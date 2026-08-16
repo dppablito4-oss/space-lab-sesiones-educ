@@ -77,6 +77,53 @@
     --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
     --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
     --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.65);
+
+    /* ════════════════════════════════════════════
+       OVERRIDES DE TOKENS LEGACY (style.css)
+       Neutralizamos todos los valores navy/neon
+       del sistema antiguo para que resuelvan a
+       graphite puro. redesign.css se carga después
+       así que estos valores ganan la cascada.
+       ════════════════════════════════════════════ */
+
+    /* Accent legacy → nuevo cyan Space Lab */
+    --accent:        #19BCEB;
+    --accent-dark:   #13A8D4;
+    --accent-glow:   rgba(25, 188, 235, 0.15);
+    --accent-2:      #19BCEB; /* eliminamos purple */
+    --accent-2-glow: rgba(25, 188, 235, 0.10);
+    --text-accent:   #19BCEB;
+
+    /* Fondos legacy → graphite neutro */
+    --bg-deep:      #0B0B0C;
+    --bg-primary:   #131314;
+    --bg-secondary: #18181A;
+    --bg-elevated:  #1E1E21;
+    --bg-card:      #131314;
+    --bg-card-hover:#18181A;
+
+    /* Texto legacy → zinc neutro */
+    --text-primary:   #F4F4F5;
+    --text-secondary: #B4B4BA;
+    --text-muted:     #77777F;
+
+    /* Glass legacy → graphite, sin navy */
+    --glass-bg:     rgba(19, 19, 20, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.05);
+    --glass-blur:   16px;
+
+    /* Bordes legacy → neutral */
+    --border:        #202023;
+    --border-hover:  #29292D;
+    --border-accent: rgba(25, 188, 235, 0.22);
+
+    /* Estados legacy */
+    --success-bg:  rgba(34, 197, 94, 0.10);
+    --warning-bg:  rgba(245, 158, 11, 0.10);
+    --danger-bg:   rgba(239, 68, 68, 0.10);
+
+    /* Shadow glow → sin cyan bloom */
+    --shadow-glow: 0 0 16px rgba(25, 188, 235, 0.12);
 }
 
 /* ─── RESET Y BASE DE CONTENCIÓN 100VH ─── */
@@ -195,7 +242,12 @@ html, body {
     font-size: 0.98rem;
     font-weight: 700;
     line-height: 1.1;
-    color: var(--color-foreground);
+    /* Neutraliza gradiente cyan+purple de style.css */
+    background: none !important;
+    -webkit-background-clip: initial !important;
+    -webkit-text-fill-color: var(--color-foreground) !important;
+    background-clip: initial !important;
+    color: var(--color-foreground) !important;
     letter-spacing: -0.01em;
 }
 
@@ -418,10 +470,10 @@ html, body {
 }
 
 .sidebar-tab.active {
-    background: var(--color-muted);
-    border-color: var(--color-border-hover);
+    background: var(--color-muted) !important;
+    border-color: var(--color-border-hover) !important;
+    box-shadow: none !important;
     color: var(--color-accent);
-    box-shadow: var(--shadow-sm);
 }
 
 /* Formulario */
