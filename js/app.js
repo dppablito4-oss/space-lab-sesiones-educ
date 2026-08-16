@@ -2758,11 +2758,13 @@
     function toggleSidebar() {
         AppState.sidebarOpen = !AppState.sidebarOpen;
         DOM.sidebar.classList.toggle('open', AppState.sidebarOpen);
+        document.body.classList.toggle('sidebar-open', AppState.sidebarOpen);
     }
 
     function closeSidebar() {
         AppState.sidebarOpen = false;
         DOM.sidebar.classList.remove('open');
+        document.body.classList.remove('sidebar-open');
     }
 
     // ═══════════════════════════════════════

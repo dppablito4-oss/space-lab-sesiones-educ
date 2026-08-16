@@ -32,5 +32,7 @@ jobs:
         run: node tests/storage.test.js
       - name: Run frontend security test
         run: python tests/frontend_security.py
+      - name: Run responsive UI smoke test
+        run: python tests/ui_smoke.py
       - name: Run backend DOCX smoke test
         run: python tests/backend_smoke.py

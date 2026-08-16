@@ -44,6 +44,9 @@
         <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 10v7M14 10v7"/></symbol>
         <symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 15-5-5L5 20"/></symbol>
         <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7h-5V2M4 17h5v5"/><path d="M6.1 7a8 8 0 0 1 13.5-1.5L20 7M4 17l.4 1.5A8 8 0 0 0 17.9 17"/></symbol>
+        <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+        <symbol id="icon-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+        <symbol id="icon-clean" viewBox="0 0 24 24"><path d="m4 18 8-8M14 3l7 7-9 9H5l-2-2 9-9Z"/><path d="m11 19 2 2M16 16l2 2M7 15l4 4"/></symbol>
     </svg>
     <!-- ═══════════ TOAST CONTAINER ═══════════ -->
     <div id="toast-container" class="toast-container"></div>
@@ -796,7 +799,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                                 <button type="button" id="btn-ribbon-add-logo"
                                     class="btn btn-ghost btn-sm toolbar-btn"
                                     style="height: 28px; min-height: 28px; padding: 2px 8px !important; display: flex; align-items: center; gap: 4px;"
-                                    title="Añadir un nuevo logo al encabezado oficial">➕ Añadir Logo</button>
+                                    title="Añadir un nuevo logo al encabezado oficial"><svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>Añadir logo</button>
                             </div>
                         </div>
 
@@ -811,11 +814,11 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                                     <button type="button" id="btn-table-row-insert"
                                         class="btn btn-ghost btn-sm toolbar-btn"
                                         style="height: 28px; min-height: 28px; padding: 2px 8px !important;"
-                                        title="Insertar Fila Abajo">➕ Fila</button>
+                                        title="Insertar fila debajo"><svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>Fila</button>
                                     <button type="button" id="btn-table-row-delete"
                                         class="btn btn-ghost btn-sm toolbar-btn"
                                         style="height: 28px; min-height: 28px; padding: 2px 8px !important;"
-                                        title="Eliminar Fila">➖ Fila</button>
+                                        title="Eliminar fila"><svg class="ui-icon" aria-hidden="true"><use href="#icon-minus"></use></svg>Fila</button>
                                 </div>
                             </div>
                         </div>
@@ -828,8 +831,8 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                             <div class="toolbar-item">
                                 <label class="toolbar-sublabel">Copiloto IA</label>
                                 <div class="btn-group" style="display: flex; gap: 4px;">
-                                    <button type="button" id="btn-ai-rubrica" class="btn btn-ghost btn-sm toolbar-btn" style="height: 28px; min-height: 28px; padding: 2px 8px !important; font-weight: 600; color: var(--accent-2);" title="Autogenerar criterios/rúbrica de evaluación">🎯 Rúbrica</button>
-                                    <button type="button" id="btn-ai-improve-text" class="btn btn-ghost btn-sm toolbar-btn" style="height: 28px; min-height: 28px; padding: 2px 8px !important; font-weight: 600; color: var(--accent);" title="Mejorar redacción técnica del texto seleccionado">✨ Redactar</button>
+                                    <button type="button" id="btn-ai-rubrica" class="btn btn-ghost btn-sm toolbar-btn" style="height: 28px; min-height: 28px; padding: 2px 8px !important; font-weight: 600;" title="Autogenerar criterios o rúbrica de evaluación"><svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>Rúbrica</button>
+                                    <button type="button" id="btn-ai-improve-text" class="btn btn-ghost btn-sm toolbar-btn" style="height: 28px; min-height: 28px; padding: 2px 8px !important; font-weight: 600;" title="Mejorar redacción técnica del texto seleccionado"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>Redactar</button>
                                 </div>
                             </div>
                         </div>
@@ -840,16 +843,16 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                         <!-- Group 5: Actions -->
                         <div class="toolbar-group toolbar-group-actions"
                             style="margin-left: auto; display: flex; gap: 8px; align-items: center;">
-                            <span class="preview-badge" id="edit-mode-badge">✏️ Modo Edición</span>
+                            <span class="preview-badge" id="edit-mode-badge"><svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>Modo edición</span>
                             <button id="btn-export-word-preview" class="btn btn-ghost btn-sm toolbar-btn"
                                 style="width: 32px; height: 32px; padding: 0 !important;"
-                                title="Exportar sesión a Word">📝</button>
+                                title="Exportar sesión a Word" aria-label="Exportar sesión a Word"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></button>
                             <button id="btn-clean-format" class="btn btn-ghost btn-sm toolbar-btn"
                                 style="width: 32px; height: 32px; padding: 0 !important;"
-                                title="Limpiar formato pegado">🧹</button>
+                                title="Limpiar formato pegado" aria-label="Limpiar formato pegado"><svg class="ui-icon" aria-hidden="true"><use href="#icon-clean"></use></svg></button>
                             <button id="btn-close-session" class="btn btn-ghost btn-sm toolbar-btn"
                                 style="width: 32px; height: 32px; padding: 0 !important; color: #ef4444; font-weight: bold; font-size: 1.1rem;"
-                                title="Cerrar sesión actual (Nueva sesión)">❌</button>
+                                title="Cerrar sesión actual e iniciar una nueva" aria-label="Cerrar sesión actual e iniciar una nueva"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
                         </div>
                     </div>
 

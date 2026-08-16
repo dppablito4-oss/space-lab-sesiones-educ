@@ -13,6 +13,14 @@ Las correcciones deben priorizar la eliminación de XSS almacenado y de HTML no 
 
 Los hallazgos 1 a 6 y 8 quedaron corregidos y cubiertos por pruebas locales. Para el hallazgo 7, los artefactos fueron retirados del índice de Git sin borrarlos del equipo; el tamaño histórico solo disminuirá si posteriormente se autoriza una reescritura del historial.
 
+## Revisión de interfaz
+
+La interfaz anterior era funcional, pero el fondo espacial animado, el contraste irregular y la densidad de controles reducían la claridad de una herramienta de uso docente. En móvil, la cabecera competía con el formulario y algunos controles dependían únicamente de iconos o texto emergente. Además, el panel de diseño existía en el documento, pero no tenía una pestaña visible para acceder a él.
+
+El rediseño conserva todas las entradas y funciones actuales, y aplica una dirección visual educativa más sobria: superficies claras, navegación por cinco secciones, jerarquía tipográfica, foco visible, controles táctiles y una guía inicial de cuatro pasos. También incorpora estados ARIA, una opción para saltar al formulario, iconos SVG consistentes, reducción de movimiento y comportamiento responsivo verificado en 375, 768, 1024 y 1440 píxeles.
+
+La lógica Python no fue modificada durante esta fase visual.
+
 ## Hallazgos
 
 ### 1. XSS almacenado en la previsualización administrativa — Crítico

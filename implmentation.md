@@ -83,6 +83,24 @@ Criterios de aceptación:
 3. Ampliar el workflow de CI con las nuevas pruebas.
 4. Documentar la retirada de artefactos compilados y el despliegue pendiente de SQL/Edge Functions.
 
+## Fase 7 — Rediseño integral de interfaz
+
+1. Definir y persistir un sistema visual accesible para el producto educativo.
+2. Reorganizar la navegación del formulario sin eliminar ni renombrar sus entradas.
+3. Hacer visible la configuración de diseño que estaba inaccesible desde las pestañas.
+4. Sustituir iconos decorativos ambiguos por SVG con etiquetas accesibles.
+5. Rediseñar el estado inicial, la cabecera, el panel lateral, la previsualización y los diálogos.
+6. Añadir foco visible, reducción de movimiento y reglas responsivas para móvil, tableta y escritorio.
+7. Incorporar una prueba de humo de interfaz al workflow de integración continua.
+
+Criterios de aceptación:
+
+- No existe desplazamiento horizontal en 375, 768, 1024 o 1440 píxeles.
+- Las cinco secciones del formulario son navegables y conservan sus campos.
+- El formulario móvil puede abrirse sin que el copiloto tape sus controles.
+- La vista de documento y sus herramientas mantienen las funciones existentes.
+- La carga no produce errores JavaScript en los tamaños verificados.
+
 ## Verificación final
 
 Se ejecutarán:
