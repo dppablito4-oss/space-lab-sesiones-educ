@@ -20,6 +20,37 @@ def run() -> None:
     unauthorized = client.post("/exportar-docx-json", json={"token": "incorrecto"})
     assert unauthorized.status_code == 401
 
+    allowed_preflight = client.options(
+        "/exportar-docx-json",
+        headers={
+            "Origin": "https://sesiones.sypablitodp.site",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "content-type",
+            "Access-Control-Request-Private-Network": "true",
+        },
+    )
+    assert allowed_preflight.status_code == 200
+    assert allowed_preflight.headers["access-control-allow-origin"] == (
+        "https://sesiones.sypablitodp.site"
+    )
+    assert allowed_preflight.headers["access-control-allow-private-network"] == "true"
+
+    blocked_origin = client.options(
+        "/exportar-docx-json",
+        headers={
+            "Origin": "https://malicioso.example",
+            "Access-Control-Request-Method": "POST",
+        },
+    )
+    assert "access-control-allow-origin" not in blocked_origin.headers
+
+    oversized = client.post(
+        "/exportar-docx-json",
+        content=b"{}",
+        headers={"content-length": str(main.MAX_REQUEST_BYTES + 1)},
+    )
+    assert oversized.status_code == 413
+
     payload = {
         "metadata": {
             "institucion": "I.E. Prueba",
@@ -69,7 +100,7 @@ def run() -> None:
     assert word.content[:2] == b"PK"
     assert len(word.content) > 10_000
 
-    print(f"backend_smoke.py: OK ({len(word.content)} bytes)")
+    print(f"backend_smoke.py: OK ({len(word.content)} bytes, CORS y límite OK)")
 
 
 if __name__ == "__main__":

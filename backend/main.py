@@ -37,7 +37,7 @@ if sys.platform.startswith('win'):
     except Exception:
         pass
 
-from fastapi import FastAPI, HTTPException, Body
+from fastapi import FastAPI, HTTPException, Body, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel, Field
@@ -67,27 +67,38 @@ app = FastAPI(
     description="Backend local para generación premium de PDFs y Word (.docx)"
 )
 
+ALLOWED_ORIGINS = {
+    "https://sesiones.sypablitodp.site",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+}
+LOCAL_ORIGIN_PATTERN = r"^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?$"
+MAX_REQUEST_BYTES = 25 * 1024 * 1024
+
 # Configuración de CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=sorted(ALLOWED_ORIGINS),
+    allow_origin_regex=LOCAL_ORIGIN_PATTERN,
     allow_credentials=False,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["Content-Type"],
 )
 
 @app.middleware("http")
-async def add_private_network_header(request, call_next):
-    if request.method == "OPTIONS":
-        response = Response()
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("origin", "*")
-        response.headers["Access-Control-Allow-Methods"] = "*"
-        response.headers["Access-Control-Allow-Headers"] = "*"
-        response.headers["Access-Control-Allow-Private-Network"] = "true"
-        return response
+async def protect_local_engine(request: Request, call_next):
+    content_length = request.headers.get("content-length")
+    if content_length:
+        try:
+            if int(content_length) > MAX_REQUEST_BYTES:
+                return Response("Solicitud demasiado grande.", status_code=413)
+        except ValueError:
+            return Response("Content-Length inválido.", status_code=400)
 
     response = await call_next(request)
-    response.headers["Access-Control-Allow-Private-Network"] = "true"
+    origin = request.headers.get("origin", "")
+    if origin in ALLOWED_ORIGINS or re.fullmatch(LOCAL_ORIGIN_PATTERN, origin):
+        response.headers["Access-Control-Allow-Private-Network"] = "true"
     return response
 
 # Variables globales para el enlace de sesión
@@ -1590,6 +1601,8 @@ async def exportar_pdf_json(raw: dict = Body(...)):
 
         # 1. Intentar conversión nativa Word-to-PDF si estamos en Windows
         if sys.platform.startswith('win'):
+            temp_docx = None
+            temp_pdf = None
             try:
                 from docx2pdf import convert
                 
@@ -1614,13 +1627,6 @@ async def exportar_pdf_json(raw: dict = Body(...)):
                 with open(temp_pdf, "rb") as f:
                     pdf_bytes = f.read()
                     
-                # Limpieza de archivos temporales
-                try:
-                    os.remove(temp_docx)
-                    os.remove(temp_pdf)
-                except Exception:
-                    pass
-                    
                 if console:
                     console.print(f"[green]✓ [PDF PREMIUM CONVERTIDO] Generado vía Word con éxito: {nombre_archivo}[/green]")
                     
@@ -1637,6 +1643,13 @@ async def exportar_pdf_json(raw: dict = Body(...)):
                     console.print(f"[yellow]⚠️ Falló conversión vía Word: {str(word_err)}. Usando fallback de Chromium...[/yellow]")
                 else:
                     print(f"[WARN WORD PDF] Falló conversión: {word_err}. Usando fallback...")
+            finally:
+                for temp_path in (temp_docx, temp_pdf):
+                    if temp_path:
+                        try:
+                            temp_path.unlink(missing_ok=True)
+                        except Exception:
+                            pass
 
         # 2. Fallback: Renderizado HTML con Playwright (Chromium headless)
         documento_html = build_pdf_html_from_json(payload)
@@ -1981,7 +1994,7 @@ def start_gui():
             
             print("Iniciando servidor local en el puerto 8000...")
             import uvicorn
-            uvicorn.run(app, host="0.0.0.0", port=8000, log_level="warning", log_config=None)
+            uvicorn.run(app, host="127.0.0.1", port=8000, log_level="warning", log_config=None)
         except Exception as e:
             print(f"\n❌ [ERROR CRÍTICO]: {str(e)}")
 

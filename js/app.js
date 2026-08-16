@@ -3,7 +3,7 @@
    Space Lab — Sesiones Educativas
    ═══════════════════════════════════════════════════ */
 
-;(function() {
+; (function () {
     'use strict';
 
     // ─── APP STATE ───
@@ -290,7 +290,7 @@
                 showPdfGuide();
             }
         });
-        
+
         // Word export listeners
         const btnExportWord = document.getElementById('btn-export-word');
         if (btnExportWord) {
@@ -300,12 +300,12 @@
         if (btnExportWordPreview) {
             btnExportWordPreview.addEventListener('click', handleExportWord);
         }
-        
+
         const btnAiRubrica = document.getElementById('btn-ai-rubrica');
         if (btnAiRubrica) {
             btnAiRubrica.addEventListener('click', handleAiRubrica);
         }
-        
+
         const btnAiImproveText = document.getElementById('btn-ai-improve-text');
         if (btnAiImproveText) {
             btnAiImproveText.addEventListener('click', () => handleAiImproveText('improve'));
@@ -667,7 +667,7 @@
         DOM.previewArea.addEventListener('wheel', (e) => {
             if (e.ctrlKey) {
                 e.preventDefault(); // Prevent standard browser zoom
-                
+
                 const delta = e.deltaY;
                 const scaleChange = 0.05;
                 if (delta < 0) {
@@ -675,7 +675,7 @@
                 } else {
                     AppState.zoomScale = Math.max(AppState.zoomScale - scaleChange, 0.5); // min 50%
                 }
-                
+
                 applyZoom();
             }
         }, { passive: false });
@@ -698,15 +698,15 @@
                 try {
                     // Guardar HTML original interactivo
                     DOM.sessionSheet.setAttribute('data-original-html', DOM.sessionSheet.innerHTML);
-                    
+
                     // Clonar limpio para medir
                     const clone = DOM.sessionSheet.cloneNode(true);
                     clone.querySelectorAll('.no-print, #logo-resize-handle, .btn-remove-logo, .add-logo-placeholder').forEach(el => el.remove());
-                    
+
                     const canvas = Paginador.calcular(clone);
                     const hojas = canvas.querySelectorAll('.hoja-a4');
                     hojas.forEach((h, i) => h.setAttribute('data-pagina', `${i + 1} / ${hojas.length}`));
-                    
+
                     // Reemplazar DOM temporalmente
                     DOM.sessionSheet.innerHTML = '';
                     DOM.sessionSheet.appendChild(canvas);
@@ -721,10 +721,10 @@
             if (originalHtml) {
                 DOM.sessionSheet.innerHTML = originalHtml;
                 DOM.sessionSheet.removeAttribute('data-original-html');
-                
+
                 // Re-inicializar fórmulas matemáticas en el DOM restaurado
                 renderMatematica();
-                
+
                 // Re-enlazar celdas editables para que el cursor no pierda foco
                 const editables = DOM.sessionSheet.querySelectorAll('[contenteditable]');
                 editables.forEach(el => {
@@ -794,7 +794,7 @@
 
                 await SupabaseClient.saveAlumnos(nivel, grado, seccion, nombresArray);
                 Toast.success(`Lista de alumnos guardada con éxito para ${grado} "${seccion}" (${nivel})`);
-                
+
                 // Actualizar la sesión activa con los nuevos alumnos y re-renderizar
                 if (AppState.currentSession) {
                     AppState.currentSession.alumnos = nombresArray;
@@ -971,11 +971,11 @@
         }
 
         PedagogyBrief.open({
-            area:        formData.metadata.area || '',
-            titulo:      formData.metadata.titulo || '',
-            grado:       formData.metadata.grado || '',
+            area: formData.metadata.area || '',
+            titulo: formData.metadata.titulo || '',
+            grado: formData.metadata.grado || '',
             methodology: DOM.selectMethodology ? DOM.selectMethodology.value : '',
-            sourceFile:  AppState.sourceFileData || null
+            sourceFile: AppState.sourceFileData || null
         });
     }
 
@@ -1075,7 +1075,9 @@
         const template = session.template || 'estandar';
         const html = Templates.render(template, session, AppState.editMode);
 
-        DOM.sessionSheet.innerHTML = html;
+        DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
+            ? SpaceLabSanitizer.sanitizeSessionHTML(html)
+            : '';
         DOM.emptyState.classList.add('hidden');
         DOM.printPreview.classList.remove('hidden');
 
@@ -1109,10 +1111,10 @@
         try {
             renderMathInElement(DOM.sessionSheet, {
                 delimiters: [
-                    { left: '$$', right: '$$', display: true  },
+                    { left: '$$', right: '$$', display: true },
                     { left: '$', right: '$', display: false },
                     { left: '\\(', right: '\\)', display: false },
-                    { left: '\\[', right: '\\]', display: true  }
+                    { left: '\\[', right: '\\]', display: true }
                 ],
                 throwOnError: false,
                 errorColor: '#cc0000',
@@ -1227,16 +1229,16 @@
     function updateBackendUI() {
         const btn = document.getElementById('btn-download-engine');
         if (!btn) return;
-        
+
         if (AppState.backendOnline) {
             btn.href = 'javascript:void(0)';
             btn.removeAttribute('target');
             btn.classList.add('btn-connected');
             btn.title = 'Motor de Exportación Local Conectado';
-            
-            const icon = btn.querySelector('.icon');
-            if (icon) icon.textContent = '⚡';
-            
+
+            const iconUse = btn.querySelector('.icon use');
+            if (iconUse) iconUse.setAttribute('href', '#icon-check');
+
             const label = btn.querySelector('.btn-label');
             if (label) label.textContent = 'Motor Activo';
         } else {
@@ -1244,10 +1246,10 @@
             btn.setAttribute('target', '_blank');
             btn.classList.remove('btn-connected');
             btn.title = 'Descargar Motor de Exportación Local (.exe)';
-            
-            const icon = btn.querySelector('.icon');
-            if (icon) icon.textContent = '📥';
-            
+
+            const iconUse = btn.querySelector('.icon use');
+            if (iconUse) iconUse.setAttribute('href', '#icon-download');
+
             const label = btn.querySelector('.btn-label');
             if (label) label.textContent = 'Descargar Motor';
         }
@@ -1676,7 +1678,7 @@
             if (rows[1] && rows[1].querySelectorAll('td')[1]) materiales = rows[1].querySelectorAll('td')[1].textContent.trim();
             if (rows[2] && rows[2].querySelectorAll('td')[1]) refuerzo = rows[2].querySelectorAll('td')[1].textContent.trim();
         }
-        
+
         const recursos = { enlaces, materiales, refuerzo };
 
         // 7. Momentos Didácticos
@@ -1692,12 +1694,12 @@
         const momTable = DOM.sessionSheet.querySelector('.momentos-table');
         if (momTable) {
             const rows = Array.from(momTable.querySelectorAll('tbody > tr'));
-            
+
             let currentMoment = 'inicio';
             let inicioRows = [];
             let desarrolloRows = [];
             let cierreRows = [];
-            
+
             rows.forEach(row => {
                 const cells = row.querySelectorAll('td');
                 if (cells.length > 1) {
@@ -1710,7 +1712,7 @@
                         currentMoment = 'cierre';
                     }
                 }
-                
+
                 if (currentMoment === 'inicio') {
                     inicioRows.push(row);
                 } else if (currentMoment === 'desarrollo') {
@@ -1757,13 +1759,13 @@
                 if (cellAct) {
                     const titleEl = cellAct.querySelector('.proceso-titulo') || cellAct.querySelector('strong');
                     const titulo = titleEl ? titleEl.textContent.trim() : 'Proceso Didáctico';
-                    
+
                     let contenido = Array.from(cellAct.querySelectorAll('p')).map(p => p.textContent.trim()).filter(t => t !== titulo && t.length > 0);
                     if (contenido.length === 0) {
                         const rawText = cellAct.textContent.trim();
                         contenido = rawText.split('\n').map(l => l.trim()).filter(t => t !== titulo && t.length > 0);
                     }
-                    
+
                     desarrollo_procesos.push({
                         clave: titulo.toLowerCase().replace(/[^a-z0-9]/g, '_'),
                         titulo: titulo,
@@ -1832,7 +1834,7 @@
         const fichaTituloEl = DOM.sessionSheet.querySelector('[data-key="ficha_titulo"]');
         const fichaIndicacionesEl = DOM.sessionSheet.querySelector('[data-key="ficha_indicaciones"]');
         const fichaActividadesEl = DOM.sessionSheet.querySelector('[data-key="ficha_actividades"]');
-        
+
         if (fichaTituloEl && fichaActividadesEl) {
             ficha_trabajo = {
                 titulo: fichaTituloEl.textContent.trim(),
@@ -1881,25 +1883,25 @@
             Toast.warning('Genera una sesión primero');
             return;
         }
-        
+
         saveCurrentState();
         Loader.show('🚀 Generando PDF oficial con el motor local...');
-        
+
         try {
             const sessionPayload = getFormDataJSON();
             const titulo = sessionPayload.metadata.titulo || 'Sesion-de-Aprendizaje';
-            
+
             const response = await fetch(`http://${activeHost}/exportar-pdf-json`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(sessionPayload)
             });
-            
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.detail || `Error del servidor: ${response.statusText}`);
             }
-            
+
             const blob = await response.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1909,7 +1911,7 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
+
             Toast.success('¡PDF exportado con éxito!');
         } catch (error) {
             console.error('[PDF Export Local] Error:', error);
@@ -1924,25 +1926,25 @@
             Toast.warning('Genera una sesión primero');
             return;
         }
-        
+
         saveCurrentState();
         Loader.show('📝 Generando archivo de Word (.docx) nativo...');
-        
+
         try {
             const sessionPayload = getFormDataJSON();
             const titulo = sessionPayload.metadata.titulo || 'Sesion-de-Aprendizaje';
-            
+
             const response = await fetch(`http://${activeHost}/exportar-docx-json`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(sessionPayload)
             });
-            
+
             if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.detail || `Error del servidor: ${response.statusText}`);
             }
-            
+
             const blob = await response.blob();
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -1952,7 +1954,7 @@
             a.click();
             document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            
+
             Toast.success('¡Word (.docx) exportado con éxito!');
         } catch (error) {
             console.error('[Word Export Local] Error:', error);
@@ -1979,7 +1981,7 @@
     function parseMinutes(text) {
         if (!text) return 0;
         const clean = text.toLowerCase().trim();
-        
+
         // Check for ranges or sum of numbers, e.g. "15 + 5" or "15-20"
         // Let's first search for hours and multiply by 45 (or 60)
         const hoursMatch = clean.match(/(\d+(?:\.\d+)?)\s*(?:hora|h)/);
@@ -1988,7 +1990,7 @@
             const multiplier = clean.includes('pedag') ? 45 : 45;
             return Math.round(hours * multiplier);
         }
-        
+
         const numbers = clean.match(/\d+/g);
         if (numbers) {
             let sum = 0;
@@ -2002,19 +2004,19 @@
 
     function checkTimeBalance() {
         if (!AppState.currentSession) return;
-        
+
         // 1. Get planned duration
         const totalDurationText = DOM.inputDuracion ? DOM.inputDuracion.value : '';
         const plannedMinutes = parseMinutes(totalDurationText || AppState.currentSession.metadata?.duracion);
-        
+
         if (plannedMinutes <= 0) {
             hideTimeBalanceWarning();
             return;
         }
-        
+
         // 2. Sum minutes of the moments in the sheet
         let parsedSum = 0;
-        
+
         // For Estandar template (.momento-time)
         const timeElements = DOM.sessionSheet.querySelectorAll('.momento-time');
         timeElements.forEach(el => {
@@ -2022,19 +2024,19 @@
             const cleaned = txt.replace(/TIEMPO\s*:\s*/i, '');
             parsedSum += parseMinutes(cleaned);
         });
-        
+
         // For Laboratorio/Refuerzo templates (.time-cell)
         const cellElements = DOM.sessionSheet.querySelectorAll('.time-cell');
         cellElements.forEach(el => {
             const txt = el.textContent || '';
             parsedSum += parseMinutes(txt);
         });
-        
+
         if (parsedSum === 0) {
             hideTimeBalanceWarning();
             return;
         }
-        
+
         // 3. Compare
         if (parsedSum !== plannedMinutes) {
             showTimeBalanceWarning(`La suma de los momentos da ${parsedSum} min, pero tu sesión está planificada para ${plannedMinutes} min.`);
@@ -2099,7 +2101,7 @@
             return;
         }
 
-        Loader.show('🤖 Generando criterios de evaluación con IA...');
+        Loader.show('Generando criterios de evaluación con IA...');
 
         try {
             const formData = getFormData();
@@ -2109,9 +2111,12 @@
             const area = formData.metadata?.area || DOM.inputArea.value || '';
 
             const listItemsHtml = await AiCopilot.generateCriterios(competencia, tema, grado, area);
-            
+            const safeListItemsHtml = window.SpaceLabSanitizer
+                ? SpaceLabSanitizer.sanitizeCriteria(listItemsHtml)
+                : '';
+
             // Wrap in ul.session-list
-            criteriaTarget.innerHTML = `<ul class="session-list">${listItemsHtml}</ul>`;
+            criteriaTarget.innerHTML = `<ul class="session-list">${safeListItemsHtml}</ul>`;
 
             saveCurrentState();
             checkTimeBalance();
@@ -2163,7 +2168,7 @@
         if (modal) {
             if (preview) preview.textContent = selectedText;
             if (customInput) customInput.value = '';
-            
+
             // Set first option active by default
             optBtns.forEach((btn, index) => {
                 if (index === 0) btn.classList.add('active');
@@ -2189,7 +2194,9 @@
         // Also persist to the sessions list
         const session = {
             ...AppState.currentSession,
-            htmlContent: DOM.sessionSheet.innerHTML
+            htmlContent: window.SpaceLabSanitizer
+                ? SpaceLabSanitizer.sanitizeSessionHTML(DOM.sessionSheet.innerHTML)
+                : DOM.sessionSheet.textContent
         };
 
         if (Storage.saveSession(session)) {
@@ -2240,7 +2247,7 @@
             AppState.currentSession = clon;
             Storage.setCurrentSession(clon);
             populateForm(clon);
-            
+
             // Actualizar inputs del formulario de metadatos (si hay uno en pantalla para el título)
             if (DOM.inputTitulo) DOM.inputTitulo.value = tituloFinal;
 
@@ -2260,7 +2267,9 @@
         if (!AppState.currentSession) return;
         if (isUndoingOrRedoing) return;
 
-        const currentHtml = DOM.sessionSheet.innerHTML;
+        const currentHtml = window.SpaceLabSanitizer
+            ? SpaceLabSanitizer.sanitizeSessionHTML(DOM.sessionSheet.innerHTML)
+            : DOM.sessionSheet.textContent;
         const previousState = AppState.currentSession.htmlContent || '';
 
         // If the HTML changed, push the previous state to the undo stack
@@ -2303,7 +2312,9 @@
         }
 
         const prevState = AppState.undoStack.pop();
-        DOM.sessionSheet.innerHTML = prevState.html;
+        DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
+            ? SpaceLabSanitizer.sanitizeSessionHTML(prevState.html)
+            : '';
 
         AppState.currentSession.metadata = prevState.metadata;
         populateForm(AppState.currentSession);
@@ -2341,7 +2352,9 @@
         }
 
         const nextState = AppState.redoStack.pop();
-        DOM.sessionSheet.innerHTML = nextState.html;
+        DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
+            ? SpaceLabSanitizer.sanitizeSessionHTML(nextState.html)
+            : '';
 
         AppState.currentSession.metadata = nextState.metadata;
         populateForm(AppState.currentSession);
@@ -2411,13 +2424,27 @@
         });
     }
 
+    const ALLOWED_LOGO_TYPES = new Set(['image/png', 'image/jpeg', 'image/webp']);
+    const MAX_LOGO_BYTES = 5 * 1024 * 1024;
+
+    function validateLogoFile(file) {
+        if (!file || !ALLOWED_LOGO_TYPES.has(file.type)) {
+            throw new Error('Formato no permitido. Usa PNG, JPG o WebP.');
+        }
+        if (file.size > MAX_LOGO_BYTES) {
+            throw new Error('El logo supera el límite de 5 MB.');
+        }
+    }
+
     function loadLastSession() {
         const current = Storage.getCurrentSession();
         if (current && current.htmlContent) {
             AppState.currentSession = current;
             populateForm(current);
 
-            DOM.sessionSheet.innerHTML = current.htmlContent;
+            DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
+                ? SpaceLabSanitizer.sanitizeSessionHTML(current.htmlContent)
+                : '';
             applyDesignStyles(current.design);
             applyZoom();
             enforceEditMode();
@@ -2429,7 +2456,7 @@
             }
 
             Toast.info('Última sesión restaurada');
-            
+
             // Check time balance
             checkTimeBalance();
         }
@@ -2503,7 +2530,9 @@
         populateForm(session);
 
         if (session.htmlContent) {
-            DOM.sessionSheet.innerHTML = session.htmlContent;
+            DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
+                ? SpaceLabSanitizer.sanitizeSessionHTML(session.htmlContent)
+                : '';
             applyDesignStyles(session.design);
             applyZoom();
             enforceEditMode();
@@ -2626,7 +2655,7 @@
                 });
                 if (confirmed) {
                     Storage.deleteSession(btn.dataset.id);
-                    
+
                     // Si la sesión activa es la que se eliminó, limpiar lienzo
                     if (AppState.currentSession && AppState.currentSession.id === btn.dataset.id) {
                         Storage.clearCurrentSession();
@@ -2635,7 +2664,7 @@
                         DOM.emptyState.classList.remove('hidden');
                         DOM.printPreview.classList.add('hidden');
                     }
-                    
+
                     renderSavedList();
                     Toast.success('Sesión enviada a la papelera');
                 }
@@ -2664,23 +2693,23 @@
             // Utilizar el DOMParser del navegador para limpiar de manera robusta
             const parser = new DOMParser();
             const doc = parser.parseFromString(el.innerHTML, 'text/html');
-            
+
             // Lista de etiquetas permitidas
             const allowedTags = ['STRONG', 'B', 'EM', 'I', 'U', 'UL', 'OL', 'LI', 'P', 'BR'];
-            
+
             // Función recursiva para sanear nodos
             function sanitizeNode(node) {
                 if (node.nodeType === Node.TEXT_NODE) {
                     return node.cloneNode(true);
                 }
-                
+
                 if (node.nodeType === Node.ELEMENT_NODE) {
                     const tagName = node.tagName;
-                    
+
                     // Si la etiqueta está permitida, recreamos el elemento sin atributos
                     if (allowedTags.includes(tagName)) {
                         const newEl = document.createElement(tagName);
-                        
+
                         // Recursivamente sanear y añadir hijos
                         node.childNodes.forEach(child => {
                             const cleanChild = sanitizeNode(child);
@@ -2700,17 +2729,17 @@
                 }
                 return null;
             }
-            
+
             const cleanFragment = document.createDocumentFragment();
             doc.body.childNodes.forEach(child => {
                 const cleanChild = sanitizeNode(child);
                 if (cleanChild) cleanFragment.appendChild(cleanChild);
             });
-            
+
             // Reemplazar el HTML original
             el.innerHTML = '';
             el.appendChild(cleanFragment);
-            
+
             // Limpieza de espacios en blanco
             el.innerHTML = el.innerHTML.trim();
         });
@@ -2738,7 +2767,7 @@
 
     function handleKeyboard(e) {
         const key = e.key.toLowerCase();
-        
+
         // Ctrl+S: Save
         if (e.ctrlKey && key === 's') {
             e.preventDefault();
@@ -2801,27 +2830,27 @@
     // ═══════════════════════════════════════
     // SPACE BACKGROUND (Canvas Animation)
     // ═══════════════════════════════════════
- 
+
     function initSpaceBackground() {
         const canvas = DOM.spaceBg;
-        if (!canvas) return;
- 
+        if (!canvas || canvas.hidden) return;
+
         const ctx = canvas.getContext('2d');
         let stars = [];
- 
+
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
             createStars();
         }
- 
+
         function createStars() {
             stars = [];
             const count = Math.floor((canvas.width * canvas.height) / 5000);
             for (let i = 0; i < count; i++) {
                 const layer = Math.random() < 0.6 ? 1 : (Math.random() < 0.85 ? 2 : 3);
                 let size, speed, opacity, twinkleSpeed;
-                
+
                 if (layer === 1) { // Background stars
                     size = Math.random() * 0.8 + 0.3;
                     speed = Math.random() * 0.05 + 0.01;
@@ -2838,7 +2867,7 @@
                     opacity = Math.random() * 0.8 + 0.4;
                     twinkleSpeed = Math.random() * 0.06 + 0.02;
                 }
- 
+
                 stars.push({
                     x: Math.random() * canvas.width,
                     y: Math.random() * canvas.height,
@@ -2852,63 +2881,63 @@
                 });
             }
         }
- 
+
         function draw() {
             // Dark base background
             ctx.fillStyle = '#06060f';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
- 
+
             // Draw Nebulas (Cyan + Purple overlay)
             const grad1 = ctx.createRadialGradient(
-                canvas.width * 0.15, canvas.height * 0.2, 50, 
+                canvas.width * 0.15, canvas.height * 0.2, 50,
                 canvas.width * 0.25, canvas.height * 0.2, canvas.width * 0.65
             );
             grad1.addColorStop(0, 'rgba(0, 212, 255, 0.04)');
             grad1.addColorStop(0.5, 'rgba(139, 92, 246, 0.02)');
             grad1.addColorStop(1, 'rgba(0, 0, 0, 0)');
- 
+
             const grad2 = ctx.createRadialGradient(
-                canvas.width * 0.85, canvas.height * 0.75, 50, 
+                canvas.width * 0.85, canvas.height * 0.75, 50,
                 canvas.width * 0.75, canvas.height * 0.8, canvas.width * 0.55
             );
             grad2.addColorStop(0, 'rgba(139, 92, 246, 0.05)');
             grad2.addColorStop(0.5, 'rgba(0, 212, 255, 0.02)');
             grad2.addColorStop(1, 'rgba(0, 0, 0, 0)');
- 
+
             ctx.fillStyle = grad1;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = grad2;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
- 
+
             // Draw Stars
             for (const star of stars) {
                 star.pulse += star.twinkleSpeed;
                 const alpha = star.opacity * (0.5 + 0.5 * Math.sin(star.pulse));
- 
+
                 // Core star
                 ctx.beginPath();
                 ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
                 ctx.fillStyle = `${star.color}${alpha})`;
                 ctx.fill();
- 
+
                 // Lens flare / Cross glow for foreground glowing stars (layer 3)
                 if (star.layer === 3 && alpha > 0.7) {
                     ctx.strokeStyle = `rgba(255, 255, 255, ${(alpha - 0.7) * 0.5})`;
                     ctx.lineWidth = 0.5;
-                    
+
                     // Horizontal flare
                     ctx.beginPath();
                     ctx.moveTo(star.x - star.size * 4, star.y);
                     ctx.lineTo(star.x + star.size * 4, star.y);
                     ctx.stroke();
- 
+
                     // Vertical flare
                     ctx.beginPath();
                     ctx.moveTo(star.x, star.y - star.size * 4);
                     ctx.lineTo(star.x, star.y + star.size * 4);
                     ctx.stroke();
                 }
- 
+
                 // Drift downwards
                 star.y += star.speed;
                 if (star.y > canvas.height) {
@@ -2916,7 +2945,7 @@
                     star.x = Math.random() * canvas.width;
                 }
             }
- 
+
             requestAnimationFrame(draw);
         }
 
@@ -2951,10 +2980,10 @@
 
     function populateEnfoques() {
         if (!curriculumData || !curriculumData.enfoques_transversales) return;
-        
+
         const optionsHtml = '<option value="">-- Seleccionar Enfoque Oficial --</option>' +
             curriculumData.enfoques_transversales.map(e => `<option value="${escHTML(e)}">${escHTML(e)}</option>`).join('');
-        
+
         DOM.selectCnebEnfoque.innerHTML = optionsHtml;
         DOM.selectCnebEnfoque2.innerHTML = optionsHtml;
     }
@@ -3155,17 +3184,21 @@
         const file = e.target.files[0];
         if (!file) return;
 
-        if (!file.type.startsWith('image/')) {
-            Toast.warning('Por favor selecciona una imagen válida (PNG, JPG)');
+        try {
+            validateLogoFile(file);
+        } catch (error) {
+            Toast.warning(error.message);
             return;
         }
 
-        Loader.show('Subiendo logo...');
+        Loader.show('Comprimiendo y subiendo logo...');
         try {
-            const publicUrl = await SupabaseClient.uploadLogo(file);
+            const compressedFile = await compressImage(file, 800, 800, 0.8);
+            validateLogoFile(compressedFile);
+            const publicUrl = await SupabaseClient.uploadLogo(compressedFile);
             Loader.hide();
             Toast.success('Logo subido correctamente');
-            
+
             // Reload the gallery
             await loadLogosGallery();
 
@@ -3231,7 +3264,7 @@
 
     async function applyLogoToDocument(url, targetId) {
         let id = targetId || AppState.activeLogoTarget;
-        
+
         if (!id) {
             addLogoToHeader(url);
             return;
@@ -3241,7 +3274,7 @@
         if (logoImg) {
             logoImg.src = url;
             logoImg.style.display = 'block';
-            
+
             // Highlight effect
             logoImg.style.transform = 'scale(1.15)';
             setTimeout(() => {
@@ -3291,7 +3324,7 @@
 
         saveCurrentState();
         Toast.success('Logo añadido al encabezado');
-        
+
         // Open editor popover on the newly added logo immediately so they can adjust size
         const img = newLogoNode.querySelector('img');
         if (img) {
@@ -3304,7 +3337,7 @@
     function openLogoEditor(target) {
         if (!target) return;
         AppState.activeLogoTarget = target.id;
-        
+
         const popover = document.getElementById('logo-editor-popover');
         const widthSlider = document.getElementById('logo-editor-width-slider');
         const widthVal = document.getElementById('logo-editor-width-val');
@@ -3343,9 +3376,9 @@
 
         let currentHeight = target.style.height;
         let isAutoHeight = !currentHeight || currentHeight === 'auto';
-        
+
         aspectRatioCheckbox.checked = isAutoHeight;
-        
+
         if (isAutoHeight) {
             heightContainer.classList.add('hidden');
             heightContainer.style.display = 'none';
@@ -3711,7 +3744,7 @@
         if (isTextType) {
             Loader.show('Leyendo archivo de texto...');
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 Loader.hide();
                 const content = e.target.result;
                 AppState.sourceFileData = {
@@ -3722,7 +3755,7 @@
                 };
                 showSourceFileInfo(fileName);
             };
-            reader.onerror = function() {
+            reader.onerror = function () {
                 Loader.hide();
                 Toast.error('Error al leer el archivo de texto.');
             };
@@ -3730,12 +3763,12 @@
         } else if (fileName.toLowerCase().endsWith('.pdf')) {
             Loader.show('Procesando PDF, extrayendo texto e imágenes...');
             const reader = new FileReader();
-            reader.onload = async function(e) {
+            reader.onload = async function (e) {
                 try {
                     const arrayBuffer = e.target.result;
                     // Obtener base64
                     const base64Data = arrayBufferToBase64(arrayBuffer);
-                    
+
                     // Extraer texto usando pdfjs
                     const extractedText = await extractTextFromPDF(arrayBuffer);
 
@@ -3746,7 +3779,7 @@
                     } catch (renderErr) {
                         console.error('[PDF Render Warning] No se pudieron renderizar las páginas del PDF como imágenes:', renderErr);
                     }
-                    
+
                     AppState.sourceFileData = {
                         name: fileName,
                         type: 'application/pdf',
@@ -3760,7 +3793,7 @@
                     Loader.hide();
                     console.error('[PDF Extraction Error]', err);
                     Toast.warning('No se pudo extraer el texto del PDF de forma nativa. Se cargará solo como archivo de referencia.');
-                    
+
                     // Fallback a solo base64 si falla la extracción
                     const arrayBuffer = e.target.result;
                     const base64Data = arrayBufferToBase64(arrayBuffer);
@@ -3774,7 +3807,7 @@
                     showSourceFileInfo(fileName);
                 }
             };
-            reader.onerror = function() {
+            reader.onerror = function () {
                 Loader.hide();
                 Toast.error('Error al leer el archivo PDF.');
             };
@@ -3783,13 +3816,13 @@
             // It's a binary file (image, audio, etc.)
             Loader.show('Cargando archivo multimedia...');
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = function (e) {
                 Loader.hide();
                 const dataUrl = e.target.result;
                 // Strip metadata from data URL
                 const base64Data = dataUrl.split(',')[1];
                 const mimeType = fileType || getBinaryMimeFallback(fileName);
-                
+
                 // Si es imagen, la inyectamos en el array de imágenes
                 const images = mimeType.startsWith('image/') ? [{ base64: base64Data, type: mimeType }] : [];
 
@@ -3802,7 +3835,7 @@
                 };
                 showSourceFileInfo(fileName);
             };
-            reader.onerror = function() {
+            reader.onerror = function () {
                 Loader.hide();
                 Toast.error('Error al procesar el archivo multimedia.');
             };
@@ -3837,14 +3870,14 @@
         const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
         const pdf = await loadingTask.promise;
         let fullText = '';
-        
+
         for (let i = 1; i <= pdf.numPages; i++) {
             const page = await pdf.getPage(i);
             const textContent = await page.getTextContent();
             const pageText = textContent.items.map(item => item.str).join(' ');
             fullText += `\n--- PÁGINA ${i} ---\n${pageText}\n`;
         }
-        
+
         return fullText.trim();
     }
 
@@ -3881,7 +3914,7 @@
                     viewport: viewport
                 };
                 await page.render(renderContext).promise;
-                
+
                 const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
                 const base64 = dataUrl.split(',')[1];
                 images.push({
@@ -4106,7 +4139,7 @@
     function applyZoom() {
         const sheet = DOM.sessionSheet;
         if (!sheet) return;
-        
+
         // Firefox compatibility fallback:
         // Firefox does not support css zoom. We check if zoom is supported in style.
         if ('zoom' in sheet.style) {
@@ -4123,7 +4156,7 @@
             if (parent) {
                 // Adjust height of the parent container so scrollbar and footer elements render properly
                 parent.style.height = `${sheet.scrollHeight * AppState.zoomScale + 40}px`;
-                
+
                 // Configurar ResizeObserver dinámico para actualizar la altura cuando cambie el contenido del lienzo
                 if (!sheetResizeObserver) {
                     sheetResizeObserver = new ResizeObserver(() => {
@@ -4133,7 +4166,7 @@
                 }
             }
         }
-        
+
         // Show temporary zoom floating percentage indicator
         showZoomIndicator();
     }
@@ -4162,10 +4195,10 @@
             indicator.style.transition = 'opacity 0.2s ease';
             document.body.appendChild(indicator);
         }
-        
+
         indicator.textContent = `🔍 Zoom: ${Math.round(AppState.zoomScale * 100)}%`;
         indicator.style.opacity = '1';
-        
+
         clearTimeout(zoomIndicatorTimeout);
         zoomIndicatorTimeout = setTimeout(() => {
             indicator.style.opacity = '0';
@@ -4188,7 +4221,7 @@
 
         const next = item.nextElementSibling;
         const parent = item.parentElement;
-        
+
         if (next && next.classList.contains('official-logo-item')) {
             // Swap item with next element
             parent.insertBefore(next, item);
@@ -4265,14 +4298,14 @@
             let newHeight;
 
             const keepAspect = !moveEvt.ctrlKey;
-            
+
             if (keepAspect) {
                 newHeight = newWidth / aspectRatio;
                 target.style.height = 'auto';
                 target.style.width = `${newWidth}px`;
                 target.style.maxWidth = 'none';
                 target.style.maxHeight = 'none';
-                
+
                 aspectRatioCheckbox.checked = true;
                 heightContainer.classList.add('hidden');
                 heightContainer.style.display = 'none';
@@ -4284,13 +4317,13 @@
                 target.style.height = `${newHeight}px`;
                 target.style.maxWidth = 'none';
                 target.style.maxHeight = 'none';
-                
+
                 aspectRatioCheckbox.checked = false;
                 heightContainer.classList.remove('hidden');
                 heightContainer.style.display = 'flex';
                 fitContainer.classList.remove('hidden');
                 fitContainer.style.display = 'flex';
-                
+
                 heightSlider.value = Math.round(newHeight);
                 heightVal.textContent = `${Math.round(newHeight)}px`;
             }
@@ -4393,20 +4426,23 @@
             return;
         }
 
-        if (!file.type.startsWith('image/')) {
-            Toast.warning('Por favor selecciona una imagen válida (PNG, JPG)');
+        try {
+            validateLogoFile(file);
+        } catch (error) {
+            Toast.warning(error.message);
             return;
         }
 
         Loader.show('Comprimiendo y subiendo logo...');
         try {
             const compressedFile = await compressImage(file, 800, 800, 0.8);
+            validateLogoFile(compressedFile);
             const publicUrl = await SupabaseClient.uploadLogo(compressedFile);
             Toast.success('Logo subido correctamente');
-            
+
             await refreshModalLogosList();
             await loadLogosGallery();
-            
+
             handleSelectModalLogo(publicUrl);
         } catch (err) {
             Toast.error('Error al subir logo: ' + err.message);
@@ -4664,21 +4700,23 @@
                 }
 
                 closeModal();
-                Loader.show('🤖 Refinando redacción con IA...');
+                Loader.show('Refinando redacción con IA...');
 
                 try {
                     const resultText = await AiCopilot.improveText(text, instruction);
-                    
+
                     const sel = window.getSelection();
                     sel.removeAllRanges();
                     sel.addRange(range);
-                    
+
                     range.deleteContents();
-                    
+
                     const container = document.createElement('span');
-                    container.innerHTML = resultText;
+                    container.innerHTML = window.SpaceLabSanitizer
+                        ? SpaceLabSanitizer.sanitizeFragment(resultText)
+                        : '';
                     range.insertNode(container);
-                    
+
                     sel.removeAllRanges();
                     const newRange = document.createRange();
                     newRange.selectNode(container);

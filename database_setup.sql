@@ -80,7 +80,13 @@ $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 CREATE OR REPLACE FUNCTION public.check_profile_role_update()
 RETURNS TRIGGER AS $$
 BEGIN
-    IF OLD.role IS DISTINCT FROM NEW.role AND NOT public.is_admin() THEN
+    -- En peticiones autenticadas, solo un administrador puede cambiar roles.
+    -- auth.uid() es NULL en contextos internos de confianza como el SQL Editor
+    -- de Supabase o una operación con service_role; esos contextos deben poder
+    -- realizar tareas administrativas.
+    IF OLD.role IS DISTINCT FROM NEW.role
+       AND auth.uid() IS NOT NULL
+       AND NOT public.is_admin() THEN
         RAISE EXCEPTION 'No tienes permisos para modificar el rol de usuario.';
     END IF;
     RETURN NEW;
@@ -220,6 +226,29 @@ CREATE TABLE IF NOT EXISTS public.security_logs (
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
+DO $$
+BEGIN
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'security_logs_action_format'
+          AND conrelid = 'public.security_logs'::regclass
+    ) THEN
+        ALTER TABLE public.security_logs
+            ADD CONSTRAINT security_logs_action_format
+            CHECK (action ~ '^[A-Z][A-Z0-9_]{0,63}$') NOT VALID;
+    END IF;
+    IF NOT EXISTS (
+        SELECT 1 FROM pg_constraint
+        WHERE conname = 'security_logs_details_length'
+          AND conrelid = 'public.security_logs'::regclass
+    ) THEN
+        ALTER TABLE public.security_logs
+            ADD CONSTRAINT security_logs_details_length
+            CHECK (details IS NULL OR char_length(details) <= 2000) NOT VALID;
+    END IF;
+END
+$$;
+
 -- Habilitar RLS en security_logs
 ALTER TABLE public.security_logs ENABLE ROW LEVEL SECURITY;
 
@@ -242,29 +271,49 @@ INSERT INTO storage.buckets (id, name, public)
 VALUES ('logos', 'logos', true)
 ON CONFLICT (id) DO NOTHING;
 
+UPDATE storage.buckets
+SET file_size_limit = 5242880,
+    allowed_mime_types = ARRAY['image/png', 'image/jpeg', 'image/webp']
+WHERE id = 'logos';
+
 -- Crear políticas para permitir a cualquiera ver/listar logos públicos
 DROP POLICY IF EXISTS "Public Access to Logos" ON storage.objects;
 CREATE POLICY "Public Access to Logos" ON storage.objects
-    FOR SELECT USING (bucket_id = 'logos');
+    FOR SELECT TO authenticated
+    USING (bucket_id = 'logos' AND auth.uid() = owner);
 
 -- Permitir a usuarios autenticados subir logos
 DROP POLICY IF EXISTS "Auth Users Upload Logos" ON storage.objects;
 CREATE POLICY "Auth Users Upload Logos" ON storage.objects
-    FOR INSERT WITH CHECK (bucket_id = 'logos' AND auth.role() = 'authenticated');
+    FOR INSERT TO authenticated
+    WITH CHECK (
+        bucket_id = 'logos'
+        AND auth.uid() = owner
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
 
 -- Permitir a usuarios autenticados actualizar solo sus propios logos
 DROP POLICY IF EXISTS "Auth Users Update Logos" ON storage.objects;
 CREATE POLICY "Auth Users Update Logos" ON storage.objects
-    FOR UPDATE USING (bucket_id = 'logos' AND auth.uid() = owner);
+    FOR UPDATE TO authenticated
+    USING (bucket_id = 'logos' AND auth.uid() = owner)
+    WITH CHECK (
+        bucket_id = 'logos'
+        AND auth.uid() = owner
+        AND (storage.foldername(name))[1] = auth.uid()::text
+    );
 
 -- Permitir a usuarios autenticados eliminar solo sus propios logos
 DROP POLICY IF EXISTS "Auth Users Delete Logos" ON storage.objects;
 CREATE POLICY "Auth Users Delete Logos" ON storage.objects
-    FOR DELETE USING (bucket_id = 'logos' AND auth.uid() = owner);
+    FOR DELETE TO authenticated
+    USING (bucket_id = 'logos' AND auth.uid() = owner);
 
 -- =======================================================
 -- 6. Lista de alumnos por docente y sección
 -- =======================================================
+-- Esta sección ya incluye todo el contenido de student_roster.sql.
+-- Si ejecutas este archivo completo, no necesitas ejecutar el archivo separado.
 
 CREATE TABLE IF NOT EXISTS public.alumnos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

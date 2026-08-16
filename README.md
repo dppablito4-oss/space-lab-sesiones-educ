@@ -31,23 +31,23 @@ El flujo de trabajo principal es el siguiente:
 
 ## 📁 Estructura del Proyecto
 
-* **[index.html](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/index.html):** Interfaz de usuario principal. Contiene el formulario lateral y la hoja A4 de vista previa interactiva.
-* **[CNAME](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/CNAME):** Configuración del subdominio personalizado para GitHub Pages.
-* **[.nojekyll](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/.nojekyll):** Evita el procesamiento Jekyll en GitHub Pages para una carga más rápida.
+* **[index.html](index.html):** Interfaz de usuario principal. Contiene el formulario lateral y la hoja A4 de vista previa interactiva.
+* **[CNAME](CNAME):** Configuración del subdominio personalizado para GitHub Pages.
+* **[.nojekyll](.nojekyll):** Evita el procesamiento Jekyll en GitHub Pages para una carga más rápida.
 * **`css/`**
-  * **[style.css](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/css/style.css):** Hoja de estilos principal con diseño premium, efectos de glassmorphism y tema oscuro.
-  * **[print.css](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/css/print.css):** Estilos especializados para impresión A4, aplicando saltos de página inteligentes (`break-inside: avoid;`).
+  * **[style.css](css/style.css):** Hoja de estilos principal con diseño premium, efectos de glassmorphism y tema oscuro.
+  * **[print.css](css/print.css):** Estilos especializados para impresión A4, aplicando saltos de página inteligentes (`break-inside: avoid;`).
 * **`js/`**
-  * **[app.js](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/js/app.js):** Controlador principal de la aplicación, maneja eventos, renderizado y flujos de usuario.
-  * **[ai-copilot.js](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/js/ai-copilot.js):** Integración con la API de IA (OpenRouter/DeepSeek) y generación de prompts estructurados.
-  * **[storage.js](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/js/storage.js):** Gestión de persistencia local en `LocalStorage` (guardado automático, carga y exportación JSON).
-  * **[templates.js](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/js/templates.js):** Plantillas de sesión MINEDU (Estándar, Laboratorio y Refuerzo).
+  * **[app.js](js/app.js):** Controlador principal de la aplicación, maneja eventos, renderizado y flujos de usuario.
+  * **[ai-copilot.js](js/ai-copilot.js):** Integración con la API de IA (OpenRouter/DeepSeek) y generación de prompts estructurados.
+  * **[storage.js](js/storage.js):** Gestión de persistencia local en `LocalStorage` (guardado automático, carga y exportación JSON).
+  * **[templates.js](js/templates.js):** Plantillas de sesión MINEDU (Estándar, Laboratorio y Refuerzo).
   * **`components/`**
-    * **[toast.js](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/js/components/toast.js):** Sistema de notificaciones flotantes premium.
-    * **[confirm-dialog.js](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/js/components/confirm-dialog.js):** Ventanas emergentes de confirmación personalizadas.
-    * **[loader.js](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/js/components/loader.js):** Spinner de carga interactivo para la generación por IA.
+    * **[toast.js](js/components/toast.js):** Sistema de notificaciones flotantes premium.
+    * **[confirm-dialog.js](js/components/confirm-dialog.js):** Ventanas emergentes de confirmación personalizadas.
+    * **[loader.js](js/components/loader.js):** Spinner de carga interactivo para la generación por IA.
 * **`data/`**
-  * **[competencias.json](file:///d:/zzzzzzzzzzzzzzzzzzzzzzzz/data/competencias.json):** Base de datos estructurada con las competencias, capacidades y desempeños del Currículo Nacional.
+  * **[competencias.json](data/competencias.json):** Base de datos estructurada con las competencias, capacidades y desempeños del Currículo Nacional.
 
 ---
 

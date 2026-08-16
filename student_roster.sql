@@ -1,6 +1,9 @@
 -- ==============================================================================
 -- 👥 TABLA DE ALUMNOS (ROSTER DE ESTUDIANTES)
 -- ==============================================================================
+-- Archivo independiente y opcional.
+-- No lo ejecutes si ya ejecutaste database_setup.sql, porque esa configuración
+-- ya crea esta tabla, su política RLS y su índice.
 
 CREATE TABLE IF NOT EXISTS public.alumnos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

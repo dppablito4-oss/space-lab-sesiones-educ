@@ -147,7 +147,7 @@
                 <tr>
                     <td style="white-space: nowrap;">${formatDate(log.created_at)}</td>
                     <td style="font-family: var(--font-mono); font-size: 0.8rem;">${log.user_id || 'Sistema/Anónimo'}</td>
-                    <td><span class="badge ${getLogBadgeClass(log.action)}">${log.action}</span></td>
+                    <td><span class="badge ${getLogBadgeClass(log.action)}">${escHTML(log.action)}</span></td>
                     <td>${escHTML(log.details)}</td>
                 </tr>
             `).join('');
@@ -211,25 +211,25 @@
                     statusHtml = `<span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">🗑️ Papelera (${daysLeft}d)</span>`;
 
                     actionsHtml = `
-                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${s.id}" title="Previsualizar Sesión">👁️ Ver</button>
-                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${s.id}" title="Ver JSON de la sesión">📦 JSON</button>
-                        <button class="btn btn-ghost btn-sm btn-restore-session" data-id="${s.id}" style="color: #10b981; border-color: rgba(16, 185, 129, 0.2);" title="Restaurar Sesión">🔄 Restaurar</button>
-                        <button class="btn btn-danger-ghost btn-sm btn-purge-session" data-id="${s.id}" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2);" title="Eliminar Permanentemente">🚨 Purgar</button>
+                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${escAttr(s.id)}" title="Previsualizar Sesión">👁️ Ver</button>
+                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${escAttr(s.id)}" title="Ver JSON de la sesión">📦 JSON</button>
+                        <button class="btn btn-ghost btn-sm btn-restore-session" data-id="${escAttr(s.id)}" style="color: #10b981; border-color: rgba(16, 185, 129, 0.2);" title="Restaurar Sesión">🔄 Restaurar</button>
+                        <button class="btn btn-danger-ghost btn-sm btn-purge-session" data-id="${escAttr(s.id)}" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2);" title="Eliminar Permanentemente">🚨 Purgar</button>
                     `;
                 } else {
                     statusHtml = `<span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">✅ Activa</span>`;
 
                     actionsHtml = `
-                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${s.id}" title="Previsualizar Sesión">👁️ Ver</button>
-                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${s.id}" title="Ver JSON de la sesión">📦 JSON</button>
-                        <button class="btn btn-danger-ghost btn-sm btn-delete-session" data-id="${s.id}" style="color: #f97316; border-color: rgba(249, 115, 22, 0.2);" title="Enviar a Papelera">🗑️ Eliminar</button>
+                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${escAttr(s.id)}" title="Previsualizar Sesión">👁️ Ver</button>
+                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${escAttr(s.id)}" title="Ver JSON de la sesión">📦 JSON</button>
+                        <button class="btn btn-danger-ghost btn-sm btn-delete-session" data-id="${escAttr(s.id)}" style="color: #f97316; border-color: rgba(249, 115, 22, 0.2);" title="Enviar a Papelera">🗑️ Eliminar</button>
                     `;
                 }
 
                 return `
                     <tr style="${s.deleted_at ? 'opacity: 0.65; background: rgba(255,255,255,0.01);' : ''}">
-                        <td style="font-family: var(--font-mono); font-size: 0.75rem;">${s.id}</td>
-                        <td title="${s.user_id}">${escHTML(email)}</td>
+                        <td style="font-family: var(--font-mono); font-size: 0.75rem;">${escHTML(s.id)}</td>
+                        <td title="${escAttr(s.user_id)}">${escHTML(email)}</td>
                         <td>${escHTML(metadata.area || 'Sin Área')} / ${escHTML(metadata.grado || 'Sin Grado')}</td>
                         <td><strong>${escHTML(s.titulo || 'Sin Título')}</strong></td>
                         <td>${formatDate(s.last_saved)}</td>
@@ -307,7 +307,7 @@
                 <h3 style="margin-top: 0; margin-bottom: 0;">Previsualización de Sesión: ${escHTML(session.titulo || 'Sin Título')}</h3>
                 
                 <div style="flex: 1; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; background: #ffffff;">
-                    <iframe id="preview-iframe" style="width: 100%; height: 100%; border: none;"></iframe>
+                    <iframe id="preview-iframe" sandbox="allow-same-origin" referrerpolicy="no-referrer" style="width: 100%; height: 100%; border: none;"></iframe>
                 </div>
                 
                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -320,9 +320,15 @@
         document.body.appendChild(overlay);
 
         const iframe = overlay.querySelector('#preview-iframe');
-        const doc = iframe.contentDocument || iframe.contentWindow.document;
-        doc.open();
-        doc.write(`
+        const sessionData = session.session_data || {};
+        const design = sessionData.design || {};
+        const safeHtml = window.SpaceLabSanitizer
+            ? SpaceLabSanitizer.sanitizeSessionHTML(sessionData.htmlContent || '')
+            : '';
+        const cssValue = (value, fallback) => escAttr(window.SpaceLabSanitizer
+            ? SpaceLabSanitizer.sanitizeCssValue(value, fallback)
+            : fallback);
+        iframe.srcdoc = `
             <!DOCTYPE html>
             <html>
             <head>
@@ -350,13 +356,12 @@
                 </style>
             </head>
             <body>
-                <div class="session-sheet" style="--theme-border-color: ${session.session_data?.design?.themeColor || '#000000'}; --session-font-family: ${session.session_data?.design?.fontFamily || 'Arial, sans-serif'}; --session-font-size: ${session.session_data?.design?.fontSize || '10pt'}; --session-cell-padding: ${session.session_data?.design?.padding || '4px 6px'}; --session-line-height: ${session.session_data?.design?.lineHeight || '1.4'}; --theme-label-bg: ${session.session_data?.design?.headerBg || '#f1f5f9'};">
-                    ${session.htmlContent || '<h3>No hay contenido HTML guardado para esta sesión</h3>'}
+                <div class="session-sheet" style="--theme-border-color: ${cssValue(design.themeColor, '#000000')}; --session-font-family: ${cssValue(design.fontFamily, 'Arial, sans-serif')}; --session-font-size: ${cssValue(design.fontSize, '10pt')}; --session-cell-padding: ${cssValue(design.padding, '4px 6px')}; --session-line-height: ${cssValue(design.lineHeight, '1.4')}; --theme-label-bg: ${cssValue(design.headerBg, '#f1f5f9')};">
+                    ${safeHtml || '<h3>No hay contenido HTML guardado para esta sesión</h3>'}
                 </div>
             </body>
             </html>
-        `);
-        doc.close();
+        `;
 
         const close = () => document.body.removeChild(overlay);
         overlay.querySelector('#btn-close-preview').addEventListener('click', close);
@@ -602,6 +607,7 @@
 
     // Utilidades de diseño
     function getLogBadgeClass(action) {
+        action = String(action || '');
         if (action.includes('SUCCESS') || action === 'LOGOUT') return 'badge-success';
         if (action.includes('FAIL') || action.includes('ERROR') || action.includes('INTRUSION')) return 'badge-danger';
         if (action.includes('UPDATE') || action.includes('DELETE')) return 'badge-warning';
@@ -613,6 +619,15 @@
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
+    }
+
+    function escAttr(value) {
+        return String(value ?? '')
+            .replace(/&/g, '&amp;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
     }
 
     function formatDate(isoString) {

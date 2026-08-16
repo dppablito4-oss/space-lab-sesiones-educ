@@ -20,6 +20,8 @@ jobs:
           node-version: '22'
       - name: Install backend dependencies
         run: python -m pip install -r backend/requirements.txt
+      - name: Install Chromium for frontend security test
+        run: python -m playwright install --with-deps chromium
       - name: Validate Python syntax
         run: python -m py_compile backend/main.py backend/docx_builder.py
       - name: Validate JavaScript syntax
@@ -28,5 +30,7 @@ jobs:
         run: python -m json.tool data/competencias.json >/dev/null
       - name: Run storage smoke test
         run: node tests/storage.test.js
+      - name: Run frontend security test
+        run: python tests/frontend_security.py
       - name: Run backend DOCX smoke test
         run: python tests/backend_smoke.py

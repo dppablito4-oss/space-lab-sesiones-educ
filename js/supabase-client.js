@@ -323,8 +323,15 @@ window.SupabaseClient = (() => {
         const user = await getCurrentUser();
         if (!user) throw new Error('Debes iniciar sesión para subir logos');
 
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+        const allowedTypes = new Map([
+            ['image/png', 'png'],
+            ['image/jpeg', 'jpg'],
+            ['image/webp', 'webp']
+        ]);
+        const fileExt = allowedTypes.get(file.type);
+        if (!fileExt) throw new Error('Formato de logo no permitido.');
+        if (file.size > 5 * 1024 * 1024) throw new Error('El logo supera el límite de 5 MB.');
+        const fileName = `${user.id}/${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
         
         const { error } = await supabase.storage
             .from('logos')
@@ -349,9 +356,11 @@ window.SupabaseClient = (() => {
     async function listLogos() {
         if (!supabase) return [];
         try {
+            const user = await getCurrentUser();
+            if (!user) return [];
             const { data, error } = await supabase.storage
                 .from('logos')
-                .list('', {
+                .list(user.id, {
                     limit: 50,
                     sortBy: { column: 'name', order: 'desc' }
                 });
@@ -361,7 +370,7 @@ window.SupabaseClient = (() => {
             return (data || []).map(file => {
                 const { data: { publicUrl } } = supabase.storage
                     .from('logos')
-                    .getPublicUrl(file.name);
+                    .getPublicUrl(`${user.id}/${file.name}`);
                 return {
                     name: file.name,
                     url: publicUrl

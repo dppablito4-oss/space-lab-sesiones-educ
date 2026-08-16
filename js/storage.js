@@ -64,6 +64,12 @@ const Storage = (() => {
 
     function saveSession(session) {
         try {
+            if (window.SpaceLabSanitizer && typeof session?.htmlContent === 'string') {
+                session = {
+                    ...session,
+                    htmlContent: window.SpaceLabSanitizer.sanitizeSessionHTML(session.htmlContent)
+                };
+            }
             // Include soft-deleted records so a later save cannot discard the
             // deletion tombstones before they are synchronized with Supabase.
             const sessions = getAllSessions(true);

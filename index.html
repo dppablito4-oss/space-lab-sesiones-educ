@@ -8,16 +8,35 @@
         content="Space Lab — Generador automático de sesiones de aprendizaje con formato MINEDU. Edita, guarda e imprime tus sesiones educativas.">
     <title>Space Lab — Sesiones Educativas</title>
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Lato:wght@400;700;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.vsg.svg">
     <link rel="stylesheet" href="css/style.css?v=2">
+    <link rel="stylesheet" href="css/redesign.css?v=1">
     <link rel="stylesheet" href="css/print.css" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
 </head>
 
 <body>
+    <a class="skip-link" href="#session-form">Ir al formulario de sesión</a>
+
+    <svg class="ui-icon-sprite" aria-hidden="true">
+        <symbol id="icon-edit" viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></symbol>
+        <symbol id="icon-eye" viewBox="0 0 24 24"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></symbol>
+        <symbol id="icon-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></symbol>
+        <symbol id="icon-download" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 18v2h16v-2"/></symbol>
+        <symbol id="icon-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+        <symbol id="icon-sparkles" viewBox="0 0 24 24"><path d="m12 3-1.4 3.6L7 8l3.6 1.4L12 13l1.4-3.6L17 8l-3.6-1.4Z"/><path d="m19 14-.9 2.1L16 17l2.1.9L19 20l.9-2.1L22 17l-2.1-.9ZM5 14l-.7 1.3L3 16l1.3.7L5 18l.7-1.3L7 16l-1.3-.7Z"/></symbol>
+        <symbol id="icon-building" viewBox="0 0 24 24"><path d="M3 21h18M6 21V4h12v17M9 8h2m2 0h2m-6 4h2m2 0h2m-6 4h2m2 0h2"/></symbol>
+        <symbol id="icon-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1"/></symbol>
+        <symbol id="icon-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></symbol>
+        <symbol id="icon-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><path d="M17 21v-8H7v8M7 3v5h8"/></symbol>
+        <symbol id="icon-folder" viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></symbol>
+        <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 18v2h16v-2"/></symbol>
+        <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+        <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    </svg>
     <!-- ═══════════ TOAST CONTAINER ═══════════ -->
     <div id="toast-container" class="toast-container"></div>
 
@@ -132,7 +151,7 @@
     </div>
 
     <!-- ═══════════ BACKGROUND PARTICLES ═══════════ -->
-    <canvas id="space-bg" class="space-background"></canvas>
+    <canvas id="space-bg" class="space-background" hidden aria-hidden="true"></canvas>
 
     <!-- ═══════════ MAIN APP ═══════════ -->
     <div class="app-wrapper">
@@ -154,30 +173,30 @@
                     <span class="save-text">Sin cambios</span>
                 </div>
                 <button id="btn-toggle-edit" class="btn btn-icon" title="Modo edición / lectura">
-                    <span class="icon">✏️</span>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
                     <span class="btn-label">Editar</span>
                 </button>
                 <button id="btn-preview" class="btn btn-icon" title="Vista previa de impresión">
-                    <span class="icon">👁️</span>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
                     <span class="btn-label">Vista Previa</span>
                 </button>
                 <button id="btn-export-pdf" class="btn btn-pdf" title="Exportar sesión a PDF">
-                    <span class="icon">📄</span>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                     <span class="btn-label">Exportar PDF</span>
                 </button>
-                <button id="btn-export-word" class="btn btn-word" style="background: linear-gradient(135deg, #2b579a 0%, #1e3d6b 100%); color: #fff;" title="Exportar sesión a Word">
-                    <span class="icon">📝</span>
+                <button id="btn-export-word" class="btn btn-word" title="Exportar sesión a Word">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                     <span class="btn-label">Exportar Word</span>
                 </button>
                 <a id="btn-download-engine" href="https://descargas.sypablitodp.site" target="_blank" class="btn btn-primary" title="Descargar Motor de Exportación Local (.exe)">
-                    <span class="icon">📥</span>
+                    <span class="icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg></span>
                     <span class="btn-label">Descargar Motor</span>
                 </a>
                 <div id="auth-header-container" class="auth-header-container">
                     <!-- Dinámico por auth-ui.js -->
                 </div>
-                <button id="btn-menu-mobile" class="btn btn-icon mobile-only" title="Menú">
-                    <span class="icon">☰</span>
+                <button id="btn-menu-mobile" class="btn btn-icon mobile-only" title="Abrir configuración" aria-label="Abrir configuración">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
                 </button>
             </nav>
         </header>
@@ -188,26 +207,29 @@
             <!-- ═══ SIDEBAR: Formulario ═══ -->
             <aside id="sidebar" class="sidebar glass-card">
                 <div class="sidebar-header">
-                    <h2 class="sidebar-title">📋 Configuración</h2>
-                    <button id="btn-close-sidebar" class="btn btn-ghost btn-sm mobile-only">✕</button>
+                    <div>
+                        <span class="sidebar-eyebrow">Planificador docente</span>
+                        <h2 class="sidebar-title">Diseña tu sesión</h2>
+                    </div>
+                    <button id="btn-close-sidebar" class="btn btn-ghost btn-sm mobile-only" aria-label="Cerrar configuración"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
                 </div>
 
                 <!-- Tabs Navigation -->
                 <div class="sidebar-tabs">
                     <button type="button" class="sidebar-tab active" data-tab="tab-ai">
-                        <span class="tab-icon">🧠</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
                         <span class="tab-text">Copiloto IA</span>
                     </button>
                     <button type="button" class="sidebar-tab" data-tab="tab-general">
-                        <span class="tab-icon">🏫</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
                         <span class="tab-text">Datos</span>
                     </button>
                     <button type="button" class="sidebar-tab" data-tab="tab-propositos">
-                        <span class="tab-icon">🗺️</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                         <span class="tab-text">Propósitos</span>
                     </button>
                     <button type="button" class="sidebar-tab" data-tab="tab-alumnos">
-                        <span class="tab-icon">👥</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
                         <span class="tab-text">Alumnos</span>
                     </button>
                 </div>
@@ -220,9 +242,9 @@
                         <div class="form-group">
                             <label for="select-ai-provider" class="form-label">Motor de IA para Generación</label>
                             <select id="select-ai-provider" class="form-select">
-                                <option value="openai" selected>🤖 OpenAI (Recomendado)</option>
-                                <option value="gemini">♊ Google Gemini (Soporta Archivos)</option>
-                                <option value="deepseek">🐳 DeepSeek V3</option>
+                                <option value="openai" selected>OpenAI — recomendado</option>
+                                <option value="gemini">Google Gemini — admite archivos</option>
+                                <option value="deepseek">DeepSeek V3</option>
                             </select>
                         </div>
 
@@ -230,10 +252,10 @@
                         <div class="form-group">
                             <label for="select-template" class="form-label">Tipo de Sesión</label>
                             <select id="select-template" class="form-select">
-                                <option value="estandar">📄 Sesión Estándar MINEDU</option>
-                                <option value="inicial">🧸 Sesión Educación Inicial</option>
-                                <option value="laboratorio">🔬 Sesión de Laboratorio</option>
-                                <option value="refuerzo">📚 Sesión de Refuerzo</option>
+                                <option value="estandar">Sesión estándar MINEDU</option>
+                                <option value="inicial">Sesión de educación inicial</option>
+                                <option value="laboratorio">Sesión de laboratorio</option>
+                                <option value="refuerzo">Sesión de refuerzo</option>
                             </select>
                         </div>
 
@@ -242,13 +264,12 @@
                             <label for="select-methodology" class="form-label">Metodología Didáctica</label>
                             <select id="select-methodology" class="form-select">
                                 <option value="">-- Por defecto del Área --</option>
-                                <option value="polya">📐 Método de Polya (Resolución de Problemas)</option>
-                                <option value="erca">🔄 Ciclo ERCA (Experiencia, Reflexión, Conceptualización,
-                                    Aplicación)</option>
-                                <option value="abp">📂 Aprendizaje Basado en Proyectos (ABP)</option>
-                                <option value="flipped">🎒 Aula Invertida (Flipped Classroom)</option>
-                                <option value="indagacion">🔬 Indagación Científica (STEAM)</option>
-                                <option value="cooperativo">🤝 Aprendizaje Cooperativo</option>
+                                <option value="polya">Método de Polya — resolución de problemas</option>
+                                <option value="erca">Ciclo ERCA — experiencia, reflexión, conceptualización y aplicación</option>
+                                <option value="abp">Aprendizaje basado en proyectos (ABP)</option>
+                                <option value="flipped">Aula invertida</option>
+                                <option value="indagacion">Indagación científica (STEAM)</option>
+                                <option value="cooperativo">Aprendizaje cooperativo</option>
                             </select>
                         </div>
 
@@ -540,27 +561,27 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                     <!-- Acciones locales y guardado -->
                     <div class="form-actions">
                         <button type="button" id="btn-generate" class="btn btn-primary btn-full">
-                            <span class="icon">🧠</span> Generar Sesión con IA
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar sesión con IA
                         </button>
                         <div class="form-actions-row">
                             <button type="button" id="btn-save" class="btn btn-ghost btn-full" title="Guardar cambios en la sesión actual">
-                                <span class="icon">💾</span> Guardar
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar
                             </button>
                             <button type="button" id="btn-load" class="btn btn-ghost btn-full" title="Cargar sesión previamente guardada">
-                                <span class="icon">📂</span> Cargar
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Cargar
                             </button>
                         </div>
                         <button type="button" id="btn-save-as" class="btn btn-ghost btn-full" title="Guardar una copia de esta sesión con un nuevo título" style="margin-top: 2px;">
-                            <span class="icon">💾✍️</span> Guardar como...
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar como…
                         </button>
                         <div class="form-actions-row">
                             <button type="button" id="btn-export-json" class="btn btn-ghost btn-full btn-sm"
                                 title="Exportar sesión a archivo JSON">
-                                <span class="icon">📥</span> Exportar JSON
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Exportar JSON
                             </button>
                             <button type="button" id="btn-import-json" class="btn btn-ghost btn-full btn-sm"
                                 title="Importar sesión desde archivo JSON">
-                                <span class="icon">📤</span> Importar JSON
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Importar JSON
                             </button>
                         </div>
                         <input type="file" id="input-import-file" class="hidden" accept=".json">
@@ -604,25 +625,26 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
 
                 <!-- Empty State -->
                 <div id="empty-state" class="empty-state">
-                    <div class="empty-icon">🚀</div>
-                    <h2 class="empty-title">¡Bienvenido a Space Lab!</h2>
-                    <p class="empty-text">Completa el formulario y genera tu primera sesión de aprendizaje.</p>
+                    <div class="empty-brand-mark"><img src="assets/favicon.vsg.svg" alt="" aria-hidden="true"></div>
+                    <span class="empty-eyebrow">Tu espacio de planificación</span>
+                    <h2 class="empty-title">Convierte tus ideas en una sesión lista para enseñar</h2>
+                    <p class="empty-text">Organiza los datos, define el propósito y deja que el copiloto prepare una primera versión editable.</p>
                     <div class="empty-steps">
                         <div class="step-item">
                             <span class="step-num">1</span>
-                            <span>Llena los datos generales</span>
+                            <span><strong>Configura</strong><small>Elige el tipo de sesión y el motor de IA.</small></span>
                         </div>
                         <div class="step-item">
                             <span class="step-num">2</span>
-                            <span>Clic en <strong>Generar Sesión</strong></span>
+                            <span><strong>Completa los datos</strong><small>Institución, grado, propósito y estudiantes.</small></span>
                         </div>
                         <div class="step-item">
                             <span class="step-num">3</span>
-                            <span>Edita directamente en la hoja</span>
+                            <span><strong>Genera y revisa</strong><small>Edita directamente sobre la hoja A4.</small></span>
                         </div>
                         <div class="step-item">
                             <span class="step-num">4</span>
-                            <span>Imprime o exporta tu sesión</span>
+                            <span><strong>Exporta</strong><small>Descarga el resultado en Word o PDF.</small></span>
                         </div>
                     </div>
                 </div>
@@ -1201,6 +1223,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <script src="js/components/toast.js"></script>
     <script src="js/components/confirm-dialog.js"></script>
     <script src="js/components/loader.js"></script>
+    <script src="js/sanitizer.js"></script>
     <script src="js/auth-ui.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/templates.js"></script>
