@@ -6,66 +6,66 @@
 
 :root {
     /* ════════════════════════════════════════════
-       SPACE LAB — DARK GRAPHITE DESIGN SYSTEM
-       4 niveles de superficie. Jerarquía visual real.
+       SPACE LAB — GRAPHITE DESIGN SYSTEM TOKENS
+       Jerarquía de 4 niveles por luminosidad.
+       Cyan (#22BEEB) + Muted Violet (#8A7CF6 <5%)
        ════════════════════════════════════════════ */
 
-    /* ── Nivel 0: Fondo de aplicación (más oscuro) */
-    --color-background:   #0A0A0B;
+    /* ── Nivel 0: Workspace Canvas */
+    --color-background:   #0D0D11;
 
-    /* ── Nivel 1: Sidebar / Topbar */
-    --color-card:         #111113;
+    /* ── Nivel 1: Container Shell (Topbar & Sidebar) */
+    --color-card:         #121217;
 
-    /* ── Nivel 2: Cards, paneles, dropzones */
-    --color-card-surface: #191919;
+    /* ── Nivel 2: Surfaces, Cards, Modales */
+    --color-card-surface: #17171C;
 
-    /* ── Nivel 3: Inputs, selects, muted areas */
-    --color-muted:        #1F1F22;
-    --color-elevated:     #252528;
+    /* ── Nivel 3: Inputs, Selects, Buttons Secundarios */
+    --color-muted:        #17171C;
+    --color-elevated:     #1D1D24;
+    --color-popover:      #23232C;
 
-    /* ── Texto — zinc de alta legibilidad */
-    --color-foreground:         #EEEEF0;
-    --color-muted-foreground:   #9595A0;
-    --color-subtle-foreground:  #5A5A65;
-    --color-label:              #C4C4CC;
+    /* ── Tipografía & Textos (Zinc Neutro & Legible) */
+    --color-foreground:         #F4F4F6;
+    --color-muted-foreground:   #A6A6B4;
+    --color-subtle-foreground:  #646473;
+    --color-label:              #A6A6B4;
 
-    /* ── Bordes — visibles pero sutiles */
-    --color-border:        #252528;
-    --color-border-subtle: #1C1C1F;
-    --color-border-hover:  #333338;
-    --color-border-focus:  rgba(25, 188, 235, 0.50);
+    /* ── Bordes (Sutiles y equilibrados) */
+    --color-border-subtle: #202028;
+    --color-border:        #292930;
+    --color-border-hover:  #383842;
+    --color-border-focus:  #22BEEB;
 
-    /* ── Accent principal: Cyan Space Lab ── */
-    --color-primary:        #19BCEB;
-    --color-primary-hover:  #0FAEDA;
-    --color-primary-dim:    rgba(25, 188, 235, 0.12);
-    --color-primary-ring:   rgba(25, 188, 235, 0.28);
-    --color-accent:         #19BCEB;
-    --color-accent-hover:   #0FAEDA;
-    --color-ring:           #19BCEB;
+    /* ── Accent Primario: Cyan Space Lab (~95%) ── */
+    --color-primary:        #22BEEB;
+    --color-primary-hover:  #12AEDC;
+    --color-primary-dim:    rgba(34, 190, 235, 0.08);
+    --color-primary-ring:   rgba(34, 190, 235, 0.10);
+    --color-accent:         #22BEEB;
+    --color-accent-hover:   #12AEDC;
+    --color-ring:           #22BEEB;
 
-    /* ── Accent secundario: Violeta MUY sutil ──
-       Solo en detalles mínimos: step-num, badge especial,
-       borde de chatbot bubble. NO en backgrounds. */
-    --color-violet:        #8B7CF6;
-    --color-violet-dim:    rgba(139, 124, 246, 0.10);
-    --color-violet-border: rgba(139, 124, 246, 0.25);
+    /* ── Accent Secundario: Muted Violet (<5%) ── */
+    --color-violet:        #8A7CF6;
+    --color-violet-dim:    rgba(138, 124, 246, 0.07);
+    --color-violet-border: rgba(138, 124, 246, 0.20);
 
     /* ── Semánticos estrictos */
     --color-success:     #22c55e;
     --color-warning:     #f59e0b;
     --color-destructive: #ef4444;
 
-    /* ── Sombras con profundidad real */
-    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.55);
-    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.55);
-    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.60);
-    --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.70);
-    --shadow-inset: inset 0 1px 0 rgba(255,255,255,0.04);
-    --glow-cyan: 0 0 12px rgba(25, 188, 235, 0.20);
+    /* ── Sombras de profundidad real */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.40);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.35);
+    --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.50);
+    --shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.65);
+    --shadow-inset: inset 0 1px 0 rgba(255,255,255,0.03);
+    --glow-cyan: 0 0 16px rgba(34, 190, 235, 0.28);
 
-    /* ── Transiciones finas */
-    --ease-out: 140ms cubic-bezier(0.16, 1, 0.3, 1);
+    /* ── Microanimaciones (curva de aceleración fina) */
+    --ease-out: 150ms cubic-bezier(0.16, 1, 0.3, 1);
     --ease-in:  100ms ease-in;
 
     /* ── Compatibilidad con scripts y componentes */
@@ -81,7 +81,7 @@
     --text-accent:    var(--color-accent);
     --border:         var(--color-border);
     --border-hover:   var(--color-border-hover);
-    --border-accent:  rgba(25, 188, 235, 0.30);
+    --border-accent:  rgba(34, 190, 235, 0.22);
 
     /* ── Tipografía */
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -92,29 +92,29 @@
     --header-h: 50px;
     --sidebar-w: 370px;
     --radius-xs: 4px;
-    --radius-sm: 7px;
-    --radius-md: 9px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
     --radius-lg: 12px;
 
     /* ════════════════════════════════════════════
        OVERRIDES DE TOKENS LEGACY (style.css)
        ════════════════════════════════════════════ */
-    --accent:        #19BCEB;
-    --accent-dark:   #0FAEDA;
-    --accent-glow:   rgba(25, 188, 235, 0.18);
-    --accent-2:      #8B7CF6;
-    --accent-2-glow: rgba(139, 124, 246, 0.12);
-    --bg-deep:      #0A0A0B;
-    --bg-primary:   #111113;
-    --bg-secondary: #191919;
-    --bg-elevated:  #1F1F22;
-    --bg-card:      #111113;
-    --bg-card-hover:#191919;
-    --text-primary:   #EEEEF0;
-    --text-secondary: #9595A0;
-    --text-muted:     #5A5A65;
-    --glass-bg:     rgba(17, 17, 19, 0.90);
-    --glass-border: rgba(255, 255, 255, 0.06);
+    --accent:        #22BEEB;
+    --accent-dark:   #12AEDC;
+    --accent-glow:   rgba(34, 190, 235, 0.18);
+    --accent-2:      #8A7CF6;
+    --accent-2-glow: rgba(138, 124, 246, 0.12);
+    --bg-deep:      #0D0D11;
+    --bg-primary:   #121217;
+    --bg-secondary: #17171C;
+    --bg-elevated:  #1D1D24;
+    --bg-card:      #121217;
+    --bg-card-hover:#17171C;
+    --text-primary:   #F4F4F6;
+    --text-secondary: #A6A6B4;
+    --text-muted:     #646473;
+    --glass-bg:     rgba(18, 18, 23, 0.90);
+    --glass-border: rgba(255, 255, 255, 0.05);
     --glass-blur:   16px;
 
     /* Bordes legacy → neutral */
@@ -319,7 +319,7 @@ html, body {
 }
 
 .btn:hover {
-    background: var(--color-muted);
+    background: var(--color-elevated);
     border-color: var(--color-border-hover);
     color: var(--color-foreground);
     box-shadow: var(--shadow-sm);
@@ -341,19 +341,19 @@ html, body {
 
 .btn-primary {
     background: var(--color-primary);
-    border-color: var(--color-primary-hover);
-    color: #060608;
-    font-weight: 600;
+    border: 1px solid var(--color-primary);
+    color: #08090C;
+    font-weight: 700;
     letter-spacing: 0.01em;
-    box-shadow: 0 0 0 0 rgba(25,188,235,0), var(--shadow-xs);
+    box-shadow: 0 0 0 0 rgba(34, 190, 235, 0), var(--shadow-xs);
     transition: background var(--ease-out), box-shadow var(--ease-out), border-color var(--ease-out);
 }
 
 .btn-primary:hover {
     background: var(--color-primary-hover);
-    border-color: var(--color-primary);
-    color: #060608;
-    box-shadow: 0 0 12px rgba(25,188,235,0.30), var(--shadow-sm);
+    border-color: var(--color-primary-hover);
+    color: #08090C;
+    box-shadow: var(--glow-cyan), var(--shadow-sm);
 }
 
 .btn-ghost {
@@ -368,7 +368,7 @@ html, body {
     color: var(--color-foreground);
 }
 
-/* PDF y Word usan el estilo neutro estándar — sin colores arbitrarios */
+/* PDF y Word usan el estilo neutro estándar */
 .btn-pdf,
 .btn-word {
     background: var(--color-card-surface);
@@ -377,7 +377,7 @@ html, body {
 }
 .btn-pdf:hover,
 .btn-word:hover {
-    background: var(--color-muted);
+    background: var(--color-elevated);
     border-color: var(--color-border-hover);
     color: var(--color-foreground);
 }
@@ -479,16 +479,16 @@ html, body {
 }
 
 .sidebar-tab:hover {
-    color: var(--color-muted-foreground);
-    background: rgba(255, 255, 255, 0.035);
+    color: var(--color-foreground);
+    background: var(--color-card-surface);
 }
 
 .sidebar-tab:hover .tab-icon {
-    transform: scale(1.08);
+    transform: scale(1.06);
 }
 
 .sidebar-tab.active {
-    background: var(--color-muted) !important;
+    background: var(--color-card-surface) !important;
     border-color: transparent !important;
     border-bottom: 2px solid var(--color-accent) !important;
     box-shadow: none !important;
@@ -544,13 +544,12 @@ html, body {
     padding: 5px 10px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    background-color: var(--color-muted);
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.35), var(--shadow-inset);
+    background-color: var(--color-card-surface);
     color: var(--color-foreground);
     font-family: inherit;
     font-size: 0.78rem;
     box-sizing: border-box;
-    transition: border-color var(--ease-out), box-shadow var(--ease-out), background var(--ease-out);
+    transition: background var(--ease-out), border-color var(--ease-out), box-shadow var(--ease-out), color var(--ease-out);
 }
 
 .form-textarea {
@@ -563,17 +562,17 @@ html, body {
 .form-input:hover,
 .form-select:hover,
 .form-textarea:hover {
-    border-color: var(--color-border-hover);
     background-color: var(--color-elevated);
+    border-color: var(--color-border-hover);
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
-    border-color: var(--color-ring);
+    border-color: var(--color-border-focus);
     background-color: var(--color-elevated);
     outline: none;
-    box-shadow: 0 0 0 3px var(--color-primary-ring), inset 0 1px 3px rgba(0,0,0,0.25);
+    box-shadow: 0 0 0 3px var(--color-primary-ring);
 }
 
 .form-input::placeholder,
@@ -583,7 +582,7 @@ html, body {
 }
 
 .form-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A5A65' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23A6A6B4' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 8px center;
     background-size: 11px;
@@ -596,29 +595,31 @@ html, body {
     color: var(--color-foreground);
 }
 
-/* Insignia de Capacidades de Modelos de IA */
-.model-capabilities-badge {
+/* Insignia de Capacidades de Modelos de IA / Panel AI */
+.model-capabilities-badge,
+.ai-panel {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 5px 8px;
+    padding: 6px 10px;
     margin-top: 2px;
     border-radius: var(--radius-sm);
-    background: var(--color-muted);
-    border: 1px solid var(--color-border);
+    background: linear-gradient(135deg, rgba(34, 190, 235, 0.07), rgba(138, 124, 246, 0.035)), #17171C;
+    border: 1px solid rgba(34, 190, 235, 0.18);
     color: var(--color-muted-foreground);
     font-size: 0.7rem;
     line-height: 1.35;
 }
 
 .model-capabilities-badge.badge-no-files {
-    background: var(--color-muted);
-    border-color: var(--color-border);
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.05), rgba(138, 124, 246, 0.02)), #17171C;
+    border-color: rgba(245, 158, 11, 0.20);
     color: var(--color-warning);
 }
 
 .model-capabilities-badge .badge-icon {
     font-size: 0.85rem;
+    color: var(--color-accent);
     flex: 0 0 auto;
 }
 
@@ -626,7 +627,7 @@ html, body {
 .source-file-dropzone {
     min-height: 68px;
     padding: 8px;
-    background: var(--color-card);
+    background: var(--color-card-surface);
     border: 1px dashed var(--color-border);
     border-radius: var(--radius-sm);
     color: var(--color-muted-foreground);
@@ -637,18 +638,18 @@ html, body {
     align-items: center;
     justify-content: center;
     gap: 3px;
-    transition: all 120ms ease;
+    transition: background var(--ease-out), border-color var(--ease-out);
 }
 
 .source-file-dropzone:hover,
 .source-file-dropzone.dragover {
-    background: var(--color-card-surface);
+    background: var(--color-elevated);
     border-color: var(--color-primary);
     color: var(--color-foreground);
 }
 
 .source-file-dropzone.disabled-dropzone {
-    border-color: rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.20);
     background: transparent;
     cursor: not-allowed;
 }
@@ -659,7 +660,7 @@ html, body {
     width: 24px;
     height: 24px;
     border-radius: 4px;
-    background: var(--color-muted);
+    background: var(--color-elevated);
     color: var(--color-accent);
 }
 
@@ -703,11 +704,11 @@ html, body {
     justify-content: center;
     gap: 5px;
     cursor: pointer;
-    transition: all 120ms ease;
+    transition: background var(--ease-out), border-color var(--ease-out), color var(--ease-out);
 }
 
 .pb-trigger-btn:hover {
-    background: var(--color-muted);
+    background: var(--color-elevated);
     border-color: var(--color-border-hover);
     color: var(--color-foreground);
 }
@@ -718,21 +719,21 @@ html, body {
     min-height: 36px;
     height: 36px;
     background: var(--color-primary);
-    border: 1px solid var(--color-primary-hover);
-    color: #060608;
+    border: 1px solid var(--color-primary);
+    color: #08090C;
     font-size: 0.84rem;
     font-weight: 700;
     letter-spacing: 0.01em;
     border-radius: var(--radius-sm);
-    box-shadow: 0 0 0 0 rgba(25,188,235,0), var(--shadow-xs);
-    transition: background var(--ease-out), box-shadow var(--ease-out);
+    box-shadow: 0 0 0 0 rgba(34, 190, 235, 0), var(--shadow-xs);
+    transition: background var(--ease-out), box-shadow var(--ease-out), border-color var(--ease-out);
 }
 
 #btn-generate:hover {
     background: var(--color-primary-hover);
-    border-color: var(--color-primary);
-    color: #060608;
-    box-shadow: 0 0 16px rgba(25,188,235,0.35), var(--shadow-sm);
+    border-color: var(--color-primary-hover);
+    color: #08090C;
+    box-shadow: var(--glow-cyan), var(--shadow-sm);
 }
 
 .form-actions {
@@ -880,8 +881,8 @@ html, body {
     padding: 28px 32px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    background: var(--color-card);
-    box-shadow: var(--shadow-sm);
+    background: var(--color-card-surface);
+    box-shadow: var(--shadow-md);
     text-align: left;
 }
 
@@ -894,7 +895,7 @@ html, body {
     margin-bottom: 12px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xs);
-    background: var(--color-card-surface);
+    background: var(--color-elevated);
 }
 
 .empty-brand-mark img { width: 20px; height: 20px; }
@@ -943,7 +944,7 @@ html, body {
     align-items: flex-start;
     gap: 9px;
     padding: 10px 12px;
-    background: var(--color-card-surface);
+    background: var(--color-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     transition: border-color var(--ease-out), background var(--ease-out);
@@ -951,7 +952,7 @@ html, body {
 
 .step-item:hover {
     border-color: var(--color-border-hover);
-    background: var(--color-muted);
+    background: var(--color-popover);
 }
 
 .step-num {
@@ -961,7 +962,7 @@ html, body {
     width: 20px;
     height: 20px;
     min-width: 20px;
-    /* Violeta sutil como detalle secundario */
+    /* Muted Violet (<5%) */
     background: var(--color-violet-dim);
     border: 1px solid var(--color-violet-border);
     color: var(--color-violet);
@@ -1030,26 +1031,27 @@ html, body {
     width: 40px;
     height: 40px;
     background: var(--color-primary);
-    color: #ffffff;
-    border: 1px solid var(--color-accent);
-    box-shadow: var(--shadow-md);
+    color: #08090C;
+    border: 1px solid var(--color-primary);
+    box-shadow: var(--glow-cyan), var(--shadow-md);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: transform 120ms ease, background-color 120ms ease;
+    transition: transform var(--ease-out), background-color var(--ease-out), box-shadow var(--ease-out);
 }
 
 .chatbot-bubble .ui-icon { width: 17px; height: 17px; }
 
 .chatbot-bubble:hover {
-    transform: scale(1.05);
+    transform: scale(1.06);
     background: var(--color-primary-hover);
+    box-shadow: 0 0 20px rgba(34, 190, 235, 0.40), var(--shadow-lg);
 }
 
 .chatbot-window {
-    background: var(--color-card);
+    background: var(--color-card-surface);
     color: var(--color-foreground);
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-lg);
@@ -1057,8 +1059,8 @@ html, body {
 }
 
 .chatbot-header {
-    background: var(--color-card-surface);
-    border-bottom: 1px solid var(--color-border);
+    background: var(--color-card);
+    border-bottom: 1px solid var(--color-border-subtle);
     padding: 9px 12px;
 }
 
@@ -1076,7 +1078,7 @@ html, body {
 
 .chatbot-dot {
     background: var(--color-success);
-    box-shadow: 0 0 5px var(--color-success);
+    box-shadow: 0 0 6px var(--color-success);
 }
 
 .chatbot-messages {
@@ -1085,7 +1087,7 @@ html, body {
 }
 
 .chat-message.bot .message-bubble {
-    background: var(--color-card-surface);
+    background: var(--color-elevated);
     color: var(--color-foreground);
     border: 1px solid var(--color-border);
     border-radius: 6px 6px 6px 2px;
@@ -1094,14 +1096,14 @@ html, body {
 
 .chat-message.user .message-bubble {
     background: var(--color-primary);
-    color: #0B0B0C;
+    color: #08090C;
     border-radius: 6px 6px 2px 6px;
     font-size: 0.8rem;
 }
 
 .chatbot-input-container {
     background: var(--color-card);
-    border-top: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border-subtle);
     padding: 7px 10px;
 }
 
@@ -1111,10 +1113,14 @@ html, body {
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     font-size: 0.78rem;
+    transition: background var(--ease-out), border-color var(--ease-out), box-shadow var(--ease-out);
 }
 
 .chatbot-input-container input:focus {
-    border-color: var(--color-ring);
+    border-color: var(--color-border-focus);
+    background: var(--color-elevated);
+    box-shadow: 0 0 0 3px var(--color-primary-ring);
+    outline: none;
 }
 
 /* ═══════════════════════════════════════════════════
