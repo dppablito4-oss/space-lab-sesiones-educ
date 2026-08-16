@@ -4,8 +4,8 @@
 
 CREATE TABLE IF NOT EXISTS public.alumnos (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-    nombre_completo TEXT NOT NULL,
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    nombre_completo TEXT NOT NULL CHECK (char_length(trim(nombre_completo)) > 0),
     nivel TEXT NOT NULL,      -- Inicial, Primaria, Secundaria
     grado TEXT NOT NULL,      -- 1, 2, 3, etc.
     seccion TEXT NOT NULL,    -- A, B, C, etc.
@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS public.alumnos (
 ALTER TABLE public.alumnos ENABLE ROW LEVEL SECURITY;
 
 -- Política de RLS para que los usuarios solo manejen sus propios alumnos
+DROP POLICY IF EXISTS "Users can manage their own student rosters" ON public.alumnos;
 CREATE POLICY "Users can manage their own student rosters" 
     ON public.alumnos
     FOR ALL 

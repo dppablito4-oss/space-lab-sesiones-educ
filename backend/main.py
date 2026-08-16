@@ -40,7 +40,7 @@ if sys.platform.startswith('win'):
 from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from playwright.async_api import async_playwright
 from docx_builder import build_docx_from_json, build_docx_from_html
 
@@ -97,18 +97,15 @@ else:
     TOKEN_FILE = BASE_DIR / "connection_token.txt"
 
 
-if TOKEN_FILE.exists():
-    try:
-        CONNECTION_TOKEN = TOKEN_FILE.read_text(encoding="utf-8").strip()
-    except Exception:
-        CONNECTION_TOKEN = secrets.token_hex(16)
-        TOKEN_FILE.write_text(CONNECTION_TOKEN, encoding="utf-8")
-else:
-    CONNECTION_TOKEN = secrets.token_hex(16)
-    try:
-        TOKEN_FILE.write_text(CONNECTION_TOKEN, encoding="utf-8")
-    except Exception:
-        pass
+# Rotate the local pairing token on every launch. A token persisted between
+# executions (or accidentally committed) must never authorize a new process.
+CONNECTION_TOKEN = secrets.token_hex(32)
+try:
+    TOKEN_FILE.write_text(CONNECTION_TOKEN, encoding="utf-8")
+except Exception:
+    # The GUI still exposes the in-memory pairing URL if the executable
+    # directory is read-only.
+    pass
 CLIENT_CONNECTED = False
 
 # ── NORMALIZACIÓN Y MAPEO DE LLAVES DE ENTRADA (ADAPTADOR JSON) ──
@@ -713,14 +710,14 @@ class PropositoData(BaseModel):
     competencia: Optional[str] = ""
     estandar: Optional[str] = ""
     desempeno: Optional[str] = ""
-    capacidades: List[str] = []
-    criterios: List[str] = []
+    capacidades: List[str] = Field(default_factory=list)
+    criterios: List[str] = Field(default_factory=list)
     producto_evidencia: Optional[str] = ""
     instrumento: Optional[str] = ""
 
 class CompetenciaTransversal(BaseModel):
     titulo: str
-    desempenos: List[str] = []
+    desempenos: List[str] = Field(default_factory=list)
 
 class EnfoqueTransversal(BaseModel):
     nombre: str
@@ -734,22 +731,22 @@ class RecursosData(BaseModel):
 
 class MomentoInicio(BaseModel):
     tiempo_total: Optional[str] = ""
-    actividades: List[str] = []
+    actividades: List[str] = Field(default_factory=list)
 
 class ProcesoDesarrollo(BaseModel):
     clave: str
     titulo: str
-    contenido: List[str] = []
+    contenido: List[str] = Field(default_factory=list)
 
 class MomentoDesarrollo(BaseModel):
     tiempo_total: Optional[str] = ""
-    procesos: List[ProcesoDesarrollo] = []
+    procesos: List[ProcesoDesarrollo] = Field(default_factory=list)
 
 class MomentoCierre(BaseModel):
     tiempo_total: Optional[str] = ""
-    metacognicion: List[str] = []
-    evaluacion: List[str] = []
-    extension: List[str] = []
+    metacognicion: List[str] = Field(default_factory=list)
+    evaluacion: List[str] = Field(default_factory=list)
+    extension: List[str] = Field(default_factory=list)
 
 class MomentosData(BaseModel):
     inicio: MomentoInicio
@@ -772,13 +769,13 @@ class JuegoLibreSectoresData(BaseModel):
 class SesionAprendizajeRequest(BaseModel):
     metadata: MetadataData
     proposito: PropositoData
-    competencias_transversales: List[CompetenciaTransversal] = []
-    enfoques_transversales: List[EnfoqueTransversal] = []
+    competencias_transversales: List[CompetenciaTransversal] = Field(default_factory=list)
+    enfoques_transversales: List[EnfoqueTransversal] = Field(default_factory=list)
     recursos: RecursosData
     momentos: MomentosData
     ficha_trabajo: Optional[FichaTrabajoData] = None
     juego_libre_sectores: Optional[JuegoLibreSectoresData] = None
-    alumnos: Optional[List[str]] = []
+    alumnos: List[str] = Field(default_factory=list)
     token: str
 
 

@@ -308,11 +308,12 @@ window.AuthUi = (() => {
         if (user) {
             const role = await SupabaseClient.getUserRole(user.id);
             const isAdmin = role === 'superadmin' || role === 'admin';
-            const displayName = user.user_metadata?.username || truncateEmail(user.email);
+            const displayName = escapeHTML(user.user_metadata?.username || truncateEmail(user.email));
+            const safeEmail = escapeHTML(user.email || '');
 
             authHeaderContainer.innerHTML = `
                 <div class="user-menu-container">
-                    <span class="user-email-tag" title="${user.email}">
+                    <span class="user-email-tag" title="${safeEmail}">
                         👤 ${displayName}
                     </span>
                     ${isAdmin ? `
@@ -364,6 +365,15 @@ window.AuthUi = (() => {
     // utilidades sencillas
     function validateEmail(email) {
         return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    function escapeHTML(value) {
+        return String(value)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
     }
 
     function truncateEmail(email) {
