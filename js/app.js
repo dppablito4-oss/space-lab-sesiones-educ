@@ -54,6 +54,7 @@
         selectTemplate: $('#select-template'),
         selectMethodology: $('#select-methodology'),
         selectAiProvider: $('#select-ai-provider'),
+        modelCapabilitiesBadge: $('#model-capabilities-badge'),
         inputInstitucion: $('#input-institucion'),
         inputDre: $('#input-dre'),
         inputUgel: $('#input-ugel'),
@@ -139,6 +140,9 @@
 
         // Bind all events
         bindEvents();
+
+        // Sync AI provider UI
+        handleAiProviderChange();
 
         // Initialize space background
         initSpaceBackground();
@@ -919,7 +923,12 @@
             DOM.selectTemplate.value = session.template;
         }
         DOM.selectMethodology.value = m.methodology || '';
-        DOM.selectAiProvider.value = m.ai_provider || 'gemini';
+        
+        let prov = m.ai_provider || 'openai-gpt-5.6-luna';
+        if (prov === 'openai') prov = 'openai-gpt-5.6-luna';
+        if (prov === 'gemini') prov = 'gemini-2.5-flash';
+        if (prov === 'deepseek') prov = 'deepseek-v3';
+        DOM.selectAiProvider.value = prov;
         handleAiProviderChange();
 
         // Design config inputs
@@ -3715,10 +3724,37 @@
     // ═══════════════════════════════════════
 
     function handleAiProviderChange() {
-        // Permitir archivos de referencia para todos los proveedores
         const fileGroup = $('.source-file-group');
+        const badge = DOM.modelCapabilitiesBadge || $('#model-capabilities-badge');
+        const dropzoneText = DOM.sourceFileDropzone ? DOM.sourceFileDropzone.querySelector('.text') : null;
+        const provider = DOM.selectAiProvider ? DOM.selectAiProvider.value : 'openai-gpt-5.6-luna';
+
         if (fileGroup) {
             fileGroup.classList.remove('hidden');
+        }
+
+        if (badge) {
+            if (provider === 'openai-gpt-5.6-luna') {
+                badge.className = 'model-capabilities-badge';
+                badge.innerHTML = '<span class="badge-icon">📎</span><span class="badge-text"><strong>GPT-5.6 Luna:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>';
+                if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
+                if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
+            } else if (provider === 'openai-gpt-5.4-mini') {
+                badge.className = 'model-capabilities-badge';
+                badge.innerHTML = '<span class="badge-icon">📎</span><span class="badge-text"><strong>GPT-5.4 Mini:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>';
+                if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
+                if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
+            } else if (provider === 'gemini-2.5-flash') {
+                badge.className = 'model-capabilities-badge';
+                badge.innerHTML = '<span class="badge-icon">📎</span><span class="badge-text"><strong>Gemini 2.5 Flash:</strong> Multimodal nativo (PDF, imágenes, audio y textos).</span>';
+                if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen, audio o texto)';
+                if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
+            } else if (provider === 'deepseek-v3') {
+                badge.className = 'model-capabilities-badge badge-no-files';
+                badge.innerHTML = '<span class="badge-icon">📝</span><span class="badge-text"><strong>DeepSeek V3:</strong> Solo admite texto (los archivos adjuntos no serán procesados).</span>';
+                if (dropzoneText) dropzoneText.textContent = 'DeepSeek V3 procesa solo texto. Cambia a GPT-5.6 o Gemini para adjuntar archivos.';
+                if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.add('disabled-dropzone');
+            }
         }
     }
 

@@ -7,9 +7,9 @@
 ---
 
 **Project:** Space Lab Sesiones
-**Generated:** 2026-08-15 23:47:36
-**Category:** B2B Service
-**Design Dials:** Variance 6/10 (Balanced / Modern) | Motion 4/10 (Standard) | Density 7/10 (Standard)
+**Generated:** 2026-08-16 00:42:03
+**Category:** Productivity Tool
+**Design Dials:** Variance 2/10 (Centered / Minimal) | Motion 2/10 (Subtle) | Density 7/10 (Standard)
 
 ---
 
@@ -19,35 +19,35 @@
 
 | Role | Hex | CSS Variable |
 |------|-----|--------------|
-| Primary | `#0F172A` | `--color-primary` |
-| On Primary | `#FFFFFF` | `--color-on-primary` |
-| Secondary | `#334155` | `--color-secondary` |
-| On Secondary | `#FFFFFF` | `--color-on-secondary` |
-| Accent/CTA | `#0369A1` | `--color-accent` |
-| On Accent/CTA | `#FFFFFF` | `--color-on-accent` |
-| Background | `#F8FAFC` | `--color-background` |
-| Foreground | `#020617` | `--color-foreground` |
+| Primary | `#0D9488` | `--color-primary` |
+| On Primary | `#000000` | `--color-on-primary` |
+| Secondary | `#14B8A6` | `--color-secondary` |
+| On Secondary | `#0F172A` | `--color-on-secondary` |
+| Accent/CTA | `#EA580C` | `--color-accent` |
+| On Accent/CTA | `#000000` | `--color-on-accent` |
+| Background | `#F0FDFA` | `--color-background` |
+| Foreground | `#134E4A` | `--color-foreground` |
 | Card | `#FFFFFF` | `--color-card` |
-| Card Foreground | `#020617` | `--color-card-foreground` |
-| Muted | `#E8ECF1` | `--color-muted` |
+| Card Foreground | `#134E4A` | `--color-card-foreground` |
+| Muted | `#E8F1F4` | `--color-muted` |
 | Muted Foreground | `#475569` | `--color-muted-foreground` |
-| Border | `#E2E8F0` | `--color-border` |
+| Border | `#99F6E4` | `--color-border` |
 | Destructive | `#DC2626` | `--color-destructive` |
 | On Destructive | `#FFFFFF` | `--color-on-destructive` |
-| Ring | `#0F172A` | `--color-ring` |
+| Ring | `#0D9488` | `--color-ring` |
 
-**Color Notes:** Professional navy + blue CTA
+**Color Notes:** Teal focus + action orange [Accent adjusted from #F97316]
 
 ### Typography
 
-- **Heading Font:** EB Garamond
-- **Body Font:** Lato
-- **Mood:** legal, professional, traditional, trustworthy, formal, authoritative
-- **Google Fonts:** [EB Garamond + Lato](https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap)
+- **Heading Font:** Inter
+- **Body Font:** Inter
+- **Mood:** dark, cinematic, technical, precision, clean, premium, developer, professional, high-end utility
+- **Google Fonts:** [Inter + Inter](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap)
 
 **CSS Import:**
 ```css
-@import url('https://fonts.googleapis.com/css2?family=EB+Garamond:wght@400;500;600;700&family=Lato:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 ```
 
 ### Spacing Variables
@@ -82,7 +82,7 @@
 ```css
 /* Primary Button */
 .btn-primary {
-  background: #0369A1;
+  background: #EA580C;
   color: white;
   padding: 12px 24px;
   border-radius: 8px;
@@ -99,8 +99,8 @@
 /* Secondary Button */
 .btn-secondary {
   background: transparent;
-  color: #0F172A;
-  border: 2px solid #0F172A;
+  color: #0D9488;
+  border: 2px solid #0D9488;
   padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
@@ -113,7 +113,7 @@
 
 ```css
 .card {
-  background: #F8FAFC;
+  background: #F0FDFA;
   border-radius: 12px;
   padding: 24px;
   box-shadow: var(--shadow-md);
@@ -139,9 +139,9 @@
 }
 
 .input:focus {
-  border-color: #0F172A;
+  border-color: #0D9488;
   outline: none;
-  box-shadow: 0 0 0 3px #0F172A20;
+  box-shadow: 0 0 0 3px #0D948820;
 }
 ```
 
@@ -167,45 +167,44 @@
 
 ## Style Guidelines
 
-**Style:** Accessible & Ethical
+**Style:** Minimalism & Swiss Style
 
-**Keywords:** Accessible, inclusive interface, high contrast, large text (16px+), keyboard navigation, screen reader friendly, accessibility standards aware, focus state, semantic
+**Keywords:** Clean, simple, spacious, functional, white space, high contrast, geometric, sans-serif, grid-based, essential
 
-**Best For:** Government, healthcare, education, inclusive products, large audience, legal compliance, public
+**Best For:** Enterprise apps, dashboards, documentation sites, SaaS platforms, professional tools
 
-**Key Effects:** Clear focus rings (3-4px), ARIA labels, skip links, responsive design, reduced motion, 44x44px touch targets
+**Key Effects:** Subtle hover (200-250ms), smooth transitions, sharp shadows if any, clear type hierarchy, fast loading
 
 ### Page Pattern
 
-**Pattern Name:** Trust & Authority + Conversion
+**Pattern Name:** Product Demo + Features
 
-- **Conversion Strategy:** Security badges. Case studies. Transparent pricing. Low-friction form. Provide pause/stop and stop the logo carousel on focus, hover, and reduced motion. Previous/next controls provide the keyboard equivalent; pause offscreen/hidden and render a static logo set under reduced motion.
-- **CTA Placement:** Contact Sales / Get Quote (primary) + Nav
-- **Section Order:** Hero (mission/credibility) > Proof (logos, certs, stats) > Solution overview > Clear CTA path
+- **Conversion Strategy:** Use an interactive demo only when it explains value better than static media. Provide captions, transcript, visible play/pause controls, and a non-video fallback; do not autoplay under reduced motion. Pause media when offscreen or hidden and keep the final product state available as static content.
+- **CTA Placement:** Video center + CTA right/bottom
+- **Section Order:** Hero > Product video/mockup (center) > Feature breakdown per section > Comparison (optional) > CTA
 
 ---
 
 ## Motion
 
-**Stagger List** (Standard) — Trigger: load or scroll | Duration: 300-450ms | Easing: `back.out(1.4)`
+**Scroll Reveal** (Subtle) — Trigger: scroll (viewport enter) | Duration: 300-400ms | Easing: `power1.out`
 
 ```js
-gsap.from('.grid-item', { opacity: 0, scale: 0.92, y: 16, duration: 0.4, stagger: { each: 0.06, from: 'start', grid: 'auto' }, ease: 'back.out(1.4)' });
+gsap.from(el, { opacity: 0, y: 12, duration: 0.35, ease: 'power1.out', scrollTrigger: { trigger: el, start: 'top 90%', toggleActions: 'play none none reverse' } });
 ```
 
-**Framework notes:** grid: 'auto' lets GSAP infer rows/columns from a CSS grid layout for a natural wave stagger; Use matchMedia('(prefers-reduced-motion: reduce)') to skip non-essential motion and render the final state immediately
+**Framework notes:** Requires the ScrollTrigger plugin registered once via gsap.registerPlugin(ScrollTrigger); Use matchMedia('(prefers-reduced-motion: reduce)') to skip non-essential motion and render the final state immediately
 
-- ✅ Combine with from: 'center' for a bento-grid layout to draw the eye inward first
-- ❌ Don't use back.out on dense data tables; the overshoot reads as sloppy on informational UI
-- ⚡ Group DOM writes; avoid interleaving layout reads (getBoundingClientRect) between staggered tweens
+- ✅ Keep the y offset small (8-16px) so it reads as a fade, not a slide
+- ❌ Don't reveal below-the-fold content needed for SEO/crawlers as invisible-by-default without a no-JS fallback
+- ⚡ toggleActions 'play none none reverse' avoids re-triggering on every scroll direction change
 
 ---
 
 ## Anti-Patterns (Do NOT Use)
 
-- ❌ Playful design
-- ❌ Hidden credentials
-- ❌ AI purple/pink gradients
+- ❌ Complex onboarding
+- ❌ Slow performance
 
 ### Additional Forbidden Patterns
 

@@ -11,7 +11,7 @@ const AiCopilot = (() => {
         // Por defecto conectamos a la API de OpenAI
         endpoint: 'https://api.openai.com/v1/chat/completions',
         apiKey: '', // Se configura desde la UI
-        model: 'gpt-5.4-mini', // OpenAI GPT-5.4 Mini por defecto
+        model: 'gpt-5.6-luna', // OpenAI GPT-5.6 Luna por defecto
         maxTokens: 4000, // Ajuste clave para evitar JSONs rotos
         temperature: 0.5 // Bajarlo ayuda a que sea más estricto con el formato JSON
     };
@@ -264,17 +264,29 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         if (window.SupabaseClient && SupabaseClient.client) {
             try {
                 let functionName = 'openai-router';
-                if (metadata.ai_provider === 'gemini') {
+                let selectedModel = 'gpt-5.6-luna';
+                const prov = metadata.ai_provider || 'openai-gpt-5.6-luna';
+
+                if (prov === 'gemini-2.5-flash' || prov === 'gemini') {
                     functionName = 'gemini-router';
-                } else if (metadata.ai_provider === 'deepseek') {
+                    selectedModel = 'gemini-2.5-flash';
+                } else if (prov === 'deepseek-v3' || prov === 'deepseek') {
                     functionName = 'deepseek-router';
+                    selectedModel = 'deepseek-chat';
+                } else if (prov === 'openai-gpt-5.4-mini') {
+                    functionName = 'openai-router';
+                    selectedModel = 'gpt-5.4-mini';
+                } else {
+                    functionName = 'openai-router';
+                    selectedModel = 'gpt-5.6-luna';
                 }
                 
-                console.log(`[AI] Llamando a Edge Function ${functionName}...`);
+                console.log(`[AI] Llamando a Edge Function ${functionName} con modelo ${selectedModel}...`);
                 const { data, error } = await SupabaseClient.client.functions.invoke(functionName, {
                     body: { 
                         prompt: userPrompt, 
                         systemPrompt: dynamicSystemPrompt,
+                        model: selectedModel,
                         sourceFile: metadata.sourceFile || null
                     }
                 });

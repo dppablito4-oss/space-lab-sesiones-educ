@@ -19,7 +19,7 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, systemPrompt } = await req.json();
+    const { prompt, systemPrompt, model, sourceFile } = await req.json();
 
     if (!prompt) {
       return new Response(
@@ -37,7 +37,27 @@ serve(async (req) => {
       );
     }
 
-    // Llamada directa a la API oficial de OpenAI usando gpt-5.4-mini
+    // Construir contenido del mensaje de usuario
+    let userMessageContent: any = prompt;
+    if (sourceFile) {
+      if (sourceFile.textContent) {
+        userMessageContent = `${prompt}\n\n--- DOCUMENTO / ARCHIVO ADJUNTO DE REFERENCIA (${sourceFile.name}) ---\n${sourceFile.textContent}\n--- FIN DEL DOCUMENTO ---`;
+      } else if (sourceFile.base64 && sourceFile.type?.startsWith("image/")) {
+        userMessageContent = [
+          { type: "text", text: prompt },
+          {
+            type: "image_url",
+            image_url: {
+              url: `data:${sourceFile.type};base64,${sourceFile.base64}`
+            }
+          }
+        ];
+      }
+    }
+
+    const selectedModel = model || "gpt-5.6-luna";
+
+    // Llamada directa a la API oficial de OpenAI
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -45,10 +65,10 @@ serve(async (req) => {
         "Authorization": `Bearer ${apiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-5.4-mini",
+        model: selectedModel,
         messages: [
           { role: "system", content: systemPrompt || "Eres un asistente de Inteligencia Artificial para docentes de Space Lab." },
-          { role: "user", content: prompt }
+          { role: "user", content: userMessageContent }
         ],
         temperature: 0.5
       })

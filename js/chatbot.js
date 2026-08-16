@@ -107,12 +107,15 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
 
             let invokedCloud = false;
 
-            // Llamar a Supabase Edge Function
+            // Llamar a Supabase Edge Function con GPT-5.6 Luna
             if (window.SupabaseClient && SupabaseClient.client) {
                 try {
-                    console.log('[Chatbot] Enviando mensaje a deepseek-router...');
-                    const { data, error } = await SupabaseClient.client.functions.invoke('deepseek-router', {
-                        body: { prompt: promptText }
+                    console.log('[Chatbot] Enviando mensaje a openai-router con gpt-5.6-luna...');
+                    const { data, error } = await SupabaseClient.client.functions.invoke('openai-router', {
+                        body: { 
+                            prompt: promptText,
+                            model: 'gpt-5.6-luna'
+                        }
                     });
 
                     if (error) throw error;
