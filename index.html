@@ -36,6 +36,14 @@
         <symbol id="icon-upload" viewBox="0 0 24 24"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 18v2h16v-2"/></symbol>
         <symbol id="icon-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
         <symbol id="icon-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+        <symbol id="icon-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></symbol>
+        <symbol id="icon-shield" viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6Z"/><path d="m9 12 2 2 4-4"/></symbol>
+        <symbol id="icon-logout" viewBox="0 0 24 24"><path d="M10 17l5-5-5-5M15 12H3"/><path d="M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5"/></symbol>
+        <symbol id="icon-chat" viewBox="0 0 24 24"><path d="M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-5A8 8 0 1 1 21 15Z"/><path d="M8 12h.01M12 12h.01M16 12h.01"/></symbol>
+        <symbol id="icon-sliders" viewBox="0 0 24 24"><path d="M4 6h10M18 6h2M4 12h3M11 12h9M4 18h7M15 18h5"/><circle cx="16" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="13" cy="18" r="2"/></symbol>
+        <symbol id="icon-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 10v7M14 10v7"/></symbol>
+        <symbol id="icon-image" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 15-5-5L5 20"/></symbol>
+        <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7h-5V2M4 17h5v5"/><path d="M6.1 7a8 8 0 0 1 13.5-1.5L20 7M4 17l.4 1.5A8 8 0 0 0 17.9 17"/></symbol>
     </svg>
     <!-- ═══════════ TOAST CONTAINER ═══════════ -->
     <div id="toast-container" class="toast-container"></div>
@@ -172,19 +180,19 @@
                     <span class="save-dot"></span>
                     <span class="save-text">Sin cambios</span>
                 </div>
-                <button id="btn-toggle-edit" class="btn btn-icon" title="Modo edición / lectura">
+                <button id="btn-toggle-edit" class="btn btn-icon" title="Modo edición / lectura" aria-label="Cambiar modo de edición">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
                     <span class="btn-label">Editar</span>
                 </button>
-                <button id="btn-preview" class="btn btn-icon" title="Vista previa de impresión">
+                <button id="btn-preview" class="btn btn-icon" title="Vista previa de impresión" aria-label="Abrir vista previa">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
                     <span class="btn-label">Vista Previa</span>
                 </button>
-                <button id="btn-export-pdf" class="btn btn-pdf" title="Exportar sesión a PDF">
+                <button id="btn-export-pdf" class="btn btn-pdf" title="Exportar sesión a PDF" aria-label="Exportar sesión a PDF">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                     <span class="btn-label">Exportar PDF</span>
                 </button>
-                <button id="btn-export-word" class="btn btn-word" title="Exportar sesión a Word">
+                <button id="btn-export-word" class="btn btn-word" title="Exportar sesión a Word" aria-label="Exportar sesión a Word">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                     <span class="btn-label">Exportar Word</span>
                 </button>
@@ -215,20 +223,24 @@
                 </div>
 
                 <!-- Tabs Navigation -->
-                <div class="sidebar-tabs">
-                    <button type="button" class="sidebar-tab active" data-tab="tab-ai">
+                <div class="sidebar-tabs" role="tablist" aria-label="Etapas de configuración">
+                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" role="tab" aria-selected="true" aria-controls="tab-ai">
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
                         <span class="tab-text">Copiloto IA</span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-general">
+                    <button type="button" class="sidebar-tab" data-tab="tab-general" role="tab" aria-selected="false" aria-controls="tab-general">
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
                         <span class="tab-text">Datos</span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-propositos">
+                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" role="tab" aria-selected="false" aria-controls="tab-propositos">
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                         <span class="tab-text">Propósitos</span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos">
+                    <button type="button" class="sidebar-tab" data-tab="tab-design" role="tab" aria-selected="false" aria-controls="tab-design">
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+                        <span class="tab-text">Diseño</span>
+                    </button>
+                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" role="tab" aria-selected="false" aria-controls="tab-alumnos">
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
                         <span class="tab-text">Alumnos</span>
                     </button>
@@ -237,7 +249,7 @@
                 <form id="session-form" class="session-form" autocomplete="off">
 
                     <!-- PANE 1: COPILOTO IA -->
-                    <div id="tab-ai" class="tab-pane active">
+                    <div id="tab-ai" class="tab-pane active" role="tabpanel">
                         <!-- Motor de IA para Generación -->
                         <div class="form-group">
                             <label for="select-ai-provider" class="form-label">Motor de IA para Generación</label>
@@ -277,10 +289,10 @@
                         <div class="form-group source-file-group">
                             <label class="form-label"
                                 style="display: flex; align-items: center; gap: 6px; margin-top: 10px;">
-                                <span>📄</span> Archivo de Referencia (Opcional)
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg> Archivo de referencia <span class="optional-label">Opcional</span>
                             </label>
                             <div id="source-file-dropzone" class="source-file-dropzone">
-                                <span class="icon">📤</span>
+                                <span class="icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg></span>
                                 <span class="text">Haz clic o arrastra un archivo aquí (PDF, imagen, audio o
                                     texto)</span>
                             </div>
@@ -296,13 +308,13 @@
                         <!-- Afinar enfoque pedagógico -->
                         <div style="margin-top: 1rem;">
                             <button type="button" id="btn-pedagogy-brief" class="pb-trigger-btn" title="Afinar el enfoque pedagógico con la IA antes de generar">
-                                ✨ Afinar enfoque pedagógico
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Afinar enfoque pedagógico
                             </button>
                         </div>
                     </div>
 
                     <!-- PANE 2: DATOS GENERALES -->
-                    <div id="tab-general" class="tab-pane">
+                    <div id="tab-general" class="tab-pane" role="tabpanel">
                         <div class="form-group">
                             <label for="input-institucion" class="form-label">Institución Educativa</label>
                             <input type="text" id="input-institucion" class="form-input"
@@ -410,18 +422,18 @@
                         <div style="display: flex; gap: 8px; margin-top: 1.5rem;">
                             <button type="button" id="btn-save-defaults" class="btn btn-ghost btn-full btn-sm"
                                 title="Guardar predeterminados en la nube" style="font-size: 0.75rem; padding: 6px;">
-                                ⚙️ Guardar Predets.
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar predeterminados
                             </button>
                             <button type="button" id="btn-new" class="btn btn-ghost btn-full btn-sm"
                                 title="Limpiar formulario e iniciar nueva sesión"
                                 style="font-size: 0.75rem; padding: 6px;">
-                                🗑️ Nueva Sesión
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Nueva sesión
                             </button>
                         </div>
                     </div>
 
                     <!-- PANE 3: PROPÓSITOS Y ACCIONES -->
-                    <div id="tab-propositos" class="tab-pane">
+                    <div id="tab-propositos" class="tab-pane" role="tabpanel">
                         <div class="form-group">
                             <label for="input-competencia" class="form-label">Competencia</label>
                             <select id="select-cneb-competencia" class="form-select hidden"
@@ -458,9 +470,9 @@
                     </div> <!-- End tab-propositos -->
 
                     <!-- PANE 4: DISEÑO Y ESTILOS -->
-                    <div id="tab-design" class="tab-pane">
+                    <div id="tab-design" class="tab-pane" role="tabpanel">
                         <div style="margin-bottom: 1.5rem;">
-                            <h3 class="saved-title" style="margin-bottom: 8px;">🎨 Configuración de Diseño</h3>
+                            <h3 class="saved-title" style="margin-bottom: 8px;">Configuración de diseño</h3>
                             <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">Ajusta el
                                 estilo visual de tu sesión para impresión y PDF.</p>
                         </div>
@@ -538,9 +550,9 @@
                     </div>
 
                     <!-- PANE 5: REGISTRO DE ALUMNOS -->
-                    <div id="tab-alumnos" class="tab-pane">
+                    <div id="tab-alumnos" class="tab-pane" role="tabpanel">
                         <div style="margin-bottom: 1.5rem;">
-                            <h3 class="saved-title" style="margin-bottom: 8px;">👥 Registro de Estudiantes</h3>
+                            <h3 class="saved-title" style="margin-bottom: 8px;">Registro de estudiantes</h3>
                             <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">Registra la lista de alumnos para el grado y sección actual (configurados en Datos) para rellenar la Lista de Cotejo de forma automática.</p>
                             
                             <div class="form-group">
@@ -589,7 +601,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
 
                     <!-- Sesiones Guardadas -->
                     <div class="saved-sessions" style="margin-top: 1.5rem;">
-                        <h3 class="saved-title">📁 Sesiones Guardadas</h3>
+                        <h3 class="saved-title">Sesiones guardadas</h3>
                         <ul id="saved-list" class="saved-list">
                             <li class="saved-empty">No hay sesiones guardadas</li>
                         </ul>
@@ -598,17 +610,17 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                     <!-- Galería de Logos -->
                     <div class="logo-gallery-section"
                         style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-                        <h3 class="saved-title">🖼️ Galería de Logos</h3>
+                        <h3 class="saved-title">Galería de logos</h3>
                         <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                            <input type="file" id="input-upload-logo" accept="image/*" class="hidden">
+                            <input type="file" id="input-upload-logo" accept="image/png,image/jpeg,image/webp" class="hidden">
                             <button type="button" id="btn-trigger-upload-logo" class="btn btn-ghost btn-sm"
                                 style="flex: 1; font-size: 0.72rem; padding: 4px;">
-                                📤 Subir Logo
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Subir logo
                             </button>
-                            <button type="button" id="btn-refresh-logos" class="btn btn-ghost btn-icon"
+                             <button type="button" id="btn-refresh-logos" class="btn btn-ghost btn-icon"
                                 style="min-width: 30px; min-height: 30px; font-size: 0.8rem; padding: 2px;"
-                                title="Actualizar lista">
-                                🔄
+                                title="Actualizar lista" aria-label="Actualizar galería de logos">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
                             </button>
                         </div>
                         <div id="logos-container"
@@ -873,8 +885,8 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <!-- ═══════════ FLOATING CHATBOT WIDGET ═══════════ -->
     <div id="chatbot-container" class="chatbot-container no-print">
         <!-- Chat Bubble Button -->
-        <button id="chatbot-bubble" class="chatbot-bubble" title="Preguntar a Copilot">
-            <span class="icon">🤖</span>
+        <button id="chatbot-bubble" class="chatbot-bubble" title="Preguntar al copiloto" aria-label="Preguntar al copiloto">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-chat"></use></svg>
             <span class="pulse-ring"></span>
         </button>
 
@@ -888,7 +900,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                         <span class="chatbot-subtitle">DeepSeek Copilot</span>
                     </div>
                 </div>
-                <button id="btn-close-chatbot" class="btn-close-chat">✕</button>
+                <button id="btn-close-chatbot" class="btn-close-chat" aria-label="Cerrar copiloto"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
             </div>
 
             <div id="chatbot-messages" class="chatbot-messages">
@@ -1179,7 +1191,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
             <div id="modal-logo-dropzone" class="source-file-dropzone" style="border: 2px dashed rgba(0, 210, 255, 0.2); background: rgba(0, 210, 255, 0.02); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem;">
                 <span class="icon" style="font-size: 1.8rem; display: block; margin-bottom: 8px;">📤</span>
                 <span class="text" style="font-size: 0.8rem; color: #a1a1aa; line-height: 1.4;">Sube tu logo para el encabezado (PNG, JPG)<br><strong style="color: #00d2ff;">Se comprimirá automáticamente</strong> para un rendimiento ultra-rápido</span>
-                <input type="file" id="input-modal-upload-logo" accept="image/*" class="hidden">
+                <input type="file" id="input-modal-upload-logo" accept="image/png,image/jpeg,image/webp" class="hidden">
             </div>
 
             <!-- Divider -->

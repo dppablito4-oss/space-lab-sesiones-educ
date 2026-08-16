@@ -314,15 +314,15 @@ window.AuthUi = (() => {
             authHeaderContainer.innerHTML = `
                 <div class="user-menu-container">
                     <span class="user-email-tag" title="${safeEmail}">
-                        👤 ${displayName}
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg><span class="auth-label">${displayName}</span>
                     </span>
                     ${isAdmin ? `
                         <a href="admin.html" class="btn btn-accent btn-sm" style="text-decoration: none;">
-                            👑 Admin
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg><span class="auth-label">Admin</span>
                         </a>
                     ` : ''}
                     <button id="btn-logout" class="btn btn-ghost btn-sm" title="Cerrar sesión">
-                        🚪 Salir
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-logout"></use></svg><span class="auth-label">Salir</span>
                     </button>
                 </div>
             `;
@@ -353,8 +353,8 @@ window.AuthUi = (() => {
 
         } else {
             authHeaderContainer.innerHTML = `
-                <button id="btn-login-trigger" class="btn btn-ghost btn-sm">
-                    👤 Iniciar Sesión
+                <button id="btn-login-trigger" class="btn btn-ghost btn-sm" aria-label="Iniciar sesión">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg><span class="auth-label">Iniciar sesión</span>
                 </button>
             `;
 

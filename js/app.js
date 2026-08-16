@@ -241,9 +241,13 @@
         tabs.forEach(tab => {
             tab.addEventListener('click', () => {
                 const targetTabId = tab.dataset.tab;
-                tabs.forEach(t => t.classList.remove('active'));
+                tabs.forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
                 panes.forEach(p => p.classList.remove('active'));
                 tab.classList.add('active');
+                tab.setAttribute('aria-selected', 'true');
                 const targetPane = $(`#${targetTabId}`);
                 if (targetPane) targetPane.classList.add('active');
             });

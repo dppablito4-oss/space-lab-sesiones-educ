@@ -310,6 +310,18 @@ body {
     text-transform: none;
 }
 
+.optional-label {
+    margin-left: auto;
+    padding: 2px 7px;
+    border-radius: 999px;
+    background: #eef2f6;
+    color: #64748b;
+    font-size: 0.65rem;
+    font-weight: 900;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
 .form-input,
 .form-select,
 .form-textarea {
@@ -365,6 +377,17 @@ body {
 .source-file-dropzone.drag-over {
     background: #eff6ff;
     border-color: var(--color-accent);
+}
+
+.source-file-dropzone .icon {
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: #e0f2fe;
+    color: #0369a1;
+    opacity: 1;
 }
 
 .pb-trigger-btn {
@@ -535,6 +558,27 @@ body {
 
 .toast { background: #ffffff; color: #0f172a; border-color: var(--color-border); box-shadow: var(--shadow-lg); }
 
+.chatbot-bubble {
+    width: 54px;
+    height: 54px;
+    background: var(--color-primary);
+    color: #ffffff;
+    border: 4px solid #ffffff;
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.25);
+    font-size: initial;
+}
+
+.chatbot-bubble .ui-icon { width: 23px; height: 23px; }
+.chatbot-bubble:hover { transform: none; background: #1e293b; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.28); }
+.chatbot-bubble .pulse-ring { display: none; }
+.chatbot-window { background: #ffffff; color: #0f172a; border-color: var(--color-border); }
+.btn-close-chat { display: grid; place-items: center; color: #475569; }
+.btn-close-chat .ui-icon { width: 18px; height: 18px; }
+
+.user-menu-container,
+.user-email-tag { display: flex; align-items: center; gap: 7px; }
+.user-email-tag { color: #475569; font-size: 0.8rem; font-weight: 700; }
+
 /* Responsive */
 @media (max-width: 1180px) {
     .header-actions #btn-toggle-edit .btn-label,
@@ -583,10 +627,11 @@ body {
 @media (max-width: 560px) {
     .brand-subtitle { display: none; }
     .brand-title { font-size: 1.16rem; }
-    .header-actions #btn-export-pdf,
-    .header-actions #btn-export-word { border-color: transparent; background: transparent; color: #334155; }
-    .auth-header-container .btn { font-size: 0; }
-    .auth-header-container .btn::first-letter { font-size: 0; }
+    .header-actions #btn-export-pdf { border-color: transparent; background: transparent; color: #b91c1c; }
+    .header-actions #btn-export-word { border-color: transparent; background: transparent; color: #1e3a8a; }
+    .auth-header-container .auth-label,
+    .auth-header-container .user-email-tag .auth-label { display: none; }
+    .auth-header-container .user-email-tag { width: 40px; height: 40px; justify-content: center; }
     .preview-area { padding: 14px; }
     .empty-state { align-items: flex-start; text-align: left; padding: 26px 22px; }
     .empty-brand-mark { width: 54px; height: 54px; margin-bottom: 15px; border-radius: 15px; }
@@ -595,6 +640,9 @@ body {
     .empty-text { font-size: 0.94rem; margin-bottom: 24px; }
     .empty-steps { grid-template-columns: 1fr; width: 100%; }
     .step-item { min-height: 82px; }
+    .step-item:last-child { padding-right: 64px; }
+    .chatbot-container { right: 10px; bottom: 10px; }
+    .chatbot-bubble { width: 48px; height: 48px; }
     .sidebar-tabs { position: sticky; top: -1px; z-index: 4; }
     .sidebar-tab { min-height: 62px; }
     .form-row { grid-template-columns: 1fr; }
