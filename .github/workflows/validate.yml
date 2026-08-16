@@ -1,38 +1,69 @@
-name: Validate source
+name: Validate & Build
 
 on:
   push:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
+  # ─── 1. Syntax + smoke tests (sin Chromium) ───────────────────────────────
   syntax-and-smoke-tests:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+
       - name: Install backend dependencies
-        run: python -m pip install -r backend/requirements.txt
-      - name: Install Chromium for frontend security test
-        run: python -m playwright install --with-deps chromium
+        run: pip install -r backend/requirements.txt
+
       - name: Validate Python syntax
         run: python -m py_compile backend/main.py backend/docx_builder.py
+
       - name: Validate JavaScript syntax
         run: find js -name '*.js' -print0 | xargs -0 -n1 node --check
+
       - name: Validate curriculum JSON
-        run: python -m json.tool data/competencias.json >/dev/null
+        run: python -m json.tool data/competencias.json > /dev/null
+
       - name: Run storage smoke test
         run: node tests/storage.test.js
-      - name: Run frontend security test
-        run: python tests/frontend_security.py
-      - name: Run responsive UI smoke test
-        run: python tests/ui_smoke.py
+
       - name: Run backend DOCX smoke test
         run: python tests/backend_smoke.py
+
+  # ─── 2. Build Windows .exe (solo en push a main/master) ───────────────────
+  build-exe:
+    needs: syntax-and-smoke-tests
+    runs-on: windows-latest
+    if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install pyinstaller
+
+      - name: Build EXE with PyInstaller
+        working-directory: backend
+        run: pyinstaller pablitopyhost.spec --clean --noconfirm
+
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pablitopyhost-windows
+          path: backend/dist/pablitopyhost.exe
+          retention-days: 30

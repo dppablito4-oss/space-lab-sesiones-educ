@@ -1,20 +1,53 @@
 # -*- mode: python ; coding: utf-8 -*-
+# pablitopyhost.spec
+# PyInstaller spec para Space Lab — Motor de Exportación Pedagógica
+#
+# Notas importantes:
+# - playwright se incluye como módulo Python (para sus APIs asyncio)
+# - Chromium NO se bundlea: main.py lo descarga en runtime en EXE_DIR/bin/
+# - tkinter debe estar instalado en el Python del build (incluido por defecto en CPython oficial)
 
+block_cipher = None
 
 a = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[('../assets/logo.ico', 'assets')],
-    hiddenimports=[],
+    datas=[
+        ('../assets/logo.ico', 'assets'),
+    ],
+    hiddenimports=[
+        'playwright.async_api',
+        'playwright._impl._api_types',
+        'playwright._impl._browser_context',
+        'docx_builder',
+        'uvicorn.logging',
+        'uvicorn.loops',
+        'uvicorn.loops.auto',
+        'uvicorn.protocols',
+        'uvicorn.protocols.http',
+        'uvicorn.protocols.http.auto',
+        'uvicorn.protocols.websockets',
+        'uvicorn.protocols.websockets.auto',
+        'uvicorn.lifespan',
+        'uvicorn.lifespan.on',
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    # Excluir drivers de Chromium — se descargan en runtime, no en el bundle
+    excludes=[
+        'playwright.driver',
+        'test',
+        'unittest',
+        'doctest',
+        'pdb',
+    ],
     noarchive=False,
-    optimize=0,
+    optimize=1,
 )
-pyz = PYZ(a.pure)
+
+pyz = PYZ(a.pure, cipher=block_cipher)
 
 exe = EXE(
     pyz,
