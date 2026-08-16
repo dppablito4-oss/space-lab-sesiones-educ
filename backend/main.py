@@ -149,6 +149,8 @@ TOP_LEVEL_MAP = {
     'metadata': 'metadata',
     'proposito': 'proposito',
     'propositos': 'proposito',
+    'proposito_aprendizaje': 'proposito',
+    'propositos_aprendizaje': 'proposito',
     'competencias_transversales': 'competencias_transversales',
     'competenciastransversales': 'competencias_transversales',
     'enfoques_transversales': 'enfoques_transversales',
@@ -156,19 +158,25 @@ TOP_LEVEL_MAP = {
     'enfoques': 'enfoques_transversales',
     'recursos': 'recursos',
     'recursos_materiales': 'recursos',
+    'materiales_recursos': 'recursos',
     'momentos': 'momentos',
     'momentos_didacticos': 'momentos',
     'secuencia_didactica': 'momentos',
+    'secuencia': 'momentos',
+    'momentos_de_la_sesion': 'momentos',
     'ficha_trabajo': 'ficha_trabajo',
     'fichatrabajo': 'ficha_trabajo',
+    'ficha_de_trabajo': 'ficha_trabajo',
     'ficha': 'ficha_trabajo',
     'juego_libre_sectores': 'juego_libre_sectores',
     'juego_libre': 'juego_libre_sectores',
     'juego_libre_en_los_sectores': 'juego_libre_sectores',
+    'juego_libre_en_sectores': 'juego_libre_sectores',
     'alumnos': 'alumnos',
     'estudiantes': 'alumnos',
     'lista_alumnos': 'alumnos',
     'lista_estudiantes': 'alumnos',
+    'lista_de_cotejo': 'alumnos',
     'titulo_sesion_retador': '_titulo_sesion_retador',
     'titulo_sesion': '_titulo_sesion_retador',
     'evaluacion': 'evaluacion',
@@ -213,6 +221,7 @@ METADATA_MAP = {
     'materia': 'area',
     'duracion': 'duracion',
     'duracion_minutos': 'duracion',
+    'tiempo': 'duracion',
     'unidad': 'unidad',
     'unidad_proyecto': 'unidad',
     'proyecto': 'unidad',
@@ -234,31 +243,52 @@ PROPOSITO_MAP = {
     'proposito_texto': 'proposito_texto',
     'proposito': 'proposito_texto',
     'proposito_sesion': 'proposito_texto',
+    'proposito_de_la_sesion': 'proposito_texto',
     'conocimientos': 'conocimientos',
     'contenido': 'conocimientos',
     'contenidos': 'conocimientos',
     'temas': 'conocimientos',
+    'tema': 'conocimientos',
+    'conocimiento': 'conocimientos',
+    'conocimientos_clave': 'conocimientos',
     'competencia': 'competencia',
     'competencias': 'competencia',
     'estandar': 'estandar',
     'estandar_aprendizaje': 'estandar',
+    'estandar_de_aprendizaje': 'estandar',
     'capacidades': 'capacidades',
     'capacidad': 'capacidades',
     'criterios': 'criterios',
     'criterio': 'criterios',
     'criterios_evaluacion': 'criterios',
+    'criterio_evaluacion': 'criterios',
     'criterios_de_evaluacion': 'criterios',
+    'criterios_eval': 'criterios',
     'producto_evidencia': 'producto_evidencia',
     'evidencia': 'producto_evidencia',
+    'evidencias': 'producto_evidencia',
     'producto': 'producto_evidencia',
+    'productos': 'producto_evidencia',
     'evidencia_aprendizaje': 'producto_evidencia',
     'producto_aprendizaje': 'producto_evidencia',
+    'evidencia_de_aprendizaje': 'producto_evidencia',
+    'producto_o_evidencia': 'producto_evidencia',
     'instrumento': 'instrumento',
     'instrumentos': 'instrumento',
     'instrumento_evaluacion': 'instrumento',
     'instrumentos_evaluacion': 'instrumento',
+    'instrumento_de_evaluacion': 'instrumento',
+    'instrumentos_de_evaluacion': 'instrumento',
     'desempeno': 'desempeno',
-    'desempeño': 'desempeno'
+    'desempeño': 'desempeno',
+    'desempenos': 'desempeno',
+    'desempeños': 'desempeno',
+    'desempeno_grado': 'desempeno',
+    'desempeño_grado': 'desempeno',
+    'desempeno_del_grado': 'desempeno',
+    'desempeño_del_grado': 'desempeno',
+    'desempenos_precisados': 'desempeno',
+    'desempeños_precisados': 'desempeno'
 }
 
 COMPETENCIA_TRANSVERSAL_MAP = {
@@ -270,7 +300,9 @@ COMPETENCIA_TRANSVERSAL_MAP = {
     'desempeno': 'desempenos',
     'desempeño': 'desempenos',
     'desempenos_precisados': 'desempenos',
-    'desempeños_precisados': 'desempenos'
+    'desempeños_precisados': 'desempenos',
+    'criterios': 'desempenos',
+    'criterios_evaluacion': 'desempenos'
 }
 
 ENFOQUE_TRANSVERSAL_MAP = {
@@ -283,7 +315,8 @@ ENFOQUE_TRANSVERSAL_MAP = {
     'actitud': 'actitudes',
     'acciones_observables': 'actitudes',
     'acciones': 'actitudes',
-    'actitudes_o_acciones_observables': 'actitudes'
+    'actitudes_o_acciones_observables': 'actitudes',
+    'actitudes_observables': 'actitudes'
 }
 
 RECURSOS_MAP = {
@@ -294,33 +327,49 @@ RECURSOS_MAP = {
     'paginas_web': 'enlaces',
     'paginas_consulta': 'enlaces',
     'paginas_de_consulta': 'enlaces',
+    'paginas_de_texto': 'enlaces',
+    'paginas_de_texto_consulta': 'enlaces',
+    'referencias': 'enlaces',
+    'bibliografia': 'enlaces',
     'materiales': 'materiales',
     'recursos': 'materiales',
     'materiales_recursos': 'materiales',
     'materiales_y_recursos': 'materiales',
+    'materiales_y_recursos_educativos': 'materiales',
+    'recursos_educativos': 'materiales',
     'refuerzo': 'refuerzo',
     'reforzamiento': 'refuerzo',
     'actividades_refuerzo': 'refuerzo',
-    'actividades_de_refuerzo': 'refuerzo'
+    'actividades_de_refuerzo': 'refuerzo',
+    'actividades_de_refuerzo_escolar': 'refuerzo',
+    'refuerzo_escolar': 'refuerzo'
 }
 
 JUEGO_LIBRE_MAP = {
     'planificacion': 'planificacion',
+    'planificación': 'planificacion',
     'organizacion': 'organizacion',
+    'organización': 'organizacion',
     'ejecucion': 'ejecucion',
+    'ejecución': 'ejecucion',
     'orden': 'orden',
     'socializacion': 'socializacion',
-    'representacion': 'representacion'
+    'socialización': 'socializacion',
+    'representacion': 'representacion',
+    'representación': 'representacion'
 }
 
 MOMENTO_INICIO_MAP = {
     'tiempo_total': 'tiempo_total',
     'tiempo': 'tiempo_total',
     'duracion': 'tiempo_total',
+    'tiempo_inicio': 'tiempo_total',
+    'minutos': 'tiempo_total',
     'actividades': 'actividades',
     'secuencia': 'actividades',
     'estrategias': 'actividades',
-    'procesos': 'actividades'
+    'procesos': 'actividades',
+    'estrategias_inicio': 'actividades'
 }
 
 PROCESO_DESARROLLO_MAP = {
@@ -333,30 +382,44 @@ PROCESO_DESARROLLO_MAP = {
     'contenido': 'contenido',
     'contenidos': 'contenido',
     'actividades': 'contenido',
-    'descripcion': 'contenido'
+    'descripcion': 'contenido',
+    'texto': 'contenido'
 }
 
 MOMENTO_DESARROLLO_MAP = {
     'tiempo_total': 'tiempo_total',
     'tiempo': 'tiempo_total',
     'duracion': 'tiempo_total',
+    'tiempo_desarrollo': 'tiempo_total',
     'procesos': 'procesos',
     'procesos_didacticos': 'procesos',
-    'actividades': 'procesos'
+    'actividades': 'procesos',
+    'processes': 'procesos'
 }
 
 MOMENTO_CIERRE_MAP = {
     'tiempo_total': 'tiempo_total',
     'tiempo': 'tiempo_total',
     'duracion': 'tiempo_total',
+    'tiempo_cierre': 'tiempo_total',
     'metacognicion': 'metacognicion',
+    'metacognición': 'metacognicion',
     'preguntas_metacognicion': 'metacognicion',
+    'preguntas_de_metacognicion': 'metacognicion',
+    'reflexion': 'metacognicion',
+    'reflexión': 'metacognicion',
     'evaluacion': 'evaluacion',
+    'evaluación': 'evaluacion',
     'evaluacion_formativa': 'evaluacion',
+    'evaluación_formativa': 'evaluacion',
     'extension': 'extension',
+    'extensión': 'extension',
+    'extension_para_casa': 'extension',
+    'extension_casa': 'extension',
     'tarea': 'extension',
+    'tarea_casa': 'extension',
     'casa': 'extension',
-    'extension_casa': 'extension'
+    'actividad_extension': 'extension'
 }
 
 MOMENTOS_MAP = {
@@ -384,7 +447,6 @@ FICHA_TRABAJO_MAP = {
 def _humanize_key(k: str) -> str:
     """Convierte 'proceso_1_familiarizacion' -> 'Familiarizacion'."""
     parts = k.split('_')
-    # Quitar prefijo 'proceso' y numeros
     cleaned = [p.capitalize() for p in parts if not p.isdigit() and p.lower() not in ('proceso', 'paso')]
     return ' '.join(cleaned) if cleaned else k.replace('_', ' ').capitalize()
 
@@ -486,13 +548,19 @@ def normalize_sesion_data(data: dict) -> dict:
                     proposito_clean[list_field] = []
             else:
                 proposito_clean[list_field] = []
+        if 'desempeno' in proposito_clean:
+            if isinstance(proposito_clean['desempeno'], list):
+                proposito_clean['desempeno'] = '\n'.join([str(x) for x in proposito_clean['desempeno']])
+            elif proposito_clean['desempeno'] is not None:
+                proposito_clean['desempeno'] = str(proposito_clean['desempeno']).strip()
+        if 'conocimientos' in proposito_clean:
+            if isinstance(proposito_clean['conocimientos'], list):
+                proposito_clean['conocimientos'] = '\n'.join([str(x) for x in proposito_clean['conocimientos']])
+            elif proposito_clean['conocimientos'] is not None:
+                proposito_clean['conocimientos'] = str(proposito_clean['conocimientos']).strip()
     else:
         proposito_clean = {'capacidades': [], 'criterios': []}
     data['proposito'] = proposito_clean
-
-    # 4. Normalizar competencias_transversales
-    #    La IA manda un objeto {tic: [...], autonoma: [...]}
-    #    El backend espera una lista [{titulo, desempenos}, ...]
     cts_raw = data.get('competencias_transversales', [])
     cts_clean = []
     if isinstance(cts_raw, dict):

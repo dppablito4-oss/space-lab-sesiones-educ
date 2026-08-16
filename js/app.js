@@ -1640,7 +1640,7 @@
         };
 
         // 4. Competencias Transversales
-        const competencias_transversales = [];
+        let competencias_transversales = [];
         const ctTable = DOM.sessionSheet.querySelector('.ct-table');
         if (ctTable) {
             const rows = ctTable.querySelectorAll('tbody > tr');
@@ -1648,7 +1648,7 @@
                 const cells = row.querySelectorAll('td');
                 if (cells.length >= 2) {
                     const ct_titulo = cells[0].textContent.trim();
-                    const ct_desempenos = Array.from(cells[1].querySelectorAll('ul.session-list li')).map(li => li.textContent.trim());
+                    const ct_desempenos = Array.from(cells[1].querySelectorAll('ul.session-list li, ul li')).map(li => li.textContent.trim());
                     competencias_transversales.push({
                         titulo: ct_titulo,
                         desempenos: ct_desempenos
@@ -1656,9 +1656,12 @@
                 }
             });
         }
+        if (competencias_transversales.length === 0 && AppState.currentSession?.competencias_transversales?.length > 0) {
+            competencias_transversales = AppState.currentSession.competencias_transversales;
+        }
 
         // 5. Enfoques Transversales
-        const enfoques_transversales = [];
+        let enfoques_transversales = [];
         const enfTable = Array.from(DOM.sessionSheet.querySelectorAll('table.content-table')).find(t => {
             const th = t.querySelector('th');
             return th && th.textContent.includes('ENFOQUES TRANSVERSALES');
@@ -1676,6 +1679,9 @@
                 }
             });
         }
+        if (enfoques_transversales.length === 0 && AppState.currentSession?.enfoques_transversales?.length > 0) {
+            enfoques_transversales = AppState.currentSession.enfoques_transversales;
+        }
 
         // 6. Recursos
         let enlaces = '';
@@ -1692,7 +1698,11 @@
             if (rows[2] && rows[2].querySelectorAll('td')[1]) refuerzo = rows[2].querySelectorAll('td')[1].textContent.trim();
         }
 
-        const recursos = { enlaces, materiales, refuerzo };
+        const recursos = {
+            enlaces: enlaces || AppState.currentSession?.recursos?.enlaces || '',
+            materiales: materiales || AppState.currentSession?.recursos?.materiales || '',
+            refuerzo: refuerzo || AppState.currentSession?.recursos?.refuerzo || ''
+        };
 
         // 7. Momentos Didácticos
         let inicio_tiempo = '';
@@ -1796,7 +1806,7 @@
                     if (timeMatch) cierre_tiempo = timeMatch[1];
                 }
                 if (cellAct) {
-                    const uls = cellAct.querySelectorAll('ul.session-list');
+                    const uls = cellAct.querySelectorAll('ul.session-list, ul');
                     if (uls.length >= 3) {
                         if (uls[0]) cierre_metacognicion = Array.from(uls[0].querySelectorAll('li')).map(li => li.textContent.trim());
                         if (uls[1]) cierre_evaluacion = Array.from(uls[1].querySelectorAll('li')).map(li => li.textContent.trim());
@@ -1836,10 +1846,22 @@
             }
         }
 
+        const fallbackMom = AppState.currentSession?.momentos || {};
         const momentos = {
-            inicio: { tiempo_total: inicio_tiempo, actividades: inicio_actividades },
-            desarrollo: { tiempo_total: desarrollo_tiempo, procesos: desarrollo_procesos },
-            cierre: { tiempo_total: cierre_tiempo, metacognicion: cierre_metacognicion, evaluacion: cierre_evaluacion, extension: cierre_extension }
+            inicio: {
+                tiempo_total: inicio_tiempo || fallbackMom.inicio?.tiempo_total || '',
+                actividades: inicio_actividades.length > 0 ? inicio_actividades : (fallbackMom.inicio?.actividades || [])
+            },
+            desarrollo: {
+                tiempo_total: desarrollo_tiempo || fallbackMom.desarrollo?.tiempo_total || '',
+                procesos: desarrollo_procesos.length > 0 ? desarrollo_procesos : (fallbackMom.desarrollo?.procesos || [])
+            },
+            cierre: {
+                tiempo_total: cierre_tiempo || fallbackMom.cierre?.tiempo_total || '',
+                metacognicion: cierre_metacognicion.length > 0 ? cierre_metacognicion : (fallbackMom.cierre?.metacognicion || []),
+                evaluacion: cierre_evaluacion.length > 0 ? cierre_evaluacion : (fallbackMom.cierre?.evaluacion || []),
+                extension: cierre_extension.length > 0 ? cierre_extension : (fallbackMom.cierre?.extension || [])
+            }
         };
 
         // 8. Ficha de Trabajo
@@ -1854,6 +1876,8 @@
                 indicaciones: fichaIndicacionesEl ? fichaIndicacionesEl.textContent.replace('Indicaciones:', '').trim() : '',
                 actividades: fichaActividadesEl.textContent.trim()
             };
+        } else if (AppState.currentSession?.ficha_trabajo) {
+            ficha_trabajo = AppState.currentSession.ficha_trabajo;
         }
 
         // 9. Juego Libre en los Sectores (Educación Inicial)
@@ -1870,8 +1894,14 @@
                 }
             });
         } else if (AppState.currentSession && AppState.currentSession.juego_libre_sectores) {
-            // Fallback: use session data if DOM table not found
             juego_libre_sectores = AppState.currentSession.juego_libre_sectores;
+        }
+
+        // 10. Alumnos
+        const textAlumnos = document.getElementById('textarea-alumnos')?.value || '';
+        let alumnosList = textAlumnos.split('\n').map(line => line.trim()).filter(Boolean);
+        if (alumnosList.length === 0 && Array.isArray(AppState.currentSession?.alumnos) && AppState.currentSession.alumnos.length > 0) {
+            alumnosList = AppState.currentSession.alumnos;
         }
 
         return {
@@ -1883,10 +1913,7 @@
             momentos,
             ficha_trabajo,
             juego_libre_sectores,
-            alumnos: (() => {
-                const text = document.getElementById('textarea-alumnos')?.value || '';
-                return text.split('\n').map(line => line.trim()).filter(Boolean);
-            })(),
+            alumnos: alumnosList,
             token: localStorage.getItem('connection_token') || ''
         };
     }
