@@ -6,46 +6,69 @@
 
 :root {
     /* ════════════════════════════════════════════
-       SPACE LAB — NEUTRAL GRAPHITE DARK PALETTE
-       Superficies acromáticas. Cyan SÓLO para
-       acción primaria, foco, selección y marca.
+       SPACE LAB — DARK GRAPHITE DESIGN SYSTEM
+       4 niveles de superficie. Jerarquía visual real.
        ════════════════════════════════════════════ */
 
-    /* Fondos — charcoal puro, sin undertone azul */
-    --color-background:   #0B0B0C;
-    --color-card:         #131314;
-    --color-card-surface: #18181A;
-    --color-muted:        #1E1E21;
-    --color-elevated:     #242427;
+    /* ── Nivel 0: Fondo de aplicación (más oscuro) */
+    --color-background:   #0A0A0B;
 
-    /* Texto — zinc neutro */
-    --color-foreground:         #F4F4F5;
-    --color-muted-foreground:   #B4B4BA;
-    --color-subtle-foreground:  #77777F;
+    /* ── Nivel 1: Sidebar / Topbar */
+    --color-card:         #111113;
 
-    /* Bordes — subtle, casi invisibles */
-    --color-border:        #202023;
-    --color-border-subtle: #1A1A1D;
-    --color-border-hover:  #29292D;
+    /* ── Nivel 2: Cards, paneles, dropzones */
+    --color-card-surface: #191919;
 
-    /* ── Accent Space Lab ──
-       Cyan exclusivo: acción primaria, tab activo,
-       focus ring, detalles de marca, enlaces activos.
-       NO usar para fondos, cards, inputs, topbar, sidebar. */
+    /* ── Nivel 3: Inputs, selects, muted areas */
+    --color-muted:        #1F1F22;
+    --color-elevated:     #252528;
+
+    /* ── Texto — zinc de alta legibilidad */
+    --color-foreground:         #EEEEF0;
+    --color-muted-foreground:   #9595A0;
+    --color-subtle-foreground:  #5A5A65;
+    --color-label:              #C4C4CC;
+
+    /* ── Bordes — visibles pero sutiles */
+    --color-border:        #252528;
+    --color-border-subtle: #1C1C1F;
+    --color-border-hover:  #333338;
+    --color-border-focus:  rgba(25, 188, 235, 0.50);
+
+    /* ── Accent principal: Cyan Space Lab ── */
     --color-primary:        #19BCEB;
-    --color-primary-hover:  #13A8D4;
-    --color-primary-subtle: rgba(25, 188, 235, 0.10);
-    --color-primary-ring:   rgba(25, 188, 235, 0.20);
+    --color-primary-hover:  #0FAEDA;
+    --color-primary-dim:    rgba(25, 188, 235, 0.12);
+    --color-primary-ring:   rgba(25, 188, 235, 0.28);
     --color-accent:         #19BCEB;
-    --color-accent-hover:   #13A8D4;
+    --color-accent-hover:   #0FAEDA;
     --color-ring:           #19BCEB;
 
-    /* Semánticos — estrictamente reservados */
+    /* ── Accent secundario: Violeta MUY sutil ──
+       Solo en detalles mínimos: step-num, badge especial,
+       borde de chatbot bubble. NO en backgrounds. */
+    --color-violet:        #8B7CF6;
+    --color-violet-dim:    rgba(139, 124, 246, 0.10);
+    --color-violet-border: rgba(139, 124, 246, 0.25);
+
+    /* ── Semánticos estrictos */
     --color-success:     #22c55e;
     --color-warning:     #f59e0b;
     --color-destructive: #ef4444;
 
-    /* Compatibilidad con scripts y componentes */
+    /* ── Sombras con profundidad real */
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.55);
+    --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.55);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.60);
+    --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.70);
+    --shadow-inset: inset 0 1px 0 rgba(255,255,255,0.04);
+    --glow-cyan: 0 0 12px rgba(25, 188, 235, 0.20);
+
+    /* ── Transiciones finas */
+    --ease-out: 140ms cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-in:  100ms ease-in;
+
+    /* ── Compatibilidad con scripts y componentes */
     --bg-deep:       var(--color-background);
     --bg-primary:    var(--color-card);
     --bg-secondary:  var(--color-card-surface);
@@ -58,58 +81,40 @@
     --text-accent:    var(--color-accent);
     --border:         var(--color-border);
     --border-hover:   var(--color-border-hover);
-    --border-accent:  rgba(25, 188, 235, 0.25);
+    --border-accent:  rgba(25, 188, 235, 0.30);
 
-    /* Tipografía */
+    /* ── Tipografía */
     --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     --font-heading: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', monospace;
 
-    /* Dimensiones de Layout (16:9 Desktop Workspace) */
+    /* ── Layout */
     --header-h: 50px;
     --sidebar-w: 370px;
     --radius-xs: 4px;
-    --radius-sm: 6px;
-    --radius-md: 8px;
+    --radius-sm: 7px;
+    --radius-md: 9px;
     --radius-lg: 12px;
-
-    /* Sombras planas y precisas */
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
-    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
-    --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.65);
 
     /* ════════════════════════════════════════════
        OVERRIDES DE TOKENS LEGACY (style.css)
-       Neutralizamos todos los valores navy/neon
-       del sistema antiguo para que resuelvan a
-       graphite puro. redesign.css se carga después
-       así que estos valores ganan la cascada.
        ════════════════════════════════════════════ */
-
-    /* Accent legacy → nuevo cyan Space Lab */
     --accent:        #19BCEB;
-    --accent-dark:   #13A8D4;
-    --accent-glow:   rgba(25, 188, 235, 0.15);
-    --accent-2:      #19BCEB; /* eliminamos purple */
-    --accent-2-glow: rgba(25, 188, 235, 0.10);
-    --text-accent:   #19BCEB;
-
-    /* Fondos legacy → graphite neutro */
-    --bg-deep:      #0B0B0C;
-    --bg-primary:   #131314;
-    --bg-secondary: #18181A;
-    --bg-elevated:  #1E1E21;
-    --bg-card:      #131314;
-    --bg-card-hover:#18181A;
-
-    /* Texto legacy → zinc neutro */
-    --text-primary:   #F4F4F5;
-    --text-secondary: #B4B4BA;
-    --text-muted:     #77777F;
-
-    /* Glass legacy → graphite, sin navy */
-    --glass-bg:     rgba(19, 19, 20, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.05);
+    --accent-dark:   #0FAEDA;
+    --accent-glow:   rgba(25, 188, 235, 0.18);
+    --accent-2:      #8B7CF6;
+    --accent-2-glow: rgba(139, 124, 246, 0.12);
+    --bg-deep:      #0A0A0B;
+    --bg-primary:   #111113;
+    --bg-secondary: #191919;
+    --bg-elevated:  #1F1F22;
+    --bg-card:      #111113;
+    --bg-card-hover:#191919;
+    --text-primary:   #EEEEF0;
+    --text-secondary: #9595A0;
+    --text-muted:     #5A5A65;
+    --glass-bg:     rgba(17, 17, 19, 0.90);
+    --glass-border: rgba(255, 255, 255, 0.06);
     --glass-blur:   16px;
 
     /* Bordes legacy → neutral */
@@ -153,10 +158,10 @@ html, body {
 .space-background { display: none !important; }
 
 /* Scrollbars minimalistas */
-::-webkit-scrollbar { width: 5px; height: 5px; }
+::-webkit-scrollbar { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #2C2C2F; border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: #38383C; }
+::-webkit-scrollbar-thumb { background: #2A2A2E; border-radius: 6px; transition: background 140ms ease; }
+::-webkit-scrollbar-thumb:hover { background: #3A3A40; }
 
 /* Iconos vectoriales consistentes */
 .ui-icon {
@@ -213,6 +218,7 @@ html, body {
     padding: 0 16px;
     background: var(--color-card);
     border-bottom: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -295,11 +301,12 @@ html, body {
 .btn {
     min-height: 28px;
     height: 28px;
-    padding: 0 9px;
+    padding: 0 10px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
     background: var(--color-card-surface);
-    color: #e4e4e7;
+    box-shadow: var(--shadow-inset);
+    color: var(--color-muted-foreground);
     font-family: inherit;
     font-size: 0.76rem;
     font-weight: 500;
@@ -308,13 +315,14 @@ html, body {
     justify-content: center;
     gap: 5px;
     cursor: pointer;
-    transition: background-color 120ms ease, border-color 120ms ease, color 120ms ease;
+    transition: background var(--ease-out), border-color var(--ease-out), color var(--ease-out), box-shadow var(--ease-out);
 }
 
 .btn:hover {
     background: var(--color-muted);
     border-color: var(--color-border-hover);
     color: var(--color-foreground);
+    box-shadow: var(--shadow-sm);
 }
 
 .btn:active { transform: scale(0.98); }
@@ -334,14 +342,18 @@ html, body {
 .btn-primary {
     background: var(--color-primary);
     border-color: var(--color-primary-hover);
-    color: #0B0B0C;
+    color: #060608;
     font-weight: 600;
+    letter-spacing: 0.01em;
+    box-shadow: 0 0 0 0 rgba(25,188,235,0), var(--shadow-xs);
+    transition: background var(--ease-out), box-shadow var(--ease-out), border-color var(--ease-out);
 }
 
 .btn-primary:hover {
     background: var(--color-primary-hover);
     border-color: var(--color-primary);
-    color: #0B0B0C;
+    color: #060608;
+    box-shadow: 0 0 12px rgba(25,188,235,0.30), var(--shadow-sm);
 }
 
 .btn-ghost {
@@ -398,6 +410,7 @@ html, body {
     padding: 14px;
     background: var(--color-card);
     border-right: 1px solid var(--color-border);
+    box-shadow: var(--shadow-xs);
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -450,13 +463,14 @@ html, body {
     justify-content: center;
     gap: 2px;
     cursor: pointer;
-    transition: all 120ms ease;
+    transition: color var(--ease-out), background var(--ease-out);
 }
 
 .sidebar-tab .tab-icon {
     width: 14px;
     height: 14px;
     color: inherit;
+    transition: transform var(--ease-out);
 }
 
 .sidebar-tab .tab-text {
@@ -465,13 +479,18 @@ html, body {
 }
 
 .sidebar-tab:hover {
-    color: var(--color-foreground);
-    background: rgba(255, 255, 255, 0.03);
+    color: var(--color-muted-foreground);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.sidebar-tab:hover .tab-icon {
+    transform: scale(1.08);
 }
 
 .sidebar-tab.active {
     background: var(--color-muted) !important;
-    border-color: var(--color-border-hover) !important;
+    border-color: transparent !important;
+    border-bottom: 2px solid var(--color-accent) !important;
     box-shadow: none !important;
     color: var(--color-accent);
 }
@@ -495,9 +514,10 @@ html, body {
 }
 
 .form-label {
-    color: var(--color-muted-foreground);
-    font-size: 0.72rem;
+    color: var(--color-label);
+    font-size: 0.71rem;
     font-weight: 600;
+    letter-spacing: 0.01em;
     display: flex;
     align-items: center;
     gap: 4px;
@@ -519,23 +539,24 @@ html, body {
 .form-select,
 .form-textarea {
     width: 100%;
-    min-height: 30px;
-    height: 30px;
-    padding: 4px 8px;
+    min-height: 32px;
+    height: 32px;
+    padding: 5px 10px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    background-color: var(--color-card-surface);
+    background-color: var(--color-muted);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.35), var(--shadow-inset);
     color: var(--color-foreground);
     font-family: inherit;
     font-size: 0.78rem;
     box-sizing: border-box;
-    transition: border-color 120ms ease;
+    transition: border-color var(--ease-out), box-shadow var(--ease-out), background var(--ease-out);
 }
 
 .form-textarea {
-    min-height: 60px;
+    min-height: 64px;
     height: auto;
-    line-height: 1.4;
+    line-height: 1.45;
     resize: vertical;
 }
 
@@ -543,27 +564,31 @@ html, body {
 .form-select:hover,
 .form-textarea:hover {
     border-color: var(--color-border-hover);
+    background-color: var(--color-elevated);
 }
 
 .form-input:focus,
 .form-select:focus,
 .form-textarea:focus {
     border-color: var(--color-ring);
+    background-color: var(--color-elevated);
     outline: none;
-    box-shadow: 0 0 0 2px var(--color-primary-ring);
+    box-shadow: 0 0 0 3px var(--color-primary-ring), inset 0 1px 3px rgba(0,0,0,0.25);
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
     color: var(--color-subtle-foreground);
+    font-weight: 400;
 }
 
 .form-select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b90a0' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235A5A65' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
-    background-position: right 7px center;
+    background-position: right 8px center;
     background-size: 11px;
-    padding-right: 24px;
+    padding-right: 26px;
+    cursor: pointer;
 }
 
 .form-select option {
@@ -690,20 +715,24 @@ html, body {
 /* Botón principal Generar */
 #btn-generate {
     width: 100%;
-    min-height: 34px;
-    height: 34px;
+    min-height: 36px;
+    height: 36px;
     background: var(--color-primary);
     border: 1px solid var(--color-primary-hover);
-    color: #0B0B0C;
-    font-size: 0.82rem;
-    font-weight: 600;
+    color: #060608;
+    font-size: 0.84rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
     border-radius: var(--radius-sm);
+    box-shadow: 0 0 0 0 rgba(25,188,235,0), var(--shadow-xs);
+    transition: background var(--ease-out), box-shadow var(--ease-out);
 }
 
 #btn-generate:hover {
     background: var(--color-primary-hover);
     border-color: var(--color-primary);
-    color: #0B0B0C;
+    color: #060608;
+    box-shadow: 0 0 16px rgba(25,188,235,0.35), var(--shadow-sm);
 }
 
 .form-actions {
@@ -914,14 +943,15 @@ html, body {
     align-items: flex-start;
     gap: 9px;
     padding: 10px 12px;
-    background: var(--color-muted);
+    background: var(--color-card-surface);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
-    transition: border-color 120ms ease;
+    transition: border-color var(--ease-out), background var(--ease-out);
 }
 
 .step-item:hover {
     border-color: var(--color-border-hover);
+    background: var(--color-muted);
 }
 
 .step-num {
@@ -931,8 +961,10 @@ html, body {
     width: 20px;
     height: 20px;
     min-width: 20px;
-    background: var(--color-elevated);
-    color: var(--color-accent);
+    /* Violeta sutil como detalle secundario */
+    background: var(--color-violet-dim);
+    border: 1px solid var(--color-violet-border);
+    color: var(--color-violet);
     border-radius: 4px;
     font-size: 0.7rem;
     font-weight: 700;
