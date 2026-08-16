@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+
+# Local export engine artifacts
+backend/build/
+backend/dist/
+backend/bin/
+backend/test_run.log
+connection_token.txt
+backend/connection_token.txt
+
+# Supabase CLI local state
+supabase/.temp/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+

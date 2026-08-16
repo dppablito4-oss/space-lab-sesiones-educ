@@ -64,7 +64,9 @@ const Storage = (() => {
 
     function saveSession(session) {
         try {
-            const sessions = getAllSessions();
+            // Include soft-deleted records so a later save cannot discard the
+            // deletion tombstones before they are synchronized with Supabase.
+            const sessions = getAllSessions(true);
             const idx = sessions.findIndex(s => s.id === session.id);
 
             session.lastSaved = new Date().toISOString();

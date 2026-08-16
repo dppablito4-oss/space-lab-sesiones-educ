@@ -42,7 +42,11 @@ CREATE POLICY "Users can view their own profile" ON public.profiles
 
 DROP POLICY IF EXISTS "Users can insert their own profile" ON public.profiles;
 CREATE POLICY "Users can insert their own profile" ON public.profiles
-    FOR INSERT WITH CHECK (auth.uid() = id);
+    FOR INSERT WITH CHECK (
+        auth.uid() = id
+        AND role = 'user'
+        AND email = (auth.jwt() ->> 'email')
+    );
 
 DROP POLICY IF EXISTS "Users can update their own profile" ON public.profiles;
 CREATE POLICY "Users can update their own profile" ON public.profiles
@@ -54,7 +58,7 @@ CREATE POLICY "Admins can view all profiles" ON public.profiles
 
 DROP POLICY IF EXISTS "Admins can update profiles" ON public.profiles;
 CREATE POLICY "Admins can update profiles" ON public.profiles
-    FOR UPDATE USING (public.is_admin());
+    FOR UPDATE USING (public.is_admin()) WITH CHECK (public.is_admin());
 
 -- Trigger para crear perfil automáticamente cuando se registra un usuario en Supabase Auth
 CREATE OR REPLACE FUNCTION public.handle_new_user()
@@ -68,11 +72,6 @@ BEGIN
         'user' -- Todos los usuarios se registran como 'user' por seguridad.
     );
     
-    -- Sincronizar también el rol inicial a raw_user_meta_data en auth.users
-    UPDATE auth.users
-    SET raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || jsonb_build_object('role', 'user')
-    WHERE id = new.id;
-
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
@@ -93,12 +92,13 @@ CREATE TRIGGER before_profile_role_update
     BEFORE UPDATE ON public.profiles
     FOR EACH ROW EXECUTE FUNCTION public.check_profile_role_update();
 
--- Función y trigger para sincronizar el rol a auth.users cuando cambie en profiles
+-- Sincronizar roles solo con app_metadata. user_metadata puede ser modificada
+-- por el propio usuario y nunca debe utilizarse para autorizar administradores.
 CREATE OR REPLACE FUNCTION public.sync_profile_role_to_auth()
 RETURNS TRIGGER AS $$
 BEGIN
     UPDATE auth.users 
-    SET raw_user_meta_data = COALESCE(raw_user_meta_data, '{}'::jsonb) || jsonb_build_object('role', NEW.role)
+    SET raw_app_meta_data = COALESCE(raw_app_meta_data, '{}'::jsonb) || jsonb_build_object('role', NEW.role)
     WHERE id = NEW.id;
     RETURN NEW;
 END;
@@ -109,17 +109,22 @@ CREATE TRIGGER on_profile_role_update
     AFTER INSERT OR UPDATE OF role ON public.profiles
     FOR EACH ROW EXECUTE FUNCTION public.sync_profile_role_to_auth();
 
--- Redefinición de is_admin sin bucle RLS (usando claims del JWT)
+-- Verificar el rol directamente en la tabla protegida. La función SECURITY
+-- DEFINER evita la recursión de RLS sin confiar en claims controlados por el usuario.
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS BOOLEAN AS $$
 BEGIN
-    RETURN (
-        auth.jwt() -> 'user_metadata' ->> 'role' IN ('admin', 'superadmin')
-        OR
-        auth.jwt() -> 'app_metadata' ->> 'role' IN ('admin', 'superadmin')
+    RETURN EXISTS (
+        SELECT 1
+        FROM public.profiles
+        WHERE id = auth.uid()
+          AND role IN ('admin', 'superadmin')
     );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+
+REVOKE ALL ON FUNCTION public.is_admin() FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
@@ -203,7 +208,7 @@ CREATE POLICY "Admins can view SMTP settings" ON public.corporate_email_settings
 
 DROP POLICY IF EXISTS "Admins can modify SMTP settings" ON public.corporate_email_settings;
 CREATE POLICY "Admins can modify SMTP settings" ON public.corporate_email_settings
-    FOR ALL USING (public.is_admin());
+    FOR ALL USING (public.is_admin()) WITH CHECK (public.is_admin());
 
 
 -- 4. Tabla de Logs de Seguridad
@@ -224,8 +229,9 @@ CREATE POLICY "Admins can view logs" ON public.security_logs
     FOR SELECT USING (public.is_admin());
 
 DROP POLICY IF EXISTS "Anyone can insert security logs" ON public.security_logs;
-CREATE POLICY "Anyone can insert security logs" ON public.security_logs
-    FOR INSERT WITH CHECK (auth.role() = 'authenticated');
+DROP POLICY IF EXISTS "Users can insert their own security logs" ON public.security_logs;
+CREATE POLICY "Users can insert their own security logs" ON public.security_logs
+    FOR INSERT WITH CHECK (auth.uid() = user_id);
 
 -- =======================================================
 -- 5. Configuración de Storage para Logos Públicos
@@ -255,3 +261,30 @@ CREATE POLICY "Auth Users Update Logos" ON storage.objects
 DROP POLICY IF EXISTS "Auth Users Delete Logos" ON storage.objects;
 CREATE POLICY "Auth Users Delete Logos" ON storage.objects
     FOR DELETE USING (bucket_id = 'logos' AND auth.uid() = owner);
+
+-- =======================================================
+-- 6. Lista de alumnos por docente y sección
+-- =======================================================
+
+CREATE TABLE IF NOT EXISTS public.alumnos (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+    nombre_completo TEXT NOT NULL CHECK (char_length(trim(nombre_completo)) > 0),
+    nivel TEXT NOT NULL,
+    grado TEXT NOT NULL,
+    seccion TEXT NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+ALTER TABLE public.alumnos ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Users can manage their own student rosters" ON public.alumnos;
+CREATE POLICY "Users can manage their own student rosters"
+    ON public.alumnos
+    FOR ALL
+    TO authenticated
+    USING (auth.uid() = user_id)
+    WITH CHECK (auth.uid() = user_id);
+
+CREATE INDEX IF NOT EXISTS idx_alumnos_user_grade_section
+    ON public.alumnos (user_id, nivel, grado, seccion);

@@ -1022,13 +1022,19 @@
             const session = {
                 id: AppState.currentSession?.id || Storage.generateId(),
                 template: DOM.selectTemplate.value,
-                metadata: { ...formData.metadata },
-                proposito: aiData.proposito || formData.proposito,
+                metadata: { ...formData.metadata, ...(aiData.metadata || {}) },
+                proposito: { ...formData.proposito, ...(aiData.proposito || {}) },
+                competencias_transversales: aiData.competencias_transversales || [],
+                enfoques: aiData.enfoques || [],
+                enfoques_transversales: aiData.enfoques_transversales || [],
+                recursos: aiData.recursos || {},
                 momentos: aiData.momentos || {},
                 evaluacion: aiData.evaluacion || {},
                 juego_libre_sectores: aiData.juego_libre_sectores || null,
                 ficha_trabajo: aiData.ficha_trabajo || null,
-                createdAt: new Date().toISOString()
+                alumnos: formData.alumnos,
+                design: formData.design,
+                createdAt: AppState.currentSession?.createdAt || new Date().toISOString()
             };
 
             AppState.currentSession = session;
@@ -1104,6 +1110,7 @@
             renderMathInElement(DOM.sessionSheet, {
                 delimiters: [
                     { left: '$$', right: '$$', display: true  },
+                    { left: '$', right: '$', display: false },
                     { left: '\\(', right: '\\)', display: false },
                     { left: '\\[', right: '\\]', display: true  }
                 ],
@@ -1861,6 +1868,10 @@
             momentos,
             ficha_trabajo,
             juego_libre_sectores,
+            alumnos: (() => {
+                const text = document.getElementById('textarea-alumnos')?.value || '';
+                return text.split('\n').map(line => line.trim()).filter(Boolean);
+            })(),
             token: localStorage.getItem('connection_token') || ''
         };
     }
