@@ -50,15 +50,124 @@ const Templates = (() => {
      * @param {boolean} editable - Enable contenteditable
      * @returns {string} HTML string
      */
+    /**
+     * Normaliza los datos de entrada soportando tanto SessionDocument v1 como formatos legacy.
+     */
+    function _normalizeForTemplate(data) {
+        if (!data || typeof data !== 'object') return { m: {}, p: {}, momentos: {}, evalData: {}, ct: {}, enfoques: [], recursos: {}, fichaTrabajo: null, juegoLibre: null, alumnos: [] };
+
+        const m = Object.assign({}, data.metadata || {});
+        if (m.numeroSesion && !m.numero_sesion) m.numero_sesion = m.numeroSesion;
+        if (m.duracionMinutos && !m.duracion) m.duracion = `${m.duracionMinutos} min`;
+        if (m.logos) {
+            if (m.logos.institucional && !m.logo_left_url) m.logo_left_url = m.logos.institucional;
+            if (m.logos.regional && !m.logo_regional_url) m.logo_regional_url = m.logos.regional;
+        }
+
+        const p = Object.assign({}, data.proposito || {});
+        if (p.texto && !p.proposito_texto) p.proposito_texto = p.texto;
+        if (p.criterios && !p.criterios_evaluacion) p.criterios_evaluacion = p.criterios;
+        if (p.evidencia && !p.producto_evidencia) p.producto_evidencia = p.evidencia;
+
+        const evalData = Object.assign({}, data.evaluacion || {});
+        if (evalData.criterioConsolidado && !evalData.criterio) evalData.criterio = evalData.criterioConsolidado;
+
+        // Enfoques
+        let enfoques = data.enfoques || data.enfoques_transversales || data.enfoquesTransversales || [];
+        if (!Array.isArray(enfoques)) enfoques = [];
+
+        // Competencias transversales
+        let rawCt = data.competencias_transversales || data.competenciasTransversales || {};
+        let ct = {};
+        if (Array.isArray(rawCt)) {
+            ct = { tic: [], autonoma: [] };
+            rawCt.forEach(c => {
+                const title = (c.titulo || '').toLowerCase();
+                const items = c.desempenos || c.criterios || [];
+                if (title.includes('tic') || title.includes('virtual')) {
+                    ct.tic = items;
+                } else if (title.includes('autónoma') || title.includes('autonoma') || title.includes('gestiona')) {
+                    ct.autonoma = items;
+                }
+            });
+        } else if (typeof rawCt === 'object') {
+            ct = rawCt;
+        }
+
+        // Recursos
+        const recursos = Object.assign({}, data.recursos || {});
+        if (recursos.enlaces && !recursos.paginas_consulta) recursos.paginas_consulta = recursos.enlaces;
+        if (recursos.refuerzo && !recursos.actividades_refuerzo) recursos.actividades_refuerzo = recursos.refuerzo;
+
+        // Momentos
+        const rawMom = data.momentos || {};
+        const momentos = {
+            inicio: Object.assign({}, rawMom.inicio || {}),
+            desarrollo: Object.assign({}, rawMom.desarrollo || {}),
+            cierre: Object.assign({}, rawMom.cierre || {})
+        };
+
+        // Normalizar momentos.inicio v1 procesos
+        if (Array.isArray(rawMom.inicio?.procesos) && rawMom.inicio.procesos.length > 0) {
+            momentos.inicio.tiempo_total = momentos.inicio.tiempo_total || `${rawMom.inicio.tiempoMinutos || 15} min`;
+            rawMom.inicio.procesos.forEach(proc => {
+                const id = (proc.id || '').toLowerCase();
+                const content = typeof proc.contenido === 'object' ? (proc.contenido?.value || '') : String(proc.contenido || '');
+                if (id === 'motivacion') momentos.inicio.motivacion = content;
+                else if (id === 'saberes_previos') momentos.inicio.saberes_previos = content;
+                else if (id === 'problematizacion') momentos.inicio.problematizacion = content;
+                else if (id === 'proposito_organizacion') momentos.inicio.proposito_organizacion = content;
+                else {
+                    if (!momentos.inicio.actividades) momentos.inicio.actividades = content;
+                    else momentos.inicio.actividades += '\n' + content;
+                }
+            });
+        }
+
+        // Normalizar momentos.desarrollo v1 procesos
+        if (Array.isArray(rawMom.desarrollo?.procesos) && rawMom.desarrollo.procesos.length > 0) {
+            momentos.desarrollo.tiempo_total = momentos.desarrollo.tiempo_total || `${rawMom.desarrollo.tiempoMinutos || 65} min`;
+            rawMom.desarrollo.procesos.forEach((proc, idx) => {
+                const key = `proceso_${idx + 1}_${proc.id || 'proceso'}`;
+                const content = typeof proc.contenido === 'object' ? (proc.contenido?.value || '') : String(proc.contenido || '');
+                momentos.desarrollo[key] = content;
+            });
+        }
+
+        // Normalizar momentos.cierre v1 procesos
+        if (Array.isArray(rawMom.cierre?.procesos) && rawMom.cierre.procesos.length > 0) {
+            momentos.cierre.tiempo_total = momentos.cierre.tiempo_total || `${rawMom.cierre.tiempoMinutos || 10} min`;
+            const cierreParts = [];
+            rawMom.cierre.procesos.forEach(proc => {
+                const title = proc.titulo || 'Cierre';
+                const content = typeof proc.contenido === 'object' ? (proc.contenido?.value || '') : String(proc.contenido || '');
+                cierreParts.push(`• <strong>${title}:</strong> ${content}`);
+            });
+            momentos.cierre.actividades = cierreParts.join('<br>');
+        }
+
+        // Ficha de trabajo
+        const fichaTrabajo = data.ficha_trabajo || data.fichaTrabajo || null;
+
+        // Juego libre
+        const juegoLibre = data.juego_libre_sectores || data.juegoLibreSectores || null;
+
+        // Alumnos
+        const alumnos = data.alumnos || (data.listaCotejo && data.listaCotejo.alumnos) || [];
+
+        return { m, p, momentos, evalData, ct, enfoques, recursos, fichaTrabajo, juegoLibre, alumnos };
+    }
+
+    /**
+     * Render a session template
+     * @param {string} type - 'estandar' | 'laboratorio' | 'refuerzo'
+     * @param {Object} data - Session data
+     * @param {boolean} editable - Enable contenteditable
+     * @returns {string} HTML string
+     */
     function render(type, data, editable = true) {
         const ce = `contenteditable="${editable ? 'true' : 'false'}"`;
-        const m = data.metadata || {};
-        const p = data.proposito || {};
-        const momentos = data.momentos || {};
-        const evalData = data.evaluacion || {};
-        const ct = data.competencias_transversales || {};
-        const enfoques = data.enfoques || [];
-        const recursos = data.recursos || {};
+        const { m, p, momentos, evalData, ct, enfoques, recursos, fichaTrabajo, juegoLibre, alumnos } = _normalizeForTemplate(data);
 
         switch (type) {
             case 'laboratorio':
@@ -66,9 +175,9 @@ const Templates = (() => {
             case 'refuerzo':
                 return renderRefuerzo(m, p, momentos, evalData, ce);
             case 'inicial':
-                return renderInicial(m, p, momentos, evalData, ct, enfoques, recursos, data.juego_libre_sectores, data.ficha_trabajo, data.alumnos, ce);
+                return renderInicial(m, p, momentos, evalData, ct, enfoques, recursos, juegoLibre, fichaTrabajo, alumnos, ce);
             default:
-                return renderEstandar(m, p, momentos, evalData, ct, enfoques, recursos, data.ficha_trabajo, data.alumnos, ce);
+                return renderEstandar(m, p, momentos, evalData, ct, enfoques, recursos, fichaTrabajo, alumnos, ce);
         }
     }
 
@@ -1779,5 +1888,10 @@ const Templates = (() => {
     return { render };
 })();
 
-window.Templates = Templates;
+if (typeof window !== 'undefined') {
+    window.Templates = Templates;
+}
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Templates;
+}
 

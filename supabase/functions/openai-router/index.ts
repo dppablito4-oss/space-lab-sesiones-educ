@@ -7,9 +7,17 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const ALLOWED_MODELS = new Set(["gpt-5.6-luna", "gpt-5.4-mini"]);
+const MAX_PROMPT_CHARS = 30_000;
+const MAX_SOURCE_CHARS = 30_000;
+const MAX_IMAGE_BASE64_CHARS = 4 * 1024 * 1024;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
+  }
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Método no permitido." }), { status: 405, headers: corsHeaders });
   }
 
   const authError = await requireAuthenticatedUser(req);
@@ -21,7 +29,7 @@ serve(async (req) => {
   try {
     const { prompt, systemPrompt, model, sourceFile } = await req.json();
 
-    if (!prompt) {
+    if (typeof prompt !== "string" || !prompt.trim() || prompt.length > MAX_PROMPT_CHARS) {
       return new Response(
         JSON.stringify({ error: "Falta el parámetro 'prompt'." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
@@ -40,9 +48,9 @@ serve(async (req) => {
     // Construir contenido del mensaje de usuario
     let userMessageContent: any = prompt;
     if (sourceFile) {
-      if (sourceFile.textContent) {
-        userMessageContent = `${prompt}\n\n--- DOCUMENTO / ARCHIVO ADJUNTO DE REFERENCIA (${sourceFile.name}) ---\n${sourceFile.textContent}\n--- FIN DEL DOCUMENTO ---`;
-      } else if (sourceFile.base64 && sourceFile.type?.startsWith("image/")) {
+      if (typeof sourceFile.textContent === "string") {
+        userMessageContent = `${prompt}\n\n--- DOCUMENTO / ARCHIVO ADJUNTO DE REFERENCIA (${sourceFile.name || "sin nombre"}) ---\n${sourceFile.textContent.slice(0, MAX_SOURCE_CHARS)}\n--- FIN DEL DOCUMENTO ---`;
+      } else if (typeof sourceFile.base64 === "string" && sourceFile.base64.length <= MAX_IMAGE_BASE64_CHARS && sourceFile.type?.startsWith("image/")) {
         userMessageContent = [
           { type: "text", text: prompt },
           {
@@ -55,7 +63,10 @@ serve(async (req) => {
       }
     }
 
-    const selectedModel = model || "gpt-5.6-luna";
+    const selectedModel = typeof model === "string" ? model : "gpt-5.6-luna";
+    if (!ALLOWED_MODELS.has(selectedModel)) {
+      return new Response(JSON.stringify({ error: "Modelo no permitido." }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
 
     // Llamada directa a la API oficial de OpenAI
     const response = await fetch("https://api.openai.com/v1/chat/completions", {

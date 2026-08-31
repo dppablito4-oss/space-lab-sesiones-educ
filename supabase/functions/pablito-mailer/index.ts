@@ -27,17 +27,9 @@ serve(async (req) => {
   try {
     const { action, payload } = await req.json();
 
-    if (action !== "MANUAL_BLAST" || !payload) {
+    if (!payload || !["MANUAL_BLAST", "GET_SMTP_CONFIG", "UPDATE_SMTP_CONFIG"].includes(action)) {
       return new Response(
         JSON.stringify({ error: "Acción no soportada o payload vacío." }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
-      );
-    }
-
-    const { target, subject, customHtml } = payload;
-    if (!subject || !customHtml) {
-      return new Response(
-        JSON.stringify({ error: "Faltan campos obligatorios: subject o customHtml." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
@@ -78,6 +70,44 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: "Acceso denegado: Se requiere rol de administrador." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 403 }
+      );
+    }
+
+    if (action === "GET_SMTP_CONFIG") {
+      const { data, error } = await supabaseClient
+        .from("corporate_email_settings")
+        .select("smtp_email, smtp_host, smtp_port, smtp_secure")
+        .eq("id", 1)
+        .maybeSingle();
+      if (error) throw error;
+      return new Response(JSON.stringify(data || {}), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
+    }
+
+    if (action === "UPDATE_SMTP_CONFIG") {
+      const { email, password, host, port, secure } = payload;
+      if (typeof email !== "string" || typeof password !== "string" || typeof host !== "string" ||
+          !email.includes("@") || password.length < 8 || !host.trim() || !Number.isInteger(Number(port))) {
+        return new Response(JSON.stringify({ error: "Configuración SMTP inválida." }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 });
+      }
+      const { error } = await supabaseClient.from("corporate_email_settings").upsert({
+        id: 1,
+        smtp_email: email.trim(),
+        smtp_app_password: password,
+        smtp_host: host.trim(),
+        smtp_port: Number(port),
+        smtp_secure: Boolean(secure),
+        updated_at: new Date().toISOString()
+      });
+      if (error) throw error;
+      return new Response(JSON.stringify({ message: "Configuración SMTP actualizada." }), { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 });
+    }
+
+    const { target, subject, customHtml } = payload;
+    if (typeof subject !== "string" || typeof customHtml !== "string" || !subject.trim() || !customHtml.trim() ||
+        subject.length > 200 || customHtml.length > 50_000) {
+      return new Response(
+        JSON.stringify({ error: "Asunto o contenido de correo inválido." }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 
@@ -122,6 +152,12 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ message: "No hay destinatarios registrados." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 200 }
+      );
+    }
+    if (emails.length > 500) {
+      return new Response(
+        JSON.stringify({ error: "El envío masivo supera el límite de 500 destinatarios." }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 

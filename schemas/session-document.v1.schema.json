@@ -1,0 +1,257 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/session-document.v1.schema.json",
+  "title": "SessionDocument v1",
+  "description": "Contrato canónico para una Sesión de Aprendizaje de Space Lab. Fuente de verdad compartida entre Web, PDF y DOCX.",
+  "type": "object",
+  "required": ["schemaVersion", "metadata", "proposito", "momentos"],
+  "properties": {
+    "schemaVersion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "Versión del esquema. Siempre '1.0' para este contrato."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Datos informativos de la sesión.",
+      "properties": {
+        "institucion":    { "type": "string", "default": "" },
+        "dre":            { "type": "string", "default": "" },
+        "ugel":           { "type": "string", "default": "" },
+        "docente":        { "type": "string", "default": "" },
+        "director":       { "type": "string", "default": "" },
+        "fecha":          { "type": "string", "default": "" },
+        "nivel":          { "type": "string", "default": "", "description": "INICIAL | PRIMARIA | SECUNDARIA" },
+        "grado":          { "type": "string", "default": "" },
+        "seccion":        { "type": "string", "default": "" },
+        "area":           { "type": "string", "default": "" },
+        "numeroSesion":   { "type": "string", "default": "" },
+        "duracionMinutos": { "type": "integer", "default": 90, "minimum": 1 },
+        "unidad":         { "type": "string", "default": "" },
+        "titulo":         { "type": "string", "default": "" },
+        "logos": {
+          "type": "object",
+          "properties": {
+            "institucional": { "type": ["string", "null"], "default": null },
+            "regional":      { "type": ["string", "null"], "default": null }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "proposito": {
+      "type": "object",
+      "description": "Propósitos de aprendizaje de la sesión.",
+      "properties": {
+        "texto":        { "type": "string", "default": "", "description": "Propósito general de la sesión." },
+        "competencia":  { "type": "string", "default": "" },
+        "capacidades":  {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "estandar":     { "type": "string", "default": "" },
+        "desempeno":    { "type": "string", "default": "" },
+        "conocimientos": { "type": "string", "default": "" },
+        "criterios":    {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "evidencia":    { "type": "string", "default": "" },
+        "instrumento":  { "type": "string", "default": "" }
+      },
+      "additionalProperties": false
+    },
+
+    "competenciasTransversales": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "required": ["titulo"],
+        "properties": {
+          "titulo":     { "type": "string" },
+          "desempenos": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": []
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+
+    "enfoquesTransversales": {
+      "type": "array",
+      "default": [],
+      "items": {
+        "type": "object",
+        "required": ["nombre"],
+        "properties": {
+          "nombre":    { "type": "string" },
+          "valor":     { "type": "string", "default": "" },
+          "actitudes": { "type": "string", "default": "" }
+        },
+        "additionalProperties": false
+      }
+    },
+
+    "recursos": {
+      "type": "object",
+      "properties": {
+        "enlaces":    { "type": "string", "default": "" },
+        "materiales": { "type": "string", "default": "" },
+        "refuerzo":   { "type": "string", "default": "" }
+      },
+      "additionalProperties": false
+    },
+
+    "momentos": {
+      "type": "object",
+      "required": ["inicio", "desarrollo", "cierre"],
+      "properties": {
+        "inicio": {
+          "type": "object",
+          "properties": {
+            "tiempoMinutos": { "type": "integer", "default": 15 },
+            "procesos": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/SessionProcess" },
+              "default": []
+            }
+          },
+          "additionalProperties": false
+        },
+        "desarrollo": {
+          "type": "object",
+          "properties": {
+            "tiempoMinutos": { "type": "integer", "default": 65 },
+            "procesos": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/SessionProcess" },
+              "default": []
+            }
+          },
+          "additionalProperties": false
+        },
+        "cierre": {
+          "type": "object",
+          "properties": {
+            "tiempoMinutos": { "type": "integer", "default": 10 },
+            "procesos": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/SessionProcess" },
+              "default": []
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+
+    "evaluacion": {
+      "type": "object",
+      "description": "Evaluación consolidada de la sesión. No se elimina silenciosamente.",
+      "properties": {
+        "criterioConsolidado": { "type": "string", "default": "" },
+        "evidencia":           { "type": "string", "default": "" },
+        "instrumento":         { "type": "string", "default": "" }
+      },
+      "additionalProperties": false
+    },
+
+    "fichaTrabajo": {
+      "type": ["object", "null"],
+      "default": null,
+      "properties": {
+        "titulo":       { "type": "string", "default": "" },
+        "indicaciones": { "type": "string", "default": "" },
+        "actividades":  { "type": "string", "default": "" }
+      },
+      "additionalProperties": false
+    },
+
+    "juegoLibreSectores": {
+      "type": ["object", "null"],
+      "default": null,
+      "description": "Solo para Educación Inicial.",
+      "properties": {
+        "planificacion":  { "type": "string", "default": "" },
+        "organizacion":   { "type": "string", "default": "" },
+        "ejecucion":      { "type": "string", "default": "" },
+        "orden":          { "type": "string", "default": "" },
+        "socializacion":  { "type": "string", "default": "" },
+        "representacion": { "type": "string", "default": "" }
+      },
+      "additionalProperties": false
+    },
+
+    "listaCotejo": {
+      "type": "object",
+      "default": {},
+      "properties": {
+        "alumnos": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        },
+        "criterios": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": []
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+
+  "$defs": {
+    "RichContent": {
+      "type": "object",
+      "required": ["format", "value"],
+      "properties": {
+        "format": {
+          "type": "string",
+          "enum": ["html", "text"],
+          "default": "html"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false
+    },
+    "SessionProcess": {
+      "type": "object",
+      "required": ["id", "titulo", "contenido"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Identificador semántico del proceso (ej: motivacion, saberes_previos, familiarizacion, metacognicion)."
+        },
+        "orden": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Posición ordinal dentro del momento."
+        },
+        "titulo": {
+          "type": "string",
+          "description": "Nombre legible del proceso pedagógico."
+        },
+        "methodology": {
+          "type": "string",
+          "description": "Metodología a la que pertenece el proceso (ej: polya, erca, indagacion)."
+        },
+        "contenido": {
+          "$ref": "#/$defs/RichContent"
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

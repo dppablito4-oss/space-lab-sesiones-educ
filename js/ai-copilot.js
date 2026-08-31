@@ -4,7 +4,7 @@
    ═══════════════════════════════════════════════════ */
 
 const AiCopilot = (() => {
-    
+
     // ─── CONFIGURACIÓN ───
     // El usuario debe configurar su propia API key y endpoint
     const CONFIG = {
@@ -15,6 +15,44 @@ const AiCopilot = (() => {
         maxTokens: 4000, // Ajuste clave para evitar JSONs rotos
         temperature: 0.5 // Bajarlo ayuda a que sea más estricto con el formato JSON
     };
+
+    const PROVIDERS = {
+        'openai-gpt-5.6-luna': { router: 'openai-router', kind: 'openai', model: 'gpt-5.6-luna' },
+        'openai-gpt-5.4-mini': { router: 'openai-router', kind: 'openai', model: 'gpt-5.4-mini' },
+        'gemini-2.5-flash': { router: 'gemini-router', kind: 'gemini', model: 'gemini-2.5-flash' },
+        'deepseek-v3': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-chat' }
+    };
+
+    function resolveProvider(provider) {
+        const aliases = { openai: 'openai-gpt-5.6-luna', gemini: 'gemini-2.5-flash', deepseek: 'deepseek-v3' };
+        return PROVIDERS[aliases[provider] || provider] || PROVIDERS['openai-gpt-5.6-luna'];
+    }
+
+    function hasLocalApiKey() {
+        return Boolean(CONFIG.apiKey && CONFIG.apiKey.length > 10);
+    }
+
+    async function hasAuthenticatedUser() {
+        if (!window.SupabaseClient || !SupabaseClient.client) return false;
+        try { return Boolean(await SupabaseClient.getCurrentUser()); } catch { return false; }
+    }
+
+    function prepareSourceFile(sourceFile, provider) {
+        if (!sourceFile) return null;
+        const base = { name: sourceFile.name || 'archivo-adjunto', type: sourceFile.type || 'application/octet-stream' };
+        const maxBase64Chars = 4 * 1024 * 1024;
+
+        if (provider.kind === 'gemini' && sourceFile.base64) {
+            if (sourceFile.base64.length > maxBase64Chars) throw new Error('El archivo adjunto supera el límite permitido para IA.');
+            return { ...base, base64: sourceFile.base64 };
+        }
+        if (sourceFile.textContent) return { ...base, textContent: String(sourceFile.textContent).slice(0, 30000) };
+        if (base.type.startsWith('image/') && sourceFile.base64) {
+            if (sourceFile.base64.length > maxBase64Chars) throw new Error('La imagen adjunta supera el límite permitido para IA.');
+            return { ...base, base64: sourceFile.base64 };
+        }
+        return null;
+    }
 
     /**
      * Set API configuration
@@ -30,6 +68,10 @@ const AiCopilot = (() => {
             apiKey: CONFIG.apiKey,
             model: CONFIG.model
         }));
+    }
+
+    function setProvider(provider) {
+        CONFIG.model = provider;
     }
 
     /**
@@ -51,7 +93,7 @@ const AiCopilot = (() => {
      * Check if API is configured
      */
     function isConfigured() {
-        const hasLocalKey = CONFIG.apiKey && CONFIG.apiKey.length > 10;
+        const hasLocalKey = hasLocalApiKey();
         let hasSavedSession = false;
         for (let i = 0; i < localStorage.length; i++) {
             if (localStorage.key(i).includes('-auth-token')) {
@@ -70,34 +112,34 @@ const AiCopilot = (() => {
 3. **Socialización de representaciones:** Los estudiantes comparten e intercambian en la pizarra sus representaciones (gráficas, simbólicas, concretas).
 4. **Reflexión y Formalización:** Momento donde el docente consolida conceptualmente el aprendizaje y los estudiantes reflexionan sobre sus dificultades y aciertos.
 Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_familiarizacion", "proceso_2_busqueda_estrategias", "proceso_3_socializacion" y "proceso_4_formalizacion_reflexion".`,
-        
+
         erca: `La secuencia didáctica del momento de DESARROLLO debe estructurarse estrictamente bajo el ciclo ERCA:
 1. **Experiencia:** Actividad vivencial, exploración física, o recuperación de una situación real relacionada al tema.
 2. **Reflexión:** Los estudiantes analizan lo experimentado, exponen sus puntos de vista, y discuten las primeras interrogantes.
 3. **Conceptualización:** Sistematización teórica de los conceptos claves científicos, reglas o ideas principales guiados por el docente.
 4. **Aplicación:** Resolución de retos prácticos, ejercicios o situaciones cotidianas donde apliquen lo aprendido.
 Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_experiencia", "proceso_2_reflexion", "proceso_3_conceptualizacion" y "proceso_4_aplicacion".`,
-        
+
         abp: `La secuencia didáctica del momento de DESARROLLO debe estructurarse bajo los principios del Aprendizaje Basado en Proyectos (ABP):
 1. **Lanzamiento / Desafío:** Planteamiento del reto, pregunta orientadora o necesidad real del proyecto.
 2. **Indagación / Investigación:** Búsqueda activa de información, lectura o recolección de datos sobre la problemática.
 3. **Desarrollo del Producto:** Trabajo colaborativo donde los estudiantes diseñan, crean o esbozan el entregable/producto del proyecto.
 4. **Difusión y Evaluación:** Espacio donde socializan sus productos y reciben retroalimentación crítica constructiva de sus pares.
 Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_lanzamiento", "proceso_2_indagacion", "proceso_3_desarrollo_producto" y "proceso_4_difusion_evaluacion".`,
-        
+
         flipped: `La secuencia didáctica del momento de DESARROLLO debe estructurarse bajo el enfoque de Aula Invertida (Flipped Classroom):
 1. **Conexión de saberes externos:** Puesta en común del contenido estudiado autónomamente antes de la clase (videos, lecturas previas).
 2. **Aplicación guiada / Taller activo:** Dinámica de alta exigencia cognitiva donde se resuelven dudas complejas y se trabaja en proyectos o retos colaborativos.
 3. **Consolidación y retroalimentación interactiva:** Sistematización del saber aplicado en el taller y evaluación formativa en vivo.
 Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_conexion_externa", "proceso_2_aplicacion_guiada" y "proceso_3_consolidacion_retroalimentacion".`,
-        
+
         indagacion: `La secuencia didáctica del momento de DESARROLLO debe estructurarse siguiendo el Método de Indagación Científica (STEAM/Ciencia):
 1. **Problematización de situaciones:** Formulación de preguntas investigables e hipótesis explicativas.
 2. **Diseño de estrategias para hacer indagación:** Elaboración del plan de acción experimental o metodológico.
 3. **Generación, registro y análisis de datos:** Actividad práctica de experimentación, observación directa o recolección de evidencia empírica.
 4. **Estructuración del saber construido y comunicación:** Contraste de hipótesis, síntesis de conclusiones y comunicación de aprendizajes.
 Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_problematizacion", "proceso_2_diseno_estrategias", "proceso_3_generacion_analisis_datos" y "proceso_4_estructuracion_comunicacion".`,
-        
+
         cooperativo: `La secuencia didáctica del momento de DESARROLLO debe centrarse en el Aprendizaje Cooperativo:
 1. **Organización de equipos y roles:** Formación de grupos heterogéneos y asignación de roles (coordinador, secretario, portavoz, gestor del tiempo).
 2. **Interdependencia positiva:** Actividades diseñadas para que los estudiantes se necesiten mutuamente para lograr el éxito grupal (ej: rompecabezas, lectura compartida).
@@ -212,13 +254,38 @@ CUÁNDO USAR LATEX:
 ❌ NO uses LaTeX en textos de gestión del aula, instrucciones organizativas ni preguntas de metacognición
 `;
 
+    const V1_SYSTEM_PROMPT = `Eres un asistente experto en sesiones de aprendizaje MINEDU. Responde SOLO JSON válido con el contrato SessionDocument v1, sin markdown.
+
+El orden obligatorio del documento es: metadata, proposito, competenciasTransversales, enfoquesTransversales, recursos, momentos, evaluacion, fichaTrabajo, juegoLibreSectores, listaCotejo.
+
+Estructura obligatoria:
+{
+  "schemaVersion": "1.0",
+  "metadata": {"institucion":"", "dre":"", "ugel":"", "docente":"", "director":"", "fecha":"", "nivel":"", "grado":"", "seccion":"", "area":"", "numeroSesion":"", "duracionMinutos":90, "unidad":"", "titulo":""},
+  "proposito": {"texto":"", "competencia":"", "capacidades":[""], "estandar":"", "desempeno":"", "conocimientos":"", "criterios":[""], "evidencia":"", "instrumento":"Lista de Cotejo"},
+  "competenciasTransversales":[{"titulo":"", "desempenos":[""]}],
+  "enfoquesTransversales":[{"nombre":"", "valor":"", "actitudes":""}],
+  "recursos":{"enlaces":"", "materiales":"", "refuerzo":""},
+  "momentos":{
+    "inicio":{"tiempoMinutos":15, "procesos":[{"id":"motivacion", "orden":1, "titulo":"Motivación", "contenido":{"format":"html", "value":"<p>...</p>"}}]},
+    "desarrollo":{"tiempoMinutos":65, "procesos":[{"id":"proceso_didactico", "orden":1, "titulo":"", "contenido":{"format":"html", "value":"<p>...</p>"}}]},
+    "cierre":{"tiempoMinutos":10, "procesos":[{"id":"metacognicion", "orden":1, "titulo":"Metacognición", "contenido":{"format":"html", "value":"<p>...</p>"}}]}
+  },
+  "evaluacion":{"criterioConsolidado":"", "evidencia":"", "instrumento":"Lista de Cotejo"},
+  "fichaTrabajo": null,
+  "juegoLibreSectores": null,
+  "listaCotejo":{"alumnos":[], "criterios":[""]}
+}
+
+Usa HTML básico solo dentro de contenido.value. Mantén los procesos en el orden didáctico de la metodología solicitada; no uses llaves legacy como proceso_1 ni titulo_sesion_retador. Para Inicial completa juegoLibreSectores; para Primaria completa fichaTrabajo.`;
+
     async function generateSession(metadata) {
         const userPrompt = buildPrompt(metadata);
 
         // Construir prompt de sistema dinámico basado en la metodología didáctica elegida
-        let dynamicSystemPrompt = SYSTEM_PROMPT;
+        let dynamicSystemPrompt = V1_SYSTEM_PROMPT;
         if (metadata.methodology && METHODOLOGY_PROMPTS[metadata.methodology]) {
-            dynamicSystemPrompt += `\n\n⚠️ INSTRUCCIÓN CRÍTICA DE METODOLOGÍA DIDÁCTICA REQUERIDA:\n${METHODOLOGY_PROMPTS[metadata.methodology]}`;
+            dynamicSystemPrompt += `\n\nMetodología didáctica requerida: ${metadata.methodology}. Usa sus etapas como procesos ordenados dentro de momentos.desarrollo.procesos.`;
         }
 
         if (metadata.template === 'inicial') {
@@ -261,33 +328,22 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         }
 
         // 1. Intentar llamar a la Edge Function de Supabase si está disponible
-        if (window.SupabaseClient && SupabaseClient.client) {
-            try {
-                let functionName = 'openai-router';
-                let selectedModel = 'gpt-5.6-luna';
-                const prov = metadata.ai_provider || 'openai-gpt-5.6-luna';
+        dynamicSystemPrompt += '\nUse only SessionDocument v1 camelCase field names. Ignore any earlier legacy snake_case field examples.';
 
-                if (prov === 'gemini-2.5-flash' || prov === 'gemini') {
-                    functionName = 'gemini-router';
-                    selectedModel = 'gemini-2.5-flash';
-                } else if (prov === 'deepseek-v3' || prov === 'deepseek') {
-                    functionName = 'deepseek-router';
-                    selectedModel = 'deepseek-chat';
-                } else if (prov === 'openai-gpt-5.4-mini') {
-                    functionName = 'openai-router';
-                    selectedModel = 'gpt-5.4-mini';
-                } else {
-                    functionName = 'openai-router';
-                    selectedModel = 'gpt-5.6-luna';
-                }
-                
+        if (await hasAuthenticatedUser()) {
+            try {
+                const provider = resolveProvider(metadata.ai_provider);
+                const functionName = provider.router;
+                const selectedModel = provider.model;
+                const sourceFile = prepareSourceFile(metadata.sourceFile, provider);
+
                 console.log(`[AI] Llamando a Edge Function ${functionName} con modelo ${selectedModel}...`);
                 const { data, error } = await SupabaseClient.client.functions.invoke(functionName, {
-                    body: { 
-                        prompt: userPrompt, 
+                    body: {
+                        prompt: userPrompt,
                         systemPrompt: dynamicSystemPrompt,
                         model: selectedModel,
-                        sourceFile: metadata.sourceFile || null
+                        sourceFile
                     }
                 });
 
@@ -307,11 +363,11 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
                 }
             } catch (err) {
                 console.error('[AI] Error en Edge Function:', err);
-                
+
                 // Differentiate error types
                 const isNetworkOrNotFound = !err.status || err.status === 404 || err.name === 'FunctionsFetchError';
-                
-                if (isNetworkOrNotFound) {
+
+                if (isNetworkOrNotFound || hasLocalApiKey()) {
                     console.warn('[AI] Edge Function no disponible o fuera de línea, intentando fallback local...');
                     if (!CONFIG.apiKey || CONFIG.apiKey.length <= 10) {
                         Toast.warning('El servidor de IA en la nube no responde. Por favor ingresa tu API Key local de OpenAI/OpenRouter.');
@@ -343,25 +399,27 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         try {
             let requestEndpoint = CONFIG.endpoint;
             let requestModel = CONFIG.model;
-            const provider = metadata.ai_provider || 'openai';
+            const provider = resolveProvider(metadata.ai_provider);
+            const isOpenRouterKey = CONFIG.apiKey.startsWith('sk-or-');
+            const sourceFile = prepareSourceFile(metadata.sourceFile, provider);
 
-            if (provider === 'openai') {
-                if (CONFIG.apiKey.startsWith('sk-')) {
+            if (provider.kind === 'openai') {
+                if (CONFIG.apiKey.startsWith('sk-') && !isOpenRouterKey) {
                     requestEndpoint = 'https://api.openai.com/v1/chat/completions';
-                    requestModel = 'gpt-5.4-mini';
+                    requestModel = provider.model;
                 } else {
                     requestEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
-                    requestModel = 'openai/gpt-5.4-mini';
+                    requestModel = `openai/${provider.model}`;
                 }
-            } else if (provider === 'deepseek') {
-                if (CONFIG.apiKey.startsWith('sk-')) {
+            } else if (provider.kind === 'deepseek') {
+                if (!isOpenRouterKey) {
                     requestEndpoint = 'https://api.deepseek.com/chat/completions';
                     requestModel = 'deepseek-chat';
                 } else {
                     requestEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
                     requestModel = 'deepseek/deepseek-chat';
                 }
-            } else if (provider === 'gemini') {
+            } else if (provider.kind === 'gemini') {
                 // Solo usar la API de Google directa si la clave es de Google (empieza por AIza)
                 if (CONFIG.apiKey.startsWith('AIza')) {
                     requestEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CONFIG.apiKey}`;
@@ -373,32 +431,23 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
             }
 
             console.log(`[AI] Conectando a local (${requestEndpoint}) con modelo ${requestModel}...`);
-            
+
             let response;
-            if (provider === 'gemini' && requestEndpoint.includes('generativelanguage.googleapis.com')) {
+            if (provider.kind === 'gemini' && requestEndpoint.includes('generativelanguage.googleapis.com')) {
                 // Inyectar el texto del prompt
                 const parts = [{ text: userPrompt }];
-                
+
                 // Si el modelo es Gemini directo y tenemos las imágenes renderizadas, las agregamos como inlineData
-                if (metadata.sourceFile && metadata.sourceFile.images && metadata.sourceFile.images.length > 0) {
-                    metadata.sourceFile.images.forEach(img => {
-                        parts.push({
-                            inlineData: {
-                                mimeType: img.type,
-                                data: img.base64
-                            }
-                        });
-                    });
-                } else if (metadata.sourceFile && metadata.sourceFile.base64 && metadata.sourceFile.type) {
+                if (sourceFile && sourceFile.base64 && sourceFile.type) {
                     // Fallback: Si no hay imágenes pero hay un archivo cargado completo en base64
                     parts.push({
                         inlineData: {
-                            mimeType: metadata.sourceFile.type,
-                            data: metadata.sourceFile.base64
+                                mimeType: sourceFile.type,
+                                data: sourceFile.base64
                         }
                     });
                 }
-                
+
                 response = await fetch(requestEndpoint, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -411,17 +460,15 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
             } else {
                 // Para OpenAI / OpenRouter / DeepSeek
                 let userContent;
-                if (metadata.sourceFile && metadata.sourceFile.images && metadata.sourceFile.images.length > 0) {
+                if (sourceFile && sourceFile.base64 && sourceFile.type.startsWith('image/')) {
                     userContent = [
                         { type: 'text', text: userPrompt }
                     ];
-                    metadata.sourceFile.images.forEach(img => {
-                        userContent.push({
-                            type: 'image_url',
-                            image_url: {
-                                url: `data:${img.type};base64,${img.base64}`
-                            }
-                        });
+                    userContent.push({
+                        type: 'image_url',
+                        image_url: {
+                            url: `data:${sourceFile.type};base64,${sourceFile.base64}`
+                        }
                     });
                 } else {
                     userContent = userPrompt;
@@ -455,7 +502,7 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
 
             const data = await response.json();
             let content;
-            if (provider === 'gemini' && requestEndpoint.includes('generativelanguage.googleapis.com')) {
+            if (provider.kind === 'gemini' && requestEndpoint.includes('generativelanguage.googleapis.com')) {
                 content = data.candidates?.[0]?.content?.parts?.[0]?.text;
             } else {
                 content = data.choices?.[0]?.message?.content;
@@ -478,9 +525,9 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
      */
     function buildPrompt(m) {
         const parts = [];
-        
+
         parts.push(`Genera una sesión de aprendizaje con estos datos:`);
-        
+
         if (m.nivel) parts.push(`- Nivel educativo: ${m.nivel}`);
         if (m.area) parts.push(`- Área curricular: ${m.area}`);
         if (m.grado) parts.push(`- Grado: ${m.grado}`);
@@ -543,7 +590,7 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
 
         try {
             const parsed = JSON.parse(cleaned);
-            
+
             // Clean excessive newlines from all string values
             return normalizeSessionData(deepCleanStrings(parsed));
         } catch {
@@ -663,7 +710,7 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         const currentKey = CONFIG.apiKey ? CONFIG.apiKey.slice(0, 8) + '...' : '(no configurada)';
 
         const key = prompt(
-            `🤖 Configuración de IA\n\n` +
+            `Configuración de IA\n\n` +
             `Para usar la generación con IA, necesitas una API Key.\n\n` +
             `Opciones:\n` +
             `1. OpenRouter (openrouter.ai) — Acceso a DeepSeek, GPT, etc.\n` +
@@ -685,24 +732,22 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
      * Run a generic prompt leveraging Supabase edge functions or local OpenRouter fallback.
      */
     async function runPrompt(systemPrompt, userPrompt) {
+        const provider = resolveProvider(CONFIG.model);
         // 1. Try to invoke Supabase Edge Function if available
-        if (window.SupabaseClient && SupabaseClient.client) {
+        if (await hasAuthenticatedUser()) {
             try {
-                let functionName = 'openai-router';
-                if (CONFIG.model.includes('gemini')) {
-                    functionName = 'gemini-router';
-                } else if (CONFIG.model.includes('deepseek')) {
-                    functionName = 'deepseek-router';
-                }
-                
+                const functionName = provider.router;
+
                 console.log(`[AI Helper] Invoking edge function ${functionName} for generic prompt...`);
                 const { data, error } = await SupabaseClient.client.functions.invoke(functionName, {
-                    body: { 
-                        prompt: userPrompt, 
-                        systemPrompt: systemPrompt
+                    body: {
+                        prompt: userPrompt,
+                        systemPrompt: systemPrompt,
+                        model: provider.model
                     }
                 });
 
+                if (error) throw error;
                 if (!error) {
                     let text = data;
                     if (data && typeof data === 'object') {
@@ -723,14 +768,22 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         let requestEndpoint = CONFIG.endpoint;
         let requestModel = CONFIG.model;
 
-        if (CONFIG.apiKey.startsWith('sk-')) {
-            if (CONFIG.model.includes('deepseek')) {
+        const isOpenRouterKey = CONFIG.apiKey.startsWith('sk-or-');
+        if (provider.kind === 'gemini' && CONFIG.apiKey.startsWith('AIza')) {
+            throw new Error('El asistente de rÃºbrica y mejora requiere una Edge Function para Gemini o una clave compatible con OpenRouter.');
+        }
+        if (!isOpenRouterKey) {
+            if (provider.kind === 'deepseek') {
                 requestEndpoint = 'https://api.deepseek.com/v1/chat/completions';
                 requestModel = 'deepseek-chat';
             } else {
                 requestEndpoint = 'https://api.openai.com/v1/chat/completions';
-                requestModel = 'gpt-5.4-mini';
+                requestModel = provider.model;
             }
+        } else {
+            requestEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
+            requestModel = provider.kind === 'gemini' ? 'google/gemini-2.5-flash' :
+                provider.kind === 'deepseek' ? 'deepseek/deepseek-chat' : `openai/${provider.model}`;
         }
 
         const response = await fetch(requestEndpoint, {
@@ -798,6 +851,41 @@ ${instruction}`;
         return result.trim();
     }
 
+    // ── SessionDocument v1 facade ──
+    /**
+     * Convierte datos legacy (salida IA o formulario) a SessionDocument v1.
+     * @param {Object} legacyData - JSON legacy de la sesión.
+     * @param {Object} [formMeta] - Metadata adicional del formulario del docente.
+     * @returns {{ document: Object, warnings: string[], valid: boolean, errors: string[] }}
+     */
+    function toV1(legacyData, formMeta = {}) {
+        if (typeof SessionAdapter === 'undefined') {
+            console.warn('[AiCopilot] SessionAdapter no cargado, devolviendo datos sin adaptar.');
+            return { document: legacyData, warnings: ['SessionAdapter no disponible'], valid: false, errors: ['SessionAdapter no cargado'] };
+        }
+        const { document, warnings } = SessionAdapter.adaptLegacyToV1(legacyData, formMeta);
+
+        // Validar si SessionValidator está disponible
+        let valid = true, errors = [];
+        if (typeof SessionValidator !== 'undefined') {
+            const result = SessionValidator.validate(document);
+            valid = result.valid;
+            errors = result.errors;
+            if (result.warnings.length > 0) {
+                warnings.push(...result.warnings);
+            }
+        }
+
+        if (warnings.length > 0) {
+            console.log('[AiCopilot] toV1 warnings:', warnings);
+        }
+        if (!valid) {
+            console.warn('[AiCopilot] toV1 validation errors:', errors);
+        }
+
+        return { document, warnings, valid, errors };
+    }
+
     // Initialize
     loadConfig();
 
@@ -805,10 +893,13 @@ ${instruction}`;
         generateSession,
         isConfigured,
         configure,
+        setProvider,
+        hasLocalApiKey,
         showConfigPrompt,
         loadConfig,
         generateCriterios,
-        improveText
+        improveText,
+        toV1
     };
 })();
 

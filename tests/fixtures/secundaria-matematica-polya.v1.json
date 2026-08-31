@@ -1,0 +1,215 @@
+{
+  "schemaVersion": "1.0",
+  "metadata": {
+    "institucion": "I.E. 3082 SEÑOR DE LOS MILAGROS",
+    "dre": "LIMA METROPOLITANA",
+    "ugel": "UGEL 02",
+    "docente": "LIC. PABLO PÉREZ",
+    "director": "MG. CARLOS MENDOZA",
+    "fecha": "16/08/2026",
+    "nivel": "SECUNDARIA",
+    "grado": "4°",
+    "seccion": "A",
+    "area": "MATEMÁTICA",
+    "numeroSesion": "04",
+    "duracionMinutos": 90,
+    "unidad": "UNIDAD 01",
+    "titulo": "RESOLVEMOS PROBLEMAS DE REGULARIDAD, EQUIVALENCIA Y CAMBIO CON SISTEMAS DE ECUACIONES",
+    "logos": {
+      "institucional": null,
+      "regional": null
+    }
+  },
+  "proposito": {
+    "texto": "Los estudiantes aprenderán a resolver problemas cotidianos utilizando sistemas de ecuaciones lineales con dos incógnitas mediante el método algebraico.",
+    "competencia": "Resuelve problemas de regularidad, equivalencia y cambio",
+    "capacidades": [
+      "Traduce datos y condiciones a expresiones algebraicas y gráficas.",
+      "Comunica su comprensión sobre las relaciones algebraicas.",
+      "Usa estrategias y procedimientos para encontrar equivalencias y reglas generales."
+    ],
+    "estandar": "Resuelve problemas referidos a analizar cambios continuos o periódicos, o regularidades entre magnitudes...",
+    "desempeno": "Combina y adapta métodos analíticos para resolver sistemas de ecuaciones lineales.",
+    "conocimientos": "Sistemas de ecuaciones lineales, método de reducción, sustitución e igualación.",
+    "criterios": [
+      "Identifica las incógnitas y relaciones en un enunciado problemático.",
+      "Aplica el método de reducción para hallar el conjunto solución.",
+      "Verifica la validez de los resultados en el contexto del problema."
+    ],
+    "evidencia": "Ficha de trabajo resuelta con justificación matemática de los métodos empleados.",
+    "instrumento": "Lista de Cotejo"
+  },
+  "competenciasTransversales": [
+    {
+      "titulo": "Gestiona su aprendizaje de manera autónoma",
+      "desempenos": [
+        "Determina metas de aprendizaje viables asociadas a sus conocimientos y habilidades.",
+        "Organiza un conjunto de estrategias y procedimientos en función del tiempo y recursos."
+      ]
+    },
+    {
+      "titulo": "Se desenvuelve en entornos virtuales generados por las TIC",
+      "desempenos": [
+        "Navega en plataformas digitales para contrastar información matemática."
+      ]
+    }
+  ],
+  "enfoquesTransversales": [
+    {
+      "nombre": "Enfoque Búsqueda de la Excelencia",
+      "valor": "Superación personal",
+      "actitudes": "Disposición para adaptarse a los cambios y alcanzar metas complejas con optimismo."
+    },
+    {
+      "nombre": "Enfoque Ambiental",
+      "valor": "Justicia y solidaridad",
+      "actitudes": "Disposición a evaluar el impacto de las decisiones en el entorno escolar."
+    }
+  ],
+  "recursos": {
+    "enlaces": "https://www.perueduca.pe/#/materiales-secundaria-matematica",
+    "materiales": "Ficha de actividades N° 04, pizarra, plumones, regla milimetrada.",
+    "refuerzo": "Ficha de Refuerzo N° 04: Sistemas lineales"
+  },
+  "momentos": {
+    "inicio": {
+      "tiempoMinutos": 15,
+      "procesos": [
+        {
+          "id": "motivacion",
+          "orden": 1,
+          "titulo": "Motivación",
+          "contenido": {
+            "format": "html",
+            "value": "<p>El docente saluda cordialmente a los estudiantes y acuerda las normas de convivencia.</p><p>Se presenta una situación problemática sobre la compra de insumos escolares para el laboratorio.</p>"
+          }
+        },
+        {
+          "id": "saberes_previos",
+          "orden": 2,
+          "titulo": "Saberes previos",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Se recogen saberes previos mediante preguntas: ¿Qué es una incógnita? ¿Cómo representamos dos cantidades desconocidas?</p>"
+          }
+        },
+        {
+          "id": "problematizacion",
+          "orden": 3,
+          "titulo": "Problematización",
+          "contenido": {
+            "format": "html",
+            "value": "<p>¿Será posible determinar el precio exacto de cada insumo si solo sabemos el total de dos compras diferentes?</p>"
+          }
+        },
+        {
+          "id": "proposito_organizacion",
+          "orden": 4,
+          "titulo": "Propósito y organización",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Hoy aprenderemos a resolver problemas cotidianos utilizando sistemas de ecuaciones lineales con dos incógnitas mediante el método de reducción.</p>"
+          }
+        }
+      ]
+    },
+    "desarrollo": {
+      "tiempoMinutos": 65,
+      "procesos": [
+        {
+          "id": "familiarizacion",
+          "orden": 1,
+          "titulo": "Familiarización con el problema",
+          "methodology": "polya",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Los estudiantes leen en parejas la situación planteada y subrayan los datos numéricos y condiciones.</p><p>El docente realiza preguntas de comprensión para asegurar que todos identifiquen qué se pide calcular.</p>"
+          }
+        },
+        {
+          "id": "busqueda_estrategias",
+          "orden": 2,
+          "titulo": "Búsqueda y ejecución de estrategias",
+          "methodology": "polya",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Los equipos proponen representar el problema mediante un sistema de dos ecuaciones con dos incógnitas.</p><p>Aplican el método de reducción multiplicando las filas para eliminar una de las variables.</p>"
+          }
+        },
+        {
+          "id": "socializacion",
+          "orden": 3,
+          "titulo": "Socialización de representaciones",
+          "methodology": "polya",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Dos equipos explican en la pizarra sus procedimientos paso a paso y comparan sus resultados.</p><p>Se valida la solución sustituyendo los valores en las ecuaciones originales.</p>"
+          }
+        },
+        {
+          "id": "formalizacion",
+          "orden": 4,
+          "titulo": "Formalización y reflexión",
+          "methodology": "polya",
+          "contenido": {
+            "format": "html",
+            "value": "<p>El docente sintetiza los pasos clave del método de reducción y las propiedades algebraicas aplicadas.</p>"
+          }
+        }
+      ]
+    },
+    "cierre": {
+      "tiempoMinutos": 10,
+      "procesos": [
+        {
+          "id": "metacognicion",
+          "orden": 1,
+          "titulo": "Metacognición",
+          "contenido": {
+            "format": "html",
+            "value": "<ul><li>¿Qué método algebraico resultó más directo para resolver el sistema?</li><li>¿Qué dificultades tuvimos al formular las ecuaciones y cómo las superamos?</li></ul>"
+          }
+        },
+        {
+          "id": "evaluacion",
+          "orden": 2,
+          "titulo": "Evaluación formativa",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Los estudiantes autoevalúan su aprendizaje usando los criterios de la lista de cotejo.</p>"
+          }
+        },
+        {
+          "id": "extension",
+          "orden": 3,
+          "titulo": "Extensión",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Resolver los problemas 3 y 4 de la página 45 del cuaderno de trabajo de Matemática.</p>"
+          }
+        }
+      ]
+    }
+  },
+  "evaluacion": {
+    "criterioConsolidado": "",
+    "evidencia": "Ficha de trabajo resuelta con justificación matemática de los métodos empleados.",
+    "instrumento": "Lista de Cotejo"
+  },
+  "fichaTrabajo": null,
+  "juegoLibreSectores": null,
+  "listaCotejo": {
+    "alumnos": [
+      "ALVAREZ ROJAS, JUAN CARLOS",
+      "BARRERA CASTILLO, MARÍA ELENA",
+      "CASTILLO HUAMÁN, ANDRÉS",
+      "DELGADO MENDOZA, SOFÍA",
+      "ESPINOZA PAREDES, KEVIN"
+    ],
+    "criterios": [
+      "Identifica las incógnitas y relaciones en un enunciado problemático.",
+      "Aplica el método de reducción para hallar el conjunto solución.",
+      "Verifica la validez de los resultados en el contexto del problema."
+    ]
+  }
+}

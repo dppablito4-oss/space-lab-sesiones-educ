@@ -5,7 +5,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   # ─── 1. Syntax + smoke tests (sin Chromium) ───────────────────────────────
@@ -22,6 +22,10 @@ jobs:
         with:
           node-version: '22'
 
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
       - name: Install backend dependencies
         run: pip install -r backend/requirements.txt
 
@@ -34,11 +38,35 @@ jobs:
       - name: Validate curriculum JSON
         run: python -m json.tool data/competencias.json > /dev/null
 
+      - name: Run JS contract & adapter & template tests
+        run: |
+          node tests/test_contract_v1.js
+          node tests/test_adapter_v1.js
+          node tests/test_templates_v1.js
+
       - name: Run storage smoke test
-        run: node tests/storage.test.js
+        run: |
+          node tests/storage.test.js
+          node tests/ai-provider-routing.test.js
+
+      - name: Run Python contract & adapter & docx tests
+        run: |
+          python tests/test_contract_v1.py
+          python tests/test_adapter_v1_py.py
+          python tests/test_docx_builder_v1.py
 
       - name: Run backend DOCX smoke test
         run: python tests/backend_smoke.py
+
+      - name: Run frontend security test
+        run: python tests/frontend_security.py
+
+      - name: Check Supabase Edge Functions
+        run: |
+          deno check supabase/functions/openai-router/index.ts
+          deno check supabase/functions/gemini-router/index.ts
+          deno check supabase/functions/deepseek-router/index.ts
+          deno check supabase/functions/pablito-mailer/index.ts
 
   # ─── 2. Build Windows .exe (solo en push a main/master) ───────────────────
   build-exe:

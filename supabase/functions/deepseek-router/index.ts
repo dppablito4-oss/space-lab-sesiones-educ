@@ -7,10 +7,15 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
+const MAX_PROMPT_CHARS = 30_000;
+
 serve(async (req) => {
   // Manejo de preflight CORS
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
+  }
+  if (req.method !== "POST") {
+    return new Response(JSON.stringify({ error: "Método no permitido." }), { status: 405, headers: corsHeaders });
   }
 
   const authError = await requireAuthenticatedUser(req);
@@ -22,7 +27,7 @@ serve(async (req) => {
   try {
     const { prompt, systemPrompt } = await req.json();
 
-    if (!prompt) {
+    if (typeof prompt !== "string" || !prompt.trim() || prompt.length > MAX_PROMPT_CHARS) {
       return new Response(
         JSON.stringify({ error: "Falta el parámetro 'prompt'." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }

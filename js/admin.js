@@ -105,11 +105,9 @@
     // ─── SMTP CONFIGURATION ───
     async function fetchSmtpConfig() {
         try {
-            const { data, error } = await SupabaseClient.client
-                .from('corporate_email_settings')
-                .select('smtp_email, smtp_host, smtp_port, smtp_secure')
-                .eq('id', 1)
-                .maybeSingle();
+            const { data, error } = await SupabaseClient.client.functions.invoke('pablito-mailer', {
+                body: { action: 'GET_SMTP_CONFIG', payload: {} }
+            });
 
             if (error) throw error;
 
@@ -528,17 +526,12 @@
             btnSave.textContent = 'Guardando...';
 
             try {
-                const { error } = await SupabaseClient.client
-                    .from('corporate_email_settings')
-                    .upsert({
-                        id: 1,
-                        smtp_email: email,
-                        smtp_app_password: password,
-                        smtp_host: host,
-                        smtp_port: port,
-                        smtp_secure: secure,
-                        updated_at: new Date().toISOString()
-                    });
+                const { error } = await SupabaseClient.client.functions.invoke('pablito-mailer', {
+                    body: {
+                        action: 'UPDATE_SMTP_CONFIG',
+                        payload: { email, password, host, port, secure }
+                    }
+                });
 
                 if (error) throw error;
 

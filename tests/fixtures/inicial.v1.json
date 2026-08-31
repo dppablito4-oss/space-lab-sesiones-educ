@@ -1,0 +1,167 @@
+{
+  "schemaVersion": "1.0",
+  "metadata": {
+    "institucion": "I.E.I. 123 LOS ANGELITOS",
+    "dre": "LIMA METROPOLITANA",
+    "ugel": "UGEL 04",
+    "docente": "LIC. ANA MARÍA TORRES",
+    "director": "MG. ROSA LÓPEZ",
+    "fecha": "18/08/2026",
+    "nivel": "INICIAL",
+    "grado": "5 años",
+    "seccion": "Ositos",
+    "area": "COMUNICACIÓN",
+    "numeroSesion": "02",
+    "duracionMinutos": 45,
+    "unidad": "UNIDAD 02",
+    "titulo": "CREAMOS CUENTOS CON NUESTROS AMIGOS",
+    "logos": {
+      "institucional": null,
+      "regional": null
+    }
+  },
+  "proposito": {
+    "texto": "Los niños y niñas crearán un cuento corto de manera colaborativa, expresando sus ideas con claridad.",
+    "competencia": "Se comunica oralmente en su lengua materna",
+    "capacidades": [
+      "Obtiene información del texto oral.",
+      "Infiere e interpreta información del texto oral.",
+      "Adecúa, organiza y desarrolla las ideas de forma coherente y cohesionada."
+    ],
+    "estandar": "Se comunica oralmente mediante diversos tipos de textos; identifica información explícita...",
+    "desempeno": "Expresa sus ideas acerca de un cuento creado colaborativamente utilizando vocabulario de uso frecuente.",
+    "conocimientos": "Estructura del cuento: inicio, nudo y desenlace.",
+    "criterios": [
+      "Participa activamente en la creación del cuento.",
+      "Expresa ideas con secuencia lógica (inicio, nudo, desenlace)."
+    ],
+    "evidencia": "Dibujo y narración oral del cuento creado.",
+    "instrumento": "Lista de Cotejo"
+  },
+  "competenciasTransversales": [
+    {
+      "titulo": "Gestiona su aprendizaje de manera autónoma",
+      "desempenos": [
+        "Elige los materiales que necesita para realizar la actividad."
+      ]
+    }
+  ],
+  "enfoquesTransversales": [
+    {
+      "nombre": "Enfoque de Orientación al Bien Común",
+      "valor": "Solidaridad",
+      "actitudes": "Los niños comparten materiales y colaboran con sus compañeros durante la creación del cuento."
+    }
+  ],
+  "recursos": {
+    "enlaces": "",
+    "materiales": "Láminas, crayones, títeres, papelógrafo.",
+    "refuerzo": ""
+  },
+  "momentos": {
+    "inicio": {
+      "tiempoMinutos": 10,
+      "procesos": [
+        {
+          "id": "motivacion",
+          "orden": 1,
+          "titulo": "Motivación",
+          "contenido": {
+            "format": "html",
+            "value": "<p>La docente presenta títeres de animales y canta una canción de bienvenida.</p><p>Pregunta: ¿Qué cuentos conocen? ¿Quién quiere contarnos uno?</p>"
+          }
+        },
+        {
+          "id": "saberes_previos",
+          "orden": 2,
+          "titulo": "Saberes previos",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Los niños mencionan cuentos que conocen y la docente anota sus ideas en un papelógrafo.</p>"
+          }
+        },
+        {
+          "id": "proposito_organizacion",
+          "orden": 3,
+          "titulo": "Propósito y organización",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Hoy vamos a crear nuestro propio cuento juntos, usando los títeres y nuestras ideas.</p>"
+          }
+        }
+      ]
+    },
+    "desarrollo": {
+      "tiempoMinutos": 25,
+      "procesos": [
+        {
+          "id": "proceso_didactico",
+          "orden": 1,
+          "titulo": "Creación colaborativa del cuento",
+          "contenido": {
+            "format": "html",
+            "value": "<p>En asamblea, la docente guía a los niños para decidir los personajes.</p><p>Cada niño aporta una idea para el inicio, nudo y desenlace del cuento.</p><p>La docente escribe las ideas en el papelógrafo mientras los niños observan.</p>"
+          }
+        },
+        {
+          "id": "actividad",
+          "orden": 2,
+          "titulo": "Dibujo individual del cuento",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Cada niño dibuja la parte del cuento que más le gustó usando crayones y colores.</p>"
+          }
+        }
+      ]
+    },
+    "cierre": {
+      "tiempoMinutos": 10,
+      "procesos": [
+        {
+          "id": "metacognicion",
+          "orden": 1,
+          "titulo": "Metacognición",
+          "contenido": {
+            "format": "html",
+            "value": "<ul><li>¿Qué cuento creamos hoy?</li><li>¿Qué parte del cuento les gustó más?</li><li>¿Fue fácil o difícil crear el cuento juntos?</li></ul>"
+          }
+        },
+        {
+          "id": "extension",
+          "orden": 2,
+          "titulo": "Extensión",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Contar el cuento a mamá o papá en casa y dibujar un nuevo final.</p>"
+          }
+        }
+      ]
+    }
+  },
+  "evaluacion": {
+    "criterioConsolidado": "",
+    "evidencia": "Dibujo y narración oral del cuento creado.",
+    "instrumento": "Lista de Cotejo"
+  },
+  "fichaTrabajo": null,
+  "juegoLibreSectores": {
+    "planificacion": "Los niños eligen en qué sector desean jugar: dramatización, biblioteca o arte.",
+    "organizacion": "Se organizan en grupos de 4 y acuerdan normas de uso de materiales.",
+    "ejecucion": "Los niños juegan libremente representando cuentos con los títeres o dibujando.",
+    "orden": "Los niños guardan los materiales en su lugar con apoyo de la docente.",
+    "socializacion": "Comparten lo que hicieron durante el juego libre con sus compañeros.",
+    "representacion": "Dibujan lo que más les gustó de su juego en el sector elegido."
+  },
+  "listaCotejo": {
+    "alumnos": [
+      "FLORES GUTIÉRREZ, VALENTINA",
+      "HUAMÁN QUISPE, MATEO",
+      "LÓPEZ FERNÁNDEZ, CAMILA",
+      "MENDOZA RAMOS, SEBASTIÁN"
+    ],
+    "criterios": [
+      "Participa activamente en la creación del cuento.",
+      "Expresa ideas con secuencia lógica (inicio, nudo, desenlace)."
+    ]
+  }
+}

@@ -229,7 +229,7 @@ window.SupabaseClient = (() => {
                     ...session,
                     deleted_at: session.deleted_at || null
                 },
-                last_saved: new Date().toISOString(),
+                last_saved: session.lastSaved || new Date().toISOString(),
                 deleted_at: session.deleted_at || null
             });
 
@@ -414,31 +414,14 @@ window.SupabaseClient = (() => {
         const user = await getCurrentUser();
         if (!user) throw new Error('Debes iniciar sesión para guardar alumnos');
         try {
-            // 1. Eliminar anteriores
-            const { error: deleteError } = await supabase
-                .from('alumnos')
-                .delete()
-                .eq('user_id', user.id)
-                .eq('nivel', nivel)
-                .eq('grado', grado)
-                .eq('seccion', seccion);
-            if (deleteError) throw deleteError;
-
-            if (nombresArray.length === 0) return true;
-
-            // 2. Insertar nuevos
-            const inserts = nombresArray.map(nombre => ({
-                user_id: user.id,
-                nombre_completo: nombre.trim(),
-                nivel: nivel,
-                grado: grado,
-                seccion: seccion
-            }));
-
-            const { error: insertError } = await supabase
-                .from('alumnos')
-                .insert(inserts);
-            if (insertError) throw insertError;
+            const nombres = [...new Set(nombresArray.map(nombre => nombre.trim()).filter(Boolean))];
+            const { error } = await supabase.rpc('replace_alumnos_roster', {
+                p_nivel: nivel,
+                p_grado: grado,
+                p_seccion: seccion,
+                p_nombres: nombres
+            });
+            if (error) throw error;
             return true;
         } catch (e) {
             console.error('[Supabase] Error al guardar alumnos:', e);

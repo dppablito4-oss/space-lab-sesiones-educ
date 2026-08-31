@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import sys
 
@@ -100,7 +101,21 @@ def run() -> None:
     assert word.content[:2] == b"PK"
     assert len(word.content) > 10_000
 
-    print(f"backend_smoke.py: OK ({len(word.content)} bytes, CORS y límite OK)")
+    v1_payload = json.loads(
+        (ROOT / "tests" / "fixtures" / "secundaria-matematica-polya.v1.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    v1_payload["token"] = main.CONNECTION_TOKEN
+    word_v1 = client.post("/exportar-docx-json", json=v1_payload)
+    assert word_v1.status_code == 200, word_v1.text
+    assert word_v1.content[:2] == b"PK"
+    assert len(word_v1.content) > 10_000
+
+    print(
+        "backend_smoke.py: OK "
+        f"({len(word.content)} legacy, {len(word_v1.content)} v1, CORS y límite OK)"
+    )
 
 
 if __name__ == "__main__":

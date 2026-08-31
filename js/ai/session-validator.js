@@ -1,0 +1,257 @@
+/**
+ * SessionValidator — Validador de SessionDocument v1 para el frontend.
+ *
+ * Valida documentos contra el contrato canónico sin dependencias externas.
+ * No modifica el documento, solo reporta errores.
+ *
+ * Uso:
+ *   const result = SessionValidator.validate(doc);
+ *   if (!result.valid) console.error(result.errors);
+ */
+const SessionValidator = (() => {
+    'use strict';
+
+    const SCHEMA_VERSION = '1.0';
+
+    // IDs de procesos pedagógicos reconocidos (no obligatorios, pero sirven para warnings)
+    const KNOWN_PROCESS_IDS = new Set([
+        // Inicio
+        'motivacion', 'saberes_previos', 'problematizacion', 'proposito_organizacion',
+        // Desarrollo (Polya)
+        'familiarizacion', 'busqueda_estrategias', 'socializacion', 'formalizacion',
+        'planteamiento_otros_problemas',
+        // Desarrollo (ERCA)
+        'experiencia', 'reflexion', 'conceptualizacion', 'aplicacion',
+        // Desarrollo (Indagación)
+        'planteamiento_problema', 'formulacion_hipotesis', 'elaboracion_plan',
+        'recojo_datos', 'analisis_resultados', 'evaluacion_comunicacion',
+        // Desarrollo (genérico)
+        'proceso_didactico', 'actividad',
+        // Cierre
+        'metacognicion', 'evaluacion', 'evaluacion_formativa', 'extension',
+    ]);
+
+    const VALID_LEVELS = new Set(['INICIAL', 'PRIMARIA', 'SECUNDARIA', '']);
+    const VALID_FORMATS = new Set(['html', 'text']);
+
+    /**
+     * @typedef {Object} ValidationResult
+     * @property {boolean} valid
+     * @property {string[]} errors  - Errores que impiden el procesamiento.
+     * @property {string[]} warnings - Advertencias que no impiden el procesamiento.
+     */
+
+    /**
+     * Valida un objeto contra el contrato SessionDocument v1.
+     * @param {Object} doc - Documento a validar.
+     * @returns {ValidationResult}
+     */
+    function validate(doc) {
+        const errors = [];
+        const warnings = [];
+
+        if (!doc || typeof doc !== 'object') {
+            return { valid: false, errors: ['El documento es nulo o no es un objeto.'], warnings };
+        }
+
+        // schemaVersion
+        if (doc.schemaVersion !== SCHEMA_VERSION) {
+            errors.push(`schemaVersion debe ser "${SCHEMA_VERSION}", recibido: "${doc.schemaVersion}".`);
+        }
+
+        // metadata
+        if (!doc.metadata || typeof doc.metadata !== 'object') {
+            errors.push('metadata es requerido y debe ser un objeto.');
+        } else {
+            _validateMetadata(doc.metadata, errors, warnings);
+        }
+
+        // proposito
+        if (!doc.proposito || typeof doc.proposito !== 'object') {
+            errors.push('proposito es requerido y debe ser un objeto.');
+        } else {
+            _validateProposito(doc.proposito, errors, warnings);
+        }
+
+        // competenciasTransversales
+        if (doc.competenciasTransversales !== undefined) {
+            if (!Array.isArray(doc.competenciasTransversales)) {
+                errors.push('competenciasTransversales debe ser un array.');
+            } else {
+                doc.competenciasTransversales.forEach((ct, i) => {
+                    if (!ct.titulo) warnings.push(`competenciasTransversales[${i}].titulo está vacío.`);
+                });
+            }
+        }
+
+        // enfoquesTransversales
+        if (doc.enfoquesTransversales !== undefined) {
+            if (!Array.isArray(doc.enfoquesTransversales)) {
+                errors.push('enfoquesTransversales debe ser un array.');
+            } else {
+                doc.enfoquesTransversales.forEach((et, i) => {
+                    if (!et.nombre) warnings.push(`enfoquesTransversales[${i}].nombre está vacío.`);
+                });
+            }
+        }
+
+        // momentos
+        if (!doc.momentos || typeof doc.momentos !== 'object') {
+            errors.push('momentos es requerido y debe ser un objeto.');
+        } else {
+            _validateMomentos(doc.momentos, errors, warnings);
+        }
+
+        // evaluacion (no debe eliminarse)
+        if (doc.evaluacion !== undefined && typeof doc.evaluacion !== 'object') {
+            errors.push('evaluacion debe ser un objeto si está presente.');
+        }
+
+        // fichaTrabajo
+        if (doc.fichaTrabajo !== undefined && doc.fichaTrabajo !== null) {
+            if (typeof doc.fichaTrabajo !== 'object') {
+                errors.push('fichaTrabajo debe ser un objeto o null.');
+            }
+        }
+
+        // juegoLibreSectores
+        if (doc.juegoLibreSectores !== undefined && doc.juegoLibreSectores !== null) {
+            if (typeof doc.juegoLibreSectores !== 'object') {
+                errors.push('juegoLibreSectores debe ser un objeto o null.');
+            }
+        }
+
+        // listaCotejo
+        if (doc.listaCotejo !== undefined) {
+            if (typeof doc.listaCotejo !== 'object') {
+                errors.push('listaCotejo debe ser un objeto.');
+            } else {
+                if (doc.listaCotejo.alumnos && !Array.isArray(doc.listaCotejo.alumnos)) {
+                    errors.push('listaCotejo.alumnos debe ser un array.');
+                }
+                if (doc.listaCotejo.criterios && !Array.isArray(doc.listaCotejo.criterios)) {
+                    errors.push('listaCotejo.criterios debe ser un array.');
+                }
+            }
+        }
+
+        // Campos desconocidos de nivel superior
+        const knownTopLevel = new Set([
+            'schemaVersion', 'metadata', 'proposito', 'competenciasTransversales',
+            'enfoquesTransversales', 'recursos', 'momentos', 'evaluacion',
+            'fichaTrabajo', 'juegoLibreSectores', 'listaCotejo'
+        ]);
+        Object.keys(doc).forEach(key => {
+            if (!knownTopLevel.has(key)) {
+                warnings.push(`Campo de nivel superior no reconocido: "${key}".`);
+            }
+        });
+
+        return {
+            valid: errors.length === 0,
+            errors,
+            warnings
+        };
+    }
+
+    // ── Validadores internos ──
+
+    function _validateMetadata(m, errors, warnings) {
+        if (typeof m.duracionMinutos !== 'undefined') {
+            if (typeof m.duracionMinutos !== 'number' || m.duracionMinutos < 1) {
+                errors.push('metadata.duracionMinutos debe ser un entero >= 1.');
+            }
+        }
+        if (m.nivel && !VALID_LEVELS.has(m.nivel.toUpperCase())) {
+            warnings.push(`metadata.nivel "${m.nivel}" no es un nivel reconocido (INICIAL|PRIMARIA|SECUNDARIA).`);
+        }
+        if (!m.titulo) {
+            warnings.push('metadata.titulo está vacío.');
+        }
+    }
+
+    function _validateProposito(p, errors, warnings) {
+        if (p.capacidades && !Array.isArray(p.capacidades)) {
+            errors.push('proposito.capacidades debe ser un array.');
+        }
+        if (p.criterios && !Array.isArray(p.criterios)) {
+            errors.push('proposito.criterios debe ser un array.');
+        }
+        if (!p.competencia) {
+            warnings.push('proposito.competencia está vacío.');
+        }
+    }
+
+    function _validateMomentos(momentos, errors, warnings) {
+        ['inicio', 'desarrollo', 'cierre'].forEach(key => {
+            if (!momentos[key] || typeof momentos[key] !== 'object') {
+                errors.push(`momentos.${key} es requerido y debe ser un objeto.`);
+                return;
+            }
+            const m = momentos[key];
+
+            if (typeof m.tiempoMinutos !== 'undefined') {
+                if (typeof m.tiempoMinutos !== 'number' || m.tiempoMinutos < 0) {
+                    errors.push(`momentos.${key}.tiempoMinutos debe ser un entero >= 0.`);
+                }
+            }
+
+            if (!m.procesos || !Array.isArray(m.procesos)) {
+                errors.push(`momentos.${key}.procesos es requerido y debe ser un array.`);
+                return;
+            }
+
+            m.procesos.forEach((proc, i) => {
+                _validateProcess(proc, `momentos.${key}.procesos[${i}]`, errors, warnings);
+            });
+        });
+
+        // Validar suma de tiempos
+        if (momentos.inicio && momentos.desarrollo && momentos.cierre) {
+            const total = (momentos.inicio.tiempoMinutos || 0) +
+                          (momentos.desarrollo.tiempoMinutos || 0) +
+                          (momentos.cierre.tiempoMinutos || 0);
+            if (total > 0 && momentos.inicio.tiempoMinutos !== undefined) {
+                // Solo validar si al menos un tiempo fue especificado
+                // No es error, es warning informativo
+            }
+        }
+    }
+
+    function _validateProcess(proc, path, errors, warnings) {
+        if (!proc || typeof proc !== 'object') {
+            errors.push(`${path} debe ser un objeto.`);
+            return;
+        }
+        if (!proc.id || typeof proc.id !== 'string') {
+            errors.push(`${path}.id es requerido y debe ser un string.`);
+        } else if (!KNOWN_PROCESS_IDS.has(proc.id)) {
+            warnings.push(`${path}.id "${proc.id}" no es un ID de proceso reconocido.`);
+        }
+        if (!proc.titulo || typeof proc.titulo !== 'string') {
+            errors.push(`${path}.titulo es requerido y debe ser un string.`);
+        }
+        if (!proc.contenido || typeof proc.contenido !== 'object') {
+            errors.push(`${path}.contenido es requerido y debe ser un objeto RichContent.`);
+        } else {
+            if (!VALID_FORMATS.has(proc.contenido.format)) {
+                errors.push(`${path}.contenido.format debe ser "html" o "text", recibido: "${proc.contenido.format}".`);
+            }
+            if (typeof proc.contenido.value !== 'string') {
+                errors.push(`${path}.contenido.value debe ser un string.`);
+            }
+        }
+    }
+
+    // ── API pública ──
+    return {
+        validate,
+        SCHEMA_VERSION,
+        KNOWN_PROCESS_IDS
+    };
+})();
+
+// Export para uso en Node.js (tests)
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = SessionValidator;
+}

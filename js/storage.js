@@ -10,6 +10,7 @@ const Storage = (() => {
 
     // ─── ACTIVE SYNC TRACKING ───
     let activeSyncsCount = 0;
+    const cloudSaveQueues = new Map();
 
     function incrementSync() {
         activeSyncsCount++;
@@ -17,6 +18,32 @@ const Storage = (() => {
 
     function decrementSync() {
         activeSyncsCount = Math.max(0, activeSyncsCount - 1);
+    }
+
+    function queueCloudSave(session) {
+        if (!window.SupabaseClient || typeof SupabaseClient.saveSessionCloud !== 'function') return;
+
+        // Each request owns an immutable snapshot and waits for the preceding save.
+        // This prevents a slow, older autosave from overwriting a newer version.
+        const snapshot = JSON.parse(JSON.stringify(session));
+        const previous = cloudSaveQueues.get(snapshot.id) || Promise.resolve();
+        const next = previous.catch(() => undefined).then(async () => {
+            incrementSync();
+            try {
+                const user = await SupabaseClient.getCurrentUser();
+                if (user) await SupabaseClient.saveSessionCloud(snapshot);
+            } finally {
+                decrementSync();
+            }
+        });
+
+        cloudSaveQueues.set(snapshot.id, next);
+        next.catch(err => console.warn('[Storage] Error al subir a la nube:', err));
+        next.then(() => {
+            if (cloudSaveQueues.get(snapshot.id) === next) cloudSaveQueues.delete(snapshot.id);
+        }, () => {
+            if (cloudSaveQueues.get(snapshot.id) === next) cloudSaveQueues.delete(snapshot.id);
+        });
     }
 
     window.addEventListener('beforeunload', (e) => {
@@ -86,18 +113,7 @@ const Storage = (() => {
             safeSetItem(STORAGE_KEY, JSON.stringify(sessions));
 
             // Sincronización asíncrona con Supabase en background si está logueado
-            if (window.SupabaseClient && typeof SupabaseClient.saveSessionCloud === 'function') {
-                incrementSync();
-                SupabaseClient.getCurrentUser().then(user => {
-                    if (user) {
-                        return SupabaseClient.saveSessionCloud(session)
-                            .then(() => console.log('[Storage] Sincronizado en la nube:', session.id))
-                            .catch(err => console.warn('[Storage] Error al subir a la nube:', err));
-                    }
-                }).finally(() => {
-                    decrementSync();
-                });
-            }
+            queueCloudSave(session);
 
             return true;
         } catch (e) {
@@ -117,18 +133,7 @@ const Storage = (() => {
                 safeSetItem(STORAGE_KEY, JSON.stringify(sessions));
 
                 // Sincronización asíncrona con Supabase en background
-                if (window.SupabaseClient && typeof SupabaseClient.saveSessionCloud === 'function') {
-                    incrementSync();
-                    SupabaseClient.getCurrentUser().then(user => {
-                        if (user) {
-                            return SupabaseClient.saveSessionCloud(session)
-                                .then(() => console.log('[Storage] Soft-deleted en la nube:', id))
-                                .catch(err => console.warn('[Storage] Error al borrar de la nube (soft-delete):', err));
-                        }
-                    }).finally(() => {
-                        decrementSync();
-                    });
-                }
+                queueCloudSave(session);
             }
 
             return true;
@@ -242,7 +247,26 @@ const Storage = (() => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `sesion_${session.metadata?.titulo || 'sin_titulo'}_${Date.now()}.json`;
+        const titulo = session.metadata?.titulo || session.titulo || 'sin_titulo';
+        const cleanTitle = titulo.replace(/[^a-zA-Z0-9-_\s]/g, '').replace(/\s+/g, '_');
+        a.download = `sesion_${cleanTitle}_${Date.now()}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+
+    function exportAsV1JSON(session) {
+        let docToExport = session.data || session;
+        if (typeof SessionAdapter !== 'undefined' && docToExport.schemaVersion !== '1.0') {
+            const { document } = SessionAdapter.adaptLegacyToV1(docToExport);
+            docToExport = document;
+        }
+        const blob = new Blob([JSON.stringify(docToExport, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        const titulo = docToExport.metadata?.titulo || session.metadata?.titulo || 'sin_titulo';
+        const cleanTitle = titulo.replace(/[^a-zA-Z0-9-_\s]/g, '').replace(/\s+/g, '_');
+        a.download = `sesion_${cleanTitle}_v1_${Date.now()}.json`;
         a.click();
         URL.revokeObjectURL(url);
     }
@@ -253,7 +277,12 @@ const Storage = (() => {
             reader.onload = (e) => {
                 try {
                     const data = JSON.parse(e.target.result);
-                    resolve(data);
+                    if (typeof SessionAdapter !== 'undefined' && data && typeof data === 'object' && data.schemaVersion !== '1.0') {
+                        const { document } = SessionAdapter.adaptLegacyToV1(data);
+                        resolve({ ...data, data: document });
+                    } else {
+                        resolve(data);
+                    }
                 } catch {
                     reject(new Error('Archivo JSON inválido'));
                 }
@@ -381,10 +410,16 @@ const Storage = (() => {
         updateSaveIndicator,
         generateId,
         exportAsJSON,
+        exportAsV1JSON,
         importFromJSON,
         syncSessions
     };
 })();
 
-window.StorageManager = Storage;
+if (typeof window !== 'undefined') {
+    window.StorageManager = Storage;
+}
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = Storage;
+}
 

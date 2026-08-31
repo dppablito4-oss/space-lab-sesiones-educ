@@ -906,15 +906,15 @@
         DOM.inputDirector.value = m.director || '';
         DOM.inputFecha.value = m.fecha || '';
         DOM.inputNivel.value = m.nivel || 'SECUNDARIA';
-        DOM.inputNumeroSesion.value = m.numero_sesion || '';
+        DOM.inputNumeroSesion.value = m.numeroSesion || m.numero_sesion || '';
         DOM.inputGrado.value = m.grado || '';
         DOM.inputSeccion.value = m.seccion || '';
         DOM.inputArea.value = m.area || '';
-        DOM.inputDuracion.value = m.duracion || '';
+        DOM.inputDuracion.value = m.duracionMinutos || m.duracion || '';
         DOM.inputUnidad.value = m.unidad || '';
         DOM.inputTitulo.value = m.titulo || '';
         DOM.inputCompetencia.value = p.competencia || '';
-        DOM.inputCapacidad.value = p.capacidad || '';
+        DOM.inputCapacidad.value = p.capacidad || (p.capacidades || []).join('; ');
         DOM.inputDesempeno.value = p.desempeno || '';
         DOM.inputEnfoque.value = p.enfoque || '';
         DOM.inputEnfoque2.value = p.enfoque2 || '';
@@ -946,7 +946,7 @@
         // Populate student roster textarea
         const textareaAlumnos = document.getElementById('textarea-alumnos');
         if (textareaAlumnos) {
-            textareaAlumnos.value = session.alumnos ? session.alumnos.join('\n') : '';
+            textareaAlumnos.value = (session.alumnos || session.listaCotejo?.alumnos || []).join('\n');
         }
     }
 
@@ -995,7 +995,7 @@
     async function handleGenerateAI() {
         // Intercept: Check user authentication
         const user = await SupabaseClient.getCurrentUser();
-        if (!user) {
+        if (!user && !AiCopilot.hasLocalApiKey()) {
             Toast.warning('Debes crear una cuenta para generar sesiones con IA');
             if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                 window.AuthUi.openRegister();
@@ -1031,26 +1031,32 @@
                 pedagogyBrief: (window.PedagogyBrief ? PedagogyBrief.getSummary() : null)
             });
 
-            // Merge AI data with form data
+            // Normalize at the AI boundary so the web and DOCX builders share
+            // exactly one SessionDocument v1 contract.
+            const formMeta = {
+                ...formData.metadata,
+                numeroSesion: formData.metadata.numero_sesion,
+                duracionMinutos: parseMinutes(formData.metadata.duracion) || 90
+            };
+            const { document: canonical, valid, errors } = AiCopilot.toV1(aiData, formMeta);
+            if (!valid) throw new Error(`La IA devolvió una sesión inválida: ${errors.join('; ')}`);
+            canonical.metadata = { ...formMeta, ...canonical.metadata };
+            canonical.listaCotejo = { ...canonical.listaCotejo, alumnos: formData.alumnos };
+
             const session = {
                 id: AppState.currentSession?.id || Storage.generateId(),
                 template: DOM.selectTemplate.value,
-                metadata: { ...formData.metadata, ...(aiData.metadata || {}) },
-                proposito: { ...formData.proposito, ...(aiData.proposito || {}) },
-                competencias_transversales: aiData.competencias_transversales || [],
-                enfoques: aiData.enfoques || [],
-                enfoques_transversales: aiData.enfoques_transversales || [],
-                recursos: aiData.recursos || {},
-                momentos: aiData.momentos || {},
-                evaluacion: aiData.evaluacion || {},
-                juego_libre_sectores: aiData.juego_libre_sectores || null,
-                ficha_trabajo: aiData.ficha_trabajo || null,
-                alumnos: formData.alumnos,
+                ...canonical,
                 design: formData.design,
                 createdAt: AppState.currentSession?.createdAt || new Date().toISOString()
             };
 
             AppState.currentSession = session;
+
+            DOM.inputTitulo.value = canonical.metadata.titulo || '';
+            DOM.inputCompetencia.value = canonical.proposito.competencia || '';
+            DOM.inputCapacidad.value = (canonical.proposito.capacidades || []).join('; ');
+            DOM.inputDesempeno.value = canonical.proposito.desempeno || '';
 
             // Update form with AI-generated title
             if (aiData.titulo_sesion_retador) {
@@ -1904,7 +1910,7 @@
             alumnosList = AppState.currentSession.alumnos;
         }
 
-        return {
+        const legacyPayload = {
             metadata,
             proposito,
             competencias_transversales,
@@ -1916,6 +1922,20 @@
             alumnos: alumnosList,
             token: localStorage.getItem('connection_token') || ''
         };
+
+        if (window.AiCopilot && typeof AiCopilot.toV1 === 'function') {
+            const { document, valid } = AiCopilot.toV1(legacyPayload, {
+                ...metadata,
+                numeroSesion: metadata.numero_sesion,
+                duracionMinutos: parseMinutes(metadata.duracion) || 90
+            });
+            if (valid) {
+                document.listaCotejo = { ...document.listaCotejo, alumnos: alumnosList };
+                return { ...document, token: legacyPayload.token };
+            }
+        }
+
+        return legacyPayload;
     }
 
     async function exportarAPDFBackend() {
@@ -2106,7 +2126,7 @@
     async function handleAiRubrica() {
         // Intercept: Check user authentication
         const user = await SupabaseClient.getCurrentUser();
-        if (!user) {
+        if (!user && !AiCopilot.hasLocalApiKey()) {
             Toast.warning('Debes crear una cuenta para usar el asistente de evaluación con IA');
             if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                 window.AuthUi.openRegister();
@@ -2171,7 +2191,7 @@
     async function handleAiImproveText() {
         // Intercept: Check user authentication
         const user = await SupabaseClient.getCurrentUser();
-        if (!user) {
+        if (!user && !AiCopilot.hasLocalApiKey()) {
             Toast.warning('Debes crear una cuenta para refinar texto con IA');
             if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                 window.AuthUi.openRegister();
@@ -3755,6 +3775,9 @@
         const badge = DOM.modelCapabilitiesBadge || $('#model-capabilities-badge');
         const dropzoneText = DOM.sourceFileDropzone ? DOM.sourceFileDropzone.querySelector('.text') : null;
         const provider = DOM.selectAiProvider ? DOM.selectAiProvider.value : 'openai-gpt-5.6-luna';
+        if (window.AiCopilot && typeof AiCopilot.setProvider === 'function') {
+            AiCopilot.setProvider(provider);
+        }
 
         if (fileGroup) {
             fileGroup.classList.remove('hidden');
@@ -3794,8 +3817,9 @@
     function processSourceFile(file) {
         if (!file) return;
 
-        // Check file size (max 8MB)
-        const maxSizeBytes = 8 * 1024 * 1024;
+        // Base64 expands the payload by roughly one third. Keep the final Edge
+        // Function request below provider and gateway limits.
+        const maxSizeBytes = 3 * 1024 * 1024;
         if (file.size > maxSizeBytes) {
             Toast.warning('El archivo excede el tamaño límite de 8 MB.');
             DOM.inputSourceFile.value = '';
@@ -3815,7 +3839,7 @@
             const reader = new FileReader();
             reader.onload = function (e) {
                 Loader.hide();
-                const content = e.target.result;
+                const content = String(e.target.result || '').slice(0, 30000);
                 AppState.sourceFileData = {
                     name: fileName,
                     type: fileType || 'text/plain',
@@ -3947,7 +3971,7 @@
             fullText += `\n--- PÁGINA ${i} ---\n${pageText}\n`;
         }
 
-        return fullText.trim();
+        return fullText.trim().slice(0, 30000);
     }
 
     async function renderPDFToImages(arrayBuffer, maxPages = 4) {

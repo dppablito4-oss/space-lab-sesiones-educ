@@ -1,0 +1,196 @@
+{
+  "schemaVersion": "1.0",
+  "metadata": {
+    "institucion": "I.E. 2024 JOSÉ ANTONIO ENCINAS",
+    "dre": "LIMA METROPOLITANA",
+    "ugel": "UGEL 02",
+    "docente": "LIC. MARÍA ELENA SÁNCHEZ",
+    "director": "MG. JUAN DIEGO RIVERA",
+    "fecha": "19/08/2026",
+    "nivel": "PRIMARIA",
+    "grado": "3°",
+    "seccion": "B",
+    "area": "COMUNICACIÓN",
+    "numeroSesion": "06",
+    "duracionMinutos": 90,
+    "unidad": "UNIDAD 03",
+    "titulo": "ESCRIBIMOS UNA CARTA PARA NUESTRA FAMILIA",
+    "logos": {
+      "institucional": null,
+      "regional": null
+    }
+  },
+  "proposito": {
+    "texto": "Los estudiantes escribirán una carta familiar aplicando la estructura del texto epistolar y las convenciones del lenguaje escrito.",
+    "competencia": "Escribe diversos tipos de textos en su lengua materna",
+    "capacidades": [
+      "Adecúa el texto a la situación comunicativa.",
+      "Organiza y desarrolla las ideas de forma coherente y cohesionada.",
+      "Utiliza convenciones del lenguaje escrito de forma pertinente."
+    ],
+    "estandar": "Escribe diversos tipos de textos de forma reflexiva. Adecúa su texto al destinatario, propósito y registro...",
+    "desempeno": "Escribe una carta familiar con estructura completa (lugar, fecha, destinatario, cuerpo, despedida y firma).",
+    "conocimientos": "Estructura de la carta familiar: encabezado, saludo, cuerpo, despedida y firma.",
+    "criterios": [
+      "Incluye todos los elementos de la carta familiar.",
+      "Expresa sus ideas con coherencia y cohesión.",
+      "Usa mayúsculas, puntos y comas de forma pertinente."
+    ],
+    "evidencia": "Carta familiar escrita y revisada.",
+    "instrumento": "Lista de Cotejo"
+  },
+  "competenciasTransversales": [
+    {
+      "titulo": "Gestiona su aprendizaje de manera autónoma",
+      "desempenos": [
+        "Revisa su carta identificando los elementos que le faltan.",
+        "Solicita ayuda cuando tiene dificultades para expresar sus ideas por escrito."
+      ]
+    }
+  ],
+  "enfoquesTransversales": [
+    {
+      "nombre": "Enfoque de Derechos",
+      "valor": "Diálogo y concertación",
+      "actitudes": "Los estudiantes expresan libremente sus emociones y opiniones a través de la carta."
+    }
+  ],
+  "recursos": {
+    "enlaces": "Cuaderno de trabajo de Comunicación 3°, págs. 32-35.",
+    "materiales": "Hojas bond decoradas, lápices, colores, sobre de carta modelo.",
+    "refuerzo": "Escribir una carta a un amigo o compañero del aula."
+  },
+  "momentos": {
+    "inicio": {
+      "tiempoMinutos": 15,
+      "procesos": [
+        {
+          "id": "motivacion",
+          "orden": 1,
+          "titulo": "Motivación",
+          "contenido": {
+            "format": "html",
+            "value": "<p>La docente muestra una carta real que recibió de un familiar lejano y la lee en voz alta con entusiasmo.</p><p>Pregunta: ¿Alguna vez han recibido una carta? ¿A quién les gustaría escribirle?</p>"
+          }
+        },
+        {
+          "id": "saberes_previos",
+          "orden": 2,
+          "titulo": "Saberes previos",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Los estudiantes mencionan qué partes tiene una carta y la docente registra sus ideas en la pizarra.</p>"
+          }
+        },
+        {
+          "id": "problematizacion",
+          "orden": 3,
+          "titulo": "Problematización",
+          "contenido": {
+            "format": "html",
+            "value": "<p>¿Qué pasaría si escribimos una carta sin poner quién la envía ni a quién va dirigida? ¿Se entendería?</p>"
+          }
+        },
+        {
+          "id": "proposito_organizacion",
+          "orden": 4,
+          "titulo": "Propósito y organización",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Hoy escribiremos una carta para alguien de nuestra familia, cuidando que tenga todas sus partes completas.</p>"
+          }
+        }
+      ]
+    },
+    "desarrollo": {
+      "tiempoMinutos": 60,
+      "procesos": [
+        {
+          "id": "proceso_didactico",
+          "orden": 1,
+          "titulo": "Planificación de la carta",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Los estudiantes deciden a quién escribirán y qué le quieren decir.</p><p>Completan un organizador gráfico con: destinatario, propósito y mensaje principal.</p>"
+          }
+        },
+        {
+          "id": "proceso_didactico",
+          "orden": 2,
+          "titulo": "Textualización",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Escriben su primer borrador de la carta en hojas bond, utilizando la estructura modelo visible en la pizarra.</p><p>La docente acompaña mesa por mesa, orientando la escritura.</p>"
+          }
+        },
+        {
+          "id": "proceso_didactico",
+          "orden": 3,
+          "titulo": "Revisión y edición",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Intercambian cartas con un compañero para revisar si tiene todos los elementos.</p><p>Corrigen errores y escriben la versión final en la hoja decorada.</p>"
+          }
+        }
+      ]
+    },
+    "cierre": {
+      "tiempoMinutos": 15,
+      "procesos": [
+        {
+          "id": "metacognicion",
+          "orden": 1,
+          "titulo": "Metacognición",
+          "contenido": {
+            "format": "html",
+            "value": "<ul><li>¿Qué aprendimos hoy sobre las cartas?</li><li>¿Qué parte fue más difícil de escribir?</li><li>¿Por qué es importante incluir todas las partes?</li></ul>"
+          }
+        },
+        {
+          "id": "evaluacion",
+          "orden": 2,
+          "titulo": "Evaluación formativa",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Algunos estudiantes voluntarios leen su carta frente a la clase. Los demás identifican las partes de la carta leída.</p>"
+          }
+        },
+        {
+          "id": "extension",
+          "orden": 3,
+          "titulo": "Extensión",
+          "contenido": {
+            "format": "html",
+            "value": "<p>Escribir una carta a un amigo o compañero del aula y entregarla al día siguiente.</p>"
+          }
+        }
+      ]
+    }
+  },
+  "evaluacion": {
+    "criterioConsolidado": "",
+    "evidencia": "Carta familiar escrita y revisada.",
+    "instrumento": "Lista de Cotejo"
+  },
+  "fichaTrabajo": {
+    "titulo": "Ficha de Trabajo N° 06: Mi carta familiar",
+    "indicaciones": "Escribe una carta para un familiar siguiendo la estructura aprendida. Incluye: lugar y fecha, saludo, cuerpo del mensaje, despedida y firma.",
+    "actividades": "1. Completa el encabezado de tu carta (lugar, fecha, destinatario).\n2. Escribe el saludo.\n3. Redacta el cuerpo de tu carta (mínimo 3 oraciones contando algo importante).\n4. Escribe la despedida y tu firma.\n5. Decora tu carta con un dibujo."
+  },
+  "juegoLibreSectores": null,
+  "listaCotejo": {
+    "alumnos": [
+      "CASTRO DÍAZ, LUCÍA",
+      "GUERRA PAREDES, ALEJANDRO",
+      "HUAMÁN TORRES, GABRIELA",
+      "JARA MENDOZA, DIEGO",
+      "LÓPEZ QUISPE, FERNANDA",
+      "MIRANDA ROJAS, CARLOS"
+    ],
+    "criterios": [
+      "Incluye todos los elementos de la carta familiar.",
+      "Expresa sus ideas con coherencia y cohesión.",
+      "Usa mayúsculas, puntos y comas de forma pertinente."
+    ]
+  }
+}

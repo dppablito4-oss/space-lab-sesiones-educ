@@ -43,6 +43,9 @@ from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel, Field
 from playwright.async_api import async_playwright
 from docx_builder import build_docx_from_json, build_docx_from_html
+from docx_builder_v1 import build_docx_from_v1
+from adapters.legacy_to_v1 import adapt_legacy_to_v1
+from models.session_document import SessionDocumentV1
 
 
 
@@ -1644,6 +1647,55 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
     return html_content
 
 
+def v1_to_legacy_pdf_payload(doc: SessionDocumentV1, token: str) -> dict:
+    """Compatibility view for the existing Chromium PDF fallback.
+
+    SessionDocument v1 remains the source of truth; this is only used when
+    native Word-to-PDF conversion is unavailable on the local machine.
+    """
+    def process_text(process):
+        return process.contenido.value if process and process.contenido else ""
+
+    def moment(moment):
+        return {
+            "tiempo_total": f"{moment.tiempoMinutos} min",
+            "actividades": [process_text(p) for p in moment.procesos],
+            "procesos": [
+                {"clave": p.id, "titulo": p.titulo, "contenido": [process_text(p)]}
+                for p in moment.procesos
+            ]
+        }
+
+    return {
+        "metadata": {
+            **doc.metadata.model_dump(),
+            "numero_sesion": doc.metadata.numeroSesion,
+            "duracion": str(doc.metadata.duracionMinutos),
+        },
+        "proposito": {
+            **doc.proposito.model_dump(),
+            "criterios_evaluacion": doc.proposito.criterios,
+            "producto_evidencia": doc.proposito.evidencia,
+        },
+        "competencias_transversales": [item.model_dump() for item in doc.competenciasTransversales],
+        "enfoques_transversales": [item.model_dump() for item in doc.enfoquesTransversales],
+        "recursos": {
+            "paginas_consulta": doc.recursos.enlaces,
+            "materiales": doc.recursos.materiales,
+            "actividades_refuerzo": doc.recursos.refuerzo,
+        },
+        "momentos": {
+            "inicio": moment(doc.momentos.inicio),
+            "desarrollo": moment(doc.momentos.desarrollo),
+            "cierre": moment(doc.momentos.cierre),
+        },
+        "ficha_trabajo": doc.fichaTrabajo.model_dump() if doc.fichaTrabajo else None,
+        "juego_libre_sectores": doc.juegoLibreSectores.model_dump() if doc.juegoLibreSectores else None,
+        "alumnos": doc.listaCotejo.alumnos,
+        "token": token,
+    }
+
+
 @app.post("/exportar-pdf-json")
 async def exportar_pdf_json(raw: dict = Body(...)):
     """
@@ -1652,6 +1704,21 @@ async def exportar_pdf_json(raw: dict = Body(...)):
     Intenta utilizar la conversión nativa de Word (docx2pdf) si está disponible en Windows,
     y si falla o no está disponible, cae de vuelta al renderizado con Playwright.
     """
+    # v1 is the canonical source. The legacy shape below is only needed by
+    # the existing Chromium HTML fallback.
+    canonical_doc_v1 = None
+    if raw.get("schemaVersion") == "1.0":
+        token = raw.get("token", "")
+        if token != CONNECTION_TOKEN:
+            raise HTTPException(status_code=401, detail="No autorizado: Token de conexion invalido.")
+        try:
+            v1_data = dict(raw)
+            v1_data.pop("token", None)
+            canonical_doc_v1 = SessionDocumentV1(**v1_data)
+            raw = v1_to_legacy_pdf_payload(canonical_doc_v1, token)
+        except Exception as exc:
+            raise HTTPException(status_code=422, detail=f"SessionDocument v1 invalido: {exc}")
+
     # Normalizar y adaptar llaves antes de validar con Pydantic
     normalized = normalize_sesion_data(raw)
     try:
@@ -1675,7 +1742,8 @@ async def exportar_pdf_json(raw: dict = Body(...)):
                 from docx2pdf import convert
                 
                 # Generamos primero el Word perfecto usando la función premium
-                docx_stream = build_docx_from_json(payload)
+                docx_stream = (build_docx_from_v1(canonical_doc_v1)
+                               if canonical_doc_v1 else build_docx_from_json(payload))
                 
                 # Crear archivos temporales
                 temp_docx = LOCAL_BIN_DIR / f"temp_{secrets.token_hex(4)}_{filename}.docx"
@@ -1810,12 +1878,45 @@ async def exportar_docx_json(raw: dict = Body(...)):
     Normaliza cualquier variante de llaves del JSON antes de validar con Pydantic.
     Requiere token de conexión.
     """
+    # SessionDocument v1 is the canonical contract emitted by the frontend.
+    # Keep the legacy path below only for imported historical sessions.
+    if raw.get("schemaVersion") == "1.0":
+        token = raw.get("token", "")
+        if token != CONNECTION_TOKEN:
+            raise HTTPException(status_code=401, detail="No autorizado: Token de conexión inválido.")
+        try:
+            v1_payload = dict(raw)
+            v1_payload.pop("token", None)
+            doc_v1 = SessionDocumentV1(**v1_payload)
+            titulo = doc_v1.metadata.titulo or "Sesion_de_Aprendizaje"
+            filename = re.sub(r'[^a-zA-Z0-9-_\s]', '', titulo).replace(' ', '_')
+            nombre_archivo = f"{filename}.docx"
+            docx_stream = build_docx_from_v1(doc_v1)
+            return StreamingResponse(
+                docx_stream,
+                media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                headers={
+                    "Content-Disposition": f"attachment; filename={nombre_archivo}",
+                    "Access-Control-Expose-Headers": "Content-Disposition"
+                }
+            )
+        except Exception as exc:
+            raise HTTPException(status_code=422, detail=f"SessionDocument v1 inválido: {exc}")
+
     # Normalizar y adaptar llaves antes de validar con Pydantic
     normalized = normalize_sesion_data(raw)
     try:
         payload = SesionAprendizajeRequest(**normalized)
     except Exception as ve:
         raise HTTPException(status_code=422, detail=f"Error de validación tras normalización: {str(ve)}")
+
+    # ── SessionDocument v1 shadow conversion (preparación para futuro builder v1) ──
+    try:
+        doc_v1, v1_warnings = adapt_legacy_to_v1(normalized)
+        if v1_warnings:
+            print(f"[V1 ADAPTER] Warnings: {v1_warnings}")
+    except Exception as v1_err:
+        print(f"[V1 ADAPTER] Error (non-blocking): {v1_err}")
 
     if payload.token != CONNECTION_TOKEN:
         raise HTTPException(status_code=401, detail="No autorizado: Token de conexión inválido.")
@@ -1825,8 +1926,12 @@ async def exportar_docx_json(raw: dict = Body(...)):
         filename = re.sub(r'[^a-zA-Z0-9-_\s]', '', titulo).replace(' ', '_')
         nombre_archivo = f"{filename}.docx"
 
-        # Compilar archivo DOCX desde JSON nativo
-        docx_stream = build_docx_from_json(payload)
+        # Compilar archivo DOCX usando el generador nativo SessionDocument v1 (con fallback a legacy)
+        try:
+            docx_stream = build_docx_from_v1(doc_v1)
+        except Exception as v1_gen_err:
+            print(f"[WARN] Fallback a builder legacy: {v1_gen_err}")
+            docx_stream = build_docx_from_json(payload)
 
         if console:
             console.print(f"[green]✓ [WORD PREMIUM EXPORTADO] Generado nativamente con éxito: {nombre_archivo}[/green]")
