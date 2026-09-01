@@ -1,10 +1,8 @@
 from __future__ import annotations
 import io
 import re
-import sys
-import urllib.request
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING
 
 from bs4 import BeautifulSoup, NavigableString, Tag
 from docx import Document
@@ -23,14 +21,6 @@ def set_cell_background(cell, hex_color: str):
     shading_elm.set(qn('w:color'), 'auto')
     shading_elm.set(qn('w:fill'), hex_color)
     cell._tc.get_or_add_tcPr().append(shading_elm)
-
-
-def set_cell_text_direction_vertical(cell):
-    """Establece la dirección del texto vertical (abajo a arriba, de izquierda a derecha) en una celda en Word."""
-    tcPr = cell._tc.get_or_add_tcPr()
-    textDirection = OxmlElement('w:textDirection')
-    textDirection.set(qn('w:val'), 'btLr')
-    tcPr.append(textDirection)
 
 
 def set_cell_margins(cell, top=120, bottom=120, left=180, right=180):
@@ -131,20 +121,6 @@ def set_table_col_widths_and_indent(table, widths_twip: list, indent_twip: int =
                 tcW.set(qn('w:w'), str(int(cell_w)))
                 tcW.set(qn('w:type'), 'dxa')
             col_idx += span_val
-
-
-def set_table_col_widths(table, widths_twip: list):
-    """Compatibilidad: llama a set_table_col_widths_and_indent con sangría -289 twips."""
-    set_table_col_widths_and_indent(table, widths_twip, indent_twip=-289)
-
-
-def set_run_color(run, hex_color: str):
-    """Aplica color hex a un run de texto Word."""
-    run.font.color.rgb = RGBColor(
-        int(hex_color[0:2], 16),
-        int(hex_color[2:4], 16),
-        int(hex_color[4:6], 16)
-    )
 
 
 def set_cell_text_white_bold(cell, text: str, font_size_pt: float = 9):
@@ -322,22 +298,6 @@ def build_docx_from_html(html_content: str) -> io.BytesIO:
     doc.save(stream)
     stream.seek(0)
     return stream
-
-
-def get_image_stream(url: str):
-    """Intenta descargar la imagen desde la URL y devuelve un BytesIO. Retorna None si falla o es vacía."""
-    if not url or not (url.startswith("http://") or url.startswith("https://")):
-        return None
-    try:
-        req = urllib.request.Request(
-            url, 
-            headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'}
-        )
-        with urllib.request.urlopen(req, timeout=3) as response:
-            return io.BytesIO(response.read())
-    except Exception as e:
-        print(f"[WARN LOGO] No se pudo descargar el logo {url}: {e}")
-        return None
 
 
 def format_latex_to_unicode(text: str) -> str:
@@ -2054,19 +2014,19 @@ def build_docx_from_json(session: SesionAprendizajeRequest) -> io.BytesIO:
                     p = doc.add_paragraph()
                     p.paragraph_format.space_after = Pt(6)
                     p.paragraph_format.line_spacing = 1.15
-                    add_runs_to_paragraph(p, element, is_bold, is_italic)
+                    append_html_to_cell_or_paragraph(p, str(element), default_font_size=9.5)
                 elif element.name == 'ul':
                     for li in element.find_all('li', recursive=False):
                         p = doc.add_paragraph(style='List Bullet')
                         p.paragraph_format.space_after = Pt(3)
                         p.paragraph_format.line_spacing = 1.15
-                        add_runs_to_paragraph(p, li, is_bold, is_italic)
+                        append_html_to_cell_or_paragraph(p, str(li), default_font_size=9.5)
                 elif element.name == 'ol':
                     for li in element.find_all('li', recursive=False):
                         p = doc.add_paragraph(style='List Number')
                         p.paragraph_format.space_after = Pt(3)
                         p.paragraph_format.line_spacing = 1.15
-                        add_runs_to_paragraph(p, li, is_bold, is_italic)
+                        append_html_to_cell_or_paragraph(p, str(li), default_font_size=9.5)
                 elif element.name == 'table':
                     rows = element.find_all('tr')
                     if rows:
@@ -2086,9 +2046,9 @@ def build_docx_from_json(session: SesionAprendizajeRequest) -> io.BytesIO:
                                         p_cell.paragraph_format.line_spacing = 1.1
                                         if cell_h.name == 'th':
                                             set_cell_background(c, 'F2F2F2')
-                                            add_runs_to_paragraph(p_cell, cell_h, is_bold=True)
+                                            append_html_to_cell_or_paragraph(p_cell, f"<strong>{cell_h.get_text()}</strong>")
                                         else:
-                                            add_runs_to_paragraph(p_cell, cell_h)
+                                            append_html_to_cell_or_paragraph(p_cell, str(cell_h))
                 else:
                     for child in element.children:
                         add_act_element(child, is_bold, is_italic)

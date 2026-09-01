@@ -28,16 +28,6 @@ const Paginador = (() => {
     }
 
     /**
-     * Crea un nuevo div .hoja-a4 vacío para comenzar una nueva página
-     */
-    function crearHoja(canvas) {
-        const hoja = document.createElement('div');
-        hoja.className = 'hoja-a4';
-        canvas.appendChild(hoja);
-        return hoja;
-    }
-
-    /**
      * Mide la altura real de un nodo insertándolo en un contenedor
      * fuera de pantalla del mismo ancho que la hoja A4.
      */

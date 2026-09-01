@@ -8,10 +8,13 @@ __pycache__/
 backend/build/
 backend/dist/
 backend/bin/
-backend/test_run.log
+*.log
 connection_token.txt
 backend/connection_token.txt
 artifacts/
+
+# Local agent tooling (not part of the application)
+.agents/
 
 # Supabase CLI local state
 supabase/.temp/

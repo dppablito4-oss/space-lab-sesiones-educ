@@ -260,13 +260,6 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    function escHTML(str) {
-        if (!str) return '';
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
     return {
         init,
         toggleChat

@@ -1,67 +1,123 @@
-# Space Lab — Sesiones Educativas 🚀
+# Space Lab - Sesiones Educativas
 
-¡Bienvenido a **Space Lab — Sesiones Educativas**! Esta es una aplicación web estática diseñada para automatizar la creación de sesiones de aprendizaje de acuerdo con los lineamientos del **MINEDU** (Ministerio de Educación del Perú). 
+Aplicación para crear, editar, guardar y exportar sesiones de aprendizaje alineadas al CNEB y a formatos MINEDU.
 
-El sistema permite configurar competencias, desempeños y capacidades por área/grado, rellenar información complementaria, generar la sesión estructurada mediante Inteligencia Artificial (con OpenRouter/DeepSeek), editarla directamente sobre el diseño en formato A4 y exportarla/imprimirla de forma óptima.
+Sitio: <https://sesiones.sypablitodp.site>
 
----
+## Arquitectura
 
-## 🌐 Despliegue en GitHub Pages
+La aplicación usa un único contrato de datos, `SessionDocument v1`, definido en:
 
-La aplicación está configurada para desplegarse automáticamente en GitHub Pages usando un subdominio personalizado:
+- `schemas/session-document.v1.schema.json`
+- `js/ai/session-validator.js`
+- `backend/models/session_document.py`
 
-* **URL Personalizada:** `https://sesiones.sypablitodp.site`
+El mismo documento alimenta la vista web, la exportación DOCX y la exportación PDF. Los adaptadores legacy se conservan únicamente para abrir sesiones antiguas.
 
+### Frontend
 
-## 🎯 Objetivo
+Frontend estático desplegado con GitHub Pages. La interfaz principal está en `index.html`; los controladores están en `js/` y los estilos en `css/`.
 
-Automatizar y optimizar la creación, personalización y exportación de sesiones de aprendizaje alineadas al Currículo Nacional de Educación Básica (CNEB) del MINEDU, reduciendo tiempos administrativos para los docentes mediante asistencia de IA.
+Las solicitudes de IA siguen esta ruta:
 
----
+```text
+Navegador -> Supabase Edge Function -> proveedor de IA
+```
 
-## 🛠️ Instrucciones de Uso
+El navegador nunca solicita ni almacena claves de proveedores.
 
-El flujo de trabajo principal es el siguiente:
-1. **Llenar Formulario:** Selecciona el área, grado, competencias y llena la información de la sesión (nombre, propósito, duración, etc.).
-2. **Clic en Generar:** Haz clic en el botón de generación para procesar con IA o usar una plantilla base.
-3. **Editar en Hoja:** Toda la sesión generada en la hoja A4 interactiva es editable (`contenteditable`). Puedes modificar cualquier texto, tabla o sección directamente en pantalla.
-4. **Guardar / Exportar:** Las sesiones se guardan automáticamente en tu navegador (`LocalStorage`). Puedes presionar `Ctrl + P` o hacer clic en "Imprimir / Guardar PDF" para exportarla a formato A4 físico o digital de forma impecable.
+### Supabase
 
----
+Funciones activas:
 
-## 📁 Estructura del Proyecto
+- `openai-router`
+- `gemini-router`
+- `deepseek-router`
+- `pablito-mailer`
 
-* **[index.html](index.html):** Interfaz de usuario principal. Contiene el formulario lateral y la hoja A4 de vista previa interactiva.
-* **[CNAME](CNAME):** Configuración del subdominio personalizado para GitHub Pages.
-* **[.nojekyll](.nojekyll):** Evita el procesamiento Jekyll en GitHub Pages para una carga más rápida.
-* **`css/`**
-  * **[style.css](css/style.css):** Hoja de estilos principal con diseño premium, efectos de glassmorphism y tema oscuro.
-  * **[print.css](css/print.css):** Estilos especializados para impresión A4, aplicando saltos de página inteligentes (`break-inside: avoid;`).
-* **`js/`**
-  * **[app.js](js/app.js):** Controlador principal de la aplicación, maneja eventos, renderizado y flujos de usuario.
-  * **[ai-copilot.js](js/ai-copilot.js):** Integración con la API de IA (OpenRouter/DeepSeek) y generación de prompts estructurados.
-  * **[storage.js](js/storage.js):** Gestión de persistencia local en `LocalStorage` (guardado automático, carga y exportación JSON).
-  * **[templates.js](js/templates.js):** Plantillas de sesión MINEDU (Estándar, Laboratorio y Refuerzo).
-  * **`components/`**
-    * **[toast.js](js/components/toast.js):** Sistema de notificaciones flotantes premium.
-    * **[confirm-dialog.js](js/components/confirm-dialog.js):** Ventanas emergentes de confirmación personalizadas.
-    * **[loader.js](js/components/loader.js):** Spinner de carga interactivo para la generación por IA.
-* **`data/`**
-  * **[competencias.json](data/competencias.json):** Base de datos estructurada con las competencias, capacidades y desempeños del Currículo Nacional.
+Secretos requeridos:
 
----
+- `OPENAI_API_KEY`
+- `API-KEY-GEMINI`
+- `API-KEY-DEEPSEEK`
 
-## 📌 Características Pro
+Los routers de IA requieren una sesión autenticada de Supabase antes de consumir créditos.
 
-* **Edición Directa en Pantalla:** Toda la hoja A4 utiliza el atributo `contenteditable` nativo, permitiendo modificar libremente el texto generado.
-* **Persistencia Local:** Tus sesiones se guardan de forma automática cada vez que editas un campo. No perderás tu trabajo si recargas la página.
-* **Modo Impresión Impecable:** Oculta controles de edición y ajusta márgenes, fuentes y elementos para que quepan exactamente en páginas A4 sin desbordamientos raros.
-* **Selector de Plantillas:** Elige entre sesión Estándar, Laboratorio de Ciencias o Refuerzo Pedagógico para adaptar la estructura a la clase del día.
-* **Limpiador de Formato Inteligente:** Si copias texto desde Word u otras páginas, la aplicación limpia automáticamente los estilos para mantener el diseño impecable y consistente.
+### Motor local
 
----
+El backend FastAPI de `backend/` genera Word y PDF. El ejecutable de Windows se compila con PyInstaller y se publica como artefacto de GitHub Actions.
 
-## 🐛 Known Issues (Cosas Pendientes)
+## Estructura
 
-1. **Tablas Extensas:** Si una tabla de secuencia didáctica tiene demasiadas filas y texto largo, puede desbordar el espacio A4. Se recomienda usar la división manual de páginas si esto ocurre.
-2. **Límites de LocalStorage:** El navegador limita el almacenamiento a ~5MB. Si guardas cientos de sesiones con imágenes incrustadas en base64, podrías alcanzar el límite. Usa la opción "Exportar a archivo" para respaldar.
+```text
+backend/                 Motor FastAPI y generadores DOCX/PDF
+css/                     Estilos de interfaz, documento e impresión
+data/                    Datos curriculares
+design-system/           Tokens y criterios visuales del producto
+js/                      Aplicación web y adaptadores SessionDocument
+schemas/                 Contrato JSON canónico
+supabase/functions/      Edge Functions y autenticación compartida
+tests/                   Contratos, seguridad, render y exportación
+assets/                  Marca y documentos oficiales de referencia
+```
+
+Archivos SQL:
+
+- `database_setup.sql`: instalación principal e idempotente.
+- `student_roster.sql`: instalación o reparación del padrón de estudiantes.
+
+## Desarrollo local
+
+Requisitos:
+
+- Python 3.11
+- Node.js 22 o posterior
+- Deno 2
+
+Instalar dependencias:
+
+```powershell
+python -m pip install -r backend/requirements.txt
+python -m playwright install chromium
+```
+
+La web puede servirse con cualquier servidor estático. Por ejemplo:
+
+```powershell
+python -m http.server 5173
+```
+
+## Pruebas
+
+Validaciones principales:
+
+```powershell
+node tests/test_contract_v1.js
+node tests/test_adapter_v1.js
+node tests/test_templates_v1.js
+node tests/test_presentation.js
+node tests/storage.test.js
+node tests/ai-provider-routing.test.js
+
+python tests/test_contract_v1.py
+python tests/test_adapter_v1_py.py
+python tests/test_docx_builder_v1.py
+python tests/backend_smoke.py
+python tests/frontend_security.py
+python tests/ui_smoke.py
+python tests/ui_presentation_smoke.py
+```
+
+GitHub Actions ejecuta estas pruebas, valida las Edge Functions y compila `pablitopyhost-windows` en cada push a `main`.
+
+## Despliegue de Edge Functions
+
+```powershell
+npx supabase link --project-ref koptglmifwpzrfzvipnm
+npx supabase functions deploy openai-router --no-verify-jwt
+npx supabase functions deploy gemini-router --no-verify-jwt
+npx supabase functions deploy deepseek-router --no-verify-jwt
+npx supabase functions deploy pablito-mailer
+```
+
+`--no-verify-jwt` delega la verificación al helper compartido `supabase/functions/_shared/auth.ts`; no vuelve públicas las funciones de IA.

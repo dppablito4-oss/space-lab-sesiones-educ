@@ -32,10 +32,17 @@ jobs:
           deno-version: v2.x
 
       - name: Install backend dependencies
-        run: pip install -r backend/requirements.txt
+        run: |
+          pip install -r backend/requirements.txt
+          pip install ruff==0.16.5
 
       - name: Validate Python syntax
-        run: python -m py_compile backend/main.py backend/docx_builder.py backend/docx_builder_v1.py backend/models/session_document.py backend/adapters/legacy_to_v1.py
+        run: |
+          python -m py_compile backend/main.py backend/docx_builder.py backend/docx_builder_v1.py backend/models/session_document.py backend/adapters/legacy_to_v1.py
+          python -m ruff check backend tests --select F401,F811,F821 --exclude backend/build,backend/dist
+
+      - name: Validate repository hygiene
+        run: python tests/repository_hygiene.py
 
       - name: Validate JavaScript syntax
         run: find js -name '*.js' -print0 | xargs -0 -n1 node --check
@@ -60,6 +67,7 @@ jobs:
           python tests/test_contract_v1.py
           python tests/test_adapter_v1_py.py
           python tests/test_docx_builder_v1.py
+          python tests/test_docx_fidelity.py
 
       - name: Run backend DOCX smoke test
         run: python tests/backend_smoke.py

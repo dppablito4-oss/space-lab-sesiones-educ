@@ -1,6 +1,5 @@
 import sys
 import os
-import io
 import docx
 from docx.oxml.ns import qn
 

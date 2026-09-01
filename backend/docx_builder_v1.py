@@ -11,23 +11,16 @@ Genera un documento .docx nativo oficial MINEDU con:
 from __future__ import annotations
 import io
 import re
-import sys
 from pathlib import Path
-from typing import List, Optional
 
-from bs4 import BeautifulSoup, NavigableString, Tag
+from bs4 import BeautifulSoup, Tag
 from docx import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 
-from models.session_document import (
-    SessionDocumentV1, MetadataV1, PropositoV1,
-    CompetenciaTransversalV1, EnfoqueTransversalV1,
-    RecursosV1, MomentosV1, MomentoV1, SessionProcess,
-    EvaluacionV1, FichaTrabajoV1, JuegoLibreSectoresV1, ListaCotejoV1
-)
+from models.session_document import SessionDocumentV1
 from docx_builder import (
     set_cell_background,
     set_cell_margins,

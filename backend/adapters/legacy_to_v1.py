@@ -11,7 +11,7 @@ RULES:
 """
 from __future__ import annotations
 import re
-from typing import List, Optional, Tuple
+from typing import List, Tuple
 from models.session_document import (
     SessionDocumentV1, MetadataV1, LogosData,
     PropositoV1, CompetenciaTransversalV1, EnfoqueTransversalV1,

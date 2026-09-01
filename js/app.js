@@ -970,25 +970,6 @@
     // SESSION GENERATION
     // ═══════════════════════════════════════
 
-    function handleGenerate() {
-        const data = getFormData();
-        const template = DOM.selectTemplate.value;
-
-        // Create session object
-        const session = {
-            id: AppState.currentSession?.id || Storage.generateId(),
-            template: template,
-            ...data,
-            createdAt: AppState.currentSession?.createdAt || new Date().toISOString()
-        };
-
-        AppState.currentSession = session;
-
-        // Render
-        renderSession(session);
-        Toast.success('Sesión generada correctamente');
-    }
-
     // ─── PEDAGOGY BRIEF ───
     function handleOpenPedagogyBrief() {
         if (!window.PedagogyBrief) return;
@@ -4044,15 +4025,6 @@
         DOM.sourceFileInfo.classList.add('hidden');
         DOM.sourceFileDropzone.classList.remove('hidden');
         Toast.success('Archivo de referencia removido');
-    }
-
-    // Standard clearing without notifications
-    function clearSourceFile() {
-        AppState.sourceFileData = null;
-        DOM.inputSourceFile.value = '';
-        DOM.sourceFileNameText.textContent = '';
-        DOM.sourceFileInfo.classList.add('hidden');
-        DOM.sourceFileDropzone.classList.remove('hidden');
     }
 
     // ═══════════════════════════════════════

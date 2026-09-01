@@ -1,18 +1,17 @@
 import os
-import io
 import re
 import sys
 import secrets
 import asyncio
 import webbrowser
 import threading
-import subprocess
 import warnings
 import urllib.request
 import zipfile
 import tkinter as tk
 from tkinter import scrolledtext
 from pathlib import Path
+from typing import List, Optional
 
 # Determinar base absoluta del ejecutable para portabilidad
 if getattr(sys, 'frozen', False):
@@ -47,16 +46,10 @@ from docx_builder_v1 import build_docx_from_v1
 from adapters.legacy_to_v1 import adapt_legacy_to_v1
 from models.session_document import SessionDocumentV1
 
-
-
-
-
 # Librerías para estilizar consola
 try:
     from rich import print as rprint
     from rich.console import Console
-    from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn
-    from rich.panel import Panel
     console = Console()
 except ImportError:
     # Fallback si no está instalado rich
@@ -766,8 +759,6 @@ class ExportDocxRequest(BaseModel):
     token: str
 
 # ── MODELO DE DATOS JSON ESTRUCTURADO PARA SESIONES PREMIUM ──
-from typing import List, Optional
-
 class MetadataData(BaseModel):
     institucion: Optional[str] = ""
     dre: Optional[str] = ""
