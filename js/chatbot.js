@@ -144,7 +144,7 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
         } catch (e) {
             console.error('[Chatbot] Error:', e);
             removeTypingIndicator(typingId);
-            appendMessage('bot', '⚠️ Lo siento, ocurrió un error al procesar tu consulta con IA: ' + e.message);
+            appendMessage('bot', 'Lo siento, ocurrió un error al procesar tu consulta con IA: ' + e.message);
             scrollBottom();
         }
     }
@@ -167,7 +167,7 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
                     window.AppDesign.save();
                     
                     if (window.Toast) {
-                        Toast.success('🎨 Diseño actualizado por el Asistente Copiloto');
+                        Toast.success('Diseño actualizado por el Asistente Copiloto');
                     }
                     
                     // Quitar el bloque JSON de la respuesta final
@@ -188,7 +188,7 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
                         window.AppDesign.save();
                         
                         if (window.Toast) {
-                            Toast.success('🎨 Diseño actualizado por el Asistente Copiloto');
+                            Toast.success('Diseño actualizado por el Asistente Copiloto');
                         }
                         
                         text = text.replace(curlyMatch[0], '').trim();

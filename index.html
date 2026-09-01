@@ -12,7 +12,7 @@
         rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="css/style.css?v=2">
-    <link rel="stylesheet" href="css/redesign.css?v=1">
+    <link rel="stylesheet" href="css/redesign.css?v=2">
     <link rel="stylesheet" href="css/print.css" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
@@ -46,6 +46,11 @@
         <symbol id="icon-refresh" viewBox="0 0 24 24"><path d="M20 7h-5V2M4 17h5v5"/><path d="M6.1 7a8 8 0 0 1 13.5-1.5L20 7M4 17l.4 1.5A8 8 0 0 0 17.9 17"/></symbol>
         <symbol id="icon-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
         <symbol id="icon-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+        <symbol id="icon-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+        <symbol id="icon-alert" viewBox="0 0 24 24"><path d="M10.3 3.7 2.5 17.2A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.8L13.7 3.7a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></symbol>
+        <symbol id="icon-undo" viewBox="0 0 24 24"><path d="m9 7-5 5 5 5"/><path d="M20 17a7 7 0 0 0-7-7H4"/></symbol>
+        <symbol id="icon-redo" viewBox="0 0 24 24"><path d="m15 7 5 5-5 5"/><path d="M4 17a7 7 0 0 1 7-7h9"/></symbol>
+        <symbol id="icon-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></symbol>
         <symbol id="icon-clean" viewBox="0 0 24 24"><path d="m4 18 8-8M14 3l7 7-9 9H5l-2-2 9-9Z"/><path d="m11 19 2 2M16 16l2 2M7 15l4 4"/></symbol>
     </svg>
     <!-- ═══════════ TOAST CONTAINER ═══════════ -->
@@ -54,7 +59,7 @@
     <!-- ═══════════ CONFIRM DIALOG ═══════════ -->
     <div id="confirm-dialog" class="confirm-overlay hidden">
         <div class="confirm-card glass-card">
-            <div class="confirm-icon">⚠️</div>
+            <div class="confirm-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg></div>
             <h3 id="confirm-title">¿Estás seguro?</h3>
             <p id="confirm-message">Esta acción no se puede deshacer.</p>
             <div class="confirm-actions">
@@ -82,12 +87,12 @@
     <div id="pdf-guide-modal" class="pdf-guide-overlay hidden">
         <div class="pdf-guide-card glass-card">
             <button id="pdf-guide-close" class="pdf-guide-close" title="Cerrar">&times;</button>
-            <div class="pdf-guide-icon">📄</div>
+            <div class="pdf-guide-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></div>
             <h3 class="pdf-guide-title">Exportar Sesión como PDF</h3>
             
             <!-- Warning badge for offline print -->
             <div class="pdf-guide-warning-badge" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); color: #eab308; padding: 8px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                ⚠️ Motor Local Desconectado: Se usará la impresión de Windows
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg> Motor Local Desconectado: Se usará la impresión de Windows
             </div>
 
             <p class="pdf-guide-subtitle">Para obtener un PDF de calidad con el navegador, sigue estos pasos:</p>
@@ -117,22 +122,22 @@
             </div>
 
             <!-- Banner Motor Premium -->
-            <div class="pdf-premium-ad-box" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%); border: 1px dashed rgba(6, 182, 212, 0.3); border-radius: 12px; padding: 15px; margin: 15px 0; text-align: left;">
+            <div class="pdf-premium-ad-box" style="background: var(--color-card-surface); border: 1px dashed rgba(6, 182, 212, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; text-align: left;">
                 <div style="display: flex; align-items: center; gap: 8px; color: #06b6d4; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px;">
-                    <span>🚀</span> ¡Recomendado: Exportación Premium Directa!
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> ¡Recomendado: Exportación Premium Directa!
                 </div>
                 <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 10px;">
                     Para descargas automáticas inmediatas con paginado físico A4 perfecto y archivos Word (.docx) nativos editables de Office, descarga e inicia el motor.
                 </p>
                 <a href="https://descargas.sypablitodp.site" target="_blank" class="btn" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600; text-decoration: none; padding: 8px 14px; background: #06b6d4; color: #05070f; border-radius: 8px; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">
-                    💾 Descargar Motor Local (.exe)
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
                 </a>
             </div>
 
             <div class="pdf-guide-actions">
                 <button id="pdf-guide-cancel" class="btn btn-ghost">Cancelar</button>
                 <button id="pdf-guide-proceed" class="btn btn-primary pdf-guide-proceed-btn">
-                    <span class="icon">🖨️</span> Abrir Impresora
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg> Abrir Impresora
                 </button>
             </div>
         </div>
@@ -142,7 +147,7 @@
     <div id="engine-required-modal" class="pdf-guide-overlay hidden">
         <div class="pdf-guide-card glass-card" style="max-width: 420px;">
             <button id="engine-modal-close" class="pdf-guide-close" title="Cerrar">&times;</button>
-            <div class="pdf-guide-icon" style="color: #f59e0b; font-size: 2.5rem; margin-bottom: 10px;">⚠️</div>
+            <div class="pdf-guide-icon" style="color: #f59e0b; margin-bottom: 10px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg></div>
             <h3 class="pdf-guide-title">Motor Local Requerido</h3>
             <p class="pdf-guide-subtitle" style="margin-bottom: 15px; font-size: 0.9rem;">
                 La exportación nativa a **Microsoft Word (.docx)** con formato premium no está disponible sin vincular el motor local.
@@ -153,8 +158,8 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn" style="background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #000; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;">
-                    📥 Descargar Motor Local (.exe)
+                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn btn-primary" style="color: #000; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
                 </a>
                 <button id="engine-modal-cancel" class="btn btn-ghost" style="padding: 8px;">Cancelar</button>
             </div>
@@ -169,20 +174,26 @@
 
         <!-- ─── HEADER ─── -->
         <header class="app-header glass-card">
-            <div class="header-brand">
-                <div class="brand-icon">
-                    <img src="assets/favicon.svg" alt="Space Lab Logo" class="brand-logo-img">
+            <div class="header-leading">
+                <div class="header-brand">
+                    <div class="brand-icon">
+                        <img src="assets/favicon.svg" alt="Space Lab Logo" class="brand-logo-img">
+                    </div>
+                    <div>
+                        <h1 class="brand-title">Space Lab</h1>
+                        <span class="brand-subtitle">Sesiones Educativas</span>
+                    </div>
                 </div>
-                <div>
-                    <h1 class="brand-title">Space Lab</h1>
-                    <span class="brand-subtitle">Sesiones Educativas</span>
+                <div class="header-context" aria-label="Contexto de la sesión">
+                    <span class="header-context-label">Editor de sesión</span>
+                    <span id="session-context-title" class="header-context-title">Nueva sesión</span>
                 </div>
             </div>
+            <div class="save-indicator" id="save-indicator" role="status" aria-live="polite">
+                <span class="save-dot"></span>
+                <span class="save-text">Sin cambios</span>
+            </div>
             <nav class="header-actions">
-                <div class="save-indicator" id="save-indicator">
-                    <span class="save-dot"></span>
-                    <span class="save-text">Sin cambios</span>
-                </div>
                 <button id="btn-toggle-edit" class="btn btn-icon" title="Modo edición / lectura" aria-label="Cambiar modo de edición">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
                     <span class="btn-label">Editar</span>
@@ -225,47 +236,65 @@
                     <button id="btn-close-sidebar" class="btn btn-ghost btn-sm mobile-only" aria-label="Cerrar configuración"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
                 </div>
 
-                <!-- Tabs Navigation -->
-                <div class="sidebar-tabs" role="tablist" aria-label="Etapas de configuración">
+                <div class="sidebar-workflow">
+                <!-- Workflow Navigation -->
+                <div class="sidebar-tabs" role="tablist" aria-label="Etapas de configuración" aria-orientation="vertical">
                     <button type="button" class="sidebar-tab active" data-tab="tab-ai" role="tab" aria-selected="true" aria-controls="tab-ai">
+                        <span class="tab-step">01</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
-                        <span class="tab-text">Copiloto IA</span>
+                        <span class="tab-copy"><span class="tab-text">Copiloto</span><span class="tab-state">En curso</span></span>
                     </button>
                     <button type="button" class="sidebar-tab" data-tab="tab-general" role="tab" aria-selected="false" aria-controls="tab-general">
+                        <span class="tab-step">02</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
-                        <span class="tab-text">Datos</span>
+                        <span class="tab-copy"><span class="tab-text">Datos</span><span class="tab-state">Pendiente</span></span>
                     </button>
                     <button type="button" class="sidebar-tab" data-tab="tab-propositos" role="tab" aria-selected="false" aria-controls="tab-propositos">
+                        <span class="tab-step">03</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
-                        <span class="tab-text">Propósitos</span>
+                        <span class="tab-copy"><span class="tab-text">Propósitos</span><span class="tab-state">Pendiente</span></span>
                     </button>
                     <button type="button" class="sidebar-tab" data-tab="tab-design" role="tab" aria-selected="false" aria-controls="tab-design">
+                        <span class="tab-step">04</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
-                        <span class="tab-text">Diseño</span>
+                        <span class="tab-copy"><span class="tab-text">Diseño</span><span class="tab-state">Pendiente</span></span>
                     </button>
                     <button type="button" class="sidebar-tab" data-tab="tab-alumnos" role="tab" aria-selected="false" aria-controls="tab-alumnos">
+                        <span class="tab-step">05</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
-                        <span class="tab-text">Alumnos</span>
+                        <span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
                     </button>
                 </div>
 
                 <form id="session-form" class="session-form" autocomplete="off">
+                    <div class="inspector-heading">
+                        <span id="inspector-step" class="inspector-step">Paso 01 de 05</span>
+                        <h3 id="inspector-title">Configura el copiloto</h3>
+                        <p id="inspector-description">Elige el modelo, la plantilla y las referencias para preparar tu sesión.</p>
+                    </div>
 
                     <!-- PANE 1: COPILOTO IA -->
                     <div id="tab-ai" class="tab-pane active" role="tabpanel">
                         <!-- Motor de IA para Generación -->
-                        <div class="form-group">
+                        <div class="form-group ai-model-card">
+                            <div class="ai-model-header">
+                                <div>
+                                    <span class="ai-model-eyebrow">Copiloto Space AI</span>
+                                    <strong>Modelo de generación</strong>
+                                </div>
+                                <span class="ai-model-status"><span></span> Disponible</span>
+                            </div>
                             <label for="select-ai-provider" class="form-label">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Motor de IA para Generación
+                                Modelo actual
                             </label>
                             <select id="select-ai-provider" class="form-select">
-                                <option value="openai-gpt-5.6-luna" selected>OpenAI GPT-5.6 Luna — Más avanzado (Admite archivos 📎)</option>
-                                <option value="openai-gpt-5.4-mini">OpenAI GPT-5.4 Mini — Equilibrado (Admite archivos 📎)</option>
-                                <option value="gemini-2.5-flash">Google Gemini 2.5 Flash — Multimodal (Admite archivos 📎)</option>
-                                <option value="deepseek-v3">DeepSeek V3 — Razonamiento (Solo texto 📝)</option>
+                                <option value="openai-gpt-5.6-luna" selected>OpenAI GPT-5.6 Luna — Más avanzado</option>
+                                <option value="openai-gpt-5.4-mini">OpenAI GPT-5.4 Mini — Equilibrado</option>
+                                <option value="gemini-2.5-flash">Google Gemini 2.5 Flash — Multimodal</option>
+                                <option value="deepseek-v3">DeepSeek V3 — Razonamiento</option>
                             </select>
                             <div id="model-capabilities-badge" class="model-capabilities-badge">
-                                <span class="badge-icon">📎</span>
+                                <svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                                 <span class="badge-text"><strong>GPT-5.6 Luna:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>
                             </div>
                         </div>
@@ -310,7 +339,7 @@
                             <div id="source-file-info" class="source-file-info hidden">
                                 <span class="file-name" id="source-file-name-text"></span>
                                 <button type="button" id="btn-remove-source-file" class="btn-remove-file"
-                                    title="Eliminar archivo">✕</button>
+                                    title="Eliminar archivo" aria-label="Eliminar archivo"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
                             </div>
                             <input type="file" id="input-source-file" class="hidden"
                                 accept=".pdf,image/*,audio/*,text/plain,.csv,.md,.json">
@@ -582,7 +611,7 @@
                             <div class="form-group">
                                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
                                     <label class="form-label" style="margin: 0;">Lista de Alumnos (un nombre por línea)</label>
-                                    <button type="button" id="btn-save-alumnos" class="btn btn-primary btn-sm" style="font-size:0.7rem; padding:4px 10px; background:linear-gradient(135deg, #00d4ff 0%, #0072ff 100%); color:#fff; border:none; border-radius:4px; cursor:pointer;">Guardar Alumnos</button>
+                                    <button type="button" id="btn-save-alumnos" class="btn btn-primary btn-sm" style="font-size:0.7rem; padding:4px 10px; cursor:pointer;">Guardar Alumnos</button>
                                 </div>
                                 <textarea id="textarea-alumnos" class="form-textarea" placeholder="Pega los nombres aquí, uno por línea. Ejemplo:
 ACOSTA MURGA, CLIFEER AMELEX
@@ -592,13 +621,10 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                     </div>
 
                     <!-- Separación -->
-                    <div style="border-top: 1px solid var(--border); margin: 1.5rem 0;"></div>
+                    <div class="form-section-divider"></div>
 
                     <!-- Acciones locales y guardado -->
                     <div class="form-actions">
-                        <button type="button" id="btn-generate" class="btn btn-primary btn-full">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar sesión con IA
-                        </button>
                         <div class="form-actions-row">
                             <button type="button" id="btn-save" class="btn btn-ghost btn-full" title="Guardar cambios en la sesión actual">
                                 <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar
@@ -653,7 +679,15 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                                 style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Inicia
                                 sesión para ver logos</span>
                         </div>
+                    </div>
                 </form>
+                <div class="sidebar-primary-action">
+                    <span class="sidebar-primary-hint">Listo para crear</span>
+                    <button type="button" id="btn-generate" class="btn btn-primary btn-full">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar sesión con IA
+                    </button>
+                </div>
+                </div>
             </aside>
 
             <!-- ═══ PREVIEW AREA ═══ -->
@@ -661,37 +695,43 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
 
                 <!-- Empty State -->
                 <div id="empty-state" class="empty-state">
-                    <div class="empty-brand-mark"><img src="assets/favicon.svg" alt="" aria-hidden="true"></div>
-                    <span class="empty-eyebrow">Tu espacio de planificación</span>
-                    <h2 class="empty-title">Convierte tus ideas en una sesión lista para enseñar</h2>
-                    <p class="empty-text">Organiza los datos, define el propósito y deja que el copiloto prepare una primera versión editable.</p>
+                    <div class="empty-state-copy">
+                        <div class="empty-brand-mark"><img src="assets/favicon.svg" alt="" aria-hidden="true"></div>
+                        <span class="empty-eyebrow">Workspace de planificación</span>
+                        <h2 class="empty-title">Tu sesión empieza con una estructura clara</h2>
+                        <p class="empty-text">Completa el flujo de la izquierda y Space AI construirá un documento MINEDU editable, listo para revisar y exportar.</p>
+                        <button type="button" id="btn-empty-start" class="btn btn-primary empty-primary-action">
+                            Comenzar con los datos
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                        </button>
+                    </div>
                     <div class="empty-steps">
                         <div class="step-item">
                             <span class="step-num">1</span>
                             <div class="step-content">
-                                <strong class="step-title">Configura</strong>
-                                <span class="step-desc">Elige el tipo de sesión y el motor de IA</span>
+                                <strong class="step-title">Prepara</strong>
+                                <span class="step-desc">Modelo, datos y propósito pedagógico</span>
                             </div>
                         </div>
                         <div class="step-item">
                             <span class="step-num">2</span>
                             <div class="step-content">
-                                <strong class="step-title">Completa los datos</strong>
-                                <span class="step-desc">Institución, grado, propósito y estudiantes</span>
+                                <strong class="step-title">Genera</strong>
+                                <span class="step-desc">Obtén una primera versión estructurada</span>
                             </div>
                         </div>
                         <div class="step-item">
                             <span class="step-num">3</span>
                             <div class="step-content">
-                                <strong class="step-title">Genera y revisa</strong>
+                                <strong class="step-title">Revisa</strong>
                                 <span class="step-desc">Edita directamente sobre la hoja A4</span>
                             </div>
                         </div>
                         <div class="step-item">
                             <span class="step-num">4</span>
                             <div class="step-content">
-                                <strong class="step-title">Exporta</strong>
-                                <span class="step-desc">Descarga el resultado en Word o PDF</span>
+                                <strong class="step-title">Entrega</strong>
+                                <span class="step-desc">Exporta con el mismo diseño a Word o PDF</span>
                             </div>
                         </div>
                     </div>
@@ -704,9 +744,9 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                         <!-- Group 1: Text Editor (Word Style) -->
                         <div class="toolbar-group">
                             <button type="button" id="btn-format-undo" class="btn btn-ghost btn-xs toolbar-btn"
-                                title="Deshacer (Ctrl+Z)">↩️</button>
+                                title="Deshacer (Ctrl+Z)" aria-label="Deshacer"><svg class="ui-icon" aria-hidden="true"><use href="#icon-undo"></use></svg></button>
                             <button type="button" id="btn-format-redo" class="btn btn-ghost btn-xs toolbar-btn"
-                                title="Rehacer (Ctrl+Y)">↪️</button>
+                                title="Rehacer (Ctrl+Y)" aria-label="Rehacer"><svg class="ui-icon" aria-hidden="true"><use href="#icon-redo"></use></svg></button>
                             <div class="toolbar-divider" style="margin: 0 2px; height: 18px; align-self: center;"></div>
                             <button type="button" id="btn-format-bold" class="btn btn-ghost btn-xs toolbar-btn"
                                 style="font-weight: 800;" title="Negrita (Ctrl+B)">B</button>
@@ -716,9 +756,9 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                                 style="text-decoration: underline;" title="Subrayado (Ctrl+U)">U</button>
                             <div class="toolbar-divider" style="margin: 0 2px; height: 18px; align-self: center;"></div>
                             <button type="button" id="btn-format-list-bullet" class="btn btn-ghost btn-xs toolbar-btn"
-                                title="Lista de viñetas">• ☰</button>
+                                title="Lista de viñetas" aria-label="Lista de viñetas"><svg class="ui-icon" aria-hidden="true"><use href="#icon-list"></use></svg></button>
                             <button type="button" id="btn-format-list-number" class="btn btn-ghost btn-xs toolbar-btn"
-                                title="Lista numerada">1. ☰</button>
+                                title="Lista numerada" aria-label="Lista numerada">1.</button>
                             <div class="toolbar-divider" style="margin: 0 2px; height: 18px; align-self: center;"></div>
                             <!-- Alineación -->
                             <button type="button" id="btn-format-align-left" class="btn btn-ghost btn-xs toolbar-btn"
@@ -897,7 +937,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
 
                     <!-- Time Balance Warning Banner -->
                     <div id="time-balance-warning" class="time-balance-banner no-print" style="background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); color: #eab308; padding: 10px 16px; border-radius: 8px; margin: 10px auto; max-width: 820px; font-size: 0.85rem; font-weight: 600; display: none; align-items: center; gap: 8px;">
-                        <span>⚠️</span>
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg>
                         <span id="time-balance-warning-text"></span>
                     </div>
 
@@ -911,8 +951,8 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                 <div id="load-modal" class="load-modal hidden">
                     <div class="load-modal-content glass-card">
                         <div class="load-modal-header">
-                            <h3>📂 Cargar Sesión Guardada</h3>
-                            <button id="btn-close-load" class="btn btn-ghost btn-sm">✕</button>
+                            <h3><svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Cargar Sesión Guardada</h3>
+                            <button id="btn-close-load" class="btn btn-ghost btn-sm" aria-label="Cerrar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
                         </div>
                         <ul id="load-list" class="load-list">
                             <li class="saved-empty">No hay sesiones guardadas</li>
@@ -957,7 +997,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
             <div class="chatbot-input-container">
                 <input type="text" id="chatbot-input" placeholder="Pregunta algo sobre tu sesión..." autocomplete="off">
                 <button id="btn-send-chat" class="btn btn-accent btn-icon-only">
-                    <span class="icon">➡️</span>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
                 </button>
             </div>
         </div>
@@ -970,11 +1010,11 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
             <div class="load-modal-header"
                 style="border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
                 <h3
-                    style="font-size: 1.25rem; font-weight: 800; background: linear-gradient(135deg, #a78bfa, #6366f1); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0;">
+                    style="font-size: 1.25rem; font-weight: 800; color: var(--color-foreground); margin: 0;">
                     Términos, Condiciones de Uso y Políticas de Privacidad — Space Lab
                 </h3>
                 <button id="btn-close-terms" class="btn btn-ghost btn-sm"
-                    style="font-size: 1.1rem; padding: 4px 8px;">✕</button>
+                    style="font-size: 1.1rem; padding: 4px 8px;" aria-label="Cerrar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
             </div>
             <div
                 style="font-size: 0.82rem; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 1rem;">
@@ -1045,13 +1085,13 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
             style="max-width: 420px; padding: 2.5rem; text-align: center; position: relative;">
 
             <!-- Close Button -->
-            <button id="btn-close-auth" class="btn btn-ghost btn-sm"
-                style="position: absolute; top: 1rem; right: 1rem; color: #71717a;">✕</button>
+            <button id="btn-close-auth" class="btn btn-ghost btn-sm" aria-label="Cerrar"
+                style="position: absolute; top: 1rem; right: 1rem; color: #71717a;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
 
             <!-- Premium SVG Logo at top -->
             <div style="margin-bottom: 1.5rem; display: flex; justify-content: center;">
                 <div
-                    style="background: #090a0f; border: 1px solid rgba(255,255,255,0.06); padding: 12px; border-radius: 16px; display: inline-flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(0, 210, 255, 0.15);">
+                    style="background: #090a0f; border: 1px solid rgba(255,255,255,0.06); padding: 12px; border-radius: 8px; display: inline-flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);">
                     <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg"
                         style="filter: drop-shadow(0px 0px 8px rgba(0, 210, 255, 0.5));">
                         <rect x="2" y="2" width="96" height="96" rx="28" fill="#0d0e12" stroke="#1f2937"
@@ -1072,7 +1112,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
 
             <!-- Title & Subtitle (Now dynamically updated, keep structure but visually hidden if wanted, or kept brief) -->
             <div class="load-modal-header" style="display: none;">
-                <h3 id="auth-title">Iniciar Sesión 🌌</h3>
+                <h3 id="auth-title">Iniciar Sesión</h3>
             </div>
             <p id="auth-subtitle" style="display: none;"></p>
 
@@ -1134,15 +1174,15 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <!-- ═══════════ LOGO EDITOR POPOVER ═══════════ -->
     <div id="logo-editor-popover" class="logo-editor-popover hidden no-print" style="position: absolute; display: none;">
         <div class="popover-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
-            <h4 style="margin: 0; font-size: 0.9rem; color: #fff; font-weight: 600;">🖼️ Ajustes de Logo</h4>
-            <button type="button" id="logo-editor-close" class="popover-close-btn" style="background: none; border: none; color: #a1a1aa; font-size: 1.1rem; cursor: pointer; padding: 0; line-height: 1;">✕</button>
+            <h4 style="margin: 0; font-size: 0.9rem; color: #fff; font-weight: 600;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg> Ajustes de Logo</h4>
+            <button type="button" id="logo-editor-close" class="popover-close-btn" aria-label="Cerrar" style="background: none; border: none; color: #a1a1aa; cursor: pointer; padding: 0; line-height: 1;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
         </div>
         <div class="popover-body" style="padding: 12px 0 0 0; display: flex; flex-direction: column; gap: 12px;">
             <!-- Actions -->
             <div class="popover-action-row" style="display: flex; gap: 6px; flex-wrap: wrap;">
-                <button type="button" id="logo-editor-gallery-trigger" class="btn btn-ghost btn-sm" style="flex: 1.5; font-size: 0.75rem; padding: 4px 8px !important; min-width: 100px;">🖼️ Galería / Subir</button>
-                <button type="button" id="logo-editor-swap" class="btn btn-ghost btn-sm" style="flex: 1; font-size: 0.75rem; padding: 4px 8px !important;" title="Mover la posición del logo en la lista">🔄 Mover</button>
-                <button type="button" id="logo-editor-delete" class="btn btn-danger-ghost btn-sm" style="flex: 1; font-size: 0.75rem; padding: 4px 8px !important; color: #ef4444; border-color: rgba(239, 68, 68, 0.2);">🗑️ Quitar</button>
+                <button type="button" id="logo-editor-gallery-trigger" class="btn btn-ghost btn-sm" style="flex: 1.5; font-size: 0.75rem; padding: 4px 8px !important; min-width: 100px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg> Galería / Subir</button>
+                <button type="button" id="logo-editor-swap" class="btn btn-ghost btn-sm" style="flex: 1; font-size: 0.75rem; padding: 4px 8px !important;" title="Mover la posición del logo en la lista"><svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg> Mover</button>
+                <button type="button" id="logo-editor-delete" class="btn btn-danger-ghost btn-sm" style="flex: 1; font-size: 0.75rem; padding: 4px 8px !important; color: #ef4444; border-color: rgba(239, 68, 68, 0.2);"><svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Quitar</button>
             </div>
             
             <!-- Width Slider -->
@@ -1189,8 +1229,8 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <!-- ═══════════ REFINE TEXT MODAL ═══════════ -->
     <div id="refine-text-modal" class="load-modal hidden no-print" style="z-index: 9999;">
         <div class="load-modal-content glass-card" style="max-width: 485px; padding: 2rem; position: relative;">
-            <button id="btn-close-refine-modal" class="btn btn-ghost btn-sm" style="position: absolute; top: 1rem; right: 1rem; color: #71717a; font-size: 1rem; cursor: pointer; background: none; border: none; padding: 0;">✕</button>
-            <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px;">🪄 Refinar Texto con IA</h3>
+            <button id="btn-close-refine-modal" class="btn btn-ghost btn-sm" aria-label="Cerrar" style="position: absolute; top: 1rem; right: 1rem; color: #71717a; cursor: pointer; background: none; border: none; padding: 0;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+            <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Refinar Texto con IA</h3>
             
             <!-- Selected Text Preview -->
             <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.06); padding: 12px; border-radius: 8px; margin-bottom: 1.25rem; max-height: 100px; overflow-y: auto;">
@@ -1202,10 +1242,10 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
             <div class="form-group" style="margin-bottom: 1.25rem;">
                 <label class="form-label" style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; display: block;">¿Cómo deseas refinarlo?</label>
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px;">
-                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn active" data-instruction="Hazlo más formal, claro y profesional. Mantén un tono pedagógico adecuado.">💼 Más Formal</button>
-                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Hazlo mucho más sencillo, explicativo y fácil de entender para niños.">⚡ Más Sencillo</button>
-                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Reescríbelo con un tono lúdico, divertido, entusiasta y chistoso para enganchar a los estudiantes.">🎭 Más Divertido</button>
-                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Corrige estrictamente cualquier error de ortografía, puntuación o gramática sin alterar su sentido.">📝 Corregir Ortografía</button>
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn active" data-instruction="Hazlo más formal, claro y profesional. Mantén un tono pedagógico adecuado.">Más Formal</button>
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Hazlo mucho más sencillo, explicativo y fácil de entender para niños.">Más Sencillo</button>
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Reescríbelo con un tono lúdico, divertido, entusiasta y chistoso para enganchar a los estudiantes.">Más Divertido</button>
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Corrige estrictamente cualquier error de ortografía, puntuación o gramática sin alterar su sentido.">Corregir Ortografía</button>
                 </div>
             </div>
 
@@ -1218,7 +1258,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
             <!-- Action Buttons -->
             <div style="display: flex; justify-content: flex-end; gap: 8px;">
                 <button type="button" id="btn-refine-cancel" class="btn btn-ghost btn-sm" style="font-size: 0.8rem; padding: 6px 16px;">Cancelar</button>
-                <button type="button" id="btn-refine-submit" class="btn btn-primary btn-sm" style="font-size: 0.8rem; padding: 6px 16px; font-weight: 600; background-color: var(--accent);">🪄 Refinar</button>
+                <button type="button" id="btn-refine-submit" class="btn btn-primary btn-sm" style="font-size: 0.8rem; padding: 6px 16px; font-weight: 600;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Refinar</button>
             </div>
         </div>
     </div>
@@ -1226,12 +1266,12 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <!-- ═══════════ LOGOS GALLERY MODAL ═══════════ -->
     <div id="logos-gallery-modal" class="load-modal hidden no-print" style="z-index: 9998;">
         <div class="load-modal-content glass-card" style="max-width: 520px; padding: 2rem; position: relative;">
-            <button id="btn-close-gallery-modal" class="btn btn-ghost btn-sm" style="position: absolute; top: 1rem; right: 1rem; color: #71717a; font-size: 1rem; cursor: pointer; background: none; border: none; padding: 0;">✕</button>
-            <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px;">🖼️ Galería de Logos del Encabezado</h3>
+            <button id="btn-close-gallery-modal" class="btn btn-ghost btn-sm" aria-label="Cerrar" style="position: absolute; top: 1rem; right: 1rem; color: #71717a; cursor: pointer; background: none; border: none; padding: 0;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+            <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg> Galería de Logos del Encabezado</h3>
             
             <!-- Upload Area -->
             <div id="modal-logo-dropzone" class="source-file-dropzone" style="border: 2px dashed rgba(0, 210, 255, 0.2); background: rgba(0, 210, 255, 0.02); border-radius: 12px; padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s; margin-bottom: 1.5rem;">
-                <span class="icon" style="font-size: 1.8rem; display: block; margin-bottom: 8px;">📤</span>
+                <span class="icon" style="display: block; margin-bottom: 8px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg></span>
                 <span class="text" style="font-size: 0.8rem; color: #a1a1aa; line-height: 1.4;">Sube tu logo para el encabezado (PNG, JPG)<br><strong style="color: #00d2ff;">Se comprimirá automáticamente</strong> para un rendimiento ultra-rápido</span>
                 <input type="file" id="input-modal-upload-logo" accept="image/png,image/jpeg,image/webp" class="hidden">
             </div>
@@ -1264,10 +1304,10 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
             <li id="menu-item-copy" class="context-menu-item">Copiar <span class="shortcut">Ctrl+C</span></li>
             <li id="menu-item-paste" class="context-menu-item">Pegar <span class="shortcut">Ctrl+V</span></li>
             <li class="context-menu-divider"></li>
-            <li id="menu-item-ai-improve" class="context-menu-item">🪄 Refinar con IA</li>
-            <li id="menu-item-ai-rubrica" class="context-menu-item">🎯 Rúbrica con IA</li>
-            <li id="menu-item-edit-logo" class="context-menu-item hidden">🖼️ Ajustes de Logo</li>
-            <li id="menu-item-swap-logos" class="context-menu-item hidden">🔄 Intercambiar Lado</li>
+            <li id="menu-item-ai-improve" class="context-menu-item">Refinar con IA</li>
+            <li id="menu-item-ai-rubrica" class="context-menu-item">Rúbrica con IA</li>
+            <li id="menu-item-edit-logo" class="context-menu-item hidden">Ajustes de Logo</li>
+            <li id="menu-item-swap-logos" class="context-menu-item hidden">Intercambiar Lado</li>
         </ul>
     </div>
 

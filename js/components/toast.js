@@ -25,16 +25,16 @@ const Toast = (() => {
      */
     function show(message, type = 'info', duration = DURATION) {
         const icons = {
-            success: '✅',
-            error: '❌',
-            info: '💡',
-            warning: '⚠️'
+            success: '<svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>',
+            error: '<svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg>',
+            info: '<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>',
+            warning: '<svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg>'
         };
 
         const toast = document.createElement('div');
         toast.className = `toast toast-${type}`;
         toast.innerHTML = `
-            <span class="toast-icon">${icons[type] || '💡'}</span>
+            <span class="toast-icon">${icons[type] || icons.info}</span>
             <span class="toast-msg">${message}</span>
         `;
 

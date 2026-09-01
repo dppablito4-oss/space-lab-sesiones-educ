@@ -18,6 +18,7 @@
         zoomScale: 1.0, // Custom zoom level for the sheet (1.0 = 100%)
         undoStack: [],
         redoStack: [],
+        completedWorkflowTabs: new Set(),
         backendOnline: false,
         backendRunning: false
     };
@@ -132,6 +133,77 @@
         spaceBg: $('#space-bg')
     };
 
+    const WORKFLOW_STEPS = {
+        'tab-ai': {
+            step: 'Paso 01 de 05',
+            title: 'Configura el copiloto',
+            description: 'Elige el modelo, la plantilla y las referencias para preparar tu sesión.'
+        },
+        'tab-general': {
+            step: 'Paso 02 de 05',
+            title: 'Completa los datos',
+            description: 'Define la institución, el grado, el área y la identidad de la sesión.'
+        },
+        'tab-propositos': {
+            step: 'Paso 03 de 05',
+            title: 'Define los propósitos',
+            description: 'Alinea competencias, desempeños, evidencias y criterios de evaluación.'
+        },
+        'tab-design': {
+            step: 'Paso 04 de 05',
+            title: 'Personaliza el diseño',
+            description: 'Ajusta la presentación que compartirán el editor web y la exportación Word.'
+        },
+        'tab-alumnos': {
+            step: 'Paso 05 de 05',
+            title: 'Añade a tus estudiantes',
+            description: 'Prepara la lista de cotejo con los nombres del grado y la sección actual.'
+        }
+    };
+
+    function syncSessionContextTitle() {
+        const contextTitle = $('#session-context-title');
+        if (!contextTitle) return;
+        contextTitle.textContent = DOM.inputTitulo?.value.trim() || 'Nueva sesión';
+    }
+
+    function updateWorkflowUi(activeTabId) {
+        $$('.sidebar-tab').forEach(tab => {
+            const stateLabel = tab.querySelector('.tab-state');
+            const isActive = tab.dataset.tab === activeTabId;
+            const isCompleted = AppState.completedWorkflowTabs.has(tab.dataset.tab) && !isActive;
+            tab.classList.toggle('completed', isCompleted);
+            tab.setAttribute('tabindex', isActive ? '0' : '-1');
+            if (stateLabel) stateLabel.textContent = isActive ? 'En curso' : (isCompleted ? 'Completado' : 'Pendiente');
+        });
+
+        const step = WORKFLOW_STEPS[activeTabId];
+        if (!step) return;
+        const stepLabel = $('#inspector-step');
+        const title = $('#inspector-title');
+        const description = $('#inspector-description');
+        if (stepLabel) stepLabel.textContent = step.step;
+        if (title) title.textContent = step.title;
+        if (description) description.textContent = step.description;
+    }
+
+    function activateWorkflowTab(tab, markPreviousComplete = true) {
+        if (!tab) return;
+        const currentTab = $('.sidebar-tab.active');
+        if (markPreviousComplete && currentTab && currentTab !== tab) {
+            AppState.completedWorkflowTabs.add(currentTab.dataset.tab);
+        }
+
+        const targetTabId = tab.dataset.tab;
+        $$('.sidebar-tab').forEach(item => {
+            const isTarget = item === tab;
+            item.classList.toggle('active', isTarget);
+            item.setAttribute('aria-selected', String(isTarget));
+        });
+        $$('.tab-pane').forEach(pane => pane.classList.toggle('active', pane.id === targetTabId));
+        updateWorkflowUi(targetTabId);
+    }
+
     // ═══════════════════════════════════════
     // INITIALIZATION
     // ═══════════════════════════════════════
@@ -142,6 +214,8 @@
 
         // Bind all events
         bindEvents();
+        updateWorkflowUi('tab-ai');
+        syncSessionContextTitle();
 
         // Sync AI provider UI
         handleAiProviderChange();
@@ -156,6 +230,7 @@
 
         // Listen for form inputs to auto-save metadata changes
         DOM.form.addEventListener('input', () => {
+            syncSessionContextTitle();
             if (AppState.currentSession) {
                 const data = getFormData();
                 AppState.currentSession.metadata = {
@@ -243,21 +318,29 @@
     function bindEvents() {
         // Sidebar tabs switcher
         const tabs = $$('.sidebar-tab');
-        const panes = $$('.tab-pane');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', () => {
-                const targetTabId = tab.dataset.tab;
-                tabs.forEach(t => {
-                    t.classList.remove('active');
-                    t.setAttribute('aria-selected', 'false');
-                });
-                panes.forEach(p => p.classList.remove('active'));
-                tab.classList.add('active');
-                tab.setAttribute('aria-selected', 'true');
-                const targetPane = $(`#${targetTabId}`);
-                if (targetPane) targetPane.classList.add('active');
+        tabs.forEach((tab, index) => {
+            tab.addEventListener('click', () => activateWorkflowTab(tab));
+            tab.addEventListener('keydown', (event) => {
+                let nextIndex = null;
+                if (event.key === 'ArrowDown' || event.key === 'ArrowRight') nextIndex = (index + 1) % tabs.length;
+                if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') nextIndex = (index - 1 + tabs.length) % tabs.length;
+                if (event.key === 'Home') nextIndex = 0;
+                if (event.key === 'End') nextIndex = tabs.length - 1;
+                if (nextIndex === null) return;
+                event.preventDefault();
+                tabs[nextIndex].focus();
+                activateWorkflowTab(tabs[nextIndex]);
             });
         });
+
+        const btnEmptyStart = $('#btn-empty-start');
+        if (btnEmptyStart) {
+            btnEmptyStart.addEventListener('click', () => {
+                const dataTab = $('.sidebar-tab[data-tab="tab-general"]');
+                activateWorkflowTab(dataTab);
+                dataTab?.focus();
+            });
+        }
 
         // Generate buttons
         DOM.btnGenerate.addEventListener('click', handleGenerateAI);
@@ -276,7 +359,7 @@
             if (btn) {
                 if (summary) {
                     btn.classList.add('pb-has-brief');
-                    btn.textContent = '✅ Enfoque listo — Editar';
+                    btn.textContent = 'Enfoque listo — Editar';
                 } else {
                     btn.classList.remove('pb-has-brief');
                     btn.textContent = '✨ Afinar enfoque pedagógico';
@@ -1008,7 +1091,7 @@
             return;
         }
 
-        Loader.show('🤖 Generando sesión con IA...');
+        Loader.show('Generando sesión con IA...');
 
         try {
             const aiData = await AiCopilot.generateSession({
@@ -1148,17 +1231,17 @@
 
         // Update UI
         const btnLabel = DOM.btnToggleEdit.querySelector('.btn-label');
-        const btnIcon = DOM.btnToggleEdit.querySelector('.icon');
+        const btnIconUse = DOM.btnToggleEdit.querySelector('use');
 
         if (AppState.editMode) {
             btnLabel.textContent = 'Editar';
-            btnIcon.textContent = '✏️';
-            DOM.editModeBadge.textContent = '✏️ Modo Edición';
+            if (btnIconUse) btnIconUse.setAttribute('href', '#icon-edit');
+            DOM.editModeBadge.innerHTML = '<svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>Modo edición';
             DOM.editModeBadge.classList.remove('read-only');
         } else {
             btnLabel.textContent = 'Lectura';
-            btnIcon.textContent = '👁️';
-            DOM.editModeBadge.textContent = '🔒 Modo Lectura';
+            if (btnIconUse) btnIconUse.setAttribute('href', '#icon-eye');
+            DOM.editModeBadge.innerHTML = '<svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>Modo lectura';
             DOM.editModeBadge.classList.add('read-only');
         }
 
@@ -1931,7 +2014,7 @@
         }
 
         saveCurrentState();
-        Loader.show('🚀 Generando PDF oficial con el motor local...');
+        Loader.show('Generando PDF oficial con el motor local...');
 
         try {
             const sessionPayload = getFormDataJSON();
@@ -1974,7 +2057,7 @@
         }
 
         saveCurrentState();
-        Loader.show('📝 Generando archivo de Word (.docx) nativo...');
+        Loader.show('Generando archivo de Word (.docx) nativo...');
 
         try {
             const sessionPayload = getFormDataJSON();
@@ -2159,7 +2242,7 @@
             saveCurrentState();
             checkTimeBalance();
             Loader.hide();
-            Toast.success('🎯 Criterios de evaluación generados con éxito');
+            Toast.success('Criterios de evaluación generados con éxito');
         } catch (error) {
             Loader.hide();
             Toast.error('Error al generar criterios: ' + error.message);
@@ -2230,7 +2313,7 @@
         };
 
         if (Storage.saveSession(session)) {
-            Toast.success('💾 Sesión guardada correctamente');
+            Toast.success('Sesión guardada correctamente');
             renderSavedList();
         } else {
             Toast.error('Error al guardar la sesión');
@@ -2285,7 +2368,7 @@
             renderSession(clon);
 
             renderSavedList();
-            Toast.success('💾 Copia de sesión creada correctamente');
+            Toast.success('Copia de sesión creada correctamente');
         } else {
             Toast.error('Error al crear la copia de la sesión');
         }
@@ -2510,8 +2593,8 @@
                     </span>
                 </div>
                 <div class="load-item-actions">
-                    <button class="btn btn-ghost btn-sm load-item-select" data-id="${s.id}" title="Cargar">📂</button>
-                    <button class="btn btn-ghost btn-sm load-item-delete" data-id="${s.id}" title="Eliminar">🗑️</button>
+                    <button class="btn btn-ghost btn-sm load-item-select" data-id="${s.id}" title="Cargar" aria-label="Cargar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg></button>
+                    <button class="btn btn-ghost btn-sm load-item-delete" data-id="${s.id}" title="Eliminar" aria-label="Eliminar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg></button>
                 </div>
             </li>
         `).join('');
@@ -2662,7 +2745,7 @@
                     <span class="saved-item-title">${escHTML(s.metadata?.titulo || 'Sin título')}</span>
                     <span class="saved-item-date">${formatDate(s.lastSaved)}</span>
                 </div>
-                <button class="saved-item-delete" data-id="${s.id}" title="Eliminar">🗑️</button>
+                <button class="saved-item-delete" data-id="${s.id}" title="Eliminar" aria-label="Eliminar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg></button>
             </li>
         `).join('');
 
@@ -3349,7 +3432,7 @@
         const newLogoHtml = `
             <div class="official-logo-item" draggable="true">
                 <img id="${id}" src="${url}" class="official-logo-img" onerror="this.src='assets/logo.png'; this.onerror=function(){this.style.display='none';};" style="width: 65px; height: auto; object-fit: contain; cursor: pointer;" title="Haz clic para editar, arrastra para reordenar" draggable="false">
-                <button type="button" class="btn-remove-logo no-print" title="Eliminar logo" onclick="this.parentElement.remove(); window.dispatchEvent(new CustomEvent('logo-removed'));">✕</button>
+                <button type="button" class="btn-remove-logo no-print" title="Eliminar logo" aria-label="Eliminar logo" onclick="this.parentElement.remove(); window.dispatchEvent(new CustomEvent('logo-removed'));"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
             </div>
         `;
 
@@ -3763,24 +3846,26 @@
         }
 
         if (badge) {
+            const fileIcon = '<svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>';
+            const textIcon = '<svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>';
             if (provider === 'openai-gpt-5.6-luna') {
                 badge.className = 'model-capabilities-badge';
-                badge.innerHTML = '<span class="badge-icon">📎</span><span class="badge-text"><strong>GPT-5.6 Luna:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>';
+                badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-5.6 Luna:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>`;
                 if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
                 if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
             } else if (provider === 'openai-gpt-5.4-mini') {
                 badge.className = 'model-capabilities-badge';
-                badge.innerHTML = '<span class="badge-icon">📎</span><span class="badge-text"><strong>GPT-5.4 Mini:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>';
+                badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-5.4 Mini:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>`;
                 if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
                 if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
             } else if (provider === 'gemini-2.5-flash') {
                 badge.className = 'model-capabilities-badge';
-                badge.innerHTML = '<span class="badge-icon">📎</span><span class="badge-text"><strong>Gemini 2.5 Flash:</strong> Multimodal nativo (PDF, imágenes, audio y textos).</span>';
+                badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>Gemini 2.5 Flash:</strong> Multimodal nativo (PDF, imágenes, audio y textos).</span>`;
                 if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen, audio o texto)';
                 if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
             } else if (provider === 'deepseek-v3') {
                 badge.className = 'model-capabilities-badge badge-no-files';
-                badge.innerHTML = '<span class="badge-icon">📝</span><span class="badge-text"><strong>DeepSeek V3:</strong> Solo admite texto (los archivos adjuntos no serán procesados).</span>';
+                badge.innerHTML = `${textIcon}<span class="badge-text"><strong>DeepSeek V3:</strong> Solo admite texto (los archivos adjuntos no serán procesados).</span>`;
                 if (dropzoneText) dropzoneText.textContent = 'DeepSeek V3 procesa solo texto. Cambia a GPT-5.6 o Gemini para adjuntar archivos.';
                 if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.add('disabled-dropzone');
             }
@@ -4012,7 +4097,7 @@
     }
 
     function showSourceFileInfo(name) {
-        DOM.sourceFileNameText.textContent = `📄 ${name}`;
+        DOM.sourceFileNameText.textContent = name;
         DOM.sourceFileInfo.classList.remove('hidden');
         DOM.sourceFileDropzone.classList.add('hidden');
         Toast.success('Archivo cargado correctamente');
@@ -4259,7 +4344,7 @@
             document.body.appendChild(indicator);
         }
 
-        indicator.textContent = `🔍 Zoom: ${Math.round(AppState.zoomScale * 100)}%`;
+        indicator.textContent = `Zoom: ${Math.round(AppState.zoomScale * 100)}%`;
         indicator.style.opacity = '1';
 
         clearTimeout(zoomIndicatorTimeout);

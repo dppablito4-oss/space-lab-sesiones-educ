@@ -79,13 +79,13 @@ REGLAS:
             <div class="pb-panel">
                 <div class="pb-header">
                     <div class="pb-header-left">
-                        <span class="pb-header-icon">✨</span>
+                        <span class="pb-header-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg></span>
                         <div>
                             <div class="pb-title">Afinar Enfoque Pedagógico</div>
                             <div class="pb-subtitle">${_escHtml(areaLabel)} &middot; ${_escHtml(temaLabel)}</div>
                         </div>
                     </div>
-                    <button id="pb-close-btn" class="pb-close-btn" title="Cerrar" aria-label="Cerrar panel">✕</button>
+                    <button id="pb-close-btn" class="pb-close-btn" title="Cerrar" aria-label="Cerrar panel"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
                 </div>
 
                 <div class="pb-messages" id="pb-messages">
@@ -108,7 +108,7 @@ REGLAS:
                             Enviar ↵
                         </button>
                         <button id="pb-generate-btn" class="pb-btn pb-btn-generate pb-hidden" aria-label="Generar sesión con este enfoque">
-                            🚀 Generar Sesión
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar Sesión
                         </button>
                     </div>
                 </div>
@@ -212,7 +212,7 @@ REGLAS:
             _setInputEnabled(true);
         } catch (err) {
             _showThinking(false);
-            _appendMessage('ai', '⚠️ No se pudo conectar con la IA en este momento. Puedes escribir tu enfoque aquí abajo y hacer clic en <strong>Generar Sesión</strong> directamente.');
+            _appendMessage('ai', 'No se pudo conectar con la IA en este momento. Puedes escribir tu enfoque aquí abajo y hacer clic en <strong>Generar Sesión</strong> directamente.');
             _setInputEnabled(true);
             _isFinished = true;
             _showGenerateButton();
@@ -251,7 +251,7 @@ REGLAS:
             _setInputEnabled(true);
         } catch (err) {
             _showThinking(false);
-            _appendMessage('ai', '⚠️ Error de conexión. Intenta de nuevo o haz clic en <strong>Generar Sesión</strong>.');
+            _appendMessage('ai', 'Error de conexión. Intenta de nuevo o haz clic en <strong>Generar Sesión</strong>.');
             _setInputEnabled(true);
             _isFinished = true;
             _showGenerateButton();
@@ -264,7 +264,7 @@ REGLAS:
             _isFinished = true;
             const cleanText = aiText.replace('[LISTO_PARA_GENERAR]', '').trim();
             if (cleanText) _appendMessage('ai', cleanText);
-            _appendMessage('ai', '✅ ¡Perfecto! Haz clic en <strong>Generar Sesión</strong> cuando estés listo, o escribe algo más si quieres agregar algún detalle.');
+            _appendMessage('ai', 'Perfecto. Haz clic en <strong>Generar Sesión</strong> cuando estés listo, o escribe algo más si quieres agregar algún detalle.');
             _messages.push({ role: 'assistant', content: cleanText || 'Listo para generar.' });
             _showGenerateButton();
             _setInputEnabled(true);

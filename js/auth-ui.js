@@ -143,7 +143,7 @@ window.AuthUi = (() => {
             if (tabLogin) tabLogin.classList.add('active');
             if (tabRegister) tabRegister.classList.remove('active');
 
-            if (authTitle) authTitle.textContent = 'Iniciar Sesión 🌌';
+            if (authTitle) authTitle.textContent = 'Iniciar Sesión';
             if (authSubtitle) authSubtitle.textContent = 'Ingresa a tu cuenta Space Lab para gestionar tus créditos de IA y sincronizar tus sesiones.';
             btnSubmit.textContent = 'INICIAR SESIÓN';
             if (toggleText) toggleText.textContent = '¿No tienes una cuenta?';
@@ -159,7 +159,7 @@ window.AuthUi = (() => {
             if (tabLogin) tabLogin.classList.remove('active');
             if (tabRegister) tabRegister.classList.add('active');
 
-            if (authTitle) authTitle.textContent = 'Crear Cuenta 🚀';
+            if (authTitle) authTitle.textContent = 'Crear Cuenta';
             if (authSubtitle) authSubtitle.textContent = 'Crea tu cuenta para acceder a la generación de sesiones con IA (incluye créditos iniciales y planes de suscripción).';
             btnSubmit.textContent = 'CREAR CUENTA GRATIS';
             if (toggleText) toggleText.textContent = '¿Ya tienes una cuenta?';
@@ -223,7 +223,7 @@ window.AuthUi = (() => {
                 Toast.error('Error al iniciar sesión: ' + err.message);
             } finally {
                 btnSubmit.disabled = false;
-                btnSubmit.textContent = 'Iniciar Sesión 🚪';
+                btnSubmit.textContent = 'Iniciar Sesión';
             }
         } else {
             // Modo Registro
@@ -282,7 +282,7 @@ window.AuthUi = (() => {
                 Toast.error('Error al registrar cuenta: ' + err.message);
             } finally {
                 btnSubmit.disabled = false;
-                btnSubmit.textContent = 'Crear Cuenta 🔑';
+                btnSubmit.textContent = 'Crear Cuenta';
             }
         }
     }

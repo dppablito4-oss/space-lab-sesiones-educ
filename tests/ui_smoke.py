@@ -25,7 +25,7 @@ def run() -> None:
     try:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=True)
-            for width, height in ((375, 812), (768, 900), (1024, 800), (1440, 1000)):
+            for width, height in ((375, 812), (768, 900), (1024, 800), (1280, 800), (1440, 1000)):
                 page = browser.new_page(viewport={"width": width, "height": height})
                 page_errors: list[str] = []
                 page.on("pageerror", lambda error: page_errors.append(str(error)))
@@ -42,9 +42,22 @@ def run() -> None:
                 assert page.evaluate(
                     "document.documentElement.scrollWidth <= window.innerWidth"
                 )
+                assert page.locator("#btn-generate").is_visible()
+                assert page.locator("#btn-generate").evaluate(
+                    "element => element.getBoundingClientRect().bottom <= window.innerHeight"
+                )
 
-                if width <= 900:
+                first_tab = page.locator('.sidebar-tab[data-tab="tab-ai"]')
+                first_tab.focus()
+                first_tab.press("ArrowDown")
+                assert page.locator('[data-tab="tab-general"]').get_attribute(
+                    "aria-selected"
+                ) == "true"
+                assert first_tab.locator(".tab-state").inner_text() == "Completado"
+
+                if width <= 1100:
                     page.click("#btn-menu-mobile")
+                    page.wait_for_timeout(250)
                     assert page.locator("#sidebar").evaluate(
                         "element => element.classList.contains('open')"
                     )
@@ -63,7 +76,7 @@ def run() -> None:
         server.shutdown()
         server.server_close()
 
-    print("ui_smoke.py: OK (375, 768, 1024 y 1440 px)")
+    print("ui_smoke.py: OK (375, 768, 1024, 1280 y 1440 px)")
 
 
 if __name__ == "__main__":
