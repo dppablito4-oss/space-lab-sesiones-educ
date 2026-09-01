@@ -11,33 +11,51 @@ const localStorage = {
 };
 
 const calls = [];
+const SupabaseClient = {
+    client: {},
+    getCurrentUser: async () => ({ id: 'test-user' }),
+    invokeFunction: async (functionName, body) => {
+        calls.push({ functionName, body });
+        return '<li>OK</li>';
+    }
+};
+
 const context = vm.createContext({
     console,
     localStorage,
-    window: { localStorage, location: { origin: 'https://example.test' } },
-    fetch: async (url, options) => {
-        calls.push({ url, body: JSON.parse(options.body) });
-        return { ok: true, json: async () => ({ choices: [{ message: { content: '<li>OK</li>' } }] }) };
+    SupabaseClient,
+    window: { localStorage, SupabaseClient, location: { origin: 'https://example.test' } },
+    fetch: async () => {
+        throw new Error('The browser must not call an AI provider directly');
     }
 });
 
 vm.runInContext(`${fs.readFileSync('js/ai-copilot.js', 'utf8')}\nglobalThis.AiCopilotForTest = AiCopilot;`, context);
 const ai = context.AiCopilotForTest;
 
-async function expectProvider(provider, expectedModel) {
+async function expectProvider(provider, expectedFunction, expectedModel) {
     calls.length = 0;
-    ai.configure({ apiKey: 'sk-or-test-key-1234567890' });
     ai.setProvider(provider);
     await ai.generateCriterios('Competencia', 'Tema', '5', 'Matemática');
-    assert.equal(calls.length, 1, `${provider} should make one request`);
-    assert.match(calls[0].url, /openrouter\.ai/, `${provider} should use OpenRouter for an OpenRouter key`);
+    assert.equal(calls.length, 1, `${provider} should make one Edge Function request`);
+    assert.equal(calls[0].functionName, expectedFunction);
     assert.equal(calls[0].body.model, expectedModel);
 }
 
 (async () => {
-    await expectProvider('openai-gpt-5.4-mini', 'openai/gpt-5.4-mini');
-    await expectProvider('gemini-2.5-flash', 'google/gemini-2.5-flash');
-    await expectProvider('deepseek-v3', 'deepseek/deepseek-chat');
+    await expectProvider('openai-gpt-5.4-mini', 'openai-router', 'gpt-5.4-mini');
+    await expectProvider('gemini-2.5-flash', 'gemini-router', 'gemini-2.5-flash');
+    await expectProvider('deepseek-v3', 'deepseek-router', 'deepseek-chat');
+
+    const browserAiSource = ['js/ai-copilot.js', 'js/chatbot.js', 'js/pedagogy-brief.js']
+        .map(file => fs.readFileSync(file, 'utf8'))
+        .join('\n');
+    assert.doesNotMatch(browserAiSource, /showConfigPrompt|Ingresa tu API Key/);
+    assert.doesNotMatch(
+        browserAiSource,
+        /openrouter\.ai|api\.openai\.com|api\.deepseek\.com|generativelanguage\.googleapis\.com/,
+        'AI provider endpoints must exist only inside Supabase Edge Functions'
+    );
     console.log('ai-provider-routing.test.js: OK');
 })().catch(error => {
     console.error(error);

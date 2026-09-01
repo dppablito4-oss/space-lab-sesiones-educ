@@ -1011,21 +1011,12 @@
     async function handleGenerateAI() {
         // Intercept: Check user authentication
         const user = await SupabaseClient.getCurrentUser();
-        if (!user && !AiCopilot.hasLocalApiKey()) {
+        if (!user) {
             Toast.warning('Debes crear una cuenta para generar sesiones con IA');
             if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                 window.AuthUi.openRegister();
             }
             return;
-        }
-
-        // Check if AI is configured
-        if (!AiCopilot.isConfigured()) {
-            const configured = AiCopilot.showConfigPrompt();
-            if (!configured) {
-                Toast.warning('Necesitas configurar una API Key para usar la IA');
-                return;
-            }
         }
 
         const formData = getFormData();
@@ -1094,11 +1085,7 @@
         } catch (error) {
             Loader.hide();
 
-            if (error.message === 'API_NOT_CONFIGURED') {
-                AiCopilot.showConfigPrompt();
-            } else {
-                Toast.error(`Error: ${error.message}`);
-            }
+            Toast.error(`Error: ${error.message}`);
         }
     }
 
@@ -2144,20 +2131,12 @@
     async function handleAiRubrica() {
         // Intercept: Check user authentication
         const user = await SupabaseClient.getCurrentUser();
-        if (!user && !AiCopilot.hasLocalApiKey()) {
+        if (!user) {
             Toast.warning('Debes crear una cuenta para usar el asistente de evaluación con IA');
             if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                 window.AuthUi.openRegister();
             }
             return;
-        }
-
-        if (!AiCopilot.isConfigured()) {
-            const configured = AiCopilot.showConfigPrompt();
-            if (!configured) {
-                Toast.warning('Necesitas configurar una API Key para usar el Asistente IA');
-                return;
-            }
         }
 
         // Search for target cell inside sheet
@@ -2209,20 +2188,12 @@
     async function handleAiImproveText() {
         // Intercept: Check user authentication
         const user = await SupabaseClient.getCurrentUser();
-        if (!user && !AiCopilot.hasLocalApiKey()) {
+        if (!user) {
             Toast.warning('Debes crear una cuenta para refinar texto con IA');
             if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                 window.AuthUi.openRegister();
             }
             return;
-        }
-
-        if (!AiCopilot.isConfigured()) {
-            const configured = AiCopilot.showConfigPrompt();
-            if (!configured) {
-                Toast.warning('Necesitas configurar una API Key para usar el Asistente IA');
-                return;
-            }
         }
 
         const selection = window.getSelection();

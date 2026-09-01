@@ -335,48 +335,17 @@ REGLAS:
     }
 
     async function _runLightPrompt(systemPrompt, userPrompt, maxTokens) {
-        // 1. Supabase Edge Function (server-side, cheapest)
-        if (window.SupabaseClient && SupabaseClient.client) {
-            try {
-                const { data, error } = await SupabaseClient.client.functions.invoke('gemini-router', {
-                    body: { prompt: userPrompt, systemPrompt, maxTokens: maxTokens || 380 }
-                });
-                if (!error && data) {
-                    const text = _extractText(data);
-                    if (text && text.trim()) return text.trim();
-                }
-            } catch {
-                // fallthrough to local
-            }
+        if (!window.SupabaseClient || !SupabaseClient.client) {
+            throw new Error('No se pudo conectar con Supabase.');
         }
-
-        // 2. Local OpenRouter fallback
-        const saved = JSON.parse(localStorage.getItem('spacelab_ai_config') || '{}');
-        const apiKey = saved.apiKey || '';
-        if (!apiKey || apiKey.length <= 10) throw new Error('API_NOT_CONFIGURED');
-
-        const resp = await fetch(saved.endpoint || 'https://openrouter.ai/api/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}`,
-                'HTTP-Referer': window.location.origin,
-                'X-Title': 'Space Lab - Pedagogy Brief'
-            },
-            body: JSON.stringify({
-                model: saved.model || 'deepseek/deepseek-chat',
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user',   content: userPrompt }
-                ],
-                max_tokens: maxTokens || 380,
-                temperature: 0.6
-            })
+        const data = await SupabaseClient.invokeFunction('gemini-router', {
+            prompt: userPrompt,
+            systemPrompt,
+            maxTokens: maxTokens || 380
         });
-
-        if (!resp.ok) throw new Error(`API error ${resp.status}`);
-        const json = await resp.json();
-        return _extractText(json);
+        const text = _extractText(data);
+        if (!text || !text.trim()) throw new Error('Gemini no devolvió contenido.');
+        return text.trim();
     }
 
     function _extractText(data) {

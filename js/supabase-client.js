@@ -166,6 +166,42 @@ window.SupabaseClient = (() => {
         return user;
     }
 
+    async function readFunctionError(error, fallbackMessage) {
+        const response = error && error.context;
+        if (response && typeof response.clone === 'function') {
+            try {
+                const payload = await response.clone().json();
+                if (payload && payload.error) {
+                    return `${payload.error}${payload.details ? ': ' + payload.details : ''}`;
+                }
+            } catch {
+                // The SDK error message below is the fallback for non-JSON responses.
+            }
+        }
+        return (error && error.message) || fallbackMessage;
+    }
+
+    /**
+     * Invokes an authenticated Edge Function. Provider keys always remain in
+     * Supabase secrets and are never requested from or exposed to the browser.
+     */
+    async function invokeFunction(functionName, body) {
+        if (!supabase) throw new Error('No se pudo conectar con Supabase.');
+
+        const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+        if (sessionError) throw sessionError;
+        if (!session) throw new Error('Debes iniciar sesión para usar las funciones de IA.');
+
+        const { data, error } = await supabase.functions.invoke(functionName, { body });
+        if (error) {
+            throw new Error(await readFunctionError(error, `La función ${functionName} no está disponible.`));
+        }
+        if (data && typeof data === 'object' && data.error) {
+            throw new Error(`${data.error}${data.details ? ': ' + data.details : ''}`);
+        }
+        return data;
+    }
+
     /**
      * Obtiene el rol del usuario actual desde su perfil
      */
@@ -437,6 +473,7 @@ window.SupabaseClient = (() => {
         verifyOtp,
         logout,
         getCurrentUser,
+        invokeFunction,
         getUserRole,
         getSessionsCloud,
         saveSessionCloud,

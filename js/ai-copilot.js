@@ -6,14 +6,9 @@
 const AiCopilot = (() => {
 
     // ─── CONFIGURACIÓN ───
-    // El usuario debe configurar su propia API key y endpoint
     const CONFIG = {
-        // Por defecto conectamos a la API de OpenAI
-        endpoint: 'https://api.openai.com/v1/chat/completions',
-        apiKey: '', // Se configura desde la UI
-        model: 'gpt-5.6-luna', // OpenAI GPT-5.6 Luna por defecto
-        maxTokens: 4000, // Ajuste clave para evitar JSONs rotos
-        temperature: 0.5 // Bajarlo ayuda a que sea más estricto con el formato JSON
+        // Provider credentials are held only by Supabase Edge Functions.
+        model: 'openai-gpt-5.6-luna'
     };
 
     const PROVIDERS = {
@@ -26,10 +21,6 @@ const AiCopilot = (() => {
     function resolveProvider(provider) {
         const aliases = { openai: 'openai-gpt-5.6-luna', gemini: 'gemini-2.5-flash', deepseek: 'deepseek-v3' };
         return PROVIDERS[aliases[provider] || provider] || PROVIDERS['openai-gpt-5.6-luna'];
-    }
-
-    function hasLocalApiKey() {
-        return Boolean(CONFIG.apiKey && CONFIG.apiKey.length > 10);
     }
 
     async function hasAuthenticatedUser() {
@@ -57,15 +48,11 @@ const AiCopilot = (() => {
     /**
      * Set API configuration
      */
-    function configure({ endpoint, apiKey, model } = {}) {
-        if (endpoint) CONFIG.endpoint = endpoint;
-        if (apiKey) CONFIG.apiKey = apiKey;
+    function configure({ model } = {}) {
         if (model) CONFIG.model = model;
 
         // Persist config (without sensitive keys shown)
         localStorage.setItem('spacelab_ai_config', JSON.stringify({
-            endpoint: CONFIG.endpoint,
-            apiKey: CONFIG.apiKey,
             model: CONFIG.model
         }));
     }
@@ -82,26 +69,10 @@ const AiCopilot = (() => {
             const saved = localStorage.getItem('spacelab_ai_config');
             if (saved) {
                 const c = JSON.parse(saved);
-                CONFIG.endpoint = c.endpoint || CONFIG.endpoint;
-                CONFIG.apiKey = c.apiKey || CONFIG.apiKey;
                 CONFIG.model = c.model || CONFIG.model;
+                localStorage.setItem('spacelab_ai_config', JSON.stringify({ model: CONFIG.model }));
             }
         } catch { /* ignore */ }
-    }
-
-    /**
-     * Check if API is configured
-     */
-    function isConfigured() {
-        const hasLocalKey = hasLocalApiKey();
-        let hasSavedSession = false;
-        for (let i = 0; i < localStorage.length; i++) {
-            if (localStorage.key(i).includes('-auth-token')) {
-                hasSavedSession = true;
-                break;
-            }
-        }
-        return hasLocalKey || hasSavedSession;
     }
 
     // ─── METODOLOGÍAS DIDÁCTICAS PROMPTS ───
@@ -338,16 +309,12 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
                 const sourceFile = prepareSourceFile(metadata.sourceFile, provider);
 
                 console.log(`[AI] Llamando a Edge Function ${functionName} con modelo ${selectedModel}...`);
-                const { data, error } = await SupabaseClient.client.functions.invoke(functionName, {
-                    body: {
-                        prompt: userPrompt,
-                        systemPrompt: dynamicSystemPrompt,
-                        model: selectedModel,
-                        sourceFile
-                    }
+                const data = await SupabaseClient.invokeFunction(functionName, {
+                    prompt: userPrompt,
+                    systemPrompt: dynamicSystemPrompt,
+                    model: selectedModel,
+                    sourceFile
                 });
-
-                if (error) throw error;
 
                 // Si la función retorna un string de JSON
                 let resultObj = data;
@@ -363,161 +330,11 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
                 }
             } catch (err) {
                 console.error('[AI] Error en Edge Function:', err);
-
-                // Differentiate error types
-                const isNetworkOrNotFound = !err.status || err.status === 404 || err.name === 'FunctionsFetchError';
-
-                if (isNetworkOrNotFound || hasLocalApiKey()) {
-                    console.warn('[AI] Edge Function no disponible o fuera de línea, intentando fallback local...');
-                    if (!CONFIG.apiKey || CONFIG.apiKey.length <= 10) {
-                        Toast.warning('El servidor de IA en la nube no responde. Por favor ingresa tu API Key local de OpenAI/OpenRouter.');
-                        const configured = showConfigPrompt();
-                        if (!configured) {
-                            throw new Error('Debes configurar una API Key de OpenAI/OpenRouter para poder generar sesiones con IA.');
-                        }
-                    }
-                } else {
-                    let serverMsg = err.message || `Error del servidor de IA (${err.status})`;
-                    try {
-                        const parsedBody = JSON.parse(err.message);
-                        if (parsedBody && parsedBody.error) {
-                            serverMsg = `${parsedBody.error}${parsedBody.details ? ': ' + parsedBody.details : ''}`;
-                        }
-                    } catch {
-                        // ignore
-                    }
-                    throw new Error(serverMsg);
-                }
+                throw err;
             }
         }
 
-        // 2. Fallback local (OpenRouter/API Key directa en cliente)
-        if (!CONFIG.apiKey || CONFIG.apiKey.length <= 10) {
-            throw new Error('API_NOT_CONFIGURED');
-        }
-
-        try {
-            let requestEndpoint = CONFIG.endpoint;
-            let requestModel = CONFIG.model;
-            const provider = resolveProvider(metadata.ai_provider);
-            const isOpenRouterKey = CONFIG.apiKey.startsWith('sk-or-');
-            const sourceFile = prepareSourceFile(metadata.sourceFile, provider);
-
-            if (provider.kind === 'openai') {
-                if (CONFIG.apiKey.startsWith('sk-') && !isOpenRouterKey) {
-                    requestEndpoint = 'https://api.openai.com/v1/chat/completions';
-                    requestModel = provider.model;
-                } else {
-                    requestEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
-                    requestModel = `openai/${provider.model}`;
-                }
-            } else if (provider.kind === 'deepseek') {
-                if (!isOpenRouterKey) {
-                    requestEndpoint = 'https://api.deepseek.com/chat/completions';
-                    requestModel = 'deepseek-chat';
-                } else {
-                    requestEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
-                    requestModel = 'deepseek/deepseek-chat';
-                }
-            } else if (provider.kind === 'gemini') {
-                // Solo usar la API de Google directa si la clave es de Google (empieza por AIza)
-                if (CONFIG.apiKey.startsWith('AIza')) {
-                    requestEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${CONFIG.apiKey}`;
-                } else {
-                    // Si empieza por sk- (OpenAI/OpenRouter) pero seleccionó Gemini, enrutar a OpenRouter usando el modelo Gemini
-                    requestEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
-                    requestModel = 'google/gemini-2.5-flash';
-                }
-            }
-
-            console.log(`[AI] Conectando a local (${requestEndpoint}) con modelo ${requestModel}...`);
-
-            let response;
-            if (provider.kind === 'gemini' && requestEndpoint.includes('generativelanguage.googleapis.com')) {
-                // Inyectar el texto del prompt
-                const parts = [{ text: userPrompt }];
-
-                // Si el modelo es Gemini directo y tenemos las imágenes renderizadas, las agregamos como inlineData
-                if (sourceFile && sourceFile.base64 && sourceFile.type) {
-                    // Fallback: Si no hay imágenes pero hay un archivo cargado completo en base64
-                    parts.push({
-                        inlineData: {
-                                mimeType: sourceFile.type,
-                                data: sourceFile.base64
-                        }
-                    });
-                }
-
-                response = await fetch(requestEndpoint, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: parts }],
-                        generationConfig: { responseMimeType: "application/json" },
-                        systemInstruction: { parts: [{ text: dynamicSystemPrompt }] }
-                    })
-                });
-            } else {
-                // Para OpenAI / OpenRouter / DeepSeek
-                let userContent;
-                if (sourceFile && sourceFile.base64 && sourceFile.type.startsWith('image/')) {
-                    userContent = [
-                        { type: 'text', text: userPrompt }
-                    ];
-                    userContent.push({
-                        type: 'image_url',
-                        image_url: {
-                            url: `data:${sourceFile.type};base64,${sourceFile.base64}`
-                        }
-                    });
-                } else {
-                    userContent = userPrompt;
-                }
-
-                response = await fetch(requestEndpoint, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${CONFIG.apiKey}`,
-                        'HTTP-Referer': window.location.origin,
-                        'X-Title': 'Space Lab - Sesiones Educativas'
-                    },
-                    body: JSON.stringify({
-                        model: requestModel,
-                        messages: [
-                            { role: 'system', content: dynamicSystemPrompt },
-                            { role: 'user', content: userContent }
-                        ],
-                        max_tokens: CONFIG.maxTokens,
-                        temperature: CONFIG.temperature
-                    })
-                });
-            }
-
-            if (!response.ok) {
-                const errBody = await response.text();
-                console.error('[AI] API Error:', response.status, errBody);
-                throw new Error(`Error del servidor: ${response.status}`);
-            }
-
-            const data = await response.json();
-            let content;
-            if (provider.kind === 'gemini' && requestEndpoint.includes('generativelanguage.googleapis.com')) {
-                content = data.candidates?.[0]?.content?.parts?.[0]?.text;
-            } else {
-                content = data.choices?.[0]?.message?.content;
-            }
-
-            if (!content) {
-                throw new Error('La IA no devolvió contenido');
-            }
-
-            const parsed = parseAIResponse(content);
-            return parsed;
-        } catch (error) {
-            console.error('[AI] Generation error:', error);
-            throw error;
-        }
+        throw new Error('Debes iniciar sesión para generar contenido con IA.');
     }
 
     /**
@@ -704,32 +521,8 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
     /**
      * Show API configuration prompt
      */
-    function showConfigPrompt() {
-        loadConfig();
-
-        const currentKey = CONFIG.apiKey ? CONFIG.apiKey.slice(0, 8) + '...' : '(no configurada)';
-
-        const key = prompt(
-            `Configuración de IA\n\n` +
-            `Para usar la generación con IA, necesitas una API Key.\n\n` +
-            `Opciones:\n` +
-            `1. OpenRouter (openrouter.ai) — Acceso a DeepSeek, GPT, etc.\n` +
-            `2. OpenAI directo (api.openai.com)\n\n` +
-            `API Key actual: ${currentKey}\n\n` +
-            `Ingresa tu API Key (o cancela):`,
-            CONFIG.apiKey || ''
-        );
-
-        if (key !== null && key.trim()) {
-            configure({ apiKey: key.trim() });
-            Toast.success('API Key guardada correctamente');
-            return true;
-        }
-        return false;
-    }
-
     /**
-     * Run a generic prompt leveraging Supabase edge functions or local OpenRouter fallback.
+     * Run a generic prompt through an authenticated Supabase Edge Function.
      */
     async function runPrompt(systemPrompt, userPrompt) {
         const provider = resolveProvider(CONFIG.model);
@@ -739,79 +532,25 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
                 const functionName = provider.router;
 
                 console.log(`[AI Helper] Invoking edge function ${functionName} for generic prompt...`);
-                const { data, error } = await SupabaseClient.client.functions.invoke(functionName, {
-                    body: {
-                        prompt: userPrompt,
-                        systemPrompt: systemPrompt,
-                        model: provider.model
-                    }
+                const data = await SupabaseClient.invokeFunction(functionName, {
+                    prompt: userPrompt,
+                    systemPrompt: systemPrompt,
+                    model: provider.model
                 });
 
-                if (error) throw error;
-                if (!error) {
-                    let text = data;
-                    if (data && typeof data === 'object') {
-                        text = data.choices?.[0]?.message?.content || data.content || JSON.stringify(data);
-                    }
-                    if (text) return text;
+                let text = data;
+                if (data && typeof data === 'object') {
+                    text = data.choices?.[0]?.message?.content || data.content || JSON.stringify(data);
                 }
+                if (text) return text;
+                throw new Error('La función de IA no devolvió contenido.');
             } catch (err) {
-                console.warn('[AI Helper] Edge function failed or returned error, using local fallback...', err);
+                console.warn('[AI Helper] Edge function failed:', err);
+                throw err;
             }
         }
 
-        // 2. Local fallback (using user's API key)
-        if (!CONFIG.apiKey || CONFIG.apiKey.length <= 10) {
-            throw new Error('API_NOT_CONFIGURED');
-        }
-
-        let requestEndpoint = CONFIG.endpoint;
-        let requestModel = CONFIG.model;
-
-        const isOpenRouterKey = CONFIG.apiKey.startsWith('sk-or-');
-        if (provider.kind === 'gemini' && CONFIG.apiKey.startsWith('AIza')) {
-            throw new Error('El asistente de rÃºbrica y mejora requiere una Edge Function para Gemini o una clave compatible con OpenRouter.');
-        }
-        if (!isOpenRouterKey) {
-            if (provider.kind === 'deepseek') {
-                requestEndpoint = 'https://api.deepseek.com/v1/chat/completions';
-                requestModel = 'deepseek-chat';
-            } else {
-                requestEndpoint = 'https://api.openai.com/v1/chat/completions';
-                requestModel = provider.model;
-            }
-        } else {
-            requestEndpoint = 'https://openrouter.ai/api/v1/chat/completions';
-            requestModel = provider.kind === 'gemini' ? 'google/gemini-2.5-flash' :
-                provider.kind === 'deepseek' ? 'deepseek/deepseek-chat' : `openai/${provider.model}`;
-        }
-
-        const response = await fetch(requestEndpoint, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${CONFIG.apiKey}`,
-                'HTTP-Referer': window.location.origin,
-                'X-Title': 'Space Lab - Sesiones Educativas'
-            },
-            body: JSON.stringify({
-                model: requestModel,
-                messages: [
-                    { role: 'system', content: systemPrompt },
-                    { role: 'user', content: userPrompt }
-                ],
-                max_tokens: 1500,
-                temperature: 0.5
-            })
-        });
-
-        if (!response.ok) {
-            const errText = await response.text();
-            throw new Error(`Error del servidor de IA: ${response.status}`);
-        }
-
-        const resData = await response.json();
-        return resData.choices?.[0]?.message?.content || '';
+        throw new Error('Debes iniciar sesión para usar las funciones de IA.');
     }
 
     /**
@@ -891,11 +630,8 @@ ${instruction}`;
 
     return {
         generateSession,
-        isConfigured,
         configure,
         setProvider,
-        hasLocalApiKey,
-        showConfigPrompt,
         loadConfig,
         generateCriterios,
         improveText,

@@ -108,21 +108,15 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
             });
             promptText += `\nAsistente:`;
 
-            let invokedCloud = false;
-
-            // Llamar a Supabase Edge Function con GPT-5.6 Luna
+            // Call the authenticated Supabase Edge Function. API keys stay server-side.
             if (window.SupabaseClient && SupabaseClient.client) {
                 try {
                     console.log('[Chatbot] Enviando mensaje a openai-router con gpt-5.6-luna...');
-                    const { data, error } = await SupabaseClient.client.functions.invoke('openai-router', {
-                        body: { 
-                            prompt: promptText,
-                            model: 'gpt-5.6-luna'
-                        }
+                    const data = await SupabaseClient.invokeFunction('openai-router', {
+                        prompt: promptText,
+                        model: 'gpt-5.6-luna'
                     });
 
-                    if (error) throw error;
-                    
                     if (typeof data === 'string') {
                         responseText = data;
                     } else if (data && typeof data === 'object') {
@@ -130,71 +124,12 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
                     } else {
                         responseText = 'No pude procesar la respuesta del servidor.';
                     }
-                    invokedCloud = true;
                 } catch (cloudErr) {
                     console.warn('[Chatbot] Falló llamada a Edge Function:', cloudErr);
-                    // Si falla, permitimos continuar al fallback de OpenRouter local
+                    throw cloudErr;
                 }
-            }
-
-            if (!invokedCloud) {
-                // Fallback local a OpenRouter
-                let hasLocalKey = false;
-                let c = null;
-                try {
-                    const config = localStorage.getItem('spacelab_ai_config');
-                    if (config) {
-                        c = JSON.parse(config);
-                        if (c && c.apiKey && c.apiKey.length > 10) {
-                            hasLocalKey = true;
-                        }
-                    }
-                } catch (e) { /* ignore */ }
-
-                if (hasLocalKey && c) {
-                    console.log('[Chatbot] Fallback local a DeepSeek...');
-                    
-                    let requestEndpoint = c.endpoint || 'https://openrouter.ai/api/v1/chat/completions';
-                    let requestModel = 'deepseek/deepseek-chat';
-                    
-                    // Si es una API Key de DeepSeek directo en lugar de OpenRouter
-                    if (c.apiKey.startsWith('sk-') && !c.endpoint && !c.apiKey.startsWith('sk-proj-')) {
-                        requestEndpoint = 'https://api.deepseek.com/chat/completions';
-                        requestModel = 'deepseek-chat';
-                    }
-
-                    const response = await fetch(requestEndpoint, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${c.apiKey}`,
-                            'HTTP-Referer': window.location.origin
-                        },
-                        body: JSON.stringify({
-                            model: requestModel,
-                            messages: [
-                                { role: 'system', content: 'Eres un asistente pedagógico de MINEDU Perú.' },
-                                { role: 'user', content: promptText }
-                            ]
-                        })
-                    });
-                    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-                    const resJson = await response.json();
-                    responseText = resJson.choices?.[0]?.message?.content || 'Error en formato de respuesta';
-                } else {
-                    // Si no está configurada la API key local, mostramos un prompt para configurarla
-                    if (window.AiCopilot && typeof window.AiCopilot.showConfigPrompt === 'function') {
-                        Toast.warning('El servidor de IA en la nube no responde. Por favor ingresa tu API Key local de OpenRouter.');
-                        const configured = window.AiCopilot.showConfigPrompt();
-                        if (configured) {
-                            // Reintentar tras configurar
-                            removeTypingIndicator(typingId);
-                            inputField.value = text; // restaurar texto del usuario
-                            return handleSendMessage();
-                        }
-                    }
-                    responseText = '⚠️ Para chatear con DeepSeek, por favor inicia sesión o configura una API Key de OpenRouter.';
-                }
+            } else {
+                throw new Error('No se pudo conectar con Supabase.');
             }
 
             // Procesar y aplicar diseño agéntico si la respuesta contiene el JSON
