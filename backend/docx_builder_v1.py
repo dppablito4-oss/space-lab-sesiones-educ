@@ -11,6 +11,7 @@ Genera un documento .docx nativo oficial MINEDU con:
 from __future__ import annotations
 import io
 import re
+from copy import deepcopy
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Tag
@@ -31,6 +32,153 @@ from docx_builder import (
     format_latex_to_unicode,
     append_html_to_cell_or_paragraph
 )
+
+
+def _replace_or_insert(parent, element, tag, index=0):
+    """Replace a direct OOXML child without changing the surrounding document."""
+    for child in list(parent):
+        if child.tag == tag:
+            parent.replace(child, deepcopy(element))
+            return
+    parent.insert(index, deepcopy(element))
+
+
+def _copy_row_properties(target_row, source_row):
+    source_pr = source_row._tr.find(qn('w:trPr'))
+    if source_pr is not None:
+        _replace_or_insert(target_row._tr, source_pr, qn('w:trPr'))
+
+
+def _copy_cell_properties(target_cell, source_cell):
+    source_pr = source_cell._tc.find(qn('w:tcPr'))
+    if source_pr is not None:
+        # Geometry comes from the reference, but the user-selected presentation
+        # colour belongs to the generated document and must win over the sample.
+        target_pr = target_cell._tc.find(qn('w:tcPr'))
+        existing_shading = target_pr.find(qn('w:shd')) if target_pr is not None else None
+        cloned_pr = deepcopy(source_pr)
+        for shading in list(cloned_pr.findall(qn('w:shd'))):
+            cloned_pr.remove(shading)
+        if existing_shading is not None:
+            cloned_pr.append(deepcopy(existing_shading))
+        _replace_or_insert(target_cell._tc, cloned_pr, qn('w:tcPr'))
+
+
+def _copy_first_paragraph_properties(target_cell, source_cell):
+    if not target_cell.paragraphs or not source_cell.paragraphs:
+        return
+    source_pr = source_cell.paragraphs[0]._p.find(qn('w:pPr'))
+    if source_pr is not None:
+        _replace_or_insert(target_cell.paragraphs[0]._p, source_pr, qn('w:pPr'))
+
+
+def _copy_table_layout(target, source):
+    """Copy layout-only OOXML from a reference table into a compatible table."""
+    source_tbl_pr = source._tbl.find(qn('w:tblPr'))
+    source_grid = source._tbl.find(qn('w:tblGrid'))
+    if source_tbl_pr is not None:
+        target_tbl_pr = target._tbl.find(qn('w:tblPr'))
+        existing_borders = target_tbl_pr.find(qn('w:tblBorders')) if target_tbl_pr is not None else None
+        cloned_tbl_pr = deepcopy(source_tbl_pr)
+        for borders in list(cloned_tbl_pr.findall(qn('w:tblBorders'))):
+            cloned_tbl_pr.remove(borders)
+        if existing_borders is not None:
+            cloned_tbl_pr.append(deepcopy(existing_borders))
+        _replace_or_insert(target._tbl, cloned_tbl_pr, qn('w:tblPr'))
+    if source_grid is not None:
+        _replace_or_insert(target._tbl, source_grid, qn('w:tblGrid'), index=1)
+    for row_index, target_row in enumerate(target.rows):
+        source_row = source.rows[min(row_index, len(source.rows) - 1)]
+        _copy_row_properties(target_row, source_row)
+        for cell_index, target_cell in enumerate(target_row.cells):
+            source_cell = source_row.cells[min(cell_index, len(source_row.cells) - 1)]
+            _copy_cell_properties(target_cell, source_cell)
+            _copy_first_paragraph_properties(target_cell, source_cell)
+
+
+def _reference_template_path() -> Path | None:
+    """Return the OOXML reference layout without hard-coding its accented filename."""
+    assets_dir = Path(__file__).resolve().parent.parent / 'assets'
+    return next((item for item in assets_dir.glob('*.docx') if '01UNI' in item.name), None)
+
+
+def _apply_sa01_reference_layout(doc: Document) -> None:
+    """Apply the S.A. 01UNI table geometry/spacing while leaving all logos untouched.
+
+    Content is never copied from the reference. Only OOXML properties that control
+    layout (row height, cell margins, fills, borders, merges and table grid) are
+    cloned into tables with the same semantic structure.
+    """
+    template_path = _reference_template_path()
+    if not template_path or not template_path.exists():
+        return
+
+    reference = Document(template_path)
+    if len(doc.tables) < 7 or len(reference.tables) < 7:
+        return
+
+    # Preserve the existing header/logo part; only align the body geometry.
+    section = doc.sections[0]
+    reference_section = reference.sections[0]
+    section.header_distance = reference_section.header_distance
+    section.footer_distance = reference_section.footer_distance
+
+    source_title = next((p for p in reference.paragraphs if p.text.startswith('SESIÓN DE APRENDIZAJE')), None)
+    target_title = next((p for p in doc.paragraphs if p.text.startswith('SESIÓN DE APRENDIZAJE')), None)
+    if source_title is not None and target_title is not None:
+        source_pr = source_title._p.find(qn('w:pPr'))
+        if source_pr is not None:
+            _replace_or_insert(target_title._p, source_pr, qn('w:pPr'))
+        if source_title.runs:
+            source_run_pr = source_title.runs[0]._r.find(qn('w:rPr'))
+            if source_run_pr is not None:
+                for run in target_title.runs:
+                    _replace_or_insert(run._r, source_run_pr, qn('w:rPr'))
+
+    # Tables 0-6 are equivalent in both documents. Copy only formatting OOXML.
+    for index in range(7):
+        _copy_table_layout(doc.tables[index], reference.tables[index])
+
+    # The portrait checklist is optional, so locate it by its stable 10-column
+    # geometry instead of assuming a fixed index after optional content blocks.
+    checklist = next((table for table in reversed(doc.tables)
+                      if len(table.columns) == 10 and len(table.rows) >= 2), None)
+    if checklist is not None and len(reference.tables) > 7:
+        _copy_table_layout(checklist, reference.tables[7])
+
+    # Momentos uses the reference's readable paragraph rhythm rather than a
+    # global line-height applied across every cell.
+    for row in doc.tables[6].rows:
+        for cell in row.cells:
+            for paragraph in cell.paragraphs:
+                paragraph.paragraph_format.line_spacing = 1.5
+                paragraph.paragraph_format.space_before = Pt(0)
+                paragraph.paragraph_format.space_after = Pt(0)
+
+    # Optional blocks (ficha, firmas, tables embedded in activities) do not
+    # have an exact peer in the template. Keep them compact so they follow the
+    # same visual density instead of inheriting the old roomy defaults.
+    profiled_tables = {id(table) for table in doc.tables[:7]}
+    if checklist is not None:
+        profiled_tables.add(id(checklist))
+    for table in doc.tables:
+        if id(table) in profiled_tables:
+            continue
+        for row in table.rows:
+            for cell in row.cells:
+                set_cell_margins(cell, top=50, bottom=50, left=80, right=80)
+                for paragraph in cell.paragraphs:
+                    paragraph.paragraph_format.space_before = Pt(0)
+                    paragraph.paragraph_format.space_after = Pt(0)
+                    paragraph.paragraph_format.line_spacing = 1.08
+
+    # Remove generic spacer paragraphs introduced by the builder. The reference
+    # expresses separation through its table rows instead of blank 4pt blocks.
+    for paragraph in doc.paragraphs:
+        if not paragraph.text.strip():
+            paragraph.paragraph_format.space_before = Pt(0)
+            paragraph.paragraph_format.space_after = Pt(0)
+            paragraph.paragraph_format.line_spacing = 1.0
 
 
 def _hex(value: str, fallback: str) -> str:
@@ -626,8 +774,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     # ── TABLA 6: SECUENCIAL DE MOMENTOS DE LA SESIÓN ──
     _MOM_TWIPS = [1702, 283, 8080, 425]
     des_procs = doc_v1.momentos.desarrollo.procesos
-    n_proc = len(des_procs) if des_procs else 1
-    n_rows = 1 + 1 + n_proc + 1
+    n_rows = 4
 
     mt = doc.add_table(rows=n_rows, cols=4)
     mt.autofit = False
@@ -659,21 +806,19 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             rpt.font.color.rgb = PRIMARY_RGB
         append_html_to_cell_or_paragraph(cell_ini, proc.contenido.value, default_font_size=9.5)
 
-    # Filas 2 a 2+n_proc-1: DESARROLLO
+    # Fila 2: DESARROLLO (the template reserves one expandable content row).
     _write_momento_cell(mt.cell(2, 0), "DESARROLLO:",
         "Gestión y Acompañamiento del Desarrollo de las Competencias\n(Procesos didácticos del Área)",
         str(doc_v1.momentos.desarrollo.tiempoMinutos))
     _write_vertical_cell(mt.cell(2, 1), "MOTIVACION")
     _write_vertical_cell(mt.cell(2, 3), "EVALUACION")
 
-    for idx in range(n_proc):
-        rn = 2 + idx
-        cell_des = mt.cell(rn, 2)
-        set_cell_background(cell_des, 'FFFFFF')
-        set_cell_margins(cell_des, top=100, bottom=100, left=140, right=140)
-        cell_des.text = ""
-        if des_procs:
-            proc = des_procs[idx]
+    cell_des = mt.cell(2, 2)
+    set_cell_background(cell_des, 'FFFFFF')
+    set_cell_margins(cell_des, top=100, bottom=100, left=140, right=140)
+    cell_des.text = ""
+    if des_procs:
+        for proc in des_procs:
             ppt = cell_des.add_paragraph()
             ppt.paragraph_format.space_before = Pt(2)
             ppt.paragraph_format.space_after = Pt(4)
@@ -682,20 +827,11 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             rpt.font.size = Pt(9.5)
             rpt.font.color.rgb = ACCENT_RGB
             append_html_to_cell_or_paragraph(cell_des, proc.contenido.value, default_font_size=9.5)
-        else:
-            append_html_to_cell_or_paragraph(cell_des, "Gestión y Acompañamiento del Desarrollo de Competencias...", default_font_size=9.5)
-
-        if idx > 0:
-            _write_vertical_cell(mt.cell(rn, 1), "MOTIVACION")
-            _write_vertical_cell(mt.cell(rn, 3), "EVALUACION")
-
-    if n_proc > 1:
-        mt.cell(2, 0).merge(mt.cell(2 + n_proc - 1, 0))
-        mt.cell(2, 1).merge(mt.cell(2 + n_proc - 1, 1))
-        mt.cell(2, 3).merge(mt.cell(2 + n_proc - 1, 3))
+    else:
+        append_html_to_cell_or_paragraph(cell_des, "Gestión y Acompañamiento del Desarrollo de Competencias...", default_font_size=9.5)
 
     # Fila CIERRE
-    rc = n_rows - 1
+    rc = 3
     _write_momento_cell(mt.cell(rc, 0), "CIERRE:",
         "Evaluación (Reflexión sobre lo aprendido)\nAcciones de reforzamiento o indagación",
         str(doc_v1.momentos.cierre.tiempoMinutos))
@@ -943,7 +1079,52 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     # ── LISTA DE COTEJO ──
     alumnos = doc_v1.listaCotejo.alumnos if doc_v1.listaCotejo else []
     criterios = doc_v1.listaCotejo.criterios if (doc_v1.listaCotejo and doc_v1.listaCotejo.criterios) else doc_v1.proposito.criterios
-    if alumnos and len(alumnos) > 0 and len(criterios) > 0:
+    # The reference template keeps its four-criterion checklist in portrait,
+    # with a stable 10-column grid. It is much more legible than the previous
+    # landscape table for the normal 1–4 criterion session.
+    if alumnos and criterios and len(criterios) <= 4:
+        roster_size = max(30, len(alumnos))
+        lct = doc.add_table(rows=2 + roster_size, cols=10)
+        lct.autofit = False
+        add_table_borders_black(lct)
+
+        # First two columns are row-spanned; each criterion owns a Sí / No pair.
+        lct.cell(0, 0).merge(lct.cell(1, 0))
+        lct.cell(0, 1).merge(lct.cell(1, 1))
+        lct.cell(0, 0).text = "N°"
+        lct.cell(0, 1).text = "APELLIDOS Y NOMBRES"
+        checklist_criteria = list(criterios[:4]) + [""] * (4 - len(criterios[:4]))
+        for criterion_index, criterion in enumerate(checklist_criteria):
+            column = 2 + criterion_index * 2
+            lct.cell(0, column).merge(lct.cell(0, column + 1))
+            lct.cell(0, column).text = criterion or f"CRITERIO {criterion_index + 1}"
+            lct.cell(1, column).text = "SÍ"
+            lct.cell(1, column + 1).text = "NO"
+
+        for row_index in range(roster_size):
+            row = 2 + row_index
+            student = alumnos[row_index] if row_index < len(alumnos) else ""
+            lct.cell(row, 0).text = str(row_index + 1)
+            lct.cell(row, 1).text = "" if student.startswith("Estudiante ") else student
+
+        for row_index, row in enumerate(lct.rows):
+            for cell in row.cells:
+                set_cell_margins(cell, top=35, bottom=35, left=35, right=35)
+                paragraph = cell.paragraphs[0]
+                paragraph.paragraph_format.space_before = Pt(0)
+                paragraph.paragraph_format.space_after = Pt(0)
+                paragraph.paragraph_format.line_spacing = 1.0
+                paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                for run in paragraph.runs:
+                    run.font.size = Pt(7.5 if row_index < 2 else 8)
+                    run.bold = row_index < 2
+        set_table_col_widths_and_indent(
+            lct, [400, 4562, 992, 709, 709, 708, 851, 709, 850, 607], indent_twip=-289
+        )
+
+    # Keep the flexible landscape variant only when the schema genuinely needs
+    # more than the four columns present in the official reference template.
+    if alumnos and len(alumnos) > 0 and len(criterios) > 4:
         doc.add_page_break()
 
         lc_sec = doc.add_section()
@@ -1045,6 +1226,9 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
                 _lcfmt(lct.cell(rn, sc + 1), 0.35, 8, ctr=True)
 
     _apply_presentation(doc, doc_v1)
+    # Final OOXML pass: takes spacing, row heights and table geometry from the
+    # supplied Word reference without importing its text, media or header logo.
+    _apply_sa01_reference_layout(doc)
     stream = io.BytesIO()
     doc.save(stream)
     stream.seek(0)
