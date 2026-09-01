@@ -1,0 +1,227 @@
+/*
+   Space Lab — adaptación visual de SpaceSale (app_movil)
+   Solo presenta reglas de apariencia: no modifica estructura ni comportamiento.
+*/
+
+:root {
+    /* Paleta semántica tomada del tema oscuro de la aplicación móvil. */
+    --color-background: #060912;
+    --color-card: #0D1422;
+    --color-card-surface: #111A2A;
+    --color-muted: #182337;
+    --color-elevated: #141D2E;
+    --color-popover: #1B273A;
+
+    --color-foreground: #F7F9FC;
+    --color-muted-foreground: #A9B4C7;
+    --color-subtle-foreground: #768399;
+    --color-label: #A9B4C7;
+
+    --color-border-subtle: #1D2A3D;
+    --color-border: #26344A;
+    --color-border-hover: #56667F;
+    --color-border-focus: #22D3EE;
+
+    /* Violeta para acciones principales; cian para foco, información y navegación. */
+    --color-primary: #7C3AED;
+    --color-primary-hover: #6D28D9;
+    --color-primary-dim: #251A48;
+    --color-primary-ring: rgba(124, 58, 237, 0.26);
+    --color-accent: #22D3EE;
+    --color-accent-hover: #06B6D4;
+    --color-ring: #22D3EE;
+    --color-violet: #A78BFA;
+    --color-violet-dim: #251A48;
+    --color-violet-border: rgba(167, 139, 250, 0.36);
+
+    --color-success: #34D399;
+    --color-warning: #FBBF24;
+    --color-destructive: #F87171;
+    --surface-cyan: #0B2C3A;
+    --surface-blue: #132E4B;
+    --surface-amber: #33270A;
+    --surface-green: #0D3128;
+    --surface-coral: #3A171D;
+
+    --accent: var(--color-accent);
+    --accent-dark: var(--color-accent-hover);
+    --accent-glow: rgba(34, 211, 238, 0.18);
+    --accent-2: #A78BFA;
+    --accent-2-glow: rgba(167, 139, 250, 0.16);
+    --glass-bg: rgba(13, 20, 34, 0.94);
+    --glass-border: rgba(86, 102, 127, 0.46);
+    --border: var(--color-border);
+    --border-hover: var(--color-border-hover);
+    --border-accent: rgba(34, 211, 238, 0.30);
+    --text-primary: var(--color-foreground);
+    --text-secondary: var(--color-muted-foreground);
+    --text-muted: var(--color-subtle-foreground);
+
+    --radius-xs: 6px;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 16px;
+    --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.22);
+    --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.20);
+    --shadow-md: 0 12px 28px rgba(0, 0, 0, 0.30);
+    --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.45);
+    --shadow-inset: inset 0 1px 0 rgba(247, 249, 252, 0.025);
+    --glow-cyan: 0 0 16px rgba(34, 211, 238, 0.18);
+}
+
+body,
+.app-wrapper,
+.preview-area,
+.chatbot-messages {
+    background: var(--color-background);
+}
+
+.app-header,
+.workflow-rail,
+.sidebar,
+.preview-toolbar,
+.chatbot-header {
+    background: var(--color-card);
+    border-color: var(--color-border);
+}
+
+.app-header {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.24);
+}
+
+.btn {
+    min-height: 40px;
+    border-radius: var(--radius-md);
+    background: var(--color-card-surface);
+    border-color: var(--color-border);
+    color: var(--color-foreground);
+    font-weight: 600;
+}
+
+.btn:hover {
+    background: #1B273A;
+    border-color: var(--color-border-hover);
+}
+
+.btn-primary {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #FFFFFF;
+    box-shadow: none;
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-hover);
+    border-color: var(--color-primary-hover);
+    color: #FFFFFF;
+}
+
+.btn-ghost {
+    background: transparent;
+    color: var(--color-muted-foreground);
+}
+
+.btn-pdf,
+.btn-word,
+.toolbar-btn,
+.toolbar-select {
+    background: var(--color-card-surface) !important;
+    border-color: var(--color-border) !important;
+}
+
+.workflow-rail-brand,
+.sidebar-tab {
+    border-radius: var(--radius-md);
+}
+
+.sidebar-tab:hover,
+.sidebar-tab.active {
+    background: var(--color-card-surface);
+}
+
+.sidebar-tab.active {
+    border-color: rgba(34, 211, 238, 0.44);
+}
+
+.sidebar-tab.active .tab-icon,
+.sidebar-tab.active .tab-state,
+.workflow-rail-brand > .ui-icon {
+    color: var(--color-accent);
+}
+
+.form-input,
+.form-select,
+.form-textarea {
+    min-height: 40px;
+    height: 40px;
+    padding: 8px 12px;
+    border-radius: var(--radius-md);
+    background: var(--color-card-surface);
+    border-color: var(--color-border);
+    color: var(--color-foreground);
+}
+
+.form-textarea {
+    min-height: 96px;
+    height: auto;
+}
+
+.form-input:hover,
+.form-select:hover,
+.form-textarea:hover {
+    background: #1B273A;
+    border-color: var(--color-border-hover);
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
+    background: var(--color-card-surface);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px var(--color-primary-ring);
+}
+
+.optional-label,
+.save-indicator,
+.preview-badge,
+.model-capabilities-badge,
+.ai-panel {
+    border-radius: var(--radius-sm);
+}
+
+.preview-badge {
+    background: var(--surface-cyan);
+    border-color: rgba(34, 211, 238, 0.32);
+    color: var(--color-accent);
+}
+
+.glass-card,
+.confirm-card,
+.pdf-guide-card,
+.load-card,
+.load-modal-content,
+.auth-card,
+.chatbot-window {
+    background: var(--color-card-surface);
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.ai-model-card {
+    background: var(--color-muted);
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-md);
+}
+
+.empty-state-copy {
+    background: var(--color-card-surface);
+    border-color: var(--color-border);
+    border-left-color: var(--color-accent);
+}
+
+@media (max-width: 1100px) {
+    .header-actions .btn { min-height: 40px; }
+}
