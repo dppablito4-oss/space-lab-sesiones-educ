@@ -123,6 +123,18 @@ class ListaCotejoV1(BaseModel):
     criterios: List[str] = Field(default_factory=list)
 
 
+class PresentationV1(BaseModel):
+    """Visual tokens shared by browser, Word and PDF renderers."""
+    preset: Literal["minedu", "institucional", "moderno", "clasico", "accesible"] = "minedu"
+    primaryColor: str = Field(default="#000000", pattern=r"^#[0-9A-Fa-f]{6}$")
+    accentColor: str = Field(default="#C0392B", pattern=r"^#[0-9A-Fa-f]{6}$")
+    headerBackground: str = Field(default="#BDD6EE", pattern=r"^#[0-9A-Fa-f]{6}$")
+    fontFamily: Literal["Arial", "Calibri", "Georgia", "Times New Roman", "Courier New"] = "Arial"
+    fontSizePt: float = Field(default=10, ge=8, le=12)
+    cellPadding: Literal["compact", "standard", "comfortable", "spacious"] = "standard"
+    lineHeight: float = Field(default=1.15, ge=1, le=1.8)
+
+
 # ── Documento raíz ──
 
 class SessionDocumentV1(BaseModel):
@@ -143,3 +155,4 @@ class SessionDocumentV1(BaseModel):
     fichaTrabajo: Optional[FichaTrabajoV1] = None
     juegoLibreSectores: Optional[JuegoLibreSectoresV1] = None
     listaCotejo: ListaCotejoV1 = Field(default_factory=ListaCotejoV1)
+    presentation: PresentationV1 = Field(default_factory=PresentationV1)

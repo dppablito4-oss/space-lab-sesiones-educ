@@ -270,6 +270,7 @@
                             </div>
                         </div>
 
+
                         <!-- Plantilla -->
                         <div class="form-group">
                             <label for="select-template" class="form-label">Tipo de Sesión</label>
@@ -487,6 +488,17 @@
                                 estilo visual de tu sesión para impresión y PDF.</p>
                         </div>
 
+                        <div class="form-group">
+                            <label class="form-label" for="select-design-preset">Estilo del documento</label>
+                            <select id="select-design-preset" class="form-select">
+                                <option value="minedu" selected>MINEDU oficial</option>
+                                <option value="institucional">Institucional azul</option>
+                                <option value="moderno">Moderno verde</option>
+                                <option value="clasico">Clásico editorial</option>
+                                <option value="accesible">Accesible alto contraste</option>
+                            </select>
+                        </div>
+
                         <!-- Color de Bordes/Tema -->
                         <div class="form-group">
                             <label class="form-label" for="input-design-theme-color">Color de Bordes y Recuadros</label>
@@ -499,11 +511,18 @@
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <label class="form-label" for="input-design-accent-color">Color de títulos y acentos</label>
+                            <input type="color" id="input-design-accent-color" class="form-input" value="#C0392B"
+                                style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
+                        </div>
+
                         <!-- Familia de Fuente -->
                         <div class="form-group">
                             <label class="form-label" for="select-design-font-family">Tipo de Letra (Fuente)</label>
                             <select id="select-design-font-family" class="form-select">
                                 <option value="Arial, sans-serif" selected>Arial (Sans-serif estándar)</option>
+                                <option value="Calibri, Arial, sans-serif">Calibri (Word moderna)</option>
                                 <option value="'Times New Roman', serif">Times New Roman (Serif clásica)</option>
                                 <option value="Georgia, serif">Georgia (Serif de pantalla)</option>
                                 <option value="'Courier New', monospace">Courier New (Monospaced)</option>
@@ -549,13 +568,8 @@
                         <div class="form-group">
                             <label class="form-label" for="select-design-header-bg">Estilo de Cabeceras de
                                 Momentos</label>
-                            <select id="select-design-header-bg" class="form-select">
-                                <option value="#f1f5f9" selected>Gris Claro Estándar</option>
-                                <option value="#e0f2fe">Azul Suave</option>
-                                <option value="#dcfce7">Verde Suave</option>
-                                <option value="#fee2e2">Rojo Suave</option>
-                                <option value="#fef3c7">Amarillo Suave</option>
-                            </select>
+                            <input type="color" id="select-design-header-bg" class="form-input" value="#BDD6EE"
+                                style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
                         </div>
                     </div>
 
@@ -745,6 +759,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                                 <select id="ribbon-font-family" class="form-select select-sm toolbar-select"
                                     style="width: 105px;">
                                     <option value="Arial, sans-serif">Arial</option>
+                                    <option value="Calibri, Arial, sans-serif">Calibri</option>
                                     <option value="'Times New Roman', serif">Times New Roman</option>
                                     <option value="Georgia, serif">Georgia</option>
                                     <option value="'Courier New', monospace">Courier New</option>
@@ -799,11 +814,16 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                                 <label for="ribbon-header-bg" class="toolbar-sublabel">Fondo Momentos</label>
                                 <select id="ribbon-header-bg" class="form-select select-sm toolbar-select"
                                     style="width: 105px;">
-                                    <option value="#f1f5f9">Gris</option>
-                                    <option value="#e0f2fe">Azul</option>
-                                    <option value="#dcfce7">Verde</option>
-                                    <option value="#fee2e2">Rojo</option>
-                                    <option value="#fef3c7">Amarillo</option>
+                                    <option value="#BDD6EE">MINEDU</option>
+                                    <option value="#DBEAFE">Institucional</option>
+                                    <option value="#CCFBF1">Moderno</option>
+                                    <option value="#F3F4F6">Clásico</option>
+                                    <option value="#CFFAFE">Accesible</option>
+                                    <option value="#F1F5F9">Gris</option>
+                                    <option value="#E0F2FE">Azul</option>
+                                    <option value="#DCFCE7">Verde</option>
+                                    <option value="#FEE2E2">Rojo</option>
+                                    <option value="#FEF3C7">Amarillo</option>
                                 </select>
                             </div>
                         </div>
@@ -1262,6 +1282,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <script src="js/storage.js"></script>
     <script src="js/templates.js"></script>
     <script src="js/ai-copilot.js"></script>
+    <script src="js/document-presentation.js"></script>
     <script src="js/ai/session-validator.js"></script>
     <script src="js/ai/session-adapter.js"></script>
     <script src="js/chatbot.js"></script>

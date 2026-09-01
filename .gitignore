@@ -11,6 +11,7 @@ backend/bin/
 backend/test_run.log
 connection_token.txt
 backend/connection_token.txt
+artifacts/
 
 # Supabase CLI local state
 supabase/.temp/

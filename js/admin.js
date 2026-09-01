@@ -319,7 +319,17 @@
 
         const iframe = overlay.querySelector('#preview-iframe');
         const sessionData = session.session_data || {};
-        const design = sessionData.design || {};
+        const presentation = window.DocumentPresentation
+            ? DocumentPresentation.normalize(sessionData.presentation || sessionData.design || {})
+            : (sessionData.presentation || sessionData.design || {});
+        const design = window.DocumentPresentation ? {
+            themeColor: presentation.primaryColor,
+            fontFamily: DocumentPresentation.toCss(presentation).fontFamily,
+            fontSize: DocumentPresentation.toCss(presentation).fontSize,
+            padding: DocumentPresentation.toCss(presentation).padding,
+            lineHeight: presentation.lineHeight,
+            headerBg: presentation.headerBackground
+        } : presentation;
         const safeHtml = window.SpaceLabSanitizer
             ? SpaceLabSanitizer.sanitizeSessionHTML(sessionData.htmlContent || '')
             : '';

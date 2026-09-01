@@ -76,7 +76,7 @@ window.Chatbot = (() => {
             if (window.AppDesign && typeof window.AppDesign.getCurrent === 'function') {
                 const curDesign = window.AppDesign.getCurrent();
                 if (curDesign) {
-                    designContext = `\n\n[El documento actual tiene la siguiente configuración visual: Color de bordes=${curDesign.themeColor}, Tamaño de letra=${curDesign.fontSize}, Espaciado celda=${curDesign.padding}, Interlineado=${curDesign.lineHeight}, Fondo de cabeceras de momentos=${curDesign.headerBg}]`;
+                    designContext = `\n\n[Configuración visual actual: preset=${curDesign.preset}, color principal=${curDesign.primaryColor}, color de acento=${curDesign.accentColor}, fondo de cabeceras=${curDesign.headerBackground}, fuente=${curDesign.fontFamily}, tamaño=${curDesign.fontSizePt}pt, densidad=${curDesign.cellPadding}, interlineado=${curDesign.lineHeight}]`;
                 }
             }
 
@@ -89,11 +89,14 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
 {
   "action": "apply_design",
   "design": {
-    "themeColor": "#HexColor",
-    "fontSize": "9pt/10pt/11pt/12pt",
-    "padding": "2px 4px / 4px 6px / 6px 8px / 8px 12px",
-    "lineHeight": "1.2 / 1.4 / 1.6 / 1.8",
-    "headerBg": "#HexColor"
+    "preset": "minedu/institucional/moderno/clasico/accesible",
+    "primaryColor": "#RRGGBB",
+    "accentColor": "#RRGGBB",
+    "headerBackground": "#RRGGBB",
+    "fontFamily": "Arial/Calibri/Georgia/Times New Roman/Courier New",
+    "fontSizePt": 10,
+    "cellPadding": "compact/standard/comfortable/spacious",
+    "lineHeight": 1.3
   }
 }
 4. Escribe también una breve explicación amigable de por qué elegiste esos colores y qué cambios realizaste.`;

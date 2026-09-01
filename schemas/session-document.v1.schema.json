@@ -11,6 +11,21 @@
       "const": "1.0",
       "description": "Versión del esquema. Siempre '1.0' para este contrato."
     },
+    "presentation": {
+      "type": "object",
+      "description": "Tokens visuales compartidos por los renderizadores Web, Word y PDF.",
+      "properties": {
+        "preset": { "type": "string", "enum": ["minedu", "institucional", "moderno", "clasico", "accesible"], "default": "minedu" },
+        "primaryColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "default": "#000000" },
+        "accentColor": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "default": "#C0392B" },
+        "headerBackground": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "default": "#BDD6EE" },
+        "fontFamily": { "type": "string", "enum": ["Arial", "Calibri", "Georgia", "Times New Roman", "Courier New"], "default": "Arial" },
+        "fontSizePt": { "type": "number", "minimum": 8, "maximum": 12, "default": 10 },
+        "cellPadding": { "type": "string", "enum": ["compact", "standard", "comfortable", "spacious"], "default": "standard" },
+        "lineHeight": { "type": "number", "minimum": 1, "maximum": 1.8, "default": 1.15 }
+      },
+      "additionalProperties": false
+    },
     "metadata": {
       "type": "object",
       "description": "Datos informativos de la sesión.",

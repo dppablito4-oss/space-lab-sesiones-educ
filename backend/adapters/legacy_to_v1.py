@@ -16,8 +16,40 @@ from models.session_document import (
     SessionDocumentV1, MetadataV1, LogosData,
     PropositoV1, CompetenciaTransversalV1, EnfoqueTransversalV1,
     RecursosV1, MomentosV1, MomentoV1, SessionProcess, RichContent,
-    EvaluacionV1, FichaTrabajoV1, JuegoLibreSectoresV1, ListaCotejoV1
+    EvaluacionV1, FichaTrabajoV1, JuegoLibreSectoresV1, ListaCotejoV1,
+    PresentationV1
 )
+
+
+def _presentation(data: dict) -> PresentationV1:
+    raw = data.get("presentation") or data.get("design") or {}
+    font = _str(raw.get("fontFamily") or "Arial").replace("'", "").replace('"', '').split(',')[0]
+    if font == "Space Grotesk":
+        font = "Calibri"
+    if font not in {"Arial", "Calibri", "Georgia", "Times New Roman", "Courier New"}:
+        font = "Arial"
+    padding = raw.get("cellPadding")
+    if padding not in {"compact", "standard", "comfortable", "spacious"}:
+        px = _int(raw.get("padding"), 4)
+        padding = "compact" if px <= 2 else "comfortable" if px >= 6 else "standard"
+    def hex_color(value, fallback):
+        value = _str(value).upper()
+        return value if re.fullmatch(r"#[0-9A-F]{6}", value) else fallback
+    def bounded_float(value, fallback, minimum, maximum):
+        try:
+            return max(minimum, min(maximum, float(value)))
+        except (TypeError, ValueError):
+            return fallback
+    return PresentationV1(
+        preset=raw.get("preset") if raw.get("preset") in {"minedu", "institucional", "moderno", "clasico", "accesible"} else "minedu",
+        primaryColor=hex_color(raw.get("primaryColor") or raw.get("themeColor"), "#000000"),
+        accentColor=hex_color(raw.get("accentColor"), "#C0392B"),
+        headerBackground=hex_color(raw.get("headerBackground") or raw.get("headerBg"), "#BDD6EE"),
+        fontFamily=font,
+        fontSizePt=bounded_float(raw.get("fontSizePt") or _int(raw.get("fontSize"), 10), 10, 8, 12),
+        cellPadding=padding,
+        lineHeight=bounded_float(raw.get("lineHeight"), 1.15, 1, 1.8),
+    )
 
 
 def _str(v) -> str:
@@ -202,6 +234,7 @@ def adapt_legacy_to_v1(data: dict, form_meta: dict | None = None) -> Tuple[Sessi
         fichaTrabajo=ficha,
         juegoLibreSectores=jls,
         listaCotejo=lista_cotejo,
+        presentation=_presentation(data),
     )
     return doc, warnings
 

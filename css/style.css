@@ -930,13 +930,13 @@ body {
 
 .session-sheet .session-header-table td {
     padding: var(--session-cell-padding, 6px 10px) !important;
-    border: 1px solid #000000 !important;
+    border: 1px solid var(--theme-border-color, #000000) !important;
     vertical-align: middle;
 }
 
 .session-sheet .session-header-table .label-cell {
     font-weight: 700;
-    background: #F7CAAC !important;
+    background: var(--theme-accent-soft, #F7CAAC) !important;
     color: #000000;
     white-space: nowrap;
     width: 130px;
@@ -947,7 +947,7 @@ body {
 
 .session-sheet .session-header-table .value-cell {
     font-weight: 400;
-    background: #F2F2F2 !important;
+    background: var(--theme-value-bg, #F2F2F2) !important;
     color: #000000;
     min-width: 120px;
 }
@@ -976,8 +976,8 @@ body {
 }
 
 .session-sheet .section-title {
-    background: #e8f0fe;
-    color: #1e3a5f;
+    background: var(--theme-label-bg, #e8f0fe);
+    color: var(--theme-primary-color, #1e3a5f);
     font-weight: 700;
     padding: 6px 10px;
     border-radius: 4px;
@@ -985,7 +985,7 @@ body {
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    border-left: 4px solid #2563eb;
+    border-left: 4px solid var(--theme-accent-color, #2563eb);
 }
 
 .session-sheet .content-table {
@@ -1867,7 +1867,7 @@ body {
 
 /* Subsection Title Bar */
 .session-sheet .subsection-title-bar {
-    background: #e2e8f0;
+    background: var(--theme-label-bg, #e2e8f0);
     color: #000;
     font-weight: 700;
     padding: 4px 8px;
@@ -1875,7 +1875,7 @@ body {
     font-size: 10px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    border-left: 3px solid #1e293b;
+    border-left: 3px solid var(--theme-accent-color, #1e293b);
 }
 
 /* Subsection Content Box */
@@ -1967,7 +1967,7 @@ body {
     margin-top: 12px;
     font-weight: 700;
     font-size: 9px;
-    color: #c0392b;
+    color: var(--theme-accent-color, #c0392b);
 }
 
 /* Momento Content Cell */
@@ -1998,7 +1998,7 @@ body {
 
 /* Vertical Evaluation Column Cell */
 .session-sheet .eval-column-cell {
-    background: #f8fafc;
+    background: var(--theme-label-bg, #f8fafc);
     width: 35px;
     vertical-align: middle !important;
     text-align: center;
@@ -2012,7 +2012,7 @@ body {
     font-weight: 700;
     font-size: 10px;
     letter-spacing: 0.35em;
-    color: #334155;
+    color: var(--theme-primary-color, #334155);
     white-space: nowrap;
     display: inline-block;
     margin: 0 auto;

@@ -662,26 +662,26 @@ const Templates = (() => {
             <!-- ════════ TABLA TÍTULO, PROPÓSITO Y CONOCIMIENTOS ════════ -->
             <table class="session-header-table pc-table" style="margin-top: 15px; border-collapse: collapse; width: 100%;">
                 <tr>
-                    <td class="label-cell" style="background: var(--theme-label-bg, #BDD7EE) !important; text-align: center; font-weight: bold; color: #000; text-transform: uppercase; font-size: 9.5px; border: 1px solid #000 !important; padding: 6px !important;">TÍTULO DE LA SESIÓN</td>
+                    <td class="label-cell" style="background: var(--theme-label-bg, #BDD7EE) !important; text-align: center; font-weight: bold; color: #000; text-transform: uppercase; font-size: 9.5px; border: 1px solid var(--theme-border-color, #000) !important; padding: 6px !important;">TÍTULO DE LA SESIÓN</td>
                 </tr>
                 <tr>
-                    <td class="value-cell" ${ce} style="background: #FFFFFF !important; text-align: center; font-weight: bold; color: #C0392B !important; font-size: 11px; border: 1px solid #000 !important; padding: 10px !important;">
+                    <td class="value-cell" ${ce} style="background: #FFFFFF !important; text-align: center; font-weight: bold; color: var(--theme-accent-color, #C0392B) !important; font-size: 11px; border: 1px solid var(--theme-border-color, #000) !important; padding: 10px !important;">
                         ${esc(m.titulo || 'Título de la sesión de aprendizaje')}
                     </td>
                 </tr>
                 <tr>
-                    <td class="label-cell" style="background: var(--theme-label-bg, #BDD7EE) !important; text-align: center; font-weight: bold; color: #000; text-transform: uppercase; font-size: 9.5px; border: 1px solid #000 !important; padding: 6px !important;">PROPÓSITO DE LA SESIÓN:</td>
+                    <td class="label-cell" style="background: var(--theme-label-bg, #BDD7EE) !important; text-align: center; font-weight: bold; color: #000; text-transform: uppercase; font-size: 9.5px; border: 1px solid var(--theme-border-color, #000) !important; padding: 6px !important;">PROPÓSITO DE LA SESIÓN:</td>
                 </tr>
                 <tr>
-                    <td class="value-cell" ${ce} style="background: #FFFFFF !important; text-align: left; font-weight: normal; color: #000; font-size: 10px; border: 1px solid #000 !important; padding: 10px !important; line-height: 1.45;">
+                    <td class="value-cell" ${ce} style="background: #FFFFFF !important; text-align: left; font-weight: normal; color: #000; font-size: 10px; border: 1px solid var(--theme-border-color, #000) !important; padding: 10px !important; line-height: 1.45;">
                         ${escHtml(p.proposito_texto || p.desempeno || 'Describir el propósito de la sesión...')}
                     </td>
                 </tr>
                 <tr>
-                    <td class="label-cell" style="background: #F7CAAC !important; text-align: center; font-weight: bold; color: #000; text-transform: uppercase; font-size: 9.5px; border: 1px solid #000 !important; padding: 6px !important;">CONOCIMIENTOS:</td>
+                    <td class="label-cell" style="background: var(--theme-accent-soft, #F7CAAC) !important; text-align: center; font-weight: bold; color: #000; text-transform: uppercase; font-size: 9.5px; border: 1px solid var(--theme-border-color, #000) !important; padding: 6px !important;">CONOCIMIENTOS:</td>
                 </tr>
                 <tr>
-                    <td class="value-cell" ${ce} style="background: #FFFFFF !important; text-align: left; font-weight: normal; color: #000; font-size: 10px; border: 1px solid #000 !important; padding: 10px !important; line-height: 1.45;">
+                    <td class="value-cell" ${ce} style="background: #FFFFFF !important; text-align: left; font-weight: normal; color: #000; font-size: 10px; border: 1px solid var(--theme-border-color, #000) !important; padding: 10px !important; line-height: 1.45;">
                         ${escHtml(p.conocimientos || 'Temas y subtemas que se abordarán...')}
                     </td>
                 </tr>

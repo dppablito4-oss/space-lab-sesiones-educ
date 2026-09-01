@@ -28,7 +28,6 @@ from models.session_document import (
     RecursosV1, MomentosV1, MomentoV1, SessionProcess,
     EvaluacionV1, FichaTrabajoV1, JuegoLibreSectoresV1, ListaCotejoV1
 )
-
 from docx_builder import (
     set_cell_background,
     set_cell_margins,
@@ -40,6 +39,54 @@ from docx_builder import (
     append_html_to_cell_or_paragraph
 )
 
+
+def _hex(value: str, fallback: str) -> str:
+    clean = str(value or '').lstrip('#').upper()
+    return clean if re.fullmatch(r'[0-9A-F]{6}', clean) else fallback
+
+
+def _blend_with_white(hex_color: str, white_ratio: float) -> str:
+    ratio = max(0.0, min(1.0, white_ratio))
+    rgb = [int(hex_color[i:i + 2], 16) for i in (0, 2, 4)]
+    return ''.join(f'{round(channel * (1 - ratio) + 255 * ratio):02X}' for channel in rgb)
+
+
+def _rgb(hex_color: str) -> RGBColor:
+    return RGBColor(*(int(hex_color[i:i + 2], 16) for i in (0, 2, 4)))
+
+
+def _apply_presentation(doc: Document, doc_v1: SessionDocumentV1) -> None:
+    """Apply final shared tokens without flattening the document structure."""
+    p = doc_v1.presentation
+    primary = _hex(p.primaryColor, '000000')
+    scale = float(p.fontSizePt) / 10.0
+    margins = {
+        'compact': (40, 70), 'standard': (70, 100),
+        'comfortable': (100, 140), 'spacious': (130, 180),
+    }
+    vertical, horizontal = margins[p.cellPadding]
+
+    for paragraph in doc.paragraphs:
+        paragraph.paragraph_format.line_spacing = float(p.lineHeight)
+        for run in paragraph.runs:
+            run.font.name = p.fontFamily
+            run._element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'), p.fontFamily)
+            if run.font.size:
+                run.font.size = Pt(max(7, run.font.size.pt * scale))
+
+    for table in doc.tables:
+        for edge in table._tbl.xpath('.//w:tblBorders/*'):
+            edge.set(qn('w:color'), primary)
+        for row in table.rows:
+            for cell in row.cells:
+                set_cell_margins(cell, top=vertical, bottom=vertical, left=horizontal, right=horizontal)
+                for paragraph in cell.paragraphs:
+                    paragraph.paragraph_format.line_spacing = float(p.lineHeight)
+                    for run in paragraph.runs:
+                        run.font.name = p.fontFamily
+                        run._element.get_or_add_rPr().rFonts.set(qn('w:eastAsia'), p.fontFamily)
+                        if run.font.size:
+                            run.font.size = Pt(max(7, run.font.size.pt * scale))
 
 def _preprocess_v1_latex(doc_v1: SessionDocumentV1):
     """Preprocesa todas las cadenas del documento v1 convirtiendo LaTeX a Unicode."""
@@ -92,19 +139,25 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
 
     # Estilo Normal
     style_normal = doc.styles['Normal']
-    style_normal.font.name = 'Arial'
-    style_normal.font.size = Pt(10)
-    style_normal.font.color.rgb = RGBColor(30, 41, 59)
+    presentation = doc_v1.presentation
+    PRIMARY = _hex(presentation.primaryColor, '000000')
+    ACCENT = _hex(presentation.accentColor, 'C0392B')
+    HEADER_BG = _hex(presentation.headerBackground, 'BDD6EE')
+    PRIMARY_RGB = _rgb(PRIMARY)
+    ACCENT_RGB = _rgb(ACCENT)
+    style_normal.font.name = presentation.fontFamily
+    style_normal.font.size = Pt(presentation.fontSizePt)
+    style_normal.font.color.rgb = PRIMARY_RGB
 
     # Paleta de colores institucional
-    PEACH = 'F7CAAC'
-    BLUE_HDR = 'BDD6EE'
-    YELLOW_HDR = 'FFE599'
-    GRAY_VAL = 'F2F2F2'
-    PEACH_MOM = 'FBE5D5'
-    GRAY_MOM = 'EDEDED'
-    YELLOW_VAL = 'FFF2CC'
-    BULLET_COLORS = ['2980B9', 'C0392B', '27AE60', '8E44AD', '16A085']
+    PEACH = _blend_with_white(ACCENT, 0.78)
+    BLUE_HDR = HEADER_BG
+    YELLOW_HDR = _blend_with_white(PRIMARY, 0.82)
+    GRAY_VAL = _blend_with_white(PRIMARY, 0.94)
+    PEACH_MOM = _blend_with_white(ACCENT, 0.88)
+    GRAY_MOM = _blend_with_white(PRIMARY, 0.90)
+    YELLOW_VAL = _blend_with_white(ACCENT, 0.92)
+    BULLET_COLORS = [ACCENT, PRIMARY, '277A4B', '6D3A8C', '0F766E']
 
     def _label(cell, text):
         set_cell_background(cell, PEACH)
@@ -140,7 +193,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             bc = BULLET_COLORS[i % len(BULLET_COLORS)]
             rb = p.add_run(u"\u25cf ")
             rb.font.size = Pt(9)
-            rb.font.color.rgb = RGBColor(int(bc[0:2], 16), int(bc[2:4], 16), int(bc[4:6], 16))
+            rb.font.color.rgb = _rgb(bc)
             append_html_to_cell_or_paragraph(p, item, default_font_size=9)
 
     def make_vertical_text(text: str) -> str:
@@ -177,7 +230,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         r = p.add_run(make_vertical_text(txt))
         r.bold = True
         r.font.size = Pt(8.5)
-        r.font.color.rgb = RGBColor(120, 60, 20)
+        r.font.color.rgb = ACCENT_RGB
 
     # ── Header nativo ──
     section = doc.sections[0]
@@ -310,7 +363,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     r_tit = p_tit.add_run(meta.titulo or "Título de la sesión de aprendizaje")
     r_tit.bold = True
     r_tit.font.size = Pt(10.5)
-    r_tit.font.color.rgb = RGBColor(192, 57, 43)
+    r_tit.font.color.rgb = ACCENT_RGB
 
     _hdr(pc.cell(2, 0), "PROPÓSITO DE LA SESIÓN", bg=BLUE_HDR, sz=9.5)
 
@@ -610,7 +663,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             rpt = ppt.add_run(proc.titulo.upper() + ":")
             rpt.bold = True
             rpt.font.size = Pt(9.5)
-            rpt.font.color.rgb = RGBColor(41, 128, 185)
+            rpt.font.color.rgb = PRIMARY_RGB
         append_html_to_cell_or_paragraph(cell_ini, proc.contenido.value, default_font_size=9.5)
 
     # Filas 2 a 2+n_proc-1: DESARROLLO
@@ -634,7 +687,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             rpt = ppt.add_run(proc.titulo.upper())
             rpt.bold = True
             rpt.font.size = Pt(9.5)
-            rpt.font.color.rgb = RGBColor(192, 57, 43)
+            rpt.font.color.rgb = ACCENT_RGB
             append_html_to_cell_or_paragraph(cell_des, proc.contenido.value, default_font_size=9.5)
         else:
             append_html_to_cell_or_paragraph(cell_des, "Gestión y Acompañamiento del Desarrollo de Competencias...", default_font_size=9.5)
@@ -695,7 +748,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
                 p.paragraph_format.space_after = Pt(2)
                 rb = p.add_run(u"\u25cf ")
                 rb.font.size = Pt(8.5)
-                rb.font.color.rgb = RGBColor(41, 128, 185)
+                rb.font.color.rgb = PRIMARY_RGB
                 append_html_to_cell_or_paragraph(p, item, default_font_size=9.5)
 
     set_table_col_widths_and_indent(mt, _MOM_TWIPS, indent_twip=-289)
@@ -821,7 +874,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         rf_t = p_ft_t.add_run("Actividad: " + doc_v1.fichaTrabajo.titulo.upper())
         rf_t.bold = True
         rf_t.font.size = Pt(12)
-        rf_t.font.color.rgb = RGBColor(41, 128, 185)
+        rf_t.font.color.rgb = ACCENT_RGB
 
         if doc_v1.fichaTrabajo.indicaciones:
             p_ft_ind = doc.add_paragraph()
@@ -856,7 +909,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
                         p.paragraph_format.line_spacing = 1.15
                         rb = p.add_run(u"\u25cf ")
                         rb.font.size = Pt(8.5)
-                        rb.font.color.rgb = RGBColor(41, 128, 185)
+                        rb.font.color.rgb = PRIMARY_RGB
                         append_html_to_cell_or_paragraph(p, str(li), default_font_size=9.5)
                 elif element.name == 'ol':
                     for idx_li, li in enumerate(element.find_all('li', recursive=False)):
@@ -998,6 +1051,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
                 _lcfmt(lct.cell(rn, sc), 0.35, 8, ctr=True)
                 _lcfmt(lct.cell(rn, sc + 1), 0.35, 8, ctr=True)
 
+    _apply_presentation(doc, doc_v1)
     stream = io.BytesIO()
     doc.save(stream)
     stream.seek(0)

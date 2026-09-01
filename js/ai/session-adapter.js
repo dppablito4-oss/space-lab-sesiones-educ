@@ -15,6 +15,10 @@
 const SessionAdapter = (() => {
     'use strict';
 
+    const PresentationContract = typeof DocumentPresentation !== 'undefined'
+        ? DocumentPresentation
+        : (typeof require === 'function' ? require('../document-presentation.js') : null);
+
     // ── Utilidades ──
 
     function _str(v) {
@@ -95,6 +99,12 @@ const SessionAdapter = (() => {
         }
 
         const doc = { schemaVersion: '1.0' };
+
+        if (PresentationContract) {
+            doc.presentation = PresentationContract.normalize(raw.presentation || raw.design || {});
+        } else if (raw.presentation) {
+            doc.presentation = raw.presentation;
+        }
 
         // ── 1. Metadata ──
         const rawMeta = raw.metadata || {};

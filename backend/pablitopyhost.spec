@@ -7,6 +7,8 @@
 # - Chromium NO se bundlea: main.py lo descarga en runtime en EXE_DIR/bin/
 # - tkinter debe estar instalado en el Python del build (incluido por defecto en CPython oficial)
 
+from PyInstaller.utils.hooks import collect_submodules
+
 block_cipher = None
 
 a = Analysis(
@@ -18,7 +20,6 @@ a = Analysis(
     ],
     hiddenimports=[
         'playwright.async_api',
-        'playwright._impl._api_types',
         'playwright._impl._browser_context',
         'docx_builder',
         'docx_builder_v1',
@@ -36,7 +37,7 @@ a = Analysis(
         'uvicorn.protocols.websockets.auto',
         'uvicorn.lifespan',
         'uvicorn.lifespan.on',
-    ],
+    ] + collect_submodules('pkg_resources._vendor'),
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

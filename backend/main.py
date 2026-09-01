@@ -858,6 +858,7 @@ class SesionAprendizajeRequest(BaseModel):
     ficha_trabajo: Optional[FichaTrabajoData] = None
     juego_libre_sectores: Optional[JuegoLibreSectoresData] = None
     alumnos: List[str] = Field(default_factory=list)
+    presentation: dict = Field(default_factory=dict)
     token: str
 
 
@@ -980,6 +981,24 @@ def escape_html(text: str) -> str:
 
 
 def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
+    presentation = session.presentation or {}
+    def css_color(value, fallback):
+        value = str(value or '').upper()
+        return value if re.fullmatch(r'#[0-9A-F]{6}', value) else fallback
+    def bounded_float(value, fallback, minimum, maximum):
+        try:
+            return max(minimum, min(maximum, float(value)))
+        except (TypeError, ValueError):
+            return fallback
+    primary = css_color(presentation.get('primaryColor'), '#000000')
+    accent = css_color(presentation.get('accentColor'), '#C0392B')
+    header_bg = css_color(presentation.get('headerBackground'), '#BDD6EE')
+    font_family = presentation.get('fontFamily', 'Arial')
+    if font_family not in {'Arial', 'Calibri', 'Georgia', 'Times New Roman', 'Courier New'}:
+        font_family = 'Arial'
+    font_size = bounded_float(presentation.get('fontSizePt'), 10, 8, 12)
+    line_height = bounded_float(presentation.get('lineHeight'), 1.15, 1, 1.8)
+    cell_padding = {'compact': '2px 4px', 'standard': '4px 6px', 'comfortable': '6px 8px', 'spacious': '8px 10px'}.get(presentation.get('cellPadding'), '4px 6px')
     # 1. Cabecera con logos si existen
     logo_left_html = ""
     if session.metadata.logo_left_url:
@@ -1186,11 +1205,11 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
             
             * {{ box-sizing: border-box; margin: 0; padding: 0; }}
             body {{
-                font-family: 'Inter', Arial, sans-serif;
+                font-family: '{font_family}', Arial, sans-serif;
                 background: #ffffff;
-                color: #1e293b;
-                font-size: 10pt;
-                line-height: 1.4;
+                color: {primary};
+                font-size: {font_size}pt;
+                line-height: {line_height};
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
             }}
@@ -1254,7 +1273,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
             }}
 
             .divider {{
-                border-bottom: 2px solid #0f172a;
+                border-bottom: 2px solid {primary};
                 margin-top: 4px;
                 margin-bottom: 12px;
             }}
@@ -1290,13 +1309,13 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
                 break-inside: avoid !important;
             }}
             table.content-table th, table.content-table td {{
-                border: 1px solid #cbd5e1;
-                padding: 5px 7px;
+                border: 1px solid {primary};
+                padding: {cell_padding};
                 font-size: 9pt;
                 vertical-align: top;
             }}
             table.content-table th {{
-                background-color: #f1f5f9;
+                background-color: {header_bg};
                 font-weight: 600;
                 text-align: left;
                 color: #0f172a;
@@ -1314,7 +1333,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
                 color: #0f172a;
                 margin: 12px 0 4px 0;
                 text-transform: uppercase;
-                border-left: 3px solid #3b82f6;
+                border-left: 3px solid {accent};
                 padding-left: 6px;
             }}
 
@@ -1336,7 +1355,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
 
             /* Momentos didácticos */
             .momentos-table th {{
-                background-color: #e2e8f0 !important;
+                background-color: {header_bg} !important;
                 font-size: 8.5pt !important;
                 text-align: center !important;
             }}
@@ -1349,7 +1368,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
             }}
             .momento-time {{
                 font-size: 7.5pt;
-                color: #64748b;
+                color: {accent};
                 margin-top: 4px;
                 font-weight: 600;
             }}
@@ -1362,7 +1381,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
             }}
             .proceso-titulo {{
                 font-weight: 700;
-                color: #b91c1c; /* C0392B */
+                color: {accent};
                 font-size: 8.5pt;
                 text-transform: uppercase;
                 margin-bottom: 4px;
@@ -1692,6 +1711,7 @@ def v1_to_legacy_pdf_payload(doc: SessionDocumentV1, token: str) -> dict:
         "ficha_trabajo": doc.fichaTrabajo.model_dump() if doc.fichaTrabajo else None,
         "juego_libre_sectores": doc.juegoLibreSectores.model_dump() if doc.juegoLibreSectores else None,
         "alumnos": doc.listaCotejo.alumnos,
+        "presentation": doc.presentation.model_dump(),
         "token": token,
     }
 

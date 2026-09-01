@@ -30,7 +30,7 @@ jobs:
         run: pip install -r backend/requirements.txt
 
       - name: Validate Python syntax
-        run: python -m py_compile backend/main.py backend/docx_builder.py
+        run: python -m py_compile backend/main.py backend/docx_builder.py backend/docx_builder_v1.py backend/models/session_document.py backend/adapters/legacy_to_v1.py
 
       - name: Validate JavaScript syntax
         run: find js -name '*.js' -print0 | xargs -0 -n1 node --check
@@ -43,6 +43,7 @@ jobs:
           node tests/test_contract_v1.js
           node tests/test_adapter_v1.js
           node tests/test_templates_v1.js
+          node tests/test_presentation.js
 
       - name: Run storage smoke test
         run: |
@@ -58,8 +59,14 @@ jobs:
       - name: Run backend DOCX smoke test
         run: python tests/backend_smoke.py
 
+      - name: Install Playwright Chromium
+        run: python -m playwright install --with-deps chromium
+
       - name: Run frontend security test
-        run: python tests/frontend_security.py
+        run: |
+          python tests/frontend_security.py
+          python tests/ui_smoke.py
+          python tests/ui_presentation_smoke.py
 
       - name: Check Supabase Edge Functions
         run: |

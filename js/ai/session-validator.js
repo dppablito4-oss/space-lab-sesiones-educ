@@ -107,6 +107,25 @@ const SessionValidator = (() => {
             errors.push('evaluacion debe ser un objeto si está presente.');
         }
 
+        if (doc.presentation !== undefined) {
+            const p = doc.presentation;
+            if (!p || typeof p !== 'object' || Array.isArray(p)) {
+                errors.push('presentation debe ser un objeto.');
+            } else {
+                ['primaryColor', 'accentColor', 'headerBackground'].forEach(key => {
+                    if (p[key] !== undefined && !/^#[0-9A-F]{6}$/i.test(p[key])) {
+                        errors.push(`presentation.${key} debe usar formato #RRGGBB.`);
+                    }
+                });
+                if (p.fontSizePt !== undefined && (typeof p.fontSizePt !== 'number' || p.fontSizePt < 8 || p.fontSizePt > 12)) {
+                    errors.push('presentation.fontSizePt debe estar entre 8 y 12.');
+                }
+                if (p.lineHeight !== undefined && (typeof p.lineHeight !== 'number' || p.lineHeight < 1 || p.lineHeight > 1.8)) {
+                    errors.push('presentation.lineHeight debe estar entre 1 y 1.8.');
+                }
+            }
+        }
+
         // fichaTrabajo
         if (doc.fichaTrabajo !== undefined && doc.fichaTrabajo !== null) {
             if (typeof doc.fichaTrabajo !== 'object') {
@@ -139,7 +158,7 @@ const SessionValidator = (() => {
         const knownTopLevel = new Set([
             'schemaVersion', 'metadata', 'proposito', 'competenciasTransversales',
             'enfoquesTransversales', 'recursos', 'momentos', 'evaluacion',
-            'fichaTrabajo', 'juegoLibreSectores', 'listaCotejo'
+            'fichaTrabajo', 'juegoLibreSectores', 'listaCotejo', 'presentation'
         ]);
         Object.keys(doc).forEach(key => {
             if (!knownTopLevel.has(key)) {

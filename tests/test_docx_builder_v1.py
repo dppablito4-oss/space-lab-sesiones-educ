@@ -22,6 +22,7 @@ sys.path.insert(0, os.path.join(ROOT_DIR, 'backend'))
 from docx import Document
 from models.session_document import SessionDocumentV1
 from docx_builder_v1 import build_docx_from_v1
+from docx.oxml.ns import qn
 
 
 def test_fixture_docx(fixture_filename: str):
@@ -51,6 +52,42 @@ def test_fixture_docx(fixture_filename: str):
     return size
 
 
+def test_custom_presentation_tokens():
+    fixture_path = os.path.join(TEST_DIR, 'fixtures', 'secundaria-matematica-polya.v1.json')
+    with open(fixture_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    data['presentation'] = {
+        'preset': 'moderno', 'primaryColor': '#334155', 'accentColor': '#0F766E',
+        'headerBackground': '#CCFBF1', 'fontFamily': 'Calibri', 'fontSizePt': 11,
+        'cellPadding': 'comfortable', 'lineHeight': 1.3,
+    }
+    output = build_docx_from_v1(SessionDocumentV1(**data))
+    rendered = Document(output)
+
+    fills = {
+        node.get(qn('w:fill'))
+        for table in rendered.tables
+        for node in table._tbl.xpath('.//w:shd')
+    }
+    borders = {
+        node.get(qn('w:color'))
+        for table in rendered.tables
+        for node in table._tbl.xpath('.//w:tblBorders/*')
+    }
+    fonts = {
+        run.font.name
+        for table in rendered.tables
+        for row in table.rows
+        for cell in row.cells
+        for paragraph in cell.paragraphs
+        for run in paragraph.runs
+        if run.text.strip()
+    }
+    assert 'CCFBF1' in fills, 'El fondo de cabecera personalizado debe llegar a Word'
+    assert borders == {'334155'}, f'Los bordes deben usar el color primario: {borders}'
+    assert fonts == {'Calibri'}, f'Todas las fuentes deben usar Calibri: {fonts}'
+
+
 if __name__ == '__main__':
     print("=" * 60)
     print("TEST DOCX BUILDER V1 — SessionDocument v1 → .docx")
@@ -59,6 +96,7 @@ if __name__ == '__main__':
     size1 = test_fixture_docx('secundaria-matematica-polya.v1.json')
     size2 = test_fixture_docx('inicial.v1.json')
     size3 = test_fixture_docx('primaria-con-ficha.v1.json')
+    test_custom_presentation_tokens()
 
     print("\n" + "=" * 60)
     print(">>> TODOS LOS TESTS DE DOCX BUILDER V1 PASARON EXITOSAMENTE <<<")

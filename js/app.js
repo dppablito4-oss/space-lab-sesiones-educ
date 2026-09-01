@@ -91,6 +91,8 @@
         // Design customization controls
         designColor: $('#input-design-theme-color'),
         designColorHex: $('#input-design-theme-color-hex'),
+        designPreset: $('#select-design-preset'),
+        designAccentColor: $('#input-design-accent-color'),
         designFontFamily: $('#select-design-font-family'),
         designFontSize: $('#select-design-font-size'),
         designPadding: $('#select-design-padding'),
@@ -459,31 +461,40 @@
 
         // Helper to update session design styles from DOM inputs
         function updateStylesFromSidebar() {
-            applyDesignStyles({
+            applyDesignStyles(DocumentPresentation.normalize({
+                preset: DOM.designPreset?.value,
                 themeColor: DOM.designColor.value,
+                accentColor: DOM.designAccentColor?.value,
                 fontFamily: DOM.designFontFamily.value,
                 fontSize: DOM.designFontSize.value,
                 padding: DOM.designPadding.value,
                 lineHeight: DOM.designLineHeight.value,
                 headerBg: DOM.designHeaderBg.value
-            });
+            }));
             saveCurrentState();
         }
 
         function updateStylesFromRibbon() {
-            applyDesignStyles({
+            applyDesignStyles(DocumentPresentation.normalize({
+                preset: DOM.designPreset?.value,
                 themeColor: DOM.ribbonColor.value,
+                accentColor: DOM.designAccentColor?.value,
                 fontFamily: DOM.ribbonFontFamily.value,
                 fontSize: DOM.ribbonFontSize.value,
                 padding: DOM.ribbonPadding.value,
                 lineHeight: DOM.ribbonLineHeight.value,
                 headerBg: DOM.ribbonHeaderBg.value
-            });
+            }));
             saveCurrentState();
         }
 
         // Design customizer controls events (Sidebar)
         DOM.designColor.addEventListener('input', updateStylesFromSidebar);
+        if (DOM.designAccentColor) DOM.designAccentColor.addEventListener('input', updateStylesFromSidebar);
+        if (DOM.designPreset) DOM.designPreset.addEventListener('change', () => {
+            applyDesignStyles(DocumentPresentation.preset(DOM.designPreset.value));
+            saveCurrentState();
+        });
         DOM.designColorHex.addEventListener('input', (e) => {
             if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
                 DOM.designColor.value = e.target.value;
@@ -869,14 +880,16 @@
                 enfoque: DOM.inputEnfoque.value,
                 enfoque2: DOM.inputEnfoque2.value
             },
-            design: {
+            presentation: DocumentPresentation.normalize({
+                preset: DOM.designPreset?.value,
                 themeColor: DOM.designColor.value,
+                accentColor: DOM.designAccentColor?.value,
                 fontFamily: DOM.designFontFamily.value,
                 fontSize: DOM.designFontSize.value,
                 padding: DOM.designPadding.value,
                 lineHeight: DOM.designLineHeight.value,
                 headerBg: DOM.designHeaderBg.value
-            },
+            }),
             momentos: {},
             evaluacion: {},
             alumnos: (() => {
@@ -890,14 +903,14 @@
         if (!session) return;
         const m = session.metadata || {};
         const p = session.proposito || {};
-        const d = session.design || {
+        const d = DocumentPresentation.normalize(session.presentation || session.design || {
             themeColor: '#000000',
             fontFamily: 'Arial, sans-serif',
             fontSize: '10pt',
             padding: '4px 6px',
             lineHeight: '1.4',
             headerBg: '#f1f5f9'
-        };
+        });
 
         DOM.inputInstitucion.value = m.institucion || '';
         DOM.inputDre.value = m.dre || '';
@@ -932,13 +945,16 @@
         handleAiProviderChange();
 
         // Design config inputs
-        DOM.designColor.value = d.themeColor || '#000000';
-        DOM.designColorHex.value = d.themeColor || '#000000';
-        if (DOM.designFontFamily) DOM.designFontFamily.value = d.fontFamily || 'Arial, sans-serif';
-        DOM.designFontSize.value = d.fontSize || '10pt';
-        DOM.designPadding.value = d.padding || '4px 6px';
-        DOM.designLineHeight.value = d.lineHeight || '1.4';
-        DOM.designHeaderBg.value = d.headerBg || '#f1f5f9';
+        const cssDesign = DocumentPresentation.toCss(d);
+        DOM.designColor.value = d.primaryColor;
+        DOM.designColorHex.value = d.primaryColor;
+        if (DOM.designPreset) DOM.designPreset.value = d.preset;
+        if (DOM.designAccentColor) DOM.designAccentColor.value = d.accentColor;
+        if (DOM.designFontFamily) DOM.designFontFamily.value = cssDesign.fontFamily;
+        DOM.designFontSize.value = cssDesign.fontSize;
+        DOM.designPadding.value = cssDesign.padding;
+        DOM.designLineHeight.value = cssDesign.lineHeight;
+        DOM.designHeaderBg.value = d.headerBackground;
 
         // Sync curriculum selectors with loaded area
         handleAreaChange();
@@ -1047,7 +1063,7 @@
                 id: AppState.currentSession?.id || Storage.generateId(),
                 template: DOM.selectTemplate.value,
                 ...canonical,
-                design: formData.design,
+                presentation: formData.presentation,
                 createdAt: AppState.currentSession?.createdAt || new Date().toISOString()
             };
 
@@ -1101,7 +1117,7 @@
         DOM.printPreview.classList.remove('hidden');
 
         // Apply design customizer variables
-        applyDesignStyles(session.design);
+        applyDesignStyles(session.presentation || session.design);
 
         // Apply zoom scale
         applyZoom();
@@ -1920,6 +1936,7 @@
             ficha_trabajo,
             juego_libre_sectores,
             alumnos: alumnosList,
+            presentation: DocumentPresentation.normalize(AppState.currentSession.presentation || AppState.currentSession.design || {}),
             token: localStorage.getItem('connection_token') || ''
         };
 
@@ -1931,6 +1948,7 @@
             });
             if (valid) {
                 document.listaCotejo = { ...document.listaCotejo, alumnos: alumnosList };
+                document.presentation = legacyPayload.presentation;
                 return { ...document, token: legacyPayload.token };
             }
         }
@@ -2505,7 +2523,7 @@
             DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
                 ? SpaceLabSanitizer.sanitizeSessionHTML(current.htmlContent)
                 : '';
-            applyDesignStyles(current.design);
+            applyDesignStyles(current.presentation || current.design);
             applyZoom();
             enforceEditMode();
             DOM.emptyState.classList.add('hidden');
@@ -2593,7 +2611,7 @@
             DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
                 ? SpaceLabSanitizer.sanitizeSessionHTML(session.htmlContent)
                 : '';
-            applyDesignStyles(session.design);
+            applyDesignStyles(session.presentation || session.design);
             applyZoom();
             enforceEditMode();
         } else {
@@ -3286,41 +3304,50 @@
         if (!sheet) return;
 
         // If no design object is provided, read current values from inputs
-        const d = design || {
+        const d = DocumentPresentation.normalize(design || {
+            preset: DOM.designPreset?.value,
             themeColor: DOM.designColor.value,
+            accentColor: DOM.designAccentColor?.value,
             fontFamily: DOM.designFontFamily.value,
             fontSize: DOM.designFontSize.value,
             padding: DOM.designPadding.value,
             lineHeight: DOM.designLineHeight.value,
             headerBg: DOM.designHeaderBg.value
-        };
+        });
+        const cssDesign = DocumentPresentation.toCss(d);
 
         // Sync Sidebar inputs
-        DOM.designColor.value = d.themeColor || '#000000';
-        DOM.designColorHex.value = d.themeColor || '#000000';
-        if (DOM.designFontFamily) DOM.designFontFamily.value = d.fontFamily || 'Arial, sans-serif';
-        DOM.designFontSize.value = d.fontSize || '10pt';
-        DOM.designPadding.value = d.padding || '4px 6px';
-        DOM.designLineHeight.value = d.lineHeight || '1.4';
-        DOM.designHeaderBg.value = d.headerBg || '#f1f5f9';
+        DOM.designColor.value = d.primaryColor;
+        DOM.designColorHex.value = d.primaryColor;
+        if (DOM.designPreset) DOM.designPreset.value = d.preset;
+        if (DOM.designAccentColor) DOM.designAccentColor.value = d.accentColor;
+        if (DOM.designFontFamily) DOM.designFontFamily.value = cssDesign.fontFamily;
+        DOM.designFontSize.value = cssDesign.fontSize;
+        DOM.designPadding.value = cssDesign.padding;
+        DOM.designLineHeight.value = cssDesign.lineHeight;
+        DOM.designHeaderBg.value = d.headerBackground;
 
         // Sync Ribbon inputs
-        if (DOM.ribbonColor) DOM.ribbonColor.value = d.themeColor || '#000000';
-        if (DOM.ribbonFontFamily) DOM.ribbonFontFamily.value = d.fontFamily || 'Arial, sans-serif';
-        if (DOM.ribbonFontSize) DOM.ribbonFontSize.value = d.fontSize || '10pt';
-        if (DOM.ribbonPadding) DOM.ribbonPadding.value = d.padding || '4px 6px';
-        if (DOM.ribbonLineHeight) DOM.ribbonLineHeight.value = d.lineHeight || '1.4';
-        if (DOM.ribbonHeaderBg) DOM.ribbonHeaderBg.value = d.headerBg || '#f1f5f9';
+        if (DOM.ribbonColor) DOM.ribbonColor.value = d.primaryColor;
+        if (DOM.ribbonFontFamily) DOM.ribbonFontFamily.value = cssDesign.fontFamily;
+        if (DOM.ribbonFontSize) DOM.ribbonFontSize.value = cssDesign.fontSize;
+        if (DOM.ribbonPadding) DOM.ribbonPadding.value = cssDesign.padding;
+        if (DOM.ribbonLineHeight) DOM.ribbonLineHeight.value = cssDesign.lineHeight;
+        if (DOM.ribbonHeaderBg) DOM.ribbonHeaderBg.value = d.headerBackground;
 
-        sheet.style.setProperty('--theme-border-color', d.themeColor || '#000000');
-        sheet.style.setProperty('--session-font-family', d.fontFamily || 'Arial, sans-serif');
-        sheet.style.setProperty('--session-font-size', d.fontSize || '10pt');
-        sheet.style.setProperty('--session-cell-padding', d.padding || '4px 6px');
-        sheet.style.setProperty('--session-line-height', d.lineHeight || '1.4');
-        sheet.style.setProperty('--theme-label-bg', d.headerBg || '#f1f5f9');
+        sheet.style.setProperty('--theme-border-color', d.primaryColor);
+        sheet.style.setProperty('--theme-primary-color', d.primaryColor);
+        sheet.style.setProperty('--theme-accent-color', d.accentColor);
+        sheet.style.setProperty('--session-font-family', cssDesign.fontFamily);
+        sheet.style.setProperty('--session-font-size', cssDesign.fontSize);
+        sheet.style.setProperty('--session-cell-padding', cssDesign.padding);
+        sheet.style.setProperty('--session-line-height', cssDesign.lineHeight);
+        sheet.style.setProperty('--theme-label-bg', d.headerBackground);
+        sheet.style.setProperty('--theme-accent-soft', cssDesign.accentSoft);
+        sheet.style.setProperty('--theme-value-bg', cssDesign.valueBackground);
 
         if (AppState.currentSession) {
-            AppState.currentSession.design = d;
+            AppState.currentSession.presentation = d;
         }
     }
 
@@ -4842,13 +4869,16 @@
         },
         getCurrent: () => {
             if (!DOM.designColor) return null;
-            return {
+            return DocumentPresentation.normalize({
+                preset: DOM.designPreset?.value,
                 themeColor: DOM.designColor.value,
+                accentColor: DOM.designAccentColor?.value,
+                fontFamily: DOM.designFontFamily?.value,
                 fontSize: DOM.designFontSize.value,
                 padding: DOM.designPadding.value,
                 lineHeight: DOM.designLineHeight.value,
                 headerBg: DOM.designHeaderBg.value
-            };
+            });
         }
     };
 
