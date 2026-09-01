@@ -89,13 +89,6 @@ jobs:
       run:
         working-directory: source
     steps:
-      # Windows strips trailing dots from paths. Create the normalized
-      # workspace before running Node-based actions for this repository.
-      - name: Prepare normalized Windows workspace
-        shell: pwsh
-        working-directory: ${{ runner.temp }}
-        run: New-Item -ItemType Directory -Force -Path "${{ github.workspace }}" | Out-Null
-
       - uses: actions/checkout@v4
         with:
           path: source
