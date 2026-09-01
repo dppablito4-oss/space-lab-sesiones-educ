@@ -42,6 +42,28 @@ def run() -> None:
                 assert page.evaluate(
                     "document.documentElement.scrollWidth <= window.innerWidth"
                 )
+                assert not page.locator("#sidebar").evaluate(
+                    "element => element.classList.contains('open')"
+                )
+                assert page.locator("#preview-area").evaluate(
+                    "element => element.getBoundingClientRect().left === 0"
+                )
+                if width > 1100:
+                    assert page.evaluate("""() => {
+                        const leading = document.querySelector('.header-leading').getBoundingClientRect();
+                        const save = document.querySelector('.save-indicator').getBoundingClientRect();
+                        const actions = document.querySelector('.header-actions').getBoundingClientRect();
+                        return leading.right <= save.left && save.right <= actions.left;
+                    }""")
+
+                page.click("#btn-menu-mobile")
+                page.wait_for_timeout(250)
+                assert page.locator("#sidebar").evaluate(
+                    "element => element.classList.contains('open')"
+                )
+                assert page.locator("#btn-menu-mobile").get_attribute(
+                    "aria-expanded"
+                ) == "true"
                 assert page.locator("#btn-generate").is_visible()
                 assert page.locator("#btn-generate").evaluate(
                     "element => element.getBoundingClientRect().bottom <= window.innerHeight"
@@ -55,20 +77,26 @@ def run() -> None:
                 ) == "true"
                 assert first_tab.locator(".tab-state").inner_text() == "Completado"
 
-                if width <= 1100:
-                    page.click("#btn-menu-mobile")
-                    page.wait_for_timeout(250)
-                    assert page.locator("#sidebar").evaluate(
-                        "element => element.classList.contains('open')"
-                    )
-                    assert page.locator("#chatbot-container").evaluate(
-                        "element => getComputedStyle(element).display === 'none'"
-                    )
-                    page.click('[data-tab="tab-design"]')
-                    assert page.locator("#tab-design").is_visible()
-                    assert page.locator('[data-tab="tab-design"]').get_attribute(
-                        "aria-selected"
-                    ) == "true"
+                assert page.locator("#chatbot-container").evaluate(
+                    "element => getComputedStyle(element).display === 'none'"
+                )
+                page.click('[data-tab="tab-design"]')
+                assert page.locator("#tab-design").is_visible()
+                assert page.locator('[data-tab="tab-design"]').get_attribute(
+                    "aria-selected"
+                ) == "true"
+
+                if width > 440:
+                    page.mouse.click(width - 20, 100)
+                else:
+                    page.click("#btn-close-sidebar")
+                page.wait_for_timeout(220)
+                assert not page.locator("#sidebar").evaluate(
+                    "element => element.classList.contains('open')"
+                )
+                assert page.locator("#btn-menu-mobile").get_attribute(
+                    "aria-expanded"
+                ) == "false"
 
                 page.close()
             browser.close()

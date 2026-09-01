@@ -482,6 +482,13 @@
         // Mobile sidebar
         DOM.btnMenuMobile.addEventListener('click', toggleSidebar);
         DOM.btnCloseSidebar.addEventListener('click', () => closeSidebar());
+        document.addEventListener('click', (event) => {
+            if (!AppState.sidebarOpen) return;
+            if (DOM.sidebar.contains(event.target) || DOM.btnMenuMobile.contains(event.target)) return;
+            event.preventDefault();
+            event.stopPropagation();
+            closeSidebar(false);
+        }, true);
 
         // Load modal
         DOM.btnCloseLoad.addEventListener('click', () => DOM.loadModal.classList.add('hidden'));
@@ -2861,19 +2868,25 @@
     }
 
     // ═══════════════════════════════════════
-    // SIDEBAR (Mobile)
+    // PLANNING DRAWER
     // ═══════════════════════════════════════
 
     function toggleSidebar() {
         AppState.sidebarOpen = !AppState.sidebarOpen;
         DOM.sidebar.classList.toggle('open', AppState.sidebarOpen);
         document.body.classList.toggle('sidebar-open', AppState.sidebarOpen);
+        DOM.btnMenuMobile.setAttribute('aria-expanded', String(AppState.sidebarOpen));
+        if (AppState.sidebarOpen) {
+            window.setTimeout(() => DOM.btnCloseSidebar.focus(), 180);
+        }
     }
 
-    function closeSidebar() {
+    function closeSidebar(returnFocus = true) {
         AppState.sidebarOpen = false;
         DOM.sidebar.classList.remove('open');
         document.body.classList.remove('sidebar-open');
+        DOM.btnMenuMobile.setAttribute('aria-expanded', 'false');
+        if (returnFocus) DOM.btnMenuMobile.focus();
     }
 
     // ═══════════════════════════════════════

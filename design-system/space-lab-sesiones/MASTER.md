@@ -14,17 +14,17 @@ Source of truth for the web application shell. The printable session document ke
 
 | Token | Value | Purpose |
 | --- | --- | --- |
-| `--color-background` | `#0D0D11` | Editor canvas |
-| `--color-card` | `#121217` | App chrome and navigation |
-| `--color-card-surface` | `#17171C` | Contextual controls |
-| `--color-elevated` | `#1D1D24` | Hovered or nested control surface |
-| `--color-popover` | `#23232C` | Menus and elevated overlays |
-| `--color-border` | `#292930` | Standard separation |
+| `--color-background` | `#090C11` | Level 0: editor canvas |
+| `--color-card` | `#121821` | Level 1: app chrome and navigation |
+| `--color-card-surface` | `#19222D` | Level 2: contextual panels |
+| `--color-elevated` | `#222E3A` | Level 3: controls and raised surfaces |
+| `--color-popover` | `#2B3947` | Level 4: hover and overlay surfaces |
+| `--color-border` | `#2E3A47` | Standard separation |
 | `--color-foreground` | `#F4F4F6` | Primary text |
-| `--color-muted-foreground` | `#A6A6B4` | Supporting text |
-| `--color-subtle-foreground` | `#646473` | Metadata and pending states |
-| `--color-primary` | `#22BEEB` | Primary CTA and active state |
-| `--color-primary-hover` | `#12AEDC` | Primary hover |
+| `--color-muted-foreground` | `#B2BBC8` | Supporting text |
+| `--color-subtle-foreground` | `#758192` | Metadata and pending states |
+| `--color-primary` | `#2CC8EE` | Primary CTA and active state |
+| `--color-primary-hover` | `#54D4F3` | Primary hover |
 | `--color-success` | `#22C55E` | Completed and connected |
 | `--color-warning` | `#F59E0B` | Attention |
 | `--color-destructive` | `#EF4444` | Destructive action |
@@ -52,11 +52,11 @@ Normal text must meet 4.5:1 contrast. Interactive boundaries and meaningful icon
 ## Application Layout
 
 - Topbar: brand and session context left, save status centered, commands right.
-- Creation panel: numbered vertical workflow rail plus contextual inspector.
+- Creation panel: temporary drawer with numbered workflow rail plus contextual inspector.
 - Primary generation action: persistent footer of the inspector.
-- Workspace: document/editor receives remaining width and visual priority.
+- Workspace: document/editor always receives the full available width.
 - Empty state: unframed two-column orientation, not a floating dashboard card.
-- At 1100px and below the creation panel becomes a drawer with a scrim.
+- The creation drawer is closed by default at every breakpoint and uses a scrim while open.
 
 ## States And Motion
 
