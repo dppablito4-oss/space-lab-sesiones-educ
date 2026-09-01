@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
 /*
    Space Lab — adaptación visual de SpaceSale (app_movil)
    Solo presenta reglas de apariencia: no modifica estructura ni comportamiento.
@@ -68,6 +70,9 @@
     --shadow-lg: 0 24px 56px rgba(0, 0, 0, 0.45);
     --shadow-inset: inset 0 1px 0 rgba(247, 249, 252, 0.025);
     --glow-cyan: 0 0 16px rgba(34, 211, 238, 0.18);
+    --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-main: var(--font);
+    --font-mono: 'JetBrains Mono', monospace;
 }
 
 body,
@@ -116,6 +121,28 @@ body,
     border-color: var(--color-primary-hover);
     color: #FFFFFF;
 }
+
+.btn-accent {
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #001014;
+    font-weight: 700;
+}
+
+.btn-accent:hover {
+    background: var(--color-accent-hover);
+    border-color: var(--color-accent-hover);
+    color: #001014;
+}
+
+.btn-danger {
+    background: var(--color-destructive);
+    border-color: var(--color-destructive);
+    color: #260007;
+    font-weight: 700;
+}
+
+input[type="checkbox"], input[type="radio"] { accent-color: var(--color-primary); }
 
 .btn-ghost {
     background: transparent;
@@ -224,4 +251,230 @@ body,
 
 @media (max-width: 1100px) {
     .header-actions .btn { min-height: 40px; }
+}
+
+/* ─── Panel maestro ─── */
+.admin-body {
+    min-height: 100vh;
+    height: auto;
+    overflow: auto;
+    font-family: var(--font);
+    background: var(--color-background);
+}
+
+.admin-body .app-wrapper { min-height: 100vh; height: auto; }
+
+.admin-body .app-main.admin-layout {
+    display: grid;
+    grid-template-columns: 264px minmax(0, 1fr);
+    gap: 16px;
+    width: min(1400px, calc(100% - 40px));
+    height: auto;
+    margin: 24px auto;
+}
+
+.admin-body .sidebar,
+.admin-body .preview-area {
+    position: static;
+    width: auto;
+    min-width: 0;
+    height: auto;
+    margin: 0;
+    padding: 20px;
+    transform: none;
+    background: var(--color-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.admin-body .preview-area {
+    align-items: stretch;
+    overflow: visible;
+}
+
+.admin-body .sidebar-title,
+.admin-body .section-title {
+    background: none;
+    -webkit-text-fill-color: var(--color-foreground);
+    color: var(--color-foreground);
+}
+
+.admin-body .tab-btn {
+    min-height: 48px;
+    padding: 12px;
+    color: var(--color-muted-foreground);
+    border-radius: var(--radius-md);
+}
+
+.admin-body .tab-btn:hover,
+.admin-body .tab-btn.active {
+    color: var(--color-foreground);
+    background: var(--color-card-surface);
+    border-color: var(--color-border);
+}
+
+.admin-body .tab-btn.active {
+    color: var(--color-accent);
+    border-color: rgba(34, 211, 238, 0.42);
+}
+
+.admin-body .table-container {
+    background: var(--color-card-surface);
+    border-color: var(--color-border);
+    border-radius: var(--radius-md);
+}
+
+.admin-body .admin-table th {
+    background: var(--color-elevated);
+    color: var(--color-foreground);
+    border-color: var(--color-border);
+}
+
+.admin-body .admin-table td { border-color: var(--color-border-subtle); }
+.admin-body .admin-table tr:hover td { background: #1B273A; }
+.admin-body .badge-info { background: var(--surface-cyan); color: var(--color-accent); }
+
+/* ─── Pantalla de enlace del motor ─── */
+body.connection-page {
+    --bg-color: var(--color-background);
+    --card-bg: var(--color-card);
+    --card-border: var(--color-border);
+    --accent-primary: var(--color-violet);
+    --accent-secondary: var(--color-accent);
+    --accent-success: var(--color-success);
+    --accent-error: var(--color-destructive);
+    --text-main: var(--color-foreground);
+    --text-muted: var(--color-muted-foreground);
+    font-family: var(--font);
+    background: var(--color-background);
+}
+
+body.connection-page::before {
+    background:
+        radial-gradient(circle at 18% 18%, rgba(124, 58, 237, 0.16), transparent 42%),
+        radial-gradient(circle at 82% 78%, rgba(34, 211, 238, 0.13), transparent 42%);
+}
+
+.connection-page .grid-bg {
+    background-image: linear-gradient(rgba(86, 102, 127, 0.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(86, 102, 127, 0.10) 1px, transparent 1px);
+}
+
+.connection-page .glass-card {
+    padding: 32px;
+    background: var(--color-card);
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.connection-page .node { border-radius: var(--radius-md); box-shadow: none; }
+.connection-page .node-left { background: var(--color-primary); }
+.connection-page .node-right { background: var(--color-accent); color: #001014; }
+.connection-page .connection-beam { background: var(--color-border); }
+.connection-page h1 { background: none; -webkit-text-fill-color: var(--color-foreground); color: var(--color-foreground); }
+
+.connection-page .btn-connect {
+    min-height: 56px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    box-shadow: none;
+    font-family: var(--font);
+    font-weight: 700;
+}
+
+.connection-page .btn-connect:hover { transform: none; background: var(--color-primary-hover); box-shadow: none; }
+.connection-page .status-alert { border-radius: var(--radius-md); }
+.connection-page .footer-info { border-color: var(--color-border-subtle); }
+.connection-page .footer-info a { color: var(--color-accent); }
+
+/* ─── Página de descargas ─── */
+body.downloads-page {
+    --bg: var(--color-background);
+    --card-bg: var(--color-card);
+    --card-border: var(--color-border);
+    --cyan: var(--color-accent);
+    --cyan-glow: rgba(34, 211, 238, 0.20);
+    --blue: var(--color-primary);
+    --blue-glow: rgba(124, 58, 237, 0.20);
+    --yellow: var(--color-warning);
+    --green: var(--color-success);
+    --text-main: var(--color-foreground);
+    --text-muted: var(--color-muted-foreground);
+    --magenta: var(--color-violet);
+    font-family: var(--font);
+    background: var(--color-background);
+}
+
+.downloads-page::before,
+.downloads-page .stars,
+.downloads-page .stars-anim,
+.downloads-page .glow-orb-1,
+.downloads-page .glow-orb-2 { opacity: 0.35; }
+
+.downloads-page .card {
+    padding: 40px;
+    background: var(--color-card);
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+}
+
+.downloads-page .card::before { border-radius: var(--radius-lg); background: linear-gradient(135deg, rgba(124, 58, 237, 0.45), rgba(34, 211, 238, 0.24)); }
+.downloads-page h1 { background: none; -webkit-text-fill-color: var(--color-foreground); color: var(--color-foreground); animation: none; }
+.downloads-page p { color: var(--color-muted-foreground); }
+
+.downloads-page .version {
+    color: var(--color-accent);
+    background: var(--surface-cyan);
+    border-color: rgba(34, 211, 238, 0.30);
+    border-radius: var(--radius-sm);
+    box-shadow: none;
+}
+
+.downloads-page .btn-download {
+    min-height: 56px;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    box-shadow: none;
+    font-family: var(--font);
+}
+
+.downloads-page .btn-download:hover { transform: none; background: var(--color-primary-hover); box-shadow: none; }
+.downloads-page .mockup-terminal { background: #080D17; border-color: var(--color-border); border-radius: var(--radius-md); }
+.downloads-page .terminal-header { background: var(--color-card-surface); border-color: var(--color-border-subtle); }
+.downloads-page .install-step { background: var(--color-card-surface); border-color: var(--color-border); border-radius: var(--radius-md); }
+.downloads-page .install-step:hover { transform: none; background: #1B273A; border-color: var(--color-border-hover); }
+.downloads-page .step-num { border-radius: var(--radius-sm); background: var(--surface-cyan); color: var(--color-accent); border-color: rgba(34, 211, 238, 0.30); }
+.downloads-page .warning-box { background: var(--status-warning-bg, #33270A); border-color: rgba(251, 191, 36, 0.36); border-radius: var(--radius-md); }
+
+/* ─── Plantilla de correo ───
+   Mantiene el diseño compatible con e-mail y comparte los colores del producto. */
+.email-template,
+.email-template .wrapper { background-color: #060912 !important; }
+.email-template .main-table { border-radius: 16px !important; }
+.email-template .header {
+    background: linear-gradient(135deg, #0D1422 0%, #251A48 100%) !important;
+    border-bottom-color: #22D3EE !important;
+}
+.email-template a,
+.email-template .brand-subtitle { color: #22D3EE !important; }
+.email-template .message-card { border-left-color: #7C3AED !important; }
+.email-template .btn-link {
+    background: #7C3AED !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    color: #FFFFFF !important;
+}
+.email-template .footer { background-color: #F5F7FB !important; }
+
+@media (max-width: 900px) {
+    .admin-body .app-main.admin-layout { grid-template-columns: 1fr; width: min(100% - 24px, 720px); margin: 12px auto; }
+    .admin-body .sidebar, .admin-body .preview-area { padding: 16px; }
+}
+
+@media (max-width: 640px) {
+    .connection-page .glass-card, .downloads-page .card { padding: 24px 20px; }
+    .downloads-page .btn-download { width: 100%; font-size: 0.95rem; }
 }
