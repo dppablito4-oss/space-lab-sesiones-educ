@@ -486,22 +486,22 @@ body.sidebar-open .workflow-rail { width: var(--rail-w); }
     align-items: center;
     gap: 10px;
     color: var(--color-foreground);
-    background: var(--surface-cyan);
+    background: #151E28;
     border: 0;
     border-bottom: 1px solid var(--color-border);
     text-align: left;
     cursor: pointer;
 }
 
-.workflow-rail-brand img {
-    width: 32px;
-    height: 32px;
-    padding: 6px;
+.workflow-rail-brand > .ui-icon {
+    width: 36px;
+    height: 36px;
+    padding: 9px;
     box-sizing: border-box;
     border-radius: var(--radius-sm);
-    background: var(--color-primary-dim);
-    border: 1px solid rgba(44, 200, 238, 0.26);
-    box-shadow: 0 0 20px rgba(44, 200, 238, 0.12);
+    color: var(--color-muted-foreground);
+    background: var(--color-card-surface);
+    border: 1px solid var(--color-border);
 }
 
 .workflow-rail-brand span,
