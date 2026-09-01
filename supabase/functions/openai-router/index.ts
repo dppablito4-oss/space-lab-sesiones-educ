@@ -80,16 +80,24 @@ serve(async (req) => {
         messages: [
           { role: "system", content: systemPrompt || "Eres un asistente de Inteligencia Artificial para docentes de Space Lab." },
           { role: "user", content: userMessageContent }
-        ],
-        temperature: 0.5
+        ]
       })
     });
 
     if (!response.ok) {
       const errorText = await response.text();
       console.error("OpenAI API Error:", errorText);
+      let providerMessage = `OpenAI rechazó la solicitud (${response.status}).`;
+      try {
+        const errorPayload = JSON.parse(errorText);
+        if (typeof errorPayload?.error?.message === "string") {
+          providerMessage = errorPayload.error.message;
+        }
+      } catch {
+        // Keep provider responses in server logs without exposing raw payloads to the browser.
+      }
       return new Response(
-        JSON.stringify({ error: `OpenAI API returned error: ${response.status}`, details: errorText }),
+        JSON.stringify({ error: providerMessage }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: response.status }
       );
     }

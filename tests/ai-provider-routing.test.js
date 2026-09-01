@@ -56,6 +56,14 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
         /openrouter\.ai|api\.openai\.com|api\.deepseek\.com|generativelanguage\.googleapis\.com/,
         'AI provider endpoints must exist only inside Supabase Edge Functions'
     );
+
+    const openaiRouterSource = fs.readFileSync('supabase/functions/openai-router/index.ts', 'utf8');
+    assert.doesNotMatch(
+        openaiRouterSource,
+        /temperature\s*:/,
+        'OpenAI models that only support the default temperature must not receive an override'
+    );
+    assert.doesNotMatch(browserAiSource, /consulta con DeepSeek/);
     console.log('ai-provider-routing.test.js: OK');
 })().catch(error => {
     console.error(error);

@@ -144,7 +144,7 @@ SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS
         } catch (e) {
             console.error('[Chatbot] Error:', e);
             removeTypingIndicator(typingId);
-            appendMessage('bot', '⚠️ Lo siento, ocurrió un error al procesar tu consulta con DeepSeek: ' + e.message);
+            appendMessage('bot', '⚠️ Lo siento, ocurrió un error al procesar tu consulta con IA: ' + e.message);
             scrollBottom();
         }
     }
