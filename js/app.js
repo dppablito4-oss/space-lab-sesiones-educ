@@ -30,6 +30,7 @@
     const DOM = {
         // Sections
         sidebar: $('#sidebar'),
+        workflowRail: $('#workflow-rail'),
         emptyState: $('#empty-state'),
         printPreview: $('#print-preview'),
         sessionSheet: $('#session-sheet'),
@@ -47,6 +48,7 @@
         btnCleanFormat: $('#btn-clean-format'),
         btnCloseSession: $('#btn-close-session'),
         btnMenuMobile: $('#btn-menu-mobile'),
+        btnToggleRail: $('#btn-toggle-rail'),
         btnCloseSidebar: $('#btn-close-sidebar'),
         btnCloseLoad: $('#btn-close-load'),
         btnSaveDefaults: $('#btn-save-defaults'),
@@ -170,15 +172,19 @@
     function updateWorkflowUi(activeTabId) {
         $$('.sidebar-tab').forEach(tab => {
             const stateLabel = tab.querySelector('.tab-state');
+            const tabName = tab.querySelector('.tab-text')?.textContent || 'Etapa';
             const isActive = tab.dataset.tab === activeTabId;
             const isCompleted = AppState.completedWorkflowTabs.has(tab.dataset.tab) && !isActive;
+            const state = isActive ? 'En curso' : (isCompleted ? 'Completado' : 'Pendiente');
             tab.classList.toggle('completed', isCompleted);
             tab.setAttribute('tabindex', isActive ? '0' : '-1');
-            if (stateLabel) stateLabel.textContent = isActive ? 'En curso' : (isCompleted ? 'Completado' : 'Pendiente');
+            tab.setAttribute('aria-label', `${tabName}, ${state.toLowerCase()}`);
+            if (stateLabel) stateLabel.textContent = state;
         });
 
         const step = WORKFLOW_STEPS[activeTabId];
         if (!step) return;
+        DOM.sidebar.dataset.activeTab = activeTabId;
         const stepLabel = $('#inspector-step');
         const title = $('#inspector-title');
         const description = $('#inspector-description');
@@ -202,6 +208,7 @@
         });
         $$('.tab-pane').forEach(pane => pane.classList.toggle('active', pane.id === targetTabId));
         updateWorkflowUi(targetTabId);
+        openSidebar();
     }
 
     // ═══════════════════════════════════════
@@ -481,10 +488,15 @@
 
         // Mobile sidebar
         DOM.btnMenuMobile.addEventListener('click', toggleSidebar);
+        DOM.btnToggleRail.addEventListener('click', () => {
+            const expanded = DOM.workflowRail.classList.toggle('expanded');
+            DOM.btnToggleRail.setAttribute('aria-expanded', String(expanded));
+            DOM.btnToggleRail.setAttribute('aria-label', expanded ? 'Ocultar nombres de las etapas' : 'Mostrar nombres de las etapas');
+        });
         DOM.btnCloseSidebar.addEventListener('click', () => closeSidebar());
         document.addEventListener('click', (event) => {
             if (!AppState.sidebarOpen) return;
-            if (DOM.sidebar.contains(event.target) || DOM.btnMenuMobile.contains(event.target)) return;
+            if (DOM.sidebar.contains(event.target) || DOM.workflowRail.contains(event.target) || DOM.btnMenuMobile.contains(event.target)) return;
             event.preventDefault();
             event.stopPropagation();
             closeSidebar(false);
@@ -2871,14 +2883,17 @@
     // PLANNING DRAWER
     // ═══════════════════════════════════════
 
+    function openSidebar() {
+        AppState.sidebarOpen = true;
+        DOM.sidebar.classList.add('open');
+        document.body.classList.add('sidebar-open');
+        DOM.btnMenuMobile.setAttribute('aria-expanded', 'true');
+        window.setTimeout(() => DOM.btnCloseSidebar.focus(), 180);
+    }
+
     function toggleSidebar() {
-        AppState.sidebarOpen = !AppState.sidebarOpen;
-        DOM.sidebar.classList.toggle('open', AppState.sidebarOpen);
-        document.body.classList.toggle('sidebar-open', AppState.sidebarOpen);
-        DOM.btnMenuMobile.setAttribute('aria-expanded', String(AppState.sidebarOpen));
-        if (AppState.sidebarOpen) {
-            window.setTimeout(() => DOM.btnCloseSidebar.focus(), 180);
-        }
+        if (AppState.sidebarOpen) closeSidebar();
+        else openSidebar();
     }
 
     function closeSidebar(returnFocus = true) {
@@ -2886,7 +2901,7 @@
         DOM.sidebar.classList.remove('open');
         document.body.classList.remove('sidebar-open');
         DOM.btnMenuMobile.setAttribute('aria-expanded', 'false');
-        if (returnFocus) DOM.btnMenuMobile.focus();
+        if (returnFocus) $('.sidebar-tab.active')?.focus();
     }
 
     // ═══════════════════════════════════════

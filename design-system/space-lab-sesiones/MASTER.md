@@ -7,7 +7,7 @@ Source of truth for the web application shell. The printable session document ke
 - Product: AI-assisted educational planning workspace.
 - Audience: Peruvian teachers preparing, editing, and exporting learning sessions.
 - Style: premium graphite workspace, document-first, compact and operational.
-- Brand signal: electric cyan used for primary actions, focus, active state, and small indicators.
+- Brand signal: electric cyan for primary actions, plus restrained functional accents for workflow recognition.
 - Avoid: admin-dashboard composition, nested cards, pure black, decorative gradients, purple AI tropes, excessive glow, and ornamental motion.
 
 ## Semantic Colors
@@ -52,16 +52,18 @@ Normal text must meet 4.5:1 contrast. Interactive boundaries and meaningful icon
 ## Application Layout
 
 - Topbar: brand and session context left, save status centered, commands right.
-- Creation panel: temporary drawer with numbered workflow rail plus contextual inspector.
+- Creation navigation: permanent 68px icon rail on the left; its labels expand on logo activation or desktop hover.
+- Creation panel: temporary contextual drawer that opens from the selected rail item.
 - Primary generation action: persistent footer of the inspector.
-- Workspace: document/editor always receives the full available width.
+- Workspace: document/editor receives all width except the compact permanent rail.
 - Empty state: unframed two-column orientation, not a floating dashboard card.
 - The creation drawer is closed by default at every breakpoint and uses a scrim while open.
 
 ## States And Motion
 
-- Active workflow step: cyan rail and explicit `En curso` label.
-- Completed step: green number and explicit `Completado` label.
+- Workflow accents: Copiloto cyan, Datos blue, Propósitos amber, Diseño emerald, Alumnos coral.
+- Active workflow step: tinted surface, colored vector icon, side rail, and explicit `En curso` label.
+- Completed step: green status and explicit `Completado` label.
 - Pending step: muted label.
 - Transitions: 100-180ms for controls and drawer state.
 - No layout-shifting hover effects.

@@ -45,8 +45,12 @@ def run() -> None:
                 assert not page.locator("#sidebar").evaluate(
                     "element => element.classList.contains('open')"
                 )
+                rail_width = page.locator("#workflow-rail").evaluate(
+                    "element => element.getBoundingClientRect().width"
+                )
+                assert rail_width in (58, 68)
                 assert page.locator("#preview-area").evaluate(
-                    "element => element.getBoundingClientRect().left === 0"
+                    "element => element.getBoundingClientRect().left >= 58"
                 )
                 if width > 1100:
                     assert page.evaluate("""() => {
@@ -56,7 +60,7 @@ def run() -> None:
                         return leading.right <= save.left && save.right <= actions.left;
                     }""")
 
-                page.click("#btn-menu-mobile")
+                page.click('[data-tab="tab-ai"]')
                 page.wait_for_timeout(250)
                 assert page.locator("#sidebar").evaluate(
                     "element => element.classList.contains('open')"
@@ -64,18 +68,26 @@ def run() -> None:
                 assert page.locator("#btn-menu-mobile").get_attribute(
                     "aria-expanded"
                 ) == "true"
+                first_tab = page.locator('.sidebar-tab[data-tab="tab-ai"]')
+                assert page.locator("#workflow-rail").evaluate(
+                    "element => [58, 68].includes(element.getBoundingClientRect().width)"
+                )
+                assert first_tab.locator(".tab-copy").evaluate(
+                    "element => getComputedStyle(element).visibility === 'hidden'"
+                )
                 assert page.locator("#btn-generate").is_visible()
                 assert page.locator("#btn-generate").evaluate(
                     "element => element.getBoundingClientRect().bottom <= window.innerHeight"
                 )
 
-                first_tab = page.locator('.sidebar-tab[data-tab="tab-ai"]')
                 first_tab.focus()
                 first_tab.press("ArrowDown")
+                page.wait_for_timeout(50)
                 assert page.locator('[data-tab="tab-general"]').get_attribute(
                     "aria-selected"
                 ) == "true"
-                assert first_tab.locator(".tab-state").inner_text() == "Completado"
+                first_state = first_tab.locator(".tab-state").text_content()
+                assert first_state == "Completado", (width, first_state)
 
                 assert page.locator("#chatbot-container").evaluate(
                     "element => getComputedStyle(element).display === 'none'"
@@ -86,7 +98,7 @@ def run() -> None:
                     "aria-selected"
                 ) == "true"
 
-                if width > 440:
+                if width > 500:
                     page.mouse.click(width - 20, 100)
                 else:
                     page.click("#btn-close-sidebar")
@@ -97,6 +109,15 @@ def run() -> None:
                 assert page.locator("#btn-menu-mobile").get_attribute(
                     "aria-expanded"
                 ) == "false"
+
+                page.click("#btn-toggle-rail")
+                page.wait_for_timeout(200)
+                assert page.locator("#btn-toggle-rail").get_attribute(
+                    "aria-expanded"
+                ) == "true"
+                assert page.locator("#workflow-rail").evaluate(
+                    "element => element.getBoundingClientRect().width > 150"
+                )
 
                 page.close()
             browser.close()

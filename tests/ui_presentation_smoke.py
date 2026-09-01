@@ -34,9 +34,8 @@ def run() -> None:
                 document.querySelector('#empty-state').classList.add('hidden');
                 document.querySelector('#print-preview').classList.remove('hidden');
             }""", fixture)
-            page.click('#btn-menu-mobile')
-            page.wait_for_timeout(220)
             page.click('[data-tab="tab-design"]')
+            page.wait_for_timeout(220)
             page.select_option('#select-design-preset', 'moderno')
             values = page.locator('#session-sheet').evaluate("""el => ({
                 border: getComputedStyle(el).getPropertyValue('--theme-border-color').trim(),

@@ -12,7 +12,7 @@
         rel="stylesheet">
     <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
     <link rel="stylesheet" href="css/style.css?v=2">
-    <link rel="stylesheet" href="css/redesign.css?v=3">
+    <link rel="stylesheet" href="css/redesign.css?v=4">
     <link rel="stylesheet" href="css/print.css" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
@@ -227,6 +227,40 @@
         <!-- ─── MAIN CONTENT ─── -->
         <main class="app-main">
 
+            <nav id="workflow-rail" class="workflow-rail" aria-label="Flujo de creación">
+                <button id="btn-toggle-rail" class="workflow-rail-brand" type="button" aria-label="Mostrar nombres de las etapas" aria-expanded="false" aria-controls="workflow-tabs">
+                    <img src="assets/favicon.svg" alt="" aria-hidden="true">
+                    <span>Planificación</span>
+                </button>
+                <div id="workflow-tabs" class="sidebar-tabs" role="tablist" aria-label="Etapas de configuración" aria-orientation="vertical">
+                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" role="tab" aria-label="Copiloto, en curso" aria-selected="true" aria-controls="tab-ai">
+                        <span class="tab-step">01</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                        <span class="tab-copy"><span class="tab-text">Copiloto</span><span class="tab-state">En curso</span></span>
+                    </button>
+                    <button type="button" class="sidebar-tab" data-tab="tab-general" role="tab" aria-label="Datos, pendiente" aria-selected="false" aria-controls="tab-general">
+                        <span class="tab-step">02</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
+                        <span class="tab-copy"><span class="tab-text">Datos</span><span class="tab-state">Pendiente</span></span>
+                    </button>
+                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" role="tab" aria-label="Propósitos, pendiente" aria-selected="false" aria-controls="tab-propositos">
+                        <span class="tab-step">03</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+                        <span class="tab-copy"><span class="tab-text">Propósitos</span><span class="tab-state">Pendiente</span></span>
+                    </button>
+                    <button type="button" class="sidebar-tab" data-tab="tab-design" role="tab" aria-label="Diseño, pendiente" aria-selected="false" aria-controls="tab-design">
+                        <span class="tab-step">04</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+                        <span class="tab-copy"><span class="tab-text">Diseño</span><span class="tab-state">Pendiente</span></span>
+                    </button>
+                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" role="tab" aria-label="Alumnos, pendiente" aria-selected="false" aria-controls="tab-alumnos">
+                        <span class="tab-step">05</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
+                        <span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
+                    </button>
+                </div>
+            </nav>
+
             <!-- ═══ SIDEBAR: Formulario ═══ -->
             <aside id="sidebar" class="sidebar glass-card">
                 <div class="sidebar-header">
@@ -238,35 +272,6 @@
                 </div>
 
                 <div class="sidebar-workflow">
-                <!-- Workflow Navigation -->
-                <div class="sidebar-tabs" role="tablist" aria-label="Etapas de configuración" aria-orientation="vertical">
-                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" role="tab" aria-selected="true" aria-controls="tab-ai">
-                        <span class="tab-step">01</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Copiloto</span><span class="tab-state">En curso</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-general" role="tab" aria-selected="false" aria-controls="tab-general">
-                        <span class="tab-step">02</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Datos</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" role="tab" aria-selected="false" aria-controls="tab-propositos">
-                        <span class="tab-step">03</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Propósitos</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-design" role="tab" aria-selected="false" aria-controls="tab-design">
-                        <span class="tab-step">04</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Diseño</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" role="tab" aria-selected="false" aria-controls="tab-alumnos">
-                        <span class="tab-step">05</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                </div>
-
                 <form id="session-form" class="session-form" autocomplete="off">
                     <div class="inspector-heading">
                         <span id="inspector-step" class="inspector-step">Paso 01 de 05</span>
