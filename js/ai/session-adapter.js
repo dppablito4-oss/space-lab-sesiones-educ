@@ -77,6 +77,12 @@ const SessionAdapter = (() => {
             .replace(/^_|_$/g, '') || key;
     }
 
+    function _hasCanonicalMoments(raw) {
+        return ['inicio', 'desarrollo', 'cierre'].every(key =>
+            raw.momentos?.[key] && Array.isArray(raw.momentos[key].procesos)
+        );
+    }
+
     // ── Adapter principal ──
 
     /**
@@ -93,9 +99,13 @@ const SessionAdapter = (() => {
             return { document: { schemaVersion: '1.0', metadata: {}, proposito: {}, momentos: { inicio: { procesos: [] }, desarrollo: { procesos: [] }, cierre: { procesos: [] } } }, warnings: ['Input vacío o inválido.'] };
         }
 
-        // Si ya es v1, devolver directamente
-        if (raw.schemaVersion === '1.0') {
+        // Solo aceptar passthrough cuando la estructura v1 realmente está completa.
+        // Algunos modelos etiquetan como v1 una respuesta que todavía mezcla llaves legacy.
+        if (raw.schemaVersion === '1.0' && _hasCanonicalMoments(raw)) {
             return { document: raw, warnings: [] };
+        }
+        if (raw.schemaVersion === '1.0') {
+            warnings.push('[V1 REPAIR] La respuesta estaba etiquetada como v1 pero tenía momentos incompletos; se normalizó automáticamente.');
         }
 
         const doc = { schemaVersion: '1.0' };

@@ -22,7 +22,7 @@ function assert(condition, msg) {
 // TEST 1: Legacy IA format (como lo produce el system prompt)
 // ═══════════════════════════════════════════════════════════════
 function testLegacyAIFormat() {
-    console.log('\n[1/5] Formato legacy de IA con sub-momentos y proceso_X_...');
+    console.log('\n[1/6] Formato legacy de IA con sub-momentos y proceso_X_...');
 
     const legacyAI = {
         titulo_sesion_retador: "Resolvemos problemas con ecuaciones",
@@ -125,7 +125,7 @@ function testLegacyAIFormat() {
 // TEST 2: Frontend format (como lo produce getFormDataJSON)
 // ═══════════════════════════════════════════════════════════════
 function testFrontendFormat() {
-    console.log('\n[2/5] Formato frontend con procesos como array...');
+    console.log('\n[2/6] Formato frontend con procesos como array...');
 
     const frontendData = {
         metadata: { titulo: "Sesión de primaria", nivel: "PRIMARIA", grado: "3°", area: "Comunicación" },
@@ -186,7 +186,7 @@ function testFrontendFormat() {
 // TEST 3: Passthrough para documentos ya v1
 // ═══════════════════════════════════════════════════════════════
 function testV1Passthrough() {
-    console.log('\n[3/5] Passthrough para documentos ya v1...');
+    console.log('\n[3/6] Passthrough para documentos ya v1...');
 
     const v1Doc = {
         schemaVersion: '1.0',
@@ -208,7 +208,7 @@ function testV1Passthrough() {
 // TEST 4: Campos desconocidos generan warnings
 // ═══════════════════════════════════════════════════════════════
 function testUnknownFieldsWarned() {
-    console.log('\n[4/5] Campos desconocidos generan warnings...');
+    console.log('\n[4/6] Campos desconocidos generan warnings...');
 
     const weird = {
         titulo_sesion_retador: "Test",
@@ -227,7 +227,7 @@ function testUnknownFieldsWarned() {
 // TEST 5: Inicial con juego_libre_sectores
 // ═══════════════════════════════════════════════════════════════
 function testInicialWithJLS() {
-    console.log('\n[5/5] Formato Inicial con juego_libre_sectores...');
+    console.log('\n[5/6] Formato Inicial con juego_libre_sectores...');
 
     const inicialData = {
         titulo_sesion_retador: "Creamos cuentos",
@@ -256,6 +256,34 @@ function testInicialWithJLS() {
     assert(doc.juegoLibreSectores.representacion === "Dibujan su experiencia", "JLS.representacion OK");
 }
 
+// ═══════════════════════════════════════════════════════════════
+// TEST 6: Respuesta etiquetada v1 pero con desarrollo legacy
+// ═══════════════════════════════════════════════════════════════
+function testMalformedV1IsRepaired() {
+    console.log('\n[6/6] V1 parcial de IA se repara antes de validar...');
+
+    const partialV1 = {
+        schemaVersion: '1.0',
+        metadata: { titulo: 'Sesión parcialmente v1', duracionMinutos: 90 },
+        proposito: { competencia: 'Resuelve problemas', capacidades: [], criterios: [] },
+        momentos: {
+            inicio: { tiempoMinutos: 15, procesos: [] },
+            desarrollo: {
+                tiempoMinutos: 65,
+                proceso_1_exploracion: '<p>Los estudiantes exploran el reto.</p>'
+            },
+            cierre: { tiempoMinutos: 10, procesos: [] }
+        }
+    };
+
+    const { document: doc, warnings } = SessionAdapter.adaptLegacyToV1(partialV1);
+    const validation = SessionValidator.validate(doc);
+    assert(validation.valid, `V1 parcial reparado (errors: ${validation.errors.join('; ')})`);
+    assert(Array.isArray(doc.momentos.desarrollo.procesos), 'desarrollo.procesos restaurado como array');
+    assert(doc.momentos.desarrollo.procesos.length === 1, 'proceso legacy preservado');
+    assert(warnings.some(w => w.includes('V1 REPAIR')), 'reparación registrada como warning');
+}
+
 // ── Ejecutar ──
 console.log('='.repeat(60));
 console.log('TEST SESSION ADAPTER — Legacy → v1');
@@ -266,6 +294,7 @@ testFrontendFormat();
 testV1Passthrough();
 testUnknownFieldsWarned();
 testInicialWithJLS();
+testMalformedV1IsRepaired();
 
 console.log('\n' + '='.repeat(60));
 if (failed > 0) {

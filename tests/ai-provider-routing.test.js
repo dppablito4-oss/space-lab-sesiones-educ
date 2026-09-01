@@ -11,12 +11,13 @@ const localStorage = {
 };
 
 const calls = [];
+let invokeResponse = '<li>OK</li>';
 const SupabaseClient = {
     client: {},
     getCurrentUser: async () => ({ id: 'test-user' }),
     invokeFunction: async (functionName, body) => {
         calls.push({ functionName, body });
-        return '<li>OK</li>';
+        return invokeResponse;
     }
 };
 
@@ -46,6 +47,32 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     await expectProvider('openai-gpt-5.4-mini', 'openai-router', 'gpt-5.4-mini');
     await expectProvider('gemini-2.5-flash', 'gemini-router', 'gemini-2.5-flash');
     await expectProvider('deepseek-v3', 'deepseek-router', 'deepseek-chat');
+
+    invokeResponse = {
+        schemaVersion: '1.0',
+        metadata: { titulo: 'Prueba canónica' },
+        momentos: {
+            inicio: { tiempoMinutos: 15, procesos: [] },
+            desarrollo: {
+                tiempoMinutos: 65,
+                procesos: [{
+                    id: 'proceso_didactico',
+                    orden: 1,
+                    titulo: 'Desarrollo',
+                    contenido: { format: 'html', value: '<p>Actividad</p>' }
+                }]
+            },
+            cierre: { tiempoMinutos: 10, procesos: [] }
+        }
+    };
+    const generated = await ai.generateSession({
+        area: 'Matemática',
+        titulo: 'Prueba canónica',
+        ai_provider: 'openai-gpt-5.6-luna'
+    });
+    assert.ok(Array.isArray(generated.momentos.desarrollo.procesos));
+    assert.equal(generated.momentos.desarrollo.procesos.length, 1);
+    assert.equal(generated.momentos.desarrollo.proceso_1_procesos, undefined);
 
     const browserAiSource = ['js/ai-copilot.js', 'js/chatbot.js', 'js/pedagogy-brief.js']
         .map(file => fs.readFileSync(file, 'utf8'))

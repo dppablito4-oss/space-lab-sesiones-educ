@@ -481,6 +481,13 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         // 5. Normalize desarrollo process keys
         if (obj.momentos && obj.momentos.desarrollo && typeof obj.momentos.desarrollo === 'object') {
             const desarrollo = obj.momentos.desarrollo;
+
+            // SessionDocument v1 already uses an ordered `procesos` array.
+            // Legacy normalization must never rename or discard that array.
+            if (Array.isArray(desarrollo.procesos)) {
+                return obj;
+            }
+
             const newDesarrollo = {};
             let index = 1;
 
