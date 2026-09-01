@@ -52,6 +52,16 @@ def run() -> None:
                 assert page.locator("#preview-area").evaluate(
                     "element => element.getBoundingClientRect().left >= 58"
                 )
+                hierarchy_colors = page.evaluate("""() => {
+                    const styles = getComputedStyle(document.documentElement);
+                    return ['--color-background', '--color-card', '--color-card-surface', '--color-elevated', '--color-popover']
+                        .map(token => styles.getPropertyValue(token).trim());
+                }""")
+                assert len(set(hierarchy_colors)) == 5
+                step_surfaces = page.locator(".step-item").evaluate_all(
+                    "elements => elements.map(element => getComputedStyle(element).backgroundColor)"
+                )
+                assert len(set(step_surfaces)) == 4
                 if width > 1100:
                     assert page.evaluate("""() => {
                         const leading = document.querySelector('.header-leading').getBoundingClientRect();
@@ -76,6 +86,12 @@ def run() -> None:
                     "element => getComputedStyle(element).visibility === 'hidden'"
                 )
                 assert page.locator("#btn-generate").is_visible()
+                drawer_surfaces = page.evaluate("""() => [
+                    getComputedStyle(document.querySelector('.session-form')).backgroundColor,
+                    getComputedStyle(document.querySelector('.ai-model-card')).backgroundColor,
+                    getComputedStyle(document.querySelector('.form-select')).backgroundColor
+                ]""")
+                assert len(set(drawer_surfaces)) == 3
                 assert page.locator("#btn-generate").evaluate(
                     "element => element.getBoundingClientRect().bottom <= window.innerHeight"
                 )

@@ -14,12 +14,12 @@ Source of truth for the web application shell. The printable session document ke
 
 | Token | Value | Purpose |
 | --- | --- | --- |
-| `--color-background` | `#090C11` | Level 0: editor canvas |
-| `--color-card` | `#121821` | Level 1: app chrome and navigation |
-| `--color-card-surface` | `#19222D` | Level 2: contextual panels |
-| `--color-elevated` | `#222E3A` | Level 3: controls and raised surfaces |
-| `--color-popover` | `#2B3947` | Level 4: hover and overlay surfaces |
-| `--color-border` | `#2E3A47` | Standard separation |
+| `--color-background` | `#080B0F` | Level 0: editor canvas |
+| `--color-card` | `#141A23` | Level 1: app chrome and navigation |
+| `--color-card-surface` | `#1E2834` | Level 2: contextual panels |
+| `--color-elevated` | `#2A3949` | Level 3: controls and raised surfaces |
+| `--color-popover` | `#3A4E61` | Level 4: hover and overlay surfaces |
+| `--color-border` | `#384758` | Standard separation |
 | `--color-foreground` | `#F4F4F6` | Primary text |
 | `--color-muted-foreground` | `#B2BBC8` | Supporting text |
 | `--color-subtle-foreground` | `#758192` | Metadata and pending states |
@@ -56,12 +56,13 @@ Normal text must meet 4.5:1 contrast. Interactive boundaries and meaningful icon
 - Creation panel: temporary contextual drawer that opens from the selected rail item.
 - Primary generation action: persistent footer of the inspector.
 - Workspace: document/editor receives all width except the compact permanent rail.
-- Empty state: unframed two-column orientation, not a floating dashboard card.
+- Empty state: full-width Level 1 band with a cyan-tinted introduction surface and four functional color modules.
 - The creation drawer is closed by default at every breakpoint and uses a scrim while open.
 
 ## States And Motion
 
 - Workflow accents: Copiloto cyan, Datos blue, Propósitos amber, Diseño emerald, Alumnos coral.
+- Workspace stages: Prepare amber, Generate blue, Review emerald, Deliver coral. Their filled surfaces must remain visibly distinct from the surrounding shell.
 - Active workflow step: tinted surface, colored vector icon, side rail, and explicit `En curso` label.
 - Completed step: green status and explicit `Completado` label.
 - Pending step: muted label.
