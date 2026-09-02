@@ -33,7 +33,7 @@ def run() -> None:
             """
             () => {
                 const payload = `
-                    <script>window.pwned = true<\/script>
+                    <script>window.pwned = true</script>
                     <iframe srcdoc="bad"></iframe>
                     <div onclick="window.pwned=true" style="color:red;background:url(javascript:bad)">
                         <img src="x" onerror="window.pwned=true">

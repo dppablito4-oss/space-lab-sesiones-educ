@@ -1,11 +1,15 @@
 import os
 import re
 import sys
+import json
+import socket
 import secrets
 import asyncio
 import webbrowser
 import threading
+import time
 import warnings
+import urllib.parse
 import urllib.request
 import zipfile
 import tkinter as tk
@@ -103,17 +107,119 @@ if getattr(sys, 'frozen', False):
 else:
     TOKEN_FILE = BASE_DIR / "connection_token.txt"
 
-
-# Rotate the local pairing token on every launch. A token persisted between
-# executions (or accidentally committed) must never authorize a new process.
+# The token gets rotated only after this process has confirmed that it owns the
+# single-instance mutex and that port 8000 is free.  Rotating it at import time
+# made a second launch invalidate the token of the instance already running.
 CONNECTION_TOKEN = secrets.token_hex(32)
-try:
-    TOKEN_FILE.write_text(CONNECTION_TOKEN, encoding="utf-8")
-except Exception:
-    # The GUI still exposes the in-memory pairing URL if the executable
-    # directory is read-only.
-    pass
 CLIENT_CONNECTED = False
+LOCAL_ENGINE_URL = "http://127.0.0.1:8000"
+PAIRING_PAGE_URL = "https://sesiones.sypablitodp.site/conexion.html"
+_SINGLE_INSTANCE_MUTEX = None
+
+
+def pairing_url(token: Optional[str] = None) -> str:
+    """Build the public pairing URL for the current or supplied token."""
+    active_token = token or CONNECTION_TOKEN
+    return f"{PAIRING_PAGE_URL}?token={urllib.parse.quote(active_token)}"
+
+
+def rotate_and_store_connection_token() -> str:
+    """Create the token for a new server instance and persist it when possible."""
+    global CONNECTION_TOKEN
+    CONNECTION_TOKEN = secrets.token_hex(32)
+    try:
+        TOKEN_FILE.write_text(CONNECTION_TOKEN, encoding="utf-8")
+    except Exception:
+        # The GUI still exposes the in-memory pairing URL if the executable
+        # directory is read-only.
+        pass
+    return CONNECTION_TOKEN
+
+
+def read_stored_connection_token() -> Optional[str]:
+    """Read a token written by the instance that currently owns the server."""
+    try:
+        token = TOKEN_FILE.read_text(encoding="utf-8").strip()
+    except (OSError, UnicodeError):
+        return None
+    return token if re.fullmatch(r"[0-9a-f]{64}", token) else None
+
+
+def local_port_is_busy() -> bool:
+    """Return whether a process is already listening on the engine port."""
+    try:
+        with socket.create_connection(("127.0.0.1", 8000), timeout=0.35):
+            return True
+    except OSError:
+        return False
+
+
+def running_engine_accepts(token: Optional[str] = None) -> bool:
+    """Identify our local engine and, when supplied, validate its token."""
+    try:
+        with urllib.request.urlopen(f"{LOCAL_ENGINE_URL}/", timeout=0.75) as response:
+            status = json.loads(response.read().decode("utf-8"))
+        if status.get("engine") != "FastAPI + Python Export Engine":
+            return False
+        if token is None:
+            return True
+        encoded_token = urllib.parse.quote(token)
+        with urllib.request.urlopen(
+            f"{LOCAL_ENGINE_URL}/verificar-token?token={encoded_token}", timeout=0.75
+        ) as response:
+            verification = json.loads(response.read().decode("utf-8"))
+        return verification.get("status") == "Connected"
+    except (OSError, ValueError, UnicodeError):
+        return False
+
+
+def acquire_single_instance_mutex() -> bool:
+    """Acquire a Windows mutex held for the lifetime of the desktop process."""
+    global _SINGLE_INSTANCE_MUTEX
+    if not sys.platform.startswith("win"):
+        return True
+
+    import ctypes
+
+    kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+    kernel32.CreateMutexW.argtypes = (ctypes.c_void_p, ctypes.c_bool, ctypes.c_wchar_p)
+    kernel32.CreateMutexW.restype = ctypes.c_void_p
+    kernel32.CloseHandle.argtypes = (ctypes.c_void_p,)
+    kernel32.CloseHandle.restype = ctypes.c_bool
+
+    handle = kernel32.CreateMutexW(None, False, "Local\\SYPablitoDP.ExportEngine")
+    if not handle:
+        raise ctypes.WinError(ctypes.get_last_error())
+    if ctypes.get_last_error() == 183:  # ERROR_ALREADY_EXISTS
+        kernel32.CloseHandle(handle)
+        return False
+
+    _SINGLE_INSTANCE_MUTEX = handle
+    return True
+
+
+def show_startup_message(title: str, message: str, *, error: bool = False) -> None:
+    """Show a small native message without creating a second application window."""
+    from tkinter import messagebox
+
+    root = tk.Tk()
+    root.withdraw()
+    try:
+        if error:
+            messagebox.showerror(title, message, parent=root)
+        else:
+            messagebox.showinfo(title, message, parent=root)
+    finally:
+        root.destroy()
+
+
+def open_existing_pairing_page() -> bool:
+    """Open the valid link belonging to an engine that is already online."""
+    token = read_stored_connection_token()
+    if not token or not running_engine_accepts(token):
+        return False
+    webbrowser.open(pairing_url(token))
+    return True
 
 # ── NORMALIZACIÓN Y MAPEO DE LLAVES DE ENTRADA (ADAPTADOR JSON) ──
 def standardize_key(k: str) -> str:
@@ -2029,7 +2135,7 @@ def descargar_chromium_nativo():
 @app.on_event("startup")
 async def startup_event():
     """Evento que se dispara al iniciar FastAPI para mostrar la URL de conexión segura en los logs."""
-    target_url = f"https://sesiones.sypablitodp.site/conexion.html?token={CONNECTION_TOKEN}"
+    target_url = pairing_url()
     print(f"🌐 [MOTOR ONLINE] Servidor de exportación corriendo en http://localhost:8000")
     print(f"🔗 [ENLACE SEGURO] URL de vinculación segura:\n{target_url}\n")
 
@@ -2123,7 +2229,7 @@ def start_gui():
     terminal.tag_config("link", foreground="#38bdf8", underline=True)
     
     # Eventos del enlace (Cambia el cursor a la manito y abre la web)
-    target_url = f"https://sesiones.sypablitodp.site/conexion.html?token={CONNECTION_TOKEN}"
+    target_url = pairing_url()
     terminal.tag_bind("link", "<Enter>", lambda e: terminal.config(cursor="hand2"))
     terminal.tag_bind("link", "<Leave>", lambda e: terminal.config(cursor="xterm"))
     terminal.tag_bind("link", "<Button-1>", lambda e: webbrowser.open(target_url))
@@ -2205,5 +2311,54 @@ def start_gui():
     root.after(30000, force_gc)
     root.mainloop()
 
-if __name__ == "__main__":
+def run_desktop_application() -> None:
+    """Start one engine instance or reuse the valid instance already running."""
+    if running_engine_accepts():
+        if open_existing_pairing_page():
+            return
+        show_startup_message(
+            "Motor local ya iniciado",
+            "El puerto 8000 ya pertenece al motor local, pero no se pudo recuperar "
+            "su token. Cierra todas las ventanas de pablitopyhost.exe y vuelve a abrirlo.",
+            error=True,
+        )
+        return
+
+    if local_port_is_busy():
+        show_startup_message(
+            "Puerto 8000 ocupado",
+            "Otro programa está usando el puerto 8000. Ciérralo y vuelve a iniciar "
+            "pablitopyhost.exe.",
+            error=True,
+        )
+        return
+
+    if not acquire_single_instance_mutex():
+        # The first instance may still be loading its bundled Python runtime.
+        for _ in range(20):
+            if open_existing_pairing_page():
+                return
+            time.sleep(0.25)
+        show_startup_message(
+            "Motor local iniciándose",
+            "El motor local ya se está iniciando. Usa la ventana que está abierta "
+            "y espera a que muestre [MOTOR ONLINE].",
+        )
+        return
+
+    # Close the small race between the initial port check and mutex acquisition.
+    if local_port_is_busy():
+        show_startup_message(
+            "Puerto 8000 ocupado",
+            "Otro programa empezó a usar el puerto 8000. Ciérralo y vuelve a iniciar "
+            "pablitopyhost.exe.",
+            error=True,
+        )
+        return
+
+    rotate_and_store_connection_token()
     start_gui()
+
+
+if __name__ == "__main__":
+    run_desktop_application()
