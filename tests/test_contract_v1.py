@@ -150,6 +150,27 @@ def test_evaluacion_not_dropped():
     print("  ✓ evaluacion preservada correctamente (NO eliminada)")
 
 
+def test_legacy_logo_list_is_normalized():
+    """Sesiones guardadas antes de v1 pueden traer metadata.logos como lista."""
+    with open(os.path.join(FIXTURES_DIR, 'secundaria-matematica-polya.v1.json'), 'r', encoding='utf-8') as f:
+        raw = json.load(f)
+
+    raw['metadata']['logos'] = [
+        {'id': 'header-logo-left', 'url': 'data:image/png;base64,LEFT', 'style': 'height:50px'},
+        {'id': 'header-logo-regional', 'src': 'data:image/png;base64,RIGHT'},
+    ]
+    doc = SessionDocumentV1(**raw)
+    assert doc.metadata.logos.institucional == 'data:image/png;base64,LEFT'
+    assert doc.metadata.logos.regional == 'data:image/png;base64,RIGHT'
+
+    # Un descriptor visual sin URL tampoco debe impedir exportar la sesion.
+    raw['metadata']['logos'] = [{'id': 'header-logo-left', 'type': 'model', 'style': 'height:50px'}]
+    doc = SessionDocumentV1(**raw)
+    assert doc.metadata.logos.institucional is None
+    assert doc.metadata.logos.regional is None
+    print("  OK metadata.logos legado normalizado correctamente")
+
+
 if __name__ == '__main__':
     print("=" * 60)
     print("TEST DE CONTRATO — SessionDocument v1")
@@ -166,6 +187,9 @@ if __name__ == '__main__':
 
     print("\n[4/4] Evaluación no se elimina...")
     test_evaluacion_not_dropped()
+
+    print("\n[5/5] Compatibilidad con logos guardados como lista...")
+    test_legacy_logo_list_is_normalized()
 
     print("\n" + "=" * 60)
     print(">>> TODOS LOS TESTS DE CONTRATO PASARON <<<")

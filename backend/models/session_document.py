@@ -10,8 +10,8 @@ esquema que usa el frontend (JS).
 REGLA: No eliminar campos silenciosamente. Si un campo llega, se conserva.
 """
 from __future__ import annotations
-from typing import List, Optional, Literal
-from pydantic import BaseModel, Field
+from typing import Any, List, Optional, Literal
+from pydantic import BaseModel, Field, field_validator
 
 
 # ── Bloques fundamentales ──
@@ -54,6 +54,67 @@ class MetadataV1(BaseModel):
     unidad: str = ""
     titulo: str = ""
     logos: LogosData = Field(default_factory=LogosData)
+
+    @field_validator("logos", mode="before")
+    @classmethod
+    def normalize_legacy_logos(cls, value: Any) -> Any:
+        """Accept saved sessions that still store logos as DOM image lists."""
+        if value is None:
+            return {}
+        if isinstance(value, LogosData):
+            return value
+
+        def extract_url(item: Any) -> Optional[str]:
+            if isinstance(item, str):
+                return item or None
+            if not isinstance(item, dict):
+                return None
+            for key in ("url", "src", "data", "value"):
+                candidate = item.get(key)
+                if isinstance(candidate, str) and candidate:
+                    return candidate
+                if isinstance(candidate, dict):
+                    nested = candidate.get("url") or candidate.get("src")
+                    if isinstance(nested, str) and nested:
+                        return nested
+            return None
+
+        if isinstance(value, dict):
+            return {
+                "institucional": extract_url(
+                    value.get("institucional")
+                    or value.get("logo_left_url")
+                    or value.get("logo_institucional")
+                    or value.get("left")
+                ),
+                "regional": extract_url(
+                    value.get("regional")
+                    or value.get("logo_regional_url")
+                    or value.get("logo_regional")
+                    or value.get("right")
+                ),
+            }
+
+        if isinstance(value, (list, tuple)):
+            normalized = {"institucional": None, "regional": None}
+            unassigned = []
+            for item in value:
+                url = extract_url(item)
+                if not url:
+                    continue
+                item_id = str(item.get("id", "")).lower() if isinstance(item, dict) else ""
+                if any(marker in item_id for marker in ("left", "institucional", "marca")):
+                    normalized["institucional"] = url
+                elif any(marker in item_id for marker in ("right", "regional", "ugel", "dre")):
+                    normalized["regional"] = url
+                else:
+                    unassigned.append(url)
+            for key in ("institucional", "regional"):
+                if normalized[key] is None and unassigned:
+                    normalized[key] = unassigned.pop(0)
+            return normalized
+
+        return value
 
 
 class PropositoV1(BaseModel):

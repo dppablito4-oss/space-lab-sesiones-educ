@@ -39,3 +39,30 @@ assert.equal(payload.htmlContent, undefined);
 assert.equal(source.metadata.institucion, 'Original', 'No debe mutar AppState');
 
 console.log('✓ SessionExport conserva el contrato canónico sin aplanar contenido');
+
+const legacyLogoPayload = SessionExport.buildCanonicalPayload({
+    ...source,
+    metadata: {
+        ...source.metadata,
+        logos: [
+            { id: 'header-logo-left', url: 'data:image/png;base64,LEFT', style: 'height:50px' },
+            { id: 'header-logo-regional', src: 'data:image/png;base64,RIGHT' }
+        ]
+    }
+});
+
+assert.deepEqual(legacyLogoPayload.metadata.logos, {
+    institucional: 'data:image/png;base64,LEFT',
+    regional: 'data:image/png;base64,RIGHT'
+});
+
+const descriptorOnlyPayload = SessionExport.buildCanonicalPayload({
+    ...source,
+    metadata: {
+        ...source.metadata,
+        logos: [{ id: 'header-logo-left', type: 'model', style: 'height:50px' }]
+    }
+});
+assert.deepEqual(descriptorOnlyPayload.metadata.logos, { institucional: null, regional: null });
+
+console.log('✓ SessionExport normaliza metadata.logos legado antes de exportar');
