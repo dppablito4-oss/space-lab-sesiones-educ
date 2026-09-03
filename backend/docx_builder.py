@@ -62,8 +62,8 @@ def add_table_borders_black(table, sz='4'):
 def set_table_col_widths_and_indent(table, widths_twip: list, indent_twip: int = -289):
     """
     Fuerza los anchos de columna a nivel XML (w:tblGrid + w:gridCol), la sangría izquierda
-    (w:tblInd) y el ancho total de tabla (w:tblW), además de aplicar w:cantSplit a cada fila
-    para evitar divisiones incómodas de fila entre páginas.
+    (w:tblInd) y el ancho total de tabla (w:tblW). No aplica ``w:cantSplit`` globalmente:
+    las filas extensas deben poder continuar en la página siguiente.
     """
     tbl = table._tbl
     tblPr = tbl.tblPr
@@ -95,15 +95,10 @@ def set_table_col_widths_and_indent(table, widths_twip: list, indent_twip: int =
         tblGrid.append(gridCol)
     tblPr.addnext(tblGrid)
 
-    # 4. Configurar w:cantSplit y w:tcW en todas las celdas
+    # 4. Configurar w:tcW en todas las celdas
     for row in tbl.findall(qn('w:tr')):
-        trPr = row.find(qn('w:trPr'))
-        if trPr is None:
-            trPr = OxmlElement('w:trPr')
-            row.insert(0, trPr)
-        if trPr.find(qn('w:cantSplit')) is None:
-            trPr.append(OxmlElement('w:cantSplit'))
-
+        # Word permite dividir las filas entre páginas por defecto. No añadir
+        # w:cantSplit aquí evita huecos grandes y bloques aislados.
         tcs = row.findall(qn('w:tc'))
         col_idx = 0
         for tc in tcs:

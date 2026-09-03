@@ -122,6 +122,27 @@ def test_template_fidelity_and_content_coverage():
     assert checklist.rows[0]._tr.xpath('./w:trPr/w:tblHeader')
     assert checklist.rows[1]._tr.xpath('./w:trPr/w:tblHeader')
 
+    moments = next(
+        table for table in rendered.tables
+        if table.cell(0, 0).text.strip() == 'MOMENTOS DE LA SESIÓN'
+    )
+    assert moments.rows[0]._tr.xpath('./w:trPr/w:tblHeader'), (
+        'El encabezado de momentos debe repetirse cuando la tabla continúa en otra página'
+    )
+    assert all(
+        not row._tr.xpath('./w:trPr/w:cantSplit')
+        for row in moments.rows[1:]
+    ), 'Las filas extensas de momentos deben poder continuar en la página siguiente'
+
+    purposes = next(
+        table for table in rendered.tables
+        if table.cell(0, 0).text.strip() == 'PROPÓSITOS DE APRENDIZAJE'
+    )
+    spacer_after_purposes = purposes._tbl.getnext()
+    assert not spacer_after_purposes.xpath('.//w:br[@w:type="page"]'), (
+        'Competencias transversales debe continuar en el espacio disponible, sin salto forzado'
+    )
+
     with zipfile.ZipFile(io.BytesIO(raw)) as package:
         xml_parts = b'\n'.join(
             package.read(name) for name in package.namelist() if name.endswith('.xml')
@@ -143,6 +164,30 @@ def test_template_fidelity_and_content_coverage():
             if qn('w:val') in node.attrib
         }
         assert referenced <= declared, f'Estilos OOXML faltantes: {sorted(referenced - declared)}'
+
+
+def test_landscape_checklist_uses_full_page_width():
+    fixture_path = os.path.join(TEST_DIR, 'fixtures', 'secundaria-matematica-polya.v1.json')
+    with open(fixture_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    data['listaCotejo']['criterios'] = [
+        f'Criterio amplio de evaluación número {index}' for index in range(1, 6)
+    ]
+
+    output = build_docx_from_v1(SessionDocumentV1(**data))
+    rendered = Document(output)
+    checklist = next(table for table in rendered.tables if len(table.columns) == 12)
+    grid_widths = [
+        int(column.get(qn('w:w')))
+        for column in checklist._tbl.tblGrid.findall(qn('w:gridCol'))
+    ]
+
+    assert sum(grid_widths) == 15106
+    table_width = checklist._tbl.tblPr.find(qn('w:tblW'))
+    table_indent = checklist._tbl.tblPr.find(qn('w:tblInd'))
+    assert int(table_width.get(qn('w:w'))) == 15106
+    assert table_indent.get(qn('w:w')) == '0'
+    assert min(grid_widths[2:]) >= 1100, 'Las columnas Sí/No no deben quedar comprimidas'
 
 
 if __name__ == '__main__':

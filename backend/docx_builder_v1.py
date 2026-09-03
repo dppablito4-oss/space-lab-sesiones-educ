@@ -565,7 +565,6 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
 
     set_table_col_widths_and_indent(pa, _PA_TWIPS, indent_twip=-289)
     doc.add_paragraph().paragraph_format.space_before = Pt(4)
-    doc.add_page_break()
 
     # ── TABLA 3: COMPETENCIAS TRANSVERSALES ──
     _CT_TWIPS = [3403, 7087]
@@ -1103,6 +1102,13 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         lc_sec.left_margin = Inches(0.6)
         lc_sec.right_margin = Inches(0.6)
 
+        # Ancho útil exacto de A4 horizontal con márgenes de 0.6 pulgadas.
+        # Todas las tablas de evaluación comparten esta geometría para quedar
+        # alineadas y ocupar la página completa.
+        _LANDSCAPE_TWIPS = 15106
+        _CHECK_NUMBER_TWIPS = 504
+        _CHECK_STUDENT_TWIPS = 3168
+
         lc_tbl = doc.add_table(rows=1, cols=1)
         lc_tbl.autofit = False
         lc_tbl.rows[0].cells[0].width = Inches(10.49)
@@ -1110,6 +1116,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         set_cell_text_white_bold(lc_tbl.cell(0, 0), "LISTA DE COTEJO DE EVALUACION FORMATIVA", font_size_pt=12)
         set_cell_background(lc_tbl.cell(0, 0), '2C3E50')
         set_cell_margins(lc_tbl.cell(0, 0), top=120, bottom=120, left=180, right=180)
+        set_table_col_widths_and_indent(lc_tbl, [_LANDSCAPE_TWIPS], indent_twip=0)
 
         doc.add_paragraph().paragraph_format.space_before = Pt(8)
 
@@ -1135,11 +1142,8 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         set_cell_margins(lch_tbl.cell(0, 3), top=80, bottom=80, left=120, right=120)
         lch_tbl.cell(0, 3).paragraphs[0].add_run(f"{meta.grado or ''} \"{meta.seccion or ''}\"")
 
-        for row in lch_tbl.rows:
-            row.cells[0].width = Inches(1.5)
-            row.cells[1].width = Inches(4.5)
-            row.cells[2].width = Inches(1.5)
-            row.cells[3].width = Inches(2.99)
+        _CHECK_INFO_TWIPS = [2160, 6480, 2160, 4306]
+        set_table_col_widths_and_indent(lch_tbl, _CHECK_INFO_TWIPS, indent_twip=0)
 
         doc.add_paragraph().paragraph_format.space_before = Pt(8)
 
@@ -1162,6 +1166,15 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         CRIT_COLORS = ['D9E1F2', 'FADBD8', 'D5F5E3', 'FCF3CF', 'FDE8D8', 'E8DAEF']
         SUBCRIT_COLORS = ['BDD7EE', 'FADBD8', 'A9DFBF', 'F9E79F', 'FAD7A0', 'D7BDE2']
 
+        criterion_columns = len(criterios) * 2
+        remaining_twips = _LANDSCAPE_TWIPS - _CHECK_NUMBER_TWIPS - _CHECK_STUDENT_TWIPS
+        criterion_base, criterion_extra = divmod(remaining_twips, criterion_columns)
+        criterion_twips = [
+            criterion_base + (1 if index < criterion_extra else 0)
+            for index in range(criterion_columns)
+        ]
+        checklist_widths = [_CHECK_NUMBER_TWIPS, _CHECK_STUDENT_TWIPS, *criterion_twips]
+
         def _lcfmt(cell, width_in, font_size_pt, bold=False, ctr=False, bg=None):
             cell.width = Inches(width_in)
             set_cell_margins(cell, top=60, bottom=60, left=60, right=60)
@@ -1176,29 +1189,31 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
                 run.bold = bold
                 run.font.size = Pt(font_size_pt)
 
-        _lcfmt(lct.cell(0, 0), 0.35, 8.5, bold=True, ctr=True, bg='FFF2CC')
-        _lcfmt(lct.cell(0, 1), 2.2, 8.5, bold=True, ctr=False, bg='FFF2CC')
+        _lcfmt(lct.cell(0, 0), _CHECK_NUMBER_TWIPS / 1440, 8.5, bold=True, ctr=True, bg='FFF2CC')
+        _lcfmt(lct.cell(0, 1), _CHECK_STUDENT_TWIPS / 1440, 8.5, bold=True, ctr=False, bg='FFF2CC')
         for ci, crit in enumerate(criterios):
             sc = 2 + ci * 2
-            _lcfmt(lct.cell(0, sc), 0.7, 7.5, bold=True, ctr=True, bg=CRIT_COLORS[ci % len(CRIT_COLORS)])
-            _lcfmt(lct.cell(1, sc), 0.35, 8, bold=True, ctr=True, bg=SUBCRIT_COLORS[ci % len(SUBCRIT_COLORS)])
-            _lcfmt(lct.cell(1, sc + 1), 0.35, 8, bold=True, ctr=True, bg=SUBCRIT_COLORS[ci % len(SUBCRIT_COLORS)])
+            pair_width_in = (criterion_twips[ci * 2] + criterion_twips[ci * 2 + 1]) / 1440
+            _lcfmt(lct.cell(0, sc), pair_width_in, 7.5, bold=True, ctr=True, bg=CRIT_COLORS[ci % len(CRIT_COLORS)])
+            _lcfmt(lct.cell(1, sc), criterion_twips[ci * 2] / 1440, 8, bold=True, ctr=True, bg=SUBCRIT_COLORS[ci % len(SUBCRIT_COLORS)])
+            _lcfmt(lct.cell(1, sc + 1), criterion_twips[ci * 2 + 1] / 1440, 8, bold=True, ctr=True, bg=SUBCRIT_COLORS[ci % len(SUBCRIT_COLORS)])
         for ri in range(roster_size):
             stud = alumnos[ri] if ri < len(alumnos) else ""
             rn = 2 + ri
             lct.cell(rn, 0).text = str(ri + 1)
             lct.cell(rn, 1).text = "" if stud.startswith("Estudiante ") else stud
-            _lcfmt(lct.cell(rn, 0), 0.35, 8.5, bold=True, ctr=True)
-            _lcfmt(lct.cell(rn, 1), 2.2, 8.5, bold=False, ctr=False)
+            _lcfmt(lct.cell(rn, 0), _CHECK_NUMBER_TWIPS / 1440, 8.5, bold=True, ctr=True)
+            _lcfmt(lct.cell(rn, 1), _CHECK_STUDENT_TWIPS / 1440, 8.5, bold=False, ctr=False)
             for ci in range(len(criterios)):
                 sc = 2 + ci * 2
-                _lcfmt(lct.cell(rn, sc), 0.35, 8, ctr=True)
-                _lcfmt(lct.cell(rn, sc + 1), 0.35, 8, ctr=True)
+                _lcfmt(lct.cell(rn, sc), criterion_twips[ci * 2] / 1440, 8, ctr=True)
+                _lcfmt(lct.cell(rn, sc + 1), criterion_twips[ci * 2 + 1] / 1440, 8, ctr=True)
 
         _set_repeat_table_header(lct.rows[0])
         _set_repeat_table_header(lct.rows[1])
         for row in lct.rows[2:]:
             _keep_row_together(row)
+        set_table_col_widths_and_indent(lct, checklist_widths, indent_twip=0)
 
     _apply_presentation(doc, doc_v1)
     _compact_empty_paragraphs(doc)
