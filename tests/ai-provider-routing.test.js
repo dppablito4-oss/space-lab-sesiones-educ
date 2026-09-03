@@ -68,11 +68,17 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     const generated = await ai.generateSession({
         area: 'Matemática',
         titulo: 'Prueba canónica',
+        methodology: 'polya',
         ai_provider: 'openai-gpt-5.6-luna'
     });
     assert.ok(Array.isArray(generated.momentos.desarrollo.procesos));
     assert.equal(generated.momentos.desarrollo.procesos.length, 1);
     assert.equal(generated.momentos.desarrollo.proceso_1_procesos, undefined);
+    const generationCall = calls.at(-1);
+    assert.match(generationCall.body.systemPrompt, /planificación de una sesión de aprendizaje detallada, extensa e interactiva/);
+    assert.match(generationCall.body.systemPrompt, /Familiarización con el problema/);
+    assert.match(generationCall.body.systemPrompt, /"schemaVersion": "1\.0"/);
+    assert.doesNotMatch(generationCall.body.systemPrompt, /titulo_sesion_retador|proceso_1_familiarizacion/);
 
     const browserAiSource = ['js/ai-copilot.js', 'js/chatbot.js', 'js/pedagogy-brief.js']
         .map(file => fs.readFileSync(file, 'utf8'))

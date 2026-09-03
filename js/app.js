@@ -242,12 +242,40 @@
                 const data = getFormData();
                 AppState.currentSession.metadata = {
                     ...AppState.currentSession.metadata,
-                    ...data.metadata
+                    institucion: data.metadata.institucion || '',
+                    dre: data.metadata.dre || '',
+                    ugel: data.metadata.ugel || '',
+                    docente: data.metadata.docente || '',
+                    director: data.metadata.director || '',
+                    fecha: data.metadata.fecha || '',
+                    nivel: data.metadata.nivel || '',
+                    grado: data.metadata.grado || '',
+                    seccion: data.metadata.seccion || '',
+                    area: data.metadata.area || '',
+                    numeroSesion: data.metadata.numero_sesion || '',
+                    duracionMinutos: parseMinutes(data.metadata.duracion) || 90,
+                    unidad: data.metadata.unidad || '',
+                    titulo: data.metadata.titulo || '',
+                    logos: {
+                        institucional: data.metadata.logo_left_url || null,
+                        regional: data.metadata.logo_regional_url || null
+                    }
                 };
                 AppState.currentSession.proposito = {
                     ...AppState.currentSession.proposito,
-                    ...data.proposito
+                    competencia: data.proposito.competencia || '',
+                    capacidades: String(data.proposito.capacidad || '')
+                        .split(/[;\n]/)
+                        .map(value => value.trim())
+                        .filter(Boolean),
+                    desempeno: data.proposito.desempeno || ''
                 };
+                const enfoques = [...(AppState.currentSession.enfoquesTransversales || [])];
+                [data.proposito.enfoque, data.proposito.enfoque2].forEach((nombre, index) => {
+                    if (!nombre) return;
+                    enfoques[index] = { ...(enfoques[index] || {}), nombre };
+                });
+                AppState.currentSession.enfoquesTransversales = enfoques;
                 AppState.currentSession.alumnos = data.alumnos;
                 Storage.triggerAutoSave();
             }
@@ -1113,13 +1141,13 @@
         Loader.show('Generando sesión con IA...');
 
         try {
-            const aiData = await AiCopilot.generateSession({
+            const generationRequest = {
                 ...formData.metadata,
                 ...formData.proposito,
                 template: DOM.selectTemplate.value,
                 sourceFile: AppState.sourceFileData,
                 pedagogyBrief: (window.PedagogyBrief ? PedagogyBrief.getSummary() : null)
-            });
+            };
 
             // Normalize at the AI boundary so the web and DOCX builders share
             // exactly one SessionDocument v1 contract.
@@ -1128,10 +1156,51 @@
                 numeroSesion: formData.metadata.numero_sesion,
                 duracionMinutos: parseMinutes(formData.metadata.duracion) || 90
             };
-            const { document: canonical, valid, errors } = AiCopilot.toV1(aiData, formMeta);
-            if (!valid) throw new Error(`La IA devolvió una sesión inválida: ${errors.join('; ')}`);
-            canonical.metadata = { ...formMeta, ...canonical.metadata };
-            canonical.listaCotejo = { ...canonical.listaCotejo, alumnos: formData.alumnos };
+            let aiData;
+            let canonical;
+            let qualityErrors = [];
+            for (let attempt = 0; attempt < 2; attempt += 1) {
+                aiData = await AiCopilot.generateSession({
+                    ...generationRequest,
+                    qualityFeedback: attempt === 1 ? qualityErrors : undefined
+                });
+                const normalized = AiCopilot.toV1(aiData, formMeta);
+                if (!normalized.valid) {
+                    qualityErrors = normalized.errors;
+                } else {
+                    canonical = normalized.document;
+                    const generatedMetadata = canonical.metadata || {};
+                    canonical.metadata = {
+                        ...generatedMetadata,
+                        institucion: formData.metadata.institucion || generatedMetadata.institucion || '',
+                        dre: formData.metadata.dre || generatedMetadata.dre || '',
+                        ugel: formData.metadata.ugel || generatedMetadata.ugel || '',
+                        docente: formData.metadata.docente || generatedMetadata.docente || '',
+                        director: formData.metadata.director || generatedMetadata.director || '',
+                        fecha: formData.metadata.fecha || generatedMetadata.fecha || '',
+                        nivel: formData.metadata.nivel || generatedMetadata.nivel || '',
+                        grado: formData.metadata.grado || generatedMetadata.grado || '',
+                        seccion: formData.metadata.seccion || generatedMetadata.seccion || '',
+                        area: formData.metadata.area || generatedMetadata.area || '',
+                        numeroSesion: formData.metadata.numero_sesion || generatedMetadata.numeroSesion || '',
+                        duracionMinutos: parseMinutes(formData.metadata.duracion) || generatedMetadata.duracionMinutos || 90,
+                        unidad: formData.metadata.unidad || generatedMetadata.unidad || '',
+                        titulo: formData.metadata.titulo || generatedMetadata.titulo || '',
+                        logos: {
+                            institucional: formData.metadata.logo_left_url || generatedMetadata.logos?.institucional || null,
+                            regional: formData.metadata.logo_regional_url || generatedMetadata.logos?.regional || null
+                        }
+                    };
+                    canonical.listaCotejo = { ...canonical.listaCotejo, alumnos: formData.alumnos };
+                    const quality = SessionValidator.validateGeneratedContent(canonical);
+                    qualityErrors = quality.errors;
+                    if (quality.valid) break;
+                }
+                canonical = null;
+            }
+            if (!canonical) {
+                throw new Error(`La IA devolvió contenido incompleto después de reintentarlo: ${qualityErrors.join('; ')}`);
+            }
 
             const session = {
                 id: AppState.currentSession?.id || Storage.generateId(),
@@ -1148,19 +1217,8 @@
             DOM.inputCapacidad.value = (canonical.proposito.capacidades || []).join('; ');
             DOM.inputDesempeno.value = canonical.proposito.desempeno || '';
 
-            // Update form with AI-generated title
-            if (aiData.titulo_sesion_retador) {
-                DOM.inputTitulo.value = aiData.titulo_sesion_retador;
-                session.metadata.titulo = aiData.titulo_sesion_retador;
-            }
-
-            // Update form with AI-generated propósito
-            if (aiData.proposito) {
-                DOM.inputCompetencia.value = aiData.proposito.competencia || '';
-                DOM.inputCapacidad.value = aiData.proposito.capacidad || '';
-                DOM.inputDesempeno.value = aiData.proposito.desempeno || '';
-                DOM.inputEnfoque.value = aiData.proposito.enfoque || '';
-            }
+            DOM.inputEnfoque.value = canonical.enfoquesTransversales?.[0]?.nombre || '';
+            DOM.inputEnfoque2.value = canonical.enfoquesTransversales?.[1]?.nombre || '';
 
             renderSession(session);
             Loader.hide();

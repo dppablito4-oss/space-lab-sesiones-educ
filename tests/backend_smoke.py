@@ -106,6 +106,22 @@ def run() -> None:
             encoding="utf-8"
         )
     )
+    rich_html = main.sanitize_rich_html(
+        '<p onclick="evil()"><strong>Pregunta</strong></p>'
+        '<table style="border:1px solid #000"><tr><td>Dato</td></tr></table>'
+        '<script>alert(1)</script>'
+    )
+    assert '<strong>Pregunta</strong>' in rich_html
+    assert '<table style="border:1px solid #000">' in rich_html
+    assert 'onclick' not in rich_html and '<script' not in rich_html
+
+    canonical = main.SessionDocumentV1(**v1_payload)
+    pdf_compat = main.v1_to_legacy_pdf_payload(canonical, main.CONNECTION_TOKEN)
+    cierre = pdf_compat['momentos']['cierre']
+    assert cierre['metacognicion'], 'El cierre v1 debe llegar al PDF'
+    assert cierre['evaluacion'], 'La evaluación formativa v1 debe llegar al PDF'
+    assert cierre['extension'], 'La extensión v1 debe llegar al PDF'
+
     v1_payload["token"] = main.CONNECTION_TOKEN
     word_v1 = client.post("/exportar-docx-json", json=v1_payload)
     assert word_v1.status_code == 200, word_v1.text

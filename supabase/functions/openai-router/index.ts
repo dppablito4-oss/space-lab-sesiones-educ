@@ -80,7 +80,8 @@ serve(async (req) => {
         messages: [
           { role: "system", content: systemPrompt || "Eres un asistente de Inteligencia Artificial para docentes de Space Lab." },
           { role: "user", content: userMessageContent }
-        ]
+        ],
+        max_completion_tokens: 12000
       })
     });
 

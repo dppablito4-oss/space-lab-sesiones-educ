@@ -60,7 +60,8 @@ serve(async (req) => {
     const requestBody: any = {
       contents: [{ parts }],
       generationConfig: {
-        responseMimeType: "application/json"
+        responseMimeType: "application/json",
+        maxOutputTokens: 8192
       }
     };
 

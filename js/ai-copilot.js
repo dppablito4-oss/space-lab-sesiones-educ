@@ -82,41 +82,41 @@ const AiCopilot = (() => {
 2. **Búsqueda y ejecución de estrategias:** Los alumnos proponen planes, eligen herramientas, organizan equipos y ejecutan soluciones.
 3. **Socialización de representaciones:** Los estudiantes comparten e intercambian en la pizarra sus representaciones (gráficas, simbólicas, concretas).
 4. **Reflexión y Formalización:** Momento donde el docente consolida conceptualmente el aprendizaje y los estudiantes reflexionan sobre sus dificultades y aciertos.
-Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_familiarizacion", "proceso_2_busqueda_estrategias", "proceso_3_socializacion" y "proceso_4_formalizacion_reflexion".`,
+Asegúrate de crear exactamente cuatro objetos dentro de momentos.desarrollo.procesos, con los ids "familiarizacion", "busqueda_estrategias", "socializacion" y "formalizacion_reflexion", en ese orden.`,
 
         erca: `La secuencia didáctica del momento de DESARROLLO debe estructurarse estrictamente bajo el ciclo ERCA:
 1. **Experiencia:** Actividad vivencial, exploración física, o recuperación de una situación real relacionada al tema.
 2. **Reflexión:** Los estudiantes analizan lo experimentado, exponen sus puntos de vista, y discuten las primeras interrogantes.
 3. **Conceptualización:** Sistematización teórica de los conceptos claves científicos, reglas o ideas principales guiados por el docente.
 4. **Aplicación:** Resolución de retos prácticos, ejercicios o situaciones cotidianas donde apliquen lo aprendido.
-Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_experiencia", "proceso_2_reflexion", "proceso_3_conceptualizacion" y "proceso_4_aplicacion".`,
+Asegúrate de crear exactamente cuatro objetos dentro de momentos.desarrollo.procesos, con los ids "experiencia", "reflexion", "conceptualizacion" y "aplicacion", en ese orden.`,
 
         abp: `La secuencia didáctica del momento de DESARROLLO debe estructurarse bajo los principios del Aprendizaje Basado en Proyectos (ABP):
 1. **Lanzamiento / Desafío:** Planteamiento del reto, pregunta orientadora o necesidad real del proyecto.
 2. **Indagación / Investigación:** Búsqueda activa de información, lectura o recolección de datos sobre la problemática.
 3. **Desarrollo del Producto:** Trabajo colaborativo donde los estudiantes diseñan, crean o esbozan el entregable/producto del proyecto.
 4. **Difusión y Evaluación:** Espacio donde socializan sus productos y reciben retroalimentación crítica constructiva de sus pares.
-Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_lanzamiento", "proceso_2_indagacion", "proceso_3_desarrollo_producto" y "proceso_4_difusion_evaluacion".`,
+Asegúrate de crear exactamente cuatro objetos dentro de momentos.desarrollo.procesos, con los ids "lanzamiento", "indagacion", "desarrollo_producto" y "difusion_evaluacion", en ese orden.`,
 
         flipped: `La secuencia didáctica del momento de DESARROLLO debe estructurarse bajo el enfoque de Aula Invertida (Flipped Classroom):
 1. **Conexión de saberes externos:** Puesta en común del contenido estudiado autónomamente antes de la clase (videos, lecturas previas).
 2. **Aplicación guiada / Taller activo:** Dinámica de alta exigencia cognitiva donde se resuelven dudas complejas y se trabaja en proyectos o retos colaborativos.
 3. **Consolidación y retroalimentación interactiva:** Sistematización del saber aplicado en el taller y evaluación formativa en vivo.
-Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_conexion_externa", "proceso_2_aplicacion_guiada" y "proceso_3_consolidacion_retroalimentacion".`,
+Asegúrate de crear exactamente tres objetos dentro de momentos.desarrollo.procesos, con los ids "conexion_externa", "aplicacion_guiada" y "consolidacion_retroalimentacion", en ese orden.`,
 
         indagacion: `La secuencia didáctica del momento de DESARROLLO debe estructurarse siguiendo el Método de Indagación Científica (STEAM/Ciencia):
 1. **Problematización de situaciones:** Formulación de preguntas investigables e hipótesis explicativas.
 2. **Diseño de estrategias para hacer indagación:** Elaboración del plan de acción experimental o metodológico.
 3. **Generación, registro y análisis de datos:** Actividad práctica de experimentación, observación directa o recolección de evidencia empírica.
 4. **Estructuración del saber construido y comunicación:** Contraste de hipótesis, síntesis de conclusiones y comunicación de aprendizajes.
-Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_problematizacion", "proceso_2_diseno_estrategias", "proceso_3_generacion_analisis_datos" y "proceso_4_estructuracion_comunicacion".`,
+Asegúrate de crear exactamente cuatro objetos dentro de momentos.desarrollo.procesos, con los ids "problematizacion", "diseno_estrategias", "generacion_analisis_datos" y "estructuracion_comunicacion", en ese orden.`,
 
         cooperativo: `La secuencia didáctica del momento de DESARROLLO debe centrarse en el Aprendizaje Cooperativo:
 1. **Organización de equipos y roles:** Formación de grupos heterogéneos y asignación de roles (coordinador, secretario, portavoz, gestor del tiempo).
 2. **Interdependencia positiva:** Actividades diseñadas para que los estudiantes se necesiten mutuamente para lograr el éxito grupal (ej: rompecabezas, lectura compartida).
 3. **Interacción promotora:** Fomentar el diálogo cercano y la explicación mutua de conceptos entre compañeros.
 4. **Autoevaluación grupal:** Reflexión final sobre el desempeño cooperativo del equipo.
-Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves: "proceso_1_organizacion_roles", "proceso_2_interdependencia_positiva", "proceso_3_interaccion_promotora" y "proceso_4_autoevaluacion_grupal".`
+Asegúrate de crear exactamente cuatro objetos dentro de momentos.desarrollo.procesos, con los ids "organizacion_roles", "interdependencia_positiva", "interaccion_promotora" y "autoevaluacion_grupal", en ese orden.`
     };
 
     // ─── SYSTEM PROMPT ───
@@ -125,14 +125,18 @@ Asegúrate de estructurar el JSON del desarrollo usando exactamente estas llaves
 REGLAS DE FORMATO Y CONTENIDO:
 1. Responde ÚNICAMENTE en formato JSON válido. No envíes explicaciones, código markdown ni backticks \`\`\`.
 2. Las actividades de los momentos (inicio, desarrollo, cierre) deben contener marcado HTML básico (como <strong>, <ul>, <li>, <p>, <br>) para estructurar el texto, listas y preguntas con excelente visualización. No uses etiquetas como <html>, <body>, ni clases CSS complejas.
-3. El desarrollo de la sesión debe dividirse rigurosamente en sub-procesos didácticos separados en claves independientes de JSON (proceso_1, proceso_2, etc.). Explaya detalladamente las interacciones pedagógicas, preguntas clave y dinámicas en cada proceso didáctico. No escatimes en la longitud del contenido, el formato de destino soporta textos extensos.
+3. El desarrollo de la sesión debe dividirse rigurosamente en objetos separados dentro del array momentos.desarrollo.procesos. Explaya detalladamente las interacciones pedagógicas, preguntas clave y dinámicas en cada proceso didáctico. No escatimes en la longitud del contenido, el formato de destino soporta textos extensos.
 4. Genera múltiples capacidades y criterios de evaluación adecuados a la competencia.
 5. Adapta la complejidad y tono de las actividades al Grado, Nivel (Inicial, Primaria, Secundaria) y Área curricular indicados.
+6. No entregues frases genéricas ni marcadores como "...". En cada proceso indica acciones concretas del docente, acciones de los estudiantes, preguntas mediadoras, organización, recursos y producto o evidencia parcial.
+7. Genera como mínimo 3 capacidades, entre 3 y 5 criterios observables, 4 procesos de inicio, todos los procesos propios de la metodología y 3 procesos de cierre.
 
-FORMATO DE RESPUESTA (JSON):
+FORMATO DE RESPUESTA (SessionDocument v1, JSON):
 {
-  "titulo_sesion_retador": "Frase de acción de la sesión (ej: Representamos con números enteros los goles a favor y en contra...)",
+  "schemaVersion": "1.0",
+  "metadata": {"institucion":"", "dre":"", "ugel":"", "docente":"", "director":"", "fecha":"", "nivel":"", "grado":"", "seccion":"", "area":"", "numeroSesion":"", "duracionMinutos":90, "unidad":"", "titulo":"Frase de acción retadora"},
   "proposito": {
+    "texto": "Propósito de aprendizaje comunicado al estudiante",
     "competencia": "Nombre oficial de la competencia (ej. Resuelve problemas de cantidad)",
     "estandar": "Texto completo del Estándar de Aprendizaje del ciclo correspondiente",
     "capacidades": [
@@ -140,26 +144,21 @@ FORMATO DE RESPUESTA (JSON):
       "Capacidad oficial 2",
       "Capacidad oficial 3"
     ],
-    "criterios_evaluacion": [
+    "criterios": [
       "Criterio de evaluación específico 1",
       "Criterio de evaluación específico 2",
       "Criterio de evaluación específico 3"
     ],
-    "producto_evidencia": "Descripción detallada del producto o evidencia de aprendizaje",
+    "evidencia": "Descripción detallada del producto o evidencia de aprendizaje",
     "instrumento": "Lista de Cotejo / Rúbrica",
-    "conocimientos": "Conceptos clave, temas y subtemas que se abordarán"
+    "conocimientos": "Conceptos clave, temas y subtemas que se abordarán",
+    "desempeno": "Desempeño precisado y contextualizado"
   },
-  "competencias_transversales": {
-    "tic": [
-      "Se desenvuelve en los entornos virtuales generados por las TIC al buscar información y recursos...",
-      "Organiza y clasifica información digital..."
-    ],
-    "autonoma": [
-      "Determina metas de aprendizaje viables asociadas a sus necesidades...",
-      "Organiza su tiempo y recursos para lograr sus metas..."
-    ]
-  },
-  "enfoques": [
+  "competenciasTransversales": [
+    {"titulo":"Se desenvuelve en los entornos virtuales generados por las TIC", "desempenos":["Desempeño contextualizado 1", "Desempeño contextualizado 2"]},
+    {"titulo":"Gestiona su aprendizaje de manera autónoma", "desempenos":["Desempeño contextualizado 1", "Desempeño contextualizado 2"]}
+  ],
+  "enfoquesTransversales": [
     {
       "nombre": "Nombre del Enfoque Transversal 1 (ej. Enfoque de derechos)",
       "valor": "Valor del enfoque 1 (ej. Conciencia de derechos)",
@@ -172,35 +171,43 @@ FORMATO DE RESPUESTA (JSON):
     }
   ],
   "recursos": {
-    "paginas_consulta": "Referencias bibliográficas, libros de texto de MINEDU, enlaces web oficiales",
+    "enlaces": "Referencias bibliográficas, libros de texto de MINEDU, enlaces web oficiales",
     "materiales": "Fichas de trabajo, papelotes, plumones, material concreto, proyector",
-    "actividades_refuerzo": "Ficha N° XX y título de la actividad de refuerzo escolar (opcional)"
+    "refuerzo": "Ficha N° XX y título de la actividad de refuerzo escolar (opcional)"
   },
   "momentos": {
     "inicio": {
-      "motivacion": "Actividad motivadora y retadora con los estudiantes (juego, caso, noticia).",
-      "saberes_previos": "Preguntas clave para rescatar lo que ya saben los estudiantes sobre el tema.",
-      "problematizacion": "Situación de conflicto cognitivo o reto inicial que movilice el pensamiento.",
-      "proposito_organizacion": "Comunicación del propósito de la sesión, los criterios de evaluación y cómo se organizarán para trabajar.",
-      "tiempo_total": "15 min"
+      "tiempoMinutos": 15,
+      "procesos": [
+        {"id":"motivacion", "orden":1, "titulo":"Motivación", "contenido":{"format":"html", "value":"<p>Actividad motivadora y retadora...</p>"}},
+        {"id":"saberes_previos", "orden":2, "titulo":"Saberes previos", "contenido":{"format":"html", "value":"<p>Preguntas y respuestas esperadas...</p>"}},
+        {"id":"problematizacion", "orden":3, "titulo":"Problematización", "contenido":{"format":"html", "value":"<p>Conflicto cognitivo o reto...</p>"}},
+        {"id":"proposito_organizacion", "orden":4, "titulo":"Propósito y organización", "contenido":{"format":"html", "value":"<p>Propósito, criterios y organización...</p>"}}
+      ]
     },
     "desarrollo": {
-      "proceso_1_familiarizacion": "Texto detallado en HTML para la lectura y comprensión del reto.",
-      "proceso_2_busqueda_estrategias": "Texto detallado en HTML sobre cómo plantearán y ejecutarán la solución.",
-      "proceso_3_socializacion": "Texto detallado en HTML sobre la exposición y debate de representaciones.",
-      "proceso_4_formalizacion_reflexion": "Texto detallado en HTML con la explicación científica/matemática consolidada y reflexión sobre lo aprendido.",
-      "tiempo_total": "65 min"
+      "tiempoMinutos": 65,
+      "procesos": [
+        {"id":"id_metodologico", "orden":1, "titulo":"Nombre del proceso didáctico", "contenido":{"format":"html", "value":"<p>Desarrollo amplio y específico...</p><ul><li>Interacción concreta...</li><li>Preguntas mediadoras...</li></ul>"}}
+      ]
     },
     "cierre": {
-      "actividades": "Preguntas de metacognición (¿Qué aprendimos hoy?, ¿Cómo lo aprendimos?, ¿Para qué nos servirá?), revisión corta de los criterios de evaluación logrados y tareas/actividades de extensión para el hogar.",
-      "tiempo_total": "10 min"
+      "tiempoMinutos": 10,
+      "procesos": [
+        {"id":"metacognicion", "orden":1, "titulo":"Metacognición", "contenido":{"format":"html", "value":"<p>Preguntas reflexivas contextualizadas...</p>"}},
+        {"id":"evaluacion_formativa", "orden":2, "titulo":"Evaluación formativa", "contenido":{"format":"html", "value":"<p>Revisión de criterios, evidencias y retroalimentación...</p>"}},
+        {"id":"extension", "orden":3, "titulo":"Extensión", "contenido":{"format":"html", "value":"<p>Aplicación significativa fuera del aula...</p>"}}
+      ]
     }
   },
   "evaluacion": {
-    "criterio": "Criterio de evaluación consolidado",
+    "criterioConsolidado": "Criterio de evaluación consolidado",
     "evidencia": "Evidencia/producto esperado",
     "instrumento": "Lista de Cotejo / Rúbrica"
-  }
+  },
+  "fichaTrabajo": null,
+  "juegoLibreSectores": null,
+  "listaCotejo": {"alumnos":[], "criterios":["Los mismos criterios observables de proposito.criterios"]}
 }
 
 FORMATO MATEMÁTICO (LaTeX con KaTeX):
@@ -225,38 +232,13 @@ CUÁNDO USAR LATEX:
 ❌ NO uses LaTeX en textos de gestión del aula, instrucciones organizativas ni preguntas de metacognición
 `;
 
-    const V1_SYSTEM_PROMPT = `Eres un asistente experto en sesiones de aprendizaje MINEDU. Responde SOLO JSON válido con el contrato SessionDocument v1, sin markdown.
-
-El orden obligatorio del documento es: metadata, proposito, competenciasTransversales, enfoquesTransversales, recursos, momentos, evaluacion, fichaTrabajo, juegoLibreSectores, listaCotejo.
-
-Estructura obligatoria:
-{
-  "schemaVersion": "1.0",
-  "metadata": {"institucion":"", "dre":"", "ugel":"", "docente":"", "director":"", "fecha":"", "nivel":"", "grado":"", "seccion":"", "area":"", "numeroSesion":"", "duracionMinutos":90, "unidad":"", "titulo":""},
-  "proposito": {"texto":"", "competencia":"", "capacidades":[""], "estandar":"", "desempeno":"", "conocimientos":"", "criterios":[""], "evidencia":"", "instrumento":"Lista de Cotejo"},
-  "competenciasTransversales":[{"titulo":"", "desempenos":[""]}],
-  "enfoquesTransversales":[{"nombre":"", "valor":"", "actitudes":""}],
-  "recursos":{"enlaces":"", "materiales":"", "refuerzo":""},
-  "momentos":{
-    "inicio":{"tiempoMinutos":15, "procesos":[{"id":"motivacion", "orden":1, "titulo":"Motivación", "contenido":{"format":"html", "value":"<p>...</p>"}}]},
-    "desarrollo":{"tiempoMinutos":65, "procesos":[{"id":"proceso_didactico", "orden":1, "titulo":"", "contenido":{"format":"html", "value":"<p>...</p>"}}]},
-    "cierre":{"tiempoMinutos":10, "procesos":[{"id":"metacognicion", "orden":1, "titulo":"Metacognición", "contenido":{"format":"html", "value":"<p>...</p>"}}]}
-  },
-  "evaluacion":{"criterioConsolidado":"", "evidencia":"", "instrumento":"Lista de Cotejo"},
-  "fichaTrabajo": null,
-  "juegoLibreSectores": null,
-  "listaCotejo":{"alumnos":[], "criterios":[""]}
-}
-
-Usa HTML básico solo dentro de contenido.value. Mantén los procesos en el orden didáctico de la metodología solicitada; no uses llaves legacy como proceso_1 ni titulo_sesion_retador. Para Inicial completa juegoLibreSectores; para Primaria completa fichaTrabajo.`;
-
     async function generateSession(metadata) {
         const userPrompt = buildPrompt(metadata);
 
         // Construir prompt de sistema dinámico basado en la metodología didáctica elegida
-        let dynamicSystemPrompt = V1_SYSTEM_PROMPT;
+        let dynamicSystemPrompt = SYSTEM_PROMPT;
         if (metadata.methodology && METHODOLOGY_PROMPTS[metadata.methodology]) {
-            dynamicSystemPrompt += `\n\nMetodología didáctica requerida: ${metadata.methodology}. Usa sus etapas como procesos ordenados dentro de momentos.desarrollo.procesos.`;
+            dynamicSystemPrompt += `\n\nMETODOLOGÍA DIDÁCTICA OBLIGATORIA:\n${METHODOLOGY_PROMPTS[metadata.methodology]}`;
         }
 
         if (metadata.template === 'inicial') {
@@ -264,7 +246,7 @@ Usa HTML básico solo dentro de contenido.value. Mantén los procesos en el orde
 La sesión que vas a generar es de nivel EDUCACIÓN INICIAL (para niños de 3 a 5 años). Por lo tanto:
 1. Adapta el lenguaje y las dinámicas para que sean sumamente lúdicas, vivenciales y concretas (uso de títeres, juegos de rol, asambleas cortas, manipulación de material concreto, dibujo y expresión plástica).
 2. Debes incluir OBLIGATORIAMENTE dos campos adicionales en la raíz del JSON de respuesta:
-   - "juego_libre_sectores": Objeto con los 6 pasos didácticos del juego libre en los sectores, detallados para este tema específico:
+   - "juegoLibreSectores": Objeto con los 6 pasos didácticos del juego libre en los sectores, detallados para este tema específico:
      {
        "planificacion": "Detalle de la asamblea y la elección libre del sector.",
        "organizacion": "Cómo se agrupan los niños y distribuyen los roles en los sectores.",
@@ -273,7 +255,7 @@ La sesión que vas a generar es de nivel EDUCACIÓN INICIAL (para niños de 3 a 
        "socializacion": "Preguntas que el docente hará para conversar sobre la experiencia del juego.",
        "representacion": "Detalle de la producción gráfica, modelado o dramatización posterior al juego."
      }
-   - "ficha_trabajo": Objeto con una propuesta de hoja de aplicación/ficha práctica autónoma para el estudiante:
+   - "fichaTrabajo": Objeto con una propuesta de hoja de aplicación/ficha práctica autónoma para el estudiante:
      {
        "titulo": "Título corto y llamativo para el niño (ej. ¡A contar maestras!)",
        "indicaciones": "Instrucciones de la actividad descritas de forma sumamente sencilla (para la docente/padre).",
@@ -284,9 +266,9 @@ Asegúrate de que la estructura JSON contenga estos dos nuevos campos en su raí
 
         if (metadata.nivel === 'PRIMARIA' || (metadata.nivel && metadata.nivel.toUpperCase() === 'PRIMARIA')) {
             dynamicSystemPrompt += `\n\n⚠️ INSTRUCCIÓN DE FORMATO ESPECIAL PARA EDUCACIÓN PRIMARIA (1° A 6° GRADO):
-La sesión que vas a generar es de nivel EDUCACIÓN PRIMARIA. Por lo tanto, debes incluir OBLIGATORIAMENTE un campo adicional en la raíz del JSON de respuesta llamado "ficha_trabajo" para proponer una ficha de aplicación/trabajo autónoma adaptada de forma rigurosa al grado indicado (${metadata.grado || 'del grado correspondiente'}):
+La sesión que vas a generar es de nivel EDUCACIÓN PRIMARIA. Por lo tanto, debes incluir OBLIGATORIAMENTE un campo adicional en la raíz del JSON de respuesta llamado "fichaTrabajo" para proponer una ficha de aplicación/trabajo autónoma adaptada de forma rigurosa al grado indicado (${metadata.grado || 'del grado correspondiente'}):
 {
-  "ficha_trabajo": {
+  "fichaTrabajo": {
     "titulo": "Título de la actividad para el estudiante (ej. ¡Jugamos y resolvemos sumando!)",
     "indicaciones": "Instrucciones cortas directas al estudiante (máximo 40 palabras).",
     "actividades": "Código HTML detallado con la estructura de la ficha. Usa tablas, recuadros punteados o listas con estilos CSS en línea para simular una hoja de trabajo física y atractiva. Adapta el contenido al grado indicado de forma estricta:
@@ -295,11 +277,10 @@ La sesión que vas a generar es de nivel EDUCACIÓN PRIMARIA. Por lo tanto, debe
       - 5° y 6° grado (Ciclo V): Preguntas reflexivas y críticas, problemas lógicos complejos (fracciones, porcentajes, etc.), organizadores visuales vacíos (ej. mapas conceptuales creados con tablas HTML vacías con bordes) para completar, y tareas de redacción corta."
   }
 }
-Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" en su raíz.`;
+Asegúrate de que la estructura JSON contenga este nuevo campo "fichaTrabajo" en su raíz.`;
         }
 
         // 1. Intentar llamar a la Edge Function de Supabase si está disponible
-        dynamicSystemPrompt += '\nUse only SessionDocument v1 camelCase field names. Ignore any earlier legacy snake_case field examples.';
 
         if (await hasAuthenticatedUser()) {
             try {
@@ -370,7 +351,7 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         }
 
         parts.push(`\n⚠️ INSTRUCCIÓN DE RESPETO DE ENTRADAS DEL DOCENTE:`);
-        parts.push(`- Si el docente ha proporcionado un 'Tema/Título' (${m.titulo ? `"${m.titulo}"` : 'NO PROVISTO'}), úsalo de forma obligatoria y estricta en la sesión. Si está vacío o NO PROVISTO, dedúcelo de manera creativa a partir del contexto del archivo de referencia adjunto y devuélvelo en la clave "titulo_sesion_retador".`);
+        parts.push(`- Si el docente ha proporcionado un 'Tema/Título' (${m.titulo ? `"${m.titulo}"` : 'NO PROVISTO'}), úsalo de forma obligatoria y estricta en la sesión. Si está vacío o NO PROVISTO, dedúcelo de manera creativa a partir del contexto del archivo de referencia adjunto y devuélvelo en "metadata.titulo".`);
         parts.push(`- Si el docente ha proporcionado una 'Competencia sugerida' (${m.competencia ? `"${m.competencia}"` : 'NO PROVISTO'}), úsala exactamente tal cual. Si está vacía o NO PROVISTO, dedúcela del contexto del archivo o área curricular.`);
         parts.push(`- Si el docente ha proporcionado una 'Capacidad sugerida' (${m.capacidad ? `"${m.capacidad}"` : 'NO PROVISTO'}), úsala. Si está vacía o NO PROVISTO, dedúcela del contexto del archivo.`);
         parts.push(`- Si el docente ha proporcionado un 'Desempeño sugerido' (${m.desempeno ? `"${m.desempeno}"` : 'NO PROVISTO'}), úsalo. Si está vacío o NO PROVISTO, dedúcelo del contexto del archivo.`);
@@ -380,6 +361,10 @@ Asegúrate de que la estructura JSON contenga este nuevo campo "ficha_trabajo" e
         // y NO repite área/grado/título (ya están arriba). Instrucción de alta prioridad.
         if (m.pedagogyBrief && m.pedagogyBrief.trim()) {
             parts.push(`\n⚠️ ENFOQUE PEDAGÓGICO ESPECÍFICO DEL DOCENTE (INSTRUCCIÓN DE ALTA PRIORIDAD):\n${m.pedagogyBrief.trim()}\nAsegúrate de que los momentos, actividades y ejemplos de la sesión reflejen exactamente este enfoque.`);
+        }
+
+        if (m.qualityFeedback) {
+            parts.push(`\n⚠️ CORRECCIÓN OBLIGATORIA: Un intento anterior fue rechazado por contenido incompleto. Corrige todos estos puntos en una respuesta nueva y completa:\n- ${m.qualityFeedback.join('\n- ')}`);
         }
 
         parts.push(`\nIMPORTANTE: Responde SOLO con el JSON, sin explicaciones.`);
@@ -647,4 +632,3 @@ ${instruction}`;
 })();
 
 window.AiCopilot = AiCopilot;
-

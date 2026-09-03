@@ -45,6 +45,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 from pydantic import BaseModel, Field
 from playwright.async_api import async_playwright
+from bs4 import BeautifulSoup
 from docx_builder import build_docx_from_json, build_docx_from_html
 from docx_builder_v1 import build_docx_from_v1
 from adapters.legacy_to_v1 import adapt_legacy_to_v1
@@ -1077,6 +1078,44 @@ def escape_html(text: str) -> str:
                 .replace("'", "&#x27;"))
 
 
+RICH_HTML_TAGS = {
+    "p", "br", "strong", "b", "em", "i", "u", "ul", "ol", "li",
+    "table", "thead", "tbody", "tfoot", "tr", "th", "td", "div", "span"
+}
+
+
+def sanitize_rich_html(value: str) -> str:
+    """Conserva el HTML pedagógico básico sin permitir contenido ejecutable."""
+    if not value:
+        return ""
+    soup = BeautifulSoup(str(value), "html.parser")
+    for unsafe in soup.find_all(["script", "style", "iframe", "object", "embed", "link", "meta"]):
+        unsafe.decompose()
+    for tag in list(soup.find_all(True)):
+        if tag.name not in RICH_HTML_TAGS:
+            tag.unwrap()
+            continue
+        clean_attrs = {}
+        for name in ("colspan", "rowspan"):
+            raw = tag.attrs.get(name)
+            if raw and str(raw).isdigit():
+                clean_attrs[name] = str(raw)
+        style = str(tag.attrs.get("style", ""))
+        if style and not re.search(r"url\s*\(|expression\s*\(|javascript:|@import", style, re.I):
+            clean_attrs["style"] = style
+        tag.attrs = clean_attrs
+    return str(soup)
+
+
+def render_rich_paragraph(value: str) -> str:
+    rendered = sanitize_rich_html(value)
+    if not rendered:
+        return ""
+    if re.search(r"<\s*(?:p|ul|ol|table|div)\b", rendered, re.I):
+        return rendered
+    return f"<p class='proceso-parrafo'>{rendered}</p>"
+
+
 def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
     presentation = session.presentation or {}
     def css_color(value, fallback):
@@ -1138,7 +1177,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
     cant_procesos = len(procesos_des) if procesos_des else 1
 
     # Inicio
-    inicio_actividades_html = "".join([f"<p class='proceso-parrafo'>{escape_html(act)}</p>" for act in session.momentos.inicio.actividades])
+    inicio_actividades_html = "".join(render_rich_paragraph(act) for act in session.momentos.inicio.actividades)
     
     # Desarrollo (Primer proceso y siguientes)
     desarrollo_primero_html = ""
@@ -1146,7 +1185,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
     
     if procesos_des:
         p_primero = procesos_des[0]
-        p_primero_cont = "".join([f"<p class='proceso-parrafo'>{escape_html(par)}</p>" for par in p_primero.contenido])
+        p_primero_cont = "".join(render_rich_paragraph(par) for par in p_primero.contenido)
         desarrollo_primero_html = f"""
         <div class="proceso-titulo">{escape_html(p_primero.titulo)}</div>
         {p_primero_cont}
@@ -1154,7 +1193,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
         
         for idx in range(1, cant_procesos):
             p_sig = procesos_des[idx]
-            p_sig_cont = "".join([f"<p class='proceso-parrafo'>{escape_html(par)}</p>" for par in p_sig.contenido])
+            p_sig_cont = "".join(render_rich_paragraph(par) for par in p_sig.contenido)
             desarrollo_siguientes_html += f"""
             <tr>
                 <td>
@@ -1170,23 +1209,21 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
     cierre_estrategias_html = ""
     if session.momentos.cierre.metacognicion:
         cierre_estrategias_html += "<p class='proceso-parrafo'><strong>Metacognición:</strong></p><ul class='session-list'>"
-        cierre_estrategias_html += "".join([f"<li>{escape_html(m)}</li>" for m in session.momentos.cierre.metacognicion])
+        cierre_estrategias_html += "".join([f"<li>{sanitize_rich_html(m)}</li>" for m in session.momentos.cierre.metacognicion])
         cierre_estrategias_html += "</ul>"
     if session.momentos.cierre.evaluacion:
         cierre_estrategias_html += "<p class='proceso-parrafo' style='margin-top:8px;'><strong>Evaluación formativa:</strong></p><ul class='session-list'>"
-        cierre_estrategias_html += "".join([f"<li>{escape_html(e)}</li>" for e in session.momentos.cierre.evaluacion])
+        cierre_estrategias_html += "".join([f"<li>{sanitize_rich_html(e)}</li>" for e in session.momentos.cierre.evaluacion])
         cierre_estrategias_html += "</ul>"
     if session.momentos.cierre.extension:
         cierre_estrategias_html += "<p class='proceso-parrafo' style='margin-top:8px;'><strong>Extensión para casa:</strong></p><ul class='session-list'>"
-        cierre_estrategias_html += "".join([f"<li>{escape_html(ext)}</li>" for ext in session.momentos.cierre.extension])
+        cierre_estrategias_html += "".join([f"<li>{sanitize_rich_html(ext)}</li>" for ext in session.momentos.cierre.extension])
         cierre_estrategias_html += "</ul>"
 
     # Ficha de Trabajo
     ficha_html = ""
     if session.ficha_trabajo:
-        ficha_actividades_txt = session.ficha_trabajo.actividades or ""
-        ficha_actividades_txt = re.sub(r'<[^>]*>', '', ficha_actividades_txt) # Limpiar tags HTML residuales
-        ficha_actividades_p = "".join([f"<p class='proceso-parrafo'>{escape_html(p)}</p>" for p in ficha_actividades_txt.split("\n") if p.strip()])
+        ficha_actividades_p = sanitize_rich_html(session.ficha_trabajo.actividades or "")
         
         ficha_html = f"""
         <div class="hoja-a4" style="page-break-before: always; break-before: page;">
@@ -1782,12 +1819,30 @@ def v1_to_legacy_pdf_payload(doc: SessionDocumentV1, token: str) -> dict:
             ]
         }
 
+    def cierre(moment):
+        grouped = {"metacognicion": [], "evaluacion": [], "extension": []}
+        for process in moment.procesos:
+            target = process.id
+            if target in {"evaluacion", "evaluacion_formativa"}:
+                target = "evaluacion"
+            elif target not in {"metacognicion", "extension"}:
+                target = "metacognicion"
+            grouped[target].append(process_text(process))
+        return {
+            "tiempo_total": f"{moment.tiempoMinutos} min",
+            **grouped,
+        }
+
+    metadata = doc.metadata.model_dump()
+    metadata.update({
+        "numero_sesion": doc.metadata.numeroSesion,
+        "duracion": str(doc.metadata.duracionMinutos),
+        "logo_left_url": doc.metadata.logos.institucional or "",
+        "logo_regional_url": doc.metadata.logos.regional or "",
+    })
+
     return {
-        "metadata": {
-            **doc.metadata.model_dump(),
-            "numero_sesion": doc.metadata.numeroSesion,
-            "duracion": str(doc.metadata.duracionMinutos),
-        },
+        "metadata": metadata,
         "proposito": {
             **doc.proposito.model_dump(),
             "criterios_evaluacion": doc.proposito.criterios,
@@ -1803,7 +1858,7 @@ def v1_to_legacy_pdf_payload(doc: SessionDocumentV1, token: str) -> dict:
         "momentos": {
             "inicio": moment(doc.momentos.inicio),
             "desarrollo": moment(doc.momentos.desarrollo),
-            "cierre": moment(doc.momentos.cierre),
+            "cierre": cierre(doc.momentos.cierre),
         },
         "ficha_trabajo": doc.fichaTrabajo.model_dump() if doc.fichaTrabajo else None,
         "juego_libre_sectores": doc.juegoLibreSectores.model_dump() if doc.juegoLibreSectores else None,

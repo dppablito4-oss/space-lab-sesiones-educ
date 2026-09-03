@@ -19,12 +19,19 @@ const SessionValidator = (() => {
         'motivacion', 'saberes_previos', 'problematizacion', 'proposito_organizacion',
         // Desarrollo (Polya)
         'familiarizacion', 'busqueda_estrategias', 'socializacion', 'formalizacion',
+        'formalizacion_reflexion',
         'planteamiento_otros_problemas',
         // Desarrollo (ERCA)
         'experiencia', 'reflexion', 'conceptualizacion', 'aplicacion',
         // Desarrollo (Indagación)
         'planteamiento_problema', 'formulacion_hipotesis', 'elaboracion_plan',
         'recojo_datos', 'analisis_resultados', 'evaluacion_comunicacion',
+        'diseno_estrategias', 'generacion_analisis_datos', 'estructuracion_comunicacion',
+        // Desarrollo (ABP, aula invertida y cooperativo)
+        'lanzamiento', 'indagacion', 'desarrollo_producto', 'difusion_evaluacion',
+        'conexion_externa', 'aplicacion_guiada', 'consolidacion_retroalimentacion',
+        'organizacion_roles', 'interdependencia_positiva', 'interaccion_promotora',
+        'autoevaluacion_grupal',
         // Desarrollo (genérico)
         'proceso_didactico', 'actividad',
         // Cierre
@@ -262,9 +269,65 @@ const SessionValidator = (() => {
         }
     }
 
+    /**
+     * Control de calidad exclusivo para respuestas recién generadas por IA.
+     * El validador estructural sigue aceptando borradores/importaciones parciales;
+     * este control evita presentar y exportar una sesión pobre como terminada.
+     */
+    function validateGeneratedContent(doc) {
+        const structural = validate(doc);
+        const errors = [...structural.errors];
+        const warnings = [...structural.warnings];
+
+        if (!structural.valid) return { valid: false, errors, warnings };
+
+        const requiredText = [
+            ['metadata.titulo', doc.metadata?.titulo],
+            ['proposito.competencia', doc.proposito?.competencia],
+            ['proposito.desempeno', doc.proposito?.desempeno],
+            ['proposito.evidencia', doc.proposito?.evidencia]
+        ];
+        requiredText.forEach(([path, value]) => {
+            if (!String(value || '').trim()) errors.push(`${path} no puede quedar vacío en una sesión generada.`);
+        });
+
+        if ((doc.proposito?.capacidades || []).filter(Boolean).length < 2) {
+            errors.push('La sesión generada debe incluir al menos 2 capacidades pertinentes.');
+        }
+        if ((doc.proposito?.criterios || []).filter(Boolean).length < 3) {
+            errors.push('La sesión generada debe incluir al menos 3 criterios observables.');
+        }
+
+        const minimumProcesses = { inicio: 4, desarrollo: 3, cierre: 3 };
+        let totalChars = 0;
+        Object.entries(minimumProcesses).forEach(([moment, minimum]) => {
+            const processes = doc.momentos?.[moment]?.procesos || [];
+            if (processes.length < minimum) {
+                errors.push(`momentos.${moment} debe incluir al menos ${minimum} procesos desarrollados.`);
+            }
+            processes.forEach((process, index) => {
+                const plain = String(process?.contenido?.value || '')
+                    .replace(/<[^>]+>/g, ' ')
+                    .replace(/&nbsp;|&#160;/gi, ' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+                totalChars += plain.length;
+                if (plain.length < 80 || /^(\.\.\.|pendiente|por completar)$/i.test(plain)) {
+                    errors.push(`momentos.${moment}.procesos[${index}] tiene contenido insuficiente.`);
+                }
+            });
+        });
+        if (totalChars < 1800) {
+            errors.push('La sesión generada es demasiado breve; debe desarrollar acciones, preguntas y dinámicas concretas.');
+        }
+
+        return { valid: errors.length === 0, errors, warnings };
+    }
+
     // ── API pública ──
     return {
         validate,
+        validateGeneratedContent,
         SCHEMA_VERSION,
         KNOWN_PROCESS_IDS
     };

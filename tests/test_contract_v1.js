@@ -92,6 +92,27 @@ function testProcessValidation() {
     console.log('  ✓ Validación de procesos OK');
 }
 
+function testGeneratedContentQualityGate() {
+    console.log('\n[5/5] Contenido pobre no se acepta como sesión terminada...');
+    const sparseDoc = {
+        schemaVersion: '1.0',
+        metadata: { titulo: 'Título' },
+        proposito: { competencia: 'Competencia', capacidades: [], criterios: [] },
+        momentos: {
+            inicio: { tiempoMinutos: 15, procesos: [] },
+            desarrollo: { tiempoMinutos: 65, procesos: [] },
+            cierre: { tiempoMinutos: 10, procesos: [] }
+        }
+    };
+    const structural = SessionValidator.validate(sparseDoc);
+    const quality = SessionValidator.validateGeneratedContent(sparseDoc);
+    if (!structural.valid || quality.valid || quality.errors.length < 4) {
+        console.error('  ✗ FAIL: El control de calidad debe rechazar una sesión estructuralmente válida pero pobre.');
+        process.exit(1);
+    }
+    console.log('  ✓ Control de calidad de generación OK');
+}
+
 // ── Ejecutar ──
 console.log('='.repeat(60));
 console.log('TEST DE CONTRATO JS — SessionDocument v1');
@@ -101,6 +122,7 @@ testValidatorAcceptsAllFixtures();
 testSchemaVersionRequired();
 testUnknownFieldsWarned();
 testProcessValidation();
+testGeneratedContentQualityGate();
 
 console.log('\n' + '='.repeat(60));
 console.log('>>> TODOS LOS TESTS JS DE CONTRATO PASARON <<<');
