@@ -10,6 +10,7 @@ from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from word_math import append_mixed_text, contains_latex
 
 if TYPE_CHECKING:
     from main import SesionAprendizajeRequest
@@ -306,6 +307,11 @@ def format_latex_to_unicode(text: str) -> str:
     """
     if not text:
         return ""
+    # Las fórmulas delimitadas deben llegar intactas al escritor híbrido de
+    # Word. Esta función queda como compatibilidad para comandos sueltos en
+    # documentos legacy, pero ya no aplana $...$ ni $$...$$ a texto Unicode.
+    if contains_latex(text):
+        return text
     
     # Tabla de equivalencias directas de LaTeX a Unicode
     # ── Convertir tablas LaTeX \begin{array}...\end{array} a texto tabular ──
@@ -526,9 +532,7 @@ def append_html_to_cell_or_paragraph(container, html_text: str, default_font_siz
                 p = container
             p.paragraph_format.line_spacing = 1.15
             p.paragraph_format.space_after = Pt(3)
-            r = p.add_run(line)
-            r.font.name = 'Arial'
-            r.font.size = Pt(default_font_size)
+            append_mixed_text(p, line, font_name='Arial', font_size=default_font_size)
             is_first_line = False
         return
 
@@ -542,12 +546,15 @@ def append_html_to_cell_or_paragraph(container, html_text: str, default_font_siz
                 # Quitar saltos de línea crudos dentro de las etiquetas HTML para evitar espaciados dobles
                 txt_clean = txt.replace('\n', ' ').replace('\r', '')
                 if txt_clean.strip() or txt == ' ':
-                    r = current_p.add_run(txt_clean)
-                    r.font.name = 'Arial'
-                    r.bold = bold
-                    r.italic = italic
-                    r.underline = underline
-                    r.font.size = Pt(default_font_size)
+                    append_mixed_text(
+                        current_p,
+                        txt_clean,
+                        font_name='Arial',
+                        font_size=default_font_size,
+                        bold=bold,
+                        italic=italic,
+                        underline=underline,
+                    )
         elif isinstance(node, Tag):
             name = node.name.lower()
             node_bold = bold or (name in ('strong', 'b'))

@@ -38,7 +38,7 @@ jobs:
 
       - name: Validate Python syntax
         run: |
-          python -m py_compile backend/main.py backend/docx_builder.py backend/docx_builder_v1.py backend/models/session_document.py backend/adapters/legacy_to_v1.py
+          python -m py_compile backend/main.py backend/docx_builder.py backend/docx_builder_v1.py backend/word_math.py backend/models/session_document.py backend/adapters/legacy_to_v1.py
           python -m ruff check backend tests --select F401,F811,F821 --exclude backend/build,backend/dist
 
       - name: Validate repository hygiene
@@ -68,6 +68,7 @@ jobs:
           python tests/test_contract_v1.py
           python tests/test_adapter_v1_py.py
           python tests/test_docx_builder_v1.py
+          python tests/test_word_math.py
           python tests/test_docx_fidelity.py
 
       - name: Run backend DOCX smoke test

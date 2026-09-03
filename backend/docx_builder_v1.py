@@ -21,6 +21,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.section import WD_SECTION
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
+from word_math import append_mixed_text
 
 from models.session_document import SessionDocumentV1
 from docx_builder import (
@@ -444,10 +445,14 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     p_tit.paragraph_format.space_before = Pt(0)
     p_tit.paragraph_format.space_after = Pt(0)
     p_tit.paragraph_format.line_spacing = 1.1
-    r_tit = p_tit.add_run(meta.titulo or "Título de la sesión de aprendizaje")
-    r_tit.bold = True
-    r_tit.font.size = Pt(10.5)
-    r_tit.font.color.rgb = ACCENT_RGB
+    append_mixed_text(
+        p_tit,
+        meta.titulo or "Título de la sesión de aprendizaje",
+        font_name=presentation.fontFamily,
+        font_size=10.5,
+        bold=True,
+        font_color=ACCENT_RGB,
+    )
 
     _hdr(pc.cell(2, 0), "PROPÓSITO DE LA SESIÓN", bg=BLUE_HDR, sz=9.5)
 
@@ -493,8 +498,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     rc1 = p_comp.add_run("Competencia: ")
     rc1.bold = True
     rc1.font.size = Pt(9.5)
-    rc2 = p_comp.add_run(prop.competencia or "No especificada")
-    rc2.font.size = Pt(9.5)
+    append_mixed_text(p_comp, prop.competencia or "No especificada", font_size=9.5)
 
     c_est = pa.cell(2, 0).merge(pa.cell(2, 4))
     set_cell_background(c_est, 'FFFFFF')
@@ -506,8 +510,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     re1 = p_est.add_run("Estándar de aprendizaje: ")
     re1.bold = True
     re1.font.size = Pt(9.5)
-    re2 = p_est.add_run(prop.estandar or "No especificado")
-    re2.font.size = Pt(9.5)
+    append_mixed_text(p_est, prop.estandar or "No especificado", font_size=9.5)
     if prop.desempeno:
         p_des = c_est.add_paragraph()
         p_des.paragraph_format.space_before = Pt(3)
@@ -516,8 +519,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         rd1 = p_des.add_run("Desempeño precisado: ")
         rd1.bold = True
         rd1.font.size = Pt(9.5)
-        rd2 = p_des.add_run(prop.desempeno)
-        rd2.font.size = Pt(9.5)
+        append_mixed_text(p_des, prop.desempeno, font_size=9.5)
 
     headers_pa = ["COMPETENCIAS", "CAPACIDADES", "CRITERIOS DE EVALUACION", "PRODUCTO / EVIDENCIA", "INSTRUMENTOS DE EVALUACIÓN"]
     for i, ht in enumerate(headers_pa):
@@ -531,7 +533,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     p_cv.paragraph_format.space_before = Pt(0)
     p_cv.paragraph_format.space_after = Pt(0)
     p_cv.paragraph_format.line_spacing = 1.1
-    p_cv.add_run(prop.competencia or "No especificada").font.size = Pt(8.5)
+    append_mixed_text(p_cv, prop.competencia or "No especificada", font_size=8.5)
 
     _bullet_cell(pa.cell(5, 1), prop.capacidades)
     _bullet_cell(pa.cell(5, 2), criterios_documento)
@@ -543,7 +545,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     p_ev.paragraph_format.space_before = Pt(0)
     p_ev.paragraph_format.space_after = Pt(0)
     p_ev.paragraph_format.line_spacing = 1.1
-    p_ev.add_run(evidencia_documento or "").font.size = Pt(8.5)
+    append_mixed_text(p_ev, evidencia_documento or "", font_size=8.5)
 
     c_ins_v = pa.cell(5, 4)
     set_cell_background(c_ins_v, GRAY_VAL)
