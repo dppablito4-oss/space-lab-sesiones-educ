@@ -6,6 +6,8 @@ import os
 import sys
 import json
 import io
+import zipfile
+from xml.etree import ElementTree as ET
 
 # Force UTF-8 on Windows
 if sys.platform.startswith('win'):
@@ -88,6 +90,61 @@ def test_custom_presentation_tokens():
     assert fonts == {'Calibri'}, f'Todas las fuentes deben usar Calibri: {fonts}'
 
 
+def test_template_fidelity_and_content_coverage():
+    fixture_path = os.path.join(TEST_DIR, 'fixtures', 'secundaria-matematica-polya.v1.json')
+    with open(fixture_path, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    data['listaCotejo']['alumnos'] = []
+
+    output = build_docx_from_v1(SessionDocumentV1(**data))
+    raw = output.getvalue()
+    rendered = Document(io.BytesIO(raw))
+    all_text = ' '.join(
+        node.text or ''
+        for node in rendered._element.body.iter()
+        if node.tag == qn('w:t')
+    )
+
+    assert abs(rendered.sections[0].page_width.inches - 8.27) < 0.01
+    assert abs(rendered.sections[0].page_height.inches - 11.69) < 0.01
+    assert rendered.sections[0].header._element.xpath('.//w:drawing | .//w:pict'), (
+        'Debe conservar el encabezado institucional de la plantilla'
+    )
+    for expected in (
+        data['metadata']['dre'], data['metadata']['ugel'], data['metadata']['director'],
+        data['proposito']['desempeno'], data['evaluacion']['criterioConsolidado'],
+        data['momentos']['desarrollo']['procesos'][0]['titulo']
+    ):
+        assert expected.casefold() in all_text.casefold(), f'Contenido v1 perdido en DOCX: {expected!r}'
+
+    checklist = next(table for table in rendered.tables if len(table.columns) == 10)
+    assert len(checklist.rows) == 32, 'Debe crear 30 filas vacías aunque no haya nómina'
+    assert checklist.rows[0]._tr.xpath('./w:trPr/w:tblHeader')
+    assert checklist.rows[1]._tr.xpath('./w:trPr/w:tblHeader')
+
+    with zipfile.ZipFile(io.BytesIO(raw)) as package:
+        xml_parts = b'\n'.join(
+            package.read(name) for name in package.namelist() if name.endswith('.xml')
+        )
+        for private_sample in (b'Edward Lenin', b'ALAYA TRIGOSO', b'TRANSFORMACIONES GEOM'):
+            assert private_sample not in xml_parts, 'La plantilla sanitizada filtró datos de ejemplo'
+
+        styles_root = ET.fromstring(package.read('word/styles.xml'))
+        document_root = ET.fromstring(package.read('word/document.xml'))
+        ns = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
+        declared = {
+            node.attrib[qn('w:styleId')]
+            for node in styles_root.findall('w:style', ns)
+        }
+        referenced = {
+            node.attrib[qn('w:val')]
+            for selector in ('.//w:pStyle', './/w:rStyle', './/w:tblStyle')
+            for node in document_root.findall(selector, ns)
+            if qn('w:val') in node.attrib
+        }
+        assert referenced <= declared, f'Estilos OOXML faltantes: {sorted(referenced - declared)}'
+
+
 if __name__ == '__main__':
     print("=" * 60)
     print("TEST DOCX BUILDER V1 — SessionDocument v1 → .docx")
@@ -97,6 +154,7 @@ if __name__ == '__main__':
     size2 = test_fixture_docx('inicial.v1.json')
     size3 = test_fixture_docx('primaria-con-ficha.v1.json')
     test_custom_presentation_tokens()
+    test_template_fidelity_and_content_coverage()
 
     print("\n" + "=" * 60)
     print(">>> TODOS LOS TESTS DE DOCX BUILDER V1 PASARON EXITOSAMENTE <<<")

@@ -17,6 +17,8 @@ a = Analysis(
     binaries=[],
     datas=[
         ('../assets/logo.ico', 'assets'),
+        ('../assets/logo.png', 'assets'),
+        ('../assets/templates/session_template_v1.docx', 'assets/templates'),
     ],
     hiddenimports=[
         'playwright.async_api',

@@ -1439,6 +1439,36 @@
     function getFormDataJSON() {
         if (!AppState.currentSession) return null;
 
+        // SessionDocument v1 ya es la fuente de verdad. No reconstruirlo desde
+        // textContent: eso elimina HTML, títulos e identidad de los procesos.
+        if (window.SessionExport && AppState.currentSession.schemaVersion === '1.0') {
+            const textAlumnos = document.getElementById('textarea-alumnos')?.value || '';
+            const alumnos = textAlumnos.split('\n').map(line => line.trim()).filter(Boolean);
+            const currentMetadata = AppState.currentSession.metadata || {};
+            const canonicalPayload = SessionExport.buildCanonicalPayload(AppState.currentSession, {
+                metadata: {
+                    institucion: DOM.inputInstitucion.value || currentMetadata.institucion || '',
+                    dre: DOM.inputDre.value || currentMetadata.dre || '',
+                    ugel: DOM.inputUgel.value || currentMetadata.ugel || '',
+                    docente: DOM.inputDocente.value || currentMetadata.docente || '',
+                    director: DOM.inputDirector.value || currentMetadata.director || '',
+                    fecha: DOM.inputFecha.value || currentMetadata.fecha || '',
+                    nivel: DOM.inputNivel.value || currentMetadata.nivel || '',
+                    numeroSesion: DOM.inputNumeroSesion.value || currentMetadata.numeroSesion || '',
+                    grado: DOM.inputGrado.value || currentMetadata.grado || '',
+                    seccion: DOM.inputSeccion.value || currentMetadata.seccion || '',
+                    area: DOM.inputArea.value || currentMetadata.area || '',
+                    duracionMinutos: parseMinutes(DOM.inputDuracion.value) || currentMetadata.duracionMinutos || 90,
+                    unidad: DOM.inputUnidad.value || currentMetadata.unidad || '',
+                    titulo: DOM.inputTitulo.value || currentMetadata.titulo || ''
+                },
+                alumnos: alumnos.length > 0 ? alumnos : (AppState.currentSession.listaCotejo?.alumnos || []),
+                presentation: DocumentPresentation.normalize(AppState.currentSession.presentation || AppState.currentSession.design || {}),
+                token: localStorage.getItem('connection_token') || ''
+            });
+            if (canonicalPayload) return canonicalPayload;
+        }
+
         // 1. Recopilar Logos
         const logos = [];
         const logoImgs = DOM.sessionSheet.querySelectorAll('.official-logo-img');

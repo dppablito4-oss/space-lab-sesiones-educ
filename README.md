@@ -96,6 +96,7 @@ node tests/test_contract_v1.js
 node tests/test_adapter_v1.js
 node tests/test_templates_v1.js
 node tests/test_presentation.js
+node tests/test_session_export.js
 node tests/storage.test.js
 node tests/ai-provider-routing.test.js
 
