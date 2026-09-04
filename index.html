@@ -351,6 +351,17 @@
                             </div>
                             <input type="file" id="input-source-file" class="hidden"
                                 accept=".pdf,image/*,audio/*,text/plain,.csv,.md,.json">
+                            <div id="source-file-guidance" class="source-file-guidance hidden">
+                                <label for="input-source-instruction" class="form-label">
+                                    ¿Qué parte debe usar la IA?
+                                </label>
+                                <textarea id="input-source-instruction" class="form-textarea" rows="3"
+                                    maxlength="600"
+                                    placeholder="Ej.: Toma como situación central la primera situación problemática de la página 2. No uses los otros ejemplos."></textarea>
+                                <p class="source-file-guidance-help">
+                                    Indica una página, un rango (págs. 3–5) o describe la situación. Si lo dejas vacío, la IA revisará todo el archivo sin asumir que la primera parte es la principal.
+                                </p>
+                            </div>
                         </div>
 
                         <!-- Afinar enfoque pedagógico -->
@@ -1329,7 +1340,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <script src="js/auth-ui.js"></script>
     <script src="js/storage.js"></script>
     <script src="js/templates.js"></script>
-    <script src="js/ai-copilot.js?v=2"></script>
+    <script src="js/ai-copilot.js?v=3"></script>
     <script src="js/document-presentation.js"></script>
     <script src="js/ai/session-validator.js"></script>
     <script src="js/ai/session-adapter.js?v=2"></script>
@@ -1343,7 +1354,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
     <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.min.js"></script>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script src="js/paginador.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=2"></script>
 </body>
 
 </html>

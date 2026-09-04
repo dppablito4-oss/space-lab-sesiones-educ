@@ -80,6 +80,22 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     assert.match(generationCall.body.systemPrompt, /"schemaVersion": "1\.0"/);
     assert.doesNotMatch(generationCall.body.systemPrompt, /titulo_sesion_retador|proceso_1_familiarizacion/);
 
+    await ai.generateSession({
+        area: 'Matemática',
+        titulo: 'Situación seleccionada',
+        ai_provider: 'openai-gpt-5.6-luna',
+        sourceFile: {
+            name: 'casos.pdf',
+            type: 'application/pdf',
+            textContent: '--- PÁGINA 1 --- Caso uno. --- PÁGINA 2 --- Caso dos.'
+        },
+        sourceInstruction: 'Toma como situación central el caso de la página 2.'
+    });
+    const sourceGuidanceCall = calls.at(-1);
+    assert.match(sourceGuidanceCall.body.prompt, /DIRECTIVA PRIORITARIA PARA USAR EL ARCHIVO/);
+    assert.match(sourceGuidanceCall.body.prompt, /Toma como situación central el caso de la página 2/);
+    assert.match(sourceGuidanceCall.body.prompt, /No la sustituyas por el primer ejemplo/);
+
     const browserAiSource = ['js/ai-copilot.js', 'js/chatbot.js', 'js/pedagogy-brief.js']
         .map(file => fs.readFileSync(file, 'utf8'))
         .join('\n');

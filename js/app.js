@@ -126,6 +126,8 @@
         sourceFileInfo: $('#source-file-info'),
         sourceFileNameText: $('#source-file-name-text'),
         btnRemoveSourceFile: $('#btn-remove-source-file'),
+        sourceFileGuidance: $('#source-file-guidance'),
+        inputSourceInstruction: $('#input-source-instruction'),
         // Other
         editModeBadge: $('#edit-mode-badge'),
         savedList: $('#saved-list'),
@@ -1146,6 +1148,7 @@
                 ...formData.proposito,
                 template: DOM.selectTemplate.value,
                 sourceFile: AppState.sourceFileData,
+                sourceInstruction: DOM.inputSourceInstruction ? DOM.inputSourceInstruction.value.trim() : '',
                 pedagogyBrief: (window.PedagogyBrief ? PedagogyBrief.getSummary() : null)
             };
 
@@ -4216,6 +4219,7 @@
         DOM.sourceFileNameText.textContent = name;
         DOM.sourceFileInfo.classList.remove('hidden');
         DOM.sourceFileDropzone.classList.add('hidden');
+        if (DOM.sourceFileGuidance) DOM.sourceFileGuidance.classList.remove('hidden');
         Toast.success('Archivo cargado correctamente');
     }
 
@@ -4225,6 +4229,8 @@
         DOM.sourceFileNameText.textContent = '';
         DOM.sourceFileInfo.classList.add('hidden');
         DOM.sourceFileDropzone.classList.remove('hidden');
+        if (DOM.inputSourceInstruction) DOM.inputSourceInstruction.value = '';
+        if (DOM.sourceFileGuidance) DOM.sourceFileGuidance.classList.add('hidden');
         Toast.success('Archivo de referencia removido');
     }
 
