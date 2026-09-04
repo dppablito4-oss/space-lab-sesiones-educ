@@ -38,6 +38,11 @@ function testV1Fixtures() {
     assert(htmlSec.includes("DESARROLLO:"), "Momento DESARROLLO presente");
     assert(htmlSec.includes("CIERRE:"), "Momento CIERRE presente");
     assert(!htmlSec.includes("undefined min"), "Sin tiempos 'undefined min'");
+    assert(htmlSec.includes('session-info-grid'), "Datos informativos usan la cuadrícula del Word");
+    assert(htmlSec.includes('>DRE<') && htmlSec.includes('>UGEL<'), "DRE y UGEL visibles en la vista previa");
+    assert(htmlSec.includes('assets/minedu-header.jpg'), "Encabezado MINEDU compartido con el Word");
+    assert(htmlSec.includes('LISTA DE COTEJO DE EVALUACIÓN FORMATIVA'), "Lista de cotejo con título oficial");
+    assert(htmlSec.includes('checklist-grid'), "Lista de cotejo usa la cuadrícula oficial");
 
     // 1.2 Inicial
     const iniPath = path.join(fixturesDir, 'inicial.v1.json');

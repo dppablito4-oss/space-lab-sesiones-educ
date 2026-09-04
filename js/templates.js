@@ -210,39 +210,46 @@ const Templates = (() => {
         alumnosList.forEach((stud, idx) => {
             const displayStudentName = stud.startsWith('Estudiante ') ? '' : stud;
             rowsHtml += `
-                <tr>
-                    <td style="text-align: center; font-weight: 700; height: 32px; border: 1px solid #000;">${idx + 1}</td>
-                    <td style="text-align: left; padding-left: 8px; font-weight: 600; border: 1px solid #000;">${esc(displayStudentName)}</td>
-                    ${criterios.map(() => `<td style="border: 1px solid #000; width: 35px;"></td><td style="border: 1px solid #000; width: 35px;"></td>`).join('')}
+                <tr class="checklist-student-row">
+                    <td class="checklist-number-cell">${idx + 1}</td>
+                    <td class="checklist-student-cell">${esc(displayStudentName)}</td>
+                    ${criterios.map(() => `<td class="checklist-mark-cell"></td><td class="checklist-mark-cell"></td>`).join('')}
                 </tr>
             `;
         });
 
-        const criteriaHeadersHtml = criterios.map(crit => `
-            <th colspan="2" style="font-size: 8px; font-weight: bold; background: #e2e8f0; border: 1px solid #000; padding: 4px; text-align: center; vertical-align: top; max-width: 150px;">
+        const criteriaHeadersHtml = criterios.map((crit, index) => `
+            <th colspan="2" class="checklist-criterion checklist-tone-${index % 6}">
+                <span class="checklist-criterion-prefix">Criterio ${index + 1}:</span>
                 ${esc(crit)}
             </th>
         `).join('');
 
-        const subHeadersHtml = criterios.map(() => `
-            <th style="width: 35px; text-align: center; background: #f1f5f9; border: 1px solid #000; font-size: 8px; font-weight: bold;">SI</th>
-            <th style="width: 35px; text-align: center; background: #f1f5f9; border: 1px solid #000; font-size: 8px; font-weight: bold;">NO</th>
+        const subHeadersHtml = criterios.map((_, index) => `
+            <th class="checklist-answer checklist-tone-${index % 6}">SÍ</th>
+            <th class="checklist-answer checklist-tone-${index % 6}">NO</th>
         `).join('');
 
         return `
             <div class="html2pdf__page-break" style="break-before: page; margin-top: 30px;"></div>
-            <div class="session-title-bar-official" style="margin-top: 20px;">
-                <span>Instrumento de evaluación</span>
-            </div>
-            <div class="session-title-bar-official" style="font-size: 11px; margin-top: 4px; background: #f1f5f9; color: #000;">
-                <span>LISTA DE COTEJO ${esc(m.grado || '2°')} ${esc(m.seccion || 'A')}</span>
-            </div>
-            
-            <table class="session-header-table eval-table momentos-table" style="width: 100%; border-collapse: collapse; margin-top: 10px; border: 1px solid #000;">
+            <section class="checklist-preview-section">
+                <div class="checklist-official-header">
+                    <img src="assets/minedu-header.jpg" alt="Perú - Ministerio de Educación">
+                </div>
+                <div class="checklist-title-bar">LISTA DE COTEJO DE EVALUACIÓN FORMATIVA</div>
+                <table class="checklist-meta-table">
+                    <tr>
+                        <th>IE / Área</th>
+                        <td>${esc(m.institucion || 'I.E.')} / ${esc(m.area || '')}</td>
+                        <th>Grado / Sección</th>
+                        <td>${esc(m.grado || '')} “${esc(m.seccion || '')}”</td>
+                    </tr>
+                </table>
+            <table class="checklist-grid" style="--checklist-criteria: ${criterios.length};">
                 <thead>
                     <tr>
-                        <th rowspan="2" style="width: 30px; text-align: center; background: #e2e8f0; border: 1px solid #000; font-size: 9px;">N°</th>
-                        <th rowspan="2" style="text-align: left; padding-left: 8px; background: #e2e8f0; border: 1px solid #000; font-size: 9px;">ESTUDIANTES</th>
+                        <th rowspan="2" class="checklist-number-header">N°</th>
+                        <th rowspan="2" class="checklist-student-header">APELLIDOS Y NOMBRES</th>
                         ${criteriaHeadersHtml}
                     </tr>
                     <tr>
@@ -253,6 +260,7 @@ const Templates = (() => {
                     ${rowsHtml}
                 </tbody>
             </table>
+            </section>
         `;
     }
 
@@ -632,30 +640,43 @@ const Templates = (() => {
             </div>
 
             <!-- ════════ DATOS GENERALES ════════ -->
-            <table class="session-header-table">
+            <table class="session-header-table session-info-grid">
+                <colgroup>
+                    <col style="width:11.64%"><col style="width:5.93%"><col style="width:3.73%">
+                    <col style="width:5.73%"><col style="width:10.81%"><col style="width:8.10%">
+                    <col style="width:8.11%"><col style="width:5.42%"><col style="width:1.35%">
+                    <col style="width:12.16%"><col style="width:4.06%"><col style="width:10.81%">
+                    <col style="width:12.15%">
+                </colgroup>
                 <tr>
-                    <td class="label-cell" style="width: 20%;">Institución Educativa</td>
-                    <td class="value-cell" ${ce} style="width: 30%;">${esc(m.institucion || 'I.E. N° — Nombre')}</td>
-                    <td class="label-cell" style="width: 20%;">Nivel</td>
-                    <td class="value-cell" ${ce} style="width: 30%;">${esc(m.nivel || 'SECUNDARIA')}</td>
+                    <td class="label-cell" colspan="3">Institución Educativa</td>
+                    <td class="value-cell" colspan="4" ${ce}>${esc(m.institucion || 'I.E. N° — Nombre')}</td>
+                    <td class="label-cell" colspan="2">Nivel</td>
+                    <td class="value-cell" colspan="4" ${ce}>${esc(m.nivel || 'SECUNDARIA')}</td>
+                </tr>
+                <tr>
+                    <td class="label-cell" colspan="2">DRE</td>
+                    <td class="value-cell" colspan="5" ${ce}>${esc(m.dre || '')}</td>
+                    <td class="label-cell" colspan="2">UGEL</td>
+                    <td class="value-cell" colspan="4" ${ce}>${esc(m.ugel || '')}</td>
                 </tr>
                 <tr>
                     <td class="label-cell">Docente</td>
-                    <td class="value-cell" ${ce}>${esc(m.docente || '')}</td>
-                    <td class="label-cell">Área</td>
-                    <td class="value-cell" ${ce}>${esc(m.area || '')}</td>
-                </tr>
-                <tr>
-                    <td class="label-cell">Grado y Sección</td>
-                    <td class="value-cell" ${ce}>${esc((m.grado || '') + ' ' + (m.seccion || ''))}</td>
-                    <td class="label-cell">Unidad / Proyecto</td>
+                    <td class="value-cell" colspan="6" ${ce}>${esc(m.docente || '')}</td>
+                    <td class="label-cell" colspan="2">Área</td>
+                    <td class="value-cell" colspan="2" ${ce}>${esc(m.area || '')}</td>
+                    <td class="label-cell">Unidad/ Proyecto</td>
                     <td class="value-cell" ${ce}>${esc(m.unidad || '')}</td>
                 </tr>
                 <tr>
+                    <td class="label-cell">Grado</td>
+                    <td class="value-cell" ${ce}>${esc(m.grado || '')}</td>
+                    <td class="label-cell" colspan="2">Sección</td>
+                    <td class="value-cell" ${ce}>${esc(m.seccion || '')}</td>
                     <td class="label-cell">Fecha</td>
-                    <td class="value-cell" ${ce}>${esc(m.fecha || '')}</td>
-                    <td class="label-cell">Duración (min)</td>
-                    <td class="value-cell" ${ce}>${esc(m.duracion || '90 min')}</td>
+                    <td class="value-cell" colspan="2" ${ce}>${esc(m.fecha || '')}</td>
+                    <td class="label-cell" colspan="2">Duración (minutos)</td>
+                    <td class="value-cell" colspan="3" ${ce}>${esc(m.duracion || '90 min')}</td>
                 </tr>
             </table>
 
@@ -700,10 +721,18 @@ const Templates = (() => {
                     <td class="label-cell">Estándar de aprendizaje</td>
                     <td ${ce} style="font-size:10px; line-height:1.4">${escHtml(p.estandar || 'Estándar de aprendizaje correspondiente al ciclo...')}</td>
                 </tr>
+                <tr>
+                    <td class="label-cell">Desempeño precisado</td>
+                    <td ${ce} style="font-size:10px; line-height:1.4">${escHtml(p.desempeno || 'Desempeño precisado para la sesión...')}</td>
+                </tr>
             </table>
 
             <!-- Tabla de Competencias / Capacidades / Criterios / Producto / Instrumento -->
             <table class="content-table propositos-table">
+                <colgroup>
+                    <col style="width:16.23%"><col style="width:22.97%"><col style="width:33.78%">
+                    <col style="width:13.52%"><col style="width:13.50%">
+                </colgroup>
                 <thead>
                     <tr>
                         <th>COMPETENCIAS</th>
@@ -1078,8 +1107,8 @@ const Templates = (() => {
 
     function buildLogosListHtml(m, ce) {
         return `
-            <div class="official-logo-item" style="display: flex; justify-content: center; align-items: center;">
-                <img id="header-logo-left" src="assets/favicon.svg" class="official-logo-img" onerror="this.src='assets/logo.png';" style="max-height: 50px; width: auto;" title="Logo de Marca" draggable="false">
+            <div class="official-logo-item minedu-header-artwork">
+                <img id="header-logo-left" src="assets/minedu-header.jpg" class="official-logo-img" onerror="this.src='assets/logo.png';" title="Perú - Ministerio de Educación" draggable="false">
             </div>
         `;
     }
