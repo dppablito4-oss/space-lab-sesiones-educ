@@ -1226,6 +1226,7 @@
             renderSession(session);
             Loader.hide();
             Toast.success('¡Sesión generada con IA exitosamente!');
+            window.dispatchEvent(new CustomEvent('spacelab:session-generated', { detail: { session } }));
         } catch (error) {
             Loader.hide();
 
