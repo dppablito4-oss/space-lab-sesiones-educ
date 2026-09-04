@@ -37,8 +37,9 @@ def run() -> None:
 
                 assert response and response.status == 200
                 assert not page_errors
-                assert page.locator(".sidebar-tab").count() == 5
+                assert page.locator(".sidebar-tab").count() == 6
                 assert page.locator('[data-tab="tab-design"]').count() == 1
+                assert page.locator('[data-tab="tab-fichas"]').count() == 1
                 assert page.evaluate(
                     "document.documentElement.scrollWidth <= window.innerWidth"
                 )

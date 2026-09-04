@@ -633,6 +633,7 @@ body.sidebar-open .chatbot-container { display: none !important; }
 .sidebar-tab:nth-child(3) { --step-color: var(--color-step-amber); --step-tint: var(--surface-amber); }
 .sidebar-tab:nth-child(4) { --step-color: var(--color-step-green); --step-tint: var(--surface-green); }
 .sidebar-tab:nth-child(5) { --step-color: var(--color-step-coral); --step-tint: var(--surface-coral); }
+.sidebar-tab:nth-child(6) { --step-color: var(--color-step-cyan); --step-tint: var(--surface-cyan); }
 
 .sidebar-tab::before {
     content: '';

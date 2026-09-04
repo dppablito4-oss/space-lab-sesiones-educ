@@ -262,6 +262,11 @@
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
                     </button>
+                    <button type="button" class="sidebar-tab" data-tab="tab-fichas" role="tab" aria-label="Fichas, pendiente" aria-selected="false" aria-controls="tab-fichas">
+                        <span class="tab-step">06</span>
+                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                        <span class="tab-copy"><span class="tab-text">Fichas</span><span class="tab-state">Pendiente</span></span>
+                    </button>
                 </div>
             </nav>
 
@@ -278,7 +283,7 @@
                 <div class="sidebar-workflow">
                 <form id="session-form" class="session-form" autocomplete="off">
                     <div class="inspector-heading">
-                        <span id="inspector-step" class="inspector-step">Paso 01 de 05</span>
+                        <span id="inspector-step" class="inspector-step">Paso 01 de 06</span>
                         <h3 id="inspector-title">Configura el copiloto</h3>
                         <p id="inspector-description">Elige el modelo, la plantilla y las referencias para preparar tu sesión.</p>
                     </div>
@@ -638,9 +643,17 @@
 ACOSTA MURGA, CLIFEER AMELEX
 AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; font-size: 0.8rem; line-height: 1.4; border-radius:6px; padding:10px; background:rgba(0,0,0,0.2); color:#fff; width:100%; border:1px solid rgba(255,255,255,0.1);"></textarea>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- PANE 6: FICHAS DE TRABAJO (PROMPT IA) -->
+                    <div id="tab-fichas" class="tab-pane" role="tabpanel">
+                        <div style="margin-bottom: 1.5rem;">
+                            <h3 class="saved-title" style="margin-bottom: 8px;">Fichas Didácticas con IA</h3>
+                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">Genera y personaliza el prompt optimizado para crear fichas escolares listas para imprimir con ChatGPT Images, GPT Image, Midjourney o DALL-E basadas en tu sesión.</p>
 
                             <!-- ═══ APARTADO DE FICHAS (PROMPT IA EXTERNA) ═══ -->
-                            <div id="apartado-fichas" class="form-group ficha-prompt-apartado" style="margin-top: 1.5rem; padding: 14px; background: rgba(14, 165, 233, 0.06); border: 1px solid var(--border-accent, rgba(14, 165, 233, 0.35)); border-radius: 10px;">
+                            <div id="apartado-fichas" class="form-group ficha-prompt-apartado" style="margin-top: 1rem; padding: 14px; background: rgba(14, 165, 233, 0.06); border: 1px solid var(--border-accent, rgba(14, 165, 233, 0.35)); border-radius: 10px;">
                                 <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
                                     <label for="input-ficha-prompt" class="form-label" style="margin: 0; font-weight: 700; display: flex; align-items: center; gap: 6px; color: var(--color-foreground, #f5f7fb);">
                                         <svg class="ui-icon" aria-hidden="true" style="color: var(--color-primary, #0ea5e9);"><use href="#icon-sparkles"></use></svg>
@@ -674,7 +687,7 @@ AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; fo
                                     </div>
                                 </div>
 
-                                <textarea id="input-ficha-prompt" class="form-textarea" rows="6" readonly style="font-size: 0.74rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.35; background: rgba(0,0,0,0.3); resize: vertical; margin-top: 8px;" placeholder="Primero genera la sesión para poder crear la ficha didáctica..."></textarea>
+                                <textarea id="input-ficha-prompt" class="form-textarea" rows="7" readonly style="font-size: 0.74rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.35; background: rgba(0,0,0,0.3); resize: vertical; margin-top: 8px;" placeholder="Primero genera la sesión para poder crear la ficha didáctica..."></textarea>
                                 
                                 <div style="display: flex; gap: 8px; margin-top: 8px;">
                                     <button type="button" id="btn-trigger-ficha-prompt" class="btn btn-primary btn-full btn-sm" style="font-size: 0.78rem; padding: 6px 10px;">

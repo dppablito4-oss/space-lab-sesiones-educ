@@ -139,29 +139,34 @@
 
     const WORKFLOW_STEPS = {
         'tab-ai': {
-            step: 'Paso 01 de 05',
+            step: 'Paso 01 de 06',
             title: 'Configura el copiloto',
             description: 'Elige el modelo, la plantilla y las referencias para preparar tu sesión.'
         },
         'tab-general': {
-            step: 'Paso 02 de 05',
+            step: 'Paso 02 de 06',
             title: 'Completa los datos',
             description: 'Define la institución, el grado, el área y la identidad de la sesión.'
         },
         'tab-propositos': {
-            step: 'Paso 03 de 05',
+            step: 'Paso 03 de 06',
             title: 'Define los propósitos',
             description: 'Alinea competencias, desempeños, evidencias y criterios de evaluación.'
         },
         'tab-design': {
-            step: 'Paso 04 de 05',
+            step: 'Paso 04 de 06',
             title: 'Personaliza el diseño',
             description: 'Ajusta la presentación que compartirán el editor web y la exportación Word.'
         },
         'tab-alumnos': {
-            step: 'Paso 05 de 05',
+            step: 'Paso 05 de 06',
             title: 'Añade a tus estudiantes',
             description: 'Prepara la lista de cotejo con los nombres del grado y la sección actual.'
+        },
+        'tab-fichas': {
+            step: 'Paso 06 de 06',
+            title: 'Fichas didácticas con IA',
+            description: 'Genera el prompt especializado para crear la ficha de trabajo para imprimir.'
         }
     };
 

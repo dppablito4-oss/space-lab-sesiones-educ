@@ -476,6 +476,18 @@
                 showSuggestion();
             });
         }
+
+        const tabFichas = document.querySelector('.sidebar-tab[data-tab="tab-fichas"]');
+        if (tabFichas) {
+            tabFichas.addEventListener('click', () => {
+                if (!hasSession()) {
+                    const txt = document.getElementById('input-ficha-prompt');
+                    if (txt && !txt.value) txt.value = 'Primero genera la sesión';
+                } else {
+                    updateApartado();
+                }
+            });
+        }
     }
 
     if (typeof document !== 'undefined') {
