@@ -52,5 +52,11 @@ const promptRefuerzo = context.window.ExternalFichaPrompt.buildPrompt({
 assert.match(promptRefuerzo, /REFUERZO ESCOLAR/);
 assert.match(promptRefuerzo, /EDUCACIÓN INICIAL/);
 
+// Test de validación cuando no hay sesión generada
+assert.equal(context.window.ExternalFichaPrompt.buildPrompt(null), 'Primero genera la sesión');
+assert.equal(context.window.ExternalFichaPrompt.buildPrompt({}), 'Primero genera la sesión');
+assert.equal(context.window.ExternalFichaPrompt.updateApartado(null), 'Primero genera la sesión');
+
 console.log('ficha-external-prompt.test.js: OK');
+
 

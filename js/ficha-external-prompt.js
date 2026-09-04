@@ -64,32 +64,45 @@
     }
 
     function hasSession(session) {
-        if (session && typeof session === 'object' && (session.momentos || session.proposito || session.metadata?.titulo || session.metadata?.area)) {
-            return true;
+        if (session !== undefined) {
+            if (!session || typeof session !== 'object') return false;
+            return Boolean(session.momentos || session.proposito || session.metadata?.titulo || session.metadata?.area);
         }
-        if (_lastSession && typeof _lastSession === 'object' && (_lastSession.momentos || _lastSession.proposito || _lastSession.metadata?.titulo)) {
-            return true;
+        if (_lastSession && typeof _lastSession === 'object') {
+            if (_lastSession.momentos || _lastSession.proposito || _lastSession.metadata?.titulo || _lastSession.metadata?.area) {
+                return true;
+            }
         }
         if (typeof window !== 'undefined' && typeof window.getCurrentSession === 'function') {
             const current = window.getCurrentSession();
-            if (current && typeof current === 'object' && (current.momentos || current.proposito || current.metadata?.titulo)) {
-                return true;
+            if (current && typeof current === 'object') {
+                if (current.momentos || current.proposito || current.metadata?.titulo || current.metadata?.area) {
+                    return true;
+                }
             }
         }
         return false;
     }
 
     function resolveSession(session) {
-        if (session && typeof session === 'object' && Object.keys(session).length > 0) {
-            return session;
+        if (session !== undefined) {
+            if (!session || typeof session !== 'object') return null;
+            if (session.momentos || session.proposito || session.metadata?.titulo || session.metadata?.area) {
+                return session;
+            }
+            return null;
         }
-        if (_lastSession && typeof _lastSession === 'object' && (_lastSession.momentos || _lastSession.proposito || _lastSession.metadata?.titulo)) {
-            return _lastSession;
+        if (_lastSession && typeof _lastSession === 'object') {
+            if (_lastSession.momentos || _lastSession.proposito || _lastSession.metadata?.titulo || _lastSession.metadata?.area) {
+                return _lastSession;
+            }
         }
         if (typeof window !== 'undefined' && typeof window.getCurrentSession === 'function') {
             const current = window.getCurrentSession();
-            if (current && typeof current === 'object' && (current.momentos || current.proposito || current.metadata?.titulo)) {
-                return current;
+            if (current && typeof current === 'object') {
+                if (current.momentos || current.proposito || current.metadata?.titulo || current.metadata?.area) {
+                    return current;
+                }
             }
         }
         return null;
@@ -147,7 +160,7 @@
     function buildPrompt(session, options = {}) {
         const activeSession = resolveSession(session);
         if (!activeSession) {
-            return 'Primero genera la sesión.';
+            return 'Primero genera la sesión';
         }
         const metadata = activeSession?.metadata || {};
         const proposito = activeSession?.proposito || {};
@@ -212,16 +225,18 @@
     }
 
     function updateApartado(session, options = {}) {
-        if (typeof document === 'undefined') return;
-        if (session) _lastSession = session;
+        if (typeof document === 'undefined') return 'Primero genera la sesión';
+        if (session && typeof session === 'object' && (session.momentos || session.proposito || session.metadata?.titulo || session.metadata?.area)) {
+            _lastSession = session;
+        }
 
         const selNivel = document.getElementById('select-ficha-nivel');
         const selVariante = document.getElementById('select-ficha-variante');
         const txtApartado = document.getElementById('input-ficha-prompt');
 
         if (!hasSession(session)) {
-            if (txtApartado) txtApartado.value = '';
-            return 'Primero genera la sesión.';
+            if (txtApartado) txtApartado.value = 'Primero genera la sesión';
+            return 'Primero genera la sesión';
         }
 
         const opt = {
@@ -229,7 +244,8 @@
             variante: options.variante || selVariante?.value || 'estandar'
         };
 
-        const prompt = buildPrompt(_lastSession, opt);
+        const activeSession = resolveSession(session);
+        const prompt = buildPrompt(activeSession, opt);
 
         if (txtApartado) {
             txtApartado.value = prompt;
@@ -315,6 +331,10 @@
         const modalVariante = modal.querySelector('#select-modal-ficha-variante');
 
         const onModalChange = () => {
+            if (!hasSession(_lastSession)) {
+                if (window.Toast) Toast.warning('Primero genera la sesión');
+                return;
+            }
             const prompt = updateApartado(_lastSession, {
                 dificultad: modalNivel.value,
                 variante: modalVariante.value
@@ -330,6 +350,10 @@
         modalVariante.addEventListener('change', onModalChange);
 
         modal.querySelector('#btn-copy-external-ficha-prompt').addEventListener('click', () => {
+            if (!hasSession(_lastSession)) {
+                if (window.Toast) Toast.warning('Primero genera la sesión');
+                return;
+            }
             const prompt = modal.querySelector('#external-ficha-prompt-text');
             copyToClipboard(prompt.value);
         });
@@ -337,7 +361,17 @@
 
     function showSuggestion(session, options = {}) {
         if (typeof document === 'undefined') return;
-        if (session) _lastSession = session;
+        if (session && typeof session === 'object' && (session.momentos || session.proposito || session.metadata?.titulo || session.metadata?.area)) {
+            _lastSession = session;
+        }
+
+        if (!hasSession(session)) {
+            const txt = document.getElementById('input-ficha-prompt');
+            if (txt) txt.value = 'Primero genera la sesión';
+            if (window.Toast) Toast.warning('Primero genera la sesión');
+            return;
+        }
+
         ensureUI();
 
         const selNivel = document.getElementById('select-ficha-nivel');
@@ -355,7 +389,8 @@
             if (modalVariante) modalVariante.value = opt.variante;
         }
 
-        const prompt = updateApartado(_lastSession, opt);
+        const activeSession = resolveSession(session);
+        const prompt = updateApartado(activeSession, opt);
         if (modal) {
             modal.querySelector('#external-ficha-prompt-text').value = prompt;
             modal.classList.remove('hidden');
@@ -373,7 +408,12 @@
         const btnToolbar = document.getElementById('btn-toolbar-ficha-prompt');
 
         const onChange = () => {
-            updateApartado(_lastSession);
+            if (!hasSession()) {
+                const txt = document.getElementById('input-ficha-prompt');
+                if (txt) txt.value = 'Primero genera la sesión';
+                return;
+            }
+            updateApartado();
         };
 
         if (selNivel) selNivel.addEventListener('change', onChange);
@@ -381,7 +421,13 @@
 
         if (btnTrigger) {
             btnTrigger.addEventListener('click', () => {
-                const prompt = updateApartado(_lastSession);
+                if (!hasSession()) {
+                    const txt = document.getElementById('input-ficha-prompt');
+                    if (txt) txt.value = 'Primero genera la sesión';
+                    if (window.Toast) Toast.warning('Primero genera la sesión');
+                    return;
+                }
+                const prompt = updateApartado();
                 if (window.Toast) Toast.success('Prompt de ficha actualizado');
                 const txt = document.getElementById('input-ficha-prompt');
                 if (txt) {
@@ -393,21 +439,41 @@
 
         if (btnCopy) {
             btnCopy.addEventListener('click', () => {
+                if (!hasSession()) {
+                    const txt = document.getElementById('input-ficha-prompt');
+                    if (txt) txt.value = 'Primero genera la sesión';
+                    if (window.Toast) Toast.warning('Primero genera la sesión');
+                    return;
+                }
                 const txt = document.getElementById('input-ficha-prompt');
-                const text = txt?.value || updateApartado(_lastSession);
+                const text = (txt && txt.value && txt.value !== 'Primero genera la sesión')
+                    ? txt.value
+                    : updateApartado();
                 copyToClipboard(text);
             });
         }
 
         if (btnModal) {
             btnModal.addEventListener('click', () => {
-                showSuggestion(_lastSession);
+                if (!hasSession()) {
+                    const txt = document.getElementById('input-ficha-prompt');
+                    if (txt) txt.value = 'Primero genera la sesión';
+                    if (window.Toast) Toast.warning('Primero genera la sesión');
+                    return;
+                }
+                showSuggestion();
             });
         }
 
         if (btnToolbar) {
             btnToolbar.addEventListener('click', () => {
-                showSuggestion(_lastSession);
+                if (!hasSession()) {
+                    const txt = document.getElementById('input-ficha-prompt');
+                    if (txt) txt.value = 'Primero genera la sesión';
+                    if (window.Toast) Toast.warning('Primero genera la sesión');
+                    return;
+                }
+                showSuggestion();
             });
         }
     }
