@@ -63,34 +63,36 @@
         return '';
     }
 
+    function hasSession(session) {
+        if (session && typeof session === 'object' && (session.momentos || session.proposito || session.metadata?.titulo || session.metadata?.area)) {
+            return true;
+        }
+        if (_lastSession && typeof _lastSession === 'object' && (_lastSession.momentos || _lastSession.proposito || _lastSession.metadata?.titulo)) {
+            return true;
+        }
+        if (typeof window !== 'undefined' && typeof window.getCurrentSession === 'function') {
+            const current = window.getCurrentSession();
+            if (current && typeof current === 'object' && (current.momentos || current.proposito || current.metadata?.titulo)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     function resolveSession(session) {
         if (session && typeof session === 'object' && Object.keys(session).length > 0) {
             return session;
         }
-        if (_lastSession) return _lastSession;
+        if (_lastSession && typeof _lastSession === 'object' && (_lastSession.momentos || _lastSession.proposito || _lastSession.metadata?.titulo)) {
+            return _lastSession;
+        }
         if (typeof window !== 'undefined' && typeof window.getCurrentSession === 'function') {
             const current = window.getCurrentSession();
-            if (current) return current;
+            if (current && typeof current === 'object' && (current.momentos || current.proposito || current.metadata?.titulo)) {
+                return current;
+            }
         }
-
-        if (typeof document !== 'undefined') {
-            return {
-                metadata: {
-                    titulo: document.getElementById('input-titulo')?.value || '',
-                    grado: document.getElementById('input-grado')?.value || '',
-                    seccion: document.getElementById('input-seccion')?.value || '',
-                    nivel: document.getElementById('input-nivel')?.value || '',
-                    area: document.getElementById('input-area')?.value || ''
-                },
-                proposito: {
-                    competencia: document.getElementById('input-competencia')?.value || '',
-                    desempeno: document.getElementById('input-desempeno')?.value || '',
-                    proposito: document.getElementById('input-desempeno')?.value || ''
-                }
-            };
-        }
-
-        return {};
+        return null;
     }
 
     function getDificultadDirective(dificultad) {
@@ -144,6 +146,9 @@
 
     function buildPrompt(session, options = {}) {
         const activeSession = resolveSession(session);
+        if (!activeSession) {
+            return 'Primero genera la sesión.';
+        }
         const metadata = activeSession?.metadata || {};
         const proposito = activeSession?.proposito || {};
         const ficha = activeSession?.fichaTrabajo || {};
@@ -213,6 +218,11 @@
         const selNivel = document.getElementById('select-ficha-nivel');
         const selVariante = document.getElementById('select-ficha-variante');
         const txtApartado = document.getElementById('input-ficha-prompt');
+
+        if (!hasSession(session)) {
+            if (txtApartado) txtApartado.value = '';
+            return 'Primero genera la sesión.';
+        }
 
         const opt = {
             dificultad: options.dificultad || selNivel?.value || 'avanzado',

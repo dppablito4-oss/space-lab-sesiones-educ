@@ -528,53 +528,6 @@
                             <input type="text" id="input-enfoque2" class="form-input"
                                 placeholder="Ej: Enfoque ambiental">
                         </div>
-
-                        <!-- ═══ APARTADO DE FICHAS (PROMPT IA EXTERNA) ═══ -->
-                        <div id="apartado-fichas" class="form-group ficha-prompt-apartado" style="margin-top: 1.5rem; padding: 14px; background: rgba(14, 165, 233, 0.06); border: 1px solid var(--border-accent, rgba(14, 165, 233, 0.35)); border-radius: 10px;">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                                <label for="input-ficha-prompt" class="form-label" style="margin: 0; font-weight: 700; display: flex; align-items: center; gap: 6px; color: var(--color-foreground, #f5f7fb);">
-                                    <svg class="ui-icon" aria-hidden="true" style="color: var(--color-primary, #0ea5e9);"><use href="#icon-sparkles"></use></svg>
-                                    Ficha de Trabajo / Aplicación (Prompt IA)
-                                </label>
-                                <button type="button" id="btn-copy-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.72rem; padding: 3px 8px; border: 1px solid var(--border);" title="Copiar prompt de ficha">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-copy"></use></svg> Copiar
-                                </button>
-                            </div>
-                            <p style="font-size: 0.75rem; color: var(--text-muted, #94a3b8); margin-bottom: 10px; line-height: 1.35;">
-                                Prompt para IA externa (ChatGPT Images, GPT Image, Midjourney) para crear la ficha didáctica de esta sesión. Puedes elegir la dificultad y variante:
-                            </p>
-                            
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                                <div>
-                                    <label for="select-ficha-nivel" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Dificultad de la Ficha</label>
-                                    <select id="select-ficha-nivel" class="form-select" style="font-size: 0.75rem; padding: 5px 8px; margin-bottom: 0;">
-                                        <option value="inicio">Nivel Inicio (Andamiaje)</option>
-                                        <option value="avanzado" selected>Nivel Avanzado (Estándar)</option>
-                                        <option value="experto">Nivel Experto (Desafío)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="select-ficha-variante" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Tipo de Variante</label>
-                                    <select id="select-ficha-variante" class="form-select" style="font-size: 0.75rem; padding: 5px 8px; margin-bottom: 0;">
-                                        <option value="estandar" selected>Datos de la sesión</option>
-                                        <option value="alternativa">Situación alternativa</option>
-                                        <option value="refuerzo">Refuerzo guiado</option>
-                                        <option value="reto">Reto / Extensión</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <textarea id="input-ficha-prompt" class="form-textarea" rows="6" readonly style="font-size: 0.74rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.35; background: rgba(0,0,0,0.3); resize: vertical; margin-top: 8px;" placeholder="El prompt de la ficha para IA externa se generará automáticamente al terminar cada sesión..."></textarea>
-                            
-                            <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                <button type="button" id="btn-trigger-ficha-prompt" class="btn btn-primary btn-full btn-sm" style="font-size: 0.78rem; padding: 6px 10px;">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar variante de ficha
-                                </button>
-                                <button type="button" id="btn-modal-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.78rem; padding: 6px 10px; border: 1px solid var(--border);" title="Ver prompt en ventana completa" aria-label="Ver prompt en ventana completa">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-expand"></use></svg>
-                                </button>
-                            </div>
-                        </div>
                     </div> <!-- End tab-propositos -->
 
                     <!-- PANE 4: DISEÑO Y ESTILOS -->
@@ -684,6 +637,53 @@
                                 <textarea id="textarea-alumnos" class="form-textarea" placeholder="Pega los nombres aquí, uno por línea. Ejemplo:
 ACOSTA MURGA, CLIFEER AMELEX
 AGUILAR JAVIER, FARID OMAR" style="min-height: 250px; font-family: monospace; font-size: 0.8rem; line-height: 1.4; border-radius:6px; padding:10px; background:rgba(0,0,0,0.2); color:#fff; width:100%; border:1px solid rgba(255,255,255,0.1);"></textarea>
+                            </div>
+
+                            <!-- ═══ APARTADO DE FICHAS (PROMPT IA EXTERNA) ═══ -->
+                            <div id="apartado-fichas" class="form-group ficha-prompt-apartado" style="margin-top: 1.5rem; padding: 14px; background: rgba(14, 165, 233, 0.06); border: 1px solid var(--border-accent, rgba(14, 165, 233, 0.35)); border-radius: 10px;">
+                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                    <label for="input-ficha-prompt" class="form-label" style="margin: 0; font-weight: 700; display: flex; align-items: center; gap: 6px; color: var(--color-foreground, #f5f7fb);">
+                                        <svg class="ui-icon" aria-hidden="true" style="color: var(--color-primary, #0ea5e9);"><use href="#icon-sparkles"></use></svg>
+                                        Ficha de Trabajo / Aplicación (Prompt IA)
+                                    </label>
+                                    <button type="button" id="btn-copy-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.72rem; padding: 3px 8px; border: 1px solid var(--border);" title="Copiar prompt de ficha">
+                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-copy"></use></svg> Copiar
+                                    </button>
+                                </div>
+                                <p style="font-size: 0.75rem; color: var(--text-muted, #94a3b8); margin-bottom: 10px; line-height: 1.35;">
+                                    Prompt para IA externa (ChatGPT Images, GPT Image, Midjourney) para crear la ficha didáctica de esta sesión. Puedes elegir la dificultad y variante:
+                                </p>
+                                
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                                    <div>
+                                        <label for="select-ficha-nivel" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Dificultad de la Ficha</label>
+                                        <select id="select-ficha-nivel" class="form-select" style="font-size: 0.75rem; padding: 5px 8px; margin-bottom: 0;">
+                                            <option value="inicio">Nivel Inicio (Andamiaje)</option>
+                                            <option value="avanzado" selected>Nivel Avanzado (Estándar)</option>
+                                            <option value="experto">Nivel Experto (Desafío)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label for="select-ficha-variante" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Tipo de Variante</label>
+                                        <select id="select-ficha-variante" class="form-select" style="font-size: 0.75rem; padding: 5px 8px; margin-bottom: 0;">
+                                            <option value="estandar" selected>Datos de la sesión</option>
+                                            <option value="alternativa">Situación alternativa</option>
+                                            <option value="refuerzo">Refuerzo guiado</option>
+                                            <option value="reto">Reto / Extensión</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <textarea id="input-ficha-prompt" class="form-textarea" rows="6" readonly style="font-size: 0.74rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.35; background: rgba(0,0,0,0.3); resize: vertical; margin-top: 8px;" placeholder="Primero genera la sesión para poder crear la ficha didáctica..."></textarea>
+                                
+                                <div style="display: flex; gap: 8px; margin-top: 8px;">
+                                    <button type="button" id="btn-trigger-ficha-prompt" class="btn btn-primary btn-full btn-sm" style="font-size: 0.78rem; padding: 6px 10px;">
+                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar variante de ficha
+                                    </button>
+                                    <button type="button" id="btn-modal-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.78rem; padding: 6px 10px; border: 1px solid var(--border);" title="Ver prompt en ventana completa" aria-label="Ver prompt en ventana completa">
+                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-expand"></use></svg>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
