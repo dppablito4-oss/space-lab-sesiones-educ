@@ -294,6 +294,7 @@
         }
 
         // Global callback to refresh session lists after login/logout
+        window.getCurrentSession = () => AppState.currentSession;
         window.appReloadSessions = () => {
             renderSavedList();
             loadLastSession();
@@ -2770,6 +2771,7 @@
 
         Storage.setCurrentSession(session);
         Toast.success('Sesión cargada correctamente');
+        window.dispatchEvent(new CustomEvent('spacelab:session-loaded', { detail: { session } }));
     }
 
     async function handleNew() {
