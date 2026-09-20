@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { requireAuthenticatedUser } from "../_shared/auth.ts";
+import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -7,7 +8,6 @@ const corsHeaders = {
   "Access-Control-Allow-Methods": "POST, OPTIONS",
 };
 
-const MAX_PROMPT_CHARS = 30_000;
 const MAX_SOURCE_BASE64_CHARS = 4 * 1024 * 1024;
 
 serve(async (req) => {
@@ -26,14 +26,16 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, systemPrompt, sourceFile } = await req.json();
-
-    if (typeof prompt !== "string" || !prompt.trim() || prompt.length > MAX_PROMPT_CHARS) {
-      return new Response(
-        JSON.stringify({ error: "Falta el parámetro 'prompt'." }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
-      );
+    const payload = await req.json();
+    let aiRequest: BuiltPrompt;
+    try {
+      aiRequest = buildPromptRequest(payload);
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Solicitud de IA inválida." }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400,
+      });
     }
+    const sourceFile = aiRequest.sourceFile;
 
     // Leer la API Key de los secretos configurados en Supabase
     const apiKey = Deno.env.get("API-KEY-GEMINI") || Deno.env.get("GEMINI_API_KEY");
@@ -45,7 +47,7 @@ serve(async (req) => {
     }
 
     // Construir partes del contenido
-    const parts: any[] = [{ text: prompt }];
+    const parts: any[] = [{ text: aiRequest.userPrompt }];
 
     // Si hay archivo multimodal adjunto (PDF, imagen, audio)
     if (sourceFile && typeof sourceFile.base64 === "string" && sourceFile.base64.length <= MAX_SOURCE_BASE64_CHARS && sourceFile.type) {
@@ -60,17 +62,12 @@ serve(async (req) => {
     const requestBody: any = {
       contents: [{ parts }],
       generationConfig: {
-        responseMimeType: "application/json",
-        maxOutputTokens: 8192
+        maxOutputTokens: aiRequest.maxOutputTokens
       }
     };
+    if (aiRequest.expectsJson) requestBody.generationConfig.responseMimeType = "application/json";
 
-    // Añadir instrucción del sistema si se provee
-    if (systemPrompt) {
-      requestBody.systemInstruction = {
-        parts: [{ text: systemPrompt }]
-      };
-    }
+    requestBody.systemInstruction = { parts: [{ text: aiRequest.systemPrompt }] };
 
     const modelName = "gemini-2.5-flash";
     const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
@@ -107,7 +104,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify(replyText),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, "Content-Type": "application/json", "X-Request-Id": aiRequest.requestId, "X-Prompt-Version": aiRequest.promptVersion },
         status: 200,
       }
     );

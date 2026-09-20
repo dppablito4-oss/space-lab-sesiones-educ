@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { requireAuthenticatedUser } from "../_shared/auth.ts";
+import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -8,7 +9,6 @@ const corsHeaders = {
 };
 
 const ALLOWED_MODELS = new Set(["gpt-5.6-luna", "gpt-5.4-mini"]);
-const MAX_PROMPT_CHARS = 30_000;
 const MAX_SOURCE_CHARS = 30_000;
 const MAX_IMAGE_BASE64_CHARS = 4 * 1024 * 1024;
 
@@ -27,14 +27,16 @@ serve(async (req) => {
   }
 
   try {
-    const { prompt, systemPrompt, model, sourceFile } = await req.json();
-
-    if (typeof prompt !== "string" || !prompt.trim() || prompt.length > MAX_PROMPT_CHARS) {
-      return new Response(
-        JSON.stringify({ error: "Falta el parámetro 'prompt'." }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
-      );
+    const payload = await req.json();
+    let aiRequest: BuiltPrompt;
+    try {
+      aiRequest = buildPromptRequest(payload);
+    } catch (error) {
+      return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Solicitud de IA inválida." }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400,
+      });
     }
+    const model = payload && typeof payload === "object" ? (payload as Record<string, unknown>).model : undefined;
 
     // Leer la API Key de los secretos configurados en Supabase
     const apiKey = Deno.env.get("OPENAI_API_KEY") || Deno.env.get("API_KEY_OPENAI");
@@ -46,13 +48,15 @@ serve(async (req) => {
     }
 
     // Construir contenido del mensaje de usuario
-    let userMessageContent: any = prompt;
+    const sourceFile = aiRequest.sourceFile;
+    let userMessageContent: any = aiRequest.userPrompt;
     if (sourceFile) {
       if (typeof sourceFile.textContent === "string") {
-        userMessageContent = `${prompt}\n\n--- DOCUMENTO / ARCHIVO ADJUNTO DE REFERENCIA (${sourceFile.name || "sin nombre"}) ---\n${sourceFile.textContent.slice(0, MAX_SOURCE_CHARS)}\n--- FIN DEL DOCUMENTO ---`;
+        // The prompt builder already places text references inside the user prompt.
+        userMessageContent = aiRequest.userPrompt.slice(0, MAX_SOURCE_CHARS * 2);
       } else if (typeof sourceFile.base64 === "string" && sourceFile.base64.length <= MAX_IMAGE_BASE64_CHARS && sourceFile.type?.startsWith("image/")) {
         userMessageContent = [
-          { type: "text", text: prompt },
+          { type: "text", text: aiRequest.userPrompt },
           {
             type: "image_url",
             image_url: {
@@ -78,10 +82,10 @@ serve(async (req) => {
       body: JSON.stringify({
         model: selectedModel,
         messages: [
-          { role: "system", content: systemPrompt || "Eres un asistente de Inteligencia Artificial para docentes de Space Lab." },
+          { role: "system", content: aiRequest.systemPrompt },
           { role: "user", content: userMessageContent }
         ],
-        max_completion_tokens: 12000
+        max_completion_tokens: aiRequest.maxOutputTokens
       })
     });
 
@@ -109,7 +113,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify(reply),
       {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, "Content-Type": "application/json", "X-Request-Id": aiRequest.requestId, "X-Prompt-Version": aiRequest.promptVersion },
         status: 200,
       }
     );

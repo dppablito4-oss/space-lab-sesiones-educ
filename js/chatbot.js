@@ -15,6 +15,16 @@ window.Chatbot = (() => {
 
     let chatHistory = [];
 
+    function createRequestId() {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+            return window.crypto.randomUUID();
+        }
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, char => {
+            const value = Math.floor(Math.random() * 16);
+            return (char === 'x' ? value : (value & 0x3) | 0x8).toString(16);
+        });
+    }
+
     function init() {
         container = document.getElementById('chatbot-container');
         bubble = document.getElementById('chatbot-bubble');
@@ -71,50 +81,35 @@ window.Chatbot = (() => {
         try {
             let responseText = '';
 
-            // Formatear prompt con historial y estado de diseño actual
-            let designContext = '';
+            let design = null;
             if (window.AppDesign && typeof window.AppDesign.getCurrent === 'function') {
                 const curDesign = window.AppDesign.getCurrent();
                 if (curDesign) {
-                    designContext = `\n\n[Configuración visual actual: preset=${curDesign.preset}, color principal=${curDesign.primaryColor}, color de acento=${curDesign.accentColor}, fondo de cabeceras=${curDesign.headerBackground}, fuente=${curDesign.fontFamily}, tamaño=${curDesign.fontSizePt}pt, densidad=${curDesign.cellPadding}, interlineado=${curDesign.lineHeight}]`;
+                    design = {
+                        preset: curDesign.preset,
+                        primaryColor: curDesign.primaryColor,
+                        accentColor: curDesign.accentColor,
+                        headerBackground: curDesign.headerBackground,
+                        fontFamily: curDesign.fontFamily,
+                        fontSizePt: curDesign.fontSizePt,
+                        cellPadding: curDesign.cellPadding,
+                        lineHeight: curDesign.lineHeight
+                    };
                 }
             }
-
-            let promptText = `Actúa como un asistente educativo experto para docentes de colegio en Perú de acuerdo a los lineamientos del Currículo Nacional (MINEDU). Sé conciso, amable y pedagógico. Si el usuario te pide que generes, crees o diseñes una sesión de aprendizaje completa, indícale amablemente que debe Iniciar Sesión o Registrarse en la esquina superior derecha de la pantalla para poder acceder al generador oficial, editar directamente sobre la hoja A4 y guardar su trabajo en la nube.${designContext}
-
-SI EL DOCENTE TE PIDE CAMBIOS DE DISEÑO, COLORES, TAMAÑO DE LETRA O ESPACIADOS:
-1. Recomienda una combinación de diseño armoniosa, profesional y de alta estética.
-2. Devuelve un bloque de código JSON con "action": "apply_design" e introduce los nuevos valores. El JSON debe ir en un bloque de código markdown de tipo json (ej. \`\`\`json { ... } \`\`\`).
-3. El formato JSON exacto debe ser:
-{
-  "action": "apply_design",
-  "design": {
-    "preset": "minedu/institucional/moderno/clasico/accesible",
-    "primaryColor": "#RRGGBB",
-    "accentColor": "#RRGGBB",
-    "headerBackground": "#RRGGBB",
-    "fontFamily": "Arial/Calibri/Georgia/Times New Roman/Courier New",
-    "fontSizePt": 10,
-    "cellPadding": "compact/standard/comfortable/spacious",
-    "lineHeight": 1.3
-  }
-}
-4. Escribe también una breve explicación amigable de por qué elegiste esos colores y qué cambios realizaste.`;
-            
-            // Adjuntar historial
-            promptText += `\n\nHistorial de la conversación:`;
-            chatHistory.slice(-6).forEach(msg => {
-                promptText += `\n${msg.sender === 'user' ? 'Docente' : 'Asistente'}: ${msg.text}`;
-            });
-            promptText += `\nAsistente:`;
 
             // Call the authenticated Supabase Edge Function. API keys stay server-side.
             if (window.SupabaseClient && SupabaseClient.client) {
                 try {
                     console.log('[Chatbot] Enviando mensaje a openai-router con gpt-5.6-luna...');
                     const data = await SupabaseClient.invokeFunction('openai-router', {
-                        prompt: promptText,
-                        model: 'gpt-5.6-luna'
+                        action: 'chatbot',
+                        requestId: createRequestId(),
+                        model: 'gpt-5.6-luna',
+                        input: {
+                            history: chatHistory.slice(-6),
+                            design
+                        }
                     });
 
                     if (typeof data === 'string') {

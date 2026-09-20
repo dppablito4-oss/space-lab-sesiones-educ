@@ -41,6 +41,13 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     assert.equal(calls.length, 1, `${provider} should make one Edge Function request`);
     assert.equal(calls[0].functionName, expectedFunction);
     assert.equal(calls[0].body.model, expectedModel);
+    assert.equal(calls[0].body.action, 'generate_criteria');
+    assert.match(calls[0].body.requestId, /^[0-9a-f-]{36}$/i);
+    assert.deepEqual(JSON.parse(JSON.stringify(calls[0].body.input)), {
+        competencia: 'Competencia', tema: 'Tema', grado: '5', area: 'Matemática'
+    });
+    assert.equal(calls[0].body.systemPrompt, undefined);
+    assert.equal(calls[0].body.prompt, undefined);
 }
 
 (async () => {
@@ -75,10 +82,11 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     assert.equal(generated.momentos.desarrollo.procesos.length, 1);
     assert.equal(generated.momentos.desarrollo.proceso_1_procesos, undefined);
     const generationCall = calls.at(-1);
-    assert.match(generationCall.body.systemPrompt, /planificación de una sesión de aprendizaje detallada, extensa e interactiva/);
-    assert.match(generationCall.body.systemPrompt, /Familiarización con el problema/);
-    assert.match(generationCall.body.systemPrompt, /"schemaVersion": "1\.0"/);
-    assert.doesNotMatch(generationCall.body.systemPrompt, /titulo_sesion_retador|proceso_1_familiarizacion/);
+    assert.equal(generationCall.body.action, 'generate_session');
+    assert.equal(generationCall.body.systemPrompt, undefined);
+    assert.equal(generationCall.body.prompt, undefined);
+    assert.equal(generationCall.body.input.metadata.methodology, 'polya');
+    assert.equal(generationCall.body.input.metadata.sourceFile, undefined);
 
     await ai.generateSession({
         area: 'Matemática',
@@ -92,9 +100,9 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
         sourceInstruction: 'Toma como situación central el caso de la página 2.'
     });
     const sourceGuidanceCall = calls.at(-1);
-    assert.match(sourceGuidanceCall.body.prompt, /DIRECTIVA PRIORITARIA PARA USAR EL ARCHIVO/);
-    assert.match(sourceGuidanceCall.body.prompt, /Toma como situación central el caso de la página 2/);
-    assert.match(sourceGuidanceCall.body.prompt, /No la sustituyas por el primer ejemplo/);
+    assert.equal(sourceGuidanceCall.body.input.metadata.sourceInstruction, 'Toma como situación central el caso de la página 2.');
+    assert.equal(sourceGuidanceCall.body.input.sourceFile.name, 'casos.pdf');
+    assert.match(sourceGuidanceCall.body.input.sourceFile.textContent, /PÁGINA 2/);
 
     const browserAiSource = ['js/ai-copilot.js', 'js/chatbot.js', 'js/pedagogy-brief.js']
         .map(file => fs.readFileSync(file, 'utf8'))
@@ -113,6 +121,11 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
         'OpenAI models that only support the default temperature must not receive an override'
     );
     assert.doesNotMatch(browserAiSource, /consulta con DeepSeek/);
+    assert.doesNotMatch(browserAiSource, /systemPrompt/);
+    assert.doesNotMatch(browserAiSource, /\bprompt\s*:/, 'The browser must use structured action inputs');
+    for (const action of ['generate_session', 'generate_criteria', 'refine_text', 'pedagogy_brief', 'summarize_brief', 'chatbot']) {
+        assert.match(browserAiSource, new RegExp(action), `Missing structured action: ${action}`);
+    }
     console.log('ai-provider-routing.test.js: OK');
 })().catch(error => {
     console.error(error);

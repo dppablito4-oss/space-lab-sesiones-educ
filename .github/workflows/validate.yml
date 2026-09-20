@@ -85,6 +85,7 @@ jobs:
 
       - name: Check Supabase Edge Functions
         run: |
+          deno test tests/ai-prompt-builder.test.ts
           deno check supabase/functions/openai-router/index.ts
           deno check supabase/functions/gemini-router/index.ts
           deno check supabase/functions/deepseek-router/index.ts

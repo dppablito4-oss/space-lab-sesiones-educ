@@ -13,26 +13,15 @@ const PedagogyBrief = (() => {
     let _isFinished = false;    // true cuando la IA ya pidió confirmación final
     let _isGenerating = false;  // evita doble submit
 
-    // ─── SYSTEM PROMPTS ───
-    const BRIEF_SYSTEM = `Eres un asesor pedagógico experto en el Currículo Nacional de Educación Básica del Perú (CNEB / MINEDU). Tu rol es conversar brevemente con un docente para entender con exactitud el enfoque pedagógico que desea para su sesión de aprendizaje.
-
-REGLAS DE COMPORTAMIENTO:
-1. Haz preguntas ESPECÍFICAS al área y tema indicados. Nunca hagas preguntas genéricas de matemática si el área es Comunicación, y viceversa.
-2. Después de cada respuesta del docente, evalúa si ya tienes suficiente contexto. Si la respuesta fue ambigua o poco clara, pide una aclaración puntual.
-3. Cuando sientas que tienes suficiente información, formula la siguiente pregunta de esta forma EXACTA: "¿Hay algo más que quieras indicarme, o podemos generar la sesión con este enfoque?"
-4. Si el docente responde positivamente (dice "sí", "listo", "genera", "está bien", "no", "ya", etc.), responde con el marcador especial: [LISTO_PARA_GENERAR]
-5. Si el docente agrega más información nueva, continúa la conversación y evalúa nuevamente.
-6. Aproximadamente 3-4 turnos es suficiente. Si ya tienes contexto claro, no hagas más preguntas innecesarias.
-7. Respuestas breves y directas. No uses saludos ni despedidas.`;
-
-    const SUMMARY_SYSTEM = `Eres un asesor pedagógico experto. Dado el historial de una conversación, extrae y redacta un resumen compacto del ENFOQUE PEDAGÓGICO específico que desea el docente para su sesión.
-
-REGLAS:
-1. Máximo 90 palabras.
-2. Redacta como instrucción directa para una IA generadora de sesiones.
-3. NO repitas el área curricular, grado ni título de la sesión (ya están en otra parte del prompt). Solo el enfoque, énfasis y restricciones.
-4. Usa frases como: "El docente quiere...", "Enfatizar...", "Evitar...", "Priorizar...".
-5. Devuelve SOLO el párrafo, sin comillas ni explicaciones adicionales.`;
+    function _createRequestId() {
+        if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+            return window.crypto.randomUUID();
+        }
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, char => {
+            const value = Math.floor(Math.random() * 16);
+            return (char === 'x' ? value : (value & 0x3) | 0x8).toString(16);
+        });
+    }
 
     // ─── PUBLIC: OPEN MODAL ───
     function open(formData) {
@@ -204,7 +193,7 @@ REGLAS:
         const userPrompt = `${contextBlock}\n\nInicia la conversación con las preguntas pedagógicas más relevantes para entender el enfoque que desea el docente.`;
 
         try {
-            const aiResponse = await _callAI(userPrompt, true);
+            const aiResponse = await _callAI(userPrompt);
             _showThinking(false);
             if (_checkIfReady(aiResponse)) return;
             _appendMessage('ai', aiResponse);
@@ -243,7 +232,7 @@ REGLAS:
 
         try {
             const userPrompt = _buildHistoryPrompt();
-            const aiResponse = await _callAI(userPrompt, false);
+            const aiResponse = await _callAI(userPrompt);
             _showThinking(false);
             if (_checkIfReady(aiResponse)) return;
             _appendMessage('ai', aiResponse);
@@ -310,12 +299,8 @@ REGLAS:
             .join('\n\n');
     }
 
-    async function _callAI(userPrompt, isFirstTurn) {
-        const contextExtra = isFirstTurn
-            ? `\n\nDatos de la sesión:\nÁrea: ${_formData.area || '—'}\nGrado: ${_formData.grado || '—'}\nTema: ${_formData.titulo || '—'}\nMetodología: ${_formData.methodology || 'Por defecto del área'}`
-            : '';
-
-        return await _runLightPrompt(BRIEF_SYSTEM + contextExtra, userPrompt, 380);
+    async function _callAI(userPrompt) {
+        return await _runLightPrompt('pedagogy_brief', userPrompt);
     }
 
     async function _generateSummary() {
@@ -323,7 +308,7 @@ REGLAS:
             .map(m => `${m.role === 'user' ? 'Docente' : 'Asesor'}: ${m.content}`)
             .join('\n\n');
 
-        return await _runLightPrompt(SUMMARY_SYSTEM, `Historial:\n\n${conversationText}`, 220);
+        return await _runLightPrompt('summarize_brief', `Historial:\n\n${conversationText}`);
     }
 
     function _buildFallbackSummary() {
@@ -334,14 +319,15 @@ REGLAS:
         return userParts.trim() || null;
     }
 
-    async function _runLightPrompt(systemPrompt, userPrompt, maxTokens) {
+    async function _runLightPrompt(action, userPrompt) {
         if (!window.SupabaseClient || !SupabaseClient.client) {
             throw new Error('No se pudo conectar con Supabase.');
         }
         const data = await SupabaseClient.invokeFunction('gemini-router', {
-            prompt: userPrompt,
-            systemPrompt,
-            maxTokens: maxTokens || 380
+            action,
+            requestId: _createRequestId(),
+            model: 'gemini-2.5-flash',
+            input: { conversation: userPrompt }
         });
         const text = _extractText(data);
         if (!text || !text.trim()) throw new Error('Gemini no devolvió contenido.');
