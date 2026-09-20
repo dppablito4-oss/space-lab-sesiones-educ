@@ -65,6 +65,9 @@ jobs:
           node tests/storage.test.js
           node tests/ai-provider-routing.test.js
           node tests/theme.test.js
+          node tests/app-utils.test.js
+          node tests/local-export-client.test.js
+          node tests/document-source-processor.test.js
 
       - name: Run Python contract & adapter & docx tests
         run: |
@@ -86,6 +89,7 @@ jobs:
           python tests/ui_smoke.py
           python tests/ui_presentation_smoke.py
           python tests/ui_theme_smoke.py
+          python tests/ui_accessibility_smoke.py
 
       - name: Check Supabase Edge Functions
         run: |

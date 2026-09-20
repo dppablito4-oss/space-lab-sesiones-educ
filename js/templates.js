@@ -600,7 +600,7 @@ const Templates = (() => {
                     </table>
                     
                     <div style="font-size: 16px; font-weight: 800; color: #2980b9; margin-bottom: 8px; text-transform: uppercase;" ${ce} data-key="ficha_titulo">
-                        🎨 Actividad: ${esc(ft.titulo || 'Mi Ficha Práctica')}
+                        Actividad: ${esc(ft.titulo || 'Mi Ficha Práctica')}
                     </div>
                     <div style="font-size: 11px; font-style: italic; color: #7f8c8d; margin-bottom: 20px; padding: 8px; background: #ecf0f1; border-radius: 6px;" ${ce} data-key="ficha_indicaciones">
                         <strong>Indicaciones:</strong> ${esc(ft.indicaciones || 'Realiza la actividad según las indicaciones.')}
@@ -872,7 +872,7 @@ const Templates = (() => {
             <table class="session-header-table">
                 <tr>
                     <td class="logo-cell" rowspan="3">
-                        <div ${ce} style="font-size:24px; text-align:center;">🔬</div>
+                        <div ${ce} style="font-size:11px; font-weight:700; text-align:center;">LAB</div>
                     </td>
                     <td class="label-cell">Institución Educativa</td>
                     <td class="value-cell" ${ce}>${esc(m.institucion || '')}</td>
@@ -894,7 +894,7 @@ const Templates = (() => {
             </table>
 
             <div class="session-title-bar" style="background: linear-gradient(135deg, #065f46, #059669);">
-                🔬 <span ${ce}>${esc(m.titulo || 'SESIÓN DE LABORATORIO')}</span>
+                <span ${ce}>${esc(m.titulo || 'SESIÓN DE LABORATORIO')}</span>
             </div>
 
             <div class="section-title" style="border-left-color: #059669;">I. Propósito de Aprendizaje</div>
@@ -988,7 +988,7 @@ const Templates = (() => {
             <table class="session-header-table">
                 <tr>
                     <td class="logo-cell" rowspan="3">
-                        <div ${ce} style="font-size:24px; text-align:center;">📚</div>
+                        <div ${ce} style="font-size:11px; font-weight:700; text-align:center;">REF</div>
                     </td>
                     <td class="label-cell">Institución Educativa</td>
                     <td class="value-cell" ${ce}>${esc(m.institucion || '')}</td>
@@ -1010,7 +1010,7 @@ const Templates = (() => {
             </table>
 
             <div class="session-title-bar" style="background: linear-gradient(135deg, #92400e, #d97706);">
-                📚 <span ${ce}>${esc(m.titulo || 'SESIÓN DE REFUERZO ESCOLAR')}</span>
+                <span ${ce}>${esc(m.titulo || 'SESIÓN DE REFUERZO ESCOLAR')}</span>
             </div>
 
             <div class="section-title" style="border-left-color: #d97706;">I. Diagnóstico</div>
@@ -1487,7 +1487,7 @@ const Templates = (() => {
                     </table>
                     
                     <div style="font-size: 16px; font-weight: 800; color: #2980b9; margin-bottom: 8px; text-transform: uppercase;" ${ce}>
-                        🎨 Actividad: ${esc(ft.titulo || 'Mi Ficha Práctica')}
+                        Actividad: ${esc(ft.titulo || 'Mi Ficha Práctica')}
                     </div>
                     <div style="font-size: 11px; font-style: italic; color: #7f8c8d; margin-bottom: 20px; padding: 8px; background: #ecf0f1; border-radius: 6px;" ${ce}>
                         <strong>Instrucciones para el docente/adulto:</strong> ${esc(ft.indicaciones || 'Realiza la actividad según las indicaciones.')}
@@ -1516,7 +1516,7 @@ const Templates = (() => {
                     </table>
                     
                     <div style="font-size: 16px; font-weight: 800; color: #2980b9; margin-bottom: 8px; text-transform: uppercase;">
-                        🎨 Actividad de Aprendizaje: Dibujo del Conteo del Día
+                        Actividad de Aprendizaje: Dibujo del Conteo del Día
                     </div>
                     <div style="font-size: 11px; font-style: italic; color: #7f8c8d; margin-bottom: 20px; padding: 8px; background: #ecf0f1; border-radius: 6px;">
                         <strong>Instrucciones:</strong> Observa y cuenta los elementos que trabajamos hoy. Luego dibújalos en el recuadro grande y delinea el número correspondiente.

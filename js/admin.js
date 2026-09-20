@@ -6,6 +6,13 @@
 ; (function () {
     'use strict';
 
+    if (!window.SpaceLabUtils) throw new Error('No se cargaron las utilidades base de Space Lab.');
+    const {
+        escapeHtml: escHTML,
+        escapeAttribute: escAttr,
+        formatDate
+    } = window.SpaceLabUtils;
+
     // ─── AUTHENTICATION CHECK admin super admin ───
     async function checkAdminAuth() {
         if (!window.SupabaseClient) {
@@ -617,38 +624,6 @@
         if (action.includes('FAIL') || action.includes('ERROR') || action.includes('INTRUSION')) return 'badge-danger';
         if (action.includes('UPDATE') || action.includes('DELETE')) return 'badge-warning';
         return 'badge-info';
-    }
-
-    function escHTML(str) {
-        if (!str) return '';
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    function escAttr(value) {
-        return String(value ?? '')
-            .replace(/&/g, '&amp;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;');
-    }
-
-    function formatDate(isoString) {
-        if (!isoString) return '';
-        try {
-            const d = new Date(isoString);
-            return d.toLocaleDateString('es-PE', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        } catch {
-            return isoString;
-        }
     }
 
     // Iniciar verificación de autenticidad en la carga del documento

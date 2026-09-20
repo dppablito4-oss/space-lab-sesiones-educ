@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="js/theme.js"></script>
     
     <!-- Meta tags de SEO y optimización -->
     <title>Descargas - S.Y. PABLITO_DP | Motor Local de Exportación</title>
@@ -461,8 +462,18 @@
         }
     </style>
     <link rel="stylesheet" href="css/mobile-app-theme.css?v=2">
+    <link rel="stylesheet" href="css/app-theme.css?v=1">
 </head>
 <body class="downloads-page">
+
+    <label class="theme-picker standalone-theme-picker" title="Tema de la aplicación">
+        <span class="sr-only">Tema de la aplicación</span>
+        <select id="theme-preference" aria-label="Tema de la aplicación">
+            <option value="system">Sistema</option>
+            <option value="light">Claro</option>
+            <option value="dark">Oscuro</option>
+        </select>
+    </label>
 
     <div class="stars"></div>
     <div class="stars-anim"></div>
@@ -498,11 +509,11 @@
                 <div class="terminal-body">
                     <span class="t-cyan">S.Y. PABLITO_DP - Servidor Local v1.2.0</span>
                     <span class="t-muted">Escaneando motor de renderizado Chromium...</span>
-                    <span class="t-green">✓ Motor Chromium extraído y listo para usar en ./bin/chrome-win/</span>
+                    <span class="t-green">[LISTO] Motor Chromium extraído y disponible en ./bin/chrome-win/</span>
                     <span class="t-muted">Iniciando servidor local en el puerto 8000...</span>
-                    <span class="t-magenta">🌐 [MOTOR ONLINE] Servidor de exportación corriendo en http://localhost:8000</span>
-                    <span class="t-yellow">⚠️ [IMPORTANTE] Mantén esta ventana abierta en segundo plano.</span>
-                    <span class="t-green">✓ [CONECTADO] El enlace de seguridad fue establecido con la web.</span>
+                    <span class="t-magenta">[MOTOR ONLINE] Servidor de exportación disponible en http://localhost:8000</span>
+                    <span class="t-yellow">[IMPORTANTE] Mantén esta ventana abierta en segundo plano.</span>
+                    <span class="t-green">[CONECTADO] El enlace de seguridad fue establecido con la web.</span>
                 </div>
             </div>
 
@@ -510,7 +521,7 @@
 
             <div class="steps-container">
                 <div class="steps-title">
-                    <span>⚡</span> GUÍA DE INICIO RÁPIDO:
+                    GUÍA DE INICIO RÁPIDO:
                 </div>
                 <div class="install-steps">
                     <div class="install-step">
@@ -529,7 +540,7 @@
             </div>
 
             <div class="warning-box">
-                <div class="warning-title">⚠️ NOTA DE SEGURIDAD (Windows SmartScreen):</div>
+                <div class="warning-title">NOTA DE SEGURIDAD (Windows SmartScreen):</div>
                 <ul class="warning-steps-list">
                     <li>Al ser una aplicación de desarrollo independiente (no firmada digitalmente), Windows podría lanzar una advertencia.</li>
                     <li>El puente es 100% seguro. Haz clic en <strong>"Más información"</strong> en la pantalla azul protectora.</li>

@@ -6,6 +6,17 @@
 ; (function () {
     'use strict';
 
+    if (!window.SpaceLabUtils || !window.LocalExportClient || !window.DocumentSourceProcessor) {
+        throw new Error('No se cargaron los módulos base de Space Lab.');
+    }
+    const {
+        parseMinutes,
+        escapeHtml: escHTML,
+        formatDate,
+        arrayBufferToBase64,
+        getBinaryMimeFallback
+    } = window.SpaceLabUtils;
+
     // ─── APP STATE ───
     const AppState = {
         currentSession: null,
@@ -1416,12 +1427,12 @@
         if (!btn) return;
 
         if (AppState.backendOnline) {
-            btn.href = 'javascript:void(0)';
+            btn.removeAttribute('href');
             btn.removeAttribute('target');
             btn.classList.add('btn-connected');
             btn.title = 'Motor de Exportación Local Conectado';
 
-            const iconUse = btn.querySelector('.icon use');
+            const iconUse = btn.querySelector('svg use');
             if (iconUse) iconUse.setAttribute('href', '#icon-check');
 
             const label = btn.querySelector('.btn-label');
@@ -1432,7 +1443,7 @@
             btn.classList.remove('btn-connected');
             btn.title = 'Descargar Motor de Exportación Local (.exe)';
 
-            const iconUse = btn.querySelector('.icon use');
+            const iconUse = btn.querySelector('svg use');
             if (iconUse) iconUse.setAttribute('href', '#icon-download');
 
             const label = btn.querySelector('.btn-label');
@@ -1441,35 +1452,13 @@
     }
 
     let lastBackendState = null;
-    let activeHost = 'localhost:8000';
-
     async function checkBackendStatus() {
-        let pingOk = false;
-        try {
-            // Intentar primero con localhost (Seguro por Mixed Content)
-            const pingResponse = await fetch('http://localhost:8000/', { method: 'GET' });
-            if (pingResponse.ok) {
-                activeHost = 'localhost:8000';
-                pingOk = true;
-            }
-        } catch (pingErr) {
-            try {
-                // Si falla, intentar con la IP directa loopback IPv4
-                const pingResponse = await fetch('http://127.0.0.1:8000/', { method: 'GET' });
-                if (pingResponse.ok) {
-                    activeHost = '127.0.0.1:8000';
-                    pingOk = true;
-                }
-            } catch (err2) {
-                // Ambos fallaron
-            }
-        }
+        const token = localStorage.getItem('connection_token');
+        const status = await window.LocalExportClient.getStatus(token);
+        AppState.backendRunning = status.running;
+        AppState.backendOnline = status.online;
 
-        if (pingOk) {
-            AppState.backendRunning = true;
-        } else {
-            AppState.backendRunning = false;
-            AppState.backendOnline = false;
+        if (!status.running) {
             if (lastBackendState !== false) {
                 console.log('[INFO] El motor de exportación local está apagado o inaccesible.');
                 lastBackendState = false;
@@ -1478,40 +1467,20 @@
             return;
         }
 
-        // 2. Si el motor está en ejecución, verificar el token de conexión
-        const token = localStorage.getItem('connection_token');
-        if (!token) {
-            AppState.backendOnline = false;
+        if (!status.online) {
             if (lastBackendState !== false) {
-                console.log('[INFO] El motor local está encendido, pero no hay token de conexión en localStorage.');
+                console.log(status.reason === 'missing-token'
+                    ? '[INFO] El motor local está encendido, pero no hay token de conexión en localStorage.'
+                    : '[INFO] El motor local está encendido, pero el token guardado no es válido o expiró.');
                 lastBackendState = false;
             }
             updateBackendUI();
             return;
         }
 
-        try {
-            const response = await fetch(`http://${activeHost}/verificar-token?token=${token}`, { method: 'GET' });
-            if (response.ok) {
-                const data = await response.json();
-                if (data.status === 'Connected') {
-                    AppState.backendOnline = true;
-                    if (lastBackendState !== true) {
-                        console.log('[OK] Enlace seguro con el motor de exportación en Python confirmado.');
-                        lastBackendState = true;
-                    }
-                    updateBackendUI();
-                    return;
-                }
-            }
-        } catch (err) {
-            // Silencioso
-        }
-
-        AppState.backendOnline = false;
-        if (lastBackendState !== false) {
-            console.log('[INFO] El motor local está encendido, pero el token guardado no es válido o expiró.');
-            lastBackendState = false;
+        if (lastBackendState !== true) {
+            console.log('[OK] Enlace seguro con el motor de exportación en Python confirmado.');
+            lastBackendState = true;
         }
         updateBackendUI();
     }
@@ -2149,18 +2118,7 @@
             const sessionPayload = getFormDataJSON();
             const titulo = sessionPayload.metadata.titulo || 'Sesion-de-Aprendizaje';
 
-            const response = await fetch(`http://${activeHost}/exportar-pdf-json`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(sessionPayload)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || `Error del servidor: ${response.statusText}`);
-            }
-
-            const blob = await response.blob();
+            const blob = await window.LocalExportClient.exportDocument('pdf', sessionPayload);
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -2192,18 +2150,7 @@
             const sessionPayload = getFormDataJSON();
             const titulo = sessionPayload.metadata.titulo || 'Sesion-de-Aprendizaje';
 
-            const response = await fetch(`http://${activeHost}/exportar-docx-json`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(sessionPayload)
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.detail || `Error del servidor: ${response.statusText}`);
-            }
-
-            const blob = await response.blob();
+            const blob = await window.LocalExportClient.exportDocument('docx', sessionPayload);
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -2234,30 +2181,6 @@
         }
 
         showEngineModal();
-    }
-
-    function parseMinutes(text) {
-        if (!text) return 0;
-        const clean = text.toLowerCase().trim();
-
-        // Check for ranges or sum of numbers, e.g. "15 + 5" or "15-20"
-        // Let's first search for hours and multiply by 45 (or 60)
-        const hoursMatch = clean.match(/(\d+(?:\.\d+)?)\s*(?:hora|h)/);
-        if (hoursMatch) {
-            const hours = parseFloat(hoursMatch[1]);
-            const multiplier = clean.includes('pedag') ? 45 : 45;
-            return Math.round(hours * multiplier);
-        }
-
-        const numbers = clean.match(/\d+/g);
-        if (numbers) {
-            let sum = 0;
-            numbers.forEach(n => {
-                sum += parseInt(n, 10);
-            });
-            return sum;
-        }
-        return 0;
     }
 
     function checkTimeBalance() {
@@ -4066,12 +3989,12 @@
                     const base64Data = arrayBufferToBase64(arrayBuffer);
 
                     // Extraer texto usando pdfjs
-                    const extractedText = await extractTextFromPDF(arrayBuffer);
+                    const extractedText = await window.DocumentSourceProcessor.extractText(arrayBuffer);
 
                     // Renderizar páginas como imágenes para visión multimodal (máximo 4 páginas)
                     let renderedImages = [];
                     try {
-                        renderedImages = await renderPDFToImages(arrayBuffer, 4);
+                        renderedImages = await window.DocumentSourceProcessor.renderImages(arrayBuffer, 4);
                     } catch (renderErr) {
                         console.error('[PDF Render Warning] No se pudieron renderizar las páginas del PDF como imágenes:', renderErr);
                     }
@@ -4139,102 +4062,6 @@
         }
     }
 
-    function arrayBufferToBase64(buffer) {
-        let binary = '';
-        const bytes = new Uint8Array(buffer);
-        const len = bytes.byteLength;
-        for (let i = 0; i < len; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        return window.btoa(binary);
-    }
-
-    async function extractTextFromPDF(arrayBuffer) {
-        if (!window.pdfjsLib) {
-            await new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-                script.onload = () => {
-                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-                    resolve();
-                };
-                script.onerror = () => reject(new Error('No se pudo cargar PDF.js'));
-                document.head.appendChild(script);
-            });
-        }
-
-        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-        const pdf = await loadingTask.promise;
-        let fullText = '';
-
-        for (let i = 1; i <= pdf.numPages; i++) {
-            const page = await pdf.getPage(i);
-            const textContent = await page.getTextContent();
-            const pageText = textContent.items.map(item => item.str).join(' ');
-            fullText += `\n--- PÁGINA ${i} ---\n${pageText}\n`;
-        }
-
-        return fullText.trim().slice(0, 30000);
-    }
-
-    async function renderPDFToImages(arrayBuffer, maxPages = 4) {
-        if (!window.pdfjsLib) {
-            await new Promise((resolve, reject) => {
-                const script = document.createElement('script');
-                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
-                script.onload = () => {
-                    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-                    resolve();
-                };
-                script.onerror = () => reject(new Error('No se pudo cargar PDF.js'));
-                document.head.appendChild(script);
-            });
-        }
-
-        const loadingTask = window.pdfjsLib.getDocument({ data: arrayBuffer });
-        const pdf = await loadingTask.promise;
-        const images = [];
-        const numPages = Math.min(pdf.numPages, maxPages);
-
-        for (let i = 1; i <= numPages; i++) {
-            try {
-                const page = await pdf.getPage(i);
-                const viewport = page.getViewport({ scale: 1.2 });
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                canvas.width = viewport.width;
-                canvas.height = viewport.height;
-
-                const renderContext = {
-                    canvasContext: context,
-                    viewport: viewport
-                };
-                await page.render(renderContext).promise;
-
-                const dataUrl = canvas.toDataURL('image/jpeg', 0.8);
-                const base64 = dataUrl.split(',')[1];
-                images.push({
-                    base64: base64,
-                    type: 'image/jpeg'
-                });
-            } catch (pageErr) {
-                console.error(`[PDF Render Page Error] No se pudo renderizar la página ${i}`, pageErr);
-            }
-        }
-        return images;
-    }
-
-    function getBinaryMimeFallback(fileName) {
-        const lower = fileName.toLowerCase();
-        if (lower.endsWith('.pdf')) return 'application/pdf';
-        if (lower.endsWith('.png')) return 'image/png';
-        if (lower.endsWith('.jpg') || lower.endsWith('.jpeg')) return 'image/jpeg';
-        if (lower.endsWith('.webp')) return 'image/webp';
-        if (lower.endsWith('.mp3')) return 'audio/mp3';
-        if (lower.endsWith('.wav')) return 'audio/wav';
-        return 'application/octet-stream';
-    }
-
     function showSourceFileInfo(name) {
         DOM.sourceFileNameText.textContent = name;
         DOM.sourceFileInfo.classList.remove('hidden');
@@ -4257,29 +4084,6 @@
     // ═══════════════════════════════════════
     // UTILITIES
     // ═══════════════════════════════════════
-
-    function escHTML(str) {
-        if (!str) return '';
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    }
-
-    function formatDate(isoString) {
-        if (!isoString) return '';
-        try {
-            const d = new Date(isoString);
-            return d.toLocaleDateString('es-PE', {
-                day: '2-digit',
-                month: 'short',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        } catch {
-            return isoString;
-        }
-    }
 
     function handleInsertRow() {
         let cell = AppState.activeTableCell;

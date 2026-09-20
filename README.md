@@ -18,6 +18,14 @@ El mismo documento alimenta la vista web, la exportación DOCX y la exportación
 
 Frontend estático desplegado con GitHub Pages. La interfaz principal está en `index.html`; los controladores están en `js/` y los estilos en `css/`.
 
+El shell usa tokens semánticos y tres preferencias visuales persistentes: `Sistema`, `Claro` y `Oscuro`. Las responsabilidades transversales del editor están separadas de `app.js`:
+
+- `js/core/app-utils.js`: formato, escape seguro, tiempos y tipos MIME.
+- `js/services/local-export-client.js`: detección, autenticación y exportación mediante el motor local.
+- `js/services/document-source-processor.js`: lectura y renderizado de PDF usados como referencia para IA.
+- `js/theme.js`: preferencia de tema y sincronización con el sistema operativo.
+- `js/ui-shell.js`: comportamiento de menús del shell.
+
 Las solicitudes de IA siguen esta ruta:
 
 ```text
@@ -99,6 +107,10 @@ node tests/test_presentation.js
 node tests/test_session_export.js
 node tests/storage.test.js
 node tests/ai-provider-routing.test.js
+node tests/theme.test.js
+node tests/app-utils.test.js
+node tests/local-export-client.test.js
+node tests/document-source-processor.test.js
 
 python tests/test_contract_v1.py
 python tests/test_adapter_v1_py.py
@@ -107,6 +119,9 @@ python tests/backend_smoke.py
 python tests/frontend_security.py
 python tests/ui_smoke.py
 python tests/ui_presentation_smoke.py
+python tests/ui_theme_smoke.py
+python tests/ui_accessibility_smoke.py
+python tests/no_emoji_controls.py
 ```
 
 GitHub Actions ejecuta estas pruebas, valida las Edge Functions y compila `pablitopyhost-windows` en cada push a `main`.

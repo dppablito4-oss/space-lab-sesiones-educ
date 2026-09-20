@@ -26,7 +26,7 @@ def run() -> None:
             browser = playwright.chromium.launch(headless=True)
             page = browser.new_page(viewport={"width": 1440, "height": 900})
             page.add_init_script(
-                "localStorage.setItem('spacelab_theme_preference', 'light')"
+                "if (!localStorage.getItem('spacelab_theme_preference')) localStorage.setItem('spacelab_theme_preference', 'light')"
             )
             page.goto(
                 f"http://127.0.0.1:{server.server_port}/index.html",
@@ -56,6 +56,20 @@ def run() -> None:
             advanced.locator("summary").click()
             assert advanced.get_attribute("open") is not None
             assert page.locator("#select-design-font-family").is_visible()
+
+            for secondary_page in ("conexion.html", "descargas_landing.html"):
+                page.evaluate("localStorage.setItem('spacelab_theme_preference', 'dark')")
+                page.goto(
+                    f"http://127.0.0.1:{server.server_port}/{secondary_page}",
+                    wait_until="domcontentloaded",
+                )
+                assert page.locator("html").get_attribute("data-theme") == "dark"
+                assert page.locator("#theme-preference").input_value() == "dark"
+                page.locator("#theme-preference").select_option("light")
+                assert page.locator("html").get_attribute("data-theme") == "light"
+                assert page.locator("body").evaluate(
+                    "element => getComputedStyle(element).backgroundColor !== 'rgb(3, 7, 18)'"
+                )
 
             browser.close()
     finally:

@@ -9,11 +9,14 @@ UI_FILES = (
     "index.html",
     "admin.html",
     "conexion.html",
+    "descargas_landing.html",
+    "plantilla.html",
     "js/admin.js",
     "js/app.js",
     "js/auth-ui.js",
     "js/storage.js",
     "js/supabase-client.js",
+    "js/templates.js",
 )
 
 # Main emoji blocks plus dingbats and miscellaneous pictographs commonly used as UI icons.
