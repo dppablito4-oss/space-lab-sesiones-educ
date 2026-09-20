@@ -109,5 +109,5 @@ if __name__ == "__main__":
     ]
     for test in tests:
         test()
-        print(f"✓ {test.__name__}")
+        print(f"OK {test.__name__}")
     print("test_word_math.py: OK")

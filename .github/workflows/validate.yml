@@ -42,7 +42,9 @@ jobs:
           python -m ruff check backend tests --select F401,F811,F821 --exclude backend/build,backend/dist
 
       - name: Validate repository hygiene
-        run: python tests/repository_hygiene.py
+        run: |
+          python tests/repository_hygiene.py
+          python tests/no_emoji_controls.py
 
       - name: Validate JavaScript syntax
         run: find js -name '*.js' -print0 | xargs -0 -n1 node --check
@@ -62,6 +64,7 @@ jobs:
         run: |
           node tests/storage.test.js
           node tests/ai-provider-routing.test.js
+          node tests/theme.test.js
 
       - name: Run Python contract & adapter & docx tests
         run: |
@@ -82,6 +85,7 @@ jobs:
           python tests/frontend_security.py
           python tests/ui_smoke.py
           python tests/ui_presentation_smoke.py
+          python tests/ui_theme_smoke.py
 
       - name: Check Supabase Edge Functions
         run: |

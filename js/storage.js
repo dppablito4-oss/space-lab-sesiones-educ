@@ -63,7 +63,7 @@ const Storage = (() => {
             console.error('[Storage] Error al escribir en localStorage:', e);
             if (e.name === 'QuotaExceededError' || e.name === 'NS_ERROR_DOM_QUOTA_REACHED') {
                 if (window.Toast && typeof Toast.warning === 'function') {
-                    Toast.warning('⚠️ Almacenamiento local lleno. Guarda o sincroniza tus sesiones en la nube para no perder cambios.');
+                    Toast.warning('Almacenamiento local lleno. Guarda o sincroniza tus sesiones en la nube para no perder cambios.');
                 }
             }
             return false;
@@ -224,7 +224,7 @@ const Storage = (() => {
                 break;
             case 'saved':
                 indicator.classList.add('saved');
-                text.textContent = 'Guardado ✓';
+                text.textContent = 'Guardado';
                 // Reset after 5 seconds
                 setTimeout(() => {
                     indicator.classList.remove('saved');
@@ -387,7 +387,7 @@ const Storage = (() => {
             // Guardar el resultado consolidado en LocalStorage
             safeSetItem(STORAGE_KEY, JSON.stringify(finalSessions));
 
-            console.log('🔄 Sesiones sincronizadas con Supabase con éxito');
+            console.log('Sesiones sincronizadas con Supabase con éxito');
         } catch (e) {
             console.error('[Storage] Error al sincronizar sesiones:', e);
         } finally {

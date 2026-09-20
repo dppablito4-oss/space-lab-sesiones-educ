@@ -350,7 +350,7 @@
             }
         }, 6000);
 
-        console.log('🚀 Space Lab initialized');
+        console.log('Space Lab initialized');
     }
 
 
@@ -405,7 +405,7 @@
                     btn.textContent = 'Enfoque listo — Editar';
                 } else {
                     btn.classList.remove('pb-has-brief');
-                    btn.textContent = '✨ Afinar enfoque pedagógico';
+                    btn.textContent = 'Afinar enfoque pedagógico';
                 }
             }
             // Auto-launch AI generation
@@ -459,7 +459,7 @@
                 if (AppState.backendOnline) {
                     e.preventDefault();
                     if (typeof Toast !== 'undefined') {
-                        Toast.success('⚡ El Motor Local está conectado de forma segura y listo.');
+                        Toast.success('El Motor Local está conectado de forma segura y listo.');
                     }
                 }
             });
@@ -524,11 +524,23 @@
 
         // Mobile sidebar
         DOM.btnMenuMobile.addEventListener('click', toggleSidebar);
+        const desktopWorkflow = window.matchMedia('(min-width: 1101px)');
+        const syncWorkflowDisclosure = () => {
+            const isDesktop = desktopWorkflow.matches;
+            if (isDesktop) DOM.workflowRail.classList.remove('expanded');
+            DOM.btnToggleRail.setAttribute('aria-expanded', String(isDesktop || DOM.workflowRail.classList.contains('expanded')));
+            DOM.btnToggleRail.setAttribute('aria-label', isDesktop
+                ? 'Etapas del flujo de creación'
+                : (DOM.workflowRail.classList.contains('expanded') ? 'Ocultar nombres de las etapas' : 'Mostrar nombres de las etapas'));
+        };
         DOM.btnToggleRail.addEventListener('click', () => {
+            if (desktopWorkflow.matches) return;
             const expanded = DOM.workflowRail.classList.toggle('expanded');
             DOM.btnToggleRail.setAttribute('aria-expanded', String(expanded));
             DOM.btnToggleRail.setAttribute('aria-label', expanded ? 'Ocultar nombres de las etapas' : 'Mostrar nombres de las etapas');
         });
+        desktopWorkflow.addEventListener?.('change', syncWorkflowDisclosure);
+        syncWorkflowDisclosure();
         DOM.btnCloseSidebar.addEventListener('click', () => closeSidebar());
         document.addEventListener('click', (event) => {
             if (!AppState.sidebarOpen) return;
@@ -3214,9 +3226,9 @@
                 handleAreaChange();
             }
 
-            console.log('📚 CNEB curriculum database loaded');
+            console.log('CNEB curriculum database loaded');
         } catch (e) {
-            console.warn('⚠️ Could not load CNEB curriculum json:', e);
+            console.warn('Could not load CNEB curriculum json:', e);
         }
     }
 
@@ -3345,7 +3357,7 @@
                 if (profile.docente) DOM.inputDocente.value = profile.docente;
                 if (profile.director) DOM.inputDirector.value = profile.director;
                 if (profile.nivel) DOM.inputNivel.value = profile.nivel;
-                console.log('⚡ Predeterminados de perfil cargados');
+                console.log('Predeterminados de perfil cargados');
             }
         } catch (e) {
             console.warn('[Profile] Error al cargar predeterminados:', e);
@@ -3372,7 +3384,7 @@
 
             await SupabaseClient.updateUserProfile(data);
             Loader.hide();
-            Toast.success('⚙️ Datos predeterminados guardados en la nube');
+            Toast.success('Datos predeterminados guardados en la nube');
         } catch (e) {
             Loader.hide();
             Toast.error('Error al guardar predeterminados: ' + e.message);
@@ -5003,7 +5015,7 @@
                     saveCurrentState();
                     checkTimeBalance();
                     Loader.hide();
-                    Toast.success('✨ Texto refinado correctamente por la IA');
+                    Toast.success('Texto refinado correctamente por la IA');
                 } catch (error) {
                     Loader.hide();
                     console.error('[AI Refinement] Error:', error);

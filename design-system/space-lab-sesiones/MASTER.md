@@ -6,28 +6,46 @@ Source of truth for the web application shell. The printable session document ke
 
 - Product: AI-assisted educational planning workspace.
 - Audience: Peruvian teachers preparing, editing, and exporting learning sessions.
-- Style: premium graphite workspace, document-first, compact and operational.
-- Brand signal: electric cyan for primary actions, plus restrained functional accents for workflow recognition.
+- Style: sober document workspace inspired by familiar file-management tools, document-first, compact and operational.
+- Brand signal: accessible OneDrive-like blue for primary actions, plus restrained functional accents for workflow recognition.
 - Avoid: admin-dashboard composition, nested cards, pure black, decorative gradients, purple AI tropes, excessive glow, and ornamental motion.
 
-## Semantic Colors
+## Theme Strategy
+
+- User preference supports `system`, `light`, and `dark`.
+- `system` is the default and reacts to `prefers-color-scheme` changes.
+- Application chrome follows the selected theme; the printable A4 document remains a white artifact.
+- All application colors use semantic tokens. Components must not introduce theme-specific hardcoded colors.
+
+## Semantic Colors — Dark
 
 | Token | Value | Purpose |
 | --- | --- | --- |
-| `--color-background` | `#080B0F` | Level 0: editor canvas |
-| `--color-card` | `#141A23` | Level 1: app chrome and navigation |
-| `--color-card-surface` | `#1E2834` | Level 2: contextual panels |
-| `--color-elevated` | `#2A3949` | Level 3: controls and raised surfaces |
-| `--color-popover` | `#3A4E61` | Level 4: hover and overlay surfaces |
-| `--color-border` | `#384758` | Standard separation |
-| `--color-foreground` | `#F4F4F6` | Primary text |
-| `--color-muted-foreground` | `#B2BBC8` | Supporting text |
-| `--color-subtle-foreground` | `#758192` | Metadata and pending states |
-| `--color-primary` | `#2CC8EE` | Primary CTA and active state |
-| `--color-primary-hover` | `#54D4F3` | Primary hover |
-| `--color-success` | `#22C55E` | Completed and connected |
-| `--color-warning` | `#F59E0B` | Attention |
-| `--color-destructive` | `#EF4444` | Destructive action |
+| `--color-background` | `#111315` | Level 0: editor canvas |
+| `--color-card` | `#191B1D` | Level 1: app chrome and navigation |
+| `--color-card-surface` | `#202326` | Level 2: contextual panels |
+| `--color-elevated` | `#292D31` | Level 3: controls and raised surfaces |
+| `--color-popover` | `#303438` | Level 4: hover and overlay surfaces |
+| `--color-border` | `#3B3F43` | Standard separation |
+| `--color-foreground` | `#F5F5F5` | Primary text |
+| `--color-muted-foreground` | `#C8C8C8` | Supporting text |
+| `--color-primary` | `#4CA0E0` | Primary CTA and active state |
+| `--color-primary-hover` | `#62ABE4` | Primary hover |
+
+## Semantic Colors — Light
+
+| Token | Value | Purpose |
+| --- | --- | --- |
+| `--color-background` | `#F5F6F8` | Level 0: editor canvas |
+| `--color-card` | `#FFFFFF` | Level 1: app chrome and navigation |
+| `--color-card-surface` | `#F1F3F5` | Level 2: contextual panels |
+| `--color-elevated` | `#FFFFFF` | Level 3: controls and raised surfaces |
+| `--color-popover` | `#FFFFFF` | Level 4: hover and overlay surfaces |
+| `--color-border` | `#D0D4D9` | Standard separation |
+| `--color-foreground` | `#1B1A19` | Primary text |
+| `--color-muted-foreground` | `#4F4D4B` | Supporting text |
+| `--color-primary` | `#0F6CBD` | Primary CTA and active state |
+| `--color-primary-hover` | `#115EA3` | Primary hover |
 
 Normal text must meet 4.5:1 contrast. Interactive boundaries and meaningful icons must meet 3:1.
 

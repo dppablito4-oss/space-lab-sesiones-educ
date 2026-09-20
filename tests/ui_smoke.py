@@ -49,7 +49,8 @@ def run() -> None:
                 rail_width = page.locator("#workflow-rail").evaluate(
                     "element => element.getBoundingClientRect().width"
                 )
-                assert rail_width in (58, 68)
+                expected_rail_width = 204 if width > 1100 else (58 if width <= 560 else 68)
+                assert rail_width == expected_rail_width
                 assert page.locator("#preview-area").evaluate(
                     "element => element.getBoundingClientRect().left >= 58"
                 )
@@ -81,11 +82,12 @@ def run() -> None:
                 ) == "true"
                 first_tab = page.locator('.sidebar-tab[data-tab="tab-ai"]')
                 assert page.locator("#workflow-rail").evaluate(
-                    "element => [58, 68].includes(element.getBoundingClientRect().width)"
+                    f"element => element.getBoundingClientRect().width === {expected_rail_width}"
                 )
-                assert first_tab.locator(".tab-copy").evaluate(
-                    "element => getComputedStyle(element).visibility === 'hidden'"
+                tab_copy_visibility = first_tab.locator(".tab-copy").evaluate(
+                    "element => getComputedStyle(element).visibility"
                 )
+                assert tab_copy_visibility == ("visible" if width > 1100 else "hidden")
                 assert page.locator("#btn-generate").is_visible()
                 drawer_surfaces = page.evaluate("""() => [
                     getComputedStyle(document.querySelector('.session-form')).backgroundColor,

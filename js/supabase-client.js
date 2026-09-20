@@ -19,7 +19,7 @@ window.SupabaseClient = (() => {
                     autoRefreshToken: true
                 }
             });
-            console.log('⚡ Supabase Client initialized successfully');
+            console.log('Supabase Client initialized successfully');
         } else {
             console.error('[Supabase] SDK no encontrado. Asegúrate de incluir la etiqueta de script en tu HTML.');
         }

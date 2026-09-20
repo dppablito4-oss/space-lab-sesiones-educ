@@ -29,7 +29,7 @@
             }
 
             // Mostrar el email del admin
-            document.getElementById('admin-user-email').textContent = `👑 ${user.email}`;
+            document.getElementById('admin-user-email').textContent = user.email;
 
             // Iniciar aplicación
             initAdmin();
@@ -206,21 +206,21 @@
                     const msLeft = expireDate.getTime() - Date.now();
                     const daysLeft = Math.max(1, Math.ceil(msLeft / (24 * 60 * 60 * 1000)));
 
-                    statusHtml = `<span class="badge" style="background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">🗑️ Papelera (${daysLeft}d)</span>`;
+                    statusHtml = `<span class="badge badge-danger">Papelera (${daysLeft}d)</span>`;
 
                     actionsHtml = `
-                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${escAttr(s.id)}" title="Previsualizar Sesión">👁️ Ver</button>
-                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${escAttr(s.id)}" title="Ver JSON de la sesión">📦 JSON</button>
-                        <button class="btn btn-ghost btn-sm btn-restore-session" data-id="${escAttr(s.id)}" style="color: #10b981; border-color: rgba(16, 185, 129, 0.2);" title="Restaurar Sesión">🔄 Restaurar</button>
-                        <button class="btn btn-danger-ghost btn-sm btn-purge-session" data-id="${escAttr(s.id)}" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2);" title="Eliminar Permanentemente">🚨 Purgar</button>
+                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${escAttr(s.id)}" title="Previsualizar sesión">Ver</button>
+                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${escAttr(s.id)}" title="Ver JSON de la sesión">JSON</button>
+                        <button class="btn btn-ghost btn-sm btn-restore-session" data-id="${escAttr(s.id)}" style="color: #10b981; border-color: rgba(16, 185, 129, 0.2);" title="Restaurar sesión">Restaurar</button>
+                        <button class="btn btn-danger-ghost btn-sm btn-purge-session" data-id="${escAttr(s.id)}" style="color: #ef4444; border-color: rgba(239, 68, 68, 0.2);" title="Eliminar permanentemente">Purgar</button>
                     `;
                 } else {
-                    statusHtml = `<span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.2); padding: 2px 6px; border-radius: 4px; font-size: 0.75rem;">✅ Activa</span>`;
+                    statusHtml = '<span class="badge badge-success">Activa</span>';
 
                     actionsHtml = `
-                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${escAttr(s.id)}" title="Previsualizar Sesión">👁️ Ver</button>
-                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${escAttr(s.id)}" title="Ver JSON de la sesión">📦 JSON</button>
-                        <button class="btn btn-danger-ghost btn-sm btn-delete-session" data-id="${escAttr(s.id)}" style="color: #f97316; border-color: rgba(249, 115, 22, 0.2);" title="Enviar a Papelera">🗑️ Eliminar</button>
+                        <button class="btn btn-ghost btn-sm btn-preview" data-id="${escAttr(s.id)}" title="Previsualizar sesión">Ver</button>
+                        <button class="btn btn-ghost btn-sm btn-inspect" data-id="${escAttr(s.id)}" title="Ver JSON de la sesión">JSON</button>
+                        <button class="btn btn-danger-ghost btn-sm btn-delete-session" data-id="${escAttr(s.id)}" style="color: #f97316; border-color: rgba(249, 115, 22, 0.2);" title="Enviar a papelera">Eliminar</button>
                     `;
                 }
 
@@ -301,7 +301,7 @@
 
         overlay.innerHTML = `
             <div class="glass-card" style="width: 95%; max-width: 900px; height: 90vh; padding: 1.5rem; display: flex; flex-direction: column; position: relative; gap: 1rem;">
-                <button id="btn-close-preview" class="btn btn-ghost btn-sm" style="position: absolute; top: 1rem; right: 1rem;">✕</button>
+                <button id="btn-close-preview" class="btn btn-ghost btn-sm" style="position: absolute; top: 1rem; right: 1rem;" aria-label="Cerrar vista previa">Cerrar</button>
                 <h3 style="margin-top: 0; margin-bottom: 0;">Previsualización de Sesión: ${escHTML(session.titulo || 'Sin Título')}</h3>
                 
                 <div style="flex: 1; border-radius: 8px; border: 1px solid var(--border); overflow: hidden; background: #ffffff;">
@@ -310,7 +310,7 @@
                 
                 <div style="display: flex; justify-content: space-between; align-items: center;">
                     <span style="font-size: 0.8rem; color: #a1a1aa;">Docente: ${escHTML(session.user_id)}</span>
-                    <button id="btn-print-preview" class="btn btn-primary">Imprimir / Guardar PDF 🖨️</button>
+                    <button id="btn-print-preview" class="btn btn-primary">Imprimir o guardar PDF</button>
                 </div>
             </div>
         `;
@@ -469,13 +469,13 @@
 
         overlay.innerHTML = `
             <div class="glass-card" style="width: 90%; max-width: 700px; padding: 2rem; max-height: 80vh; display: flex; flex-direction: column; position: relative;">
-                <button id="btn-close-inspect" class="btn btn-ghost btn-sm" style="position: absolute; top: 1rem; right: 1rem;">✕</button>
+                <button id="btn-close-inspect" class="btn btn-ghost btn-sm" style="position: absolute; top: 1rem; right: 1rem;" aria-label="Cerrar inspección">Cerrar</button>
                 <h3 style="margin-top: 0; margin-bottom: 1rem;">Detalle de Sesión: ${escHTML(session.titulo || 'Sin Título')}</h3>
                 <div style="flex: 1; overflow-y: auto; text-align: left; background: rgba(0,0,0,0.3); border-radius: 8px; padding: 1rem; border: 1px solid var(--border);">
                     <pre style="font-family: var(--font-mono); font-size: 0.8rem; margin: 0; color: #a78bfa; white-space: pre-wrap; word-break: break-all;">${escHTML(jsonStr)}</pre>
                 </div>
                 <div style="margin-top: 1rem; display: flex; justify-content: flex-end; gap: var(--space-sm);">
-                    <button id="btn-download-inspect" class="btn btn-primary">Descargar JSON 📥</button>
+                    <button id="btn-download-inspect" class="btn btn-primary">Descargar JSON</button>
                 </div>
             </div>
         `;
@@ -511,10 +511,12 @@
         btnTogglePass.addEventListener('click', () => {
             if (smtpPass.type === 'password') {
                 smtpPass.type = 'text';
-                btnTogglePass.textContent = '🔒';
+                btnTogglePass.textContent = 'Ocultar';
+                btnTogglePass.setAttribute('aria-label', 'Ocultar contraseña');
             } else {
                 smtpPass.type = 'password';
-                btnTogglePass.textContent = '👁️';
+                btnTogglePass.textContent = 'Mostrar';
+                btnTogglePass.setAttribute('aria-label', 'Mostrar contraseña');
             }
         });
 
@@ -552,7 +554,7 @@
                 Toast.error('Error al guardar credenciales: ' + e.message);
             } finally {
                 btnSave.disabled = false;
-                btnSave.textContent = 'Guardar Credenciales SMTP 💾';
+                btnSave.textContent = 'Guardar credenciales SMTP';
             }
         });
 
@@ -572,7 +574,7 @@
             const confirmed = await ConfirmDialog.show({
                 title: '¿Confirmar Envío Masivo?',
                 message: 'Esta acción enviará este correo electrónico a TODOS los usuarios registrados de la aplicación. Esta acción no se puede deshacer.',
-                confirmText: 'Enviar Correos 🚀'
+                confirmText: 'Enviar correos'
             });
 
             if (!confirmed) return;
@@ -603,7 +605,7 @@
                 Toast.error('Error al despachar correos: ' + e.message);
             } finally {
                 btnFire.disabled = false;
-                btnFire.textContent = '🚀 Despachar Oleada de Correos';
+                btnFire.textContent = 'Enviar correo masivo';
             }
         });
     }

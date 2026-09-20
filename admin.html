@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Lab — Panel Maestro 👑</title>
+    <title>Space Lab — Panel Maestro</title>
+    <script src="js/theme.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/admin.css">
     <link rel="stylesheet" href="css/mobile-app-theme.css?v=2">
+    <link rel="stylesheet" href="css/app-theme.css?v=1">
 </head>
 <body class="admin-body">
     <!-- ═══════════ TOAST CONTAINER ═══════════ -->
@@ -18,7 +20,7 @@
     <!-- ═══════════ CONFIRM DIALOG ═══════════ -->
     <div id="confirm-dialog" class="confirm-overlay hidden">
         <div class="confirm-card glass-card">
-            <div class="confirm-icon">⚠️</div>
+            <div class="confirm-icon" aria-hidden="true">!</div>
             <h3 id="confirm-title">¿Estás seguro?</h3>
             <p id="confirm-message">Esta acción no se puede deshacer.</p>
             <div class="confirm-actions">
@@ -32,19 +34,27 @@
     <div class="app-wrapper">
         <header class="app-header glass-card">
             <div class="header-brand">
-                <div class="brand-icon">👑</div>
+                <div class="brand-icon"><img src="assets/favicon.svg" alt="" class="brand-logo-img"></div>
                 <div>
                     <h1 class="brand-title" style="color: #ffd700;">Panel Maestro</h1>
                     <span class="brand-subtitle">Consola de Control</span>
                 </div>
             </div>
             <nav class="header-actions">
+                <label class="theme-picker" title="Tema de la aplicación">
+                    <span class="sr-only">Tema de la aplicación</span>
+                    <select id="theme-preference" aria-label="Tema de la aplicación">
+                        <option value="system">Sistema</option>
+                        <option value="light">Claro</option>
+                        <option value="dark">Oscuro</option>
+                    </select>
+                </label>
                 <span id="admin-user-email" class="user-email-tag" style="margin-right: 1rem;">Cargando...</span>
                 <a href="index.html" class="btn btn-ghost">
-                    <span class="icon">⬅️</span> Volver
+                    Volver al editor
                 </a>
                 <button id="btn-admin-logout" class="btn btn-danger btn-sm">
-                    🚪 Salir
+                    Salir
                 </button>
             </nav>
         </header>
@@ -53,20 +63,20 @@
             <!-- Navigation Sidebar Tabs -->
             <aside class="sidebar glass-card">
                 <div class="sidebar-header">
-                    <h2 class="sidebar-title">🧭 Módulos</h2>
+                    <h2 class="sidebar-title">Módulos</h2>
                 </div>
                 <div class="admin-tabs">
                     <button class="tab-btn active" data-tab="smtp">
-                        <span class="icon">📧</span> SMTP Settings
+                        Configuración SMTP
                     </button>
                     <button class="tab-btn" data-tab="blast">
-                        <span class="icon">🚀</span> Email Blast
+                        Correo masivo
                     </button>
                     <button class="tab-btn" data-tab="logs">
-                        <span class="icon">🛡️</span> Security Logs
+                        Auditoría de seguridad
                     </button>
                     <button class="tab-btn" data-tab="sessions">
-                        <span class="icon">📂</span> Sesiones del Servidor
+                        Sesiones del servidor
                     </button>
                 </div>
             </aside>
@@ -76,7 +86,7 @@
                 
                 <!-- ── SMTP Tab ── -->
                 <div id="tab-smtp" class="tab-content">
-                    <h2 class="section-title">📧 Configuración de Correo SMTP</h2>
+                    <h2 class="section-title">Configuración de correo SMTP</h2>
                     <p class="section-desc">Configura las credenciales SMTP corporativas para la entrega de correos y OTP.</p>
                     
                     <form id="smtp-form" class="admin-form">
@@ -87,7 +97,7 @@
                         <div class="form-group" style="position: relative;">
                             <label class="form-label" for="smtp-password">App Password (Contraseña de Aplicación)</label>
                             <input type="password" id="smtp-password" class="form-select" placeholder="••••••••••••••••" required>
-                            <button type="button" id="btn-toggle-password" style="position: absolute; right: 1rem; top: 2.2rem; background: none; border: none; color: var(--text-secondary); cursor: pointer;">👁️</button>
+                            <button type="button" id="btn-toggle-password" class="password-toggle" aria-label="Mostrar contraseña">Mostrar</button>
                         </div>
                         <div class="form-group">
                             <label class="form-label" for="smtp-host">Servidor SMTP (Host)</label>
@@ -106,14 +116,14 @@
                             </div>
                         </div>
                         <button type="submit" id="btn-save-smtp" class="btn btn-primary" style="margin-top: 1rem;">
-                            Guardar Credenciales SMTP 💾
+                            Guardar credenciales SMTP
                         </button>
                     </form>
                 </div>
 
                 <!-- ── Email Blast Tab ── -->
                 <div id="tab-blast" class="tab-content hidden">
-                    <h2 class="section-title">🚀 Despacho de Correo Masivo (Email Blast)</h2>
+                    <h2 class="section-title">Despacho de correo masivo</h2>
                     <p class="section-desc">Envía una oleada de correos a todos los usuarios del sistema utilizando la Edge Function de correos.</p>
                     
                     <form id="blast-form" class="admin-form">
@@ -132,7 +142,7 @@
                             <textarea id="blast-message" class="form-select" rows="10" placeholder="<h3>Hola Docente</h3><p>Te damos la bienvenida a la nueva actualización de Space Lab...</p>" required style="resize: vertical; font-family: var(--font-mono);"></textarea>
                         </div>
                         <button type="submit" id="btn-fire-blast" class="btn btn-accent" style="margin-top: 1rem; width: 100%; font-weight: 700;">
-                            🚀 Despachar Oleada de Correos
+                            Enviar correo masivo
                         </button>
                     </form>
                 </div>
@@ -140,8 +150,8 @@
                 <!-- ── Logs Tab ── -->
                 <div id="tab-logs" class="tab-content hidden">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2 class="section-title" style="margin: 0;">🛡️ Registro de Auditoría de Seguridad</h2>
-                        <button id="btn-refresh-logs" class="btn btn-ghost btn-sm">🔄 Actualizar</button>
+                        <h2 class="section-title" style="margin: 0;">Registro de auditoría de seguridad</h2>
+                        <button id="btn-refresh-logs" class="btn btn-ghost btn-sm">Actualizar</button>
                     </div>
                     <p class="section-desc">Monitoreo en tiempo real de logins, cierres de sesión e intentos de intrusión.</p>
                     
@@ -167,8 +177,8 @@
                 <!-- ── Sessions Tab ── -->
                 <div id="tab-sessions" class="tab-content hidden">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-                        <h2 class="section-title" style="margin: 0;">📂 Sesiones de Aprendizaje en el Servidor</h2>
-                        <button id="btn-refresh-sessions" class="btn btn-ghost btn-sm">🔄 Actualizar</button>
+                        <h2 class="section-title" style="margin: 0;">Sesiones de aprendizaje en el servidor</h2>
+                        <button id="btn-refresh-sessions" class="btn btn-ghost btn-sm">Actualizar</button>
                     </div>
                     <p class="section-desc">Explora todas las sesiones creadas por los docentes en la base de datos.</p>
                     
