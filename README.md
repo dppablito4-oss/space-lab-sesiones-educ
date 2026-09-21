@@ -53,7 +53,7 @@ Los routers de IA requieren una sesión autenticada de Supabase antes de consumi
 
 ### Motor local
 
-El backend FastAPI de `backend/` genera Word y PDF. El ejecutable de Windows se compila con PyInstaller y se publica como artefacto de GitHub Actions.
+El backend FastAPI de `backend/` genera Word y PDF. Su versión se define en `backend/version.py`. El ejecutable de Windows se compila con PyInstaller y se publica en GitHub Releases al crear un tag `v*` que coincida con esa versión.
 
 ## Estructura
 
@@ -124,7 +124,7 @@ python tests/ui_accessibility_smoke.py
 python tests/no_emoji_controls.py
 ```
 
-GitHub Actions ejecuta estas pruebas, valida las Edge Functions y compila `pablitopyhost-windows` en cada push a `main`.
+GitHub Actions ejecuta estas pruebas, valida las Edge Functions y compila `pablitopyhost-windows` en cada push a `main`. Un tag como `v1.3.0` vuelve a ejecutar la validación, compila el motor y adjunta `pablitopyhost.exe` a un GitHub Release. La descarga estable es `https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/latest/download/pablitopyhost.exe`.
 
 ## Despliegue de Edge Functions
 

@@ -50,6 +50,7 @@ from docx_builder import build_docx_from_json, build_docx_from_html
 from docx_builder_v1 import build_docx_from_v1
 from adapters.legacy_to_v1 import adapt_legacy_to_v1
 from models.session_document import SessionDocumentV1
+from version import ENGINE_VERSION
 
 # Librerías para estilizar consola
 try:
@@ -966,6 +967,7 @@ def check_status():
     return {
         "status": "Online",
         "engine": "FastAPI + Python Export Engine",
+        "version": ENGINE_VERSION,
         "connected": CLIENT_CONNECTED
     }
 

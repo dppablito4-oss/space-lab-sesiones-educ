@@ -17,6 +17,7 @@ def run() -> None:
     status = client.get("/")
     assert status.status_code == 200
     assert status.json()["status"] == "Online"
+    assert status.json()["version"] == main.ENGINE_VERSION == "1.3.0"
 
     unauthorized = client.post("/exportar-docx-json", json={"token": "incorrecto"})
     assert unauthorized.status_code == 401

@@ -1,0 +1,47 @@
+name: Release Windows Engine
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    uses: ./.github/workflows/validate.yml
+
+  build-and-release:
+    needs: validate
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Verify tag matches engine version
+        shell: pwsh
+        run: |
+          $engineVersion = python -c "from backend.version import ENGINE_VERSION; print(ENGINE_VERSION)"
+          if ("v$engineVersion" -ne "${{ github.ref_name }}") {
+            throw "Tag ${{ github.ref_name }} does not match engine version v$engineVersion"
+          }
+
+      - name: Install build dependencies
+        run: |
+          pip install -r backend/requirements.txt
+          pip install pyinstaller
+
+      - name: Build Windows executable
+        working-directory: backend
+        run: pyinstaller pablitopyhost.spec --clean --noconfirm
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: backend/dist/pablitopyhost.exe
+          generate_release_notes: true
+          fail_on_unmatched_files: true
