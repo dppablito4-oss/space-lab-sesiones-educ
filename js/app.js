@@ -6,7 +6,9 @@
 ; (function () {
     'use strict';
 
-    if (!window.SpaceLabUtils || !window.LocalExportClient || !window.DocumentSourceProcessor || !window.SpaceLabExportController || !window.SpaceLabAiController) {
+    if (!window.SpaceLabUtils || !window.LocalExportClient || !window.DocumentSourceProcessor
+        || !window.SpaceLabExportController || !window.SpaceLabAiController
+        || !window.SpaceLabWorkflowController || !window.SpaceLabStudentsController) {
         throw new Error('No se cargaron los módulos base de Space Lab.');
     }
     const {
@@ -148,90 +150,17 @@
         spaceBg: $('#space-bg')
     };
 
-    const WORKFLOW_STEPS = {
-        'tab-ai': {
-            step: 'Paso 01 de 06',
-            title: 'Configura el copiloto',
-            description: 'Elige el modelo, la plantilla y las referencias para preparar tu sesión.'
-        },
-        'tab-general': {
-            step: 'Paso 02 de 06',
-            title: 'Completa los datos',
-            description: 'Define la institución, el grado, el área y la identidad de la sesión.'
-        },
-        'tab-propositos': {
-            step: 'Paso 03 de 06',
-            title: 'Define los propósitos',
-            description: 'Alinea competencias, desempeños, evidencias y criterios de evaluación.'
-        },
-        'tab-design': {
-            step: 'Paso 04 de 06',
-            title: 'Personaliza el diseño',
-            description: 'Ajusta la presentación que compartirán el editor web y la exportación Word.'
-        },
-        'tab-alumnos': {
-            step: 'Paso 05 de 06',
-            title: 'Añade a tus estudiantes',
-            description: 'Prepara la lista de cotejo con los nombres del grado y la sección actual.'
-        },
-        'tab-fichas': {
-            step: 'Paso 06 de 06',
-            title: 'Fichas didácticas con IA',
-            description: 'Genera el prompt especializado para crear la ficha de trabajo para imprimir.'
-        }
-    };
-
-    function syncSessionContextTitle() {
-        const contextTitle = $('#session-context-title');
-        if (!contextTitle) return;
-        contextTitle.textContent = DOM.inputTitulo?.value.trim() || 'Nueva sesión';
-    }
-
-    function updateWorkflowUi(activeTabId) {
-        $$('.sidebar-tab').forEach(tab => {
-            const stateLabel = tab.querySelector('.tab-state');
-            const tabName = tab.querySelector('.tab-text')?.textContent || 'Etapa';
-            const isActive = tab.dataset.tab === activeTabId;
-            const isCompleted = AppState.completedWorkflowTabs.has(tab.dataset.tab) && !isActive;
-            const state = isActive ? 'En curso' : (isCompleted ? 'Completado' : 'Pendiente');
-            tab.classList.toggle('completed', isCompleted);
-            tab.setAttribute('tabindex', isActive ? '0' : '-1');
-            tab.setAttribute('aria-label', `${tabName}, ${state.toLowerCase()}`);
-            if (stateLabel) stateLabel.textContent = state;
-        });
-
-        const step = WORKFLOW_STEPS[activeTabId];
-        if (!step) return;
-        DOM.sidebar.dataset.activeTab = activeTabId;
-        const stepLabel = $('#inspector-step');
-        const title = $('#inspector-title');
-        const description = $('#inspector-description');
-        if (stepLabel) stepLabel.textContent = step.step;
-        if (title) title.textContent = step.title;
-        if (description) description.textContent = step.description;
-    }
-
-    function activateWorkflowTab(tab, markPreviousComplete = true) {
-        if (!tab) return;
-        const currentTab = $('.sidebar-tab.active');
-        if (markPreviousComplete && currentTab && currentTab !== tab) {
-            AppState.completedWorkflowTabs.add(currentTab.dataset.tab);
-        }
-
-        const targetTabId = tab.dataset.tab;
-        $$('.sidebar-tab').forEach(item => {
-            const isTarget = item === tab;
-            item.classList.toggle('active', isTarget);
-            item.setAttribute('aria-selected', String(isTarget));
-        });
-        $$('.tab-pane').forEach(pane => pane.classList.toggle('active', pane.id === targetTabId));
-        updateWorkflowUi(targetTabId);
-        openSidebar();
-    }
-
-    // ═══════════════════════════════════════
-    // INITIALIZATION
-    // ═══════════════════════════════════════
+    const {
+        syncSessionContextTitle,
+        updateWorkflowUi,
+        activateWorkflowTab
+    } = window.SpaceLabWorkflowController.create({
+        state: AppState,
+        dom: DOM,
+        query: $,
+        queryAll: $$,
+        openSidebar
+    });
 
     function init() {
         // Set today's date as default
@@ -917,84 +846,14 @@
     // ═══════════════════════════════════════
     // STUDENT ROSTER LOGIC
     // ═══════════════════════════════════════
-    async function loadRosterForCurrentClass() {
-        const nivel = DOM.inputNivel.value;
-        const grado = DOM.inputGrado.value;
-        const seccion = DOM.inputSeccion.value.trim().toUpperCase();
-
-        const textareaAlumnos = document.getElementById('textarea-alumnos');
-        if (!textareaAlumnos) return;
-
-        if (!nivel || !grado || !seccion) {
-            return;
-        }
-
-        if (window.SupabaseClient) {
-            try {
-                const alumnos = await SupabaseClient.getAlumnos(nivel, grado, seccion);
-                if (alumnos.length > 0) {
-                    textareaAlumnos.value = alumnos.join('\n');
-                } else {
-                    textareaAlumnos.value = '';
-                }
-            } catch (err) {
-                console.warn('Error al cargar roster:', err);
-            }
-        }
-    }
-
-    async function handleSaveAlumnos() {
-        const btnSave = document.getElementById('btn-save-alumnos');
-        const textareaAlumnos = document.getElementById('textarea-alumnos');
-        if (!btnSave || !textareaAlumnos) return;
-
-        const nivel = DOM.inputNivel.value;
-        const grado = DOM.inputGrado.value;
-        const seccion = DOM.inputSeccion.value.trim().toUpperCase();
-
-        if (!nivel || !grado || !seccion) {
-            Toast.warning('Por favor especifica Nivel, Grado y Sección en la pestaña Datos antes de guardar.');
-            return;
-        }
-
-        const nombresArray = textareaAlumnos.value.split('\n')
-            .map(n => n.trim())
-            .filter(n => n.length > 0);
-
-        btnSave.disabled = true;
-        btnSave.textContent = 'Guardando...';
-
-        try {
-            if (window.SupabaseClient) {
-                const user = await SupabaseClient.getCurrentUser();
-                if (!user) {
-                    Toast.warning('Debes iniciar sesión con Supabase para guardar la lista de alumnos.');
-                    return;
-                }
-
-                await SupabaseClient.saveAlumnos(nivel, grado, seccion, nombresArray);
-                Toast.success(`Lista de alumnos guardada con éxito para ${grado} "${seccion}" (${nivel})`);
-
-                // Actualizar la sesión activa con los nuevos alumnos y re-renderizar
-                if (AppState.currentSession) {
-                    AppState.currentSession.alumnos = nombresArray;
-                    renderSession(AppState.currentSession);
-                }
-            } else {
-                Toast.error('Supabase no está disponible.');
-            }
-        } catch (error) {
-            Toast.error('Error al guardar alumnos: ' + error.message);
-        } finally {
-            btnSave.disabled = false;
-            btnSave.textContent = 'Guardar Alumnos';
-        }
-    }
-
-    // ═══════════════════════════════════════
-    // FORM DATA COLLECTION
-    // ═══════════════════════════════════════
-
+    const {
+        loadRosterForCurrentClass,
+        handleSaveAlumnos
+    } = window.SpaceLabStudentsController.create({
+        state: AppState,
+        dom: DOM,
+        renderSession
+    });
 
     function getFormData() {
         const logos = [];
