@@ -195,14 +195,18 @@ window.SupabaseClient = (() => {
         if (sessionError) throw sessionError;
         if (!session) throw new Error('Debes iniciar sesión para usar las funciones de IA.');
 
-        const { data, error } = await supabase.functions.invoke(functionName, { body });
-        if (error) {
-            throw new Error(await readFunctionError(error, `La función ${functionName} no está disponible.`));
+        try {
+            const { data, error } = await supabase.functions.invoke(functionName, { body });
+            if (error) {
+                throw new Error(await readFunctionError(error, `La función ${functionName} no está disponible.`));
+            }
+            if (data && typeof data === 'object' && data.error) {
+                throw new Error(data.error);
+            }
+            return data;
+        } finally {
+            refreshAiCreditBalance().catch(() => {});
         }
-        if (data && typeof data === 'object' && data.error) {
-            throw new Error(`${data.error}${data.details ? ': ' + data.details : ''}`);
-        }
-        return data;
     }
 
     /**
@@ -356,6 +360,47 @@ window.SupabaseClient = (() => {
         }
     }
 
+    /** Read-only view of the authenticated user's AI wallet. */
+    async function getAiCreditBalance() {
+        if (!supabase) return null;
+        const user = await getCurrentUser();
+        if (!user) return null;
+        const { data, error } = await supabase
+            .from('ai_credit_wallets')
+            .select('balance, plan_id, cycle_started_at, updated_at')
+            .eq('user_id', user.id)
+            .maybeSingle();
+        if (error) throw error;
+        return data ? {
+            balance: Number(data.balance) || 0,
+            planId: data.plan_id || 'free',
+            cycleStartedAt: data.cycle_started_at,
+            updatedAt: data.updated_at
+        } : null;
+    }
+
+    /** Read-only recent usage; costs are always decided by PostgreSQL. */
+    async function getAiUsage(limit = 20) {
+        if (!supabase) return [];
+        const user = await getCurrentUser();
+        if (!user) return [];
+        const safeLimit = Math.min(100, Math.max(1, Number(limit) || 20));
+        const { data, error } = await supabase
+            .from('ai_usage')
+            .select('request_id, action, provider, model, credits, status, input_tokens, output_tokens, created_at, completed_at')
+            .eq('user_id', user.id)
+            .order('created_at', { ascending: false })
+            .limit(safeLimit);
+        if (error) throw error;
+        return data || [];
+    }
+
+    async function refreshAiCreditBalance() {
+        const wallet = await getAiCreditBalance();
+        window.dispatchEvent(new CustomEvent('spacelab:aicredits', { detail: wallet }));
+        return wallet;
+    }
+
     /**
      * Sube una imagen de logo al bucket 'logos'
      */
@@ -486,6 +531,9 @@ window.SupabaseClient = (() => {
         logAction,
         getUserProfile,
         updateUserProfile,
+        getAiCreditBalance,
+        getAiUsage,
+        refreshAiCreditBalance,
         uploadLogo,
         listLogos,
         getAlumnos,

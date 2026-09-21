@@ -46,6 +46,7 @@ jobs:
           python tests/repository_hygiene.py
           python tests/no_emoji_controls.py
           python tests/profile_security.py
+          python tests/ai_credit_security.py
 
       - name: Validate JavaScript syntax
         run: find js -name '*.js' -print0 | xargs -0 -n1 node --check
@@ -96,6 +97,7 @@ jobs:
       - name: Check Supabase Edge Functions
         run: |
           deno test tests/ai-prompt-builder.test.ts
+          deno test tests/ai-credits.test.ts
           deno check supabase/functions/openai-router/index.ts
           deno check supabase/functions/gemini-router/index.ts
           deno check supabase/functions/deepseek-router/index.ts
