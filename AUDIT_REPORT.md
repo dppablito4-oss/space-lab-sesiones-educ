@@ -15,7 +15,7 @@ La aplicación tiene una base funcional: el frontend estático carga, el motor F
 4. **Fórmulas matemáticas en línea sin renderizar.** El prompt pedía `$...$`, pero KaTeX no registraba ese delimitador. Se añadió el delimitador correspondiente.
 5. **Escalada de privilegios en RLS.** `is_admin()` confiaba en `user_metadata`, que el usuario puede modificar. Ahora consulta `profiles` mediante una función `SECURITY DEFINER`, restringe inserciones de perfiles a rol `user` y sincroniza roles únicamente a `app_metadata`.
 6. **Suplantación de logs.** La política permitía insertar registros con cualquier `user_id`. Ahora cada usuario solo puede registrar acciones con su propio ID.
-7. **Tabla de alumnos incompleta en la instalación principal.** Se integró el esquema idempotente de `alumnos` en `database_setup.sql` y se hizo reejecutable `student_roster.sql`.
+7. **Tabla de alumnos incompleta en la instalación principal.** Se integró el esquema idempotente de `alumnos` en `database_setup.sql`; el antiguo SQL quedó como `scripts/repair_student_roster.sql`, únicamente para reparación.
 8. **Routers de IA expuestos.** Gemini, DeepSeek y OpenAI ahora verifican una sesión Supabase válida antes de consumir créditos del proveedor.
 9. **Token local persistente y versionado.** El motor rota el token en cada arranque; el archivo ya no se conserva como fuente y quedó ignorado por Git.
 10. **Defaults mutables en Pydantic.** Las listas usan `Field(default_factory=list)` para evitar estado compartido accidental.

@@ -1,7 +1,7 @@
 -- ==============================================================================
 -- 👥 TABLA DE ALUMNOS (ROSTER DE ESTUDIANTES)
 -- ==============================================================================
--- Archivo independiente y opcional.
+-- Script independiente y opcional de reparación; no es una fuente de verdad.
 -- No lo ejecutes si ya ejecutaste database_setup.sql, porque esa configuración
 -- ya crea esta tabla, su política RLS y su índice.
 

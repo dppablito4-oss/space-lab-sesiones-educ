@@ -324,7 +324,7 @@ CREATE POLICY "Auth Users Delete Logos" ON storage.objects
 -- =======================================================
 -- 6. Lista de alumnos por docente y sección
 -- =======================================================
--- Esta sección ya incluye todo el contenido de student_roster.sql.
+-- Esta sección ya incluye todo el contenido de scripts/repair_student_roster.sql.
 -- Si ejecutas este archivo completo, no necesitas ejecutar el archivo separado.
 
 CREATE TABLE IF NOT EXISTS public.alumnos (

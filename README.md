@@ -72,7 +72,9 @@ assets/                  Marca y documentos oficiales de referencia
 Archivos SQL:
 
 - `database_setup.sql`: instalación principal e idempotente.
-- `student_roster.sql`: instalación o reparación del padrón de estudiantes.
+- `scripts/repair_student_roster.sql`: reparación opcional del padrón de estudiantes. La fuente de verdad del esquema es `database_setup.sql` junto con `supabase/migrations/`.
+
+El historial Git no se reescribe durante esta estabilización. Si el tamaño histórico del repositorio se vuelve un problema, puede evaluarse posteriormente `git filter-repo` en una tarea separada, con respaldo y coordinación previa.
 
 ## Desarrollo local
 
