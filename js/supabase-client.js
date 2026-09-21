@@ -4,6 +4,9 @@
    ═══════════════════════════════════════════════════ */
 
 window.SupabaseClient = (() => {
+    if (!window.SpaceLabProfileFields) {
+        throw new Error('No se cargó la allowlist de campos de perfil.');
+    }
     // Credenciales dadas por el usuario
     const SUPABASE_URL = 'https://koptglmifwpzrfzvipnm.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_erAiat0Q6VFXk5gveRnj4A_3WKFzBzI';
@@ -339,9 +342,11 @@ window.SupabaseClient = (() => {
         const user = await getCurrentUser();
         if (!user) return false;
         try {
+            const editableData = window.SpaceLabProfileFields.sanitizeUpdate(profileData);
+            if (Object.keys(editableData).length === 0) return true;
             const { error } = await supabase
                 .from('profiles')
-                .update(profileData)
+                .update(editableData)
                 .eq('id', user.id);
             if (error) throw error;
             return true;

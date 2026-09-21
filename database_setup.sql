@@ -76,27 +76,43 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
 
--- Trigger de protección para evitar que un usuario se auto-asigne el rol de administrador o cambie su rol
-CREATE OR REPLACE FUNCTION public.check_profile_role_update()
-RETURNS TRIGGER AS $$
+-- Protección por allowlist: usuarios normales solo pueden editar campos de UI.
+-- Todo campo de identidad, seguridad o añadido en el futuro queda protegido por defecto.
+CREATE OR REPLACE FUNCTION public.check_profile_protected_update()
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = pg_catalog, public
+AS $$
+DECLARE
+    v_user_id UUID := auth.uid();
+    v_editable_fields CONSTANT TEXT[] := ARRAY[
+        'username', 'institucion', 'dre', 'ugel',
+        'docente', 'director', 'nivel'
+    ];
 BEGIN
-    -- En peticiones autenticadas, solo un administrador puede cambiar roles.
-    -- auth.uid() es NULL en contextos internos de confianza como el SQL Editor
-    -- de Supabase o una operación con service_role; esos contextos deben poder
-    -- realizar tareas administrativas.
-    IF OLD.role IS DISTINCT FROM NEW.role
-       AND auth.uid() IS NOT NULL
-       AND NOT public.is_admin() THEN
-        RAISE EXCEPTION 'No tienes permisos para modificar el rol de usuario.';
+    IF v_user_id IS NULL OR public.is_admin() THEN
+        RETURN NEW;
+    END IF;
+    IF OLD.id IS DISTINCT FROM v_user_id THEN
+        RAISE EXCEPTION 'No tienes permisos para modificar este perfil.';
+    END IF;
+    IF (to_jsonb(NEW) - v_editable_fields)
+       IS DISTINCT FROM (to_jsonb(OLD) - v_editable_fields) THEN
+        RAISE EXCEPTION 'El perfil contiene cambios en campos protegidos.';
     END IF;
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER SET search_path = public;
+$$;
 
 DROP TRIGGER IF EXISTS before_profile_role_update ON public.profiles;
-CREATE TRIGGER before_profile_role_update
+DROP TRIGGER IF EXISTS before_profile_protected_update ON public.profiles;
+CREATE TRIGGER before_profile_protected_update
     BEFORE UPDATE ON public.profiles
-    FOR EACH ROW EXECUTE FUNCTION public.check_profile_role_update();
+    FOR EACH ROW EXECUTE FUNCTION public.check_profile_protected_update();
+
+DROP FUNCTION IF EXISTS public.check_profile_role_update();
+REVOKE ALL ON FUNCTION public.check_profile_protected_update() FROM PUBLIC, anon, authenticated;
 
 -- Sincronizar roles solo con app_metadata. user_metadata puede ser modificada
 -- por el propio usuario y nunca debe utilizarse para autorizar administradores.

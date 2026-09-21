@@ -45,6 +45,7 @@ jobs:
         run: |
           python tests/repository_hygiene.py
           python tests/no_emoji_controls.py
+          python tests/profile_security.py
 
       - name: Validate JavaScript syntax
         run: find js -name '*.js' -print0 | xargs -0 -n1 node --check
@@ -68,6 +69,7 @@ jobs:
           node tests/app-utils.test.js
           node tests/local-export-client.test.js
           node tests/document-source-processor.test.js
+          node tests/profile-fields.test.js
 
       - name: Run Python contract & adapter & docx tests
         run: |
