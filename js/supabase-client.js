@@ -165,8 +165,14 @@ window.SupabaseClient = (() => {
      */
     async function getCurrentUser() {
         if (!supabase) return null;
-        const { data: { user } } = await supabase.auth.getUser();
-        return user;
+        try {
+            const { data, error } = await supabase.auth.getUser();
+            if (error || !data) return null;
+            return data.user || null;
+        } catch (err) {
+            console.warn('[SupabaseClient] Error verificando sesión:', err);
+            return null;
+        }
     }
 
     async function readFunctionError(error, fallbackMessage) {

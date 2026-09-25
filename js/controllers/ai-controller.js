@@ -35,27 +35,53 @@ window.SpaceLabAiController = (() => {
         }
         
         async function handleGenerateAI() {
-            // Intercept: Check user authentication
-            const user = await SupabaseClient.getCurrentUser();
-            if (!user) {
-                Toast.warning('Debes crear una cuenta para generar sesiones con IA');
-                if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
-                    window.AuthUi.openRegister();
-                }
-                return;
-            }
-        
-            const formData = getFormData();
-        
-            // Validate minimum data
-            if (!AppState.sourceFileData && !formData.metadata.area && !formData.metadata.titulo) {
-                Toast.warning('Llena al menos el Área Curricular, el Título de la sesión o sube un archivo de referencia.');
-                return;
-            }
-        
-            Loader.show('Generando sesión con IA...');
-        
             try {
+                // Intercept: Check user authentication safely
+                let user = null;
+                try {
+                    user = await SupabaseClient.getCurrentUser();
+                } catch (userErr) {
+                    console.warn('[AiController] Error verificando sesión:', userErr);
+                }
+
+                if (!user) {
+                    Toast.warning('Crea o ingresa a tu cuenta para generar sesiones oficiales con IA');
+                    if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
+                        window.AuthUi.openRegister();
+                    }
+                    return;
+                }
+
+                const formData = getFormData();
+
+                // Validate minimum data
+                if (!AppState.sourceFileData && !formData.metadata.area && !formData.metadata.titulo) {
+                    Toast.info('Completa al menos el Área Curricular y el Título de tu sesión para que la IA la redacte.');
+
+                    // Auto-navegar a la pestaña Datos para que el docente vea los campos de inmediato
+                    const dataTab = document.querySelector('.sidebar-tab[data-tab="tab-general"]');
+                    if (dataTab) {
+                        dataTab.click();
+                    }
+                    if (DOM.sidebar && !DOM.sidebar.classList.contains('open')) {
+                        DOM.sidebar.classList.add('open');
+                        document.body.classList.add('sidebar-open');
+                    }
+
+                    setTimeout(() => {
+                        const target = !formData.metadata.area ? DOM.inputArea : DOM.inputTitulo;
+                        if (target) {
+                            target.focus();
+                            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            target.classList.add('input-highlight-pulse');
+                            setTimeout(() => target.classList.remove('input-highlight-pulse'), 2500);
+                        }
+                    }, 220);
+                    return;
+                }
+
+                Loader.show('Generando sesión con IA...');
+        
                 const generationRequest = {
                     ...formData.metadata,
                     ...formData.proposito,

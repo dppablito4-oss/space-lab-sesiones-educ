@@ -64,7 +64,8 @@ serve(async (req) => {
         systemInstruction: { parts: [{ text: aiRequest.systemPrompt }] },
       };
 
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL_NAME}:generateContent?key=${apiKey}`;
+      const GEMINI_API_MODEL = "gemini-2.0-flash";
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_API_MODEL}:generateContent?key=${apiKey}`;
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },

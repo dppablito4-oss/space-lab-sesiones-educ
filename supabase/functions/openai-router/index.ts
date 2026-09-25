@@ -68,11 +68,20 @@ serve(async (req) => {
         ];
       }
 
+      const OPENAI_API_MODEL_MAP: Record<string, string> = {
+        "gpt-6-luna": "gpt-4o-mini",
+        "gpt-6-astra": "gpt-4o",
+        "gpt-6-sol": "gpt-4o",
+        "gpt-5.6-luna": "gpt-4o",
+        "gpt-5.4-mini": "gpt-4o-mini",
+      };
+      const apiModel = OPENAI_API_MODEL_MAP[selectedModel] || "gpt-4o-mini";
+
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
         body: JSON.stringify({
-          model: selectedModel,
+          model: apiModel,
           messages: [
             { role: "system", content: aiRequest.systemPrompt },
             { role: "user", content: userMessageContent },
