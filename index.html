@@ -272,11 +272,21 @@
             </a>
             <ul class="landing-nav-links">
                 <li><a href="#como-funciona" class="landing-nav-link">¿Cómo Funciona?</a></li>
+                <li><a href="#motor-local" class="landing-nav-link">Motor Local</a></li>
                 <li><a href="#modelos-ia" class="landing-nav-link">Modelos IA</a></li>
                 <li><a href="#preguntas-frecuentes" class="landing-nav-link">Preguntas Frecuentes</a></li>
                 <li><a href="descargas_landing.html" class="landing-nav-link">Descargas</a></li>
             </ul>
             <div class="landing-nav-actions">
+                <label class="theme-picker" title="Tema de la aplicación">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-theme"></use></svg>
+                    <span class="sr-only">Tema de la aplicación</span>
+                    <select data-theme-selector aria-label="Tema de la aplicación">
+                        <option value="system">Sistema</option>
+                        <option value="light">Claro</option>
+                        <option value="dark">Oscuro</option>
+                    </select>
+                </label>
                 <button type="button" class="btn btn-ghost btn-sm" data-action="open-login" aria-label="Iniciar sesión con tu cuenta">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
                     <span>Iniciar Sesión</span>
@@ -299,7 +309,7 @@
                     Diseña Sesiones de Aprendizaje Oficiales MINEDU con <span class="highlight">Inteligencia Artificial</span>
                 </h1>
                 <p class="landing-hero-subtitle">
-                    Planificación curricular integral para <strong>Inicial, Primaria y Secundaria</strong> alineada 100% al CNEB. Genera situaciones significativas, momentos didácticos (Inicio, Desarrollo, Cierre), competencias, desempeños y rúbricas. Exporta a <strong>Word (.docx)</strong> editable y <strong>PDF</strong> con membrete oficial.
+                    Planificación curricular integral para <strong>Inicial, Primaria y Secundaria</strong> alineada 100% al CNEB. Genera situaciones significativas, momentos didácticos (Inicio, Desarrollo, Cierre), competencias, desempeños y rúbricas. Exporta a <strong>Word (.docx)</strong> con nuestro motor nativo o a <strong>PDF</strong> oficial.
                 </p>
                 <div class="landing-hero-actions">
                     <button type="button" class="landing-btn-lg landing-btn-primary" data-action="enter-app" aria-label="Comenzar a planificar sesión de aprendizaje gratis">
@@ -318,11 +328,11 @@
                     </div>
                     <div class="landing-badge-item">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
-                        <span>GPT-6 Luna, Claude &amp; Gemini</span>
+                        <span>GPT-6 Luna &amp; DeepSeek R1</span>
                     </div>
                     <div class="landing-badge-item">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                        <span>Word (.docx) &amp; PDF A4</span>
+                        <span>Motor Word (.docx) Nativo</span>
                     </div>
                     <div class="landing-badge-item">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
@@ -385,18 +395,67 @@
             <div class="landing-steps-grid">
                 <div class="landing-step-card">
                     <span class="landing-step-number">1</span>
-                    <h3 class="landing-step-title">Selecciona tu Contexto Curricular</h3>
+                    <h3 class="landing-step-title">Configuración Curricular CNEB</h3>
                     <p class="landing-step-text">Elige tu nivel educativo (Inicial, Primaria o Secundaria), área, grado, competencias y capacidades precargadas del CNEB de forma automática.</p>
                 </div>
                 <div class="landing-step-card">
                     <span class="landing-step-number">2</span>
-                    <h3 class="landing-step-title">Genera con Inteligencia Artificial</h3>
-                    <p class="landing-step-text">Space AI redacta la situación significativa con enfoque transversal, la secuencia didáctica completa (Inicio, Desarrollo, Cierre) y los criterios de evaluación.</p>
+                    <h3 class="landing-step-title">Generación Pedagógica con IA</h3>
+                    <p class="landing-step-text">Los modelos de IA (GPT-6 Luna, DeepSeek R1 o Gemini) redactan situaciones significativas, la secuencia didáctica completa (Inicio, Desarrollo, Cierre) y los criterios de evaluación.</p>
                 </div>
                 <div class="landing-step-card">
                     <span class="landing-step-number">3</span>
-                    <h3 class="landing-step-title">Edita y Exporta a Word Oficial</h3>
-                    <p class="landing-step-text">Ajusta los detalles directamente en la hoja A4 y descarga tu documento de Microsoft Word (.docx) con membretes de UGEL/MINEDU o imprime en PDF limpio.</p>
+                    <h3 class="landing-step-title">Compilación Nativa con Motor Local</h3>
+                    <p class="landing-step-text">Descarga el motor de escritorio para compilar Word (.docx) nativo con tablas CNEB perfectas, fórmulas matemáticas OMML editables y membretes oficiales sin descuadres.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: Hybrid Architecture & Local Engine -->
+        <section id="motor-local" class="landing-section">
+            <div class="landing-section-header">
+                <span class="landing-section-eyebrow">Arquitectura Híbrida</span>
+                <h2 class="landing-section-title">¿Por qué Space Lab Incluye un Motor Local?</h2>
+                <p class="landing-section-desc">Unificamos la flexibilidad de la web con la potencia del compilador nativo de escritorio para documentos Word (.docx) de máxima fidelidad.</p>
+            </div>
+            <div class="motor-local-card">
+                <div class="motor-local-info">
+                    <div class="motor-local-badge">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                        <span>Fidelidad Documental 100%</span>
+                    </div>
+                    <h3 class="motor-local-title">Motor Local de Exportación para Windows</h3>
+                    <p class="motor-local-desc">
+                        Los navegadores web no pueden crear de forma nativa documentos de Microsoft Word con tablas anidadas multinivel, márgenes físicos A4 de imprenta ni fórmulas matemáticas editables (OMML). Por eso creamos <strong>pablitopyhost.exe</strong>: un motor ultraligero que corre en tu PC y se comunica de forma transparente y segura con esta aplicación web a través de <code>localhost:8000</code>.
+                    </p>
+                    <div class="motor-local-features">
+                        <div class="motor-feature-item">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                            <span>Tablas CNEB oficiales sin celdas descuadradas</span>
+                        </div>
+                        <div class="motor-feature-item">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                            <span>Ecuaciones matemáticas editables en formato OMML</span>
+                        </div>
+                        <div class="motor-feature-item">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                            <span>Membretes institucionales de DRE y UGEL</span>
+                        </div>
+                        <div class="motor-feature-item">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                            <span>Exportación instantánea sin límites de memoria web</span>
+                        </div>
+                    </div>
+                    <div class="motor-local-actions">
+                        <a href="descargas_landing.html" class="landing-btn-lg landing-btn-primary" aria-label="Ir a la página de descarga del motor local">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+                            <span>Descargar Motor Local (.exe)</span>
+                        </a>
+                        <a href="conexion.html" class="landing-btn-lg landing-btn-ghost" aria-label="Ver estado de conexión del motor">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+                            <span>Verificar Estado de Conexión</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
@@ -415,26 +474,26 @@
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
                     </div>
                     <h3 class="landing-model-title">GPT-6 Luna</h3>
-                    <span class="landing-model-provider">OpenAI</span>
-                    <p class="landing-model-desc">Máxima agilidad y creatividad en el planteamiento de situaciones significativas contextualizadas a la realidad peruana.</p>
+                    <span class="landing-model-provider">OpenAI Router</span>
+                    <p class="landing-model-desc">Máxima agilidad y creatividad en el planteamiento de situaciones significativas contextualizadas a la realidad y coyuntura peruana.</p>
                 </div>
                 <div class="landing-model-card">
                     <span class="landing-model-badge" style="background: rgba(123, 97, 255, 0.15); color: #7b61ff; border-color: rgba(123, 97, 255, 0.3);">Recomendado</span>
                     <div class="landing-model-icon" style="color: #7b61ff;">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                     </div>
-                    <h3 class="landing-model-title">Claude 3.5 Sonnet</h3>
-                    <span class="landing-model-provider">Anthropic</span>
-                    <p class="landing-model-desc">Rigor metodológico profundo, coherencia en la alineación de competencias y diseño detallado de rúbricas analíticas.</p>
+                    <h3 class="landing-model-title">DeepSeek R1 / V3</h3>
+                    <span class="landing-model-provider">DeepSeek Router</span>
+                    <p class="landing-model-desc">Razonamiento pedagógico profundo, coherencia estricta en la alineación de propósitos y diseño de instrumentos de evaluación formativa.</p>
                 </div>
                 <div class="landing-model-card">
                     <span class="landing-model-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3);">Rápido</span>
                     <div class="landing-model-icon" style="color: #10b981;">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
                     </div>
-                    <h3 class="landing-model-title">Gemini 2.5 Pro</h3>
+                    <h3 class="landing-model-title">Gemini 2.5 Flash</h3>
                     <span class="landing-model-provider">Google DeepMind</span>
-                    <p class="landing-model-desc">Velocidad instantánea para actividades prácticas, fichas de trabajo y adaptación a distintos ritmos de aprendizaje.</p>
+                    <p class="landing-model-desc">Velocidad instantánea para actividades prácticas de inicio, desarrollo y cierre, fichas de trabajo y adaptación a distintos ritmos de aprendizaje.</p>
                 </div>
             </div>
         </section>
@@ -444,36 +503,50 @@
             <div class="landing-section-header">
                 <span class="landing-section-eyebrow">Respuestas Claras</span>
                 <h2 class="landing-section-title">Preguntas Frecuentes para Docentes</h2>
-                <p class="landing-section-desc">Todo lo que necesitas saber antes de empezar a planificar.</p>
+                <p class="landing-section-desc">Todo lo que necesitas saber sobre la plataforma, el motor local y el currículo.</p>
             </div>
             <div class="landing-faq-container">
                 <div class="landing-faq-item">
                     <h3 class="landing-faq-question">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+                        ¿Qué es el Motor Local y por qué debo descargarlo?
+                    </h3>
+                    <p class="landing-faq-answer">Para que tus sesiones se descarguen en Microsoft Word (.docx) con las tablas oficiales del MINEDU, márgenes exactos, listas de cotejo y fórmulas matemáticas editables (OMML) sin que se mueva ninguna celda, desarrollamos un motor nativo (<code>pablitopyhost.exe</code>). Se ejecuta en segundo plano en tu computadora y procesa el documento con máxima fidelidad.</p>
+                </div>
+                <div class="landing-faq-item">
+                    <h3 class="landing-faq-question">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
-                        ¿Las sesiones cumplen con la normativa del MINEDU y el CNEB?
+                        ¿Puedo usar la plataforma sin descargar el motor local?
                     </h3>
-                    <p class="landing-faq-answer">Sí. La plataforma incorpora las competencias, capacidades, estándares y enfoques transversales vigentes del Currículo Nacional de la Educación Básica (CNEB) para Inicial, Primaria y Secundaria.</p>
+                    <p class="landing-faq-answer">Sí. Puedes diseñar, redactar, editar, guardar en la nube o localmente, y utilizar todos los modelos de Inteligencia Artificial directamente en tu navegador. El motor local solo es necesario cuando deseas compilar y descargar tus sesiones en formato Word (.docx) editable de alta fidelidad.</p>
                 </div>
                 <div class="landing-faq-item">
                     <h3 class="landing-faq-question">
-                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                        ¿Puedo editar el documento en Microsoft Word (.docx)?
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+                        ¿Cómo se alinea al Currículo Nacional de la Educación Básica (CNEB)?
                     </h3>
-                    <p class="landing-faq-answer">Por supuesto. La descarga genera un archivo .docx nativo editable con tablas, tipografía limpia y membretes oficiales de UGEL para que puedas hacer cualquier ajuste final.</p>
-                </div>
-                <div class="landing-faq-item">
-                    <h3 class="landing-faq-question">
-                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
-                        ¿Necesito pagar o registrarme para usar la plataforma?
-                    </h3>
-                    <p class="landing-faq-answer">No es obligatorio registrarse para probar la plataforma. Puedes generar y exportar tus sesiones de inmediato. Si deseas guardar tus sesiones en la nube y acceder desde cualquier dispositivo, puedes crear tu cuenta gratuita.</p>
+                    <p class="landing-faq-answer">Toda la base de datos de competencias, capacidades, desempeños por grado y ciclo (Inicial, Primaria y Secundaria), enfoques transversales e instrumentos de evaluación está completamente estructurada según las directivas curriculares vigentes del Ministerio de Educación del Perú (MINEDU).</p>
                 </div>
                 <div class="landing-faq-item">
                     <h3 class="landing-faq-question">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
-                        ¿Cómo funciona la detección automática de inicio de sesión?
+                        ¿Qué modelos de Inteligencia Artificial están disponibles?
                     </h3>
-                    <p class="landing-faq-answer">Si ya tienes una cuenta e inicias sesión, el sistema detecta tus credenciales de forma segura y te lleva directo al editor cada vez que ingreses, sin pasar por la página de bienvenida.</p>
+                    <p class="landing-faq-answer">Dispones de una arquitectura multi-modelo conectada a través de routers seguros: GPT-6 Luna de OpenAI, DeepSeek V3 y Reasoner R1 para razonamiento pedagógico profundo, y Google Gemini 2.5 Flash para generación ultrarrápida de actividades y criterios.</p>
+                </div>
+                <div class="landing-faq-item">
+                    <h3 class="landing-faq-question">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+                        ¿Cómo funciona el sistema de créditos y monetización automatizada?
+                    </h3>
+                    <p class="landing-faq-answer">La plataforma cuenta con un sistema de créditos automatizado gestionado en la nube con Supabase. No requiere procesos manuales de verificación: tus créditos de IA se recargan y acreditan de forma automática para que puedas seguir planificando sin interrupciones.</p>
+                </div>
+                <div class="landing-faq-item">
+                    <h3 class="landing-faq-question">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                        ¿Mis sesiones y datos personales están seguros?
+                    </h3>
+                    <p class="landing-faq-answer">Totalmente seguros. Tus sesiones se guardan localmente en tu propio dispositivo (LocalStorage e IndexedDB) y, si inicias sesión, se sincronizan en la nube mediante Supabase con políticas de seguridad de nivel de fila (RLS). Tu información docente nunca se comparte con terceros.</p>
                 </div>
             </div>
         </section>

@@ -15,8 +15,16 @@ Esta skill enseña al agente a generar, rediseñar y extender interfaces web con
 
 ## 1. Filosofía y Estilo Visual
 
-- **Estética Cyber-Dark con Glassmorphism**: Fondo negro/azulado profundo (`#07070d`), paneles translúcidos con desenfoque de fondo (`backdrop-filter: blur(20px)`), bordes sutiles de cristal (`rgba(255, 255, 255, 0.08)`), y un degradado radial ambiental animado.
+- **Estética Cyber-Dark con Glassmorphism & Modo Claro Nítido**: 
+  - *Modo Oscuro*: Fondo negro/azulado profundo (`#07070d`), paneles translúcidos con desenfoque de fondo (`backdrop-filter: blur(20px)`), bordes sutiles de cristal (`rgba(255, 255, 255, 0.08)`), y un degradado radial ambiental animado.
+  - *Modo Claro*: Fondo blanco/grisáceo suave (`#f5f6f8`), paneles blancos translúcidos (`rgba(255, 255, 255, 0.9)`), bordes nítidos (`#d0d4d9`), tipografía de alto contraste (`#1b1a19`) y acentos en azul OneDrive (`#0f6cbd`).
 - **Color de Acento Eléctrico**: Neón cian (`#00D4FF`) combinado en degradado con violeta profundo (`#7B61FF`), con resplandores luminosos (`box-shadow` con efecto glow).
+- **Arquitectura de Vista Dual**:
+  - *Vista Pública / Landing Page (`#landing-view`)*: Flujo de bienvenida, pasos pedagógicos CNEB, arquitectura del motor local Word, catálogo de modelos IA (GPT-6 Luna, DeepSeek R1, Gemini), FAQs docentes y selector de tema.
+  - *Espacio de Trabajo / Editor (`#app-view`)*: Rail de navegación lateral de 6 pasos, formulario contextual curricular y renderizado interactivo en hoja A4.
+- **Arquitectura Híbrida Web + Motor Local**:
+  - Planificación y generación con IA en el cliente web estático (GitHub Pages).
+  - Compilación de máxima fidelidad a Word (.docx nativo con tablas CNEB y ecuaciones OMML) a través de `pablitopyhost.exe` en `localhost:8000`.
 - **Mobile-First con Adaptación Ergonómica**:
   - En móviles: botones e interacciones principales al alcance del pulgar (barra inferior fija `flow-nav` y `controls-panel` flotante).
   - En escritorio (>= 1024px): layout dividido en 2 columnas (área de trabajo/canvas a la izquierda y barra lateral de herramientas a la derecha).

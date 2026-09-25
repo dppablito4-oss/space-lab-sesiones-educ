@@ -69,6 +69,9 @@ Normal text must meet 4.5:1 contrast. Interactive boundaries and meaningful icon
 
 ## Application Layout
 
+- Dual Layout Architecture:
+  - Landing View (`#landing-view`): Public onboarding, CNEB 3-step pedagogical flow, hybrid local engine architecture overview, multi-model AI catalog, interactive theme selector, and teacher FAQs.
+  - Workspace View (`#app-view`): Primary creation shell for curriculum planning and document compilation.
 - Topbar: brand and session context left, save status centered, commands right.
 - Creation navigation: permanent 68px icon rail on the left; its labels expand on logo activation or desktop hover.
 - Creation panel: temporary contextual drawer that opens from the selected rail item.

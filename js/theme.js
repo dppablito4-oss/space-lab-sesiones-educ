@@ -30,14 +30,33 @@
             try { localStorage.setItem(STORAGE_KEY, normalized); } catch { /* Storage can be unavailable. */ }
         }
 
-        const selector = document.getElementById('theme-preference');
-        if (selector && selector.value !== normalized) selector.value = normalized;
+        function getThemeSelectors() {
+            if (typeof document.querySelectorAll === 'function') {
+                const list = document.querySelectorAll('#theme-preference, [data-theme-selector]');
+                if (list.length > 0) return Array.from(list);
+            }
+            const single = document.getElementById('theme-preference');
+            return single ? [single] : [];
+        }
+
+        const selectors = getThemeSelectors();
+        selectors.forEach(sel => {
+            if (sel && sel.value !== normalized) sel.value = normalized;
+        });
         window.dispatchEvent(new CustomEvent('spacelab:themechange', {
             detail: { preference: normalized, theme: resolved }
         }));
     }
 
     function bindThemeControl() {
+        if (typeof document.querySelectorAll === 'function') {
+            const list = document.querySelectorAll('#theme-preference, [data-theme-selector]');
+            list.forEach(sel => {
+                sel.value = readPreference();
+                sel.addEventListener('change', () => applyTheme(sel.value, true));
+            });
+            return;
+        }
         const selector = document.getElementById('theme-preference');
         if (!selector) return;
         selector.value = readPreference();

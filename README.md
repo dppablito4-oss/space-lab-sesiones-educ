@@ -16,32 +16,34 @@ El mismo documento alimenta la vista web, la exportación DOCX y la exportación
 
 ### Frontend
 
-Frontend estático desplegado con GitHub Pages. La interfaz principal está en `index.html`; los controladores están en `js/` y los estilos en `css/`.
+Frontend estático moderno alojado en GitHub Pages con arquitectura de vista dual:
+- **Landing Page / Bienvenida (`#landing-view`)**: Presentación del producto, desglose del flujo pedagógico CNEB en 3 pasos, especificaciones del motor local, catálogo de modelos de IA, selector interactivo de tema y preguntas frecuentes para docentes.
+- **Espacio de Trabajo / Editor (`#app-view`)**: Interfaz operacional con rail de etapas de 6 pasos, formulario contextual de competencias/capacidades, previsualización interactiva de hoja A4 y consola de comandos de exportación.
 
-El shell usa tokens semánticos y tres preferencias visuales persistentes: `Sistema`, `Claro` y `Oscuro`. Las responsabilidades transversales del editor están separadas de `app.js`:
+El shell visual utiliza tokens semánticos con soporte completo para tres modos: `Sistema`, `Claro` y `Oscuro` (persistidos en `localStorage`). Las responsabilidades están modularizadas:
 
-- `js/core/app-utils.js`: formato, escape seguro, tiempos y tipos MIME.
-- `js/services/local-export-client.js`: detección, autenticación y exportación mediante el motor local.
-- `js/services/document-source-processor.js`: lectura y renderizado de PDF usados como referencia para IA.
-- `js/theme.js`: preferencia de tema y sincronización con el sistema operativo.
-- `js/ui-shell.js`: comportamiento de menús del shell.
+- `js/core/app-utils.js`: formato, escape seguro contra inyecciones XSS, tiempos y tipos MIME.
+- `js/services/local-export-client.js`: detección en `localhost:8000`, autenticación por token rotativo y compilación con el motor local.
+- `js/services/document-source-processor.js`: lectura y renderizado de PDF usados como referencia pedagógica para IA.
+- `js/theme.js`: sincronización reactiva de temas entre controles (`#theme-preference` y selectores de la landing).
+- `js/ui-shell.js`: orquestación de navegación, atajos y menús del shell.
 
-Las solicitudes de IA siguen esta ruta:
+Las solicitudes de IA siguen esta ruta cifrada:
 
 ```text
-Navegador -> Supabase Edge Function -> proveedor de IA
+Navegador -> Supabase Edge Function -> Proveedor de IA (OpenAI / DeepSeek / Gemini)
 ```
 
-El navegador nunca solicita ni almacena claves de proveedores.
+El navegador nunca solicita, manipula ni almacena claves secretas de proveedores.
 
-### Supabase
+### Supabase y Routers Multi-Modelo
 
-Funciones activas:
+Funciones activas y enrutadores de IA:
 
-- `openai-router`
-- `gemini-router`
-- `deepseek-router`
-- `pablito-mailer`
+- `openai-router`: Enrutamiento seguro para **GPT-6 Luna**, **GPT-5.4 Mini** y **GPT-4o**.
+- `gemini-router`: Integración con **Gemini 2.5 Flash** para respuestas ultra-rápidas.
+- `deepseek-router`: Razonamiento metodológico con **DeepSeek R1** y **DeepSeek V3**.
+- `pablito-mailer`: Notificaciones y comunicaciones transaccionales.
 
 Secretos requeridos:
 
@@ -49,11 +51,17 @@ Secretos requeridos:
 - `API-KEY-GEMINI`
 - `API-KEY-DEEPSEEK`
 
-Los routers de IA requieren una sesión autenticada de Supabase antes de consumir créditos.
+El sistema integra un registro y débito automatizado de créditos por usuario en Supabase (`ai-credits`), eliminando la necesidad de verificaciones manuales.
 
-### Motor local
+### Motor Local de Alta Fidelidad (Desktop)
 
-El backend FastAPI de `backend/` genera Word y PDF. Su versión se define en `backend/version.py`. El ejecutable de Windows se compila con PyInstaller y se publica en GitHub Releases al crear un tag `v*` que coincida con esa versión.
+Debido a que los navegadores web convencionales no disponen de APIs nativas para generar archivos OpenXML (.docx) con tablas anidadas multinivel, márgenes de imprenta exactos y fórmulas matemáticas editables (OMML), la aplicación incorpora una arquitectura híbrida:
+
+1. El usuario planifica, diseña y edita en la interfaz web.
+2. Para exportar a Word o PDF con 100% de fidelidad, el cliente web se comunica vía HTTP seguro con `pablitopyhost.exe`, un micro-servicio local FastAPI que se ejecuta en segundo plano en Windows (`http://localhost:8000`).
+3. Su código fuente reside en `backend/` y su versión se define en `backend/version.py`.
+4. El ejecutable se compila automáticamente con PyInstaller mediante GitHub Actions y se distribuye a través de GitHub Releases:
+   `https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/latest/download/pablitopyhost.exe`.
 
 ## Estructura
 
