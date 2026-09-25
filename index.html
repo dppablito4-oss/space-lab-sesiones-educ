@@ -80,6 +80,10 @@
     <script src="js/theme.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link
         href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
@@ -90,8 +94,9 @@
     <link rel="stylesheet" href="css/document-preview.css?v=1">
     <link rel="stylesheet" href="css/app-theme.css?v=2">
     <link rel="stylesheet" href="css/print.css" media="print">
-    <!-- KaTeX — renderizado matemático profesional (LaTeX) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+    <!-- KaTeX — renderizado matemático profesional (LaTeX) asíncrono -->
+    <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"></noscript>
 </head>
 
 <body>
@@ -210,7 +215,7 @@
                 <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 10px;">
                     Para descargas automáticas inmediatas con paginado físico A4 perfecto y archivos Word (.docx) nativos editables de Office, descarga e inicia el motor.
                 </p>
-                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; font-size: 0.85rem; font-weight: 600; text-decoration: none; padding: 8px 14px;">
+                <a href="https://descargas.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; font-size: 0.85rem; font-weight: 600; text-decoration: none; padding: 8px 14px;">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
                 </a>
             </div>
@@ -239,7 +244,7 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn btn-primary" style="text-decoration: none; padding: 10px; text-align: center;">
+                <a href="https://descargas.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration: none; padding: 10px; text-align: center;">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
                 </a>
                 <button id="engine-modal-cancel" class="btn btn-ghost" style="padding: 8px;">Cancelar</button>
