@@ -300,6 +300,11 @@ window.AuthUi = (() => {
         if (window.appReloadSessions) {
             window.appReloadSessions();
         }
+
+        // Si el usuario inicia sesión desde la landing, saltar directo al editor
+        if (window.LandingRouter && typeof window.LandingRouter.showApp === 'function') {
+            window.LandingRouter.showApp(true);
+        }
     }
 
     async function checkSessionState() {

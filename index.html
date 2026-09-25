@@ -93,6 +93,7 @@
     <link rel="stylesheet" href="css/mobile-app-theme.css?v=2">
     <link rel="stylesheet" href="css/document-preview.css?v=1">
     <link rel="stylesheet" href="css/app-theme.css?v=2">
+    <link rel="stylesheet" href="css/landing.css?v=1">
     <link rel="stylesheet" href="css/print.css" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) asíncrono -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -255,13 +256,259 @@
     <!-- ═══════════ BACKGROUND PARTICLES ═══════════ -->
     <canvas id="space-bg" class="space-background" hidden aria-hidden="true"></canvas>
 
+    <!-- ═══════════ LANDING PAGE VIEW ═══════════ -->
+    <div id="landing-view" class="landing-view hidden">
+
+        <!-- Top Navigation -->
+        <header class="landing-navbar">
+            <a href="#/" class="landing-brand" aria-label="Space Lab - Inicio">
+                <div class="landing-brand-logo">
+                    <img src="assets/favicon.svg" alt="Space Lab Logo">
+                </div>
+                <div class="landing-brand-text">
+                    <span class="landing-brand-title">Space Lab</span>
+                    <span class="landing-brand-badge">MINEDU 2026 · CNEB</span>
+                </div>
+            </a>
+            <ul class="landing-nav-links">
+                <li><a href="#como-funciona" class="landing-nav-link">¿Cómo Funciona?</a></li>
+                <li><a href="#modelos-ia" class="landing-nav-link">Modelos IA</a></li>
+                <li><a href="#preguntas-frecuentes" class="landing-nav-link">Preguntas Frecuentes</a></li>
+                <li><a href="descargas_landing.html" class="landing-nav-link">Descargas</a></li>
+            </ul>
+            <div class="landing-nav-actions">
+                <button type="button" class="btn btn-ghost btn-sm" data-action="open-login" aria-label="Iniciar sesión con tu cuenta">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
+                    <span>Iniciar Sesión</span>
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" data-action="enter-app" aria-label="Abrir editor de sesiones de aprendizaje">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                    <span>Ir al Editor</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="landing-hero">
+            <div class="landing-hero-copy">
+                <div class="landing-pill-badge">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                    <span>Plataforma Inteligente MINEDU 2026 · CNEB Perú</span>
+                </div>
+                <h1 class="landing-hero-title">
+                    Diseña Sesiones de Aprendizaje Oficiales MINEDU con <span class="highlight">Inteligencia Artificial</span>
+                </h1>
+                <p class="landing-hero-subtitle">
+                    Planificación curricular integral para <strong>Inicial, Primaria y Secundaria</strong> alineada 100% al CNEB. Genera situaciones significativas, momentos didácticos (Inicio, Desarrollo, Cierre), competencias, desempeños y rúbricas. Exporta a <strong>Word (.docx)</strong> editable y <strong>PDF</strong> con membrete oficial.
+                </p>
+                <div class="landing-hero-actions">
+                    <button type="button" class="landing-btn-lg landing-btn-primary" data-action="enter-app" aria-label="Comenzar a planificar sesión de aprendizaje gratis">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                        <span>Comenzar a Planificar Gratis</span>
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                    </button>
+                    <a href="#como-funciona" class="landing-btn-lg landing-btn-ghost" aria-label="Ver cómo funciona la plataforma">
+                        <span>Ver Cómo Funciona</span>
+                    </a>
+                </div>
+                <div class="landing-badges-row">
+                    <div class="landing-badge-item">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                        <span>CNEB 2026 Oficial</span>
+                    </div>
+                    <div class="landing-badge-item">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                        <span>GPT-6 Luna, Claude &amp; Gemini</span>
+                    </div>
+                    <div class="landing-badge-item">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                        <span>Word (.docx) &amp; PDF A4</span>
+                    </div>
+                    <div class="landing-badge-item">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                        <span>Privado y Seguro</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Hero Visual Mockup Card -->
+            <div class="landing-hero-preview">
+                <div class="landing-preview-card">
+                    <div class="preview-card-header">
+                        <div class="preview-card-status">
+                            <span class="preview-card-dot"></span>
+                            <span>Estructura Oficial CNEB</span>
+                        </div>
+                        <span class="preview-card-type">Documento A4</span>
+                    </div>
+                    <div class="preview-session-sheet">
+                        <div class="preview-sheet-title">SESIÓN DE APRENDIZAJE N° 01</div>
+                        <div class="preview-sheet-meta">
+                            <div><strong>Área:</strong> Matemática</div>
+                            <div><strong>Nivel:</strong> Secundaria (2° Grado)</div>
+                            <div><strong>Tiempo:</strong> 90 minutos</div>
+                            <div><strong>Fecha:</strong> Año Lectivo 2026</div>
+                        </div>
+                        <div class="preview-sheet-box">
+                            <strong>Propósito de Aprendizaje:</strong>
+                            <span>Resuelve problemas de cantidad empleando estrategias de cálculo y estimación contextualizadas.</span>
+                        </div>
+                        <div class="preview-sheet-box" style="border-left-color: #10b981;">
+                            <strong>Momentos Pedagógicos:</strong>
+                            <span>Inicio (15 min) · Desarrollo (60 min) · Cierre y Metacognición (15 min)</span>
+                        </div>
+                        <div class="preview-sheet-box" style="border-left-color: #f59e0b; margin-bottom: 0;">
+                            <strong>Evaluación Formativa:</strong>
+                            <span>Lista de cotejo analítica con criterios e indicadores observables.</span>
+                        </div>
+                    </div>
+                    <div class="preview-card-footer">
+                        <div class="preview-card-export">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                            <span>Listo para Word (.docx) &amp; PDF</span>
+                        </div>
+                        <button type="button" class="btn btn-primary btn-xs" data-action="enter-app" aria-label="Abrir esta plantilla en el editor">
+                            <span>Abrir Editor</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: How It Works -->
+        <section id="como-funciona" class="landing-section">
+            <div class="landing-section-header">
+                <span class="landing-section-eyebrow">Flujo Pedagógico</span>
+                <h2 class="landing-section-title">¿Cómo Funciona en 3 Simples Pasos?</h2>
+                <p class="landing-section-desc">Diseñado para ahorrarte horas de trabajo administrativo y enfocarte en la enseñanza.</p>
+            </div>
+            <div class="landing-steps-grid">
+                <div class="landing-step-card">
+                    <span class="landing-step-number">1</span>
+                    <h3 class="landing-step-title">Selecciona tu Contexto Curricular</h3>
+                    <p class="landing-step-text">Elige tu nivel educativo (Inicial, Primaria o Secundaria), área, grado, competencias y capacidades precargadas del CNEB de forma automática.</p>
+                </div>
+                <div class="landing-step-card">
+                    <span class="landing-step-number">2</span>
+                    <h3 class="landing-step-title">Genera con Inteligencia Artificial</h3>
+                    <p class="landing-step-text">Space AI redacta la situación significativa con enfoque transversal, la secuencia didáctica completa (Inicio, Desarrollo, Cierre) y los criterios de evaluación.</p>
+                </div>
+                <div class="landing-step-card">
+                    <span class="landing-step-number">3</span>
+                    <h3 class="landing-step-title">Edita y Exporta a Word Oficial</h3>
+                    <p class="landing-step-text">Ajusta los detalles directamente en la hoja A4 y descarga tu documento de Microsoft Word (.docx) con membretes de UGEL/MINEDU o imprime en PDF limpio.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: AI Models -->
+        <section id="modelos-ia" class="landing-section">
+            <div class="landing-section-header">
+                <span class="landing-section-eyebrow">Tecnología de Vanguardia</span>
+                <h2 class="landing-section-title">Impulsado por los Mejores Modelos de IA</h2>
+                <p class="landing-section-desc">Elige el motor de inteligencia artificial que mejor se adapte a tu estilo pedagógico.</p>
+            </div>
+            <div class="landing-models-grid">
+                <div class="landing-model-card">
+                    <span class="landing-model-badge">Nuevo</span>
+                    <div class="landing-model-icon">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                    </div>
+                    <h3 class="landing-model-title">GPT-6 Luna</h3>
+                    <span class="landing-model-provider">OpenAI</span>
+                    <p class="landing-model-desc">Máxima agilidad y creatividad en el planteamiento de situaciones significativas contextualizadas a la realidad peruana.</p>
+                </div>
+                <div class="landing-model-card">
+                    <span class="landing-model-badge" style="background: rgba(123, 97, 255, 0.15); color: #7b61ff; border-color: rgba(123, 97, 255, 0.3);">Recomendado</span>
+                    <div class="landing-model-icon" style="color: #7b61ff;">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+                    </div>
+                    <h3 class="landing-model-title">Claude 3.5 Sonnet</h3>
+                    <span class="landing-model-provider">Anthropic</span>
+                    <p class="landing-model-desc">Rigor metodológico profundo, coherencia en la alineación de competencias y diseño detallado de rúbricas analíticas.</p>
+                </div>
+                <div class="landing-model-card">
+                    <span class="landing-model-badge" style="background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3);">Rápido</span>
+                    <div class="landing-model-icon" style="color: #10b981;">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                    </div>
+                    <h3 class="landing-model-title">Gemini 2.5 Pro</h3>
+                    <span class="landing-model-provider">Google DeepMind</span>
+                    <p class="landing-model-desc">Velocidad instantánea para actividades prácticas, fichas de trabajo y adaptación a distintos ritmos de aprendizaje.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section: FAQs -->
+        <section id="preguntas-frecuentes" class="landing-section">
+            <div class="landing-section-header">
+                <span class="landing-section-eyebrow">Respuestas Claras</span>
+                <h2 class="landing-section-title">Preguntas Frecuentes para Docentes</h2>
+                <p class="landing-section-desc">Todo lo que necesitas saber antes de empezar a planificar.</p>
+            </div>
+            <div class="landing-faq-container">
+                <div class="landing-faq-item">
+                    <h3 class="landing-faq-question">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                        ¿Las sesiones cumplen con la normativa del MINEDU y el CNEB?
+                    </h3>
+                    <p class="landing-faq-answer">Sí. La plataforma incorpora las competencias, capacidades, estándares y enfoques transversales vigentes del Currículo Nacional de la Educación Básica (CNEB) para Inicial, Primaria y Secundaria.</p>
+                </div>
+                <div class="landing-faq-item">
+                    <h3 class="landing-faq-question">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                        ¿Puedo editar el documento en Microsoft Word (.docx)?
+                    </h3>
+                    <p class="landing-faq-answer">Por supuesto. La descarga genera un archivo .docx nativo editable con tablas, tipografía limpia y membretes oficiales de UGEL para que puedas hacer cualquier ajuste final.</p>
+                </div>
+                <div class="landing-faq-item">
+                    <h3 class="landing-faq-question">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                        ¿Necesito pagar o registrarme para usar la plataforma?
+                    </h3>
+                    <p class="landing-faq-answer">No es obligatorio registrarse para probar la plataforma. Puedes generar y exportar tus sesiones de inmediato. Si deseas guardar tus sesiones en la nube y acceder desde cualquier dispositivo, puedes crear tu cuenta gratuita.</p>
+                </div>
+                <div class="landing-faq-item">
+                    <h3 class="landing-faq-question">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                        ¿Cómo funciona la detección automática de inicio de sesión?
+                    </h3>
+                    <p class="landing-faq-answer">Si ya tienes una cuenta e inicias sesión, el sistema detecta tus credenciales de forma segura y te lleva directo al editor cada vez que ingreses, sin pasar por la página de bienvenida.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Banner -->
+        <section class="landing-cta-banner">
+            <div class="landing-cta-card">
+                <h2 class="landing-cta-title">¿Listo para Planificar tu Próxima Sesión?</h2>
+                <p class="landing-cta-text">Únete a los docentes que ya optimizan su tiempo administrativo con inteligencia artificial curricular.</p>
+                <button type="button" class="landing-btn-lg landing-btn-primary" data-action="enter-app" aria-label="Entrar al editor y planificar sesión ahora">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                    <span>Entrar al Editor y Crear mi Sesión Ahora</span>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                </button>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="landing-footer">
+            <div class="landing-footer-links">
+                <a href="descargas_landing.html" class="landing-footer-link">Motor Local de Word</a>
+                <a href="conexion.html" class="landing-footer-link">Estado de Conexión</a>
+                <a href="#/app" class="landing-footer-link" data-action="enter-app">Ir al Editor</a>
+            </div>
+            <p>Space Lab Sesiones Educativas © 2026 · Desarrollado por S.Y. PABLITO_DP para docentes del Perú.</p>
+        </footer>
+    </div>
+
     <!-- ═══════════ MAIN APP ═══════════ -->
-    <div class="app-wrapper">
+    <div id="app-view" class="app-wrapper">
 
         <!-- ─── HEADER ─── -->
         <header class="app-header glass-card">
             <div class="header-leading">
-                <div class="header-brand">
+                <div class="header-brand" data-action="view-landing" style="cursor: pointer;" title="Volver al inicio / presentación" role="button" tabindex="0" aria-label="Volver al inicio de Space Lab">
                     <div class="brand-icon" style="background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%); border-color: rgba(0,212,255,0.35);">
                         <img src="assets/favicon.svg" alt="Space Lab Logo" class="brand-logo-img">
                     </div>
@@ -1628,6 +1875,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script src="js/paginador.js"></script>
     <script src="js/ui-shell.js"></script>
+    <script src="js/landing.js"></script>
     <script src="js/app.js?v=2"></script>
     <script src="js/ficha-external-prompt.js?v=1"></script>
 </body>

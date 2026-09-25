@@ -234,6 +234,11 @@
             window.AuthUi.init();
         }
 
+        // Initialize Landing Router if available
+        if (window.LandingRouter) {
+            window.LandingRouter.init();
+        }
+
         // Initialize Chatbot if available
         if (window.Chatbot) {
             Chatbot.init();
