@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plantilla de Ejemplo — Estilo Pablito Leans</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Design Tokens */
+    :root {
+      --bg-primary: #07070d;
+      --bg-secondary: #0e0e18;
+      --bg-surface: rgba(255, 255, 255, 0.04);
+      --bg-surface-hover: rgba(255, 255, 255, 0.08);
+      --accent: #00D4FF;
+      --accent-glow: rgba(0, 212, 255, 0.25);
+      --accent-glow-strong: rgba(0, 212, 255, 0.5);
+      --accent-gradient: linear-gradient(135deg, #00D4FF 0%, #7B61FF 100%);
+      --text-primary: #F0F0F5;
+      --text-secondary: #8888A0;
+      --text-muted: #55556A;
+      --success: #00E676;
+      --danger: #FF5252;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-full: 9999px;
+      --glass-bg: rgba(14, 14, 24, 0.75);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --glass-blur: blur(20px);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 255, 0.08), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 100%, rgba(123, 97, 255, 0.06), transparent);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Header */
+    .app-header {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; gap: 16px;
+      padding: 16px 24px;
+      background: var(--glass-bg);
+      backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    .app-title {
+      font-size: 1.25rem; font-weight: 700;
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Main Container */
+    .app-main {
+      flex: 1; display: flex; flex-direction: column;
+      max-width: 1440px; margin: 0 auto; width: 100%;
+      padding: 24px; position: relative; z-index: 1;
+    }
+
+    /* Desktop 2-column layout */
+    @media (min-width: 1024px) {
+      .split-layout {
+        display: grid;
+        grid-template-columns: 1fr 350px;
+        gap: 32px;
+        height: calc(100vh - 140px);
+      }
+    }
+
+    /* Card Box */
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 10px 20px; font-size: 0.875rem; font-weight: 600;
+      border-radius: var(--radius-full); cursor: pointer; border: none;
+      transition: all 150ms ease;
+    }
+    .btn-primary {
+      background: var(--accent-gradient); color: #000;
+      box-shadow: 0 2px 12px var(--accent-glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px var(--accent-glow-strong);
+    }
+    .btn-secondary {
+      background: var(--bg-surface); color: var(--text-primary);
+      border: 1px solid var(--glass-border);
+    }
+    .btn-secondary:hover {
+      background: var(--bg-surface-hover);
+      transform: translateY(-1px);
+    }
+  </style>
+</head>
+<body>
+  <header class="app-header">
+    <div style="width: 32px; height: 32px; border-radius: 8px; background: var(--accent-gradient);"></div>
+    <h1 class="app-title">Demo Interfaz</h1>
+  </header>
+
+  <main class="app-main">
+    <div class="split-layout">
+      <!-- Main Content / Visual Area -->
+      <section class="card" style="display: flex; align-items: center; justify-content: center;">
+        <p style="color: var(--text-secondary);">Área de trabajo principal / Vista previa</p>
+      </section>
+
+      <!-- Sidebar / Controls Area -->
+      <aside class="card" style="display: flex; flex-direction: column; gap: 16px;">
+        <h2 style="font-size: 1.1rem; color: var(--text-primary);">Controles</h2>
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">Panel lateral de configuración y acciones rápidas.</p>
+        
+        <div style="margin-top: auto; display: flex; gap: 12px;">
+          <button class="btn btn-secondary" style="flex: 1;">Secundario</button>
+          <button class="btn btn-primary" style="flex: 1;">Aceptar</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+</body>
+</html>
