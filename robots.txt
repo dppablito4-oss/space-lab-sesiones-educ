@@ -1,0 +1,8 @@
+# Robots.txt - Space Lab Sesiones Educativas
+# https://sesiones.sypablitodp.site
+
+User-agent: *
+Allow: /
+
+# Sitemap oficial para motores de busqueda (Google, Bing)
+Sitemap: https://sesiones.sypablitodp.site/sitemap.xml
