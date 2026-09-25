@@ -46,6 +46,21 @@ window.LandingRouter = (() => {
             });
         });
 
+        // Smooth scroll a secciones internas de la landing (#como-funciona, #modelos-ia, etc.)
+        landingView.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href.startsWith('#') && !href.startsWith('#/')) {
+                    const targetId = href.substring(1);
+                    const targetEl = document.getElementById(targetId);
+                    if (targetEl) {
+                        e.preventDefault();
+                        targetEl.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+
         // Escuchar cambios de hash en la URL (#/app o #/landing)
         window.addEventListener('hashchange', () => {
             const hash = window.location.hash;
@@ -97,14 +112,19 @@ window.LandingRouter = (() => {
         if (!landingView || !appView) return;
         landingView.classList.remove('hidden');
         appView.classList.add('hidden');
+        document.body.classList.add('landing-active');
+        document.documentElement.classList.add('landing-active');
         sessionStorage.setItem('spacelab_view', 'landing');
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        landingView.scrollTop = 0;
+        window.scrollTo({ top: 0 });
     }
 
     function showApp(updateHash = true) {
         if (!landingView || !appView) return;
         landingView.classList.add('hidden');
         appView.classList.remove('hidden');
+        document.body.classList.remove('landing-active');
+        document.documentElement.classList.remove('landing-active');
         sessionStorage.setItem('spacelab_view', 'app');
         if (updateHash && window.location.hash !== '#/app') {
             window.location.hash = '#/app';

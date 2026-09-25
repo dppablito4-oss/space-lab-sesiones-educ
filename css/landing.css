@@ -4,18 +4,32 @@
    ═══════════════════════════════════════════════════ */
 
 .landing-view {
-    width: 100%;
-    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
     background-color: var(--color-background);
     color: var(--color-foreground);
-    position: relative;
-    overflow-x: hidden;
+    z-index: 999;
     display: flex;
     flex-direction: column;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 
 .landing-view.hidden {
     display: none !important;
+}
+
+body.landing-active,
+html.landing-active {
+    overflow-y: auto !important;
+    height: auto !important;
 }
 
 /* ─── Top Navigation Bar ─── */
