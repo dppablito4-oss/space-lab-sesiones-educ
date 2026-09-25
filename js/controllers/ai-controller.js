@@ -259,7 +259,7 @@ window.SpaceLabAiController = (() => {
             const fileGroup = $('.source-file-group');
             const badge = DOM.modelCapabilitiesBadge || $('#model-capabilities-badge');
             const dropzoneText = DOM.sourceFileDropzone ? DOM.sourceFileDropzone.querySelector('.text') : null;
-            const provider = DOM.selectAiProvider ? DOM.selectAiProvider.value : 'openai-gpt-5.6-luna';
+            const provider = DOM.selectAiProvider ? DOM.selectAiProvider.value : 'openai-gpt-6-luna';
             if (window.AiCopilot && typeof AiCopilot.setProvider === 'function') {
                 AiCopilot.setProvider(provider);
             }
@@ -271,7 +271,22 @@ window.SpaceLabAiController = (() => {
             if (badge) {
                 const fileIcon = '<svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>';
                 const textIcon = '<svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>';
-                if (provider === 'openai-gpt-5.6-luna') {
+                if (provider === 'openai-gpt-6-luna') {
+                    badge.className = 'model-capabilities-badge';
+                    badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-6 Luna:</strong> Ultra rápido y eficiente a escala con soporte para archivos (PDF, imágenes y textos).</span>`;
+                    if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
+                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
+                } else if (provider === 'openai-gpt-6-astra') {
+                    badge.className = 'model-capabilities-badge';
+                    badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-6 Astra:</strong> Máxima inteligencia de frontera con razonamiento multimodal profundo.</span>`;
+                    if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
+                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
+                } else if (provider === 'openai-gpt-6-sol') {
+                    badge.className = 'model-capabilities-badge';
+                    badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-6 Sol:</strong> Razonamiento adaptativo equilibrado para tareas pedagógicas complejas.</span>`;
+                    if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
+                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
+                } else if (provider === 'openai-gpt-5.6-luna') {
                     badge.className = 'model-capabilities-badge';
                     badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-5.6 Luna:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>`;
                     if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
@@ -289,7 +304,7 @@ window.SpaceLabAiController = (() => {
                 } else if (provider === 'deepseek-v3') {
                     badge.className = 'model-capabilities-badge badge-no-files';
                     badge.innerHTML = `${textIcon}<span class="badge-text"><strong>DeepSeek V3:</strong> Solo admite texto (los archivos adjuntos no serán procesados).</span>`;
-                    if (dropzoneText) dropzoneText.textContent = 'DeepSeek V3 procesa solo texto. Cambia a GPT-5.6 o Gemini para adjuntar archivos.';
+                    if (dropzoneText) dropzoneText.textContent = 'DeepSeek V3 procesa solo texto. Cambia a GPT-6 o Gemini para adjuntar archivos.';
                     if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.add('disabled-dropzone');
                 }
             }

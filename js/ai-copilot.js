@@ -8,10 +8,13 @@ const AiCopilot = (() => {
     // ─── CONFIGURACIÓN ───
     const CONFIG = {
         // Provider credentials are held only by Supabase Edge Functions.
-        model: 'openai-gpt-5.6-luna'
+        model: 'openai-gpt-6-luna'
     };
 
     const PROVIDERS = {
+        'openai-gpt-6-luna': { router: 'openai-router', kind: 'openai', model: 'gpt-6-luna' },
+        'openai-gpt-6-astra': { router: 'openai-router', kind: 'openai', model: 'gpt-6-astra' },
+        'openai-gpt-6-sol': { router: 'openai-router', kind: 'openai', model: 'gpt-6-sol' },
         'openai-gpt-5.6-luna': { router: 'openai-router', kind: 'openai', model: 'gpt-5.6-luna' },
         'openai-gpt-5.4-mini': { router: 'openai-router', kind: 'openai', model: 'gpt-5.4-mini' },
         'gemini-2.5-flash': { router: 'gemini-router', kind: 'gemini', model: 'gemini-2.5-flash' },
@@ -19,8 +22,8 @@ const AiCopilot = (() => {
     };
 
     function resolveProvider(provider) {
-        const aliases = { openai: 'openai-gpt-5.6-luna', gemini: 'gemini-2.5-flash', deepseek: 'deepseek-v3' };
-        return PROVIDERS[aliases[provider] || provider] || PROVIDERS['openai-gpt-5.6-luna'];
+        const aliases = { openai: 'openai-gpt-6-luna', gemini: 'gemini-2.5-flash', deepseek: 'deepseek-v3' };
+        return PROVIDERS[aliases[provider] || provider] || PROVIDERS['openai-gpt-6-luna'];
     }
 
     async function hasAuthenticatedUser() {

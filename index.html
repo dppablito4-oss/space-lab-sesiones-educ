@@ -8,6 +8,8 @@
         content="Space Lab — Generador automático de sesiones de aprendizaje con formato MINEDU. Edita, guarda e imprime tus sesiones educativas.">
     <title>Space Lab — Sesiones Educativas</title>
     <script src="js/theme.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=EB+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
         rel="stylesheet">
@@ -16,7 +18,7 @@
     <link rel="stylesheet" href="css/redesign.css?v=6">
     <link rel="stylesheet" href="css/mobile-app-theme.css?v=2">
     <link rel="stylesheet" href="css/document-preview.css?v=1">
-    <link rel="stylesheet" href="css/app-theme.css?v=1">
+    <link rel="stylesheet" href="css/app-theme.css?v=2">
     <link rel="stylesheet" href="css/print.css" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
@@ -61,6 +63,7 @@
         <symbol id="icon-theme" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M8 22h8M12 18v4"/><path d="M16.5 8.5a4 4 0 1 1-5-1 3.2 3.2 0 0 0 5 1Z"/></symbol>
         <symbol id="icon-chevron-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
     </svg>
+
     <!-- ═══════════ TOAST CONTAINER ═══════════ -->
     <div id="toast-container" class="toast-container"></div>
 
@@ -94,7 +97,7 @@
     <!-- ═══════════ PDF EXPORT GUIDE MODAL ═══════════ -->
     <div id="pdf-guide-modal" class="pdf-guide-overlay hidden">
         <div class="pdf-guide-card glass-card">
-            <button id="pdf-guide-close" class="pdf-guide-close" title="Cerrar">&times;</button>
+            <button id="pdf-guide-close" class="pdf-guide-close" title="Cerrar" aria-label="Cerrar">&times;</button>
             <div class="pdf-guide-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></div>
             <h3 class="pdf-guide-title">Exportar Sesión como PDF</h3>
             
@@ -137,7 +140,7 @@
                 <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 10px;">
                     Para descargas automáticas inmediatas con paginado físico A4 perfecto y archivos Word (.docx) nativos editables de Office, descarga e inicia el motor.
                 </p>
-                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; font-family: 'Space Grotesk', sans-serif; font-size: 0.85rem; font-weight: 600; text-decoration: none; padding: 8px 14px; background: #06b6d4; color: #05070f; border-radius: 8px; transition: opacity 0.2s;" onmouseover="this.style.opacity=0.9" onmouseout="this.style.opacity=1">
+                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; font-size: 0.85rem; font-weight: 600; text-decoration: none; padding: 8px 14px;">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
                 </a>
             </div>
@@ -154,7 +157,7 @@
     <!-- ═══════════ ENGINE REQUIRED MODAL ═══════════ -->
     <div id="engine-required-modal" class="pdf-guide-overlay hidden">
         <div class="pdf-guide-card glass-card" style="max-width: 420px;">
-            <button id="engine-modal-close" class="pdf-guide-close" title="Cerrar">&times;</button>
+            <button id="engine-modal-close" class="pdf-guide-close" title="Cerrar" aria-label="Cerrar">&times;</button>
             <div class="pdf-guide-icon" style="color: #f59e0b; margin-bottom: 10px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg></div>
             <h3 class="pdf-guide-title">Motor Local Requerido</h3>
             <p class="pdf-guide-subtitle" style="margin-bottom: 15px; font-size: 0.9rem;">
@@ -166,7 +169,7 @@
             </div>
 
             <div style="display: flex; flex-direction: column; gap: 8px;">
-                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn btn-primary" style="color: #000; font-weight: 600; text-decoration: none; padding: 10px; border-radius: 8px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <a href="https://descargas.sypablitodp.site" target="_blank" class="btn btn-primary" style="text-decoration: none; padding: 10px; text-align: center;">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
                 </a>
                 <button id="engine-modal-cancel" class="btn btn-ghost" style="padding: 8px;">Cancelar</button>
@@ -184,7 +187,7 @@
         <header class="app-header glass-card">
             <div class="header-leading">
                 <div class="header-brand">
-                    <div class="brand-icon">
+                    <div class="brand-icon" style="background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%); border-color: rgba(0,212,255,0.35);">
                         <img src="assets/favicon.svg" alt="Space Lab Logo" class="brand-logo-img">
                     </div>
                     <div>
@@ -212,11 +215,11 @@
                         <option value="dark">Oscuro</option>
                     </select>
                 </label>
-                <button id="btn-toggle-edit" class="btn btn-icon" title="Modo edición / lectura" aria-label="Cambiar modo de edición">
+                <button id="btn-toggle-edit" class="btn btn-ghost btn-icon" title="Modo edición / lectura" aria-label="Cambiar modo de edición">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
                     <span class="btn-label">Editar</span>
                 </button>
-                <button id="btn-preview" class="btn btn-icon" title="Vista previa de impresión" aria-label="Abrir vista previa">
+                <button id="btn-preview" class="btn btn-ghost btn-icon" title="Vista previa de impresión" aria-label="Abrir vista previa">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
                     <span class="btn-label">Vista Previa</span>
                 </button>
@@ -246,7 +249,7 @@
                 <div id="auth-header-container" class="auth-header-container">
                     <!-- Dinámico por auth-ui.js -->
                 </div>
-                <button id="btn-menu-mobile" class="btn btn-icon mobile-only" title="Abrir planificación" aria-label="Abrir planificación" aria-expanded="false" aria-controls="sidebar">
+                <button id="btn-menu-mobile" class="btn btn-ghost btn-icon mobile-only" title="Abrir planificación" aria-label="Abrir planificación" aria-expanded="false" aria-controls="sidebar">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
                     <span class="btn-label">Planificar</span>
                 </button>
@@ -328,53 +331,61 @@
                                 Modelo actual
                             </label>
                             <select id="select-ai-provider" class="form-select">
-                                <option value="openai-gpt-5.6-luna" selected>OpenAI GPT-5.6 Luna — Más avanzado</option>
+                                <option value="openai-gpt-6-luna" selected>OpenAI GPT-6 Luna — Nuevo y ultra rápido</option>
+                                <option value="openai-gpt-6-astra">OpenAI GPT-6 Astra — Máxima inteligencia</option>
+                                <option value="openai-gpt-6-sol">OpenAI GPT-6 Sol — Razonamiento adaptativo</option>
+                                <option value="openai-gpt-5.6-luna">OpenAI GPT-5.6 Luna — Avanzado</option>
                                 <option value="openai-gpt-5.4-mini">OpenAI GPT-5.4 Mini — Equilibrado</option>
                                 <option value="gemini-2.5-flash">Google Gemini 2.5 Flash — Multimodal</option>
                                 <option value="deepseek-v3">DeepSeek V3 — Razonamiento</option>
                             </select>
                             <div id="model-capabilities-badge" class="model-capabilities-badge">
                                 <svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                                <span class="badge-text"><strong>GPT-5.6 Luna:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>
+                                <span class="badge-text"><strong>GPT-6 Luna:</strong> Ultra rápido y eficiente a escala con soporte para archivos (PDF, imágenes y textos).</span>
                             </div>
                         </div>
 
+                        <!-- Configuración Didáctica -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+                                Estructura de la Sesión
+                            </div>
+                            <!-- Plantilla -->
+                            <div class="form-group">
+                                <label for="select-template" class="form-label">Tipo de Sesión</label>
+                                <select id="select-template" class="form-select">
+                                    <option value="estandar">Sesión estándar MINEDU</option>
+                                    <option value="inicial">Sesión de educación inicial</option>
+                                    <option value="laboratorio">Sesión de laboratorio</option>
+                                    <option value="refuerzo">Sesión de refuerzo</option>
+                                </select>
+                            </div>
 
-                        <!-- Plantilla -->
-                        <div class="form-group">
-                            <label for="select-template" class="form-label">Tipo de Sesión</label>
-                            <select id="select-template" class="form-select">
-                                <option value="estandar">Sesión estándar MINEDU</option>
-                                <option value="inicial">Sesión de educación inicial</option>
-                                <option value="laboratorio">Sesión de laboratorio</option>
-                                <option value="refuerzo">Sesión de refuerzo</option>
-                            </select>
+                            <!-- Metodología Didáctica -->
+                            <div class="form-group">
+                                <label for="select-methodology" class="form-label">Metodología Didáctica</label>
+                                <select id="select-methodology" class="form-select">
+                                    <option value="">-- Por defecto del Área --</option>
+                                    <option value="polya">Método de Polya — resolución de problemas</option>
+                                    <option value="erca">Ciclo ERCA — experiencia, reflexión, conceptualización y aplicación</option>
+                                    <option value="abp">Aprendizaje basado en proyectos (ABP)</option>
+                                    <option value="flipped">Aula invertida</option>
+                                    <option value="indagacion">Indagación científica (STEAM)</option>
+                                    <option value="cooperativo">Aprendizaje cooperativo</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <!-- Metodología Didáctica -->
-                        <div class="form-group">
-                            <label for="select-methodology" class="form-label">Metodología Didáctica</label>
-                            <select id="select-methodology" class="form-select">
-                                <option value="">-- Por defecto del Área --</option>
-                                <option value="polya">Método de Polya — resolución de problemas</option>
-                                <option value="erca">Ciclo ERCA — experiencia, reflexión, conceptualización y aplicación</option>
-                                <option value="abp">Aprendizaje basado en proyectos (ABP)</option>
-                                <option value="flipped">Aula invertida</option>
-                                <option value="indagacion">Indagación científica (STEAM)</option>
-                                <option value="cooperativo">Aprendizaje cooperativo</option>
-                            </select>
-                        </div>
-
-                        <!-- Archivo Fuente de Referencia (Gemini) -->
-                        <div class="form-group source-file-group">
-                            <label class="form-label"
-                                style="display: flex; align-items: center; gap: 6px; margin-top: 10px;">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg> Archivo de referencia <span class="optional-label">Opcional</span>
-                            </label>
+                        <!-- Archivo Fuente de Referencia -->
+                        <div class="form-card source-file-group">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg>
+                                Documento de Referencia <span class="optional-label" style="font-size:0.65rem; color:var(--text-muted); margin-left:auto;">Opcional</span>
+                            </div>
                             <div id="source-file-dropzone" class="source-file-dropzone">
                                 <span class="icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg></span>
-                                <span class="text">Haz clic o arrastra un archivo aquí (PDF, imagen, audio o
-                                    texto)</span>
+                                <span class="text">Haz clic o arrastra un archivo aquí (PDF, imagen, audio o texto)</span>
                             </div>
                             <div id="source-file-info" class="source-file-info hidden">
                                 <span class="file-name" id="source-file-name-text"></span>
@@ -391,296 +402,360 @@
                                     maxlength="600"
                                     placeholder="Ej.: Toma como situación central la primera situación problemática de la página 2. No uses los otros ejemplos."></textarea>
                                 <p class="source-file-guidance-help">
-                                    Indica una página, un rango (págs. 3–5) o describe la situación. Si lo dejas vacío, la IA revisará todo el archivo sin asumir que la primera parte es la principal.
+                                    Indica una página, un rango (págs. 3–5) o describe la situación. Si lo dejas vacío, la IA revisará todo el archivo.
                                 </p>
                             </div>
                         </div>
 
                         <!-- Afinar enfoque pedagógico -->
-                        <div style="margin-top: 1rem;">
-                            <button type="button" id="btn-pedagogy-brief" class="pb-trigger-btn" title="Afinar el enfoque pedagógico con la IA antes de generar">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Afinar enfoque pedagógico
+                        <div style="margin-top: 0.5rem;">
+                            <button type="button" id="btn-pedagogy-brief" class="pb-trigger-btn btn btn-ghost" title="Afinar el enfoque pedagógico con la IA antes de generar" style="width: 100%; padding: 10px 16px;">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Afinar enfoque pedagógico con IA
                             </button>
                         </div>
                     </div>
 
                     <!-- PANE 2: DATOS GENERALES -->
                     <div id="tab-general" class="tab-pane" role="tabpanel">
-                        <div class="form-section-heading">
-                            <strong>Institución</strong>
-                            <span>Ubicación administrativa de la sesión</span>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-institucion" class="form-label">Institución Educativa</label>
-                            <input type="text" id="input-institucion" class="form-input"
-                                placeholder="I.E. N° 000 — Nombre">
-                        </div>
-
-                        <div class="form-section-heading">
-                            <strong>Responsables</strong>
-                            <span>Personas que figurarán en el documento</span>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="input-dre" class="form-label">DRE</label>
-                                <input type="text" id="input-dre" class="form-input" placeholder="DRE Ucayali">
+                        <!-- Centro Educativo & Jurisdicción -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
+                                Institución y Jurisdicción
                             </div>
                             <div class="form-group">
-                                <label for="input-ugel" class="form-label">UGEL</label>
-                                <input type="text" id="input-ugel" class="form-input" placeholder="UGEL Padre Abad">
+                                <label for="input-institucion" class="form-label">Institución Educativa</label>
+                                <input type="text" id="input-institucion" class="form-input"
+                                    placeholder="I.E. N° 000 — Nombre">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="input-dre" class="form-label">DRE</label>
+                                    <input type="text" id="input-dre" class="form-input" placeholder="DRE Ucayali">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-ugel" class="form-label">UGEL</label>
+                                    <input type="text" id="input-ugel" class="form-input" placeholder="UGEL Padre Abad">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-section-heading">
-                            <strong>Datos de la sesión</strong>
-                            <span>Fecha, aula y organización curricular</span>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="input-docente" class="form-label">Docente</label>
-                                <input type="text" id="input-docente" class="form-input" placeholder="Nombre completo">
+                        <!-- Responsables Educativos -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
+                                Equipo Docente
                             </div>
-                            <div class="form-group">
-                                <label for="input-director" class="form-label">Director(a)</label>
-                                <input type="text" id="input-director" class="form-input"
-                                    placeholder="Nombre del director">
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="input-fecha" class="form-label">Fecha</label>
-                                <input type="date" id="input-fecha" class="form-input">
-                            </div>
-                            <div class="form-group">
-                                <label for="input-nivel" class="form-label">Nivel</label>
-                                <select id="input-nivel" class="form-select">
-                                    <option value="SECUNDARIA">Secundaria</option>
-                                    <option value="PRIMARIA">Primaria</option>
-                                    <option value="INICIAL">Inicial</option>
-                                </select>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="input-docente" class="form-label">Docente</label>
+                                    <input type="text" id="input-docente" class="form-input" placeholder="Nombre completo">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-director" class="form-label">Director(a)</label>
+                                    <input type="text" id="input-director" class="form-input"
+                                        placeholder="Nombre del director">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label for="input-numero-sesion" class="form-label">N° de Sesión</label>
-                                <input type="text" id="input-numero-sesion" class="form-input" placeholder="03">
+                        <!-- Aula, Temporalización y Calendario -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+                                Programación de Aula
                             </div>
-                            <div class="form-group">
-                                <label for="input-duracion" class="form-label">Duración</label>
-                                <input type="text" id="input-duracion" class="form-input" placeholder="90 min">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="input-fecha" class="form-label">Fecha</label>
+                                    <input type="date" id="input-fecha" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-nivel" class="form-label">Nivel</label>
+                                    <select id="input-nivel" class="form-select">
+                                        <option value="SECUNDARIA">Secundaria</option>
+                                        <option value="PRIMARIA">Primaria</option>
+                                        <option value="INICIAL">Inicial</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="input-grado" class="form-label">Grado</label>
+                                    <select id="input-grado" class="form-select">
+                                        <option value="">Seleccionar</option>
+                                        <option value="3 años">3 años (Inicial)</option>
+                                        <option value="4 años">4 años (Inicial)</option>
+                                        <option value="5 años">5 años (Inicial)</option>
+                                        <option value="1°">1° Grado</option>
+                                        <option value="2°">2° Grado</option>
+                                        <option value="3°">3° Grado</option>
+                                        <option value="4°">4° Grado</option>
+                                        <option value="5°">5° Grado</option>
+                                        <option value="6°">6° Grado</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-seccion" class="form-label">Sección</label>
+                                    <input type="text" id="input-seccion" class="form-input" placeholder='A, B, C...'>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="input-numero-sesion" class="form-label">N° de Sesión</label>
+                                    <input type="text" id="input-numero-sesion" class="form-input" placeholder="03">
+                                </div>
+                                <div class="form-group">
+                                    <label for="input-duracion" class="form-label">Duración</label>
+                                    <input type="text" id="input-duracion" class="form-input" placeholder="90 min">
+                                </div>
                             </div>
                         </div>
 
-                        <div class="form-row">
+                        <!-- Contenido Curricular -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                                Identidad y Temario
+                            </div>
                             <div class="form-group">
-                                <label for="input-grado" class="form-label">Grado</label>
-                                <select id="input-grado" class="form-select">
+                                <label for="input-area" class="form-label">Área Curricular</label>
+                                <select id="input-area" class="form-select">
                                     <option value="">Seleccionar</option>
-                                    <option value="3 años">3 años (Inicial)</option>
-                                    <option value="4 años">4 años (Inicial)</option>
-                                    <option value="5 años">5 años (Inicial)</option>
-                                    <option value="1°">1° Grado</option>
-                                    <option value="2°">2° Grado</option>
-                                    <option value="3°">3° Grado</option>
-                                    <option value="4°">4° Grado</option>
-                                    <option value="5°">5° Grado</option>
-                                    <option value="6°">6° Grado</option>
+                                    <option value="Comunicación">Comunicación</option>
+                                    <option value="Matemática">Matemática</option>
+                                    <option value="Ciencia y Tecnología">Ciencia y Tecnología</option>
+                                    <option value="Personal Social">Personal Social</option>
+                                    <option value="Arte y Cultura">Arte y Cultura</option>
+                                    <option value="Educación Física">Educación Física</option>
+                                    <option value="Educación Religiosa">Educación Religiosa</option>
+                                    <option value="Inglés">Inglés</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="input-seccion" class="form-label">Sección</label>
-                                <input type="text" id="input-seccion" class="form-input" placeholder='A, B, C...'>
+                                <label for="input-unidad" class="form-label">Unidad Didáctica</label>
+                                <input type="text" id="input-unidad" class="form-input" placeholder="Unidad N° — Título">
                             </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="input-area" class="form-label">Área Curricular</label>
-                            <select id="input-area" class="form-select">
-                                <option value="">Seleccionar</option>
-                                <option value="Comunicación">Comunicación</option>
-                                <option value="Matemática">Matemática</option>
-                                <option value="Ciencia y Tecnología">Ciencia y Tecnología</option>
-                                <option value="Personal Social">Personal Social</option>
-                                <option value="Arte y Cultura">Arte y Cultura</option>
-                                <option value="Educación Física">Educación Física</option>
-                                <option value="Educación Religiosa">Educación Religiosa</option>
-                                <option value="Inglés">Inglés</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="input-unidad" class="form-label">Unidad Didáctica</label>
-                            <input type="text" id="input-unidad" class="form-input" placeholder="Unidad N° — Título">
-                        </div>
-
-                        <div class="form-group">
-                            <label for="input-titulo" class="form-label">Título de la Sesión</label>
-                            <input type="text" id="input-titulo" class="form-input"
-                                placeholder="Título descriptivo de la sesión">
+                            <div class="form-group">
+                                <label for="input-titulo" class="form-label">Título de la Sesión</label>
+                                <input type="text" id="input-titulo" class="form-input"
+                                    placeholder="Título descriptivo de la sesión">
+                            </div>
                         </div>
 
                         <!-- Botones auxiliares de Datos -->
-                        <div style="display: flex; gap: 8px; margin-top: 1.5rem;">
-                            <button type="button" id="btn-save-defaults" class="btn btn-ghost btn-full btn-sm"
-                                title="Guardar predeterminados en la nube" style="font-size: 0.75rem; padding: 6px;">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar predeterminados
+                        <div style="display: flex; gap: 8px; margin-top: 1rem;">
+                            <button type="button" id="btn-save-defaults" class="btn btn-ghost btn-sm"
+                                title="Guardar predeterminados en la nube" style="flex: 1; font-size: 0.76rem; padding: 8px;">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Predeterminados
                             </button>
-                            <button type="button" id="btn-new" class="btn btn-ghost btn-full btn-sm"
+                            <button type="button" id="btn-new" class="btn btn-ghost btn-sm"
                                 title="Limpiar formulario e iniciar nueva sesión"
-                                style="font-size: 0.75rem; padding: 6px;">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Nueva sesión
+                                style="flex: 1; font-size: 0.76rem; padding: 8px;">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Limpiar Todo
                             </button>
                         </div>
                     </div>
 
                     <!-- PANE 3: PROPÓSITOS Y ACCIONES -->
                     <div id="tab-propositos" class="tab-pane" role="tabpanel">
-                        <div class="form-group">
-                            <label for="input-competencia" class="form-label">Competencia</label>
-                            <select id="select-cneb-competencia" class="form-select hidden"
-                                style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                            <textarea id="input-competencia" class="form-textarea" rows="2"
-                                placeholder="Competencia curricular..."></textarea>
+                        <!-- Competencias y Capacidades -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+                                Competencias y Capacidades
+                            </div>
+                            <div class="form-group">
+                                <label for="input-competencia" class="form-label">Competencia Curricular</label>
+                                <select id="select-cneb-competencia" class="form-select hidden"
+                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
+                                <textarea id="input-competencia" class="form-textarea" rows="2"
+                                    placeholder="Competencia curricular..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="input-capacidad" class="form-label">Capacidad a Desarrollar</label>
+                                <select id="select-cneb-capacidad" class="form-select hidden"
+                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
+                                <textarea id="input-capacidad" class="form-textarea" rows="2"
+                                    placeholder="Capacidades a desarrollar..."></textarea>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="input-capacidad" class="form-label">Capacidad</label>
-                            <select id="select-cneb-capacidad" class="form-select hidden"
-                                style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                            <textarea id="input-capacidad" class="form-textarea" rows="2"
-                                placeholder="Capacidades a desarrollar..."></textarea>
+
+                        <!-- Desempeños -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                                Desempeños Esperados
+                            </div>
+                            <div class="form-group">
+                                <label for="input-desempeno" class="form-label">Criterio / Desempeño</label>
+                                <textarea id="input-desempeno" class="form-textarea" rows="3"
+                                    placeholder="Desempeños esperados..."></textarea>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="input-desempeno" class="form-label">Desempeño</label>
-                            <textarea id="input-desempeno" class="form-textarea" rows="2"
-                                placeholder="Desempeños esperados..."></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="input-enfoque" class="form-label">Enfoque Transversal 1</label>
-                            <select id="select-cneb-enfoque" class="form-select"
-                                style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                            <input type="text" id="input-enfoque" class="form-input"
-                                placeholder="Ej: Enfoque de derechos">
-                        </div>
-                        <div class="form-group">
-                            <label for="input-enfoque2" class="form-label">Enfoque Transversal 2</label>
-                            <select id="select-cneb-enfoque2" class="form-select"
-                                style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                            <input type="text" id="input-enfoque2" class="form-input"
-                                placeholder="Ej: Enfoque ambiental">
+
+                        <!-- Enfoques Transversales -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                                Enfoques Transversales CNEB
+                            </div>
+                            <div class="form-group">
+                                <label for="input-enfoque" class="form-label">Enfoque Transversal 1</label>
+                                <select id="select-cneb-enfoque" class="form-select"
+                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
+                                <input type="text" id="input-enfoque" class="form-input"
+                                    placeholder="Ej: Enfoque de derechos">
+                            </div>
+                            <div class="form-group">
+                                <label for="input-enfoque2" class="form-label">Enfoque Transversal 2</label>
+                                <select id="select-cneb-enfoque2" class="form-select"
+                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
+                                <input type="text" id="input-enfoque2" class="form-input"
+                                    placeholder="Ej: Enfoque ambiental">
+                            </div>
                         </div>
                     </div> <!-- End tab-propositos -->
 
                     <!-- PANE 4: DISEÑO Y ESTILOS -->
                     <div id="tab-design" class="tab-pane" role="tabpanel">
-                        <div style="margin-bottom: 1.5rem;">
-                            <h3 class="saved-title" style="margin-bottom: 8px;">Configuración de diseño</h3>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">Ajusta el
-                                estilo visual de tu sesión para impresión y PDF.</p>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label" for="select-design-preset">Estilo del documento</label>
-                            <select id="select-design-preset" class="form-select">
-                                <option value="minedu" selected>MINEDU oficial</option>
-                                <option value="institucional">Institucional azul</option>
-                                <option value="moderno">Moderno verde</option>
-                                <option value="clasico">Clásico editorial</option>
-                                <option value="accesible">Accesible alto contraste</option>
-                            </select>
-                        </div>
-
-                        <details class="form-disclosure">
-                            <summary>Ajustes avanzados</summary>
-                            <div class="form-disclosure-content">
-                        <!-- Color de Bordes/Tema -->
-                        <div class="form-group">
-                            <label class="form-label" for="input-design-theme-color">Color de Bordes y Recuadros</label>
-                            <div style="display: flex; gap: 8px; align-items: center;">
-                                <input type="color" id="input-design-theme-color" class="form-input"
-                                    style="padding: 2px; width: 45px; height: 35px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid var(--border);"
-                                    value="#000000">
-                                <input type="text" id="input-design-theme-color-hex" class="form-input"
-                                    placeholder="#000000" style="flex: 1; font-family: monospace;" value="#000000">
+                        <!-- Presets de Estilo -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+                                Presentación del Documento
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="select-design-preset">Estilo Prediseñado</label>
+                                <select id="select-design-preset" class="form-select">
+                                    <option value="minedu" selected>MINEDU oficial</option>
+                                    <option value="institucional">Institucional azul</option>
+                                    <option value="moderno">Moderno verde</option>
+                                    <option value="clasico">Clásico editorial</option>
+                                    <option value="accesible">Accesible alto contraste</option>
+                                </select>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label class="form-label" for="input-design-accent-color">Color de títulos y acentos</label>
-                            <input type="color" id="input-design-accent-color" class="form-input" value="#C0392B"
-                                style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
+                        <!-- Logos del Encabezado -->
+                        <div class="form-card">
+                            <div class="form-card-title">
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg>
+                                Logos del Encabezado
+                            </div>
+                            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
+                                <input type="file" id="input-upload-logo" accept="image/png,image/jpeg,image/webp" class="hidden">
+                                <button type="button" id="btn-trigger-upload-logo" class="btn btn-ghost btn-sm"
+                                    style="flex: 1; font-size: 0.74rem; padding: 6px;">
+                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Subir logo
+                                </button>
+                                <button type="button" id="btn-refresh-logos" class="btn btn-ghost btn-icon"
+                                    style="min-width: 34px; min-height: 34px; font-size: 0.8rem; padding: 2px;"
+                                    title="Actualizar lista" aria-label="Actualizar galería de logos">
+                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+                                </button>
+                            </div>
+                            <div id="logos-container"
+                                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 120px; overflow-y: auto; padding: 6px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px solid var(--border);">
+                                <span
+                                    style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Inicia
+                                    sesión para ver logos</span>
+                            </div>
                         </div>
 
-                        <!-- Familia de Fuente -->
-                        <div class="form-group">
-                            <label class="form-label" for="select-design-font-family">Tipo de Letra (Fuente)</label>
-                            <select id="select-design-font-family" class="form-select">
-                                <option value="Arial, sans-serif" selected>Arial (Sans-serif estándar)</option>
-                                <option value="Calibri, Arial, sans-serif">Calibri (Word moderna)</option>
-                                <option value="'Times New Roman', serif">Times New Roman (Serif clásica)</option>
-                                <option value="Georgia, serif">Georgia (Serif de pantalla)</option>
-                                <option value="'Courier New', monospace">Courier New (Monospaced)</option>
-                                <option value="'Space Grotesk', sans-serif">Space Grotesk (Moderna)</option>
-                            </select>
-                        </div>
+                        <!-- Ajustes Avanzados de Tipografía y Formato -->
+                        <details class="form-disclosure">
+                            <summary>Ajustes avanzados</summary>
+                            <div class="form-disclosure-content">
+                                <!-- Color de Bordes/Tema -->
+                                <div class="form-group">
+                                    <label class="form-label" for="input-design-theme-color">Color de Bordes y Recuadros</label>
+                                    <div style="display: flex; gap: 8px; align-items: center;">
+                                        <input type="color" id="input-design-theme-color" class="form-input"
+                                            style="padding: 2px; width: 45px; height: 35px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid var(--border);"
+                                            value="#000000">
+                                        <input type="text" id="input-design-theme-color-hex" class="form-input"
+                                            placeholder="#000000" aria-label="Código hexadecimal del color de bordes" style="flex: 1; font-family: monospace;" value="#000000">
+                                    </div>
+                                </div>
 
-                        <!-- Tamaño de Letra -->
-                        <div class="form-group">
-                            <label class="form-label" for="select-design-font-size">Tamaño de Letra</label>
-                            <select id="select-design-font-size" class="form-select">
-                                <option value="8pt">Pequeño (8pt)</option>
-                                <option value="9pt">Estándar MINEDU (9pt)</option>
-                                <option value="10pt" selected>Normal (10pt)</option>
-                                <option value="11pt">Grande (11pt)</option>
-                                <option value="12pt">Muy Grande (12pt)</option>
-                            </select>
-                        </div>
+                                <div class="form-group">
+                                    <label class="form-label" for="input-design-accent-color">Color de títulos y acentos</label>
+                                    <input type="color" id="input-design-accent-color" class="form-input" value="#C0392B"
+                                        style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
+                                </div>
 
-                        <!-- Espaciado / Padding de Celdas -->
-                        <div class="form-group">
-                            <label class="form-label" for="select-design-padding">Espaciado de Celdas (Padding)</label>
-                            <select id="select-design-padding" class="form-select">
-                                <option value="2px 4px">Compacto (2px)</option>
-                                <option value="4px 6px" selected>Estándar (4px)</option>
-                                <option value="6px 8px">Amplio (6px)</option>
-                                <option value="8px 10px">Espacioso (8px)</option>
-                            </select>
-                        </div>
+                                <!-- Familia de Fuente -->
+                                <div class="form-group">
+                                    <label class="form-label" for="select-design-font-family">Tipo de Letra (Fuente)</label>
+                                    <select id="select-design-font-family" class="form-select">
+                                        <option value="Arial, sans-serif" selected>Arial (Sans-serif estándar)</option>
+                                        <option value="Calibri, Arial, sans-serif">Calibri (Word moderna)</option>
+                                        <option value="'Times New Roman', serif">Times New Roman (Serif clásica)</option>
+                                        <option value="Georgia, serif">Georgia (Serif de pantalla)</option>
+                                        <option value="'Courier New', monospace">Courier New (Monospaced)</option>
+                                        <option value="'Space Grotesk', sans-serif">Space Grotesk (Moderna)</option>
+                                    </select>
+                                </div>
 
-                        <!-- Espaciado entre Líneas -->
-                        <div class="form-group">
-                            <label class="form-label" for="select-design-line-height">Interlineado (Line Height)</label>
-                            <select id="select-design-line-height" class="form-select">
-                                <option value="1.2">Compacto (1.2)</option>
-                                <option value="1.3">Sutil (1.3)</option>
-                                <option value="1.4" selected>Estándar (1.4)</option>
-                                <option value="1.5">Amplio (1.5)</option>
-                            </select>
-                        </div>
+                                <!-- Tamaño de Letra -->
+                                <div class="form-group">
+                                    <label class="form-label" for="select-design-font-size">Tamaño de Letra</label>
+                                    <select id="select-design-font-size" class="form-select">
+                                        <option value="8pt">Pequeño (8pt)</option>
+                                        <option value="9pt">Estándar MINEDU (9pt)</option>
+                                        <option value="10pt" selected>Normal (10pt)</option>
+                                        <option value="11pt">Grande (11pt)</option>
+                                        <option value="12pt">Muy Grande (12pt)</option>
+                                    </select>
+                                </div>
 
-                        <!-- Color de Fondo de Cabeceras -->
-                        <div class="form-group">
-                            <label class="form-label" for="select-design-header-bg">Estilo de Cabeceras de
-                                Momentos</label>
-                            <input type="color" id="select-design-header-bg" class="form-input" value="#BDD6EE"
-                                style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
-                        </div>
+                                <!-- Espaciado / Padding de Celdas -->
+                                <div class="form-group">
+                                    <label class="form-label" for="select-design-padding">Espaciado de Celdas (Padding)</label>
+                                    <select id="select-design-padding" class="form-select">
+                                        <option value="2px 4px">Compacto (2px)</option>
+                                        <option value="4px 6px" selected>Estándar (4px)</option>
+                                        <option value="6px 8px">Amplio (6px)</option>
+                                        <option value="8px 10px">Espacioso (8px)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Espaciado entre Líneas -->
+                                <div class="form-group">
+                                    <label class="form-label" for="select-design-line-height">Interlineado (Line Height)</label>
+                                    <select id="select-design-line-height" class="form-select">
+                                        <option value="1.2">Compacto (1.2)</option>
+                                        <option value="1.3">Sutil (1.3)</option>
+                                        <option value="1.4" selected>Estándar (1.4)</option>
+                                        <option value="1.5">Amplio (1.5)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Color de Fondo de Cabeceras -->
+                                <div class="form-group">
+                                    <label class="form-label" for="select-design-header-bg">Estilo de Cabeceras de Momentos</label>
+                                    <input type="color" id="select-design-header-bg" class="form-input" value="#BDD6EE"
+                                        style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
+                                </div>
                             </div>
                         </details>
                     </div>
 
                     <!-- PANE 5: REGISTRO DE ALUMNOS -->
                     <div id="tab-alumnos" class="tab-pane" role="tabpanel">
-                        <div style="margin-bottom: 1.5rem;">
-                            <h3 class="saved-title" style="margin-bottom: 8px;">Registro de estudiantes</h3>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">Registra la lista de alumnos para el grado y sección actual (configurados en Datos) para rellenar la Lista de Cotejo de forma automática.</p>
-                            
-                            <div class="form-group">
-                                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 8px;">
-                                    <label class="form-label" style="margin: 0;">Lista de Alumnos (un nombre por línea)</label>
-                                    <button type="button" id="btn-save-alumnos" class="btn btn-primary btn-sm" style="font-size:0.7rem; padding:4px 10px; cursor:pointer;">Guardar Alumnos</button>
+                        <div class="form-card">
+                            <div class="form-card-title" style="justify-content: space-between;">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
+                                    Registro de Estudiantes
                                 </div>
+                                <button type="button" id="btn-save-alumnos" class="btn btn-primary btn-sm" style="font-size:0.72rem; padding:4px 12px; cursor:pointer;">Guardar Alumnos</button>
+                            </div>
+                            <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+                                Registra la lista de alumnos para autocompletar la Lista de Cotejo de tu sesión.
+                            </p>
+                            <div class="form-group" style="margin-bottom: 0;">
                                 <textarea id="textarea-alumnos" class="form-textarea student-list-input" placeholder="Pega los nombres aquí, uno por línea. Ejemplo:
 ACOSTA MURGA, CLIFEER AMELEX
 AGUILAR JAVIER, FARID OMAR"></textarea>
@@ -690,120 +765,97 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
 
                     <!-- PANE 6: FICHAS DE TRABAJO (PROMPT IA) -->
                     <div id="tab-fichas" class="tab-pane" role="tabpanel">
-                        <div style="margin-bottom: 1.5rem;">
-                            <h3 class="saved-title" style="margin-bottom: 8px;">Fichas Didácticas con IA</h3>
-                            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 15px;">Genera y personaliza el prompt optimizado para crear fichas escolares listas para imprimir con ChatGPT Images, GPT Image, Midjourney o DALL-E basadas en tu sesión.</p>
+                        <!-- Apartado de Fichas Didácticas -->
+                        <div id="apartado-fichas" class="form-card ficha-prompt-apartado">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+                                <label for="input-ficha-prompt" class="form-card-title" style="margin: 0; font-size: 0.82rem;">
+                                    <svg class="ui-icon" aria-hidden="true" style="color: #00D4FF;"><use href="#icon-sparkles"></use></svg>
+                                    Ficha Didáctica (Prompt IA)
+                                </label>
+                                <button type="button" id="btn-copy-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.72rem; padding: 4px 10px;" title="Copiar prompt de ficha">
+                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-copy"></use></svg> Copiar
+                                </button>
+                            </div>
+                            <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+                                Genera un prompt optimizado para ChatGPT Images o Midjourney para crear fichas listas para imprimir:
+                            </p>
+                            
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
+                                <div>
+                                    <label for="select-ficha-nivel" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Dificultad</label>
+                                    <select id="select-ficha-nivel" class="form-select" style="font-size: 0.75rem; padding: 6px 8px;">
+                                        <option value="inicio">Nivel Inicio (Andamiaje)</option>
+                                        <option value="avanzado" selected>Nivel Avanzado (Estándar)</option>
+                                        <option value="experto">Nivel Experto (Desafío)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="select-ficha-variante" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Variante</label>
+                                    <select id="select-ficha-variante" class="form-select" style="font-size: 0.75rem; padding: 6px 8px;">
+                                        <option value="estandar" selected>Datos de la sesión</option>
+                                        <option value="alternativa">Situación alternativa</option>
+                                        <option value="refuerzo">Refuerzo guiado</option>
+                                        <option value="reto">Reto / Extensión</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                            <!-- ═══ APARTADO DE FICHAS (PROMPT IA EXTERNA) ═══ -->
-                            <div id="apartado-fichas" class="form-group ficha-prompt-apartado" style="margin-top: 1rem; padding: 14px; background: rgba(14, 165, 233, 0.06); border: 1px solid var(--border-accent, rgba(14, 165, 233, 0.35)); border-radius: 10px;">
-                                <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                                    <label for="input-ficha-prompt" class="form-label" style="margin: 0; font-weight: 700; display: flex; align-items: center; gap: 6px; color: var(--color-foreground, #f5f7fb);">
-                                        <svg class="ui-icon" aria-hidden="true" style="color: var(--color-primary, #0ea5e9);"><use href="#icon-sparkles"></use></svg>
-                                        Ficha de Trabajo / Aplicación (Prompt IA)
-                                    </label>
-                                    <button type="button" id="btn-copy-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.72rem; padding: 3px 8px; border: 1px solid var(--border);" title="Copiar prompt de ficha">
-                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-copy"></use></svg> Copiar
-                                    </button>
-                                </div>
-                                <p style="font-size: 0.75rem; color: var(--text-muted, #94a3b8); margin-bottom: 10px; line-height: 1.35;">
-                                    Prompt para IA externa (ChatGPT Images, GPT Image, Midjourney) para crear la ficha didáctica de esta sesión. Puedes elegir la dificultad y variante:
-                                </p>
-                                
-                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
-                                    <div>
-                                        <label for="select-ficha-nivel" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Dificultad de la Ficha</label>
-                                        <select id="select-ficha-nivel" class="form-select" style="font-size: 0.75rem; padding: 5px 8px; margin-bottom: 0;">
-                                            <option value="inicio">Nivel Inicio (Andamiaje)</option>
-                                            <option value="avanzado" selected>Nivel Avanzado (Estándar)</option>
-                                            <option value="experto">Nivel Experto (Desafío)</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label for="select-ficha-variante" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Tipo de Variante</label>
-                                        <select id="select-ficha-variante" class="form-select" style="font-size: 0.75rem; padding: 5px 8px; margin-bottom: 0;">
-                                            <option value="estandar" selected>Datos de la sesión</option>
-                                            <option value="alternativa">Situación alternativa</option>
-                                            <option value="refuerzo">Refuerzo guiado</option>
-                                            <option value="reto">Reto / Extensión</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <textarea id="input-ficha-prompt" class="form-textarea" rows="7" readonly style="font-size: 0.74rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.35; background: rgba(0,0,0,0.3); resize: vertical; margin-top: 8px;" placeholder="Primero genera la sesión para poder crear la ficha didáctica..."></textarea>
-                                
-                                <div style="display: flex; gap: 8px; margin-top: 8px;">
-                                    <button type="button" id="btn-trigger-ficha-prompt" class="btn btn-primary btn-full btn-sm" style="font-size: 0.78rem; padding: 6px 10px;">
-                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar variante de ficha
-                                    </button>
-                                    <button type="button" id="btn-modal-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.78rem; padding: 6px 10px; border: 1px solid var(--border);" title="Ver prompt en ventana completa" aria-label="Ver prompt en ventana completa">
-                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-expand"></use></svg>
-                                    </button>
-                                </div>
+                            <textarea id="input-ficha-prompt" class="form-textarea" rows="7" readonly style="font-size: 0.75rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.35; background: rgba(0,0,0,0.3); resize: vertical;" placeholder="Primero genera la sesión para poder crear la ficha didáctica..."></textarea>
+                            
+                            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                                <button type="button" id="btn-trigger-ficha-prompt" class="btn btn-primary btn-sm" style="flex: 1; font-size: 0.78rem; padding: 8px 12px;">
+                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar variante
+                                </button>
+                                <button type="button" id="btn-modal-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.78rem; padding: 8px 12px;" title="Ver prompt en ventana completa" aria-label="Ver prompt en ventana completa">
+                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-expand"></use></svg>
+                                </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Separación -->
-                    <div class="form-section-divider"></div>
+                    <!-- GESTIÓN DE SESIÓN Y ARCHIVOS (COLLAPSIBLE VAULT) -->
+                    <details class="form-disclosure session-management-disclosure" style="margin-top: 1.25rem;">
+                        <summary style="font-size: 0.78rem;">
+                            <svg class="ui-icon" aria-hidden="true" style="color: #00D4FF; margin-right: 6px;"><use href="#icon-folder"></use></svg>
+                            Gestión de Sesiones y Archivos
+                        </summary>
+                        <div class="form-disclosure-content">
+                            <!-- Acciones locales y guardado -->
+                            <div class="form-actions" style="border-top: none; padding-top: 4px;">
+                                <div class="form-actions-row" style="display: flex; gap: 6px; margin-bottom: 6px;">
+                                    <button type="button" id="btn-save" class="btn btn-ghost btn-sm" style="flex: 1;" title="Guardar cambios en la sesión actual">
+                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar
+                                    </button>
+                                    <button type="button" id="btn-load" class="btn btn-ghost btn-sm" style="flex: 1;" title="Cargar sesión previamente guardada">
+                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Cargar
+                                    </button>
+                                </div>
+                                <button type="button" id="btn-save-as" class="btn btn-ghost btn-sm" title="Guardar una copia de esta sesión con un nuevo título" style="width: 100%; margin-bottom: 6px;">
+                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar como…
+                                </button>
+                                <div class="form-actions-row" style="display: flex; gap: 6px;">
+                                    <button type="button" id="btn-export-json" class="btn btn-ghost btn-sm" style="flex: 1; font-size: 0.72rem;" title="Exportar sesión a archivo JSON">
+                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Exportar JSON
+                                    </button>
+                                    <button type="button" id="btn-import-json" class="btn btn-ghost btn-sm" style="flex: 1; font-size: 0.72rem;" title="Importar sesión desde archivo JSON">
+                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Importar JSON
+                                    </button>
+                                </div>
+                                <input type="file" id="input-import-file" class="hidden" accept=".json">
+                            </div>
 
-                    <!-- Acciones locales y guardado -->
-                    <div class="form-actions">
-                        <div class="form-actions-row">
-                            <button type="button" id="btn-save" class="btn btn-ghost btn-full" title="Guardar cambios en la sesión actual">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar
-                            </button>
-                            <button type="button" id="btn-load" class="btn btn-ghost btn-full" title="Cargar sesión previamente guardada">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Cargar
-                            </button>
+                            <!-- Sesiones Guardadas -->
+                            <div class="saved-sessions" style="margin-top: 1rem;">
+                                <h3 class="saved-title" style="font-size: 0.75rem; margin-bottom: 6px;">Sesiones guardadas</h3>
+                                <ul id="saved-list" class="saved-list">
+                                    <li class="saved-empty">No hay sesiones guardadas</li>
+                                </ul>
+                            </div>
                         </div>
-                        <button type="button" id="btn-save-as" class="btn btn-ghost btn-full" title="Guardar una copia de esta sesión con un nuevo título" style="margin-top: 2px;">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar como…
-                        </button>
-                        <div class="form-actions-row">
-                            <button type="button" id="btn-export-json" class="btn btn-ghost btn-full btn-sm"
-                                title="Exportar sesión a archivo JSON">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Exportar JSON
-                            </button>
-                            <button type="button" id="btn-import-json" class="btn btn-ghost btn-full btn-sm"
-                                title="Importar sesión desde archivo JSON">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Importar JSON
-                            </button>
-                        </div>
-                        <input type="file" id="input-import-file" class="hidden" accept=".json">
-                    </div>
-
-                    <!-- Sesiones Guardadas -->
-                    <div class="saved-sessions" style="margin-top: 1.5rem;">
-                        <h3 class="saved-title">Sesiones guardadas</h3>
-                        <ul id="saved-list" class="saved-list">
-                            <li class="saved-empty">No hay sesiones guardadas</li>
-                        </ul>
-                    </div>
-
-                    <!-- Galería de Logos -->
-                    <div class="logo-gallery-section"
-                        style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1rem;">
-                        <h3 class="saved-title">Galería de logos</h3>
-                        <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                            <input type="file" id="input-upload-logo" accept="image/png,image/jpeg,image/webp" class="hidden">
-                            <button type="button" id="btn-trigger-upload-logo" class="btn btn-ghost btn-sm"
-                                style="flex: 1; font-size: 0.72rem; padding: 4px;">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Subir logo
-                            </button>
-                             <button type="button" id="btn-refresh-logos" class="btn btn-ghost btn-icon"
-                                style="min-width: 30px; min-height: 30px; font-size: 0.8rem; padding: 2px;"
-                                title="Actualizar lista" aria-label="Actualizar galería de logos">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
-                            </button>
-                        </div>
-                        <div id="logos-container"
-                            style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 120px; overflow-y: auto; padding: 6px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px solid var(--border);">
-                            <span
-                                style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Inicia
-                                sesión para ver logos</span>
-                        </div>
-                    </div>
+                    </details>
                 </form>
+
+                <!-- BOTÓN PRINCIPAL DE ACCIÓN PINNED -->
                 <div class="sidebar-primary-action">
                     <span class="sidebar-primary-hint">Listo para crear</span>
                     <button type="button" id="btn-generate" class="btn btn-primary btn-full">
@@ -819,7 +871,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
                 <!-- Empty State -->
                 <div id="empty-state" class="empty-state">
                     <div class="empty-state-copy">
-                        <div class="empty-brand-mark"><img src="assets/favicon.svg" alt="" aria-hidden="true"></div>
+                        <div class="empty-brand-mark" style="background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%); border-radius: 12px; padding: 12px; display: inline-flex; box-shadow: 0 0 20px rgba(0,212,255,0.25);"><img src="assets/favicon.svg" alt="Space Lab Icon" aria-hidden="true"></div>
                         <span class="empty-eyebrow">Workspace de planificación</span>
                         <h2 class="empty-title">Tu sesión empieza con una estructura clara</h2>
                         <p class="empty-text">Completa el flujo de la izquierda y Space AI construirá un documento MINEDU editable, listo para revisar y exportar.</p>
@@ -1103,7 +1155,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
                     <span class="chatbot-dot"></span>
                     <div>
                         <h4 class="chatbot-title">Space Assistant</h4>
-                        <span class="chatbot-subtitle">GPT-5.6 Luna Copilot</span>
+                        <span class="chatbot-subtitle">GPT-6 Luna Copilot</span>
                     </div>
                 </div>
                 <button id="btn-close-chatbot" class="btn-close-chat" aria-label="Cerrar copiloto"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
@@ -1120,7 +1172,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
 
             <div class="chatbot-input-container">
                 <input type="text" id="chatbot-input" placeholder="Pregunta algo sobre tu sesión..." autocomplete="off">
-                <button id="btn-send-chat" class="btn btn-accent btn-icon-only">
+                <button id="btn-send-chat" class="btn btn-accent btn-icon-only" aria-label="Enviar mensaje al copiloto">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
                 </button>
             </div>
@@ -1234,7 +1286,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
                 <button type="button" id="auth-tab-register" class="auth-tab">Crear cuenta</button>
             </div>
 
-            <!-- Title & Subtitle (Now dynamically updated, keep structure but visually hidden if wanted, or kept brief) -->
+            <!-- Title & Subtitle -->
             <div class="load-modal-header" style="display: none;">
                 <h3 id="auth-title">Iniciar Sesión</h3>
             </div>
@@ -1295,6 +1347,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
             </div>
         </div>
     </div>
+
     <!-- ═══════════ LOGO EDITOR POPOVER ═══════════ -->
     <div id="logo-editor-popover" class="logo-editor-popover hidden no-print" style="position: absolute; display: none;">
         <div class="popover-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
@@ -1408,8 +1461,6 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
             <div id="modal-logos-container" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; max-height: 200px; overflow-y: auto; padding: 8px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px solid rgba(255,255,255,0.06); margin-bottom: 1.5rem;">
                 <!-- Cargado dinámicamente -->
             </div>
-
-
 
             <div style="display: flex; justify-content: flex-end; gap: 8px;">
                 <button type="button" id="btn-modal-gallery-close" class="btn btn-ghost btn-sm" style="font-size: 0.8rem; padding: 6px 16px;">Cerrar</button>

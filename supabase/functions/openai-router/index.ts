@@ -5,7 +5,7 @@ import { providerErrorResponse, configurationErrorResponse, internalErrorRespons
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 
-const ALLOWED_MODELS = new Set(["gpt-5.6-luna", "gpt-5.4-mini"]);
+const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-6-astra", "gpt-6-sol", "gpt-5.6-luna", "gpt-5.4-mini"]);
 const MAX_SOURCE_CHARS = 30_000;
 const MAX_IMAGE_BASE64_CHARS = 4 * 1024 * 1024;
 
@@ -30,7 +30,7 @@ serve(async (req) => {
     }
 
     const rawModel = payload && typeof payload === "object" ? (payload as Record<string, unknown>).model : undefined;
-    const selectedModel = typeof rawModel === "string" ? rawModel : "gpt-5.6-luna";
+    const selectedModel = typeof rawModel === "string" ? rawModel : "gpt-6-luna";
     if (!ALLOWED_MODELS.has(selectedModel)) {
       return jsonResponse(req, { error: "Modelo no permitido.", code: "MODEL_NOT_ALLOWED", requestId: aiRequest.requestId }, 400);
     }

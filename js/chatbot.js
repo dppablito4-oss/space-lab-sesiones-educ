@@ -101,11 +101,11 @@ window.Chatbot = (() => {
             // Call the authenticated Supabase Edge Function. API keys stay server-side.
             if (window.SupabaseClient && SupabaseClient.client) {
                 try {
-                    console.log('[Chatbot] Enviando mensaje a openai-router con gpt-5.6-luna...');
+                    console.log('[Chatbot] Enviando mensaje a openai-router con gpt-6-luna...');
                     const data = await SupabaseClient.invokeFunction('openai-router', {
                         action: 'chatbot',
                         requestId: createRequestId(),
-                        model: 'gpt-5.6-luna',
+                        model: 'gpt-6-luna',
                         input: {
                             history: chatHistory.slice(-6),
                             design
