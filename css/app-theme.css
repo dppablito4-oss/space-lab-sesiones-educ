@@ -281,6 +281,37 @@ body,
     letter-spacing: -0.02em !important;
 }
 
+/* ─── BRAND ICON MICRO-INTERACTIONS ─── */
+.header-brand .brand-icon,
+.workflow-rail-brand .brand-icon {
+    transition: transform 250ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 250ms ease !important;
+}
+
+.header-brand:hover .brand-icon,
+.workflow-rail-brand:hover .brand-icon {
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 0 16px rgba(0, 212, 255, 0.35);
+}
+
+/* ─── KEYFRAMES DE MICROANIMACIONES ─── */
+@keyframes generatePulse {
+    0%, 100% {
+        box-shadow: 0 4px 20px rgba(0, 212, 255, 0.42);
+    }
+    50% {
+        box-shadow: 0 8px 32px rgba(0, 212, 255, 0.72), 0 0 16px rgba(123, 97, 255, 0.45);
+    }
+}
+
+@keyframes tabIconPulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.6));
+    }
+    50% {
+        filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.95));
+    }
+}
+
 /* ─── HERO GENERATE BUTTON ─── */
 #btn-generate {
     background: linear-gradient(135deg, #00D4FF 0%, #7B61FF 100%) !important;
@@ -293,19 +324,47 @@ body,
     box-shadow: 0 4px 20px rgba(0, 212, 255, 0.42) !important;
     border: none !important;
     cursor: pointer !important;
-    transition: all 180ms ease !important;
+    position: relative !important;
+    overflow: hidden !important;
+    animation: generatePulse 4s ease-in-out infinite !important;
+    transition: transform 180ms ease, box-shadow 180ms ease !important;
+}
+
+#btn-generate::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -80%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: rotate(25deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+}
+
+#btn-generate:hover::after {
+    left: 150%;
 }
 
 #btn-generate:hover {
-    transform: translateY(-2px) !important;
+    transform: translateY(-2px) scale(1.02) !important;
     box-shadow: 0 8px 30px rgba(0, 212, 255, 0.65) !important;
 }
 
 /* ─── ETAPAS DEL WORKFLOW (RAIL) ─── */
 .sidebar-tab {
     border-radius: 10px !important;
-    transition: all 160ms ease !important;
+    transition: all 180ms cubic-bezier(0.16, 1, 0.3, 1) !important;
     margin-bottom: 4px;
+}
+
+.sidebar-tab .tab-icon {
+    transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1), filter 180ms ease !important;
+}
+
+.sidebar-tab:hover .tab-icon {
+    transform: scale(1.12);
 }
 
 .sidebar-tab.active {
@@ -316,7 +375,7 @@ body,
 
 .sidebar-tab.active .tab-icon {
     color: #00D4FF !important;
-    filter: drop-shadow(0 0 6px rgba(0, 212, 255, 0.6));
+    animation: tabIconPulse 3.5s ease-in-out infinite !important;
 }
 
 .sidebar-tab .tab-step {
@@ -771,5 +830,12 @@ html[data-theme="light"] .load-modal {
 }
 
 @media (prefers-reduced-motion: reduce) {
-    html { scroll-behavior: auto; }
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

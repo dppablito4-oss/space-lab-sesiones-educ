@@ -32,6 +32,92 @@ html.landing-active {
     height: auto !important;
 }
 
+/* ─── Keyframe Animations ─── */
+@keyframes heroGlowPulse {
+    0% {
+        opacity: 0.55;
+        transform: translate(-50%, -10px) scale(0.96);
+    }
+    50% {
+        opacity: 0.95;
+        transform: translate(-50%, 10px) scale(1.05);
+    }
+    100% {
+        opacity: 0.55;
+        transform: translate(-50%, -10px) scale(0.96);
+    }
+}
+
+@keyframes textShimmer {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes floatCard {
+    0% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-8px) rotate(0.4deg);
+    }
+    100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+@keyframes pulseGreen {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+    50% {
+        transform: scale(1.15);
+        opacity: 0.85;
+        box-shadow: 0 0 0 6px rgba(16, 185, 129, 0);
+    }
+}
+
+@keyframes buttonGlow {
+    0%, 100% {
+        box-shadow: 0 8px 24px rgba(0, 212, 255, 0.35);
+    }
+    50% {
+        box-shadow: 0 12px 34px rgba(0, 212, 255, 0.6), 0 0 18px rgba(123, 97, 255, 0.35);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes viewFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.landing-view:not(.hidden) {
+    animation: viewFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.app-wrapper:not(.hidden) {
+    animation: viewFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
 /* ─── Top Navigation Bar ─── */
 .landing-navbar {
     position: sticky;
@@ -120,6 +206,7 @@ html.landing-active {
 
 /* ─── Hero Section ─── */
 .landing-hero {
+    position: relative;
     padding: 72px 32px 56px;
     max-width: 1280px;
     margin: 0 auto;
@@ -130,10 +217,27 @@ html.landing-active {
     width: 100%;
 }
 
+.landing-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(850px, 95vw);
+    height: 480px;
+    background: radial-gradient(circle at 50% 50%, rgba(0, 212, 255, 0.16) 0%, rgba(123, 97, 255, 0.12) 42%, transparent 70%);
+    filter: blur(60px);
+    pointer-events: none;
+    z-index: 0;
+    animation: heroGlowPulse 8s ease-in-out infinite;
+}
+
 .landing-hero-copy {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    position: relative;
+    z-index: 1;
 }
 
 .landing-pill-badge {
@@ -151,6 +255,7 @@ html.landing-active {
     text-transform: uppercase;
     margin-bottom: 20px;
     box-shadow: 0 0 20px rgba(0, 212, 255, 0.15);
+    animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .landing-pill-badge .ui-icon {
@@ -166,13 +271,16 @@ html.landing-active {
     letter-spacing: -0.025em;
     color: var(--color-foreground);
     margin-bottom: 18px;
+    animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
 }
 
 .landing-hero-title .highlight {
-    background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 100%);
+    background: linear-gradient(135deg, #00d4ff 0%, #7b61ff 35%, #00d4ff 70%, #d946ef 100%);
+    background-size: 260% 260%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: textShimmer 7s ease infinite;
 }
 
 .landing-hero-subtitle {
@@ -181,6 +289,7 @@ html.landing-active {
     color: var(--color-muted-foreground);
     margin-bottom: 28px;
     max-width: 58ch;
+    animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.16s both;
 }
 
 .landing-hero-actions {
@@ -189,6 +298,7 @@ html.landing-active {
     gap: 14px;
     flex-wrap: wrap;
     margin-bottom: 32px;
+    animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.24s both;
 }
 
 .landing-btn-lg {
@@ -213,6 +323,26 @@ html.landing-active {
     color: #030712;
     border: none;
     box-shadow: 0 8px 24px rgba(0, 212, 255, 0.35);
+    position: relative;
+    overflow: hidden;
+    animation: buttonGlow 4s ease-in-out infinite;
+}
+
+.landing-btn-primary::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -80%;
+    width: 50%;
+    height: 200%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transform: rotate(25deg);
+    transition: left 0.7s ease;
+    pointer-events: none;
+}
+
+.landing-btn-primary:hover::after {
+    left: 150%;
 }
 
 .landing-btn-ghost {
@@ -230,6 +360,7 @@ html.landing-active {
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    animation: fadeInUp 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.32s both;
 }
 
 .landing-badge-item {
@@ -243,6 +374,12 @@ html.landing-active {
     font-size: 0.8rem;
     font-weight: 500;
     color: var(--color-foreground);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.landing-badge-item:hover {
+    transform: translateY(-2px);
+    border-color: rgba(0, 212, 255, 0.4);
 }
 
 .landing-badge-item .ui-icon {
@@ -256,6 +393,8 @@ html.landing-active {
     position: relative;
     display: flex;
     justify-content: center;
+    z-index: 1;
+    animation: fadeInUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
 }
 
 .landing-preview-card {
@@ -267,6 +406,14 @@ html.landing-active {
     padding: 24px;
     box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5), 0 0 35px rgba(0, 212, 255, 0.12);
     position: relative;
+    animation: floatCard 6s ease-in-out infinite;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
+}
+
+.landing-preview-card:hover {
+    transform: translateY(-8px) scale(1.015);
+    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6), 0 0 50px rgba(0, 212, 255, 0.28);
+    border-color: rgba(0, 212, 255, 0.5);
 }
 
 .preview-card-header {
@@ -420,12 +567,13 @@ html.landing-active {
     display: flex;
     flex-direction: column;
     position: relative;
-    transition: transform var(--ease-out), border-color var(--ease-out);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
 }
 
 .landing-step-card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0, 212, 255, 0.4);
+    transform: translateY(-8px);
+    border-color: rgba(0, 212, 255, 0.45);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), 0 0 30px rgba(0, 212, 255, 0.15);
 }
 
 .landing-step-number {
@@ -441,6 +589,12 @@ html.landing-active {
     align-items: center;
     justify-content: center;
     margin-bottom: 16px;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.landing-step-card:hover .landing-step-number {
+    transform: scale(1.1) rotate(3deg);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
 }
 
 .landing-step-title {
@@ -472,6 +626,13 @@ html.landing-active {
     flex-direction: column;
     position: relative;
     overflow: hidden;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.landing-model-card:hover {
+    transform: translateY(-8px);
+    border-color: rgba(0, 212, 255, 0.45);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45), 0 0 30px rgba(0, 212, 255, 0.15);
 }
 
 .landing-model-badge {
@@ -499,6 +660,12 @@ html.landing-active {
     border: 1px solid var(--color-border);
     margin-bottom: 16px;
     color: var(--color-primary);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+}
+
+.landing-model-card:hover .landing-model-icon {
+    transform: scale(1.12) rotate(-3deg);
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
 }
 
 .landing-model-title {
@@ -535,6 +702,14 @@ html.landing-active {
     border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 20px 24px;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.landing-faq-item:hover {
+    transform: translateX(6px);
+    border-color: rgba(0, 212, 255, 0.38);
+    background: var(--color-card-surface);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .landing-faq-question {
@@ -579,6 +754,14 @@ html.landing-active {
     flex-direction: column;
     align-items: center;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+}
+
+.landing-cta-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.5), 0 0 45px rgba(0, 212, 255, 0.22);
 }
 
 .landing-cta-title {
@@ -666,3 +849,15 @@ html.landing-active {
         justify-content: center;
     }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
