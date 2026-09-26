@@ -285,7 +285,7 @@ window.SpaceLabAiController = (() => {
             const fileGroup = $('.source-file-group');
             const badge = DOM.modelCapabilitiesBadge || $('#model-capabilities-badge');
             const dropzoneText = DOM.sourceFileDropzone ? DOM.sourceFileDropzone.querySelector('.text') : null;
-            const provider = DOM.selectAiProvider ? DOM.selectAiProvider.value : 'openai-gpt-6-luna';
+            const provider = DOM.selectAiProvider ? DOM.selectAiProvider.value : 'automatic';
             if (window.AiCopilot && typeof AiCopilot.setProvider === 'function') {
                 AiCopilot.setProvider(provider);
             }
@@ -297,38 +297,16 @@ window.SpaceLabAiController = (() => {
             if (badge) {
                 const fileIcon = '<svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>';
                 const textIcon = '<svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>';
-                if (provider === 'openai-gpt-6-luna') {
-                    badge.className = 'model-capabilities-badge';
-                    badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-6 Luna (Principal):</strong> Ultra rápido y eficiente a escala con soporte para archivos (PDF, imágenes y textos).</span>`;
-                    if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
-                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
-                } else if (provider === 'openai-gpt-5.6-terra') {
-                    badge.className = 'model-capabilities-badge';
-                    badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>GPT-5.6 Terra:</strong> Especialista en alineación curricular CNEB profunda con soporte para archivos.</span>`;
-                    if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
-                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
-                } else if (provider === 'gemini-2.5-flash') {
-                    badge.className = 'model-capabilities-badge';
-                    badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>Gemini 2.5 Flash:</strong> Multimodal nativo (PDF, imágenes, audio y textos) de alta velocidad.</span>`;
-                    if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen, audio o texto)';
-                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
-                } else if (provider === 'deepseek-chat' || provider === 'deepseek-v3') {
-                    badge.className = 'model-capabilities-badge badge-no-files';
-                    badge.innerHTML = `${textIcon}<span class="badge-text"><strong>DeepSeek Chat:</strong> Rápido y fluido para secuencias didácticas basadas en texto directo.</span>`;
-                    if (dropzoneText) dropzoneText.textContent = 'DeepSeek Chat procesa solo texto. Cambia a GPT-6 o Gemini para adjuntar archivos.';
-                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.add('disabled-dropzone');
-                } else if (provider === 'deepseek-reasoner' || provider === 'deepseek-r1') {
-                    badge.className = 'model-capabilities-badge badge-no-files';
-                    badge.innerHTML = `${textIcon}<span class="badge-text"><strong>DeepSeek R1 (Razonamiento):</strong> Pensamiento paso a paso para situaciones complejas y rúbricas.</span>`;
-                    if (dropzoneText) dropzoneText.textContent = 'DeepSeek R1 procesa solo texto. Cambia a GPT-6 o Gemini para adjuntar archivos.';
-                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.add('disabled-dropzone');
-                } else {
-                    // Fallback para variantes legacy
-                    badge.className = 'model-capabilities-badge';
-                    badge.innerHTML = `${fileIcon}<span class="badge-text"><strong>Modelo IA:</strong> Admite archivos de referencia (PDF, imágenes y textos).</span>`;
-                    if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
-                    if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
-                }
+                const descriptions = {
+                    automatic: '<strong>Automático:</strong> El gateway elige la ruta más adecuada según la tarea y los archivos.',
+                    fast: '<strong>Rápido:</strong> Prioriza menor latencia para tareas directas y multimodales.',
+                    balanced: '<strong>Equilibrado:</strong> Combina calidad, velocidad y costo para planificación cotidiana.',
+                    max_quality: '<strong>Máxima calidad:</strong> Prioriza profundidad curricular para tareas complejas.'
+                };
+                badge.className = 'model-capabilities-badge';
+                badge.innerHTML = `${provider === 'balanced' ? textIcon : fileIcon}<span class="badge-text">${descriptions[provider] || descriptions.automatic}</span>`;
+                if (dropzoneText) dropzoneText.textContent = 'Haz clic o arrastra un archivo aquí (PDF, imagen o texto)';
+                if (DOM.sourceFileDropzone) DOM.sourceFileDropzone.classList.remove('disabled-dropzone');
             }
         }
         

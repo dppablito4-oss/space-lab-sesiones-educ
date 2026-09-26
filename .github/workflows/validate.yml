@@ -78,6 +78,7 @@ jobs:
           node tests/document-source-processor.test.js
           node tests/profile-fields.test.js
           node tests/app-update.test.js
+          node tests/test_ai_gateway_routing.js
           node tests/test_model_catalog.js
           node tests/test_entitlements.js
           node tests/test_credit_ledger_logic.js
@@ -111,6 +112,7 @@ jobs:
           deno check supabase/functions/openai-router/index.ts
           deno check supabase/functions/gemini-router/index.ts
           deno check supabase/functions/deepseek-router/index.ts
+          deno check supabase/functions/ai-gateway/index.ts
           deno check supabase/functions/pablito-mailer/index.ts
 
   # ─── 2. Build Windows .exe (solo en push a main/master) ───────────────────

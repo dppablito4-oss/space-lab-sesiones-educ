@@ -5,6 +5,7 @@ ROOT = Path(__file__).resolve().parents[1]
 MIGRATION = ROOT / "supabase/migrations/202609210002_ai_credits.sql"
 ADMIN_MIGRATION = ROOT / "supabase/migrations/202609250001_admin_credit_management.sql"
 SAAS_HARDENING_MIGRATION = ROOT / "supabase/migrations/202609260005_saas_security_hardening.sql"
+GATEWAY_MIGRATION = ROOT / "supabase/migrations/202609260006_ai_gateway_routing_telemetry.sql"
 ROUTERS = [
     ROOT / "supabase/functions/openai-router/index.ts",
     ROOT / "supabase/functions/gemini-router/index.ts",
@@ -16,6 +17,7 @@ def main() -> None:
     sql = MIGRATION.read_text(encoding="utf-8")
     admin_sql = ADMIN_MIGRATION.read_text(encoding="utf-8")
     hardening_sql = SAAS_HARDENING_MIGRATION.read_text(encoding="utf-8")
+    gateway_sql = GATEWAY_MIGRATION.read_text(encoding="utf-8")
     bootstrap = (ROOT / "database_setup.sql").read_text(encoding="utf-8")
     for table in ("ai_plans", "ai_action_costs", "ai_credit_wallets", "ai_usage"):
         assert f"public.{table}" in sql
@@ -59,6 +61,11 @@ def main() -> None:
     assert "s.current_period_end IS NULL" in entitlement_function
     assert "source_type, granted_credits, remaining_credits" in hardening_sql
     assert "'adjustment'" in hardening_sql
+    assert "ADD COLUMN IF NOT EXISTS requested_quality" in gateway_sql
+    assert "ADD COLUMN IF NOT EXISTS route_reason" in gateway_sql
+    assert "CREATE OR REPLACE FUNCTION public.record_ai_route" in gateway_sql
+    assert "WHERE user_id = v_user_id" in gateway_sql
+    assert "GRANT EXECUTE ON FUNCTION public.record_ai_route" in gateway_sql
 
     admin_frontend = (ROOT / "js/admin.js").read_text(encoding="utf-8")
     assert ".rpc('admin_list_ai_credit_accounts'" in admin_frontend
@@ -73,6 +80,12 @@ def main() -> None:
         assert "rawData" not in source
         assert "details:" not in source
         assert '"Access-Control-Allow-Origin": "*"' not in source
+
+    gateway = (ROOT / "supabase/functions/ai-gateway/index.ts").read_text(encoding="utf-8")
+    assert "getAuthenticatedContext" in gateway
+    assert "decideAiRoute" in gateway
+    assert "record_ai_route" in gateway
+    assert "AI_GLOBAL_ENABLED" in gateway
 
     frontend = "\n".join(
         path.read_text(encoding="utf-8")

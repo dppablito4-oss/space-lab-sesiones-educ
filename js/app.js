@@ -963,10 +963,23 @@
         }
         DOM.selectMethodology.value = m.methodology || '';
         
-        let prov = m.ai_provider || 'openai-gpt-6-luna';
-        if (prov === 'openai') prov = 'openai-gpt-6-luna';
-        if (prov === 'gemini') prov = 'gemini-2.5-flash';
-        if (prov === 'deepseek') prov = 'deepseek-chat';
+        let prov = m.ai_provider || 'automatic';
+        const legacyQualities = {
+            openai: 'automatic',
+            'openai-gpt-6-luna': 'automatic',
+            gemini: 'fast',
+            'gemini-2.5-flash': 'fast',
+            deepseek: 'balanced',
+            'deepseek-chat': 'balanced',
+            'deepseek-v3': 'balanced',
+            'openai-gpt-5.6-terra': 'max_quality',
+            'openai-gpt-5.6-luna': 'max_quality',
+            'openai-gpt-6-astra': 'max_quality',
+            'openai-gpt-6-sol': 'max_quality',
+            'deepseek-reasoner': 'max_quality',
+            'deepseek-r1': 'max_quality'
+        };
+        prov = legacyQualities[prov] || prov;
         DOM.selectAiProvider.value = prov;
         handleAiProviderChange();
 

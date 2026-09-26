@@ -8,33 +8,30 @@ const AiCopilot = (() => {
     // ─── CONFIGURACIÓN ───
     const CONFIG = {
         // Provider credentials are held only by Supabase Edge Functions.
-        model: 'openai-gpt-6-luna'
+        quality: 'automatic'
     };
 
-    const PROVIDERS = {
-        'openai-gpt-6-luna': { router: 'openai-router', kind: 'openai', model: 'gpt-6-luna' },
-        'openai-gpt-5.6-terra': { router: 'openai-router', kind: 'openai', model: 'gpt-5.6-terra' },
-        'gemini-2.5-flash': { router: 'gemini-router', kind: 'gemini', model: 'gemini-2.5-flash' },
-        'deepseek-chat': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-chat' },
-        'deepseek-reasoner': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-reasoner' },
-        // Aliases para compatibilidad
-        'deepseek-v3': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-chat' },
-        'deepseek-r1': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-reasoner' },
-        'openai-gpt-6-astra': { router: 'openai-router', kind: 'openai', model: 'gpt-6-astra' },
-        'openai-gpt-6-sol': { router: 'openai-router', kind: 'openai', model: 'gpt-6-sol' },
-        'openai-gpt-5.6-luna': { router: 'openai-router', kind: 'openai', model: 'gpt-5.6-luna' },
-        'openai-gpt-5.4-mini': { router: 'openai-router', kind: 'openai', model: 'gpt-5.4-mini' }
+    const QUALITY_ALIASES = {
+        automatic: 'automatic',
+        fast: 'fast',
+        balanced: 'balanced',
+        max_quality: 'max_quality',
+        'openai-gpt-6-luna': 'automatic',
+        'gpt-6-luna': 'automatic',
+        'gemini-2.5-flash': 'fast',
+        'deepseek-chat': 'balanced',
+        'deepseek-v3': 'balanced',
+        'openai-gpt-5.6-terra': 'max_quality',
+        'gpt-5.6-terra': 'max_quality',
+        'openai-gpt-5.6-luna': 'max_quality',
+        'openai-gpt-6-astra': 'max_quality',
+        'openai-gpt-6-sol': 'max_quality',
+        'deepseek-reasoner': 'max_quality',
+        'deepseek-r1': 'max_quality'
     };
 
-    function resolveProvider(provider) {
-        const aliases = {
-            openai: 'openai-gpt-6-luna',
-            gemini: 'gemini-2.5-flash',
-            deepseek: 'deepseek-chat',
-            'deepseek-v3': 'deepseek-chat',
-            'deepseek-r1': 'deepseek-reasoner'
-        };
-        return PROVIDERS[aliases[provider] || provider] || PROVIDERS['openai-gpt-6-luna'];
+    function resolveQuality(value) {
+        return QUALITY_ALIASES[value] || 'automatic';
     }
 
     async function hasAuthenticatedUser() {
@@ -62,17 +59,17 @@ const AiCopilot = (() => {
     /**
      * Set API configuration
      */
-    function configure({ model } = {}) {
-        if (model) CONFIG.model = model;
+    function configure({ model, quality } = {}) {
+        CONFIG.quality = resolveQuality(quality || model || CONFIG.quality);
 
         // Persist config (without sensitive keys shown)
         localStorage.setItem('spacelab_ai_config', JSON.stringify({
-            model: CONFIG.model
+            quality: CONFIG.quality
         }));
     }
 
     function setProvider(provider) {
-        CONFIG.model = provider;
+        CONFIG.quality = resolveQuality(provider);
     }
 
     /**
@@ -83,8 +80,8 @@ const AiCopilot = (() => {
             const saved = localStorage.getItem('spacelab_ai_config');
             if (saved) {
                 const c = JSON.parse(saved);
-                CONFIG.model = c.model || CONFIG.model;
-                localStorage.setItem('spacelab_ai_config', JSON.stringify({ model: CONFIG.model }));
+                CONFIG.quality = resolveQuality(c.quality || c.model || CONFIG.quality);
+                localStorage.setItem('spacelab_ai_config', JSON.stringify({ quality: CONFIG.quality }));
             }
         } catch { /* ignore */ }
     }
@@ -103,40 +100,20 @@ const AiCopilot = (() => {
     async function generateSession(metadata) {
         if (await hasAuthenticatedUser()) {
             try {
-                const provider = resolveProvider(metadata.ai_provider);
-                const functionName = provider.router;
-                const selectedModel = provider.model;
-                const sourceFile = prepareSourceFile(metadata.sourceFile, provider);
+                const quality = resolveQuality(metadata.ai_provider || CONFIG.quality);
+                const sourceFile = prepareSourceFile(metadata.sourceFile, { kind: 'gateway' });
 
-                console.log(`[AI] Llamando a Edge Function ${functionName} con modelo ${selectedModel}...`);
+                console.log(`[AI] Solicitando calidad ${quality} mediante ai-gateway...`);
                 const { sourceFile: _sourceFile, ai_provider: _aiProvider, ...metadataInput } = metadata;
-                let data;
-                try {
-                    data = await SupabaseClient.invokeFunction(functionName, {
-                        action: 'generate_session',
-                        requestId: createRequestId(),
-                        model: selectedModel,
-                        input: {
-                            metadata: metadataInput,
-                            sourceFile
-                        }
-                    });
-                } catch (fnErr) {
-                    if (functionName === 'openai-router' && (fnErr.message?.includes('Modelo no permitido') || fnErr.message?.includes('MODEL_NOT_ALLOWED'))) {
-                        console.warn('[AI] Fallback automático a gpt-5.4-mini en openai-router...');
-                        data = await SupabaseClient.invokeFunction('openai-router', {
-                            action: 'generate_session',
-                            requestId: createRequestId(),
-                            model: 'gpt-5.4-mini',
-                            input: {
-                                metadata: metadataInput,
-                                sourceFile
-                            }
-                        });
-                    } else {
-                        throw fnErr;
+                const data = await SupabaseClient.invokeFunction('ai-gateway', {
+                    action: 'generate_session',
+                    requestId: createRequestId(),
+                    quality,
+                    input: {
+                        metadata: metadataInput,
+                        sourceFile
                     }
-                }
+                });
 
                 // Si la función retorna un string de JSON
                 let resultObj = data;
@@ -301,31 +278,14 @@ const AiCopilot = (() => {
      * Run a supported action through an authenticated Supabase Edge Function.
      */
     async function runAction(action, input) {
-        const provider = resolveProvider(CONFIG.model);
         if (await hasAuthenticatedUser()) {
-            const functionName = provider.router;
-            console.log('[AI Helper] Invoking edge function ' + functionName + ' for ' + action + '...');
-            let data;
-            try {
-                data = await SupabaseClient.invokeFunction(functionName, {
-                    action,
-                    requestId: createRequestId(),
-                    model: provider.model,
-                    input
-                });
-            } catch (fnErr) {
-                if (functionName === 'openai-router' && (fnErr.message?.includes('Modelo no permitido') || fnErr.message?.includes('MODEL_NOT_ALLOWED'))) {
-                    console.warn('[AI Helper] Fallback automático a gpt-5.4-mini en openai-router...');
-                    data = await SupabaseClient.invokeFunction('openai-router', {
-                        action,
-                        requestId: createRequestId(),
-                        model: 'gpt-5.4-mini',
-                        input
-                    });
-                } else {
-                    throw fnErr;
-                }
-            }
+            console.log('[AI Helper] Invoking ai-gateway for ' + action + '...');
+            const data = await SupabaseClient.invokeFunction('ai-gateway', {
+                action,
+                requestId: createRequestId(),
+                quality: CONFIG.quality,
+                input
+            });
 
             let text = data;
             if (data && typeof data === 'object') {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="de068c946d22e847">
+    <meta name="app-build" content="d31a7a450a2f5a12">
     <script defer src="js/app-update.js?v=9a8fde8d6fc8"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
@@ -774,23 +774,22 @@
                             <div class="ai-model-header">
                                 <div>
                                     <span class="ai-model-eyebrow">Copiloto Space AI</span>
-                                    <strong>Modelo de generación</strong>
+                                    <strong>Enrutamiento inteligente</strong>
                                 </div>
                                 <span class="ai-model-status"><span></span> Disponible</span>
                             </div>
                             <label for="select-ai-provider" class="form-label">
-                                Modelo actual
+                                Modo de calidad
                             </label>
                             <select id="select-ai-provider" class="form-select">
-                                <option value="openai-gpt-6-luna" selected>OpenAI GPT-6 Luna — Principal y ultra rápido (Predeterminado)</option>
-                                <option value="openai-gpt-5.6-terra">OpenAI GPT-5.6 Terra — Avanzado y curricular</option>
-                                <option value="gemini-2.5-flash">Google Gemini 2.5 Flash — Multimodal nativo</option>
-                                <option value="deepseek-chat">DeepSeek Chat (V3) — Rápido y fluido</option>
-                                <option value="deepseek-reasoner">DeepSeek R1 — Razonamiento pedagógico profundo</option>
+                                <option value="automatic" selected>Automático — Recomendado</option>
+                                <option value="fast">Rápido — Menor latencia</option>
+                                <option value="balanced">Equilibrado — Calidad y eficiencia</option>
+                                <option value="max_quality">Máxima calidad — Trabajo curricular complejo</option>
                             </select>
                             <div id="model-capabilities-badge" class="model-capabilities-badge">
                                 <svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                                <span class="badge-text"><strong>GPT-6 Luna:</strong> Ultra rápido y eficiente a escala con soporte para archivos (PDF, imágenes y textos).</span>
+                                <span class="badge-text"><strong>Automático:</strong> El gateway elige la ruta más adecuada según la tarea y los archivos.</span>
                             </div>
                         </div>
 
@@ -2012,13 +2011,13 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script src="js/auth-ui.js?v=0be58a936fb8"></script>
     <script src="js/storage.js?v=8b5a46a47f3b"></script>
     <script src="js/templates.js?v=f5e808bcae1f"></script>
-    <script src="js/ai-copilot.js?v=881012833f53"></script>
+    <script src="js/ai-copilot.js?v=f8ce51abac85"></script>
     <script src="js/document-presentation.js?v=4b2211b4a49d"></script>
     <script src="js/core/app-utils.js?v=9158b73088e0"></script>
     <script src="js/services/local-export-client.js?v=0d9cf246bb3e"></script>
     <script src="js/services/document-source-processor.js?v=32fc60854ee7"></script>
     <script src="js/controllers/export-controller.js?v=740d4ca632a5"></script>
-    <script src="js/controllers/ai-controller.js?v=d523361455ea"></script>
+    <script src="js/controllers/ai-controller.js?v=1e1bb962e483"></script>
     <script src="js/controllers/workflow-controller.js?v=f7e38178723c"></script>
     <script src="js/controllers/students-controller.js?v=aa2a71d8ab33"></script>
     <script src="js/controllers/session-controller.js?v=5b10f56603a1"></script>
@@ -2026,8 +2025,8 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script src="js/ai/session-validator.js?v=46c382e152ab"></script>
     <script src="js/ai/session-adapter.js?v=637df5572e30"></script>
     <script src="js/ai/session-export.js?v=c8e3395fa3dc"></script>
-    <script src="js/chatbot.js?v=5d012708f356"></script>
-    <script src="js/pedagogy-brief.js?v=76e38aa1aaaa"></script>
+    <script src="js/chatbot.js?v=d5d092ac7195"></script>
+    <script src="js/pedagogy-brief.js?v=b91b016f2c68"></script>
     <!-- KaTeX — renderizado matemático (debe cargarse antes de app.js) -->
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
@@ -2037,7 +2036,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script src="js/paginador.js?v=8352d148864e"></script>
     <script src="js/ui-shell.js?v=3165d808d6a3"></script>
     <script src="js/landing.js?v=189f5c1ae45f"></script>
-    <script src="js/app.js?v=cb54cbc7f44a"></script>
+    <script src="js/app.js?v=640b0c68a586"></script>
     <script src="js/ficha-external-prompt.js?v=37839d226210"></script>
 </body>
 

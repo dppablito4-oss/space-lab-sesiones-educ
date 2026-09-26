@@ -34,13 +34,14 @@ const context = vm.createContext({
 vm.runInContext(`${fs.readFileSync('js/ai-copilot.js', 'utf8')}\nglobalThis.AiCopilotForTest = AiCopilot;`, context);
 const ai = context.AiCopilotForTest;
 
-async function expectProvider(provider, expectedFunction, expectedModel) {
+async function expectQuality(provider, expectedQuality) {
     calls.length = 0;
     ai.setProvider(provider);
     await ai.generateCriterios('Competencia', 'Tema', '5', 'Matemática');
     assert.equal(calls.length, 1, `${provider} should make one Edge Function request`);
-    assert.equal(calls[0].functionName, expectedFunction);
-    assert.equal(calls[0].body.model, expectedModel);
+    assert.equal(calls[0].functionName, 'ai-gateway');
+    assert.equal(calls[0].body.quality, expectedQuality);
+    assert.equal(calls[0].body.model, undefined);
     assert.equal(calls[0].body.action, 'generate_criteria');
     assert.match(calls[0].body.requestId, /^[0-9a-f-]{36}$/i);
     assert.deepEqual(JSON.parse(JSON.stringify(calls[0].body.input)), {
@@ -51,16 +52,14 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
 }
 
 (async () => {
-    await expectProvider('openai-gpt-6-luna', 'openai-router', 'gpt-6-luna');
-    await expectProvider('openai-gpt-5.6-terra', 'openai-router', 'gpt-5.6-terra');
-    await expectProvider('deepseek-chat', 'deepseek-router', 'deepseek-chat');
-    await expectProvider('deepseek-reasoner', 'deepseek-router', 'deepseek-reasoner');
-    await expectProvider('openai-gpt-6-astra', 'openai-router', 'gpt-6-astra');
-    await expectProvider('openai-gpt-6-sol', 'openai-router', 'gpt-6-sol');
-    await expectProvider('openai-gpt-5.6-luna', 'openai-router', 'gpt-5.6-luna');
-    await expectProvider('openai-gpt-5.4-mini', 'openai-router', 'gpt-5.4-mini');
-    await expectProvider('gemini-2.5-flash', 'gemini-router', 'gemini-2.5-flash');
-    await expectProvider('deepseek-v3', 'deepseek-router', 'deepseek-chat');
+    await expectQuality('automatic', 'automatic');
+    await expectQuality('fast', 'fast');
+    await expectQuality('balanced', 'balanced');
+    await expectQuality('max_quality', 'max_quality');
+    await expectQuality('openai-gpt-6-luna', 'automatic');
+    await expectQuality('openai-gpt-5.6-terra', 'max_quality');
+    await expectQuality('gemini-2.5-flash', 'fast');
+    await expectQuality('deepseek-v3', 'balanced');
 
     invokeResponse = {
         schemaVersion: '1.0',
@@ -90,6 +89,8 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     assert.equal(generated.momentos.desarrollo.proceso_1_procesos, undefined);
     const generationCall = calls.at(-1);
     assert.equal(generationCall.body.action, 'generate_session');
+    assert.equal(generationCall.functionName, 'ai-gateway');
+    assert.equal(generationCall.body.quality, 'max_quality');
     assert.equal(generationCall.body.systemPrompt, undefined);
     assert.equal(generationCall.body.prompt, undefined);
     assert.equal(generationCall.body.input.metadata.methodology, 'polya');
@@ -140,6 +141,11 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     assert.doesNotMatch(browserAiSource, /consulta con DeepSeek/);
     assert.doesNotMatch(browserAiSource, /systemPrompt/);
     assert.doesNotMatch(browserAiSource, /\bprompt\s*:/, 'The browser must use structured action inputs');
+    assert.doesNotMatch(
+        browserAiSource,
+        /invokeFunction\(['"](?:openai-router|gemini-router|deepseek-router)['"]/,
+        'The browser must invoke only the server-authoritative AI gateway'
+    );
     for (const action of ['generate_session', 'generate_criteria', 'refine_text', 'pedagogy_brief', 'summarize_brief', 'chatbot']) {
         assert.match(browserAiSource, new RegExp(action), `Missing structured action: ${action}`);
     }

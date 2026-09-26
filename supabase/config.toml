@@ -1,5 +1,8 @@
 project_id = "koptglmifwpzrfzvipnm"
 
+[functions.ai-gateway]
+verify_jwt = false
+
 [functions.deepseek-router]
 verify_jwt = false
 

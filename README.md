@@ -59,7 +59,7 @@ El sistema implementa una **arquitectura híbrida** distribuida en tres capas:
                ▼                               ▼
 ┌──────────────────────────────┐ ┌─────────────────────────────┐
 │   MOTOR LOCAL FASTAPI        │ │   SUPABASE EDGE FUNCTIONS   │
-│   (pablitohost.exe)          │ │   - openai-router           │
+│   (pablitohost.exe)          │ │   - ai-gateway              │
 │   - Python 3.11 + python-docx│ │   - gemini-router           │
 │   - Parser OMML Math & PNG   │ │   - deepseek-router         │
 │   - Generador DOCX / PDF A4  │ │   - pablito-mailer          │
@@ -115,16 +115,17 @@ Para resolver esto sin depender de servidores externos lentos o que comprometan 
 
 Las consultas de IA se enrutan de forma cifrada a través de Supabase Edge Functions:
 ```text
-Navegador -> Supabase Edge Function (JWT seguro) -> Proveedor de IA
+Navegador -> ai-gateway (JWT seguro) -> router interno -> Proveedor de IA
 ```
 
-- **Enrutadores dedicados**:
+- **Gateway server-authoritative**: El navegador solicita `automatic`, `fast`, `balanced` o `max_quality`; el servidor decide proveedor y modelo y registra la razón de la ruta.
+- **Enrutadores internos/legacy para rollback**:
   - `openai-router`: `gpt-6-luna` (principal/predeterminado en generador y chatbot) y `gpt-5.6-terra` (avanzado y curricular).
   - `gemini-router`: `gemini-2.5-flash` (multimodal nativo).
   - `deepseek-router`: `deepseek-chat` (conversacional) y `deepseek-reasoner` (razonamiento pedagógico profundo R1).
 - **Invocación Canónica Directa**: Las Edge Functions invocan de manera directa los modelos canónicos configurados sin degradar a familias de modelos anteriores (`gpt-4o` o `gpt-4o-mini`).
 - **Seguridad**: El navegador del docente nunca maneja, solicita ni almacena las API Keys maestras de los proveedores de IA.
-- **Monetización y Créditos Automatizados**: La tabla `ai_credits` en Supabase audita y descuenta créditos de forma atómica por usuario (`rpc/debit_ai_credits`), evitando verificaciones manuales.
+- **Monetización y Créditos Automatizados**: `credit_grants`, `credit_ledger` y `ai_usage` auditan reservas, consumo y reembolsos de forma atómica por usuario.
 
 ### 4. Contrato Canónico de Datos (`SessionDocument v1`)
 
@@ -247,6 +248,7 @@ node tests/app-utils.test.js              # Valida utilidades y protección XSS
 node tests/local-export-client.test.js    # Valida cliente PNA del motor local
 node tests/document-source-processor.test.js # Valida procesamiento de fuentes PDF
 node tests/app-update.test.js              # Valida detección y aviso de nuevas versiones
+node tests/test_ai_gateway_routing.js      # Valida routing server-side del AI Gateway
 node tests/test_model_catalog.js          # Valida catálogo y aliases de modelos
 node tests/test_entitlements.js           # Valida shadow/enforcement de capacidades
 node tests/test_credit_ledger_logic.js    # Valida orden de consumo y reembolsos
@@ -285,6 +287,7 @@ Para actualizar las Edge Functions en el proyecto Supabase:
 
 ```powershell
 npx supabase link --project-ref koptglmifwpzrfzvipnm
+npx supabase functions deploy ai-gateway --no-verify-jwt
 npx supabase functions deploy openai-router --no-verify-jwt
 npx supabase functions deploy gemini-router --no-verify-jwt
 npx supabase functions deploy deepseek-router --no-verify-jwt

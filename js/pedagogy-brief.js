@@ -323,14 +323,14 @@ const PedagogyBrief = (() => {
         if (!window.SupabaseClient || !SupabaseClient.client) {
             throw new Error('No se pudo conectar con Supabase.');
         }
-        const data = await SupabaseClient.invokeFunction('gemini-router', {
+        const data = await SupabaseClient.invokeFunction('ai-gateway', {
             action,
             requestId: _createRequestId(),
-            model: 'gemini-2.5-flash',
+            quality: 'automatic',
             input: { conversation: userPrompt }
         });
         const text = _extractText(data);
-        if (!text || !text.trim()) throw new Error('Gemini no devolvió contenido.');
+        if (!text || !text.trim()) throw new Error('El servicio de IA no devolvió contenido.');
         return text.trim();
     }
 

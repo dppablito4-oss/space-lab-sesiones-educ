@@ -8,6 +8,27 @@
 
 ---
 
+## Estado de ejecución — 2026-09-26
+
+```text
+FASE 0  baseline y regresión                    PARCIAL
+FASE 1  identidad de modelos                    AVANZADA
+FASE 2  telemetría económica                    PARCIAL
+FASE 3  plans + entitlements                    IMPLEMENTADA
+FASE 4  enforcement                             SHADOW SEGURO
+FASE 5  credit grants + ledger                  IMPLEMENTADA
+FASE 6  AI Gateway                              V1 DESPLEGADA
+FASE 7  panel SaaS                              INICIAL
+FASE 8  billing                                 PENDIENTE
+FASE 9  beta ampliada                           PENDIENTE
+```
+
+La interfaz invoca únicamente `ai-gateway` y solicita niveles de calidad. El gateway decide proveedor/modelo, respeta kill switches, conserva routers legacy para rollback y registra `requested_quality` y `route_reason` en `ai_usage`.
+
+Pendiente para cerrar Fase 6: fallback transaccional entre proveedores, pruebas PostgreSQL de integración y retiro gradual del acceso directo a routers legacy después de 1–2 releases estables.
+
+---
+
 ## 0. Decisión arquitectónica principal
 
 Space Lab **no debe reescribirse**. El sistema de sesiones ya es el producto validado y debe tratarse como un núcleo estable.
