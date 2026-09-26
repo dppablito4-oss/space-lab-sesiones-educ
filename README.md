@@ -246,6 +246,7 @@ node tests/theme.test.js                  # Valida persistencia y cambio de tema
 node tests/app-utils.test.js              # Valida utilidades y protección XSS
 node tests/local-export-client.test.js    # Valida cliente PNA del motor local
 node tests/document-source-processor.test.js # Valida procesamiento de fuentes PDF
+node tests/app-update.test.js              # Valida detección y aviso de nuevas versiones
 node tests/test_model_catalog.js          # Valida catálogo y aliases de modelos
 node tests/test_entitlements.js           # Valida shadow/enforcement de capacidades
 node tests/test_credit_ledger_logic.js    # Valida orden de consumo y reembolsos
@@ -272,7 +273,9 @@ Para evitar que los navegadores o CDNs utilicen versiones obsoletas de archivos 
 python scripts/version_assets.py --write
 ```
 
-Este script calcula el hash SHA-256 del contenido de cada script o stylesheet referenciado en `index.html` y actualiza automáticamente los parámetros de consulta `?v=<hash>`. La integración continua (GitHub Actions) verifica que los hashes estén sincronizados antes de autorizar cualquier integración a la rama principal.
+Este script calcula el hash SHA-256 del contenido de cada script o stylesheet local y actualiza automáticamente los parámetros `?v=<hash>`. También genera `app-version.json` y sincroniza el identificador de build incluido en las páginas interactivas.
+
+Las páginas consultan el manifiesto con `cache: no-store`. Cuando detectan un despliegue nuevo muestran un aviso para actualizar mediante una URL versionada, sin recargar automáticamente ni interrumpir trabajo sin guardar. La integración continua verifica que hashes, HTML y manifiesto permanezcan sincronizados.
 
 ---
 
