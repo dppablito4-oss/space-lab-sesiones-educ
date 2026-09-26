@@ -267,6 +267,7 @@ python tests/backend_smoke.py             # Prueba de humo del servidor FastAPI
 python tests/frontend_security.py         # Análisis de seguridad del frontend
 python tests/test_asset_versioning.py     # Hashes de assets estables en Windows/Linux
 python tests/plan_entitlements.py         # Matriz comercial y fallback de entitlements
+python tests/ai_quota_policies.py         # Separación entre plan comercial y cuotas IA
 ```
 
 ---

@@ -51,6 +51,7 @@ jobs:
           python tests/profile_security.py
           python tests/ai_credit_security.py
           python tests/plan_entitlements.py
+          python tests/ai_quota_policies.py
 
       - name: Validate JavaScript syntax
         run: find js -name '*.js' -print0 | xargs -0 -n1 node --check
