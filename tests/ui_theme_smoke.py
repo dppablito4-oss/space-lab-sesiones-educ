@@ -70,6 +70,29 @@ def run() -> None:
                 document.querySelector('#home-view').classList.remove('hidden');
                 """
             )
+            page.evaluate(
+                """
+                async () => {
+                    window.SupabaseClient = {
+                        getCurrentUser: async () => ({ email: 'docente@example.com' }),
+                        getUserProfile: async () => ({ docente: 'Docente Prueba' }),
+                        getAiCreditBalance: async () => ({ balance: 150 }),
+                        getCommercialPlan: async () => 'teacher'
+                    };
+                    await window.SpaceLabHome.refresh();
+                }
+                """
+            )
+            page.locator('[data-home-action="view-plans"]').click()
+            plans_dialog = page.locator('#home-plans-dialog')
+            assert plans_dialog.is_visible()
+            assert plans_dialog.get_attribute('open') is not None
+            assert plans_dialog.locator('[data-plan-code]').count() == 4
+            assert plans_dialog.locator('[data-plan-code="teacher"]').get_attribute('aria-current') == 'true'
+            assert plans_dialog.locator('[data-plan-code="teacher"] .home-plan-status').inner_text() == 'Plan actual'
+            assert plans_dialog.get_by_text('En desarrollo', exact=True).count() == 3
+            assert 'Comprar' not in plans_dialog.inner_text()
+
             workspace_styles = {}
             for theme in ("light", "dark"):
                 page.evaluate("theme => window.SpaceLabTheme.setPreference(theme)", theme)
@@ -83,7 +106,10 @@ def run() -> None:
                             card: style('.home-tool-card-active').backgroundColor,
                             heading: style('.home-tool-copy h3').color,
                             secondary: style('.home-tool-copy p').color,
-                            border: style('.home-tool-card-active').borderColor
+                            border: style('.home-tool-card-active').borderColor,
+                            planCard: style('.home-plan-card').backgroundColor,
+                            planHeading: style('.home-plan-card h3').color,
+                            planCopy: style('.home-plan-description').color
                         };
                     }
                     """
@@ -97,10 +123,19 @@ def run() -> None:
                 assert contrast(styles["heading"], styles["card"]) >= 7
                 assert contrast(styles["secondary"], styles["card"]) >= 4.5
                 assert styles["border"] != styles["card"]
+                assert contrast(styles["planHeading"], styles["planCard"]) >= 7
+                assert contrast(styles["planCopy"], styles["planCard"]) >= 4.5
 
             page.set_viewport_size({"width": 390, "height": 844})
             assert page.locator("#home-view").is_visible()
             assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+            assert plans_dialog.is_visible()
+            assert plans_dialog.evaluate("element => element.scrollWidth <= element.clientWidth")
+            assert page.locator('.home-plans-grid').evaluate(
+                "element => getComputedStyle(element).gridTemplateColumns.split(' ').length === 1"
+            )
+            page.locator('[data-home-action="close-plans"]').click()
+            assert not plans_dialog.is_visible()
             page.set_viewport_size({"width": 1440, "height": 900})
             page.evaluate(
                 """

@@ -13,6 +13,16 @@ assert.match(html, /data-home-action="new-session"/);
 assert.match(html, /Proyectos de aprendizaje/);
 assert.ok(html.indexOf('id="home-view"') < html.indexOf('id="app-view"'));
 
+const plansDialog = html.slice(
+    html.indexOf('id="home-plans-dialog"'),
+    html.indexOf('<!--', html.indexOf('id="home-plans-dialog"')),
+);
+assert.match(plansDialog, /Comparación de planes/);
+assert.equal((plansDialog.match(/data-plan-code=/g) || []).length, 4);
+assert.match(plansDialog, /30[\s\S]*100[\s\S]*150[\s\S]*400/);
+assert.match(plansDialog, /No se realizará ningún cobro ni cambio de plan/);
+assert.doesNotMatch(plansDialog, /Comprar|checkout|Suscribirme/i);
+
 assert.match(router, /#\/home/);
 assert.match(router, /#\/sessions\/new/);
 assert.match(router, /#\\\/sessions\\\/\[\^\/\]\+\\\/edit/);
@@ -24,6 +34,9 @@ assert.match(home, /StorageManager\.getAllSessions/);
 assert.match(home, /getAiCreditBalance/);
 assert.match(home, /getCommercialPlan/);
 assert.doesNotMatch(home, /wallet\?\.planId/);
+assert.match(home, /showModal\(\)/);
+assert.match(home, /card\.dataset\.planCode === currentPlanCode/);
+assert.match(home, /isCurrent \? 'Plan actual' : 'En desarrollo'/);
 assert.match(home, /escapeHTML\(sessionTitle\(session\)\)/);
 assert.match(home, /RECENT_LIMIT = 5/);
 assert.match(app, /window\.appOpenSession/);

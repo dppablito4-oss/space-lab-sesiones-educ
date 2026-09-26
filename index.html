@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="14f03e3445b55710">
+    <meta name="app-build" content="f753de88f1ffb6c6">
     <script defer src="js/app-update.js?v=9a8fde8d6fc8"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
@@ -96,7 +96,7 @@
     <link rel="stylesheet" href="css/document-preview.css?v=d4eae174c2ac">
     <link rel="stylesheet" href="css/app-theme.css?v=a809f0368131">
     <link rel="stylesheet" href="css/landing.css?v=7358dc7672f4">
-    <link rel="stylesheet" href="css/home.css?v=1c7f6690cfea">
+    <link rel="stylesheet" href="css/home.css?v=8c103ed38555">
     <link rel="stylesheet" href="css/print.css?v=45bfd665f39e" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) asíncrono -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -690,9 +690,13 @@
                     <span class="home-summary-icon accent-purple"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg></span>
                     <div><strong id="home-credit-count">--</strong><span>Créditos de IA</span></div>
                 </article>
-                <article class="home-summary-card">
+                <article class="home-summary-card home-plan-summary">
                     <span class="home-summary-icon accent-green"><svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg></span>
-                    <div><strong id="home-plan-name">Docente</strong><span>Plan actual</span></div>
+                    <div class="home-plan-summary-copy"><strong id="home-plan-name">Docente</strong><span>Plan actual</span></div>
+                    <button type="button" class="home-plan-link" data-home-action="view-plans">
+                        Ver planes
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                    </button>
                 </article>
             </section>
 
@@ -752,6 +756,88 @@
                 </div>
             </section>
         </main>
+
+        <dialog id="home-plans-dialog" class="home-plans-dialog" aria-labelledby="home-plans-title" aria-describedby="home-plans-description">
+            <div class="home-plans-shell">
+                <header class="home-plans-header">
+                    <div>
+                        <span class="home-eyebrow">Comparación de planes</span>
+                        <h2 id="home-plans-title">Conoce qué incluye cada plan</h2>
+                        <p id="home-plans-description">Conoce las diferencias antes de decidir. Los cambios de plan y los pagos todavía no están habilitados.</p>
+                    </div>
+                    <button type="button" class="home-plans-close" data-home-action="close-plans" aria-label="Cerrar comparación de planes">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+                    </button>
+                </header>
+
+                <div class="home-plans-grid">
+                    <article class="home-plan-card" data-plan-code="free">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Para comenzar</span><h3>Gratuito</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Lo esencial para crear y guardar tus primeras sesiones.</p>
+                        <p class="home-plan-credits"><strong>30</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Crear sesiones con IA</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Guardar tus planificaciones</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Exportar a Word y PDF</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+
+                    <article class="home-plan-card" data-plan-code="beta_teacher">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Acceso anticipado</span><h3>Docente Beta</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Para docentes que prueban y ayudan a mejorar Space Lab.</p>
+                        <p class="home-plan-credits"><strong>100</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Todo lo incluido en Gratuito</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Adjuntar fuentes al copiloto</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Acceso anticipado a novedades</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+
+                    <article class="home-plan-card home-plan-card-featured" data-plan-code="teacher">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Para el día a día</span><h3>Docente Plus</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Más capacidad y herramientas para una planificación frecuente.</p>
+                        <p class="home-plan-credits"><strong>150</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Todo lo incluido en Gratuito</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Archivos y calidad equilibrada</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Plantillas personalizadas</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+
+                    <article class="home-plan-card" data-plan-code="pro">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Máxima capacidad</span><h3>Docente Pro</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Para un uso intensivo y las capacidades más avanzadas.</p>
+                        <p class="home-plan-credits"><strong>400</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Todo lo incluido en Plus</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Calidad máxima de IA</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Acceso previsto a planificación avanzada</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+                </div>
+
+                <footer class="home-plans-footer">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                    <p><strong>Vista informativa.</strong> No se realizará ningún cobro ni cambio de plan desde esta pantalla.</p>
+                </footer>
+            </div>
+        </dialog>
     </div>
 
     <!-- ═══════════ MAIN APP ═══════════ -->
@@ -2176,7 +2262,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script src="js/paginador.js?v=d765e6e6e46d"></script>
     <script src="js/ui-shell.js?v=2ecdd9416d68"></script>
-    <script src="js/home.js?v=4b2049de7288"></script>
+    <script src="js/home.js?v=ac2299c8cb4b"></script>
     <script src="js/landing.js?v=5dd5ea558854"></script>
     <script src="js/app.js?v=977c75a5742d"></script>
     <script src="js/ficha-external-prompt.js?v=37839d226210"></script>

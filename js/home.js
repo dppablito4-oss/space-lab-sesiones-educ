@@ -3,6 +3,7 @@ window.SpaceLabHome = (() => {
     const RECENT_LIMIT = 5;
     let initialized = false;
     let showAllSessions = false;
+    let currentPlanCode = null;
 
     const PLAN_LABELS = {
         free: 'Gratuito',
@@ -128,8 +129,42 @@ window.SpaceLabHome = (() => {
         const plan = byId('home-plan-name');
         const accountPlan = byId('home-account-plan');
         const planName = PLAN_LABELS[planCode] || 'Docente';
+        currentPlanCode = Object.prototype.hasOwnProperty.call(PLAN_LABELS, planCode) ? planCode : null;
         if (plan) plan.textContent = planName;
         if (accountPlan) accountPlan.textContent = `Plan ${planName}`;
+        renderPlanComparison();
+    }
+
+    function renderPlanComparison() {
+        document.querySelectorAll('#home-plans-dialog [data-plan-code]').forEach(card => {
+            const isCurrent = card.dataset.planCode === currentPlanCode;
+            card.classList.toggle('is-current', isCurrent);
+            if (isCurrent) card.setAttribute('aria-current', 'true');
+            else card.removeAttribute('aria-current');
+
+            const badge = card.querySelector('.home-plan-current-badge');
+            const status = card.querySelector('.home-plan-status');
+            if (badge) badge.hidden = !isCurrent;
+            if (status) status.textContent = isCurrent ? 'Plan actual' : 'En desarrollo';
+        });
+    }
+
+    function openPlansDialog() {
+        const dialog = byId('home-plans-dialog');
+        if (!dialog) return;
+        renderPlanComparison();
+        if (typeof dialog.showModal === 'function') {
+            if (!dialog.open) dialog.showModal();
+            return;
+        }
+        dialog.setAttribute('open', '');
+    }
+
+    function closePlansDialog() {
+        const dialog = byId('home-plans-dialog');
+        if (!dialog?.open) return;
+        if (typeof dialog.close === 'function') dialog.close();
+        else dialog.removeAttribute('open');
     }
 
     async function refresh(options = {}) {
@@ -198,6 +233,8 @@ window.SpaceLabHome = (() => {
                 const action = actionButton.dataset.homeAction;
                 if (action === 'new-session') window.LandingRouter?.openNewSession?.();
                 if (action === 'continue-session') window.LandingRouter?.showApp?.(true);
+                if (action === 'view-plans') openPlansDialog();
+                if (action === 'close-plans') closePlansDialog();
                 return;
             }
 
@@ -208,6 +245,9 @@ window.SpaceLabHome = (() => {
         byId('home-toggle-all-sessions')?.addEventListener('click', () => {
             showAllSessions = !showAllSessions;
             renderSessions(getSessions());
+        });
+        byId('home-plans-dialog')?.addEventListener('click', event => {
+            if (event.target === event.currentTarget) closePlansDialog();
         });
         byId('home-logout')?.addEventListener('click', handleLogout);
         window.addEventListener('spacelab:aicredits', event => renderWallet(event.detail));

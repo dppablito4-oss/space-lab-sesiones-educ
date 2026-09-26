@@ -341,6 +341,273 @@
     font-size: 0.7rem;
 }
 
+.home-plan-summary-copy {
+    min-width: 0;
+}
+
+.home-plan-link {
+    min-height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: auto;
+    padding: 7px 10px;
+    border: 0;
+    border-radius: 9px;
+    color: var(--color-primary);
+    background: var(--color-primary-dim);
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 750;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: color var(--transition-fast), background var(--transition-fast), transform var(--transition-fast);
+}
+
+.home-plan-link:hover {
+    color: var(--color-primary-hover);
+    background: var(--color-muted);
+    transform: translateX(1px);
+}
+
+.home-plan-link:focus-visible,
+.home-plans-close:focus-visible {
+    outline: 2px solid var(--color-border-focus);
+    outline-offset: 2px;
+}
+
+.home-plan-link .ui-icon {
+    width: 14px;
+    height: 14px;
+}
+
+.home-plans-dialog {
+    width: min(1180px, calc(100vw - 40px));
+    max-width: none;
+    max-height: calc(100vh - 40px);
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid var(--border-hover);
+    border-radius: 22px;
+    color: var(--text-primary);
+    background: var(--color-card);
+    box-shadow: var(--shadow-lg);
+}
+
+.home-plans-dialog::backdrop {
+    background: color-mix(in srgb, var(--color-background) 76%, transparent);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.home-plans-shell {
+    max-height: calc(100vh - 42px);
+    overflow-y: auto;
+    padding: clamp(22px, 3vw, 36px);
+}
+
+.home-plans-header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    gap: 24px;
+}
+
+.home-plans-header h2 {
+    max-width: 760px;
+    margin: 0;
+    color: var(--text-primary);
+    font-size: clamp(1.55rem, 3vw, 2.25rem);
+    line-height: 1.12;
+    letter-spacing: -0.035em;
+}
+
+.home-plans-header p {
+    max-width: 760px;
+    margin: 11px 0 0;
+    color: var(--color-muted-foreground);
+    font-size: 0.87rem;
+    line-height: 1.6;
+}
+
+.home-plans-close {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    color: var(--text-secondary);
+    background: var(--color-card-surface);
+    cursor: pointer;
+}
+
+.home-plans-close:hover {
+    color: var(--text-primary);
+    border-color: var(--border-hover);
+}
+
+.home-plans-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+    margin-top: 28px;
+}
+
+.home-plan-card {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    background: var(--color-card-surface);
+}
+
+.home-plan-card-featured {
+    border-color: var(--color-violet-border);
+    background: linear-gradient(160deg, var(--color-violet-dim), var(--color-card-surface) 45%);
+}
+
+.home-plan-card.is-current {
+    border-color: var(--color-primary);
+    box-shadow: inset 0 0 0 1px var(--color-primary-ring);
+}
+
+.home-plan-card-heading {
+    min-height: 48px;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: 8px;
+}
+
+.home-plan-kicker {
+    display: block;
+    color: var(--color-muted-foreground);
+    font-size: 0.63rem;
+    font-weight: 700;
+    letter-spacing: 0.065em;
+    text-transform: uppercase;
+}
+
+.home-plan-card h3 {
+    margin: 4px 0 0;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+}
+
+.home-plan-current-badge {
+    flex: 0 0 auto;
+    padding: 4px 7px;
+    border-radius: 999px;
+    color: var(--color-primary);
+    background: var(--color-primary-dim);
+    font-size: 0.58rem;
+    font-weight: 750;
+    white-space: nowrap;
+}
+
+.home-plan-description {
+    min-height: 57px;
+    margin: 13px 0 0;
+    color: var(--color-muted-foreground);
+    font-size: 0.74rem;
+    line-height: 1.55;
+}
+
+.home-plan-credits {
+    display: flex;
+    align-items: baseline;
+    gap: 7px;
+    margin: 17px 0 0;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+}
+
+.home-plan-credits strong {
+    color: var(--text-primary);
+    font-size: 1.7rem;
+    letter-spacing: -0.04em;
+}
+
+.home-plan-credits span {
+    color: var(--color-muted-foreground);
+    font-size: 0.62rem;
+    line-height: 1.3;
+}
+
+.home-plan-benefits {
+    display: grid;
+    gap: 11px;
+    margin: 17px 0 22px;
+    padding: 0;
+    list-style: none;
+}
+
+.home-plan-benefits li {
+    display: grid;
+    grid-template-columns: 16px minmax(0, 1fr);
+    gap: 8px;
+    color: var(--text-secondary);
+    font-size: 0.71rem;
+    line-height: 1.4;
+}
+
+.home-plan-benefits .ui-icon {
+    width: 15px;
+    height: 15px;
+    color: var(--color-success);
+}
+
+.home-plan-status {
+    min-height: 35px;
+    display: grid;
+    place-items: center;
+    margin-top: auto;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--color-muted-foreground);
+    background: var(--color-muted);
+    font-size: 0.7rem;
+    font-weight: 750;
+}
+
+.home-plan-card.is-current .home-plan-status {
+    border-color: var(--color-violet-border);
+    color: var(--color-success);
+    background: var(--surface-green);
+}
+
+.home-plans-footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 18px;
+    padding: 13px 15px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--color-muted-foreground);
+    background: var(--color-card-surface);
+}
+
+.home-plans-footer .ui-icon {
+    flex: 0 0 auto;
+    color: var(--color-primary);
+}
+
+.home-plans-footer p {
+    margin: 0;
+    font-size: 0.72rem;
+    line-height: 1.45;
+}
+
+.home-plans-footer strong {
+    color: var(--text-primary);
+}
+
 .home-section {
     margin-top: 56px;
 }
@@ -586,6 +853,14 @@
     .home-tool-card {
         min-height: 0;
     }
+
+    .home-plans-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .home-plan-description {
+        min-height: 0;
+    }
 }
 
 @media (max-width: 620px) {
@@ -653,6 +928,50 @@
     .home-summary-card div > span {
         font-size: 0.58rem;
         line-height: 1.25;
+    }
+
+    .home-plan-summary {
+        position: relative;
+        padding-bottom: 43px;
+    }
+
+    .home-plan-link {
+        position: absolute;
+        right: 7px;
+        bottom: 7px;
+        left: 7px;
+        justify-content: center;
+        min-height: 29px;
+        padding: 5px;
+        font-size: 0.62rem;
+    }
+
+    .home-plans-dialog {
+        width: calc(100vw - 20px);
+        max-height: calc(100vh - 20px);
+        border-radius: 17px;
+    }
+
+    .home-plans-shell {
+        max-height: calc(100vh - 22px);
+        padding: 19px 15px;
+    }
+
+    .home-plans-header {
+        gap: 12px;
+    }
+
+    .home-plans-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .home-plans-grid {
+        grid-template-columns: 1fr;
+        margin-top: 22px;
+    }
+
+    .home-plan-card {
+        padding: 18px;
     }
 
     .home-section {
