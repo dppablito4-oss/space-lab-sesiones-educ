@@ -18,7 +18,7 @@ FASE 3  plans + entitlements                    IMPLEMENTADA
 FASE 4  enforcement                             SHADOW SEGURO
 FASE 5  credit grants + ledger                  IMPLEMENTADA
 FASE 6  AI Gateway                              V1.1 DESPLEGADA
-FASE 7  panel SaaS                              INICIAL
+FASE 7  panel SaaS                              MI ESPACIO V1
 FASE 8  billing                                 PENDIENTE
 FASE 9  beta ampliada                           PENDIENTE
 ```
@@ -26,6 +26,8 @@ FASE 9  beta ampliada                           PENDIENTE
 La interfaz invoca únicamente `ai-gateway` y solicita niveles de calidad. El gateway decide proveedor/modelo, respeta kill switches, conserva routers legacy para rollback y registra `requested_quality` y `route_reason` en `ai_usage`. Cada solicitud tiene una clave idempotente propia; los intentos por proveedor se registran por separado y el gateway aplica fallback seguro ante errores transitorios sin duplicar el cobro.
 
 Pendiente para cerrar Fase 6: pruebas PostgreSQL de integración y retiro gradual del acceso directo a routers legacy después de 1–2 releases estables.
+
+La Fase 7 comienza con `Mi espacio` como inicio autenticado: presenta el plan y los créditos, permite crear o continuar sesiones y separa la biblioteca personal del editor. La navegación queda preparada para incorporar proyectos y unidades sin mezclar esos documentos con la tabla actual de sesiones.
 
 ---
 

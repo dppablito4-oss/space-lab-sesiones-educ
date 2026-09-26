@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="d31a7a450a2f5a12">
+    <meta name="app-build" content="773d174978ba7596">
     <script defer src="js/app-update.js?v=9a8fde8d6fc8"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
@@ -96,6 +96,7 @@
     <link rel="stylesheet" href="css/document-preview.css?v=d4eae174c2ac">
     <link rel="stylesheet" href="css/app-theme.css?v=a809f0368131">
     <link rel="stylesheet" href="css/landing.css?v=7358dc7672f4">
+    <link rel="stylesheet" href="css/home.css?v=fd79d0303d21">
     <link rel="stylesheet" href="css/print.css?v=c79edb3b35bc" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) asíncrono -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -617,8 +618,144 @@
         </footer>
     </div>
 
+    <!-- ═══════════ MI ESPACIO ═══════════ -->
+    <div id="home-view" class="home-view hidden">
+        <header class="home-header">
+            <button type="button" class="home-brand" data-action="view-home" aria-label="Ir a Mi espacio">
+                <span class="home-brand-mark"><img src="assets/favicon.svg" alt="" aria-hidden="true"></span>
+                <span>
+                    <strong>Space Lab</strong>
+                    <small>Mi espacio docente</small>
+                </span>
+            </button>
+
+            <nav class="home-nav" aria-label="Navegación principal">
+                <a href="#/home" class="home-nav-link active">Mi espacio</a>
+                <a href="#/sessions" class="home-nav-link">Mis sesiones</a>
+            </nav>
+
+            <div class="home-account">
+                <div class="home-account-copy">
+                    <strong id="home-account-name">Docente</strong>
+                    <span id="home-account-plan">Plan docente</span>
+                </div>
+                <span id="home-account-avatar" class="home-account-avatar" aria-hidden="true">D</span>
+                <button type="button" id="home-logout" class="btn btn-ghost btn-sm" title="Cerrar sesión">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-logout"></use></svg>
+                    <span>Salir</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="home-main" id="home-main">
+            <section class="home-welcome" aria-labelledby="home-welcome-title">
+                <div class="home-welcome-copy">
+                    <span class="home-eyebrow">Tu centro de planificación</span>
+                    <h1 id="home-welcome-title">Bienvenido a tu espacio docente</h1>
+                    <p>Continúa una planificación o crea una nueva sesión con una guía clara, paso a paso.</p>
+                    <div class="home-primary-actions">
+                        <button type="button" class="btn btn-primary home-primary-button" data-home-action="new-session">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                            Crear nueva sesión
+                        </button>
+                        <button type="button" id="home-continue-session" class="btn btn-ghost home-secondary-button hidden" data-home-action="continue-session">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
+                            Continuar último borrador
+                        </button>
+                    </div>
+                </div>
+
+                <aside class="home-guide" aria-label="Guía para comenzar">
+                    <div class="home-guide-heading">
+                        <span class="home-guide-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg></span>
+                        <div>
+                            <span>Primera sesión</span>
+                            <strong>Te acompañamos en cada paso</strong>
+                        </div>
+                    </div>
+                    <ol class="home-guide-steps">
+                        <li><span>1</span><p><strong>Completa los datos</strong>Indica nivel, área y propósito.</p></li>
+                        <li><span>2</span><p><strong>Genera con IA</strong>Obtén una propuesta alineada al CNEB.</p></li>
+                        <li><span>3</span><p><strong>Revisa y exporta</strong>Edita libremente y descarga tu documento.</p></li>
+                    </ol>
+                </aside>
+            </section>
+
+            <section class="home-summary" aria-label="Resumen de la cuenta">
+                <article class="home-summary-card">
+                    <span class="home-summary-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></span>
+                    <div><strong id="home-session-count">0</strong><span>Sesiones guardadas</span></div>
+                </article>
+                <article class="home-summary-card">
+                    <span class="home-summary-icon accent-purple"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg></span>
+                    <div><strong id="home-credit-count">--</strong><span>Créditos de IA</span></div>
+                </article>
+                <article class="home-summary-card">
+                    <span class="home-summary-icon accent-green"><svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg></span>
+                    <div><strong id="home-plan-name">Docente</strong><span>Plan actual</span></div>
+                </article>
+            </section>
+
+            <section class="home-section" aria-labelledby="home-tools-title">
+                <div class="home-section-heading">
+                    <div>
+                        <span class="home-eyebrow">Herramientas</span>
+                        <h2 id="home-tools-title">¿Qué deseas preparar?</h2>
+                    </div>
+                </div>
+                <div class="home-tool-grid">
+                    <article class="home-tool-card home-tool-card-active">
+                        <span class="home-tool-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></span>
+                        <div class="home-tool-copy">
+                            <span class="home-tool-status">Disponible</span>
+                            <h3>Sesiones de aprendizaje</h3>
+                            <p>Diseña, genera y exporta sesiones alineadas al CNEB para Inicial, Primaria y Secundaria.</p>
+                        </div>
+                        <button type="button" class="home-tool-action" data-home-action="new-session">
+                            Crear sesión <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                        </button>
+                    </article>
+                    <article class="home-tool-card home-tool-card-upcoming" aria-label="Proyectos de aprendizaje, próximamente">
+                        <span class="home-tool-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg></span>
+                        <div class="home-tool-copy">
+                            <span class="home-tool-status">Próximamente</span>
+                            <h3>Proyectos de aprendizaje</h3>
+                            <p>Organiza retos, productos y actividades articuladas en una planificación de mayor alcance.</p>
+                        </div>
+                    </article>
+                    <article class="home-tool-card home-tool-card-upcoming" aria-label="Unidades de aprendizaje, próximamente">
+                        <span class="home-tool-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-list"></use></svg></span>
+                        <div class="home-tool-copy">
+                            <span class="home-tool-status">Próximamente</span>
+                            <h3>Unidades de aprendizaje</h3>
+                            <p>Reúne sesiones, competencias y evidencias dentro de una unidad curricular completa.</p>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <section id="home-sessions-section" class="home-section home-sessions-section" aria-labelledby="home-sessions-title">
+                <div class="home-section-heading">
+                    <div>
+                        <span class="home-eyebrow">Biblioteca personal</span>
+                        <h2 id="home-sessions-title">Mis sesiones</h2>
+                    </div>
+                    <button type="button" id="home-toggle-all-sessions" class="btn btn-ghost btn-sm hidden">Ver todas</button>
+                </div>
+                <div id="home-session-list" class="home-session-list" aria-live="polite">
+                    <div class="home-empty-sessions">
+                        <span><svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg></span>
+                        <h3>Aún no tienes sesiones guardadas</h3>
+                        <p>Crea tu primera planificación y aparecerá aquí automáticamente.</p>
+                        <button type="button" class="btn btn-primary btn-sm" data-home-action="new-session">Crear mi primera sesión</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
     <!-- ═══════════ MAIN APP ═══════════ -->
-    <div id="app-view" class="app-wrapper">
+    <div id="app-view" class="app-wrapper hidden">
 
         <!-- ─── HEADER ─── -->
         <header class="app-header glass-card">
@@ -657,6 +794,10 @@
             </div>
             <nav class="header-actions">
                 <span id="ai-credit-indicator" class="ai-credit-indicator" role="status" aria-live="polite" hidden>IA · -- créditos</span>
+                <button id="btn-home-nav" type="button" class="btn btn-ghost btn-sm" data-action="view-home" hidden>
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg>
+                    <span class="btn-label">Mi espacio</span>
+                </button>
                 <label class="theme-picker" title="Tema de la aplicación">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-theme"></use></svg>
                     <span class="sr-only">Tema de la aplicación</span>
@@ -2008,7 +2149,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script src="js/components/confirm-dialog.js?v=154e4ff5c88b"></script>
     <script src="js/components/loader.js?v=f1860ac37282"></script>
     <script src="js/sanitizer.js?v=329fbf656e5c"></script>
-    <script src="js/auth-ui.js?v=0be58a936fb8"></script>
+    <script src="js/auth-ui.js?v=2bb6867fd1e9"></script>
     <script src="js/storage.js?v=8b5a46a47f3b"></script>
     <script src="js/templates.js?v=f5e808bcae1f"></script>
     <script src="js/ai-copilot.js?v=f8ce51abac85"></script>
@@ -2035,8 +2176,9 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script src="js/paginador.js?v=8352d148864e"></script>
     <script src="js/ui-shell.js?v=3165d808d6a3"></script>
-    <script src="js/landing.js?v=189f5c1ae45f"></script>
-    <script src="js/app.js?v=640b0c68a586"></script>
+    <script src="js/home.js?v=7d348a3047a1"></script>
+    <script src="js/landing.js?v=5dd5ea558854"></script>
+    <script src="js/app.js?v=bde1e1ca7fef"></script>
     <script src="js/ficha-external-prompt.js?v=37839d226210"></script>
 </body>
 

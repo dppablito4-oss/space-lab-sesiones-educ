@@ -86,7 +86,8 @@ Alojado como una SPA (Single Page Application) estática en GitHub Pages con enr
   - Catálogo de modelos de IA soportados.
   - Selector interactivo de temas (`Sistema`, `Claro`, `Oscuro`) con persistencia en `localStorage`.
   - Preguntas frecuentes (FAQ) docentes.
-  - Detección inteligente de sesión: Si el usuario ya cuenta con sesión iniciada en Supabase, el acceso redirige directamente al editor de trabajo sin recargar ni requerir pasos innecesarios.
+  - Detección inteligente de sesión: Si el usuario ya cuenta con sesión iniciada en Supabase, el acceso abre `Mi espacio`, desde donde puede crear o continuar sus planificaciones.
+  - `Mi espacio` reúne bienvenida contextual, créditos, plan, sesiones recientes y accesos preparados para futuros proyectos y unidades.
   - Enlaces de descarga del motor local (`descargas_landing.html`) y pie de página con accesos oficiales.
 - **Espacio de Trabajo / Editor (`#app-view`)**:
   - Rail lateral de navegación con 6 etapas curriculares (Datos informativos, Propósitos de aprendizaje, Criterios y evaluación, Secuencia didáctica, Recursos y materiales, Padrón de estudiantes).
@@ -248,6 +249,7 @@ node tests/app-utils.test.js              # Valida utilidades y protección XSS
 node tests/local-export-client.test.js    # Valida cliente PNA del motor local
 node tests/document-source-processor.test.js # Valida procesamiento de fuentes PDF
 node tests/app-update.test.js              # Valida detección y aviso de nuevas versiones
+node tests/home-workspace.test.js          # Valida Mi espacio y sus rutas protegidas
 node tests/test_ai_gateway_routing.js      # Valida routing server-side del AI Gateway
 node tests/test_model_catalog.js          # Valida catálogo y aliases de modelos
 node tests/test_entitlements.js           # Valida shadow/enforcement de capacidades

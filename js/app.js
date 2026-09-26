@@ -234,6 +234,10 @@
             window.AuthUi.init();
         }
 
+        if (window.SpaceLabHome) {
+            window.SpaceLabHome.init();
+        }
+
         // Initialize Landing Router if available
         if (window.LandingRouter) {
             window.LandingRouter.init();
@@ -246,11 +250,14 @@
 
         // Global callback to refresh session lists after login/logout
         window.getCurrentSession = () => AppState.currentSession;
+        window.appOpenSession = (sessionId) => loadSession(sessionId);
+        window.appStartNewSession = () => forceNewSession();
         window.appReloadSessions = () => {
             renderSavedList();
             loadLastSession();
             loadProfileDefaults();
             loadLogosGallery();
+            window.SpaceLabHome?.refresh?.();
         };
 
         // Load last session if exists
@@ -275,6 +282,7 @@
         if (window.Storage && typeof Storage.syncSessions === 'function') {
             Storage.syncSessions().then(() => {
                 renderSavedList();
+                window.SpaceLabHome?.refresh?.();
             }).catch(e => console.warn('[Sync] Sync failed at startup:', e));
         }
 
@@ -1137,7 +1145,9 @@
         validateLogoFile,
         loadLastSession,
         handleShowLoadModal,
+        loadSession,
         handleNew,
+        forceNewSession,
         handleCloseSession,
         renderSavedList
     } = window.SpaceLabSessionController.create({

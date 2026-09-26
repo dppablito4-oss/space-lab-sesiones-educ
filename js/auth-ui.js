@@ -308,9 +308,9 @@ window.AuthUi = (() => {
             window.appReloadSessions();
         }
 
-        // Si el usuario inicia sesión desde la landing, saltar directo al editor
-        if (window.LandingRouter && typeof window.LandingRouter.showApp === 'function') {
-            window.LandingRouter.showApp(true);
+        // Después del acceso, presentar el centro de trabajo antes del editor.
+        if (window.LandingRouter && typeof window.LandingRouter.showHome === 'function') {
+            window.LandingRouter.showHome(true);
         }
     }
 
@@ -367,6 +367,7 @@ window.AuthUi = (() => {
             const headerAvatar = document.getElementById('header-user-avatar');
             const headerName = document.getElementById('header-user-name');
             const headerPlan = document.getElementById('header-user-plan');
+            const homeNavButton = document.getElementById('btn-home-nav');
             if (headerBadge) {
                 headerBadge.hidden = false;
                 if (headerAvatar) headerAvatar.textContent = initials;
@@ -378,6 +379,7 @@ window.AuthUi = (() => {
                     headerPlan.textContent = 'Docente Beta';
                 }
             }
+            if (homeNavButton) homeNavButton.hidden = false;
 
             authHeaderContainer.innerHTML = `
                 <div class="user-menu-container">
@@ -410,6 +412,7 @@ window.AuthUi = (() => {
                         if (window.appReloadSessions) {
                             window.appReloadSessions();
                         }
+                        window.LandingRouter?.onLogout?.();
                     } catch (e) {
                         Toast.error('Error al cerrar sesión: ' + e.message);
                     }
@@ -418,7 +421,9 @@ window.AuthUi = (() => {
 
         } else {
             const headerBadge = document.getElementById('header-user-badge');
+            const homeNavButton = document.getElementById('btn-home-nav');
             if (headerBadge) headerBadge.hidden = true;
+            if (homeNavButton) homeNavButton.hidden = true;
 
             authHeaderContainer.innerHTML = `
                 <button id="btn-login-trigger" class="btn btn-ghost btn-sm" aria-label="Iniciar sesión">

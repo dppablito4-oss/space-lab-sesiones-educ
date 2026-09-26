@@ -5,13 +5,16 @@
 
 window.LandingRouter = (() => {
     let landingView = null;
+    let homeView = null;
     let appView = null;
+    let routeRequest = 0;
 
     async function init() {
         landingView = document.getElementById('landing-view');
+        homeView = document.getElementById('home-view');
         appView = document.getElementById('app-view');
 
-        if (!landingView || !appView) {
+        if (!landingView || !homeView || !appView) {
             return;
         }
 
@@ -33,6 +36,13 @@ window.LandingRouter = (() => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
                 showLanding();
+            });
+        });
+
+        document.querySelectorAll('[data-action="view-home"]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                window.location.hash = '#/home';
             });
         });
 
@@ -61,41 +71,44 @@ window.LandingRouter = (() => {
             });
         });
 
-        // Escuchar cambios de hash en la URL (#/app o #/landing)
-        window.addEventListener('hashchange', () => {
-            const hash = window.location.hash;
-            if (hash === '#/app' || hash === '#/editor') {
-                showApp(false);
-            } else if (hash === '#/landing' || hash === '#/' || hash === '') {
-                // Solo si el usuario explícitamente navegó a landing
-                if (hash === '#/landing') {
-                    showLanding();
-                }
-            }
-        });
+        window.addEventListener('hashchange', checkRoute);
     }
 
     async function checkRoute() {
+        const requestId = ++routeRequest;
         const hash = window.location.hash;
         const isAutomation = Boolean(navigator.webdriver);
 
         // 1. Si es test automatizado o la URL pide explícitamente el editor
-        if (isAutomation || hash === '#/app' || hash === '#/editor') {
+        if (isAutomation || hash === '#/app' || hash === '#/editor' || hash === '#/sessions/new' || /^#\/sessions\/[^/]+\/edit$/.test(hash)) {
             showApp(false);
+            activateEditorRoute(hash);
             return;
         }
 
-        // 2. Si el usuario ya inició sesión con Supabase, salta directo al editor
+        if (hash === '#/landing') {
+            showLanding(false);
+            return;
+        }
+
+        // 2. Mi espacio y la biblioteca requieren una cuenta autenticada.
         if (window.SupabaseClient && typeof window.SupabaseClient.getCurrentUser === 'function') {
             try {
                 const user = await window.SupabaseClient.getCurrentUser();
+                if (requestId !== routeRequest) return;
                 if (user) {
-                    showApp(false);
+                    showHome(false, { scrollToSessions: hash === '#/sessions' });
                     return;
                 }
             } catch (err) {
                 console.warn('[LandingRouter] No se pudo verificar la sesión:', err);
             }
+        }
+
+        if (hash === '#/home' || hash === '#/sessions') {
+            showLanding(false);
+            window.AuthUi?.openModal?.();
+            return;
         }
 
         // 3. Si en esta pestaña ya había decidido entrar al editor
@@ -108,38 +121,92 @@ window.LandingRouter = (() => {
         showLanding();
     }
 
-    function showLanding() {
-        if (!landingView || !appView) return;
+    function setBodyView(view) {
+        document.body.classList.toggle('landing-active', view === 'landing');
+        document.documentElement.classList.toggle('landing-active', view === 'landing');
+        document.body.classList.toggle('home-active', view === 'home');
+        document.documentElement.classList.toggle('home-active', view === 'home');
+    }
+
+    function showLanding(updateHash = true) {
+        if (!landingView || !homeView || !appView) return;
         landingView.classList.remove('hidden');
+        homeView.classList.add('hidden');
         appView.classList.add('hidden');
-        document.body.classList.add('landing-active');
-        document.documentElement.classList.add('landing-active');
+        setBodyView('landing');
         sessionStorage.setItem('spacelab_view', 'landing');
         landingView.scrollTop = 0;
         window.scrollTo({ top: 0 });
+        if (updateHash && window.location.hash !== '#/landing') window.location.hash = '#/landing';
     }
 
-    function showApp(updateHash = true) {
-        if (!landingView || !appView) return;
+    function showHome(updateHash = true, options = {}) {
+        if (!landingView || !homeView || !appView) return;
         landingView.classList.add('hidden');
+        homeView.classList.remove('hidden');
+        appView.classList.add('hidden');
+        setBodyView('home');
+        sessionStorage.setItem('spacelab_view', 'home');
+        if (updateHash && window.location.hash !== '#/home') window.location.hash = '#/home';
+        window.SpaceLabHome?.refresh?.(options);
+    }
+
+    function showApp(updateHash = true, targetHash = '#/app') {
+        if (!landingView || !homeView || !appView) return;
+        landingView.classList.add('hidden');
+        homeView.classList.add('hidden');
         appView.classList.remove('hidden');
-        document.body.classList.remove('landing-active');
-        document.documentElement.classList.remove('landing-active');
+        setBodyView('app');
         sessionStorage.setItem('spacelab_view', 'app');
-        if (updateHash && window.location.hash !== '#/app') {
-            window.location.hash = '#/app';
+        if (updateHash && window.location.hash !== targetHash) {
+            window.location.hash = targetHash;
+        }
+    }
+
+    function activateEditorRoute(hash) {
+        if (hash === '#/sessions/new') {
+            window.setTimeout(() => window.appStartNewSession?.(), 0);
+            return;
+        }
+        const match = hash.match(/^#\/sessions\/([^/]+)\/edit$/);
+        if (match) {
+            const sessionId = decodeURIComponent(match[1]);
+            window.setTimeout(() => window.appOpenSession?.(sessionId), 0);
+        }
+    }
+
+    function openNewSession() {
+        if (window.location.hash === '#/sessions/new') {
+            showApp(false);
+            activateEditorRoute('#/sessions/new');
+        } else {
+            window.location.hash = '#/sessions/new';
+        }
+    }
+
+    function openSession(sessionId) {
+        if (!sessionId) return;
+        const hash = `#/sessions/${encodeURIComponent(sessionId)}/edit`;
+        if (window.location.hash === hash) {
+            showApp(false);
+            activateEditorRoute(hash);
+        } else {
+            window.location.hash = hash;
         }
     }
 
     function onLogout() {
         sessionStorage.removeItem('spacelab_view');
-        showLanding();
+        showLanding(true);
     }
 
     return {
         init,
         showLanding,
+        showHome,
         showApp,
+        openNewSession,
+        openSession,
         onLogout
     };
 })();
