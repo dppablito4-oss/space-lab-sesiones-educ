@@ -256,6 +256,7 @@ node tests/test_model_catalog.js          # Valida catálogo y aliases de modelo
 node tests/test_entitlements.js           # Valida shadow/enforcement de capacidades
 node tests/test_credit_ledger_logic.js    # Valida orden de consumo y reembolsos
 node tests/credit-grant-reconciliation.test.js # Valida vigencia y reconciliación de grants
+node tests/subscription-credit-lifecycle.test.js # Valida grants idempotentes por ciclo
 ```
 
 ### Pruebas de Python (Backend y Exportación)

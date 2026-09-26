@@ -89,6 +89,7 @@ jobs:
           node tests/test_entitlements.js
           node tests/test_credit_ledger_logic.js
           node tests/credit-grant-reconciliation.test.js
+          node tests/subscription-credit-lifecycle.test.js
 
       - name: Run Python contract & adapter & docx tests
         run: |
