@@ -6,15 +6,40 @@ window.SpaceLabAiCreditUi = (() => {
 
     function render(wallet) {
         const indicator = document.getElementById('ai-credit-indicator');
-        if (!indicator) return;
+        const headerCredits = document.getElementById('header-user-credits');
+        const headerPlan = document.getElementById('header-user-plan');
+
         if (!wallet) {
-            indicator.hidden = true;
-            indicator.textContent = 'IA · -- créditos';
+            if (indicator) {
+                indicator.hidden = true;
+                indicator.textContent = 'IA · -- créditos';
+            }
+            if (headerCredits) {
+                headerCredits.innerHTML = '-- créditos IA';
+            }
             return;
         }
-        indicator.hidden = false;
-        indicator.textContent = `IA · ${wallet.balance} créditos`;
-        indicator.title = `Plan ${wallet.planId || 'free'} · saldo disponible`;
+
+        const balance = Number(wallet.balance) || 0;
+        const planId = wallet.planId || 'beta_teacher';
+        const planDisplay = planId === 'beta_teacher' ? 'Docente Beta' :
+                            planId === 'pro' ? 'Docente Pro' :
+                            planId === 'teacher' ? 'Docente Plus' : 'Plan Free';
+
+        const headerBadge = document.getElementById('header-user-badge');
+        if (indicator) {
+            // Si el badge superior izquierdo está presente y activo, ocultar el indicador duplicado de la derecha
+            indicator.hidden = !!(headerBadge && !headerBadge.hidden);
+            indicator.textContent = `IA · ${balance} créditos`;
+            indicator.title = `Plan ${planDisplay} · saldo disponible`;
+        }
+        if (headerCredits) {
+            headerCredits.innerHTML = `<strong>${balance}</strong> créditos IA disponibles`;
+            headerCredits.parentElement.title = `Plan ${planDisplay} · ${balance} créditos disponibles`;
+        }
+        if (headerPlan) {
+            headerPlan.textContent = planDisplay;
+        }
     }
 
     async function refresh() {

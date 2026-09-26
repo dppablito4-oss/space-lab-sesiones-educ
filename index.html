@@ -634,6 +634,20 @@
                     <span class="header-context-label">Editor de sesión</span>
                     <span id="session-context-title" class="header-context-title">Nueva sesión</span>
                 </div>
+                <!-- Badge de Perfil y Créditos en la parte superior izquierda -->
+                <div id="header-user-badge" class="header-user-badge" role="region" aria-label="Perfil y créditos del docente" hidden>
+                    <div class="user-avatar-badge" id="header-user-avatar" aria-hidden="true">--</div>
+                    <div class="user-details-col">
+                        <div class="user-name-row">
+                            <span class="user-display-name" id="header-user-name">Docente</span>
+                            <span class="user-plan-tag" id="header-user-plan">Docente Beta</span>
+                        </div>
+                        <div class="user-credits-sub">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                            <span class="user-credits-text" id="header-user-credits">-- créditos IA</span>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="save-indicator" id="save-indicator" role="status" aria-live="polite">
                 <span class="save-dot"></span>

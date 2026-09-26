@@ -314,26 +314,79 @@ window.AuthUi = (() => {
         }
     }
 
+    function formatDisplayName(user, profile) {
+        if (!user) return 'Docente';
+        if (profile && profile.docente && profile.docente.trim()) {
+            return profile.docente.trim();
+        }
+        const meta = user.user_metadata || {};
+        if (meta.docente && String(meta.docente).trim()) {
+            return String(meta.docente).trim();
+        }
+        if (meta.full_name && String(meta.full_name).trim()) {
+            return String(meta.full_name).trim();
+        }
+        if (meta.username && String(meta.username).trim()) {
+            const raw = String(meta.username).trim();
+            return raw.split(/[._-]/)
+                .filter(Boolean)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
+        if (user.email) {
+            const prefix = user.email.split('@')[0];
+            return prefix.charAt(0).toUpperCase() + prefix.slice(1);
+        }
+        return 'Docente';
+    }
+
+    function getInitials(name) {
+        if (!name) return 'D';
+        const clean = name.replace(/^Prof\.\s*/i, '').trim();
+        const parts = clean.split(/\s+/).filter(Boolean);
+        if (parts.length >= 2) {
+            return (parts[0][0] + parts[1][0]).toUpperCase();
+        }
+        return clean.slice(0, 2).toUpperCase();
+    }
+
     async function checkSessionState() {
         const user = await SupabaseClient.getCurrentUser();
         
         if (user) {
             const role = await SupabaseClient.getUserRole(user.id);
+            const profile = (SupabaseClient.getUserProfile ? await SupabaseClient.getUserProfile().catch(() => null) : null);
             const isAdmin = role === 'superadmin' || role === 'admin';
-            const displayName = escapeHTML(user.user_metadata?.username || truncateEmail(user.email));
+            const formattedName = formatDisplayName(user, profile);
+            const displayName = escapeHTML(formattedName);
+            const initials = getInitials(formattedName);
             const safeEmail = escapeHTML(user.email || '');
+
+            // Actualizar Badge en la parte superior izquierda
+            const headerBadge = document.getElementById('header-user-badge');
+            const headerAvatar = document.getElementById('header-user-avatar');
+            const headerName = document.getElementById('header-user-name');
+            const headerPlan = document.getElementById('header-user-plan');
+            if (headerBadge) {
+                headerBadge.hidden = false;
+                if (headerAvatar) headerAvatar.textContent = initials;
+                if (headerName) {
+                    headerName.textContent = displayName;
+                    headerName.title = safeEmail;
+                }
+                if (headerPlan) {
+                    headerPlan.textContent = 'Docente Beta';
+                }
+            }
 
             authHeaderContainer.innerHTML = `
                 <div class="user-menu-container">
-                    <span class="user-email-tag" title="${safeEmail}">
-                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg><span class="auth-label">${displayName}</span>
-                    </span>
                     ${isAdmin ? `
                         <a href="admin.html" class="btn btn-accent btn-sm" style="text-decoration: none;">
                             <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg><span class="auth-label">Admin</span>
                         </a>
                     ` : ''}
-                    <button id="btn-logout" class="btn btn-ghost btn-sm" title="Cerrar sesión">
+                    <button id="btn-logout" class="btn btn-ghost btn-sm" title="Cerrar sesión" style="border-radius: 9999px;">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-logout"></use></svg><span class="auth-label">Salir</span>
                     </button>
                 </div>
@@ -364,6 +417,9 @@ window.AuthUi = (() => {
             });
 
         } else {
+            const headerBadge = document.getElementById('header-user-badge');
+            if (headerBadge) headerBadge.hidden = true;
+
             authHeaderContainer.innerHTML = `
                 <button id="btn-login-trigger" class="btn btn-ghost btn-sm" aria-label="Iniciar sesión">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg><span class="auth-label">Iniciar sesión</span>
