@@ -73,6 +73,24 @@ window.Chatbot = (() => {
         // Añadir mensaje de usuario a la UI e historial
         appendMessage('user', text);
         chatHistory.push({ sender: 'user', text: text });
+        scrollBottom();
+
+        // Verificar autenticación antes de invocar el servicio de IA
+        let user = null;
+        try {
+            user = window.SupabaseClient ? await window.SupabaseClient.getCurrentUser() : null;
+        } catch (authErr) {
+            console.warn('[Chatbot] Error al verificar sesión:', authErr);
+        }
+
+        if (!user) {
+            appendMessage('bot', 'Para conversar con el Asistente Pedagógico IA y recibir sugerencias personalizadas, por favor inicia sesión o crea tu cuenta gratuita.');
+            scrollBottom();
+            if (window.AuthUi && typeof window.AuthUi.openModal === 'function') {
+                window.AuthUi.openModal();
+            }
+            return;
+        }
 
         // Añadir burbuja de cargando (typing indicator)
         const typingId = appendTypingIndicator();
@@ -100,28 +118,44 @@ window.Chatbot = (() => {
 
             // Call the authenticated Supabase Edge Function. API keys stay server-side.
             if (window.SupabaseClient && SupabaseClient.client) {
+                let data = null;
+                const requestId = createRequestId();
+                const historySlice = chatHistory.slice(-6);
+
                 try {
-                    console.log('[Chatbot] Enviando mensaje a openai-router con gpt-6-luna...');
-                    const data = await SupabaseClient.invokeFunction('openai-router', {
+                    console.log('[Chatbot] Enviando mensaje a openai-router con gpt-5.4-mini...');
+                    data = await SupabaseClient.invokeFunction('openai-router', {
                         action: 'chatbot',
-                        requestId: createRequestId(),
-                        model: 'gpt-6-luna',
+                        requestId: requestId,
+                        model: 'gpt-5.4-mini',
                         input: {
-                            history: chatHistory.slice(-6),
+                            history: historySlice,
                             design
                         }
                     });
-
-                    if (typeof data === 'string') {
-                        responseText = data;
-                    } else if (data && typeof data === 'object') {
-                        responseText = data.choices?.[0]?.message?.content || data.response || JSON.stringify(data);
-                    } else {
-                        responseText = 'No pude procesar la respuesta del servidor.';
+                } catch (openAiErr) {
+                    console.warn('[Chatbot] Falló llamada a openai-router, intentando con gemini-router...', openAiErr);
+                    try {
+                        data = await SupabaseClient.invokeFunction('gemini-router', {
+                            action: 'chatbot',
+                            requestId: requestId,
+                            model: 'gemini-2.5-flash',
+                            input: {
+                                history: historySlice,
+                                design
+                            }
+                        });
+                    } catch (geminiErr) {
+                        throw openAiErr;
                     }
-                } catch (cloudErr) {
-                    console.warn('[Chatbot] Falló llamada a Edge Function:', cloudErr);
-                    throw cloudErr;
+                }
+
+                if (typeof data === 'string') {
+                    responseText = data;
+                } else if (data && typeof data === 'object') {
+                    responseText = data.choices?.[0]?.message?.content || data.response || JSON.stringify(data);
+                } else {
+                    responseText = 'No pude procesar la respuesta del servidor.';
                 }
             } else {
                 throw new Error('No se pudo conectar con Supabase.');
@@ -130,17 +164,16 @@ window.Chatbot = (() => {
             // Procesar y aplicar diseño agéntico si la respuesta contiene el JSON
             responseText = processAgenticDesign(responseText);
 
-            // Quitar indicador de carga y mostrar respuesta
-            removeTypingIndicator(typingId);
             appendMessage('bot', responseText);
             chatHistory.push({ sender: 'bot', text: responseText });
             scrollBottom();
 
         } catch (e) {
             console.error('[Chatbot] Error:', e);
-            removeTypingIndicator(typingId);
             appendMessage('bot', 'Lo siento, ocurrió un error al procesar tu consulta con IA: ' + e.message);
             scrollBottom();
+        } finally {
+            removeTypingIndicator(typingId);
         }
     }
 
@@ -248,7 +281,7 @@ window.Chatbot = (() => {
 
     function removeTypingIndicator(id) {
         const el = document.getElementById(id);
-        if (el) messagesContainer.removeChild(el);
+        if (el) el.remove();
     }
 
     function scrollBottom() {

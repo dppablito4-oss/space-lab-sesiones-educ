@@ -99,15 +99,33 @@ const AiCopilot = (() => {
 
                 console.log(`[AI] Llamando a Edge Function ${functionName} con modelo ${selectedModel}...`);
                 const { sourceFile: _sourceFile, ai_provider: _aiProvider, ...metadataInput } = metadata;
-                const data = await SupabaseClient.invokeFunction(functionName, {
-                    action: 'generate_session',
-                    requestId: createRequestId(),
-                    model: selectedModel,
-                    input: {
-                        metadata: metadataInput,
-                        sourceFile
+                let data;
+                try {
+                    data = await SupabaseClient.invokeFunction(functionName, {
+                        action: 'generate_session',
+                        requestId: createRequestId(),
+                        model: selectedModel,
+                        input: {
+                            metadata: metadataInput,
+                            sourceFile
+                        }
+                    });
+                } catch (fnErr) {
+                    if (functionName === 'openai-router' && (fnErr.message?.includes('Modelo no permitido') || fnErr.message?.includes('MODEL_NOT_ALLOWED'))) {
+                        console.warn('[AI] Fallback automático a gpt-5.4-mini en openai-router...');
+                        data = await SupabaseClient.invokeFunction('openai-router', {
+                            action: 'generate_session',
+                            requestId: createRequestId(),
+                            model: 'gpt-5.4-mini',
+                            input: {
+                                metadata: metadataInput,
+                                sourceFile
+                            }
+                        });
+                    } else {
+                        throw fnErr;
                     }
-                });
+                }
 
                 // Si la función retorna un string de JSON
                 let resultObj = data;
@@ -276,12 +294,27 @@ const AiCopilot = (() => {
         if (await hasAuthenticatedUser()) {
             const functionName = provider.router;
             console.log('[AI Helper] Invoking edge function ' + functionName + ' for ' + action + '...');
-            const data = await SupabaseClient.invokeFunction(functionName, {
-                action,
-                requestId: createRequestId(),
-                model: provider.model,
-                input
-            });
+            let data;
+            try {
+                data = await SupabaseClient.invokeFunction(functionName, {
+                    action,
+                    requestId: createRequestId(),
+                    model: provider.model,
+                    input
+                });
+            } catch (fnErr) {
+                if (functionName === 'openai-router' && (fnErr.message?.includes('Modelo no permitido') || fnErr.message?.includes('MODEL_NOT_ALLOWED'))) {
+                    console.warn('[AI Helper] Fallback automático a gpt-5.4-mini en openai-router...');
+                    data = await SupabaseClient.invokeFunction('openai-router', {
+                        action,
+                        requestId: createRequestId(),
+                        model: 'gpt-5.4-mini',
+                        input
+                    });
+                } else {
+                    throw fnErr;
+                }
+            }
 
             let text = data;
             if (data && typeof data === 'object') {
