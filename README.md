@@ -136,6 +136,14 @@ python tests/no_emoji_controls.py
 
 GitHub Actions ejecuta estas pruebas, valida las Edge Functions y compila `pablitopyhost-windows` en cada push a `main`. Un tag como `v1.3.0` vuelve a ejecutar la validación, compila el motor y adjunta `pablitopyhost.exe` a un GitHub Release. La descarga estable es `https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/latest/download/pablitopyhost.exe`.
 
+Antes de confirmar cambios de JavaScript o CSS, actualiza las versiones de caché basadas en contenido:
+
+```powershell
+python scripts/version_assets.py --write
+```
+
+Los módulos sin cambios conservan la misma URL y siguen usando la caché. Cada archivo modificado recibe un hash nuevo en `?v=...`, por lo que navegadores y CDN descargan únicamente la versión actualizada. La validación de GitHub rechaza commits con versiones desactualizadas.
+
 ## Despliegue de Edge Functions
 
 ```powershell

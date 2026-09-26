@@ -57,6 +57,9 @@ jobs:
       - name: Validate curriculum JSON
         run: python -m json.tool data/competencias.json > /dev/null
 
+      - name: Validate browser cache versions
+        run: python scripts/version_assets.py --check
+
       - name: Run JS contract & adapter & template tests
         run: |
           node tests/test_contract_v1.js

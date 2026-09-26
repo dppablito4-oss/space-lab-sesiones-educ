@@ -3,6 +3,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MIGRATION = ROOT / "supabase/migrations/202609210002_ai_credits.sql"
+ADMIN_MIGRATION = ROOT / "supabase/migrations/202609250001_admin_credit_management.sql"
 ROUTERS = [
     ROOT / "supabase/functions/openai-router/index.ts",
     ROOT / "supabase/functions/gemini-router/index.ts",
@@ -12,6 +13,7 @@ ROUTERS = [
 
 def main() -> None:
     sql = MIGRATION.read_text(encoding="utf-8")
+    admin_sql = ADMIN_MIGRATION.read_text(encoding="utf-8")
     bootstrap = (ROOT / "database_setup.sql").read_text(encoding="utf-8")
     for table in ("ai_plans", "ai_action_costs", "ai_credit_wallets", "ai_usage"):
         assert f"public.{table}" in sql
@@ -33,6 +35,20 @@ def main() -> None:
     assert "daily_credit_limit" in sql
     assert "GRANT EXECUTE ON FUNCTION public.reserve_ai_credits" in sql
     assert "GRANT EXECUTE ON FUNCTION public.reserve_ai_credits" in bootstrap
+
+    for source in (admin_sql, bootstrap):
+        assert "public.admin_list_ai_credit_accounts" in source
+        assert "public.admin_set_ai_credits" in source
+        assert "NOT public.is_admin()" in source
+        assert "SECURITY DEFINER" in source
+        assert "AI_CREDITS_ADMIN_UPDATE" in source
+        assert "p_balance > 1000000" in source
+        assert "GRANT EXECUTE ON FUNCTION public.admin_set_ai_credits" in source
+
+    admin_frontend = (ROOT / "js/admin.js").read_text(encoding="utf-8")
+    assert ".rpc('admin_list_ai_credit_accounts'" in admin_frontend
+    assert ".rpc('admin_set_ai_credits'" in admin_frontend
+    assert ".from('ai_credit_wallets').update" not in admin_frontend.replace("\n", "")
 
     for router in ROUTERS:
         source = router.read_text(encoding="utf-8")

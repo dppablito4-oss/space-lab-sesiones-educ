@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Space Lab — Panel Maestro</title>
-    <script src="js/theme.js"></script>
+    <script src="js/theme.js?v=c2aede8bd54d"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/admin.css">
-    <link rel="stylesheet" href="css/mobile-app-theme.css?v=2">
-    <link rel="stylesheet" href="css/app-theme.css?v=1">
+    <link rel="stylesheet" href="css/style.css?v=75d1b2ab3c0b">
+    <link rel="stylesheet" href="css/admin.css?v=0d56d0ba53ef">
+    <link rel="stylesheet" href="css/mobile-app-theme.css?v=4edbe848dc95">
+    <link rel="stylesheet" href="css/app-theme.css?v=0f56326d1396">
 </head>
 <body class="admin-body">
     <!-- ═══════════ TOAST CONTAINER ═══════════ -->
@@ -77,6 +77,9 @@
                     </button>
                     <button class="tab-btn" data-tab="sessions">
                         Sesiones del servidor
+                    </button>
+                    <button class="tab-btn" data-tab="credits">
+                        Créditos de IA
                     </button>
                 </div>
             </aside>
@@ -204,19 +207,54 @@
                     </div>
                 </div>
 
+                <!-- Créditos de IA -->
+                <div id="tab-credits" class="tab-content hidden">
+                    <div class="admin-section-heading">
+                        <div>
+                            <h2 class="section-title">Créditos de IA por cuenta</h2>
+                            <p class="section-desc">Consulta el saldo de cada usuario y establece un nuevo saldo. Cada cambio queda registrado en la auditoría.</p>
+                        </div>
+                        <button id="btn-refresh-credits" class="btn btn-ghost btn-sm">Actualizar</button>
+                    </div>
+
+                    <div class="credit-toolbar">
+                        <label class="sr-only" for="credit-search">Buscar usuario</label>
+                        <input type="search" id="credit-search" class="form-select" placeholder="Buscar por correo, usuario o UID">
+                        <button id="btn-search-credits" class="btn btn-primary btn-sm">Buscar</button>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="admin-table credits-table">
+                            <thead>
+                                <tr>
+                                    <th>Cuenta</th>
+                                    <th>Rol</th>
+                                    <th>Plan</th>
+                                    <th>Saldo actual</th>
+                                    <th>Nuevo saldo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="credits-tbody">
+                                <tr><td colspan="6" class="table-empty">Cargando cuentas...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </section>
         </main>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8"></script>
-    <script src="js/core/profile-fields.js"></script>
-    <script src="js/supabase-client.js"></script>
-    <script src="js/components/toast.js"></script>
-    <script src="js/components/confirm-dialog.js"></script>
-    <script src="js/sanitizer.js"></script>
-    <script src="js/document-presentation.js"></script>
-    <script src="js/core/app-utils.js"></script>
-    <script src="js/admin.js"></script>
+    <script src="js/core/profile-fields.js?v=a2b8ec66df49"></script>
+    <script src="js/supabase-client.js?v=8fecf3a6e6b6"></script>
+    <script src="js/components/toast.js?v=660ea8140835"></script>
+    <script src="js/components/confirm-dialog.js?v=154e4ff5c88b"></script>
+    <script src="js/sanitizer.js?v=329fbf656e5c"></script>
+    <script src="js/document-presentation.js?v=4b2211b4a49d"></script>
+    <script src="js/core/app-utils.js?v=9158b73088e0"></script>
+    <script src="js/admin.js?v=91227d856d17"></script>
 </body>
 </html>

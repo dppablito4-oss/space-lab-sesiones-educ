@@ -92,6 +92,14 @@
         // Botones de actualización
         document.getElementById('btn-refresh-logs').addEventListener('click', () => loadTabData('logs'));
         document.getElementById('btn-refresh-sessions').addEventListener('click', () => loadTabData('sessions'));
+        document.getElementById('btn-refresh-credits').addEventListener('click', () => loadTabData('credits'));
+        document.getElementById('btn-search-credits').addEventListener('click', fetchCreditAccounts);
+        document.getElementById('credit-search').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                fetchCreditAccounts();
+            }
+        });
     }
 
     // Carga de datos correspondientes a cada pestaña
@@ -106,6 +114,98 @@
             case 'sessions':
                 fetchServerSessions();
                 break;
+            case 'credits':
+                fetchCreditAccounts();
+                break;
+        }
+    }
+
+    // ─── AI CREDIT MANAGEMENT ───
+    async function fetchCreditAccounts() {
+        const tbody = document.getElementById('credits-tbody');
+        const search = document.getElementById('credit-search').value.trim();
+        tbody.innerHTML = '<tr><td colspan="6" class="table-empty">Cargando cuentas...</td></tr>';
+
+        try {
+            const { data, error } = await SupabaseClient.client.rpc('admin_list_ai_credit_accounts', {
+                p_search: search,
+                p_limit: 100
+            });
+            if (error) throw error;
+
+            const accounts = Array.isArray(data) ? data : [];
+            if (accounts.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="table-empty">No se encontraron cuentas</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = accounts.map(account => `
+                <tr>
+                    <td>
+                        <span class="credit-account-email">${escHTML(account.email || 'Sin correo')}</span>
+                        <span class="credit-account-meta">${escHTML(account.username || 'sin usuario')} · ${escHTML(account.user_id)}</span>
+                    </td>
+                    <td><span class="badge badge-info">${escHTML(account.role || 'user')}</span></td>
+                    <td>${escHTML(account.plan_id || 'free')}</td>
+                    <td><strong>${Number(account.balance) || 0}</strong></td>
+                    <td>
+                        <input class="form-select credit-balance-input" type="number" min="0" max="1000000"
+                            step="1" value="${Number(account.balance) || 0}" data-user-id="${escAttr(account.user_id)}"
+                            aria-label="Nuevo saldo para ${escAttr(account.email || account.user_id)}">
+                    </td>
+                    <td>
+                        <button class="btn btn-primary btn-sm btn-save-credits" data-user-id="${escAttr(account.user_id)}"
+                            data-email="${escAttr(account.email || account.user_id)}">Guardar</button>
+                    </td>
+                </tr>
+            `).join('');
+
+            tbody.querySelectorAll('.btn-save-credits').forEach(button => {
+                button.addEventListener('click', () => setAccountCredits(button));
+            });
+        } catch (error) {
+            console.error('[Admin] Error al cargar créditos:', error);
+            Toast.error('Error al cargar créditos: ' + error.message);
+            tbody.innerHTML = '<tr><td colspan="6" class="table-empty">No se pudieron cargar las cuentas</td></tr>';
+        }
+    }
+
+    async function setAccountCredits(button) {
+        const userId = button.dataset.userId;
+        const email = button.dataset.email;
+        const input = document.querySelector(`.credit-balance-input[data-user-id="${CSS.escape(userId)}"]`);
+        const balance = Number(input?.value);
+        if (!Number.isInteger(balance) || balance < 0 || balance > 1000000) {
+            Toast.warning('El saldo debe ser un número entero entre 0 y 1 000 000.');
+            input?.focus();
+            return;
+        }
+
+        const confirmed = await ConfirmDialog.show({
+            title: 'Actualizar créditos de IA',
+            message: `Se establecerá el saldo de ${email} en ${balance} créditos.`,
+            confirmText: 'Actualizar saldo',
+            cancelText: 'Cancelar'
+        });
+        if (!confirmed) return;
+
+        button.disabled = true;
+        button.textContent = 'Guardando...';
+        try {
+            const { data, error } = await SupabaseClient.client.rpc('admin_set_ai_credits', {
+                p_user_id: userId,
+                p_balance: balance,
+                p_reason: 'Actualización manual desde Panel Maestro'
+            });
+            if (error) throw error;
+            if (!data?.ok) throw new Error(data?.message || data?.code || 'No se pudo actualizar el saldo.');
+            Toast.success(`Saldo actualizado: ${data.balance} créditos.`);
+            await fetchCreditAccounts();
+        } catch (error) {
+            console.error('[Admin] Error al actualizar créditos:', error);
+            Toast.error('Error al actualizar créditos: ' + error.message);
+            button.disabled = false;
+            button.textContent = 'Guardar';
         }
     }
 
