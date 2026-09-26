@@ -17,21 +17,21 @@
     async function checkAdminAuth() {
         if (!window.SupabaseClient) {
             alert('Supabase no está configurado');
-            window.location.href = 'index.html';
+            window.location.href = './';
             return;
         }
 
         try {
             const user = await SupabaseClient.getCurrentUser();
             if (!user) {
-                window.location.href = 'index.html';
+                window.location.href = './';
                 return;
             }
 
             const role = await SupabaseClient.getUserRole(user.id);
             if (role !== 'superadmin' && role !== 'admin') {
                 alert('No tienes permisos de administrador para ver esta página');
-                window.location.href = 'index.html';
+                window.location.href = './';
                 return;
             }
 
@@ -42,7 +42,7 @@
             initAdmin();
         } catch (e) {
             console.error('[Admin] Error en autenticación:', e);
-            window.location.href = 'index.html';
+            window.location.href = './';
         }
     }
 
@@ -64,7 +64,7 @@
 
             if (confirmed) {
                 await SupabaseClient.logout();
-                window.location.href = 'index.html';
+                window.location.href = './';
             }
         });
     }

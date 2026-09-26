@@ -391,6 +391,23 @@ window.SupabaseClient = (() => {
         }
     }
 
+    /**
+     * Lee la sesión persistida sin hacer una solicitud de red. Se usa solo
+     * para decidir la vista inicial; Supabase mantiene la autorización real
+     * en las consultas y funciones posteriores.
+     */
+    async function getSessionUser() {
+        if (!supabase) return null;
+        try {
+            const { data, error } = await supabase.auth.getSession();
+            if (error) return null;
+            return data?.session?.user || null;
+        } catch (err) {
+            console.warn('[SupabaseClient] No se pudo leer la sesión local:', err);
+            return null;
+        }
+    }
+
     /** Devuelve el codigo del plan comercial; nunca lo infiere desde el wallet. */
     async function getCommercialPlan(forceRefresh = false) {
         const entitlements = await getUserEntitlements(forceRefresh);
@@ -562,6 +579,7 @@ window.SupabaseClient = (() => {
         verifyOtp,
         logout,
         getCurrentUser,
+        getSessionUser,
         invokeFunction,
         getUserRole,
         getSessionsCloud,

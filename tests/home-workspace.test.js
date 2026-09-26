@@ -8,6 +8,8 @@ const app = fs.readFileSync('js/app.js', 'utf8');
 const auth = fs.readFileSync('js/auth-ui.js', 'utf8');
 
 assert.match(html, /id="home-view"/);
+assert.match(html, /id="landing-view" class="landing-view"/);
+assert.doesNotMatch(html, /id="landing-view" class="landing-view hidden"/);
 assert.match(html, /id="home-session-list"/);
 assert.match(html, /data-home-action="new-session"/);
 assert.match(html, /Proyectos de aprendizaje/);
@@ -29,6 +31,17 @@ assert.match(router, /#\\\/sessions\\\/\[\^\/\]\+\\\/edit/);
 assert.match(router, /showHome\(false/);
 assert.match(router, /hash === '#\/app' \|\| hash === '#\/editor'/);
 assert.match(router, /getCurrentUser/);
+assert.match(router, /getSessionUser/);
+assert.match(router, /persist:\s*false/);
+assert.match(router, /DOMContentLoaded['"],\s*startLandingRouter/);
+
+const startupScripts = html.slice(html.indexOf('<!-- Scripts -->'));
+assert.doesNotMatch(startupScripts, /html-docx-js/);
+assert.equal(
+    (startupScripts.match(/<script defer/g) || []).length,
+    (startupScripts.match(/<script /g) || []).length,
+    'Los scripts de arranque deben descargarse sin bloquear el primer render',
+);
 
 assert.match(home, /StorageManager\.getAllSessions/);
 assert.match(home, /getAiCreditBalance/);

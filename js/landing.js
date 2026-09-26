@@ -8,6 +8,7 @@ window.LandingRouter = (() => {
     let homeView = null;
     let appView = null;
     let routeRequest = 0;
+    let eventsBound = false;
 
     async function init() {
         landingView = document.getElementById('landing-view');
@@ -18,7 +19,10 @@ window.LandingRouter = (() => {
             return;
         }
 
-        bindEvents();
+        if (!eventsBound) {
+            bindEvents();
+            eventsBound = true;
+        }
         await checkRoute();
     }
 
@@ -91,10 +95,22 @@ window.LandingRouter = (() => {
             return;
         }
 
+        // Nunca dejar las tres vistas ocultas mientras se resuelve la sesión.
+        // Las rutas privadas muestran una vista provisional; el resto abre la
+        // portada inmediatamente y se corrige al terminar la lectura local.
+        if (hash === '#/home' || hash === '#/sessions') {
+            showHome(false, { scrollToSessions: hash === '#/sessions', persist: false });
+        } else {
+            showLanding(false, { persist: false });
+        }
+
         // 2. Mi espacio y la biblioteca requieren una cuenta autenticada.
         if (window.SupabaseClient && typeof window.SupabaseClient.getCurrentUser === 'function') {
             try {
-                const user = await window.SupabaseClient.getCurrentUser();
+                const readUser = typeof window.SupabaseClient.getSessionUser === 'function'
+                    ? window.SupabaseClient.getSessionUser
+                    : window.SupabaseClient.getCurrentUser;
+                const user = await readUser();
                 if (requestId !== routeRequest) return;
                 if (user) {
                     showHome(false, { scrollToSessions: hash === '#/sessions' });
@@ -128,13 +144,13 @@ window.LandingRouter = (() => {
         document.documentElement.classList.toggle('home-active', view === 'home');
     }
 
-    function showLanding(updateHash = true) {
+    function showLanding(updateHash = true, options = {}) {
         if (!landingView || !homeView || !appView) return;
         landingView.classList.remove('hidden');
         homeView.classList.add('hidden');
         appView.classList.add('hidden');
         setBodyView('landing');
-        sessionStorage.setItem('spacelab_view', 'landing');
+        if (options.persist !== false) sessionStorage.setItem('spacelab_view', 'landing');
         landingView.scrollTop = 0;
         window.scrollTo({ top: 0 });
         if (updateHash && window.location.hash !== '#/landing') window.location.hash = '#/landing';
@@ -146,7 +162,7 @@ window.LandingRouter = (() => {
         homeView.classList.remove('hidden');
         appView.classList.add('hidden');
         setBodyView('home');
-        sessionStorage.setItem('spacelab_view', 'home');
+        if (options.persist !== false) sessionStorage.setItem('spacelab_view', 'home');
         if (updateHash && window.location.hash !== '#/home') window.location.hash = '#/home';
         window.SpaceLabHome?.refresh?.(options);
     }
@@ -210,3 +226,18 @@ window.LandingRouter = (() => {
         onLogout
     };
 })();
+
+// El enrutador de vistas no depende del arranque completo del editor. Así la
+// portada permanece utilizable incluso si una librería secundaria falla.
+function startLandingRouter() {
+    window.LandingRouter.init().catch(error => {
+        console.error('[LandingRouter] No se pudo completar el arranque:', error);
+        window.LandingRouter.showLanding(false, { persist: false });
+    });
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startLandingRouter, { once: true });
+} else {
+    startLandingRouter();
+}

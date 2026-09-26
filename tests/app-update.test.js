@@ -25,7 +25,8 @@ for (const page of pages) {
 
 assert.match(updateScript, /cache:\s*'no-store'/);
 assert.match(updateScript, /_cache_bust/);
-assert.match(updateScript, /app_version/);
+assert.match(updateScript, /canonicalEntryUrl/);
+assert.doesNotMatch(updateScript, /searchParams\.set\(['"]app_version/);
 assert.match(updateScript, /Nueva versión disponible/);
 assert.match(updateScript, /sessionStorage/);
 
@@ -34,6 +35,7 @@ assert.match(updateScript, /sessionStorage/);
     let pendingCheck;
     let renderedBanner;
     let replacementUrl = '';
+    let canonicalizedUrl = '';
     const sessionValues = new Map();
 
     function element(tag) {
@@ -63,6 +65,10 @@ assert.match(updateScript, /sessionStorage/);
             href: 'https://example.test/index.html?mode=teacher#editor',
             replace(url) { replacementUrl = url; },
         },
+        history: {
+            state: null,
+            replaceState(_state, _title, url) { canonicalizedUrl = url; },
+        },
         addEventListener(name, handler) {
             if (name === 'load') loadHandler = handler;
         },
@@ -77,6 +83,7 @@ assert.match(updateScript, /sessionStorage/);
         sessionStorage: {
             getItem(key) { return sessionValues.get(key) || null; },
             setItem(key, value) { sessionValues.set(key, value); },
+            removeItem(key) { sessionValues.delete(key); },
         },
         fetch: async (url, options) => {
             assert.equal(options.cache, 'no-store');
@@ -90,6 +97,7 @@ assert.match(updateScript, /sessionStorage/);
     });
 
     assert.equal(typeof loadHandler, 'function');
+    assert.equal(canonicalizedUrl, 'https://example.test/?mode=teacher#editor');
     loadHandler();
     await pendingCheck;
     assert.equal(renderedBanner.id, 'app-update-banner');
@@ -99,8 +107,9 @@ assert.match(updateScript, /sessionStorage/);
     const updateButton = actions.children[1];
     updateButton.handlers.click();
     assert.match(replacementUrl, /mode=teacher/);
-    assert.match(replacementUrl, /app_version=new-build/);
+    assert.doesNotMatch(replacementUrl, /index\.html|app_version/);
     assert.match(replacementUrl, /#editor$/);
+    assert.equal(sessionValues.get('requested-app-build'), 'new-build');
 
     console.log('app-update.test.js: OK');
 })().catch((error) => {

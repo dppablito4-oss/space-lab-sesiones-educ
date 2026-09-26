@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="f753de88f1ffb6c6">
-    <script defer src="js/app-update.js?v=9a8fde8d6fc8"></script>
+    <meta name="app-build" content="a121bbeb4c2a5a4c">
+    <script defer src="js/app-update.js?v=b027f6ec44b9"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
         content="Generador inteligente de sesiones de aprendizaje MINEDU con IA (GPT-6 Luna, Claude, Gemini). Planificación curricular alineada al CNEB para Inicial, Primaria y Secundaria. Exporta a Word (.docx) y PDF oficial.">
@@ -264,7 +264,7 @@
     <canvas id="space-bg" class="space-background" hidden aria-hidden="true"></canvas>
 
     <!-- ═══════════ LANDING PAGE VIEW ═══════════ -->
-    <div id="landing-view" class="landing-view hidden">
+    <div id="landing-view" class="landing-view">
 
         <!-- Top Navigation -->
         <header class="landing-navbar">
@@ -2227,45 +2227,44 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     </div>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8"></script>
-    <script src="js/core/profile-fields.js?v=11c2bee60ff0"></script>
-    <script src="js/supabase-client.js?v=1d77139bce7d"></script>
-    <script src="js/ai-credit-ui.js?v=008e205c31a6"></script>
-    <script src="js/components/toast.js?v=333b8e1e59d3"></script>
-    <script src="js/components/confirm-dialog.js?v=5953ad86674f"></script>
-    <script src="js/components/loader.js?v=5c00aa0a6108"></script>
-    <script src="js/sanitizer.js?v=c42f2c209aab"></script>
-    <script src="js/auth-ui.js?v=831c22465f73"></script>
-    <script src="js/storage.js?v=56793733a365"></script>
-    <script src="js/templates.js?v=e21c8e558241"></script>
-    <script src="js/ai-copilot.js?v=e796937ff213"></script>
-    <script src="js/document-presentation.js?v=f4199955c689"></script>
-    <script src="js/core/app-utils.js?v=caad3dce07a9"></script>
-    <script src="js/services/local-export-client.js?v=1298f823c518"></script>
-    <script src="js/services/document-source-processor.js?v=528ade7ddaed"></script>
-    <script src="js/controllers/export-controller.js?v=fe63cb0a4fb4"></script>
-    <script src="js/controllers/ai-controller.js?v=1ba8d0446553"></script>
-    <script src="js/controllers/workflow-controller.js?v=41a361cce2f9"></script>
-    <script src="js/controllers/students-controller.js?v=eab84a81fb46"></script>
-    <script src="js/controllers/session-controller.js?v=8200e4a6ddb8"></script>
-    <script src="js/controllers/design-controller.js?v=8a8f8e479610"></script>
-    <script src="js/ai/session-validator.js?v=78a19190eff0"></script>
-    <script src="js/ai/session-adapter.js?v=2536137777ca"></script>
-    <script src="js/ai/session-export.js?v=c8e3395fa3dc"></script>
-    <script src="js/chatbot.js?v=f343615d8cac"></script>
-    <script src="js/pedagogy-brief.js?v=7e61d26176d0"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8"></script>
+    <script defer src="js/core/profile-fields.js?v=11c2bee60ff0"></script>
+    <script defer src="js/supabase-client.js?v=505d3332ebb9"></script>
+    <script defer src="js/ai-credit-ui.js?v=008e205c31a6"></script>
+    <script defer src="js/components/toast.js?v=333b8e1e59d3"></script>
+    <script defer src="js/components/confirm-dialog.js?v=5953ad86674f"></script>
+    <script defer src="js/components/loader.js?v=5c00aa0a6108"></script>
+    <script defer src="js/sanitizer.js?v=c42f2c209aab"></script>
+    <script defer src="js/auth-ui.js?v=345ebad3b302"></script>
+    <script defer src="js/storage.js?v=56793733a365"></script>
+    <!-- Shell visible e interactivo antes de descargar el editor completo. -->
+    <script defer src="js/home.js?v=ac2299c8cb4b"></script>
+    <script defer src="js/landing.js?v=e10294989697"></script>
+    <script defer src="js/templates.js?v=e21c8e558241"></script>
+    <script defer src="js/ai-copilot.js?v=e796937ff213"></script>
+    <script defer src="js/document-presentation.js?v=f4199955c689"></script>
+    <script defer src="js/core/app-utils.js?v=caad3dce07a9"></script>
+    <script defer src="js/services/local-export-client.js?v=1298f823c518"></script>
+    <script defer src="js/services/document-source-processor.js?v=528ade7ddaed"></script>
+    <script defer src="js/controllers/export-controller.js?v=fe63cb0a4fb4"></script>
+    <script defer src="js/controllers/ai-controller.js?v=1ba8d0446553"></script>
+    <script defer src="js/controllers/workflow-controller.js?v=41a361cce2f9"></script>
+    <script defer src="js/controllers/students-controller.js?v=eab84a81fb46"></script>
+    <script defer src="js/controllers/session-controller.js?v=8200e4a6ddb8"></script>
+    <script defer src="js/controllers/design-controller.js?v=8a8f8e479610"></script>
+    <script defer src="js/ai/session-validator.js?v=78a19190eff0"></script>
+    <script defer src="js/ai/session-adapter.js?v=2536137777ca"></script>
+    <script defer src="js/ai/session-export.js?v=c8e3395fa3dc"></script>
+    <script defer src="js/chatbot.js?v=f343615d8cac"></script>
+    <script defer src="js/pedagogy-brief.js?v=7e61d26176d0"></script>
     <!-- KaTeX — renderizado matemático (debe cargarse antes de app.js) -->
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
-    <!-- Librería para exportación a Word (.docx) -->
-    <script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
-    <script src="js/paginador.js?v=d765e6e6e46d"></script>
-    <script src="js/ui-shell.js?v=2ecdd9416d68"></script>
-    <script src="js/home.js?v=ac2299c8cb4b"></script>
-    <script src="js/landing.js?v=5dd5ea558854"></script>
-    <script src="js/app.js?v=977c75a5742d"></script>
-    <script src="js/ficha-external-prompt.js?v=37839d226210"></script>
+    <script defer src="js/paginador.js?v=d765e6e6e46d"></script>
+    <script defer src="js/ui-shell.js?v=2ecdd9416d68"></script>
+    <script defer src="js/app.js?v=e477e1736de0"></script>
+    <script defer src="js/ficha-external-prompt.js?v=37839d226210"></script>
 </body>
 
 </html>

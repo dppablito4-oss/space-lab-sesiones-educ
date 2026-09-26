@@ -4,6 +4,7 @@
    ═══════════════════════════════════════════════════ */
 
 window.AuthUi = (() => {
+    let initialized = false;
     
     // referencias DOM
     let modal = null;
@@ -34,6 +35,7 @@ window.AuthUi = (() => {
     let isLoginMode = true;
 
     function init() {
+        if (initialized) return;
         modal = document.getElementById('auth-modal');
         authForm = document.getElementById('auth-form');
         inputEmail = document.getElementById('auth-email');
@@ -64,6 +66,7 @@ window.AuthUi = (() => {
             return;
         }
 
+        initialized = true;
         bindEvents();
         checkSessionState();
     }
@@ -184,11 +187,15 @@ window.AuthUi = (() => {
     }
 
     function openModal() {
+        if (!initialized) init();
+        if (!modal) return;
         setMode(true); // Empezar por defecto en Login
         modal.classList.remove('hidden');
     }
 
     function openRegister() {
+        if (!initialized) init();
+        if (!modal) return;
         setMode(false); // Empezar por defecto en Registro
         modal.classList.remove('hidden');
     }
@@ -455,6 +462,7 @@ window.AuthUi = (() => {
     }
 
     function openTermsModal() {
+        if (!initialized) init();
         if (termsModal) termsModal.classList.remove('hidden');
     }
 

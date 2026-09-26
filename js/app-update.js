@@ -5,6 +5,21 @@
     const MANIFEST_PATH = 'app-version.json';
     const CHECK_INTERVAL_MS = 5 * 60 * 1000;
     const BANNER_ID = 'app-update-banner';
+    const REQUESTED_BUILD_KEY = 'requested-app-build';
+
+    function canonicalEntryUrl(value = window.location.href) {
+        const url = new URL(value);
+        url.pathname = url.pathname.replace(/\/index\.html$/i, '/');
+        url.searchParams.delete('app_version');
+        return url;
+    }
+
+    function normalizeEntryUrl() {
+        const canonical = canonicalEntryUrl();
+        if (canonical.toString() !== window.location.href && window.history?.replaceState) {
+            window.history.replaceState(window.history.state, '', canonical.toString());
+        }
+    }
 
     function currentBuild() {
         return document.querySelector(`meta[name="${BUILD_META}"]`)?.content || '';
@@ -17,8 +32,8 @@
     }
 
     function reloadWithBuild(build) {
-        const url = new URL(window.location.href);
-        url.searchParams.set('app_version', build);
+        sessionStorage.setItem(REQUESTED_BUILD_KEY, build);
+        const url = canonicalEntryUrl();
         window.location.replace(url.toString());
     }
 
@@ -85,6 +100,10 @@
         const localBuild = currentBuild();
         if (!localBuild) return;
 
+        if (sessionStorage.getItem(REQUESTED_BUILD_KEY) === localBuild) {
+            sessionStorage.removeItem(REQUESTED_BUILD_KEY);
+        }
+
         try {
             const response = await fetch(manifestUrl(), {
                 cache: 'no-store',
@@ -100,6 +119,8 @@
             console.debug('[App Update] No se pudo comprobar la versión:', error);
         }
     }
+
+    normalizeEntryUrl();
 
     window.addEventListener('load', function () {
         window.setTimeout(checkForUpdate, 1500);
