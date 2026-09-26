@@ -83,6 +83,7 @@ jobs:
           node tests/profile-fields.test.js
           node tests/app-update.test.js
           node tests/home-workspace.test.js
+          node tests/commercial-plan-ui.test.js
           node tests/test_ai_gateway_routing.js
           node tests/test_model_catalog.js
           node tests/test_entitlements.js

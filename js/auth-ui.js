@@ -366,7 +366,6 @@ window.AuthUi = (() => {
             const headerBadge = document.getElementById('header-user-badge');
             const headerAvatar = document.getElementById('header-user-avatar');
             const headerName = document.getElementById('header-user-name');
-            const headerPlan = document.getElementById('header-user-plan');
             const homeNavButton = document.getElementById('btn-home-nav');
             if (headerBadge) {
                 headerBadge.hidden = false;
@@ -374,9 +373,6 @@ window.AuthUi = (() => {
                 if (headerName) {
                     headerName.textContent = displayName;
                     headerName.title = safeEmail;
-                }
-                if (headerPlan) {
-                    headerPlan.textContent = 'Docente Beta';
                 }
             }
             if (homeNavButton) homeNavButton.hidden = false;

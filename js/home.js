@@ -6,11 +6,9 @@ window.SpaceLabHome = (() => {
 
     const PLAN_LABELS = {
         free: 'Gratuito',
-        beta: 'Docente Beta',
-        basic: 'Básico',
-        pro: 'Profesional',
-        premium: 'Premium',
-        institutional: 'Institucional'
+        beta_teacher: 'Docente Beta',
+        teacher: 'Docente Plus',
+        pro: 'Docente Pro'
     };
 
     function byId(id) {
@@ -123,10 +121,13 @@ window.SpaceLabHome = (() => {
 
     function renderWallet(wallet) {
         const credits = byId('home-credit-count');
+        if (credits) credits.textContent = wallet ? String(wallet.balance) : '--';
+    }
+
+    function renderCommercialPlan(planCode) {
         const plan = byId('home-plan-name');
         const accountPlan = byId('home-account-plan');
-        const planName = PLAN_LABELS[wallet?.planId] || wallet?.planId || 'Docente';
-        if (credits) credits.textContent = wallet ? String(wallet.balance) : '--';
+        const planName = PLAN_LABELS[planCode] || 'Docente';
         if (plan) plan.textContent = planName;
         if (accountPlan) accountPlan.textContent = `Plan ${planName}`;
     }
@@ -151,9 +152,10 @@ window.SpaceLabHome = (() => {
         try {
             const user = await window.SupabaseClient?.getCurrentUser?.();
             if (!user) return;
-            const [profile, wallet] = await Promise.all([
+            const [profile, wallet, commercialPlan] = await Promise.all([
                 window.SupabaseClient.getUserProfile?.().catch(() => null),
-                window.SupabaseClient.getAiCreditBalance?.().catch(() => null)
+                window.SupabaseClient.getAiCreditBalance?.().catch(() => null),
+                window.SupabaseClient.getCommercialPlan?.(true).catch(() => null)
             ]);
             const name = displayName(user, profile);
             const firstName = name.split(/\s+/)[0];
@@ -162,6 +164,7 @@ window.SpaceLabHome = (() => {
             byId('home-account-name').title = user.email || '';
             byId('home-account-avatar').textContent = initials(name);
             renderWallet(wallet);
+            renderCommercialPlan(commercialPlan);
         } catch (error) {
             console.warn('[Mi espacio] No se pudo cargar todo el resumen:', error);
         }

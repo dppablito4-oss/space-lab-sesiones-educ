@@ -22,6 +22,8 @@ assert.match(router, /getCurrentUser/);
 
 assert.match(home, /StorageManager\.getAllSessions/);
 assert.match(home, /getAiCreditBalance/);
+assert.match(home, /getCommercialPlan/);
+assert.doesNotMatch(home, /wallet\?\.planId/);
 assert.match(home, /escapeHTML\(sessionTitle\(session\)\)/);
 assert.match(home, /RECENT_LIMIT = 5/);
 assert.match(app, /window\.appOpenSession/);

@@ -391,6 +391,16 @@ window.SupabaseClient = (() => {
         }
     }
 
+    /** Devuelve el codigo del plan comercial; nunca lo infiere desde el wallet. */
+    async function getCommercialPlan(forceRefresh = false) {
+        const entitlements = await getUserEntitlements(forceRefresh);
+        const plan = typeof entitlements?.plan === 'string' ? entitlements.plan.trim() : '';
+        if (entitlements?.ok !== true || !plan || ['anonymous', 'unknown', 'fallback'].includes(plan)) {
+            return null;
+        }
+        return plan;
+    }
+
     /** Read-only view of the authenticated user's AI wallet. */
     async function getAiCreditBalance() {
         if (!supabase) return null;
@@ -398,14 +408,12 @@ window.SupabaseClient = (() => {
         if (!user) return null;
         const { data, error } = await supabase
             .from('ai_credit_wallets')
-            .select('balance, plan_id, cycle_started_at, updated_at')
+            .select('balance, updated_at')
             .eq('user_id', user.id)
             .maybeSingle();
         if (error) throw error;
         return data ? {
             balance: Number(data.balance) || 0,
-            planId: data.plan_id || 'free',
-            cycleStartedAt: data.cycle_started_at,
             updatedAt: data.updated_at
         } : null;
     }
@@ -563,6 +571,7 @@ window.SupabaseClient = (() => {
         getUserProfile,
         updateUserProfile,
         getUserEntitlements,
+        getCommercialPlan,
         getAiCreditBalance,
         getAiUsage,
         refreshAiCreditBalance,

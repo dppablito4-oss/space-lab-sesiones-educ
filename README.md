@@ -250,6 +250,7 @@ node tests/local-export-client.test.js    # Valida cliente PNA del motor local
 node tests/document-source-processor.test.js # Valida procesamiento de fuentes PDF
 node tests/app-update.test.js              # Valida detección y aviso de nuevas versiones
 node tests/home-workspace.test.js          # Valida Mi espacio y sus rutas protegidas
+node tests/commercial-plan-ui.test.js      # Valida plan comercial separado del wallet
 node tests/test_ai_gateway_routing.js      # Valida routing server-side del AI Gateway
 node tests/test_model_catalog.js          # Valida catálogo y aliases de modelos
 node tests/test_entitlements.js           # Valida shadow/enforcement de capacidades
