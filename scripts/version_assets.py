@@ -29,7 +29,13 @@ BUILD_META_PATTERN = re.compile(
 
 
 def asset_hash(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+    content = path.read_bytes()
+    if path.suffix.lower() in {".js", ".css"}:
+        # Git may materialize text assets as CRLF on Windows and LF on Linux.
+        # URLs must be identical in both environments because Pages serves the
+        # repository content, not the developer's checkout representation.
+        content = content.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(content).hexdigest()[:12]
 
 
 def version_html(source: str) -> str:

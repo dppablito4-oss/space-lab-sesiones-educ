@@ -265,6 +265,7 @@ python tests/test_docx_builder_v1.py      # Generador de Word con tablas CNEB
 python tests/test_word_math.py            # Conversor de fórmulas LaTeX a OMML
 python tests/backend_smoke.py             # Prueba de humo del servidor FastAPI
 python tests/frontend_security.py         # Análisis de seguridad del frontend
+python tests/test_asset_versioning.py     # Hashes de assets estables en Windows/Linux
 ```
 
 ---

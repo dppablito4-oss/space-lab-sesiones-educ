@@ -58,7 +58,9 @@ jobs:
         run: python -m json.tool data/competencias.json > /dev/null
 
       - name: Validate browser cache versions
-        run: python scripts/version_assets.py --check
+        run: |
+          python tests/test_asset_versioning.py
+          python scripts/version_assets.py --check
 
       - name: Run JS contract & adapter & template tests
         run: |
