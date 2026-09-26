@@ -47,3 +47,15 @@ La aplicación tiene una base funcional: el frontend estático carga, el motor F
 - La clave `sb_publishable_...` de Supabase está diseñada para ser pública en el navegador; la seguridad depende de RLS. No debe sustituirse por una `service_role` en el frontend.
 - `gpt-5.4-mini` es un identificador válido y admite Chat Completions, por lo que no se cambió.
 - No se modificó el diseño visual ni la estructura pedagógica; esta intervención prioriza que lo existente funcione y quede protegido.
+
+---
+
+## Adenda de Actualización — Septiembre 2026
+
+### Mejoras y Correcciones Adicionales Implementadas:
+1. **Flujo de Acceso Directo**: Detección reactiva de usuario autenticado en la Landing Page; los usuarios con sesión activa ingresan de inmediato al editor (`#app-view`) sin fricción ni pantallas redundantes.
+2. **Resiliencia y Fallback de Modelos IA**: Se implementó degradación transparente en `js/ai-copilot.js`; si un modelo preliminar (preview) no está disponible o falla, el sistema conmuta automáticamente a `gpt-5.4-mini`, asegurando que la generación nunca se quede congelada.
+3. **Chatbot Asistente con Validación Previa**: `js/chatbot.js` comprueba proactivamente el estado de la sesión antes de realizar peticiones, ofreciendo retroalimentación visual clara y guiando al docente.
+4. **Seguridad y Transparencia en Términos y Condiciones**: Se documentó de manera explícita en los Términos y Condiciones la arquitectura de `pablitohost.exe` (desarrollado en Python con FastAPI, comunicación restringida por tokens rotativos y PNA, sin acceso ni lectura de archivos personales en el equipo del usuario).
+5. **Enriquecimiento Visual y Accesibilidad**: Animaciones de entrada y microinteracciones en la landing page, sincronización perfecta entre modos Claro/Oscuro/Sistema, y canales oficiales de contacto en el pie de página.
+

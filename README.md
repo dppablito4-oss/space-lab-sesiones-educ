@@ -1,150 +1,281 @@
 # Space Lab - Sesiones Educativas
 
-Aplicación para crear, editar, guardar y exportar sesiones de aprendizaje alineadas al CNEB y a formatos MINEDU.
+[![CI Tests](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/workflows/ci.yml/badge.svg)](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/workflows/ci.yml)
+[![Node.js Tests](https://img.shields.io/badge/Node.js-22+-green.svg)](https://nodejs.org)
+[![Python Engine](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
+[![License](https://img.shields.io/badge/License-Proprietary-orange.svg)]()
 
-Sitio: <https://sesiones.sypablitodp.site>
+> **Plataforma web asistida por IA para la planificación, diseño curricular y exportación de sesiones de aprendizaje alineadas al CNEB (Currículo Nacional de la Educación Básica) y formatos normativos del MINEDU (Perú).**
 
-## Arquitectura
+- **Aplicación Web en Producción**: [https://sesiones.sypablitodp.site](https://sesiones.sypablitodp.site)
+- **Web Personal del Creador**: [https://space.sypablitodp.site](https://space.sypablitodp.site)
+- **WhatsApp de Soporte**: [+51 918 165 428](https://wa.me/51918165428)
+- **Correo Electrónico**: [pabloclsa87@gmail.com](mailto:pabloclsa87@gmail.com)
 
-La aplicación usa un único contrato de datos, `SessionDocument v1`, definido en:
+---
 
-- `schemas/session-document.v1.schema.json`
-- `js/ai/session-validator.js`
-- `backend/models/session_document.py`
+## Tabla de Contenidos
 
-El mismo documento alimenta la vista web, la exportación DOCX y la exportación PDF. Los adaptadores legacy se conservan únicamente para abrir sesiones antiguas.
+1. [Visión General y Propósito](#visión-general-y-propósito)
+2. [Arquitectura del Sistema](#arquitectura-del-sistema)
+   - [Frontend Web Dual (Landing y Editor)](#1-frontend-web-dual)
+   - [Motor Local de Alta Fidelidad (pablitohost.exe)](#2-motor-local-de-alta-fidelidad-desktop)
+   - [Seguridad y Privacidad del Motor Local](#seguridad-y-privacidad-del-motor-local)
+   - [Inteligencia Artificial y Edge Functions](#3-inteligencia-artificial-y-edge-functions)
+   - [Contrato Canónico de Datos (`SessionDocument v1`)](#4-contrato-canónico-de-datos-sessiondocument-v1)
+3. [Estructura del Repositorio](#estructura-del-repositorio)
+4. [Instalación y Desarrollo Local](#instalación-y-desarrollo-local)
+5. [Suite de Pruebas Automatizadas](#suite-de-pruebas-automatizadas)
+6. [Sistema de Versión de Activos y Caché](#sistema-de-versión-de-activos-y-caché)
+7. [Despliegue de Edge Functions](#despliegue-de-edge-functions)
+8. [Términos y Condiciones / Seguridad](#términos-y-condiciones--seguridad)
+9. [Contacto y Soporte](#contacto-y-soporte)
 
-### Frontend
+---
 
-Frontend estático moderno alojado en GitHub Pages con arquitectura de vista dual:
-- **Landing Page / Bienvenida (`#landing-view`)**: Presentación del producto, desglose del flujo pedagógico CNEB en 3 pasos, especificaciones del motor local, catálogo de modelos de IA, selector interactivo de tema y preguntas frecuentes para docentes.
-- **Espacio de Trabajo / Editor (`#app-view`)**: Interfaz operacional con rail de etapas de 6 pasos, formulario contextual de competencias/capacidades, previsualización interactiva de hoja A4 y consola de comandos de exportación.
+## Visión General y Propósito
 
-El shell visual utiliza tokens semánticos con soporte completo para tres modos: `Sistema`, `Claro` y `Oscuro` (persistidos en `localStorage`). Las responsabilidades están modularizadas:
+**Space Lab - Sesiones Educativas** resuelve el desafío de la planificación pedagógica docente en el Perú:
+- **Alineación rigurosa con el CNEB**: Selección guiada de áreas curriculares, competencias, capacidades, desempeños precisados, enfoques transversales e instrumentos de evaluación.
+- **Asistencia con Inteligencia Artificial**: Generación contextualizada de secuencias didácticas (Inicio, Desarrollo, Cierre), situaciones significativas y actividades diferenciadas con modelos de última generación.
+- **Exportación Fiel a Formatos Oficiales**: Generación de documentos Word (`.docx`) y PDF con tablas anidadas CNEB, tipografías normalizadas y ecuaciones matemáticas editables en formato nativo OMML de Microsoft Word.
+- **Experiencia de Usuario Sobria y Fluida**: Soporte completo para tres modos de visualización (`Sistema`, `Claro` y `Oscuro`), animaciones fluidas y diseño mobile-friendly.
 
-- `js/core/app-utils.js`: formato, escape seguro contra inyecciones XSS, tiempos y tipos MIME.
-- `js/services/local-export-client.js`: detección en `localhost:8000`, autenticación por token rotativo y compilación con el motor local.
-- `js/services/document-source-processor.js`: lectura y renderizado de PDF usados como referencia pedagógica para IA.
-- `js/theme.js`: sincronización reactiva de temas entre controles (`#theme-preference` y selectores de la landing).
-- `js/ui-shell.js`: orquestación de navegación, atajos y menús del shell.
+---
 
-Las solicitudes de IA siguen esta ruta cifrada:
+## Arquitectura del Sistema
 
-```text
-Navegador -> Supabase Edge Function -> Proveedor de IA (OpenAI / DeepSeek / Gemini)
-```
-
-El navegador nunca solicita, manipula ni almacena claves secretas de proveedores.
-
-### Supabase y Routers Multi-Modelo
-
-Funciones activas y enrutadores de IA:
-
-- `openai-router`: Enrutamiento seguro para **GPT-6 Luna**, **GPT-5.4 Mini** y **GPT-4o**.
-- `gemini-router`: Integración con **Gemini 2.5 Flash** para respuestas ultra-rápidas.
-- `deepseek-router`: Razonamiento metodológico con **DeepSeek R1** y **DeepSeek V3**.
-- `pablito-mailer`: Notificaciones y comunicaciones transaccionales.
-
-Secretos requeridos:
-
-- `OPENAI_API_KEY`
-- `API-KEY-GEMINI`
-- `API-KEY-DEEPSEEK`
-
-El sistema integra un registro y débito automatizado de créditos por usuario en Supabase (`ai-credits`), eliminando la necesidad de verificaciones manuales.
-
-### Motor Local de Alta Fidelidad (Desktop)
-
-Debido a que los navegadores web convencionales no disponen de APIs nativas para generar archivos OpenXML (.docx) con tablas anidadas multinivel, márgenes de imprenta exactos y fórmulas matemáticas editables (OMML), la aplicación incorpora una arquitectura híbrida:
-
-1. El usuario planifica, diseña y edita en la interfaz web.
-2. Para exportar a Word o PDF con 100% de fidelidad, el cliente web se comunica vía HTTP seguro con `pablitopyhost.exe`, un micro-servicio local FastAPI que se ejecuta en segundo plano en Windows (`http://localhost:8000`).
-3. Su código fuente reside en `backend/` y su versión se define en `backend/version.py`.
-4. El ejecutable se compila automáticamente con PyInstaller mediante GitHub Actions y se distribuye a través de GitHub Releases:
-   `https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/latest/download/pablitopyhost.exe`.
-
-## Estructura
+El sistema implementa una **arquitectura híbrida** distribuida en tres capas:
 
 ```text
-backend/                 Motor FastAPI y generadores DOCX/PDF
-css/                     Estilos de interfaz, documento e impresión
-data/                    Datos curriculares
-design-system/           Tokens y criterios visuales del producto
-js/                      Aplicación web y adaptadores SessionDocument
-schemas/                 Contrato JSON canónico
-supabase/functions/      Edge Functions y autenticación compartida
-tests/                   Contratos, seguridad, render y exportación
-assets/                  Marca y documentos oficiales de referencia
+┌─────────────────────────────────────────────────────────────┐
+│                 CLIENTE WEB (GitHub Pages)                  │
+│   Landing Page (#landing-view)  |  Editor A4 (#app-view)    │
+│   Vanilla JS (ES Modules)       |  Vanilla CSS con Tokens   │
+└──────────────┬───────────────────────────────┬──────────────┘
+               │                               │
+    PNA + Token Local                HTTPS (JWT Seguro)
+               │                               │
+               ▼                               ▼
+┌──────────────────────────────┐ ┌─────────────────────────────┐
+│   MOTOR LOCAL FASTAPI        │ │   SUPABASE EDGE FUNCTIONS   │
+│   (pablitohost.exe)          │ │   - openai-router           │
+│   - Python 3.11 + python-docx│ │   - gemini-router           │
+│   - Parser OMML Math & PNG   │ │   - deepseek-router         │
+│   - Generador DOCX / PDF A4  │ │   - pablito-mailer          │
+│   - Puerto: 127.0.0.1:8000   │ │   - Débito automático de    │
+│   - Token rotativo de sesión │ │     créditos (ai_credits)   │
+└──────────────────────────────┘ └──────────────┬──────────────┘
+                                                │
+                                                ▼
+                                 ┌─────────────────────────────┐
+                                 │   PROVEEDORES DE IA         │
+                                 │   - OpenAI (GPT-6, GPT-5.4) │
+                                 │   - Google (Gemini 2.5)     │
+                                 │   - DeepSeek (R1, V3)       │
+                                 └─────────────────────────────┘
 ```
 
-Archivos SQL:
+### 1. Frontend Web Dual
 
-- `database_setup.sql`: instalación principal e idempotente.
-- `scripts/repair_student_roster.sql`: reparación opcional del padrón de estudiantes. La fuente de verdad del esquema es `database_setup.sql` junto con `supabase/migrations/`.
+Alojado como una SPA (Single Page Application) estática en GitHub Pages con enrutamiento basado en Hash (`/#/`) para garantizar máxima compatibilidad:
 
-El historial Git no se reescribe durante esta estabilización. Si el tamaño histórico del repositorio se vuelve un problema, puede evaluarse posteriormente `git filter-repo` en una tarea separada, con respaldo y coordinación previa.
+- **Landing Page / Bienvenida (`#landing-view`)**:
+  - Presentación visual con animaciones microinteractivas (`@keyframes landingFadeIn`, `@keyframes floatGlow`).
+  - Desglose del flujo pedagógico CNEB en 3 pasos.
+  - Catálogo de modelos de IA soportados.
+  - Selector interactivo de temas (`Sistema`, `Claro`, `Oscuro`) con persistencia en `localStorage`.
+  - Preguntas frecuentes (FAQ) docentes.
+  - Detección inteligente de sesión: Si el usuario ya cuenta con sesión iniciada en Supabase, el acceso redirige directamente al editor de trabajo sin recargar ni requerir pasos innecesarios.
+  - Enlaces de descarga del motor local (`descargas_landing.html`) y pie de página con accesos oficiales.
+- **Espacio de Trabajo / Editor (`#app-view`)**:
+  - Rail lateral de navegación con 6 etapas curriculares (Datos informativos, Propósitos de aprendizaje, Criterios y evaluación, Secuencia didáctica, Recursos y materiales, Padrón de estudiantes).
+  - Previsualización en tiempo real sobre lienzo de hoja A4 estándar.
+  - Copiloto pedagógico de IA con chat flotante integrado (`js/chatbot.js`) y generador de sesiones (`js/ai-copilot.js`).
+  - Consola de exportación directa a DOCX y PDF.
 
-## Desarrollo local
+### 2. Motor Local de Alta Fidelidad (Desktop)
 
-Requisitos:
+#### ¿Por qué es necesario `pablitohost.exe`?
+Los navegadores web convencionales operan bajo restricciones de sandbox que les impiden generar archivos de Microsoft Word (`.docx`) complejos con el nivel de detalle exigido por MINEDU: tablas anidadas multinivel, saltos de sección precisos, márgenes de imprenta exactos y **ecuaciones matemáticas editables en formato OMML (Office Math Markup Language)**.
 
-- Python 3.11
-- Node.js 22 o posterior
-- Deno 2
+Para resolver esto sin depender de servidores externos lentos o que comprometan la privacidad, la plataforma incluye un microservicio local:
+- Desarrollado en **Python 3.11** con **FastAPI** y **python-docx**.
+- Se ejecuta como un proceso ligero en segundo plano en la máquina del usuario (`http://127.0.0.1:8000`).
+- Su código fuente reside en `backend/` y se compila en un ejecutable autónomo (`pablitohost.exe` / `pablitopyhost.exe`) mediante PyInstaller en GitHub Actions.
+- Disponible para descarga directa desde la sección de descargas o desde GitHub Releases.
 
-Instalar dependencias:
+#### Seguridad y Privacidad del Motor Local
+- **Cero inspección de tu computadora**: El ejecutable **NO** lee, explora, rastrea ni sube archivos de tu disco duro. Su única función es recibir el JSON de la sesión pedagógica y transformarlo en un archivo Word `.docx` o PDF.
+- **Tokens de autorización temporales y rotativos**: Cada vez que el motor inicia o se abre una sesión, genera un token criptográfico único en memoria. El navegador web debe enviar este token para que el motor procese cualquier solicitud.
+- **Acceso por Red Privada (PNA)**: Cumple con las normativas modernas de navegadores (Chrome/Edge Private Network Access), impidiendo que sitios web externos o maliciosos puedan conectarse a tu puerto local.
+- **Procesamiento 100% en tu máquina**: Tus planes curriculares y datos de estudiantes se ensamblan en tu propia computadora, sin viajar a servidores de terceros para la exportación documental.
+
+### 3. Inteligencia Artificial y Edge Functions
+
+Las consultas de IA se enrutan de forma cifrada a través de Supabase Edge Functions:
+```text
+Navegador -> Supabase Edge Function (JWT seguro) -> Proveedor de IA
+```
+
+- **Enrutadores dedicados**:
+  - `openai-router`: GPT-6 Luna, GPT-5.4 Mini, GPT-4o.
+  - `gemini-router`: Gemini 2.5 Flash para respuestas ultra-rápidas.
+  - `deepseek-router`: DeepSeek R1 y DeepSeek V3 para razonamiento estructurado.
+- **Resiliencia y Fallback Automático**: En caso de latencia o indisponibilidad temporal de un modelo preliminar (preview), el sistema realiza fallback automático a modelos estables comprobados (por ejemplo, `gpt-5.4-mini`), garantizando que la experiencia docente nunca se interrumpa.
+- **Seguridad**: El navegador del docente nunca maneja, solicita ni almacena las API Keys maestras de los proveedores de IA.
+- **Monetización y Créditos Automatizados**: La tabla `ai_credits` en Supabase audita y descuenta créditos de forma atómica por usuario (`rpc/debit_ai_credits`), evitando verificaciones manuales.
+
+### 4. Contrato Canónico de Datos (`SessionDocument v1`)
+
+Todo el flujo de datos se rige por un contrato estrictamente versionado:
+- `schemas/session-document.v1.schema.json`: Esquema JSON canónico.
+- `js/ai/session-validator.js`: Validador en tiempo de ejecución en el navegador.
+- `backend/models/session_document.py`: Modelo Pydantic en el backend local.
+
+El mismo documento garantiza paridad 1:1 entre lo previsualizado en el navegador y el archivo Word/PDF descargado.
+
+---
+
+## Estructura del Repositorio
+
+```text
+├── assets/                  # Logotipos, favicons y plantillas oficiales MINEDU
+├── backend/                 # Motor local FastAPI en Python
+│   ├── adapters/            # Adaptadores de versiones anteriores de sesión
+│   ├── models/              # Modelos Pydantic y esquema SessionDocument v1
+│   ├── docx_builder.py      # Ensamblador DOCX legacy
+│   ├── docx_builder_v1.py   # Ensamblador DOCX canónico v1 con soporte OMML
+│   ├── main.py              # API FastAPI y endpoints /export/docx, /health
+│   ├── pablitopyhost.spec   # Especificación de empaquetado PyInstaller
+│   ├── requirements.txt     # Dependencias Python
+│   └── word_math.py         # Conversor LaTeX -> OMML editable y render PNG
+├── css/                     # Hojas de estilo modulares
+│   ├── style.css            # Estilos del editor y variables globales
+│   ├── landing.css          # Estilos de la landing page y animaciones
+│   └── print.css            # Reglas de impresión y formato A4
+├── data/                    # Datos curriculares CNEB (competencias, áreas, ciclos)
+├── design-system/           # Especificación del sistema de diseño Space Lab
+│   └── space-lab-sesiones/  # Tokens, tipografía y reglas MASTER.md
+├── js/                      # Lógica de la aplicación web (ES Modules)
+│   ├── ai/                  # Validador de esquemas y transformadores IA
+│   ├── components/          # Componentes de interfaz reutilizables
+│   ├── controllers/         # Controladores de vistas y acciones
+│   ├── core/                # Utilidades de seguridad, fechas y escape XSS
+│   ├── services/            # Clientes HTTP (exportación local, Supabase)
+│   ├── ai-copilot.js        # Generador de sesiones con IA y fallback
+│   ├── auth-ui.js           # Gestión visual del modal de login/registro
+│   ├── chatbot.js           # Asistente pedagógico flotante
+│   ├── landing.js           # Enrutamiento y control de la landing page
+│   └── theme.js             # Gestor reactivo de temas (Claro / Oscuro / Sistema)
+├── schemas/                 # Contrato JSON Schema canónico v1
+├── scripts/                 # Scripts de utilidad y compilación
+│   └── version_assets.py    # Generador de hashes para cache-busting en CI
+├── SKILLs/                  # Reglas de diseño y guía de componentes Pablito Leans
+├── supabase/                # Infraestructura de backend en la nube
+│   ├── functions/           # Edge Functions (Deno / TypeScript)
+│   └── migrations/          # Migraciones SQL incrementales
+├── tests/                   # Suite completa de pruebas unitarias y de integración
+├── database_setup.sql       # Script SQL maestro e idempotente para Supabase
+├── descargas_landing.html   # Página de descarga de pablitohost.exe
+└── index.html               # Punto de entrada principal de la aplicación web
+```
+
+---
+
+## Instalación y Desarrollo Local
+
+### Requisitos Previos
+
+- **Node.js**: Versión 22 o superior
+- **Python**: Versión 3.11 o superior
+- **Deno**: Versión 2.0+ (opcional, solo para depuración de Edge Functions)
+
+### 1. Clonar el Repositorio
+
+```bash
+git clone https://github.com/dppablito4-oss/space-lab-sesiones-educ.git
+cd space-lab-sesiones-educ
+```
+
+### 2. Entorno del Motor Local (Backend)
 
 ```powershell
+# Crear y activar entorno virtual
+python -m venv .venv
+.venv\Scripts\activate
+
+# Instalar dependencias del backend
 python -m pip install -r backend/requirements.txt
-python -m playwright install chromium
+
+# Ejecutar el motor local en desarrollo
+python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-La web puede servirse con cualquier servidor estático. Por ejemplo:
+### 3. Servir el Frontend Web
+
+Cualquier servidor HTTP estático puede servir la aplicación:
 
 ```powershell
+# Usando Python
 python -m http.server 5173
+
+# O usando npx
+npx serve .
 ```
 
-## Pruebas
+Abre tu navegador en `http://localhost:5173`.
 
-Validaciones principales:
+---
+
+## Suite de Pruebas Automatizadas
+
+El proyecto cuenta con validación rigurosa tanto en Node.js como en Python:
+
+### Pruebas de JavaScript (Node.js)
 
 ```powershell
-node tests/test_contract_v1.js
-node tests/test_adapter_v1.js
-node tests/test_templates_v1.js
-node tests/test_presentation.js
-node tests/test_session_export.js
-node tests/storage.test.js
-node tests/ai-provider-routing.test.js
-node tests/theme.test.js
-node tests/app-utils.test.js
-node tests/local-export-client.test.js
-node tests/document-source-processor.test.js
-
-python tests/test_contract_v1.py
-python tests/test_adapter_v1_py.py
-python tests/test_docx_builder_v1.py
-python tests/backend_smoke.py
-python tests/frontend_security.py
-python tests/ui_smoke.py
-python tests/ui_presentation_smoke.py
-python tests/ui_theme_smoke.py
-python tests/ui_accessibility_smoke.py
-python tests/no_emoji_controls.py
+node tests/test_contract_v1.js            # Valida el contrato SessionDocument v1
+node tests/test_adapter_v1.js             # Valida adaptadores de migración
+node tests/test_templates_v1.js           # Valida templates CNEB
+node tests/test_presentation.js           # Valida configuración de presentación
+node tests/test_session_export.js         # Valida exportación de sesiones
+node tests/storage.test.js                # Valida persistencia y tombstones
+node tests/ai-provider-routing.test.js    # Valida enrutamiento y fallback de IA
+node tests/theme.test.js                  # Valida persistencia y cambio de tema
+node tests/app-utils.test.js              # Valida utilidades y protección XSS
+node tests/local-export-client.test.js    # Valida cliente PNA del motor local
+node tests/document-source-processor.test.js # Valida procesamiento de fuentes PDF
 ```
 
-GitHub Actions ejecuta estas pruebas, valida las Edge Functions y compila `pablitopyhost-windows` en cada push a `main`. Un tag como `v1.3.0` vuelve a ejecutar la validación, compila el motor y adjunta `pablitopyhost.exe` a un GitHub Release. La descarga estable es `https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/latest/download/pablitopyhost.exe`.
+### Pruebas de Python (Backend y Exportación)
 
-Antes de confirmar cambios de JavaScript o CSS, actualiza las versiones de caché basadas en contenido:
+```powershell
+python tests/test_contract_v1.py          # Contrato v1 en backend
+python tests/test_adapter_v1_py.py        # Adaptadores v1 en backend
+python tests/test_docx_builder_v1.py      # Generador de Word con tablas CNEB
+python tests/test_word_math.py            # Conversor de fórmulas LaTeX a OMML
+python tests/backend_smoke.py             # Prueba de humo del servidor FastAPI
+python tests/frontend_security.py         # Análisis de seguridad del frontend
+```
+
+---
+
+## Sistema de Versión de Activos y Caché
+
+Para evitar que los navegadores o CDNs utilicen versiones obsoletas de archivos `.js` o `.css` al desplegar en GitHub Pages, el proyecto utiliza un sistema de **cache-busting basado en el hash del contenido**:
 
 ```powershell
 python scripts/version_assets.py --write
 ```
 
-Los módulos sin cambios conservan la misma URL y siguen usando la caché. Cada archivo modificado recibe un hash nuevo en `?v=...`, por lo que navegadores y CDN descargan únicamente la versión actualizada. La validación de GitHub rechaza commits con versiones desactualizadas.
+Este script calcula el hash SHA-256 del contenido de cada script o stylesheet referenciado en `index.html` y actualiza automáticamente los parámetros de consulta `?v=<hash>`. La integración continua (GitHub Actions) verifica que los hashes estén sincronizados antes de autorizar cualquier integración a la rama principal.
+
+---
 
 ## Despliegue de Edge Functions
+
+Para actualizar las Edge Functions en el proyecto Supabase:
 
 ```powershell
 npx supabase link --project-ref koptglmifwpzrfzvipnm
@@ -154,4 +285,28 @@ npx supabase functions deploy deepseek-router --no-verify-jwt
 npx supabase functions deploy pablito-mailer
 ```
 
-`--no-verify-jwt` delega la verificación al helper compartido `supabase/functions/_shared/auth.ts`; no vuelve públicas las funciones de IA.
+> **Nota sobre seguridad**: La bandera `--no-verify-jwt` delega la verificación al middleware compartido `supabase/functions/_shared/auth.ts`, garantizando validación criptográfica y autenticación estricta antes de invocar a cualquier proveedor de IA.
+
+---
+
+## Términos y Condiciones / Seguridad
+
+En el modal de Términos y Condiciones de la aplicación y en `descargas_landing.html` se especifica detalladamente:
+1. **Uso de Datos**: El software no recopila información privada, ni rastrea el contenido de tus planificaciones fuera de tu propia cuenta de Supabase.
+2. **Uso Responsable de IA**: Las sesiones generadas por IA son sugerencias didácticas y pedagógicas que deben ser supervisadas, contextualizadas y validadas por el docente titular según la realidad de su aula.
+3. **Seguridad del Motor Local**: `pablitohost.exe` es un microservicio local de código abierto auditado, libre de telemetría invasiva, que únicamente se comunica con el navegador mediante tokens locales autorizados.
+
+---
+
+## Contacto y Soporte
+
+Si tienes dudas, sugerencias o requieres asistencia técnica personalizada:
+
+- **Sitio Web Personal**: [https://space.sypablitodp.site](https://space.sypablitodp.site)
+- **WhatsApp**: [+51 918 165 428](https://wa.me/51918165428)
+- **Correo Electrónico**: [pabloclsa87@gmail.com](mailto:pabloclsa87@gmail.com)
+- **Repositorio**: [dppablito4-oss/space-lab-sesiones-educ](https://github.com/dppablito4-oss/space-lab-sesiones-educ)
+
+---
+
+*Desarrollado con dedicación para fortalecer la labor docente y la educación peruana.*
