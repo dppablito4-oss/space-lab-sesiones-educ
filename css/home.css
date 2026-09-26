@@ -6,8 +6,8 @@
     height: 100vh;
     overflow-y: auto;
     background:
-        radial-gradient(circle at 12% 4%, rgba(0, 212, 255, 0.1), transparent 30rem),
-        radial-gradient(circle at 92% 18%, rgba(139, 92, 246, 0.09), transparent 28rem),
+        radial-gradient(circle at 12% 4%, var(--color-primary-dim), transparent 30rem),
+        radial-gradient(circle at 92% 18%, var(--color-violet-dim), transparent 28rem),
         var(--bg-deep);
 }
 
@@ -21,7 +21,7 @@
     align-items: center;
     gap: 24px;
     padding: 10px clamp(20px, 4vw, 64px);
-    background: rgba(6, 6, 15, 0.86);
+    background: color-mix(in srgb, var(--color-background) 88%, transparent);
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -45,9 +45,9 @@
     height: 40px;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(0, 212, 255, 0.25);
+    border: 1px solid var(--color-violet-border);
     border-radius: 12px;
-    background: linear-gradient(145deg, rgba(0, 212, 255, 0.14), rgba(139, 92, 246, 0.14));
+    background: linear-gradient(145deg, var(--color-primary-dim), var(--color-violet-dim));
 }
 
 .home-brand-mark img {
@@ -67,7 +67,7 @@
 
 .home-brand small {
     margin-top: 2px;
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.7rem;
     letter-spacing: 0.035em;
 }
@@ -79,7 +79,7 @@
     padding: 4px;
     border: 1px solid var(--border);
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.025);
+    background: var(--color-card-surface);
 }
 
 .home-nav-link {
@@ -95,7 +95,7 @@
 .home-nav-link:hover,
 .home-nav-link.active {
     color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.06);
+    background: var(--color-muted);
 }
 
 .home-account {
@@ -126,7 +126,7 @@
 }
 
 .home-account-copy span {
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.68rem;
 }
 
@@ -136,10 +136,10 @@
     flex: 0 0 36px;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(0, 212, 255, 0.3);
+    border: 1px solid var(--color-violet-border);
     border-radius: 50%;
-    color: var(--accent);
-    background: rgba(0, 212, 255, 0.1);
+    color: var(--color-primary);
+    background: var(--color-primary-dim);
     font-size: 0.75rem;
     font-weight: 750;
 }
@@ -205,7 +205,7 @@
     padding: 24px;
     border: 1px solid var(--border);
     border-radius: 20px;
-    background: linear-gradient(145deg, rgba(18, 18, 43, 0.9), rgba(12, 12, 29, 0.75));
+    background: linear-gradient(145deg, var(--color-card), var(--color-card-surface));
     box-shadow: var(--shadow-md);
 }
 
@@ -223,7 +223,7 @@
 }
 
 .home-guide-heading > div > span {
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.68rem;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -240,8 +240,8 @@
 .home-tool-icon {
     display: grid;
     place-items: center;
-    color: var(--accent);
-    background: rgba(0, 212, 255, 0.1);
+    color: var(--color-primary);
+    background: var(--color-primary-dim);
 }
 
 .home-guide-icon {
@@ -269,15 +269,15 @@
     height: 28px;
     display: grid;
     place-items: center;
-    border: 1px solid var(--border-accent);
+    border: 1px solid var(--color-violet-border);
     border-radius: 50%;
-    color: var(--accent);
+    color: var(--color-primary);
     font-size: 0.7rem;
     font-weight: 750;
 }
 
 .home-guide-steps p {
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.75rem;
     line-height: 1.45;
 }
@@ -304,7 +304,7 @@
     padding: 17px 19px;
     border: 1px solid var(--border);
     border-radius: 15px;
-    background: rgba(18, 18, 43, 0.48);
+    background: var(--color-card);
 }
 
 .home-summary-icon {
@@ -315,13 +315,13 @@
 }
 
 .home-summary-icon.accent-purple {
-    color: var(--accent-2);
-    background: rgba(139, 92, 246, 0.12);
+    color: var(--color-violet);
+    background: var(--color-violet-dim);
 }
 
 .home-summary-icon.accent-green {
-    color: var(--success);
-    background: var(--success-bg);
+    color: var(--color-success);
+    background: var(--surface-green);
 }
 
 .home-summary-card strong,
@@ -337,7 +337,7 @@
 
 .home-summary-card div > span {
     margin-top: 3px;
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.7rem;
 }
 
@@ -378,18 +378,19 @@
     padding: 22px;
     border: 1px solid var(--border);
     border-radius: 18px;
-    background: rgba(18, 18, 43, 0.55);
+    background: var(--color-card);
     transition: transform var(--transition-base), border-color var(--transition-base), background var(--transition-base);
 }
 
 .home-tool-card-active:hover {
     transform: translateY(-3px);
-    border-color: var(--border-accent);
-    background: rgba(18, 18, 43, 0.8);
+    border-color: var(--color-border-focus);
+    background: var(--color-card-surface);
 }
 
 .home-tool-card-upcoming {
-    opacity: 0.66;
+    border-style: dashed;
+    background: var(--color-card-surface);
 }
 
 .home-tool-icon {
@@ -412,7 +413,7 @@
 }
 
 .home-tool-card-upcoming .home-tool-status {
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
 }
 
 .home-tool-copy h3 {
@@ -463,13 +464,13 @@
     padding: 15px 17px;
     border: 1px solid var(--border);
     border-radius: 14px;
-    background: rgba(18, 18, 43, 0.45);
+    background: var(--color-card);
     transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
 .home-session-item:hover {
     border-color: var(--border-hover);
-    background: rgba(18, 18, 43, 0.72);
+    background: var(--color-card-surface);
 }
 
 .home-session-main {
@@ -486,8 +487,8 @@
     display: grid;
     place-items: center;
     border-radius: 11px;
-    color: var(--accent);
-    background: rgba(0, 212, 255, 0.08);
+    color: var(--color-primary);
+    background: var(--color-primary-dim);
 }
 
 .home-session-copy {
@@ -509,7 +510,7 @@
 
 .home-session-copy span {
     margin-top: 3px;
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.68rem;
 }
 
@@ -520,7 +521,7 @@
 }
 
 .home-session-date {
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.68rem;
     white-space: nowrap;
 }
@@ -537,7 +538,7 @@
     border-radius: 17px;
     color: var(--text-secondary);
     text-align: center;
-    background: rgba(18, 18, 43, 0.3);
+    background: var(--color-card);
 }
 
 .home-empty-sessions > span {
@@ -547,8 +548,8 @@
     place-items: center;
     margin-bottom: 13px;
     border-radius: 14px;
-    color: var(--accent);
-    background: rgba(0, 212, 255, 0.08);
+    color: var(--color-primary);
+    background: var(--color-primary-dim);
 }
 
 .home-empty-sessions h3 {
@@ -558,19 +559,8 @@
 
 .home-empty-sessions p {
     margin: 5px 0 16px;
-    color: var(--text-muted);
+    color: var(--color-muted-foreground);
     font-size: 0.76rem;
-}
-
-html[data-theme="light"] .home-view {
-    background:
-        radial-gradient(circle at 12% 4%, rgba(8, 145, 178, 0.09), transparent 30rem),
-        radial-gradient(circle at 92% 18%, rgba(124, 58, 237, 0.06), transparent 28rem),
-        var(--bg-deep);
-}
-
-html[data-theme="light"] .home-header {
-    background: rgba(248, 250, 252, 0.9);
 }
 
 @media (max-width: 900px) {

@@ -1,12 +1,32 @@
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+import re
 from threading import Thread
 
 from playwright.sync_api import sync_playwright
 
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def rgb(value: str) -> tuple[int, int, int]:
+    channels = re.findall(r"\d+", value)
+    assert len(channels) >= 3, value
+    return tuple(int(channel) for channel in channels[:3])
+
+
+def luminance(color: tuple[int, int, int]) -> float:
+    channels = []
+    for channel in color:
+        value = channel / 255
+        channels.append(value / 12.92 if value <= 0.03928 else ((value + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * channels[0] + 0.7152 * channels[1] + 0.0722 * channels[2]
+
+
+def contrast(foreground: str, background: str) -> float:
+    values = sorted((luminance(rgb(foreground)), luminance(rgb(background))), reverse=True)
+    return (values[0] + 0.05) / (values[1] + 0.05)
 
 
 class QuietHandler(SimpleHTTPRequestHandler):
@@ -41,6 +61,53 @@ def run() -> None:
             assert page.evaluate(
                 "localStorage.getItem('spacelab_theme_preference')"
             ) == "dark"
+
+            # Mi espacio must use theme tokens rather than fixed dark surfaces.
+            page.evaluate(
+                """
+                document.querySelector('#landing-view').classList.add('hidden');
+                document.querySelector('#app-view').classList.add('hidden');
+                document.querySelector('#home-view').classList.remove('hidden');
+                """
+            )
+            workspace_styles = {}
+            for theme in ("light", "dark"):
+                page.evaluate("theme => window.SpaceLabTheme.setPreference(theme)", theme)
+                page.wait_for_timeout(350)
+                workspace_styles[theme] = page.evaluate(
+                    """
+                    () => {
+                        const style = selector => getComputedStyle(document.querySelector(selector));
+                        return {
+                            page: style('.home-view').backgroundColor,
+                            card: style('.home-tool-card-active').backgroundColor,
+                            heading: style('.home-tool-copy h3').color,
+                            secondary: style('.home-tool-copy p').color,
+                            border: style('.home-tool-card-active').borderColor
+                        };
+                    }
+                    """
+                )
+
+            assert workspace_styles["light"]["card"] != workspace_styles["dark"]["card"], workspace_styles
+            assert luminance(rgb(workspace_styles["light"]["card"])) > 0.8
+            assert luminance(rgb(workspace_styles["dark"]["card"])) < 0.03
+            for theme in ("light", "dark"):
+                styles = workspace_styles[theme]
+                assert contrast(styles["heading"], styles["card"]) >= 7
+                assert contrast(styles["secondary"], styles["card"]) >= 4.5
+                assert styles["border"] != styles["card"]
+
+            page.set_viewport_size({"width": 390, "height": 844})
+            assert page.locator("#home-view").is_visible()
+            assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+            page.set_viewport_size({"width": 1440, "height": 900})
+            page.evaluate(
+                """
+                document.querySelector('#home-view').classList.add('hidden');
+                document.querySelector('#app-view').classList.remove('hidden');
+                """
+            )
 
             export_menu = page.locator("#export-command-menu")
             assert not export_menu.get_attribute("open")
