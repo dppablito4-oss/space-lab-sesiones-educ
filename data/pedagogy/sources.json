@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "sources": [
+    {
+      "id": "minedu-secondary-curriculum-2016",
+      "title": "Programa curricular de Educación Secundaria",
+      "publisher": "Ministerio de Educación del Perú",
+      "year": 2016,
+      "sourceKind": "normative_curriculum",
+      "url": "https://repositorio.minedu.gob.pe/handle/20.500.12799/4550",
+      "accessedAt": "2026-09-26"
+    },
+    {
+      "id": "minedu-mathematics-situations-2024",
+      "title": "Orientaciones para la elaboración de situaciones en Matemática",
+      "publisher": "Ministerio de Educación del Perú",
+      "year": 2024,
+      "sourceKind": "official_guidance",
+      "url": "https://repositorio.minedu.gob.pe/handle/20.500.12799/10833",
+      "accessedAt": "2026-09-26"
+    },
+    {
+      "id": "minedu-planning-faq-2022",
+      "title": "Planificación curricular: preguntas frecuentes",
+      "publisher": "Ministerio de Educación del Perú",
+      "year": 2022,
+      "sourceKind": "official_guidance",
+      "url": "https://repositorio.minedu.gob.pe/handle/20.500.12799/8311",
+      "accessedAt": "2026-09-26"
+    }
+  ]
+}

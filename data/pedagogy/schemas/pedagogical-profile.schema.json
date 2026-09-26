@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/pedagogical-profile-v1.json",
+  "title": "Space Lab PedagogicalProfile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "profileVersion",
+    "id",
+    "status",
+    "scope",
+    "planning",
+    "pedagogicalProcessProfile",
+    "didacticProfile",
+    "assessmentProfile",
+    "promptRules",
+    "provenance"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "profileVersion": { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]+$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$" },
+    "status": { "enum": ["draft", "pilot", "reviewed", "archived"] },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "cycle", "grades", "area", "competency"],
+      "properties": {
+        "level": { "enum": ["initial", "primary", "secondary"] },
+        "cycle": { "type": "string", "minLength": 1 },
+        "grades": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "area": { "$ref": "#/$defs/curriculumReference" },
+        "competency": {
+          "allOf": [
+            { "$ref": "#/$defs/curriculumReference" },
+            {
+              "type": "object",
+              "required": ["capacities"],
+              "properties": {
+                "capacities": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "#/$defs/curriculumReference" }
+                }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "planning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowedTypes", "sequenceDocumentKind", "supportsMultipleAreas"],
+      "properties": {
+        "allowedTypes": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["learning_experience", "unit", "project", "context"] }
+        },
+        "sequenceDocumentKind": { "enum": ["session_document_v1", "initial_activity_document_v1", "context_planning_document_v1"] },
+        "supportsMultipleAreas": { "type": "boolean" }
+      }
+    },
+    "pedagogicalProcessProfile": { "$ref": "#/$defs/recommendationGroup" },
+    "didacticProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["approach", "sequencePolicy", "stepsAreMandatory", "strategies", "sourceRefs"],
+      "properties": {
+        "approach": { "type": "string", "minLength": 1 },
+        "sequencePolicy": { "const": "adaptive" },
+        "stepsAreMandatory": { "const": false },
+        "strategies": { "$ref": "#/$defs/recommendations" },
+        "sourceRefs": { "$ref": "#/$defs/sourceRefs" }
+      }
+    },
+    "assessmentProfile": { "$ref": "#/$defs/recommendationGroup" },
+    "promptRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "prioritize", "avoid"],
+      "properties": {
+        "classification": { "const": "space_lab_recommendation" },
+        "prioritize": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } },
+        "avoid": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["curriculumSourceRefs", "guidanceSourceRefs", "reviewNote"],
+      "properties": {
+        "curriculumSourceRefs": { "$ref": "#/$defs/sourceRefs" },
+        "guidanceSourceRefs": { "$ref": "#/$defs/sourceRefs" },
+        "reviewNote": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "curriculumReference": {
+      "type": "object",
+      "required": ["id", "officialName"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "officialName": { "type": "string", "minLength": 1 }
+      }
+    },
+    "sourceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" }
+    },
+    "recommendations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "label", "purpose", "mode"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+          "label": { "type": "string", "minLength": 1 },
+          "purpose": { "type": "string", "minLength": 1 },
+          "mode": { "const": "recommended" }
+        }
+      }
+    },
+    "recommendationGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["classification", "recommendations", "sourceRefs"],
+      "properties": {
+        "classification": { "const": "space_lab_recommendation" },
+        "recommendations": { "$ref": "#/$defs/recommendations" },
+        "sourceRefs": { "$ref": "#/$defs/sourceRefs" }
+      }
+    }
+  }
+}

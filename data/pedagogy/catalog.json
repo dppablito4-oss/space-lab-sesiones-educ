@@ -1,0 +1,12 @@
+{
+  "schemaVersion": "1.0",
+  "catalogVersion": "2026.1",
+  "status": "pilot",
+  "profiles": [
+    {
+      "id": "secondary.cycle-vi.mathematics.quantity",
+      "path": "secondary/cycle-vi/mathematics/quantity.json",
+      "status": "pilot"
+    }
+  ]
+}

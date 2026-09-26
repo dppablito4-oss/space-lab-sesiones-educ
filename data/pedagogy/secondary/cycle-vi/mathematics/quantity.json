@@ -1,0 +1,162 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary.cycle-vi.mathematics.quantity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": {
+      "id": "mathematics",
+      "officialName": "Matemática"
+    },
+    "competency": {
+      "id": "solves-quantity-problems",
+      "officialName": "Resuelve problemas de cantidad",
+      "capacities": [
+        {
+          "id": "translates-quantities-to-numerical-expressions",
+          "officialName": "Traduce cantidades a expresiones numéricas"
+        },
+        {
+          "id": "communicates-understanding-of-numbers-and-operations",
+          "officialName": "Comunica su comprensión sobre los números y las operaciones"
+        },
+        {
+          "id": "uses-estimation-and-calculation-strategies",
+          "officialName": "Usa estrategias y procedimientos de estimación y cálculo"
+        },
+        {
+          "id": "argues-about-numerical-relations-and-operations",
+          "officialName": "Argumenta afirmaciones sobre las relaciones numéricas y las operaciones"
+        }
+      ]
+    }
+  },
+  "planning": {
+    "allowedTypes": ["learning_experience", "unit"],
+    "sequenceDocumentKind": "session_document_v1",
+    "supportsMultipleAreas": false
+  },
+  "pedagogicalProcessProfile": {
+    "classification": "space_lab_recommendation",
+    "recommendations": [
+      {
+        "id": "meaningful-challenge",
+        "label": "Reto significativo",
+        "purpose": "Plantear una situación comprensible que movilice saberes y tenga sentido para el estudiante.",
+        "mode": "recommended"
+      },
+      {
+        "id": "prior-knowledge",
+        "label": "Saberes previos",
+        "purpose": "Recoger estrategias y comprensiones existentes antes de introducir nuevas relaciones.",
+        "mode": "recommended"
+      },
+      {
+        "id": "mediation-and-feedback",
+        "label": "Mediación y retroalimentación",
+        "purpose": "Acompañar la resolución con preguntas, andamiaje y retroalimentación oportuna.",
+        "mode": "recommended"
+      },
+      {
+        "id": "metacognitive-reflection",
+        "label": "Reflexión metacognitiva",
+        "purpose": "Ayudar a reconocer decisiones, dificultades, aprendizajes y posibilidades de transferencia.",
+        "mode": "recommended"
+      }
+    ],
+    "sourceRefs": [
+      "minedu-secondary-curriculum-2016",
+      "minedu-planning-faq-2022"
+    ]
+  },
+  "didacticProfile": {
+    "approach": "Resolución de problemas",
+    "sequencePolicy": "adaptive",
+    "stepsAreMandatory": false,
+    "strategies": [
+      {
+        "id": "contextualized-problem",
+        "label": "Situación problemática contextualizada",
+        "purpose": "Vincular el desafío matemático con una situación relevante sin reducirlo a un ejercicio mecánico.",
+        "mode": "recommended"
+      },
+      {
+        "id": "strategy-exploration",
+        "label": "Exploración de estrategias",
+        "purpose": "Permitir que el estudiante proponga, compare y ajuste procedimientos de resolución.",
+        "mode": "recommended"
+      },
+      {
+        "id": "multiple-representations",
+        "label": "Representaciones y comunicación",
+        "purpose": "Relacionar lenguaje cotidiano, representaciones numéricas, gráficas y explicaciones matemáticas.",
+        "mode": "recommended"
+      },
+      {
+        "id": "argumentation-and-transfer",
+        "label": "Argumentación y transferencia",
+        "purpose": "Justificar resultados y aplicar las relaciones construidas en situaciones nuevas.",
+        "mode": "recommended"
+      }
+    ],
+    "sourceRefs": [
+      "minedu-secondary-curriculum-2016",
+      "minedu-mathematics-situations-2024"
+    ]
+  },
+  "assessmentProfile": {
+    "classification": "space_lab_recommendation",
+    "recommendations": [
+      {
+        "id": "competency-aligned-criteria",
+        "label": "Criterios alineados a la competencia",
+        "purpose": "Formular criterios observables a partir de la competencia, sus capacidades y el propósito de aprendizaje.",
+        "mode": "recommended"
+      },
+      {
+        "id": "strategy-visible-evidence",
+        "label": "Evidencia del proceso de resolución",
+        "purpose": "Recoger productos o actuaciones que permitan observar estrategias, representaciones y argumentos.",
+        "mode": "recommended"
+      },
+      {
+        "id": "timely-feedback",
+        "label": "Retroalimentación oportuna",
+        "purpose": "Ofrecer información útil para que el estudiante revise y mejore su actuación durante el proceso.",
+        "mode": "recommended"
+      }
+    ],
+    "sourceRefs": [
+      "minedu-secondary-curriculum-2016",
+      "minedu-mathematics-situations-2024",
+      "minedu-planning-faq-2022"
+    ]
+  },
+  "promptRules": {
+    "classification": "space_lab_recommendation",
+    "prioritize": [
+      "Partir de una situación problemática relevante para el contexto declarado.",
+      "Promover más de una estrategia o representación cuando el propósito lo permita.",
+      "Solicitar explicaciones y argumentos, no solo respuestas numéricas.",
+      "Conectar criterios, evidencia y propósito de aprendizaje.",
+      "Mantener una progresión explícita entre las sesiones vinculadas."
+    ],
+    "avoid": [
+      "Imponer una única secuencia didáctica como receta universal.",
+      "Reducir la competencia a una lista de ejercicios repetitivos.",
+      "Introducir procedimientos formales sin recuperar comprensiones previas.",
+      "Evaluar únicamente la respuesta final sin observar estrategias ni argumentos."
+    ]
+  },
+  "provenance": {
+    "curriculumSourceRefs": ["minedu-secondary-curriculum-2016"],
+    "guidanceSourceRefs": [
+      "minedu-mathematics-situations-2024",
+      "minedu-planning-faq-2022"
+    ],
+    "reviewNote": "Perfil piloto. Requiere revisión pedagógica humana antes de cambiar su estado a reviewed."
+  }
+}
