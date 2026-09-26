@@ -69,7 +69,7 @@ serve(async (req) => {
         ];
       }
 
-      const apiModel = resolveApiModel(selectedModel, "gpt-4o-mini");
+      const apiModel = resolveApiModel(selectedModel, "gpt-6-luna");
 
       const requestBody: Record<string, unknown> = {
         model: apiModel,

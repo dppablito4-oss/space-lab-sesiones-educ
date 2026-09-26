@@ -21,30 +21,32 @@ const { resolveApiModel, calculateProviderCostUsd, MODEL_CATALOG, MODEL_ALIAS_MA
 
 console.log('=== TEST MODEL CATALOG & 5 ACTIVE MODELS ===');
 
-// 1. Test resolución de los 5 modelos canónicos
-assert.equal(resolveApiModel('gpt-6-luna'), 'gpt-4o-mini');
-assert.equal(resolveApiModel('gpt-5.6-terra'), 'gpt-4o');
-assert.equal(resolveApiModel('gemini-2.5-flash'), 'gemini-2.0-flash');
+// 1. Test resolución de los 5 modelos canónicos (invocación directa sin degradar a 4o)
+assert.equal(resolveApiModel('gpt-6-luna'), 'gpt-6-luna');
+assert.equal(resolveApiModel('gpt-5.6-terra'), 'gpt-5.6-terra');
+assert.equal(resolveApiModel('gemini-2.5-flash'), 'gemini-2.5-flash');
 assert.equal(resolveApiModel('deepseek-chat'), 'deepseek-chat');
 assert.equal(resolveApiModel('deepseek-v3'), 'deepseek-chat');
 assert.equal(resolveApiModel('deepseek-reasoner'), 'deepseek-reasoner');
 assert.equal(resolveApiModel('deepseek-r1'), 'deepseek-reasoner');
-console.log('  ✓ Resolución de los 5 modelos canónicos OK');
+console.log('  ✓ Invocación directa de los 5 modelos canónicos OK');
 
-// 2. Test aliases legacy preservados
-assert.equal(resolveApiModel('gpt-6-astra'), 'gpt-4o');
-assert.equal(resolveApiModel('gpt-6-sol'), 'gpt-4o');
-assert.equal(resolveApiModel('gpt-5.6-luna'), 'gpt-4o');
-assert.equal(resolveApiModel('gpt-5.4-mini'), 'gpt-4o-mini');
-console.log('  ✓ Preservación de aliases legacy diferidos OK');
+// 2. Test aliases legacy y modos de calidad
+assert.equal(resolveApiModel('gpt-6-astra'), 'gpt-5.6-terra');
+assert.equal(resolveApiModel('gpt-6-sol'), 'gpt-5.6-terra');
+assert.equal(resolveApiModel('gpt-5.6-luna'), 'gpt-5.6-terra');
+assert.equal(resolveApiModel('gpt-5.4-mini'), 'gpt-6-luna');
+assert.equal(resolveApiModel('fast'), 'gpt-6-luna');
+assert.equal(resolveApiModel('max_quality'), 'gpt-5.6-terra');
+console.log('  ✓ Preservación de aliases y modos comerciales OK');
 
 // 3. Test cálculo de costo en USD
-// gpt-4o-mini (GPT-6 Luna): input 0.15/M, output 0.60/M
-const costLuna = calculateProviderCostUsd('gpt-4o-mini', 10000, 2000);
+// gpt-6-luna: input 0.15/M, output 0.60/M
+const costLuna = calculateProviderCostUsd('gpt-6-luna', 10000, 2000);
 assert.equal(costLuna, 0.0027);
 
-// gpt-4o (GPT-5.6 Terra): input 2.50/M, output 10.00/M
-const costTerra = calculateProviderCostUsd('gpt-4o', 10000, 2000);
+// gpt-5.6-terra: input 2.50/M, output 10.00/M
+const costTerra = calculateProviderCostUsd('gpt-5.6-terra', 10000, 2000);
 assert.equal(costTerra, 0.045);
 
 // deepseek-reasoner (DeepSeek R1): input 0.55/M, output 2.19/M

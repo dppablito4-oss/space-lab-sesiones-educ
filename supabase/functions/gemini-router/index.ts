@@ -7,7 +7,7 @@ import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
 
 const MODEL_NAME = "gemini-2.5-flash";
-const API_MODEL = "gemini-2.0-flash";
+const API_MODEL = "gemini-2.5-flash";
 const MAX_SOURCE_BASE64_CHARS = 4 * 1024 * 1024;
 
 serve(async (req) => {

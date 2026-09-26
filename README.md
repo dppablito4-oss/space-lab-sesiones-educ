@@ -119,10 +119,10 @@ Navegador -> Supabase Edge Function (JWT seguro) -> Proveedor de IA
 ```
 
 - **Enrutadores dedicados**:
-  - `openai-router`: GPT-6 Luna, GPT-5.4 Mini, GPT-4o.
-  - `gemini-router`: Gemini 2.5 Flash para respuestas ultra-rápidas.
-  - `deepseek-router`: DeepSeek R1 y DeepSeek V3 para razonamiento estructurado.
-- **Resiliencia y Fallback Automático**: En caso de latencia o indisponibilidad temporal de un modelo preliminar (preview), el sistema realiza fallback automático a modelos estables comprobados (por ejemplo, `gpt-5.4-mini`), garantizando que la experiencia docente nunca se interrumpa.
+  - `openai-router`: `gpt-6-luna` (principal/predeterminado en generador y chatbot) y `gpt-5.6-terra` (avanzado y curricular).
+  - `gemini-router`: `gemini-2.5-flash` (multimodal nativo).
+  - `deepseek-router`: `deepseek-chat` (conversacional) y `deepseek-reasoner` (razonamiento pedagógico profundo R1).
+- **Invocación Canónica Directa**: Las Edge Functions invocan de manera directa los modelos canónicos configurados sin degradar a familias de modelos anteriores (`gpt-4o` o `gpt-4o-mini`).
 - **Seguridad**: El navegador del docente nunca maneja, solicita ni almacena las API Keys maestras de los proveedores de IA.
 - **Monetización y Créditos Automatizados**: La tabla `ai_credits` en Supabase audita y descuenta créditos de forma atómica por usuario (`rpc/debit_ai_credits`), evitando verificaciones manuales.
 
