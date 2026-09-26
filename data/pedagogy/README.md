@@ -17,7 +17,9 @@ data/pedagogy/
 ├── catalog.json
 ├── sources.json
 ├── schemas/
-│   └── pedagogical-profile.schema.json
+│   ├── pedagogical-profile.schema.json
+│   ├── planning-container.schema.json
+│   └── session-planning-link.schema.json
 └── secondary/
     └── cycle-vi/
         └── mathematics/
@@ -25,3 +27,5 @@ data/pedagogy/
 ```
 
 Los perfiles publicados deben estar registrados en `catalog.json` y pasar `node tests/pedagogy-catalog.test.js`.
+
+`PlanningContainer v1` modela una unidad, proyecto, experiencia o planificación de contexto con revisiones explícitas. Una sesión mantiene su independencia: el vínculo se guarda en el sobre de persistencia como `session.planning`, fuera de `SessionDocumentV1`. Las sesiones vinculadas reciben un snapshot del contexto heredado para que una revisión posterior del plan no cambie documentos ya generados.

@@ -1,0 +1,44 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/session-planning-link-v1.json",
+  "title": "Space Lab SessionPlanningLink v1",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "planningContainerId", "planningRevision", "sequenceEntryId", "sequenceIndex", "inheritedContextSnapshot"],
+      "properties": {
+        "mode": { "const": "standalone" },
+        "planningContainerId": { "type": "null" },
+        "planningRevision": { "type": "null" },
+        "sequenceEntryId": { "type": "null" },
+        "sequenceIndex": { "type": "null" },
+        "inheritedContextSnapshot": { "type": "null" }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "planningContainerId", "planningRevision", "sequenceEntryId", "sequenceIndex", "inheritedContextSnapshot"],
+      "properties": {
+        "mode": { "const": "linked" },
+        "planningContainerId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "planningRevision": { "type": "integer", "minimum": 1 },
+        "sequenceEntryId": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "sequenceIndex": { "type": "integer", "minimum": 1 },
+        "inheritedContextSnapshot": {
+          "type": "object",
+          "required": ["schemaVersion", "planningContainerId", "planningRevision", "sequenceEntryId", "sequenceIndex", "capturedAt", "identity", "context", "curriculumAreas", "significantSituation", "learningPurpose", "assessment", "sequenceEntry", "precedingSequence"],
+          "properties": {
+            "schemaVersion": { "const": "1.0" },
+            "planningContainerId": { "type": "string" },
+            "planningRevision": { "type": "integer", "minimum": 1 },
+            "sequenceEntryId": { "type": "string" },
+            "sequenceIndex": { "type": "integer", "minimum": 1 },
+            "capturedAt": { "type": "string", "format": "date-time" }
+          }
+        }
+      }
+    }
+  ]
+}

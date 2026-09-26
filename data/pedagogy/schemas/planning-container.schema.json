@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/planning-container-v1.json",
+  "title": "Space Lab PlanningContainer v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "revision", "status", "identity", "context", "curriculumAreas", "significantSituation", "learningPurpose", "assessment", "sequence", "audit"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "id": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["draft", "reviewed", "archived"] },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "planningType", "level", "cycle", "grade", "age", "duration"],
+      "properties": {
+        "title": { "$ref": "#/$defs/text" },
+        "planningType": { "enum": ["learning_experience", "unit", "project", "context"] },
+        "level": { "enum": ["initial", "primary", "secondary"] },
+        "cycle": { "$ref": "#/$defs/text" },
+        "grade": { "type": ["string", "null"] },
+        "age": { "type": ["integer", "null"], "minimum": 0 },
+        "duration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["value", "unit"],
+          "properties": {
+            "value": { "type": "integer", "minimum": 1 },
+            "unit": { "enum": ["days", "weeks", "sessions"] }
+          }
+        }
+      }
+    },
+    "context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["institution", "teacher", "classroom", "students", "diagnosis", "interests", "localContext"],
+      "properties": {
+        "institution": { "type": "string" },
+        "teacher": { "type": "string" },
+        "classroom": { "type": "string" },
+        "students": { "type": "string" },
+        "diagnosis": { "type": "string" },
+        "interests": { "type": "array", "items": { "$ref": "#/$defs/text" }, "uniqueItems": true },
+        "localContext": { "type": "string" }
+      }
+    },
+    "curriculumAreas": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["area", "competencies"],
+        "properties": {
+          "area": { "$ref": "#/$defs/curriculumReference" },
+          "competencies": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["id", "officialName", "capacityRefs"],
+              "properties": {
+                "id": { "$ref": "#/$defs/id" },
+                "officialName": { "$ref": "#/$defs/text" },
+                "capacityRefs": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true }
+              }
+            }
+          }
+        }
+      }
+    },
+    "significantSituation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "challenge"],
+      "properties": { "description": { "$ref": "#/$defs/text" }, "challenge": { "$ref": "#/$defs/text" } }
+    },
+    "learningPurpose": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["summary", "transversalApproaches"],
+      "properties": {
+        "summary": { "$ref": "#/$defs/text" },
+        "transversalApproaches": { "type": "array", "items": { "$ref": "#/$defs/text" }, "uniqueItems": true }
+      }
+    },
+    "assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["criteria", "evidence", "products", "instruments"],
+      "properties": {
+        "criteria": { "$ref": "#/$defs/textList" },
+        "evidence": { "$ref": "#/$defs/textList" },
+        "products": { "$ref": "#/$defs/textList" },
+        "instruments": { "$ref": "#/$defs/textList" }
+      }
+    },
+    "sequence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "index", "kind", "activityType", "title", "areaRef", "competencyRefs", "purpose", "status", "generatedDocumentId"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "index": { "type": "integer", "minimum": 1 },
+          "kind": { "enum": ["session", "initial_activity", "milestone"] },
+          "activityType": { "type": ["string", "null"], "enum": [null, "psychomotor_workshop", "graphic_plastic_workshop", "music_workshop", "free_play", "story_activity", "sensory_activity", "exploration_activity", "closure_activity"] },
+          "title": { "$ref": "#/$defs/text" },
+          "areaRef": { "type": ["string", "null"] },
+          "competencyRefs": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+          "purpose": { "$ref": "#/$defs/text" },
+          "status": { "enum": ["planned", "generated", "completed"] },
+          "generatedDocumentId": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["createdAt", "updatedAt"],
+      "properties": { "createdAt": { "$ref": "#/$defs/dateTime" }, "updatedAt": { "$ref": "#/$defs/dateTime" } }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text": { "type": "string", "minLength": 1 },
+    "textList": { "type": "array", "items": { "$ref": "#/$defs/text" } },
+    "dateTime": { "type": "string", "format": "date-time" },
+    "curriculumReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "officialName"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "officialName": { "$ref": "#/$defs/text" } }
+    }
+  }
+}
