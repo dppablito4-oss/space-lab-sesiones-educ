@@ -246,6 +246,9 @@ node tests/theme.test.js                  # Valida persistencia y cambio de tema
 node tests/app-utils.test.js              # Valida utilidades y protección XSS
 node tests/local-export-client.test.js    # Valida cliente PNA del motor local
 node tests/document-source-processor.test.js # Valida procesamiento de fuentes PDF
+node tests/test_model_catalog.js          # Valida catálogo y aliases de modelos
+node tests/test_entitlements.js           # Valida shadow/enforcement de capacidades
+node tests/test_credit_ledger_logic.js    # Valida orden de consumo y reembolsos
 ```
 
 ### Pruebas de Python (Backend y Exportación)

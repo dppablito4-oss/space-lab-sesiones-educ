@@ -4,6 +4,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MIGRATION = ROOT / "supabase/migrations/202609210002_ai_credits.sql"
 ADMIN_MIGRATION = ROOT / "supabase/migrations/202609250001_admin_credit_management.sql"
+SAAS_HARDENING_MIGRATION = ROOT / "supabase/migrations/202609260005_saas_security_hardening.sql"
 ROUTERS = [
     ROOT / "supabase/functions/openai-router/index.ts",
     ROOT / "supabase/functions/gemini-router/index.ts",
@@ -14,6 +15,7 @@ ROUTERS = [
 def main() -> None:
     sql = MIGRATION.read_text(encoding="utf-8")
     admin_sql = ADMIN_MIGRATION.read_text(encoding="utf-8")
+    hardening_sql = SAAS_HARDENING_MIGRATION.read_text(encoding="utf-8")
     bootstrap = (ROOT / "database_setup.sql").read_text(encoding="utf-8")
     for table in ("ai_plans", "ai_action_costs", "ai_credit_wallets", "ai_usage"):
         assert f"public.{table}" in sql
@@ -44,6 +46,19 @@ def main() -> None:
         assert "AI_CREDITS_ADMIN_UPDATE" in source
         assert "p_balance > 1000000" in source
         assert "GRANT EXECUTE ON FUNCTION public.admin_set_ai_credits" in source
+
+    assert "FROM PUBLIC, anon, authenticated" in hardening_sql
+    assert "TO service_role" in hardening_sql
+    assert "CREATE OR REPLACE FUNCTION public.get_user_entitlements()" in hardening_sql
+    entitlement_function = hardening_sql.split(
+        "CREATE OR REPLACE FUNCTION public.get_user_entitlements()", 1
+    )[1].split("$$;", 1)[0]
+    assert "INSERT INTO public.subscriptions" not in entitlement_function
+    assert "UPDATE public.subscriptions" not in entitlement_function
+    assert "v_plan_code TEXT := 'free'" in entitlement_function
+    assert "s.current_period_end IS NULL" in entitlement_function
+    assert "source_type, granted_credits, remaining_credits" in hardening_sql
+    assert "'adjustment'" in hardening_sql
 
     admin_frontend = (ROOT / "js/admin.js").read_text(encoding="utf-8")
     assert ".rpc('admin_list_ai_credit_accounts'" in admin_frontend

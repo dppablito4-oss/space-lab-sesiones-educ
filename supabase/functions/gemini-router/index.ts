@@ -5,7 +5,7 @@ import { providerErrorResponse, configurationErrorResponse, internalErrorRespons
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
-import { checkFeatureEntitlement, getRequiredFeatureKey } from "../_shared/entitlements.ts";
+import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
 
 const MODEL_NAME = "gemini-2.5-flash";
 const API_MODEL = "gemini-2.5-flash";
@@ -33,18 +33,18 @@ serve(async (req) => {
 
     // Verificación de Entitlements (en modo SHADOW para beta)
     const hasAttachment = Boolean(aiRequest.sourceFile);
-    const featureKey = getRequiredFeatureKey(aiRequest.action, {
+    const featureKeys = getRequiredFeatureKeys(aiRequest.action, {
       hasAttachment,
       modelQuality: "fast",
     });
 
-    const entitlement = await checkFeatureEntitlement(auth.client, featureKey, {
+    const entitlement = await checkFeatureEntitlements(auth.client, featureKeys, {
       userId: auth.user.id,
       requestId: aiRequest.requestId,
     });
 
     if (!entitlement.allowed) {
-      return entitlementErrorResponse(req, aiRequest.requestId, featureKey, entitlement.plan);
+      return entitlementErrorResponse(req, aiRequest.requestId, entitlement.featureKey, entitlement.plan);
     }
 
     const apiKey = Deno.env.get("API-KEY-GEMINI") || Deno.env.get("GEMINI_API_KEY");

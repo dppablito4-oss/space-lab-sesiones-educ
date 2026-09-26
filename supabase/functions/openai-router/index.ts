@@ -5,7 +5,7 @@ import { providerErrorResponse, configurationErrorResponse, internalErrorRespons
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd, resolveApiModel, MODEL_CATALOG } from "../_shared/model-catalog.ts";
-import { checkFeatureEntitlement, getRequiredFeatureKey } from "../_shared/entitlements.ts";
+import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
 
 const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-5.6-terra", "gpt-6-astra", "gpt-6-sol", "gpt-5.6-luna", "gpt-5.4-mini", "fast", "balanced", "max_quality", "automatic"]);
 const MAX_SOURCE_CHARS = 30_000;
@@ -41,18 +41,18 @@ serve(async (req) => {
     const hasAttachment = Boolean(aiRequest.sourceFile);
     const resolvedModelName = resolveApiModel(selectedModel, "gpt-6-luna");
     const modelMeta = MODEL_CATALOG[resolvedModelName];
-    const featureKey = getRequiredFeatureKey(aiRequest.action, {
+    const featureKeys = getRequiredFeatureKeys(aiRequest.action, {
       hasAttachment,
       modelQuality: modelMeta?.qualityTier,
     });
 
-    const entitlement = await checkFeatureEntitlement(auth.client, featureKey, {
+    const entitlement = await checkFeatureEntitlements(auth.client, featureKeys, {
       userId: auth.user.id,
       requestId: aiRequest.requestId,
     });
 
     if (!entitlement.allowed) {
-      return entitlementErrorResponse(req, aiRequest.requestId, featureKey, entitlement.plan);
+      return entitlementErrorResponse(req, aiRequest.requestId, entitlement.featureKey, entitlement.plan);
     }
 
     const apiKey = Deno.env.get("OPENAI_API_KEY") || Deno.env.get("API_KEY_OPENAI");

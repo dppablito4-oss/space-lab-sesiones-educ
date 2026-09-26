@@ -1,7 +1,6 @@
 /**
- * Módulo de Entitlements y Control de Capacidades Comerciales (Fase 4 SaaS)
- * Opera en modo SHADOW por defecto (BILLING_ENFORCEMENT=false) para no bloquear
- * a ningún docente evaluador mientras audita con telemetría económica.
+ * Entitlements y control de capacidades comerciales.
+ * Opera en shadow por defecto; enforcement debe fallar cerrado.
  */
 
 export interface UserEntitlementsResult {
@@ -15,6 +14,8 @@ export interface EntitlementCheckResult {
   wouldBlock: boolean;
   plan: string;
   featureKey: string;
+  deniedFeatures: string[];
+  verificationFailed: boolean;
 }
 
 export interface EntitlementRpcClient {
@@ -32,76 +33,126 @@ export interface CheckEntitlementOptions {
   enforce?: boolean;
 }
 
-/**
- * Resuelve la clave de permiso (feature_key) requerida según la acción y atributos de la petición.
- */
+/** Conserva el contrato singular para consumidores legacy. */
 export function getRequiredFeatureKey(
   action: string,
-  options: RequiredFeatureOptions = {}
+  options: RequiredFeatureOptions = {},
 ): string {
-  if (options.hasAttachment) {
-    return "ai.attach_file";
-  }
-  if (options.modelQuality === "max_quality") {
-    return "ai.quality_max";
-  }
-  if (options.modelQuality === "balanced") {
-    return "ai.quality_balanced";
-  }
-  switch (action) {
-    case "generate_session":
-    case "generate_criteria":
-      return "session.generate";
-    case "chatbot":
-      return "ai.chat";
-    case "pedagogy_brief":
-    case "summarize_brief":
-    case "refine_text":
-      return "session.generate";
-    default:
-      return "session.generate";
-  }
+  return getRequiredFeatureKeys(action, options)[0];
 }
 
 /**
- * Consulta y valida el entitlement del usuario llamando al RPC get_user_entitlements().
- * En modo SHADOW (por defecto), si una característica no estuviera habilitada, se
- * registra como WOULD_BLOCK pero se permite continuar sin interrumpir al docente.
+ * Devuelve todas las capacidades necesarias. Los atributos adicionales de una
+ * solicitud no reemplazan al permiso base de la acción.
  */
+export function getRequiredFeatureKeys(
+  action: string,
+  options: RequiredFeatureOptions = {},
+): string[] {
+  const required: string[] = [];
+
+  switch (action) {
+    case "chatbot":
+      required.push("ai.chat");
+      break;
+    case "generate_session":
+    case "generate_criteria":
+    case "pedagogy_brief":
+    case "summarize_brief":
+    case "refine_text":
+    default:
+      required.push("session.generate");
+  }
+
+  if (options.hasAttachment) required.push("ai.attach_file");
+  if (options.modelQuality === "max_quality") required.push("ai.quality_max");
+  if (options.modelQuality === "balanced") required.push("ai.quality_balanced");
+
+  return Array.from(new Set(required));
+}
+
+/** Conserva el contrato singular para consumidores legacy. */
 export async function checkFeatureEntitlement(
   client: EntitlementRpcClient,
   featureKey: string,
-  options: CheckEntitlementOptions = {}
+  options: CheckEntitlementOptions = {},
 ): Promise<EntitlementCheckResult> {
+  return checkFeatureEntitlements(client, [featureKey], options);
+}
+
+/**
+ * Valida todas las capacidades con una sola lectura del RPC. Shadow permite y
+ * audita; enforcement bloquea también ante errores o respuestas incompletas.
+ */
+export async function checkFeatureEntitlements(
+  client: EntitlementRpcClient,
+  featureKeys: string[],
+  options: CheckEntitlementOptions = {},
+): Promise<EntitlementCheckResult> {
+  const required = Array.from(new Set(featureKeys.filter(Boolean)));
+  const primaryFeature = required[0] || "session.generate";
+  const enforce = options.enforce ?? (Deno.env.get("BILLING_ENFORCEMENT") === "true");
+
   try {
     const { data, error } = await client.rpc("get_user_entitlements");
 
     if (error || !data || typeof data !== "object") {
-      console.warn(`[Entitlements] Advertencia: No se pudo verificar el entitlement para '${featureKey}':`, error);
-      return { allowed: true, wouldBlock: false, plan: "unknown", featureKey };
+      console.warn(`[Entitlements] No se pudieron verificar '${required.join(", ")}':`, error);
+      return {
+        allowed: !enforce,
+        wouldBlock: true,
+        plan: "unknown",
+        featureKey: primaryFeature,
+        deniedFeatures: required,
+        verificationFailed: true,
+      };
     }
 
     const result = data as UserEntitlementsResult;
+    if (result.ok !== true || !result.features || typeof result.features !== "object" || Array.isArray(result.features)) {
+      console.warn(`[Entitlements] Respuesta inválida al verificar '${required.join(", ")}'.`);
+      return {
+        allowed: !enforce,
+        wouldBlock: true,
+        plan: result.plan || "unknown",
+        featureKey: primaryFeature,
+        deniedFeatures: required,
+        verificationFailed: true,
+      };
+    }
     const plan = result.plan || "unknown";
-    const features = result.features || {};
-    const isEnabled = features[featureKey] !== false; // Solo bloquea si explícitamente es false
+    const features = result.features;
+    const deniedFeatures = required.filter((featureKey) => features[featureKey] !== true);
 
-    if (!isEnabled) {
-      console.warn(`[Entitlements SHADOW] WOULD_BLOCK user: ${options.userId || "anon"}, plan: ${plan}, feature: ${featureKey}, requestId: ${options.requestId || "n/a"}`);
-
-      // Enforce solo si la variable de entorno BILLING_ENFORCEMENT=true está activa
-      const enforce = options.enforce ?? (Deno.env.get("BILLING_ENFORCEMENT") === "true");
-      if (enforce) {
-        return { allowed: false, wouldBlock: true, plan, featureKey };
-      }
-
-      // En modo SHADOW: se permite la ejecución para la beta
-      return { allowed: true, wouldBlock: true, plan, featureKey };
+    if (deniedFeatures.length > 0) {
+      console.warn(`[Entitlements SHADOW] WOULD_BLOCK user: ${options.userId || "anon"}, plan: ${plan}, features: ${deniedFeatures.join(",")}, requestId: ${options.requestId || "n/a"}`);
+      return {
+        allowed: !enforce,
+        wouldBlock: true,
+        plan,
+        featureKey: deniedFeatures[0],
+        deniedFeatures,
+        verificationFailed: false,
+      };
     }
 
-    return { allowed: true, wouldBlock: false, plan, featureKey };
-  } catch (err) {
-    console.error(`[Entitlements] Error inesperado evaluando feature '${featureKey}':`, err);
-    return { allowed: true, wouldBlock: false, plan: "unknown", featureKey };
+    return {
+      allowed: true,
+      wouldBlock: false,
+      plan,
+      featureKey: primaryFeature,
+      deniedFeatures: [],
+      verificationFailed: false,
+    };
+  } catch (error) {
+    console.error(`[Entitlements] Error verificando '${required.join(", ")}':`, error);
+    return {
+      allowed: !enforce,
+      wouldBlock: true,
+      plan: "unknown",
+      featureKey: primaryFeature,
+      deniedFeatures: required,
+      verificationFailed: true,
+    };
   }
 }

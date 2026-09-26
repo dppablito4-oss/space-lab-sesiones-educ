@@ -5,7 +5,7 @@ import { providerErrorResponse, configurationErrorResponse, internalErrorRespons
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
-import { checkFeatureEntitlement, getRequiredFeatureKey } from "../_shared/entitlements.ts";
+import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
 
 serve(async (req) => {
   const preflight = preflightResponse(req);
@@ -42,18 +42,18 @@ serve(async (req) => {
     // Verificación de Entitlements (en modo SHADOW para beta)
     const hasAttachment = Boolean(aiRequest.sourceFile);
     const modelQuality = selectedModel === "deepseek-reasoner" ? "max_quality" : "balanced";
-    const featureKey = getRequiredFeatureKey(aiRequest.action, {
+    const featureKeys = getRequiredFeatureKeys(aiRequest.action, {
       hasAttachment,
       modelQuality,
     });
 
-    const entitlement = await checkFeatureEntitlement(auth.client, featureKey, {
+    const entitlement = await checkFeatureEntitlements(auth.client, featureKeys, {
       userId: auth.user.id,
       requestId: aiRequest.requestId,
     });
 
     if (!entitlement.allowed) {
-      return entitlementErrorResponse(req, aiRequest.requestId, featureKey, entitlement.plan);
+      return entitlementErrorResponse(req, aiRequest.requestId, entitlement.featureKey, entitlement.plan);
     }
 
     let reservation;
