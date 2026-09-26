@@ -4,8 +4,9 @@ import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
 import { providerErrorResponse, configurationErrorResponse, internalErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
+import { calculateProviderCostUsd, resolveApiModel } from "../_shared/model-catalog.ts";
 
-const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-6-astra", "gpt-6-sol", "gpt-5.6-luna", "gpt-5.4-mini"]);
+const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-6-astra", "gpt-6-sol", "gpt-5.6-luna", "gpt-5.4-mini", "fast", "balanced", "max_quality", "automatic"]);
 const MAX_SOURCE_CHARS = 30_000;
 const MAX_IMAGE_BASE64_CHARS = 4 * 1024 * 1024;
 
@@ -68,14 +69,7 @@ serve(async (req) => {
         ];
       }
 
-      const OPENAI_API_MODEL_MAP: Record<string, string> = {
-        "gpt-6-luna": "gpt-4o-mini",
-        "gpt-6-astra": "gpt-4o",
-        "gpt-6-sol": "gpt-4o",
-        "gpt-5.6-luna": "gpt-4o",
-        "gpt-5.4-mini": "gpt-4o-mini",
-      };
-      const apiModel = OPENAI_API_MODEL_MAP[selectedModel] || "gpt-4o-mini";
+      const apiModel = resolveApiModel(selectedModel, "gpt-4o-mini");
 
       const requestBody: Record<string, unknown> = {
         model: apiModel,
@@ -89,11 +83,13 @@ serve(async (req) => {
         requestBody.response_format = { type: "json_object" };
       }
 
+      const startTime = Date.now();
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
         body: JSON.stringify(requestBody),
       });
+      const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
         console.error(`OpenAI API Error (${response.status}):`, await response.text());
@@ -115,10 +111,23 @@ serve(async (req) => {
         }
       }
 
-      const balance = await completeAiUsage(auth.client, aiRequest.requestId, {
-        input: data.usage?.prompt_tokens,
-        output: data.usage?.completion_tokens,
-      });
+      const inputTokens = data.usage?.prompt_tokens ?? 0;
+      const outputTokens = data.usage?.completion_tokens ?? 0;
+      const costUsd = calculateProviderCostUsd(apiModel, inputTokens, outputTokens);
+
+      const balance = await completeAiUsage(
+        auth.client,
+        aiRequest.requestId,
+        {
+          input: inputTokens,
+          output: outputTokens,
+        },
+        {
+          providerModel: apiModel,
+          costUsd,
+          latencyMs,
+        },
+      );
 
       return jsonResponse(req, reply, 200, {
         "X-Request-Id": aiRequest.requestId,

@@ -4,8 +4,10 @@ import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
 import { providerErrorResponse, configurationErrorResponse, internalErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
+import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
 
 const MODEL_NAME = "gemini-2.5-flash";
+const API_MODEL = "gemini-2.0-flash";
 const MAX_SOURCE_BASE64_CHARS = 4 * 1024 * 1024;
 
 serve(async (req) => {
@@ -64,13 +66,14 @@ serve(async (req) => {
         systemInstruction: { parts: [{ text: aiRequest.systemPrompt }] },
       };
 
-      const GEMINI_API_MODEL = "gemini-2.0-flash";
-      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_API_MODEL}:generateContent?key=${apiKey}`;
+      const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`;
+      const startTime = Date.now();
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
       });
+      const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
         console.error(`Gemini API Error (${response.status}):`, await response.text());
@@ -81,10 +84,23 @@ serve(async (req) => {
       const reply = data.candidates?.[0]?.content?.parts?.[0]?.text;
       if (typeof reply !== "string" || !reply) throw new Error("EMPTY_PROVIDER_RESPONSE");
 
-      const balance = await completeAiUsage(auth.client, aiRequest.requestId, {
-        input: data.usageMetadata?.promptTokenCount,
-        output: data.usageMetadata?.candidatesTokenCount,
-      });
+      const inputTokens = data.usageMetadata?.promptTokenCount ?? 0;
+      const outputTokens = data.usageMetadata?.candidatesTokenCount ?? 0;
+      const costUsd = calculateProviderCostUsd(API_MODEL, inputTokens, outputTokens);
+
+      const balance = await completeAiUsage(
+        auth.client,
+        aiRequest.requestId,
+        {
+          input: inputTokens,
+          output: outputTokens,
+        },
+        {
+          providerModel: API_MODEL,
+          costUsd,
+          latencyMs,
+        },
+      );
 
       return jsonResponse(req, reply, 200, {
         "X-Request-Id": aiRequest.requestId,

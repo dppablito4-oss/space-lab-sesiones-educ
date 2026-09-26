@@ -71,16 +71,40 @@ export async function reserveAiCredits(
   };
 }
 
+export interface AiUsageTelemetry {
+  providerModel?: string | null;
+  costUsd?: number | null;
+  latencyMs?: number | null;
+}
+
 export async function completeAiUsage(
   client: RpcClient,
   requestId: string,
   tokens: { input?: number | null; output?: number | null } = {},
+  telemetry: AiUsageTelemetry = {},
 ): Promise<number | null> {
-  const { data, error } = await client.rpc("complete_ai_usage", {
+  const fullArgs: Record<string, unknown> = {
     p_request_id: requestId,
     p_input_tokens: tokens.input ?? null,
     p_output_tokens: tokens.output ?? null,
-  });
+  };
+  if (telemetry.providerModel !== undefined) fullArgs.p_provider_model = telemetry.providerModel;
+  if (telemetry.costUsd !== undefined) fullArgs.p_cost_usd = telemetry.costUsd;
+  if (telemetry.latencyMs !== undefined) fullArgs.p_latency_ms = telemetry.latencyMs;
+
+  let rpcResult = await client.rpc("complete_ai_usage", fullArgs);
+
+  // Si la función SQL en BD aún no tiene los nuevos parámetros opcionales, reintentar con la firma clásica
+  if (rpcResult.error && typeof (rpcResult.error as Record<string, unknown>).message === "string" &&
+      String((rpcResult.error as Record<string, unknown>).message).includes("function")) {
+    rpcResult = await client.rpc("complete_ai_usage", {
+      p_request_id: requestId,
+      p_input_tokens: tokens.input ?? null,
+      p_output_tokens: tokens.output ?? null,
+    });
+  }
+
+  const { data, error } = rpcResult;
   if (error) {
     console.error("[AI Credits] No se pudo completar el consumo:", error);
     throw new AiCreditError("ACCOUNTING_UNAVAILABLE");

@@ -4,6 +4,7 @@ import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
 import { providerErrorResponse, configurationErrorResponse, internalErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
+import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
 
 const MODEL_NAME = "deepseek-chat";
 
@@ -49,6 +50,7 @@ serve(async (req) => {
     }
 
     try {
+      const startTime = Date.now();
       const response = await fetch("https://api.deepseek.com/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
@@ -62,6 +64,7 @@ serve(async (req) => {
           max_tokens: aiRequest.maxOutputTokens,
         }),
       });
+      const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
         console.error(`DeepSeek API Error (${response.status}):`, await response.text());
@@ -72,10 +75,23 @@ serve(async (req) => {
       const reply = data.choices?.[0]?.message?.content;
       if (typeof reply !== "string" || !reply) throw new Error("EMPTY_PROVIDER_RESPONSE");
 
-      const balance = await completeAiUsage(auth.client, aiRequest.requestId, {
-        input: data.usage?.prompt_tokens,
-        output: data.usage?.completion_tokens,
-      });
+      const inputTokens = data.usage?.prompt_tokens ?? 0;
+      const outputTokens = data.usage?.completion_tokens ?? 0;
+      const costUsd = calculateProviderCostUsd(MODEL_NAME, inputTokens, outputTokens);
+
+      const balance = await completeAiUsage(
+        auth.client,
+        aiRequest.requestId,
+        {
+          input: inputTokens,
+          output: outputTokens,
+        },
+        {
+          providerModel: MODEL_NAME,
+          costUsd,
+          latencyMs,
+        },
+      );
 
       return jsonResponse(req, reply, 200, {
         "X-Request-Id": aiRequest.requestId,
