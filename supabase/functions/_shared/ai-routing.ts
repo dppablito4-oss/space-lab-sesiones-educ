@@ -133,3 +133,7 @@ export function fallbackRoute(disabledProvider: AiProvider, quality: AiQuality):
     reason: "provider_openai_disabled",
   };
 }
+
+export function shouldFallbackStatus(status: number): boolean {
+  return status === 500 || status === 502 || status === 503 || status === 504;
+}

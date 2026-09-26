@@ -10,6 +10,7 @@ export function corsHeaders(req: Request): Record<string, string> {
     "Access-Control-Allow-Origin": allowedOrigin,
     "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Expose-Headers": "X-Request-Id, X-Prompt-Version, X-AI-Credits-Remaining, X-AI-Provider, X-AI-Model, X-AI-Route-Reason, X-AI-Attempt-Id, X-AI-Fallback-Count",
     "Vary": "Origin",
   };
 }
