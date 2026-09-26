@@ -609,6 +609,7 @@
                 <a href="https://space.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="landing-footer-link">space.sypablitodp.site</a>
                 <a href="descargas_landing.html" class="landing-footer-link">Motor Local de Word</a>
                 <a href="conexion.html" class="landing-footer-link">Estado de Conexión</a>
+                <a href="#" id="link-terms-footer" class="landing-footer-link">Términos y Privacidad</a>
                 <a href="#/app" class="landing-footer-link" data-action="enter-app">Ir al Editor</a>
             </div>
         </footer>
@@ -1647,75 +1648,109 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <!-- ═══════════ TERMS AND CONDITIONS MODAL ═══════════ -->
     <div id="terms-modal" class="load-modal hidden" style="z-index: 10000;">
         <div class="load-modal-content glass-card"
-            style="max-width: 600px; padding: 2rem; text-align: left; max-height: 80vh; overflow-y: auto;">
+            style="max-width: 720px; padding: 2rem; text-align: left; max-height: 85vh; overflow-y: auto;">
             <div class="load-modal-header"
-                style="border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
-                <h3
-                    style="font-size: 1.25rem; font-weight: 800; color: var(--color-foreground); margin: 0;">
-                    Términos, Condiciones de Uso y Políticas de Privacidad — Space Lab
-                </h3>
+                style="border-bottom: 1px solid var(--border); padding-bottom: 0.75rem; margin-bottom: 1.25rem; display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 0.6rem;">
+                    <svg class="ui-icon" style="color: var(--accent); width: 22px; height: 22px;" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                    <h3 style="font-size: 1.2rem; font-weight: 800; color: var(--color-foreground); margin: 0;">
+                        Términos, Condiciones de Uso y Políticas de Privacidad — Space Lab
+                    </h3>
+                </div>
                 <button id="btn-close-terms" class="btn btn-ghost btn-sm"
                     style="font-size: 1.1rem; padding: 4px 8px;" aria-label="Cerrar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
             </div>
-            <div
-                style="font-size: 0.82rem; line-height: 1.5; color: var(--text-primary); display: flex; flex-direction: column; gap: 1rem;">
-                <p><strong>Última actualización: Junio de 2026</strong></p>
+            
+            <div style="font-size: 0.85rem; line-height: 1.6; color: var(--text-primary); display: flex; flex-direction: column; gap: 1.1rem;">
+                <div style="background: rgba(0, 210, 255, 0.06); border: 1px solid rgba(0, 210, 255, 0.2); border-radius: 8px; padding: 0.85rem 1rem; font-size: 0.82rem;">
+                    <strong>Última actualización: Septiembre de 2026</strong> | Versión del Sistema: <strong>Space Lab 2.0 (Motor v1.3.0)</strong><br>
+                    Desarrollado y operado por <strong>Samuel Y. Pablo Claudio (pablitodp)</strong> — Huánuco, Perú.
+                </div>
 
-                <p>Bienvenido a <strong>Space Lab</strong>. Esta plataforma de asistencia pedagógica y generación de
-                    sesiones de aprendizaje es un desarrollo independiente de <strong>Samuel Y. Pablo Claudio
-                        (pablitodp)</strong>. Al registrarte y utilizar nuestros servicios, aceptas plenamente los
-                    siguientes Términos y Condiciones y la Política de Privacidad de acuerdo con las leyes vigentes de
-                    la República del Perú.</p>
+                <p>Bienvenido a <strong>Space Lab</strong> (<code>sesiones.sypablitodp.site</code>). Esta plataforma de asistencia pedagógica, planificación curricular y exportación documental está diseñada para facilitar el trabajo técnico-pedagógico de los docentes de Educación Básica Regular (Inicial, Primaria y Secundaria) del Perú. Al acceder, registrarte y utilizar nuestros servicios, aceptas en su totalidad los siguientes Términos y Condiciones y la Política de Privacidad conforme a la legislación vigente de la República del Perú.</p>
 
-                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem;">1. REGISTRO, SEGURIDAD Y CUENTAS
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
+                    1. REGISTRO, SEGURIDAD Y AUTENTICACIÓN
                 </h4>
-                <p>El registro en Space Lab es de carácter personal. El usuario es responsable de mantener la seguridad
-                    y confidencialidad de su cuenta y contraseña. Para garantizar la seguridad del servicio y mitigar
-                    abusos, nos reservamos el derecho de limitar el acceso a través de controles técnicos adicionales.
-                </p>
+                <p>El registro en Space Lab es de carácter personal e intransferible. El usuario es responsable de mantener la confidencialidad de sus credenciales. La plataforma utiliza infraestructura segura en la nube (Supabase Auth) con contraseñas encriptadas mediante algoritmos criptográficos robustos y políticas de seguridad a nivel de fila (Row Level Security - RLS). Cada docente tiene acceso exclusivo y privado a sus propias sesiones, perfiles y datos.</p>
 
-                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem;">2. SERVICIO DE COPILOTO IA Y
-                    CRÉDITOS</h4>
-                <p>La generación de sesiones mediante inteligencia artificial (integrando modelos avanzados como Gemini
-                    y DeepSeek) consume recursos de cómputo y APIs externas con costos reales. Por lo tanto, <strong>los
-                        créditos de generación no son ilimitados</strong>. Space Lab otorga una cuota inicial gratuita
-                    para pruebas, pero el uso continuo requiere de recargas de créditos. <strong>Las recargas se
-                        realizan de forma manual mediante Yape o Plin</strong> (según se indique en el sistema) y no
-                    están sujetas a reembolsos ni devoluciones debido a que los costes de procesamiento de la IA se
-                    facturan de manera inmediata al ejecutarse la consulta.</p>
-
-                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem;">3. PROPIEDAD INTELECTUAL Y USO
-                    DE CONTENIDOS</h4>
-                <p>Los textos, secuencias didácticas y materiales generados pertenecen al usuario que los diseñó y
-                    editó. No obstante, al utilizar la plataforma, el usuario nos otorga la autorización técnica mínima
-                    para almacenar en caché, sincronizar en la nube y procesar sus datos con el único fin de proveer la
-                    operatividad del servicio.</p>
-
-                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem;">4. EXCLUSIÓN DE RESPONSABILIDAD
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+                    2. ARQUITECTURA DEL MOTOR LOCAL (pablitohost.exe / pablitopyhost.exe) Y PRIVACIDAD TOTAL DE TU PC
                 </h4>
-                <p>Las sugerencias, indicadores y materiales didácticos generados por la IA son herramientas de apoyo
-                    pedagógico. Es responsabilidad exclusiva del docente revisar, adecuar y validar pedagógicamente cada
-                    sesión de aprendizaje antes de su aplicación en las aulas o de su presentación formal ante cualquier
-                    entidad educativa (UGEL, DRE, MINEDU).</p>
+                <div style="background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; display: flex; flex-direction: column; gap: 0.75rem;">
+                    <p><strong>¿Por qué se descarga el ejecutable local?</strong><br>
+                    Los navegadores web estándar tienen limitaciones técnicas estrictas: no pueden generar de forma nativa documentos de Microsoft Word (.docx) con estructuras complejas como tablas anidadas con anchos milimétricos del MINEDU, listas de cotejo con formato oficial de evaluación formativa y fórmulas matemáticas o científicas editables en formato OMML (Office Math Markup Language). Para lograr una calidad de impresión física 100% idéntica a la normativa de UGEL/DRE y <strong>sin subir tus documentos pedagógicos a servidores o convertidores externos en la nube</strong>, se desarrolló el motor local <code>pablitohost.exe</code> (también denominado <code>pablitopyhost.exe</code>).</p>
 
-                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem;">5. PROTECCIÓN DE DATOS
-                    PERSONALES (Ley N° 29733) Y DERECHOS ARCO</h4>
-                <p>En cumplimiento de la <strong>Ley N° 29733 (Ley de Protección de Datos Personales de Perú)</strong>,
-                    los datos que registras (correo electrónico, apodo y transacciones de créditos) serán resguardados
-                    con total confidencialidad en nuestro banco de datos de usuarios. Nos comprometemos a no
-                    comercializar ni transferir tu información a terceros. Puedes ejercer tus derechos ARCO (Acceso,
-                    Rectificación, Cancelación y Oposición) en cualquier momento escribiendo al correo de soporte
-                    oficial: <strong>pabloclsa87@gmail.com</strong>.</p>
+                    <p><strong>Arquitectura técnica en Python:</strong><br>
+                    El motor es un micro-servicio local programado íntegramente en <strong>Python</strong> utilizando un servidor asíncrono ultraligero (FastAPI / Uvicorn) y bibliotecas especializadas de manipulación XML/docx. Se ejecuta de forma aislada en segundo plano en tu propia computadora escuchando únicamente en el puerto local <code>http://127.0.0.1:8000</code>.</p>
 
-                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem;">6. JURISDICCIÓN Y SOLUCIÓN DE
-                    CONTROVERSIAS</h4>
-                <p>Cualquier disputa o controversia derivada del uso de esta plataforma se resolverá bajo las leyes de
-                    la República del Perú, sometiéndose las partes a la competencia exclusiva de los jueces y tribunales
-                    de la ciudad de <strong>Huánuco, Perú</strong>.</p>
+                    <p><strong>Comunicación segura mediante Tokens Autorizados:</strong><br>
+                    La aplicación web se conecta con el motor local a través del estándar de seguridad <strong>Private Network Access (PNA)</strong>. Toda petición requiere obligatoriamente un <strong>token criptográfico de vinculación</strong> generado al iniciar el programa. Asimismo, el motor cuenta con validación estricta de origen (CORS): únicamente procesa solicitudes emitidas desde el dominio oficial verificado (<code>https://sesiones.sypablitodp.site</code>) o el entorno local de desarrollo. Cualquier solicitud proveniente de páginas web no autorizadas o scripts de terceros es rechazada automáticamente.</p>
+
+                    <p><strong>Garantía de Privacidad y Aislamiento (No intrusión en tu sistema):</strong></p>
+                    <ul style="margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
+                        <li><strong>Cero inspección de archivos:</strong> El motor <code>pablitohost.exe</code> <strong>NO</strong> escanea, lee, recopila ni tiene acceso a tus documentos personales, fotos, descargas, escritorio ni archivos de tu computadora.</li>
+                        <li><strong>Cero telemetría invasiva:</strong> No monitorea la actividad de tu PC, no registra pulsaciones de teclado, ni accede a periféricos, micrófonos o cámaras.</li>
+                        <li><strong>Procesamiento en memoria RAM:</strong> Solo recibe el JSON de la sesión educativa que estás editando en ese instante en la pantalla, construye el archivo Word (.docx) en la memoria RAM y lo envía directamente de vuelta al navegador para su descarga.</li>
+                    </ul>
+                </div>
+
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                    3. ASISTENCIA PEDAGÓGICA CON INTELIGENCIA ARTIFICIAL Y CRÉDITOS
+                </h4>
+                <p>Space Lab integra modelos avanzados de Inteligencia Artificial (OpenAI GPT, Google DeepMind Gemini y DeepSeek) para asistir en la redacción de secuencias didácticas, criterios de evaluación, situaciones significativas y fichas de trabajo. Las credenciales y claves de API se almacenan con cifrado de extremo a extremo en Supabase Secrets del servidor y nunca se exponen al navegador. El uso del copiloto se gestiona mediante un <strong>sistema automatizado de créditos de IA</strong> que garantiza la sostenibilidad técnica y la disponibilidad equitativa del servicio para toda la comunidad docente.</p>
+
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                    4. PROPIEDAD INTELECTUAL Y TITULARIDAD DOCENTE
+                </h4>
+                <p>Todas las sesiones de aprendizaje, programaciones curriculares, fichas de aplicación, rúbricas y materiales creados o editados en la plataforma son <strong>propiedad intelectual exclusiva del docente que los elabora</strong>. Space Lab no se atribuye ningún derecho de autor sobre los contenidos pedagógicos generados por sus usuarios.</p>
+
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+                    5. RESPONSABILIDAD Y AUTONOMÍA PEDAGÓGICA
+                </h4>
+                <p>La inteligencia artificial y los asistentes de Space Lab actúan como herramientas de apoyo para agilizar la labor administrativa y brindar sugerencias curriculares basadas en el CNEB. Es responsabilidad exclusiva del docente revisar, adecuar a su contexto real y validar pedagógicamente cada sesión antes de su desarrollo en el aula o presentación formal ante la dirección de su institución educativa, UGEL o DRE.</p>
+
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                    6. PROTECCIÓN DE DATOS PERSONALES (LEY N° 29733) Y DERECHOS ARCO
+                </h4>
+                <p>En estricto cumplimiento de la <strong>Ley N° 29733 (Ley de Protección de Datos Personales de la República del Perú)</strong> y su Reglamento, los datos personales suministrados (correo electrónico, nombre de usuario y registros de uso) son resguardados con total confidencialidad. <strong>No vendemos, alquilamos ni transferimos tu información a terceros bajo ningún concepto</strong>. En cualquier momento puedes ejercer tus derechos ARCO (Acceso, Rectificación, Cancelación y Oposición) comunicándote con nuestro canal oficial de soporte.</p>
+
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
+                    7. CANALES DE CONTACTO Y SOPORTE OFICIAL
+                </h4>
+                <p>Para consultas técnicas, asistencia con el motor local, dudas sobre privacidad o reportes, puedes comunicarte directamente con el desarrollador:</p>
+                <div style="display: flex; flex-wrap: wrap; gap: 0.6rem; font-size: 0.82rem;">
+                    <a href="mailto:pabloclsa87@gmail.com" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 6px; color: var(--color-foreground); text-decoration: none;">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-mail"></use></svg> pabloclsa87@gmail.com
+                    </a>
+                    <a href="https://wa.me/51918165428" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(37, 211, 102, 0.1); border: 1px solid rgba(37, 211, 102, 0.3); border-radius: 6px; color: #25d366; text-decoration: none;">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-whatsapp"></use></svg> WhatsApp: 918 165 428
+                    </a>
+                    <a href="https://space.sypablitodp.site" target="_blank" rel="noopener noreferrer" style="display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; background: rgba(0, 210, 255, 0.1); border: 1px solid rgba(0, 210, 255, 0.3); border-radius: 6px; color: #00d2ff; text-decoration: none;">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-globe"></use></svg> space.sypablitodp.site
+                    </a>
+                </div>
+
+                <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
+                    8. LEGISLACIÓN APLICABLE Y JURISDICCIÓN
+                </h4>
+                <p>Los presentes Términos y Condiciones se rigen e interpretan según las leyes de la República del Perú. Para cualquier controversia, las partes se someten voluntariamente a la competencia exclusiva de los jueces y tribunales del distrito judicial de <strong>Huánuco, Perú</strong>.</p>
             </div>
-            <div style="margin-top: 1.5rem; text-align: right;">
+            
+            <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 0.75rem;">
                 <button id="btn-accept-terms-modal" class="btn btn-primary"
-                    style="padding: 0.6rem 1.2rem; font-weight: 600;">Entendido y Aceptar</button>
+                    style="padding: 0.6rem 1.4rem; font-weight: 600; display: inline-flex; align-items: center; gap: 0.4rem;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                    Entendido y Aceptar
+                </button>
             </div>
         </div>
     </div>

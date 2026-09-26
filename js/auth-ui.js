@@ -105,7 +105,14 @@ window.AuthUi = (() => {
         if (linkTermsTrigger) {
             linkTermsTrigger.addEventListener('click', (e) => {
                 e.preventDefault();
-                if (termsModal) termsModal.classList.remove('hidden');
+                openTermsModal();
+            });
+        }
+        const linkTermsFooter = document.getElementById('link-terms-footer');
+        if (linkTermsFooter) {
+            linkTermsFooter.addEventListener('click', (e) => {
+                e.preventDefault();
+                openTermsModal();
             });
         }
         if (btnCloseTerms) {
@@ -390,10 +397,15 @@ window.AuthUi = (() => {
         return email;
     }
 
+    function openTermsModal() {
+        if (termsModal) termsModal.classList.remove('hidden');
+    }
+
     return {
         init,
         openModal,
         openRegister,
+        openTermsModal,
         checkSessionState
     };
 })();
