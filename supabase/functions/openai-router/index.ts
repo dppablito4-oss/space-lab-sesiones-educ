@@ -77,17 +77,22 @@ serve(async (req) => {
       };
       const apiModel = OPENAI_API_MODEL_MAP[selectedModel] || "gpt-4o-mini";
 
+      const requestBody: Record<string, unknown> = {
+        model: apiModel,
+        messages: [
+          { role: "system", content: aiRequest.systemPrompt },
+          { role: "user", content: userMessageContent },
+        ],
+        max_completion_tokens: aiRequest.maxOutputTokens,
+      };
+      if (aiRequest.expectsJson) {
+        requestBody.response_format = { type: "json_object" };
+      }
+
       const response = await fetch("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model: apiModel,
-          messages: [
-            { role: "system", content: aiRequest.systemPrompt },
-            { role: "user", content: userMessageContent },
-          ],
-          max_completion_tokens: aiRequest.maxOutputTokens,
-        }),
+        body: JSON.stringify(requestBody),
       });
 
       if (!response.ok) {
@@ -98,6 +103,17 @@ serve(async (req) => {
       const data = await response.json();
       const reply = data.choices?.[0]?.message?.content;
       if (typeof reply !== "string" || !reply) throw new Error("EMPTY_PROVIDER_RESPONSE");
+      if (data.choices?.[0]?.finish_reason === "length") {
+        throw new Error("TRUNCATED_PROVIDER_RESPONSE");
+      }
+
+      if (aiRequest.expectsJson) {
+        try {
+          JSON.parse(reply);
+        } catch {
+          throw new Error("INVALID_PROVIDER_JSON");
+        }
+      }
 
       const balance = await completeAiUsage(auth.client, aiRequest.requestId, {
         input: data.usage?.prompt_tokens,

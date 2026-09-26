@@ -119,6 +119,16 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
     );
 
     const openaiRouterSource = fs.readFileSync('supabase/functions/openai-router/index.ts', 'utf8');
+    assert.match(
+        openaiRouterSource,
+        /response_format\s*=\s*\{\s*type:\s*["']json_object["']\s*\}/,
+        'OpenAI session generation must request JSON mode'
+    );
+    assert.match(
+        openaiRouterSource,
+        /finish_reason\s*===\s*["']length["']/,
+        'Truncated OpenAI responses must be rejected before reaching the browser'
+    );
     assert.doesNotMatch(
         openaiRouterSource,
         /temperature\s*:/,
