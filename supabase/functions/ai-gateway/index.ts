@@ -60,7 +60,11 @@ function responseErrorCode(body: Uint8Array, contentType: string): string | null
   }
 }
 
-function publicResponseBody(body: Uint8Array, contentType: string, requestId: string): Uint8Array {
+function publicResponseBody(
+  body: Uint8Array<ArrayBuffer>,
+  contentType: string,
+  requestId: string,
+): Uint8Array<ArrayBuffer> {
   if (!contentType.includes("application/json")) return body;
   try {
     const parsed = JSON.parse(new TextDecoder().decode(body));
@@ -202,7 +206,7 @@ serve(async (req) => {
 
   let responseStatus = finalResponse?.status || 502;
   let contentType = finalResponse?.headers.get("Content-Type") || "application/json";
-  let responseBody = finalResponse
+  let responseBody: Uint8Array<ArrayBuffer> = finalResponse
     ? new Uint8Array(await finalResponse.arrayBuffer())
     : new TextEncoder().encode(JSON.stringify({
       error: "No se pudo contactar al proveedor de IA.",
