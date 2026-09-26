@@ -255,6 +255,7 @@ node tests/test_ai_gateway_routing.js      # Valida routing server-side del AI G
 node tests/test_model_catalog.js          # Valida catálogo y aliases de modelos
 node tests/test_entitlements.js           # Valida shadow/enforcement de capacidades
 node tests/test_credit_ledger_logic.js    # Valida orden de consumo y reembolsos
+node tests/credit-grant-reconciliation.test.js # Valida vigencia y reconciliación de grants
 ```
 
 ### Pruebas de Python (Backend y Exportación)
