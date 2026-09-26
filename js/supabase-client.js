@@ -366,6 +366,31 @@ window.SupabaseClient = (() => {
         }
     }
 
+    let cachedEntitlements = null;
+    let cachedEntitlementsUserId = null;
+
+    /** Consulta las capacidades y plan comercial del usuario (RPC get_user_entitlements) */
+    async function getUserEntitlements(forceRefresh = false) {
+        if (!supabase) return { ok: false, plan: 'anonymous', features: {} };
+        const user = await getCurrentUser();
+        if (!forceRefresh && cachedEntitlements && cachedEntitlementsUserId === (user ? user.id : null)) {
+            return cachedEntitlements;
+        }
+        try {
+            const { data, error } = await supabase.rpc('get_user_entitlements');
+            if (error) throw error;
+            if (data && typeof data === 'object') {
+                cachedEntitlements = data;
+                cachedEntitlementsUserId = user ? user.id : null;
+                return data;
+            }
+            return { ok: false, plan: 'unknown', features: {} };
+        } catch (e) {
+            console.warn('[Supabase] Error al consultar entitlements:', e);
+            return { ok: false, plan: 'fallback', features: { 'session.generate': true } };
+        }
+    }
+
     /** Read-only view of the authenticated user's AI wallet. */
     async function getAiCreditBalance() {
         if (!supabase) return null;
@@ -537,6 +562,7 @@ window.SupabaseClient = (() => {
         logAction,
         getUserProfile,
         updateUserProfile,
+        getUserEntitlements,
         getAiCreditBalance,
         getAiUsage,
         refreshAiCreditBalance,

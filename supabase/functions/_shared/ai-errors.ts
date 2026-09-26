@@ -23,3 +23,19 @@ export function configurationErrorResponse(req: Request, requestId: string): Res
     requestId,
   }, 503);
 }
+
+export function entitlementErrorResponse(
+  req: Request,
+  requestId: string,
+  requiredFeature: string,
+  currentPlan: string
+): Response {
+  return jsonResponse(req, {
+    error: `Esta función (${requiredFeature}) requiere un plan superior. Tu plan actual es: ${currentPlan}.`,
+    code: "ENTITLEMENT_REQUIRED",
+    requiredFeature,
+    currentPlan,
+    requestId,
+  }, 403);
+}
+

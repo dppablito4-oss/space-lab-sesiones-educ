@@ -1,10 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { getAuthenticatedContext } from "../_shared/auth.ts";
 import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
-import { providerErrorResponse, configurationErrorResponse, internalErrorResponse } from "../_shared/ai-errors.ts";
+import { providerErrorResponse, configurationErrorResponse, internalErrorResponse, entitlementErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
+import { checkFeatureEntitlement, getRequiredFeatureKey } from "../_shared/entitlements.ts";
 
 serve(async (req) => {
   const preflight = preflightResponse(req);
@@ -37,6 +38,23 @@ serve(async (req) => {
     const selectedModel = typeof rawModel === "string" && (rawModel.includes("reasoner") || rawModel.includes("r1"))
       ? "deepseek-reasoner"
       : "deepseek-chat";
+
+    // Verificación de Entitlements (en modo SHADOW para beta)
+    const hasAttachment = Boolean(aiRequest.sourceFile);
+    const modelQuality = selectedModel === "deepseek-reasoner" ? "max_quality" : "balanced";
+    const featureKey = getRequiredFeatureKey(aiRequest.action, {
+      hasAttachment,
+      modelQuality,
+    });
+
+    const entitlement = await checkFeatureEntitlement(auth.client, featureKey, {
+      userId: auth.user.id,
+      requestId: aiRequest.requestId,
+    });
+
+    if (!entitlement.allowed) {
+      return entitlementErrorResponse(req, aiRequest.requestId, featureKey, entitlement.plan);
+    }
 
     let reservation;
     try {

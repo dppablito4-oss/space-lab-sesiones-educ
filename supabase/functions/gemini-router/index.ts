@@ -1,10 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { getAuthenticatedContext } from "../_shared/auth.ts";
 import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
-import { providerErrorResponse, configurationErrorResponse, internalErrorResponse } from "../_shared/ai-errors.ts";
+import { providerErrorResponse, configurationErrorResponse, internalErrorResponse, entitlementErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
+import { checkFeatureEntitlement, getRequiredFeatureKey } from "../_shared/entitlements.ts";
 
 const MODEL_NAME = "gemini-2.5-flash";
 const API_MODEL = "gemini-2.5-flash";
@@ -28,6 +29,22 @@ serve(async (req) => {
         error: error instanceof Error ? error.message : "Solicitud de IA inválida.",
         code: "INVALID_AI_REQUEST",
       }, 400);
+    }
+
+    // Verificación de Entitlements (en modo SHADOW para beta)
+    const hasAttachment = Boolean(aiRequest.sourceFile);
+    const featureKey = getRequiredFeatureKey(aiRequest.action, {
+      hasAttachment,
+      modelQuality: "fast",
+    });
+
+    const entitlement = await checkFeatureEntitlement(auth.client, featureKey, {
+      userId: auth.user.id,
+      requestId: aiRequest.requestId,
+    });
+
+    if (!entitlement.allowed) {
+      return entitlementErrorResponse(req, aiRequest.requestId, featureKey, entitlement.plan);
     }
 
     const apiKey = Deno.env.get("API-KEY-GEMINI") || Deno.env.get("GEMINI_API_KEY");

@@ -1,10 +1,11 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { getAuthenticatedContext } from "../_shared/auth.ts";
 import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
-import { providerErrorResponse, configurationErrorResponse, internalErrorResponse } from "../_shared/ai-errors.ts";
+import { providerErrorResponse, configurationErrorResponse, internalErrorResponse, entitlementErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
-import { calculateProviderCostUsd, resolveApiModel } from "../_shared/model-catalog.ts";
+import { calculateProviderCostUsd, resolveApiModel, MODEL_CATALOG } from "../_shared/model-catalog.ts";
+import { checkFeatureEntitlement, getRequiredFeatureKey } from "../_shared/entitlements.ts";
 
 const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-5.6-terra", "gpt-6-astra", "gpt-6-sol", "gpt-5.6-luna", "gpt-5.4-mini", "fast", "balanced", "max_quality", "automatic"]);
 const MAX_SOURCE_CHARS = 30_000;
@@ -34,6 +35,24 @@ serve(async (req) => {
     const selectedModel = typeof rawModel === "string" ? rawModel : "gpt-6-luna";
     if (!ALLOWED_MODELS.has(selectedModel)) {
       return jsonResponse(req, { error: "Modelo no permitido.", code: "MODEL_NOT_ALLOWED", requestId: aiRequest.requestId }, 400);
+    }
+
+    // Verificación de Entitlements (en modo SHADOW para beta)
+    const hasAttachment = Boolean(aiRequest.sourceFile);
+    const resolvedModelName = resolveApiModel(selectedModel, "gpt-6-luna");
+    const modelMeta = MODEL_CATALOG[resolvedModelName];
+    const featureKey = getRequiredFeatureKey(aiRequest.action, {
+      hasAttachment,
+      modelQuality: modelMeta?.qualityTier,
+    });
+
+    const entitlement = await checkFeatureEntitlement(auth.client, featureKey, {
+      userId: auth.user.id,
+      requestId: aiRequest.requestId,
+    });
+
+    if (!entitlement.allowed) {
+      return entitlementErrorResponse(req, aiRequest.requestId, featureKey, entitlement.plan);
     }
 
     const apiKey = Deno.env.get("OPENAI_API_KEY") || Deno.env.get("API_KEY_OPENAI");
