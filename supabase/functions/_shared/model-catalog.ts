@@ -25,56 +25,68 @@ export const MODEL_CATALOG: Record<string, ModelMetadata> = {
   "gpt-4o-mini": {
     provider: "openai",
     apiModel: "gpt-4o-mini",
-    displayName: "GPT-4o Mini (Rápido)",
+    displayName: "GPT-6 Luna (Principal / Ultra Rápido)",
     qualityTier: "fast",
     pricing: { inputPerMillion: 0.15, outputPerMillion: 0.60 },
   },
   "gpt-4o": {
     provider: "openai",
     apiModel: "gpt-4o",
-    displayName: "GPT-4o (Máxima Calidad)",
+    displayName: "GPT-5.6 Terra (Avanzado y Curricular)",
     qualityTier: "max_quality",
     pricing: { inputPerMillion: 2.50, outputPerMillion: 10.00 },
   },
   "gemini-2.0-flash": {
     provider: "gemini",
     apiModel: "gemini-2.0-flash",
-    displayName: "Gemini 2.0 Flash (Ultra Rápido)",
+    displayName: "Gemini 2.5 Flash (Multimodal Nativo)",
     qualityTier: "fast",
     pricing: { inputPerMillion: 0.10, outputPerMillion: 0.40 },
   },
   "deepseek-chat": {
     provider: "deepseek",
     apiModel: "deepseek-chat",
-    displayName: "DeepSeek V3 (Equilibrado)",
+    displayName: "DeepSeek Chat V3 (Conversacional)",
     qualityTier: "balanced",
     pricing: { inputPerMillion: 0.14, outputPerMillion: 0.28 },
+  },
+  "deepseek-reasoner": {
+    provider: "deepseek",
+    apiModel: "deepseek-reasoner",
+    displayName: "DeepSeek R1 (Razonamiento Pedagógico)",
+    qualityTier: "max_quality",
+    pricing: { inputPerMillion: 0.55, outputPerMillion: 2.19 },
   },
 };
 
 /**
- * Mapeo de identificadores recibidos del cliente (compatibilidad legacy y nuevos modos)
+ * Mapeo de identificadores recibidos del cliente (5 modelos activos + alias legacy)
  * hacia el modelo canónico real de la API.
  */
 export const MODEL_ALIAS_MAP: Record<string, string> = {
-  // Alias legacy OpenAI
+  // Modelos activos
   "gpt-6-luna": "gpt-4o-mini",
-  "gpt-5.4-mini": "gpt-4o-mini",
+  "gpt-5.6-terra": "gpt-4o",
+  "gemini-2.5-flash": "gemini-2.0-flash",
+  "deepseek-chat": "deepseek-chat",
+  "deepseek-reasoner": "deepseek-reasoner",
+
+  // Alias y variantes DeepSeek
+  "deepseek-v3": "deepseek-chat",
+  "deepseek-r1": "deepseek-reasoner",
+
+  // Alias legacy OpenAI (reservados o diferidos)
+  "gpt-5.6-luna": "gpt-4o",
   "gpt-6-astra": "gpt-4o",
   "gpt-6-sol": "gpt-4o",
-  "gpt-5.6-luna": "gpt-4o",
+  "gpt-5.4-mini": "gpt-4o-mini",
   "gpt-4o-mini": "gpt-4o-mini",
   "gpt-4o": "gpt-4o",
 
-  // Alias legacy Gemini
-  "gemini-2.5-flash": "gemini-2.0-flash",
+  // Alias Gemini
   "gemini-2.0-flash": "gemini-2.0-flash",
 
-  // Alias legacy DeepSeek
-  "deepseek-v3": "deepseek-chat",
-  "deepseek-chat": "deepseek-chat",
-
-  // Nuevos modos comerciales de calidad
+  // Modos comerciales de calidad
   "fast": "gpt-4o-mini",
   "balanced": "deepseek-chat",
   "max_quality": "gpt-4o",

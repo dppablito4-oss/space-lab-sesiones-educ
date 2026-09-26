@@ -6,8 +6,6 @@ import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, rese
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
 
-const MODEL_NAME = "deepseek-chat";
-
 serve(async (req) => {
   const preflight = preflightResponse(req);
   if (preflight) return preflight;
@@ -34,13 +32,19 @@ serve(async (req) => {
       return configurationErrorResponse(req, aiRequest.requestId);
     }
 
+    // Resolver si se solicita deepseek-reasoner (R1) o deepseek-chat (V3)
+    const rawModel = payload && typeof payload === "object" ? (payload as Record<string, unknown>).model : undefined;
+    const selectedModel = typeof rawModel === "string" && (rawModel.includes("reasoner") || rawModel.includes("r1"))
+      ? "deepseek-reasoner"
+      : "deepseek-chat";
+
     let reservation;
     try {
       reservation = await reserveAiCredits(auth.client, {
         requestId: aiRequest.requestId,
         action: aiRequest.action,
         provider: "deepseek",
-        model: MODEL_NAME,
+        model: selectedModel,
       });
     } catch (error) {
       if (error instanceof AiCreditError) {
@@ -51,18 +55,24 @@ serve(async (req) => {
 
     try {
       const startTime = Date.now();
+      const requestPayload: Record<string, unknown> = {
+        model: selectedModel,
+        messages: [
+          { role: "system", content: aiRequest.systemPrompt },
+          { role: "user", content: aiRequest.userPrompt },
+        ],
+        max_tokens: aiRequest.maxOutputTokens,
+      };
+
+      // Nota: DeepSeek Reasoner (R1) no admite el parámetro temperature en su API oficial
+      if (selectedModel === "deepseek-chat") {
+        requestPayload.temperature = 0.7;
+      }
+
       const response = await fetch("https://api.deepseek.com/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-        body: JSON.stringify({
-          model: MODEL_NAME,
-          messages: [
-            { role: "system", content: aiRequest.systemPrompt },
-            { role: "user", content: aiRequest.userPrompt },
-          ],
-          temperature: 0.7,
-          max_tokens: aiRequest.maxOutputTokens,
-        }),
+        body: JSON.stringify(requestPayload),
       });
       const latencyMs = Date.now() - startTime;
 
@@ -77,7 +87,7 @@ serve(async (req) => {
 
       const inputTokens = data.usage?.prompt_tokens ?? 0;
       const outputTokens = data.usage?.completion_tokens ?? 0;
-      const costUsd = calculateProviderCostUsd(MODEL_NAME, inputTokens, outputTokens);
+      const costUsd = calculateProviderCostUsd(selectedModel, inputTokens, outputTokens);
 
       const balance = await completeAiUsage(
         auth.client,
@@ -87,7 +97,7 @@ serve(async (req) => {
           output: outputTokens,
         },
         {
-          providerModel: MODEL_NAME,
+          providerModel: selectedModel,
           costUsd,
           latencyMs,
         },

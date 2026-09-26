@@ -123,18 +123,18 @@ window.Chatbot = (() => {
                 const historySlice = chatHistory.slice(-6);
 
                 try {
-                    console.log('[Chatbot] Enviando mensaje a openai-router con gpt-5.4-mini...');
+                    console.log('[Chatbot] Enviando mensaje a openai-router con gpt-6-luna (principal)...');
                     data = await SupabaseClient.invokeFunction('openai-router', {
                         action: 'chatbot',
                         requestId: requestId,
-                        model: 'gpt-5.4-mini',
+                        model: 'gpt-6-luna',
                         input: {
                             history: historySlice,
                             design
                         }
                     });
                 } catch (openAiErr) {
-                    console.warn('[Chatbot] Falló llamada a openai-router, intentando con gemini-router...', openAiErr);
+                    console.warn('[Chatbot] Falló llamada con gpt-6-luna, intentando con gemini-router...', openAiErr);
                     try {
                         data = await SupabaseClient.invokeFunction('gemini-router', {
                             action: 'chatbot',
@@ -146,7 +146,20 @@ window.Chatbot = (() => {
                             }
                         });
                     } catch (geminiErr) {
-                        throw openAiErr;
+                        console.warn('[Chatbot] Falló llamada con gemini-router, intentando con deepseek-router...', geminiErr);
+                        try {
+                            data = await SupabaseClient.invokeFunction('deepseek-router', {
+                                action: 'chatbot',
+                                requestId: requestId,
+                                model: 'deepseek-chat',
+                                input: {
+                                    history: historySlice,
+                                    design
+                                }
+                            });
+                        } catch (deepseekErr) {
+                            throw openAiErr;
+                        }
                     }
                 }
 

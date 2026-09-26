@@ -52,6 +52,9 @@ async function expectProvider(provider, expectedFunction, expectedModel) {
 
 (async () => {
     await expectProvider('openai-gpt-6-luna', 'openai-router', 'gpt-6-luna');
+    await expectProvider('openai-gpt-5.6-terra', 'openai-router', 'gpt-5.6-terra');
+    await expectProvider('deepseek-chat', 'deepseek-router', 'deepseek-chat');
+    await expectProvider('deepseek-reasoner', 'deepseek-router', 'deepseek-reasoner');
     await expectProvider('openai-gpt-6-astra', 'openai-router', 'gpt-6-astra');
     await expectProvider('openai-gpt-6-sol', 'openai-router', 'gpt-6-sol');
     await expectProvider('openai-gpt-5.6-luna', 'openai-router', 'gpt-5.6-luna');

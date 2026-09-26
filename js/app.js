@@ -963,10 +963,10 @@
         }
         DOM.selectMethodology.value = m.methodology || '';
         
-        let prov = m.ai_provider || 'openai-gpt-5.6-luna';
-        if (prov === 'openai') prov = 'openai-gpt-5.6-luna';
+        let prov = m.ai_provider || 'openai-gpt-6-luna';
+        if (prov === 'openai') prov = 'openai-gpt-6-luna';
         if (prov === 'gemini') prov = 'gemini-2.5-flash';
-        if (prov === 'deepseek') prov = 'deepseek-v3';
+        if (prov === 'deepseek') prov = 'deepseek-chat';
         DOM.selectAiProvider.value = prov;
         handleAiProviderChange();
 

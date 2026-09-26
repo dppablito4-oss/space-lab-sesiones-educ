@@ -13,16 +13,27 @@ const AiCopilot = (() => {
 
     const PROVIDERS = {
         'openai-gpt-6-luna': { router: 'openai-router', kind: 'openai', model: 'gpt-6-luna' },
+        'openai-gpt-5.6-terra': { router: 'openai-router', kind: 'openai', model: 'gpt-5.6-terra' },
+        'gemini-2.5-flash': { router: 'gemini-router', kind: 'gemini', model: 'gemini-2.5-flash' },
+        'deepseek-chat': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-chat' },
+        'deepseek-reasoner': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-reasoner' },
+        // Aliases para compatibilidad
+        'deepseek-v3': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-chat' },
+        'deepseek-r1': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-reasoner' },
         'openai-gpt-6-astra': { router: 'openai-router', kind: 'openai', model: 'gpt-6-astra' },
         'openai-gpt-6-sol': { router: 'openai-router', kind: 'openai', model: 'gpt-6-sol' },
         'openai-gpt-5.6-luna': { router: 'openai-router', kind: 'openai', model: 'gpt-5.6-luna' },
-        'openai-gpt-5.4-mini': { router: 'openai-router', kind: 'openai', model: 'gpt-5.4-mini' },
-        'gemini-2.5-flash': { router: 'gemini-router', kind: 'gemini', model: 'gemini-2.5-flash' },
-        'deepseek-v3': { router: 'deepseek-router', kind: 'deepseek', model: 'deepseek-chat' }
+        'openai-gpt-5.4-mini': { router: 'openai-router', kind: 'openai', model: 'gpt-5.4-mini' }
     };
 
     function resolveProvider(provider) {
-        const aliases = { openai: 'openai-gpt-6-luna', gemini: 'gemini-2.5-flash', deepseek: 'deepseek-v3' };
+        const aliases = {
+            openai: 'openai-gpt-6-luna',
+            gemini: 'gemini-2.5-flash',
+            deepseek: 'deepseek-chat',
+            'deepseek-v3': 'deepseek-chat',
+            'deepseek-r1': 'deepseek-reasoner'
+        };
         return PROVIDERS[aliases[provider] || provider] || PROVIDERS['openai-gpt-6-luna'];
     }
 
