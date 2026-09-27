@@ -45,6 +45,7 @@ def run():
                 page.locator('#planning-notice').filter(has_text='permisos de tu cuenta').wait_for()
                 page.evaluate("window.SupabaseClient.getUserEntitlements = async () => ({ok: true, features: {'planning.unit': true, 'planning.experience': true}})")
                 page.locator('[data-type="unit"]').click()
+                page.locator('[data-planning-action="mode-manual"]').click()
                 page.locator('[data-path="identity.title"]').fill('Mi unidad <segura>')
                 page.locator('[data-path="identity.duration.value"]').fill('3')
                 page.locator('[data-planning-action="save"]').click()

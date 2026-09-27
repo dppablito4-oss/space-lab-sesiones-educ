@@ -1,12 +1,114 @@
-/** Manual pilot editor. All persistence and validation stay in Planning Core. */
+/** Planning pilot editor. Persistence and validation stay in Planning Core. */
 const PlanningWizard = (() => {
     'use strict';
     const core = typeof module !== 'undefined' && module.exports
         ? require('./planning-container-v2.js') : window.PlanningContainerV2;
+    const mapGenerator = typeof module !== 'undefined' && module.exports
+        ? require('./planning-map-generator.js') : window.PlanningMapGenerator;
     const copy = value => JSON.parse(JSON.stringify(value));
     const uid = prefix => `${prefix}-${globalThis.crypto.randomUUID()}`;
     const types = { learning_experience: 'Experiencia de aprendizaje', unit: 'Unidad', project: 'Proyecto' };
     const steps = ['Contexto', 'Propósito', 'Currículo', 'Metodología', 'Producto / evidencias', 'Secuencia', 'Revisión'];
+    const AI_ERROR_MESSAGES = {
+        GATEWAY_UNAVAILABLE: 'No se pudo conectar con el servicio de IA. Comprueba tu sesión y conexión.',
+        INVALID_INPUT: 'Completa el contexto mínimo antes de generar la propuesta.',
+        PROFILE_NOT_FOUND: 'No se encontró el perfil pedagógico necesario para esta planificación.',
+        METHODOLOGY_NOT_FOUND: 'Selecciona una metodología disponible antes de generar.',
+        CURRICULUM_NOT_FOUND: 'Agrega el contexto curricular piloto antes de generar.',
+        INVALID_PROVIDER_JSON: 'La IA devolvió una respuesta incompleta. Intenta generar una propuesta nueva.',
+        INVALID_CURRICULUM_REFERENCES: 'La propuesta alteró referencias curriculares protegidas y fue rechazada.',
+        INVALID_PLANNING_MAP: 'La propuesta no cumple la estructura pedagógica requerida. Intenta nuevamente.',
+        QUOTA_EXCEEDED: 'Alcanzaste la cuota disponible para generar planificaciones.',
+        DAILY_LIMIT_REACHED: 'Alcanzaste el límite diario de generación.',
+        ENTITLEMENT_DENIED: 'Tu plan actual no incluye la generación de mapas con IA.',
+        RATE_LIMITED: 'Hay demasiadas solicitudes en este momento. Espera un momento e intenta nuevamente.',
+        PROVIDER_ERROR: 'El proveedor de IA no pudo completar la propuesta. Intenta nuevamente.',
+        PLANNING_MAP_GENERATION_FAILED: 'No se pudo generar la propuesta pedagógica. Intenta nuevamente.'
+    };
+
+    function methodologyProfileFor(draft, profiles) {
+        return profiles?.methodologies?.find(profile => profile.code === draft?.methodologyConfig?.primary?.code) || null;
+    }
+
+    function generationReadiness(draft, profiles) {
+        const missing = [];
+        if (!types[draft?.identity?.planningType]) missing.push('tipo de planificación');
+        if (!draft?.identity?.level) missing.push('nivel');
+        if (!draft?.identity?.cycle) missing.push('ciclo');
+        if (!draft?.identity?.grade) missing.push('grado');
+        if (!Number.isInteger(draft?.identity?.duration?.value) || draft.identity.duration.value < 1) missing.push('duración');
+        const curriculumReady = Array.isArray(draft?.curriculumMap) && draft.curriculumMap.length > 0
+            && draft.curriculumMap.every(entry => entry?.area?.id && entry?.competency?.id && entry?.capacities?.length);
+        if (!curriculumReady) missing.push('área y competencia');
+        if (!methodologyProfileFor(draft, profiles)) missing.push('metodología');
+        if (!profiles?.pedagogical || !profiles?.didactic) missing.push('perfiles pedagógicos');
+        return { ready: missing.length === 0, missing };
+    }
+
+    function buildGenerationInput(draft, profiles) {
+        const methodologyProfile = methodologyProfileFor(draft, profiles);
+        const input = {
+            planningType: draft.identity.planningType,
+            level: draft.identity.level,
+            cycle: draft.identity.cycle,
+            grade: draft.identity.grade,
+            areas: draft.curriculumMap.map(entry => entry.area.officialName),
+            duration: copy(draft.identity.duration),
+            teacherContext: copy(draft.administrativeContext),
+            learnerContext: copy(draft.learnerContext),
+            significantSituationInput: copy(draft.significantSituation),
+            methodology: { code: draft.methodologyConfig.primary?.code || '' },
+            curriculumReferences: copy(draft.curriculumMap),
+            profiles: {
+                pedagogical: copy(profiles.pedagogical),
+                didactic: copy(profiles.didactic),
+                methodology: methodologyProfile ? copy(methodologyProfile) : null
+            }
+        };
+        mapGenerator.validateInput(input);
+        return input;
+    }
+
+    function hasMeaningfulManualContent(draft) {
+        const defaultTitle = `Nueva ${types[draft?.identity?.planningType]?.toLowerCase() || ''}`;
+        const text = [draft?.identity?.title !== defaultTitle ? draft?.identity?.title : '',
+            draft?.administrativeContext?.institution, draft?.administrativeContext?.teacher,
+            draft?.learnerContext?.students, draft?.learnerContext?.diagnosis, draft?.learnerContext?.localContext,
+            draft?.significantSituation?.context, draft?.significantSituation?.problemOrOpportunity,
+            draft?.drivingQuestion, draft?.purpose?.summary, draft?.finalProduct?.title];
+        return text.some(value => typeof value === 'string' && value.trim())
+            || Boolean(draft?.sequence?.length || draft?.milestones?.length);
+    }
+
+    function acceptGeneratedProposal(currentDraft, proposal) {
+        const accepted = copy(proposal);
+        accepted.id = currentDraft.id;
+        accepted.revision = currentDraft.revision;
+        accepted.status = 'draft';
+        if (currentDraft.audit?.createdAt && accepted.audit) accepted.audit.createdAt = currentDraft.audit.createdAt;
+        return accepted;
+    }
+
+    function aiErrorCode(error) {
+        const explicit = String(error?.code || '').toUpperCase();
+        if (AI_ERROR_MESSAGES[explicit] && explicit !== 'PLANNING_MAP_GENERATION_FAILED') return explicit;
+        const message = String(error?.message || '').toLowerCase();
+        if (/entitlement|no incluye|no habilitad|plan superior/.test(message)) return 'ENTITLEMENT_DENIED';
+        if (/quota|cuota|límite diario|limite diario/.test(message)) return 'QUOTA_EXCEEDED';
+        if (/rate|429|demasiadas solicitudes/.test(message)) return 'RATE_LIMITED';
+        if (/network|fetch|conexión|conexion|supabase/.test(message)) return 'GATEWAY_UNAVAILABLE';
+        if (/proveedor/.test(message)) return 'PROVIDER_ERROR';
+        return explicit || 'PROVIDER_ERROR';
+    }
+
+    function formatAiError(error) {
+        return AI_ERROR_MESSAGES[aiErrorCode(error)] || AI_ERROR_MESSAGES.PROVIDER_ERROR;
+    }
+
+    async function generateProposal(draft, profiles, invoke, generator = mapGenerator) {
+        const input = buildGenerationInput(draft, profiles);
+        return generator.generate(input, { invoke, quality: 'automatic' });
+    }
     function canCreate(type, entitlements) {
         const feature = type === 'unit' ? 'planning.unit' : 'planning.experience';
         return Boolean(types[type] && entitlements?.ok === true && entitlements.features?.[feature] === true);
@@ -92,6 +194,7 @@ const PlanningWizard = (() => {
         if (!dialog) return;
         const repository = window.PlanningRepository.create({ validator: core });
         let draft = null, previous = null, step = 0, dirty = false, busy = false;
+        let creationMode = 'manual', aiProposal = null, generating = false;
         let profiles = null;
         const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
         const read = path => path.split('.').reduce((obj, key) => obj?.[key], draft);
@@ -123,7 +226,7 @@ const PlanningWizard = (() => {
             dialog.innerHTML = `<div class="planning-shell"><header class="planning-header"><div><span class="home-eyebrow">Beta · Secundaria, ciclo VI</span><h2 id="planning-title">Planificación articulada</h2></div>${button('close', 'Cerrar')}</header><p id="planning-notice" tabindex="-1" role="status"></p>${content}</div>`;
         }
         function library() {
-            draft = null; previous = null; dirty = false;
+            draft = null; previous = null; dirty = false; creationMode = 'manual'; aiProposal = null; generating = false;
             const plans = repository.list().filter(p => p.schemaVersion === '2.0' && ['draft', 'reviewed'].includes(p.status)
                 && p.identity.level === 'secondary' && p.identity.cycle === 'VI' && types[p.identity.planningType]);
             shell(`<h3>¿Qué quieres crear?</h3><p>Construye tu planificación paso a paso. Puedes guardar un borrador en cualquier momento.</p><div class="planning-actions">${Object.entries(types).map(([type, label]) => button('create', esc(label), `data-type="${type}"`)).join('')}</div><h3>Mis planificaciones</h3><div class="planning-library">${plans.length ? plans.map(p => `<article class="planning-card"><div><strong>${esc(p.identity.title || 'Sin título')}</strong><p>${types[p.identity.planningType]} · ${p.status === 'reviewed' ? 'Revisada' : 'Borrador'} · Revisión ${p.revision}</p></div>${button('open', 'Abrir', `data-id="${esc(p.id)}"`)}</article>`).join('') : '<p>Aún no tienes planificaciones guardadas para este piloto.</p>'}</div>${button('sync', 'Sincronizar con mi cuenta')}`);
@@ -166,7 +269,33 @@ const PlanningWizard = (() => {
             default: return review();
             }
         }
+        function modeChoice() {
+            return `<section class="planning-ai-choice" aria-labelledby="planning-mode-title"><h3 id="planning-mode-title" tabindex="-1">¿Cómo quieres comenzar?</h3><p>${esc(types[draft.identity.planningType])}. Puedes construirla paso a paso o preparar el contexto mínimo para recibir una propuesta con IA.</p><div class="planning-actions">${button('mode-manual', 'Crear manualmente')}<button type="button" class="btn btn-primary" data-planning-action="mode-ai">Generar propuesta con IA</button></div><p class="planning-action-help">La IA siempre crea un borrador editable y nunca marca la planificación como revisada.</p></section>`;
+        }
+        function aiPanel() {
+            if (creationMode !== 'ai') {
+                return `<aside class="planning-ai-panel"><div><strong>¿Prefieres partir de una propuesta?</strong><p>Tu trabajo actual no será reemplazado sin confirmación.</p></div>${button('mode-ai', 'Generar propuesta con IA')}</aside>`;
+            }
+            const readiness = generationReadiness(draft, profiles);
+            const help = readiness.ready
+                ? 'El contexto mínimo está completo. La propuesta se mostrará antes de reemplazar el borrador.'
+                : `Falta completar: ${readiness.missing.join(', ')}.`;
+            return `<aside class="planning-ai-panel" aria-labelledby="planning-ai-title"><div><strong id="planning-ai-title">Generación asistida</strong><p id="planning-ai-help">${esc(help)}</p></div><div class="planning-actions">${button('mode-manual', 'Seguir manualmente')}<button type="button" class="btn btn-primary" data-planning-action="generate-ai" aria-describedby="planning-ai-help" ${readiness.ready && !generating ? '' : 'disabled'} ${generating ? 'aria-busy="true"' : ''}>${generating ? 'Generando propuesta pedagógica…' : 'Generar propuesta con IA'}</button></div></aside>`;
+        }
+        function proposalView() {
+            const proposal = aiProposal;
+            const sequence = proposal.sequence.map(item => `<li><strong>${esc(item.title)}</strong>${item.evidence?.length ? ` · ${esc(item.evidence.map(value => value.description).join('; '))}` : ''}</li>`).join('');
+            shell(`<section class="planning-proposal" aria-labelledby="planning-proposal-title"><span class="home-eyebrow">Propuesta generada · Borrador</span><h3 id="planning-proposal-title" tabindex="-1">${esc(proposal.identity.title)}</h3><h4>Situación significativa</h4><p>${esc(proposal.significantSituation.context)}</p><h4>Pregunta retadora</h4><p>${esc(proposal.drivingQuestion)}</p><h4>Producto final</h4><p>${esc(proposal.finalProduct?.title || 'Por definir')}</p><h4>Secuencia</h4><ol>${sequence}</ol><div class="planning-actions"><button type="button" class="btn btn-primary" data-planning-action="accept-ai">Aceptar y editar</button>${button('regenerate-ai', generating ? 'Generando propuesta pedagógica…' : 'Regenerar propuesta', `${generating ? 'disabled aria-busy="true"' : ''}`)}${button('discard-ai', 'Descartar')}</div><p class="planning-action-help">La propuesta aún no se ha guardado. Puedes descartarla sin perder el contenido anterior.</p></section>`);
+        }
         function render() {
+            if (creationMode === 'choose') {
+                shell(modeChoice());
+                return;
+            }
+            if (aiProposal) {
+                proposalView();
+                return;
+            }
             const reviewResult = profiles && draft ? core.validate(draft, {
                 forReview: true,
                 pedagogicalProfile: profiles.pedagogical,
@@ -177,14 +306,64 @@ const PlanningWizard = (() => {
                 ? `<button type="button" class="btn btn-primary" data-planning-action="review" aria-describedby="planning-review-help" ${reviewResult.valid && !alreadyReviewed ? '' : 'disabled'}>${alreadyReviewed ? 'Planificación revisada' : 'Marcar como revisada'}</button>`
                     + `<span id="planning-review-help" class="planning-action-help">${alreadyReviewed ? 'Edita algún campo para crear una revisión nueva.' : reviewResult.valid ? 'La planificación cumple los requisitos de revisión.' : 'Completa los campos indicados para habilitar la revisión.'}</span>`
                 : '';
-            shell(`<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-ghost" data-planning-action="save" ${dirty ? '' : 'disabled'}>Guardar borrador</button>${reviewAction}</footer>`);
+            shell(`${aiPanel()}<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-ghost" data-planning-action="save" ${dirty ? '' : 'disabled'}>Guardar borrador</button>${reviewAction}</footer>`);
+        }
+        function updateAiAvailability() {
+            const generateButton = dialog.querySelector('[data-planning-action="generate-ai"]');
+            const help = dialog.querySelector('#planning-ai-help');
+            if (!generateButton || !help || creationMode !== 'ai') return;
+            const readiness = generationReadiness(draft, profiles);
+            generateButton.disabled = generating || !readiness.ready;
+            help.textContent = readiness.ready
+                ? 'El contexto mínimo está completo. La propuesta se mostrará antes de reemplazar el borrador.'
+                : `Falta completar: ${readiness.missing.join(', ')}.`;
         }
         function markDirty() {
             dirty = true;
             const saveButton = dialog.querySelector('[data-planning-action="save"]');
             if (saveButton) saveButton.disabled = false;
+            updateAiAvailability();
         }
         function mayLeave() { return !dirty || window.confirm('Hay cambios sin guardar. ¿Quieres descartarlos?'); }
+        async function confirmAiReplacement(regenerating = false) {
+            if (!hasMeaningfulManualContent(draft) && !(regenerating && dirty)) return true;
+            const options = {
+                title: regenerating ? 'Regenerar propuesta' : 'Generar propuesta con IA',
+                message: 'La propuesta generada puede reemplazar parte del contenido actual. ¿Deseas continuar?',
+                confirmText: regenerating ? 'Regenerar' : 'Continuar',
+                cancelText: 'Cancelar'
+            };
+            return window.confirm(`${options.title}\n\n${options.message}`);
+        }
+        async function requestAiProposal(regenerating = false) {
+            const readiness = generationReadiness(draft, profiles);
+            if (!readiness.ready) {
+                notice(`Completa antes de generar: ${readiness.missing.join(', ')}.`, true);
+                return;
+            }
+            if (!await confirmAiReplacement(regenerating)) return;
+            busy = true; generating = true;
+            render();
+            notice('Generando propuesta pedagógica…');
+            try {
+                if (!window.SupabaseClient?.invokeFunction) {
+                    throw Object.assign(new Error('AI Gateway no disponible.'), { code: 'GATEWAY_UNAVAILABLE' });
+                }
+                const result = await generateProposal(draft, profiles,
+                    (functionName, body) => window.SupabaseClient.invokeFunction(functionName, body));
+                aiProposal = result.container;
+                generating = false;
+                render();
+                dialog.querySelector('#planning-proposal-title')?.focus();
+            } catch (error) {
+                console.error('[PlanningWizard] Falló planning.map.generate:', error);
+                generating = false;
+                render();
+                notice(formatAiError(error), true);
+            } finally {
+                busy = false;
+            }
+        }
         async function save(asReviewed = false) {
             if (!asReviewed && previous && !dirty) {
                 notice('No hay cambios por guardar.');
@@ -243,6 +422,29 @@ const PlanningWizard = (() => {
             try {
                 if (action === 'close') { if (mayLeave()) { dirty = false; dialog.close(); } return; }
                 if (action === 'library') { if (mayLeave()) library(); return; }
+                if (action === 'mode-manual' || action === 'mode-ai') {
+                    creationMode = action === 'mode-ai' ? 'ai' : 'manual';
+                    render();
+                    dialog.querySelector('#planning-step-title')?.focus();
+                    return;
+                }
+                if (action === 'generate-ai' || action === 'regenerate-ai') {
+                    await requestAiProposal(action === 'regenerate-ai');
+                    return;
+                }
+                if (action === 'accept-ai') {
+                    draft = acceptGeneratedProposal(draft, aiProposal);
+                    aiProposal = null; creationMode = 'manual'; dirty = true; step = 0;
+                    render();
+                    dialog.querySelector('#planning-step-title')?.focus();
+                    return;
+                }
+                if (action === 'discard-ai') {
+                    aiProposal = null; creationMode = 'manual';
+                    render();
+                    dialog.querySelector('#planning-step-title')?.focus();
+                    return;
+                }
                 if (action === 'sync' || action === 'save' || action === 'review') {
                     busy = true; target.disabled = true;
                     if (action === 'save' || action === 'review') await save(action === 'review');
@@ -259,6 +461,7 @@ const PlanningWizard = (() => {
                     const loaded = action === 'open' ? repository.get(target.dataset.id) : create(target.dataset.type);
                     if (!loaded || !core.validate(loaded).valid) throw new Error('No se pudo abrir este borrador.');
                     draft = copy(loaded); previous = action === 'open' ? copy(loaded) : null; step = 0; dirty = action === 'create';
+                    creationMode = action === 'create' ? 'choose' : 'manual'; aiProposal = null; generating = false;
                 } else if (action === 'step') step = Number(target.dataset.step);
                 else if (action === 'next') step = Math.min(6, step + 1);
                 else if (action === 'previous') step = Math.max(0, step - 1);
@@ -272,7 +475,8 @@ const PlanningWizard = (() => {
                     if (action === 'product') draft.finalProduct = { id: uid('product'), title: 'Producto final', description: '', type: '', expectedComponents: [], audience: '', criterionRefs: draft.curriculumMap.flatMap(e => e.criteria.map(c => c.id)) };
                     if (action === 'milestone') draft.milestones.push({ id: uid('milestone'), title: `Hito ${draft.milestones.length + 1}`, phase: '', objective: '', partialProduct: null, sequenceItemIds: [], completionCriteria: [] });
                 }
-                render(); dialog.querySelector('#planning-step-title').focus();
+                render();
+                (dialog.querySelector('#planning-mode-title') || dialog.querySelector('#planning-step-title'))?.focus();
             } catch (error) { notice(error.message, true); }
             finally { busy = false; target.disabled = false; }
         });
@@ -281,6 +485,8 @@ const PlanningWizard = (() => {
         document.querySelectorAll('[data-open-planning]').forEach(button => button.addEventListener('click', () => { library(); dialog.showModal(); }));
     }
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
-    return { create, canCreate, addCurriculum, addSession, reorder, removeSession, prepareSave, prepareReview };
+    return { create, canCreate, addCurriculum, addSession, reorder, removeSession, prepareSave, prepareReview,
+        generationReadiness, buildGenerationInput, hasMeaningfulManualContent, acceptGeneratedProposal,
+        formatAiError, generateProposal };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = PlanningWizard;

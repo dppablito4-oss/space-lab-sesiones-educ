@@ -13,8 +13,10 @@ actual del repositorio y conserva `SessionDocument v1` y `PlanningContainer 2.0`
 - **E2 — `planning.map.generate`: implementado y validado.** La acción usa AI
   Gateway, prompt versionado, crédito propio, entitlement, validación JSON y
   validación completa de `PlanningContainer 2.0` antes de aceptar el borrador.
-- **E3–E6: pendientes y dependientes de E2.** No se adelantaron para respetar el
-  gate secuencial del plan maestro.
+- **E3 — IA en el wizard: implementado.** El docente puede generar, previsualizar,
+  aceptar, editar, regenerar o descartar una propuesta sin crear otro editor.
+- **E4–E6: pendientes.** No se adelantaron para respetar el gate secuencial del
+  plan maestro.
 - **V1, C1–C3, P1–P5, I1–I5, IC1–IC2 y R1–R4: pendientes.** V1 requiere un piloto
   con al menos dos docentes; la matriz CNEB y los niveles Primaria/Inicial no se
   deben completar con contenido generado sin fuentes y revisión humana.
@@ -130,6 +132,49 @@ Resultado: suite completa JavaScript, Python, Playwright y Deno en verde.
 **Gate E2:** cumplido localmente. El siguiente bloque es E3, que incorporará la
 acción al wizard con vista previa, aceptar, editar, regenerar y volver al flujo
 manual.
+
+## BLOQUE E3
+
+**Flujo integrado:**
+
+- `PlanningMapGenerator` se carga antes del wizard y conserva el único camino
+  `PlanningMapGenerator → ai-gateway → planning.map.generate`.
+- Cada tipo de planificación ofrece creación manual o asistida. La generación
+  se habilita únicamente con duración, área/competencia, metodología y perfiles
+  del piloto resueltos.
+- El borrador actual permanece intacto mientras se genera y durante la vista
+  previa. El usuario debe aceptar expresamente antes de editar la propuesta.
+- La propuesta aceptada siempre conserva `status = draft`; no se persiste hasta
+  pulsar `Guardar borrador` y usa `PlanningRepository`.
+- Regenerar crea un `requestId` nuevo. El loading bloquea dobles solicitudes y
+  los errores se traducen a mensajes pedagógicos sin exponer stacks.
+- El currículo confiable continúa protegido por
+  `PlanningMapGenerator.assertTrustedCurriculum()` y la validación completa del
+  contenedor ocurre antes de mostrar la propuesta.
+
+**Pruebas específicas:**
+
+```bash
+node tests/planning-wizard-ai.test.js
+python tests/ui_planning_ai_smoke.py
+```
+
+La prueba UI cubre 375 px y 1280 px, input incompleto, confirmación, error,
+loading, foco, propuesta válida, regeneración, descarte, aceptación y guardado
+como borrador. Las pruebas previas del wizard manual y del lifecycle revisado se
+mantienen como regresión.
+
+**Supabase verificado:**
+
+- `supabase migration list --linked` confirma que
+  `202609270001_planning_map_ai_action.sql` existe tanto local como remotamente.
+- `supabase functions list` confirma estado `ACTIVE` para `ai-gateway`,
+  `openai-router`, `gemini-router` y `deepseek-router`.
+- E3 no modifica funciones ni migraciones de Supabase; no requiere un despliegue
+  adicional de backend.
+
+**Gate E3:** se cierra únicamente después de suite completa, Validate & Build y
+GitHub Pages verdes. E4 permanece fuera de alcance.
 
 ---
 

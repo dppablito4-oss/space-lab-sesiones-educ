@@ -30,5 +30,18 @@
 .planning-dialog .btn { min-height: 44px; white-space: normal; }
 .planning-dialog .btn:disabled { cursor: not-allowed; opacity: .5; }
 .planning-action-help { flex-basis: 100%; color: var(--text-secondary); font-size: .85rem; }
+.planning-ai-choice, .planning-ai-panel, .planning-proposal {
+    padding: clamp(16px, 3vw, 24px); border: 1px solid var(--border); border-radius: 14px;
+    background: var(--color-card); overflow-wrap: anywhere;
+}
+.planning-ai-panel { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-block: 16px; }
+.planning-ai-panel p { color: var(--text-secondary); }
+.planning-ai-panel .planning-actions { margin: 0; justify-content: flex-end; }
+.planning-proposal h3 { margin-top: 8px; }
+.planning-proposal ol { display: grid; gap: 8px; }
 #planning-notice { overflow-wrap: anywhere; }
-@media (max-width: 600px) { .planning-grid { grid-template-columns: 1fr; } }
+@media (max-width: 600px) {
+    .planning-grid { grid-template-columns: 1fr; }
+    .planning-ai-panel { align-items: stretch; flex-direction: column; }
+    .planning-ai-panel .planning-actions { justify-content: flex-start; }
+}
