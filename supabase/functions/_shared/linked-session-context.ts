@@ -36,6 +36,9 @@ export function createTrustedLinkedSnapshot(containerValue: unknown, requestedVa
   const sequence = asArray(container.sequence).map(value => asObject(value, "SequenceItem"));
   const item = sequence.find(value => value.id === requested.sequenceItemId);
   if (!item || item.index !== requested.sequenceIndex) throw new Error("La sesión solicitada no coincide con la secuencia revisada.");
+  if (item.type !== "session" || item.status !== "planned" || item.linkedDocumentRef !== null) {
+    throw new Error("Esta actividad no puede generar una sesión vinculada.");
+  }
   const milestones = asArray(container.milestones).map(value => asObject(value, "Milestone"));
   const milestone = item.milestoneId ? milestones.find(value => value.id === item.milestoneId) || null : null;
   const curriculumRefs = new Set(asArray(item.curriculumMapRefs));

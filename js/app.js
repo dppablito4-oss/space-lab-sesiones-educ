@@ -246,6 +246,7 @@
 
         // Global callback to refresh session lists after login/logout
         window.getCurrentSession = () => AppState.currentSession;
+        window.getPendingPlanningLink = () => AppState.pendingPlanningLink;
         window.appOpenSession = (sessionId) => loadSession(sessionId);
         window.appStartNewSession = () => forceNewSession();
         window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);
@@ -1164,8 +1165,9 @@
 
     async function startLinkedSession(planningContainerId, sequenceItemId) {
         if (!window.PlanningLinkedSession) throw new Error('No se cargó el vínculo de planificación.');
+        AppState.pendingPlanningLink = null;
         const prepared = PlanningLinkedSession.prepare(planningContainerId, sequenceItemId);
-        await forceNewSession();
+        if (!await handleNew()) return null;
         const metadata = prepared.metadata;
         populateForm({
             template: 'estandar',

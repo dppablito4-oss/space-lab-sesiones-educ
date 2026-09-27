@@ -251,6 +251,29 @@ sesión a su planificación no forman parte de E5; quedan reservados para E6.
 ejecutar la suite completa y confirmar Validate & Build y GitHub Pages verdes.
 E6 permanece fuera de alcance.
 
+## BLOQUE E5.1
+
+**Hardening final de SessionPlanningLink:**
+
+- `linkedDocumentRef` coincide con el schema: se persiste como objeto con `id`,
+  `schemaVersion`, `revision` y `status`; el validador rechaza strings, campos
+  vacíos, revisiones inválidas y estados no permitidos.
+- Solo un `SequenceItem` de tipo `session`, estado `planned` y sin referencia
+  previa puede preparar una sesión linked. El bridge y AI Gateway aplican la
+  misma regla para impedir duplicados o clientes manipulados.
+- Registrar la referencia sigue siendo metadata operacional: la planificación
+  permanece `reviewed` y su revisión pedagógica no cambia.
+- El enlace pendiente se limpia al iniciar una sesión standalone, cargar otra,
+  cerrar el editor o cancelar el reemplazo de una sesión activa.
+- `startLinkedSession()` reutiliza la confirmación existente de nueva sesión.
+  Cancelar conserva íntegramente la sesión activa y no establece un link.
+- El snapshot guardado en `session.planning` no se reescribe al registrar la
+  referencia. `Guardar como` continúa creando una copia standalone y el payload
+  canónico de exportación continúa excluyendo `planning`.
+
+**Gate E5.1:** exige suite completa, routers/backend activos, Validate & Build
+y GitHub Pages verdes. La navegación y los botones de E6 siguen fuera de alcance.
+
 ---
 
 # Implementación de fórmulas matemáticas en Word

@@ -7,6 +7,7 @@ const PlanningLinkedSession = (() => {
         ? require('./planning-repository.js') : window.PlanningRepository;
     const clone = value => JSON.parse(JSON.stringify(value));
     const LEVELS = { secondary: 'SECUNDARIA', primary: 'PRIMARIA', initial: 'INICIAL' };
+    const DOCUMENT_STATUSES = new Set(['draft', 'reviewed', 'approved', 'archived']);
     let repository = null;
 
     function assertReviewed(container) {
@@ -28,8 +29,17 @@ const PlanningLinkedSession = (() => {
             .filter(Boolean);
     }
 
+    function assertEligibleItem(container, sequenceItemId) {
+        const item = container.sequence.find(entry => entry.id === sequenceItemId);
+        if (!item || item.type !== 'session' || item.status !== 'planned' || item.linkedDocumentRef !== null) {
+            throw new Error('Esta actividad no puede generar una sesión vinculada.');
+        }
+        return item;
+    }
+
     function buildGenerationMetadata(container, sequenceItemId, capturedAt) {
         assertReviewed(container);
+        assertEligibleItem(container, sequenceItemId);
         const link = core.createLinkedSessionLink(container, sequenceItemId, capturedAt);
         const snapshot = link.inheritedContextSnapshot;
         const item = snapshot.sequenceItem;
@@ -86,10 +96,18 @@ const PlanningLinkedSession = (() => {
         return { ...envelope.data, planning: envelope.planning };
     }
 
-    function recordGeneratedSession(link, sessionId, updatedAt = new Date().toISOString()) {
+    function sessionReference(session) {
+        if (!session || typeof session.id !== 'string' || !session.id.trim()) throw new TypeError('La sesión requiere un id estable.');
+        const schemaVersion = typeof session.schemaVersion === 'string' && session.schemaVersion.trim() ? session.schemaVersion : '1.0';
+        const revision = Number.isInteger(session.revision) && session.revision >= 1 ? session.revision : 1;
+        const status = DOCUMENT_STATUSES.has(session.status) ? session.status : 'draft';
+        return { id: session.id, schemaVersion, revision, status };
+    }
+
+    function recordGeneratedSession(link, session, updatedAt = new Date().toISOString()) {
         const validation = core.validateSessionLink(link);
         if (!validation.valid || link.mode !== 'linked') throw new TypeError('El vínculo de sesión no es válido.');
-        if (typeof sessionId !== 'string' || !sessionId.trim()) throw new TypeError('La sesión requiere un id estable.');
+        const reference = sessionReference(session);
         const repo = getRepository();
         const container = repo.get(link.planningContainerId);
         assertReviewed(container);
@@ -98,13 +116,13 @@ const PlanningLinkedSession = (() => {
         }
         const item = container.sequence.find(entry => entry.id === link.sequenceItemId);
         if (!item || item.index !== link.sequenceIndex) throw new Error('La sesión ya no coincide con la secuencia revisada.');
-        if (item.linkedDocumentRef && item.linkedDocumentRef !== sessionId) {
-            throw new Error('La secuencia ya está vinculada a otra sesión.');
+        if (item.linkedDocumentRef?.id === reference.id && item.status === 'generated') return container;
+        if (item.type !== 'session' || item.status !== 'planned' || item.linkedDocumentRef !== null) {
+            throw new Error('La planificación cambió y esta actividad ya no puede vincularse.');
         }
-        if (item.linkedDocumentRef === sessionId && item.status === 'generated') return container;
         const updated = clone(container);
         const target = updated.sequence.find(entry => entry.id === link.sequenceItemId);
-        target.linkedDocumentRef = sessionId;
+        target.linkedDocumentRef = reference;
         target.status = 'generated';
         updated.audit.updatedAt = updatedAt;
         if (!core.validate(updated).valid) throw new TypeError('No se pudo actualizar la secuencia vinculada.');
@@ -116,7 +134,7 @@ const PlanningLinkedSession = (() => {
         return getRepository().sync();
     }
 
-    return { assertReviewed, buildGenerationMetadata, prepare, attachGeneratedSession, recordGeneratedSession, sync };
+    return { assertReviewed, assertEligibleItem, buildGenerationMetadata, prepare, attachGeneratedSession, sessionReference, recordGeneratedSession, sync };
 })();
 
 if (typeof window !== 'undefined') window.PlanningLinkedSession = PlanningLinkedSession;

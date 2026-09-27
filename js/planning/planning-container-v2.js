@@ -7,6 +7,7 @@ const PlanningContainerV2 = (() => {
     const TYPES = new Set(['unit', 'project', 'learning_experience', 'context']);
     const STATUSES = new Set(['draft', 'reviewed', 'archived']);
     const ITEM_TYPES = new Set(['session', 'activity', 'workshop', 'game', 'exploration', 'investigation', 'field_activity', 'presentation', 'reflection', 'challenge_action']);
+    const LINKED_DOCUMENT_STATUSES = new Set(['draft', 'reviewed', 'approved', 'archived']);
     const METHODOLOGIES = new Set(['project_based_learning', 'problem_based_learning', 'challenge_based_learning', 'game_based_learning', 'custom']);
     const isObject = value => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
     const isText = value => typeof value === 'string' && value.trim().length > 0;
@@ -139,6 +140,14 @@ const PlanningContainerV2 = (() => {
             if (!Number.isInteger(item?.index) || item.index < 1 || indexes.has(item.index)) errors.push(issue('invalid_sequence_index', `${path}.index`, 'El índice debe ser positivo y único.'));
             indexes.add(item?.index);
             if (!ITEM_TYPES.has(item?.type)) errors.push(issue('invalid_sequence_type', `${path}.type`, 'Tipo de elemento no reconocido.'));
+            if (item?.linkedDocumentRef !== null) {
+                const reference = item?.linkedDocumentRef;
+                if (!isObject(reference) || !isText(reference.id) || !isText(reference.schemaVersion)
+                    || !Number.isInteger(reference.revision) || reference.revision < 1
+                    || !LINKED_DOCUMENT_STATUSES.has(reference.status)) {
+                    errors.push(issue('invalid_linked_document_ref', `${path}.linkedDocumentRef`, 'La referencia a la sesión vinculada no es válida.'));
+                }
+            }
             if (item?.milestoneId !== null && !milestoneIds.has(item.milestoneId)) errors.push(issue('unknown_milestone', `${path}.milestoneId`, 'El hito referenciado no existe.'));
             for (const [key, allowed] of [['curriculumMapRefs', curriculumIds], ['competencyRefs', competencyIds], ['capacityRefs', capacityIds], ['criterionRefs', criterionIds]]) {
                 if (!Array.isArray(item?.[key]) || item[key].some(ref => !allowed.has(ref))) errors.push(issue('unknown_reference', `${path}.${key}`, 'Contiene referencias desconocidas.'));

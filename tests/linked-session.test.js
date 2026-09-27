@@ -39,6 +39,20 @@ assert.equal(prepared.metadata.inheritedContextSnapshot.precedingSequence.length
 assert.equal(prepared.metadata.inheritedContextSnapshot.followingSequence.length, 1);
 assert.equal(Object.isFrozen(prepared.link.inheritedContextSnapshot), true);
 
+for (const type of ['activity', 'workshop', 'game']) {
+    const ineligible = structuredClone(fixture);
+    ineligible.sequence[0].type = type;
+    assert.throws(() => PlanningLinkedSession.buildGenerationMetadata(ineligible, 'session-01'), /no puede generar/);
+}
+for (const status of ['generated', 'completed']) {
+    const ineligible = structuredClone(fixture);
+    ineligible.sequence[0].status = status;
+    assert.throws(() => PlanningLinkedSession.buildGenerationMetadata(ineligible, 'session-01'), /no puede generar/);
+}
+const alreadyLinked = structuredClone(fixture);
+alreadyLinked.sequence[0].linkedDocumentRef = { id: 'existing-session', schemaVersion: '1.0', revision: 1, status: 'draft' };
+assert.throws(() => PlanningLinkedSession.buildGenerationMetadata(alreadyLinked, 'session-01'), /no puede generar/);
+
 const storedSession = PlanningLinkedSession.attachGeneratedSession(
     { ...structuredClone(sessionDocument), id: 'linked-session-002', template: 'estandar' },
     prepared.link
@@ -58,12 +72,20 @@ const repository = PlanningRepository.create({
     now: () => capturedAt
 });
 repository.save(structuredClone(fixture));
-const updated = PlanningLinkedSession.recordGeneratedSession(prepared.link, storedSession.id, '2026-09-27T20:05:00.000Z');
+const updated = PlanningLinkedSession.recordGeneratedSession(prepared.link, storedSession, '2026-09-27T20:05:00.000Z');
 assert.equal(updated.status, 'reviewed');
 assert.equal(updated.revision, fixture.revision, 'El enlace operativo no crea una revisión pedagógica nueva.');
 assert.equal(updated.sequence[1].status, 'generated');
-assert.equal(updated.sequence[1].linkedDocumentRef, storedSession.id);
-assert.equal(repository.get(fixture.id).sequence[1].linkedDocumentRef, storedSession.id);
+assert.deepEqual(updated.sequence[1].linkedDocumentRef, {
+    id: storedSession.id, schemaVersion: '1.0', revision: 1, status: 'draft'
+});
+assert.equal(repository.get(fixture.id).sequence[1].linkedDocumentRef.id, storedSession.id);
+assert.equal(storedSession.planning.inheritedContextSnapshot.capturedAt, capturedAt);
+const completedAfterSnapshot = structuredClone(fixture);
+completedAfterSnapshot.sequence[1].status = 'completed';
+repository.save(completedAfterSnapshot);
+assert.throws(() => PlanningLinkedSession.recordGeneratedSession(prepared.link, storedSession), /cambió/);
+assert.equal(repository.get(fixture.id).sequence[1].status, 'completed', 'No debe sobrescribir un planning que cambió.');
 
 const standalone = PlanningContainerV2.createStandaloneLink();
 assert.equal(PlanningContainerV2.validateSessionLink(standalone).valid, true);

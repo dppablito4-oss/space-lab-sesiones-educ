@@ -20,9 +20,9 @@ const container = {
   transversalElements: [], finalProduct: null,
   milestones: [{ id: "milestone-1", title: "Investigamos" }], assessmentPlan: {},
   sequence: [
-    { id: "session-01", index: 1, type: "session", title: "Anterior", milestoneId: "milestone-1", curriculumMapRefs: ["map-math"], status: "planned" },
-    { id: "session-02", index: 2, type: "session", title: "Actual", milestoneId: "milestone-1", curriculumMapRefs: ["map-math"], status: "planned" },
-    { id: "session-03", index: 3, type: "session", title: "Posterior", milestoneId: null, curriculumMapRefs: ["map-other"], status: "planned" },
+    { id: "session-01", index: 1, type: "session", title: "Anterior", milestoneId: "milestone-1", curriculumMapRefs: ["map-math"], linkedDocumentRef: null, status: "planned" },
+    { id: "session-02", index: 2, type: "session", title: "Actual", milestoneId: "milestone-1", curriculumMapRefs: ["map-math"], linkedDocumentRef: null, status: "planned" },
+    { id: "session-03", index: 3, type: "session", title: "Posterior", milestoneId: null, curriculumMapRefs: ["map-other"], linkedDocumentRef: null, status: "planned" },
   ],
 };
 const untrusted = {
@@ -53,5 +53,26 @@ Deno.test("gateway rejects draft, stale revision and mismatched sequence", () =>
     let rejected = false;
     try { createTrustedLinkedSnapshot(changedContainer, changedRequest); } catch { rejected = true; }
     assert(rejected, "invalid linked context must be rejected");
+  }
+});
+
+Deno.test("gateway rejects non-session, generated and already linked items", () => {
+  const cases = [
+    { type: "activity" },
+    { type: "workshop" },
+    { type: "game" },
+    { status: "generated" },
+    { status: "completed" },
+    { linkedDocumentRef: { id: "existing-session", schemaVersion: "1.0", revision: 1, status: "draft" } },
+  ];
+  for (const changes of cases) {
+    const changed: Record<string, unknown> = structuredClone(container);
+    const sequence = changed.sequence as Array<Record<string, unknown>>;
+    sequence[1] = { ...sequence[1], ...changes };
+    let rejected = false;
+    try { createTrustedLinkedSnapshot(changed, untrusted); } catch (error) {
+      rejected = error instanceof Error && /no puede generar/i.test(error.message);
+    }
+    assert(rejected, `ineligible item must be rejected: ${JSON.stringify(changes)}`);
   }
 });

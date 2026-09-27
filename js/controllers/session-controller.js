@@ -37,7 +37,7 @@ window.SpaceLabSessionController = (() => {
             if (Storage.saveSession(session)) {
                 if (session.planning?.mode === 'linked' && window.PlanningLinkedSession) {
                     try {
-                        PlanningLinkedSession.recordGeneratedSession(session.planning, session.id);
+                        PlanningLinkedSession.recordGeneratedSession(session.planning, session);
                         PlanningLinkedSession.sync().catch(error => console.warn('[PlanningLinkedSession] No se pudo sincronizar:', error));
                     } catch (error) {
                         console.warn('[PlanningLinkedSession] La sesión se guardó sin actualizar la secuencia:', error);
@@ -402,9 +402,10 @@ window.SpaceLabSessionController = (() => {
                     message: 'Los cambios no guardados se perderán.',
                     confirmText: 'Continuar'
                 });
-                if (!confirmed) return;
+                if (!confirmed) return false;
             }
             await forceNewSession();
+            return true;
         }
         
         async function forceNewSession() {
@@ -440,6 +441,7 @@ window.SpaceLabSessionController = (() => {
         
         async function handleCloseSession() {
             if (!AppState.currentSession) {
+                AppState.pendingPlanningLink = null;
                 Toast.info('El editor ya está vacío y listo para una nueva sesión.');
                 return;
             }

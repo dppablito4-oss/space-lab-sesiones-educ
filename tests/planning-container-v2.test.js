@@ -62,6 +62,17 @@ const brokenReference = structuredClone(fixture);
 brokenReference.sequence[0].criterionRefs.push('criterion-unknown');
 assert.equal(PlanningContainerV2.validate(brokenReference).valid, false);
 
+const stringDocumentReference = structuredClone(fixture);
+stringDocumentReference.sequence[0].linkedDocumentRef = 'session-document-001';
+assert.equal(PlanningContainerV2.validate(stringDocumentReference).valid, false);
+assert.ok(PlanningContainerV2.validate(stringDocumentReference).errors.some(item => item.code === 'invalid_linked_document_ref'));
+const validDocumentReference = structuredClone(fixture);
+validDocumentReference.sequence[0].linkedDocumentRef = {
+    id: 'session-document-001', schemaVersion: '1.0', revision: 1, status: 'draft'
+};
+validDocumentReference.sequence[0].status = 'generated';
+assert.equal(PlanningContainerV2.validate(validDocumentReference).valid, true);
+
 const snapshot = PlanningContainerV2.createInheritedContextSnapshot(fixture, 'session-01', '2026-09-26T23:05:00.000Z');
 assert.equal(snapshot.schemaVersion, '2.0');
 assert.equal(snapshot.precedingSequence.length, 0);
