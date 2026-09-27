@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/pedagogical-profile-v2.json",
+  "title": "Space Lab PedagogicalProfile 2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "profileVersion", "id", "status", "scope", "allowedPlanningTypes", "activityCharacteristics", "recommendedStructure", "representationProgression", "assessmentCharacteristics", "promptRules", "provenance"],
+  "properties": {
+    "schemaVersion": { "const": "2.0" },
+    "profileVersion": { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]+$" },
+    "id": { "type": "string" },
+    "status": { "enum": ["draft", "pilot", "reviewed", "archived"] },
+    "scope": {
+      "type": "object", "additionalProperties": false, "required": ["level", "cycle", "grades", "ages"],
+      "properties": {
+        "level": { "enum": ["initial", "primary", "secondary"] }, "cycle": { "type": "string" },
+        "grades": { "type": "array", "items": { "type": "string" } }, "ages": { "type": "array", "items": { "type": "integer" } }
+      }
+    },
+    "allowedPlanningTypes": { "type": "array", "items": { "enum": ["unit", "project", "learning_experience", "context"] } },
+    "activityCharacteristics": { "$ref": "#/$defs/stringList" },
+    "recommendedStructure": { "$ref": "#/$defs/stringList" },
+    "representationProgression": { "$ref": "#/$defs/stringList" },
+    "assessmentCharacteristics": { "$ref": "#/$defs/stringList" },
+    "promptRules": { "$ref": "#/$defs/promptRules" },
+    "provenance": { "$ref": "#/$defs/provenance" }
+  },
+  "$defs": {
+    "stringList": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+    "promptRules": {
+      "type": "object", "additionalProperties": false, "required": ["prioritize", "avoid"],
+      "properties": { "prioritize": { "$ref": "#/$defs/stringList" }, "avoid": { "$ref": "#/$defs/stringList" } }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false, "required": ["sourceRefs", "reviewNote"],
+      "properties": { "sourceRefs": { "$ref": "#/$defs/stringList" }, "reviewNote": { "type": "string", "minLength": 1 } }
+    }
+  }
+}

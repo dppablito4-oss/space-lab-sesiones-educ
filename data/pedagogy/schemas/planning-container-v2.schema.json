@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/planning-container-v2.json",
+  "title": "Space Lab PlanningContainer 2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "id", "revision", "status", "identity", "administrativeContext", "learnerContext", "significantSituation", "drivingQuestion", "purpose", "methodologyConfig", "curriculumMap", "transversalElements", "finalProduct", "milestones", "sequence", "assessmentPlan", "resources", "bibliography", "audit"],
+  "properties": {
+    "schemaVersion": { "const": "2.0" },
+    "id": { "$ref": "#/$defs/id" },
+    "revision": { "type": "integer", "minimum": 1 },
+    "status": { "enum": ["draft", "reviewed", "archived"] },
+    "identity": {
+      "type": "object", "additionalProperties": false,
+      "required": ["title", "planningType", "level", "cycle", "grade", "age", "startDate", "endDate", "duration"],
+      "properties": {
+        "title": { "type": "string" },
+        "planningType": { "enum": ["unit", "project", "learning_experience", "context"] },
+        "level": { "enum": ["initial", "primary", "secondary"] },
+        "cycle": { "type": "string" },
+        "grade": { "type": ["string", "null"] },
+        "age": { "type": ["integer", "null"], "minimum": 0 },
+        "startDate": { "type": ["string", "null"], "format": "date" },
+        "endDate": { "type": ["string", "null"], "format": "date" },
+        "duration": { "$ref": "#/$defs/duration" }
+      }
+    },
+    "administrativeContext": {
+      "type": "object", "additionalProperties": false,
+      "required": ["institution", "dre", "ugel", "teacher", "director", "sections"],
+      "properties": {
+        "institution": { "type": "string" }, "dre": { "type": "string" }, "ugel": { "type": "string" },
+        "teacher": { "type": "string" }, "director": { "type": "string" },
+        "sections": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "learnerContext": {
+      "type": "object", "additionalProperties": false,
+      "required": ["students", "diagnosis", "interests", "localContext"],
+      "properties": {
+        "students": { "type": "string" }, "diagnosis": { "type": "string" }, "localContext": { "type": "string" },
+        "interests": { "type": "array", "items": { "type": "string" }, "uniqueItems": true }
+      }
+    },
+    "significantSituation": {
+      "type": "object", "additionalProperties": false,
+      "required": ["context", "problemOrOpportunity", "affectedActors", "relevance", "studentRole", "expectedResponse"],
+      "properties": {
+        "context": { "type": "string" }, "problemOrOpportunity": { "type": "string" },
+        "affectedActors": { "type": "array", "items": { "type": "string" }, "uniqueItems": true },
+        "relevance": { "type": "string" }, "studentRole": { "type": "string" }, "expectedResponse": { "type": "string" }
+      }
+    },
+    "drivingQuestion": { "type": "string" },
+    "purpose": {
+      "type": "object", "additionalProperties": false,
+      "required": ["summary", "what", "why", "context"],
+      "properties": { "summary": { "type": "string" }, "what": { "type": "string" }, "why": { "type": "string" }, "context": { "type": "string" } }
+    },
+    "methodologyConfig": {
+      "type": "object", "additionalProperties": false,
+      "required": ["primary", "supportingStrategies", "custom", "challenge"],
+      "properties": {
+        "primary": {
+          "type": ["object", "null"], "additionalProperties": false,
+          "required": ["profileId", "profileVersion", "code"],
+          "properties": {
+            "profileId": { "$ref": "#/$defs/id" }, "profileVersion": { "type": "string" },
+            "code": { "enum": ["project_based_learning", "problem_based_learning", "challenge_based_learning", "game_based_learning", "custom"] }
+          }
+        },
+        "supportingStrategies": {
+          "type": "array", "items": {
+            "type": "object", "additionalProperties": false, "required": ["code", "label"],
+            "properties": { "code": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }, "label": { "$ref": "#/$defs/text" } }
+          }
+        },
+        "custom": {
+          "type": ["object", "null"], "additionalProperties": false, "required": ["name", "phases"],
+          "properties": { "name": { "type": "string" }, "phases": { "type": "array", "items": { "$ref": "#/$defs/namedRef" } } }
+        },
+        "challenge": {
+          "type": ["object", "null"], "additionalProperties": false,
+          "required": ["bigIdea", "essentialQuestion", "challengeStatement", "guidingQuestions", "proposedSolutions", "selectedSolution", "implementationPlan", "authenticAudience", "impactIndicators", "impactEvidence"],
+          "properties": {
+            "bigIdea": { "type": "string" }, "essentialQuestion": { "type": "string" }, "challengeStatement": { "type": "string" },
+            "guidingQuestions": { "$ref": "#/$defs/stringList" }, "proposedSolutions": { "$ref": "#/$defs/stringList" },
+            "selectedSolution": { "type": "string" }, "implementationPlan": { "type": "string" }, "authenticAudience": { "type": "string" },
+            "impactIndicators": { "$ref": "#/$defs/stringList" }, "impactEvidence": { "$ref": "#/$defs/stringList" }
+          }
+        }
+      }
+    },
+    "curriculumMap": { "type": "array", "items": { "$ref": "#/$defs/curriculumMapItem" } },
+    "transversalElements": {
+      "type": "array", "items": {
+        "type": "object", "additionalProperties": false, "required": ["id", "name", "valuesOrAttitudes"],
+        "properties": { "id": { "$ref": "#/$defs/id" }, "name": { "$ref": "#/$defs/text" }, "valuesOrAttitudes": { "$ref": "#/$defs/stringList" } }
+      }
+    },
+    "finalProduct": {
+      "type": ["object", "null"], "additionalProperties": false,
+      "required": ["id", "title", "description", "type", "expectedComponents", "audience", "criterionRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/text" }, "description": { "type": "string" },
+        "type": { "type": "string" }, "expectedComponents": { "$ref": "#/$defs/stringList" }, "audience": { "type": "string" },
+        "criterionRefs": { "$ref": "#/$defs/idList" }
+      }
+    },
+    "milestones": { "type": "array", "items": { "$ref": "#/$defs/milestone" } },
+    "sequence": { "type": "array", "items": { "$ref": "#/$defs/sequenceItem" } },
+    "assessmentPlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["formativeAssessment", "feedbackApproach", "selfAssessment", "peerAssessment", "teacherAssessment", "recommendedInstruments"],
+      "properties": {
+        "formativeAssessment": { "type": "string" }, "feedbackApproach": { "type": "string" },
+        "selfAssessment": { "type": "string" }, "peerAssessment": { "type": "string" }, "teacherAssessment": { "type": "string" },
+        "recommendedInstruments": { "$ref": "#/$defs/stringList" }
+      }
+    },
+    "resources": { "type": "array", "items": { "$ref": "#/$defs/resource" } },
+    "bibliography": { "type": "array", "items": { "$ref": "#/$defs/bibliography" } },
+    "audit": {
+      "type": "object", "additionalProperties": false, "required": ["createdAt", "updatedAt"],
+      "properties": { "createdAt": { "$ref": "#/$defs/dateTime" }, "updatedAt": { "$ref": "#/$defs/dateTime" } }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "text": { "type": "string", "minLength": 1 },
+    "dateTime": { "type": "string", "format": "date-time" },
+    "stringList": { "type": "array", "items": { "type": "string" } },
+    "idList": { "type": "array", "items": { "$ref": "#/$defs/id" }, "uniqueItems": true },
+    "duration": {
+      "type": "object", "additionalProperties": false, "required": ["value", "unit"],
+      "properties": { "value": { "type": "integer", "minimum": 0 }, "unit": { "enum": ["minutes", "hours", "days", "weeks", "sessions"] } }
+    },
+    "namedRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "label": { "$ref": "#/$defs/text" } }
+    },
+    "describedRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "description"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "description": { "$ref": "#/$defs/text" } }
+    },
+    "curriculumRef": {
+      "type": "object", "additionalProperties": false, "required": ["id", "officialName"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "officialName": { "$ref": "#/$defs/text" } }
+    },
+    "curriculumMapItem": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "area", "competency", "capacities", "standard", "performances", "criteria", "expectedEvidence", "curricularSourceRefs"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "area": { "$ref": "#/$defs/curriculumRef" }, "competency": { "$ref": "#/$defs/curriculumRef" },
+        "capacities": { "type": "array", "items": { "$ref": "#/$defs/curriculumRef" } },
+        "standard": { "type": ["object", "null"], "additionalProperties": false, "required": ["description", "sourceRef"], "properties": { "description": { "type": "string" }, "sourceRef": { "type": "string" } } },
+        "performances": { "type": "array", "items": { "$ref": "#/$defs/describedRef" } },
+        "criteria": { "type": "array", "items": { "$ref": "#/$defs/describedRef" } },
+        "expectedEvidence": { "type": "array", "items": { "$ref": "#/$defs/describedRef" } },
+        "curricularSourceRefs": { "$ref": "#/$defs/idList" }
+      }
+    },
+    "partialProduct": {
+      "type": "object", "additionalProperties": false, "required": ["id", "title", "description"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/text" }, "description": { "type": "string" } }
+    },
+    "milestone": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "title", "phase", "objective", "partialProduct", "sequenceItemIds", "completionCriteria"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/text" }, "phase": { "type": "string" }, "objective": { "type": "string" },
+        "partialProduct": { "oneOf": [{ "$ref": "#/$defs/partialProduct" }, { "type": "null" }] },
+        "sequenceItemIds": { "$ref": "#/$defs/idList" }, "completionCriteria": { "$ref": "#/$defs/stringList" }
+      }
+    },
+    "sequenceItem": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "index", "type", "title", "week", "date", "duration", "milestoneId", "curriculumMapRefs", "competencyRefs", "capacityRefs", "criterionRefs", "knowledge", "activities", "evidence", "partialProduct", "assessmentInstruments", "linkedDocumentRef", "status"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "index": { "type": "integer", "minimum": 1 },
+        "type": { "enum": ["session", "activity", "workshop", "game", "exploration", "investigation", "field_activity", "presentation", "reflection", "challenge_action"] },
+        "title": { "$ref": "#/$defs/text" }, "week": { "type": ["integer", "null"], "minimum": 1 }, "date": { "type": ["string", "null"], "format": "date" },
+        "duration": { "$ref": "#/$defs/duration" }, "milestoneId": { "type": ["string", "null"] },
+        "curriculumMapRefs": { "$ref": "#/$defs/idList" }, "competencyRefs": { "$ref": "#/$defs/idList" },
+        "capacityRefs": { "$ref": "#/$defs/idList" }, "criterionRefs": { "$ref": "#/$defs/idList" },
+        "knowledge": { "$ref": "#/$defs/stringList" }, "activities": { "$ref": "#/$defs/stringList" },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/describedRef" } },
+        "partialProduct": { "oneOf": [{ "$ref": "#/$defs/partialProduct" }, { "type": "null" }] },
+        "assessmentInstruments": { "type": "array", "items": { "$ref": "#/$defs/namedRef" } },
+        "linkedDocumentRef": {
+          "type": ["object", "null"], "additionalProperties": false, "required": ["id", "schemaVersion", "revision", "status"],
+          "properties": { "id": { "type": "string" }, "schemaVersion": { "type": "string" }, "revision": { "type": "integer", "minimum": 1 }, "status": { "enum": ["draft", "reviewed", "approved", "archived"] } }
+        },
+        "status": { "enum": ["planned", "generated", "completed"] }
+      }
+    },
+    "resource": {
+      "type": "object", "additionalProperties": false, "required": ["id", "title", "type", "url"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "title": { "$ref": "#/$defs/text" }, "type": { "type": "string" }, "url": { "type": ["string", "null"] } }
+    },
+    "bibliography": {
+      "type": "object", "additionalProperties": false, "required": ["id", "citation", "url"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "citation": { "$ref": "#/$defs/text" }, "url": { "type": ["string", "null"] } }
+    }
+  }
+}

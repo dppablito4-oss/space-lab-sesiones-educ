@@ -1,0 +1,10 @@
+{
+  "schemaVersion": "1.0",
+  "profiles": [
+    { "id": "project-based-learning", "path": "project_based_learning.json" },
+    { "id": "problem-based-learning", "path": "problem_based_learning.json" },
+    { "id": "challenge-based-learning", "path": "challenge_based_learning.json" },
+    { "id": "game-based-learning", "path": "game_based_learning.json" },
+    { "id": "custom-methodology", "path": "custom.json" }
+  ]
+}

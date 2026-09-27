@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/didactic-profile-v1.json",
+  "title": "Space Lab DidacticProfile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "profileVersion", "id", "status", "scope", "approach", "recommendedStrategies", "assessmentRecommendations", "promptRules", "provenance"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" }, "profileVersion": { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]+$" },
+    "id": { "type": "string" }, "status": { "enum": ["draft", "pilot", "reviewed", "archived"] },
+    "scope": {
+      "type": "object", "additionalProperties": false, "required": ["level", "cycle", "area", "competency", "capacities"],
+      "properties": {
+        "level": { "enum": ["initial", "primary", "secondary"] }, "cycle": { "type": "string" },
+        "area": { "$ref": "#/$defs/ref" }, "competency": { "$ref": "#/$defs/ref" },
+        "capacities": { "type": "array", "items": { "$ref": "#/$defs/ref" } }
+      }
+    },
+    "approach": { "type": "string", "minLength": 1 },
+    "recommendedStrategies": { "$ref": "#/$defs/stringList" },
+    "assessmentRecommendations": { "$ref": "#/$defs/stringList" },
+    "promptRules": {
+      "type": "object", "additionalProperties": false, "required": ["prioritize", "avoid"],
+      "properties": { "prioritize": { "$ref": "#/$defs/stringList" }, "avoid": { "$ref": "#/$defs/stringList" } }
+    },
+    "provenance": {
+      "type": "object", "additionalProperties": false, "required": ["sourceRefs", "reviewNote"],
+      "properties": { "sourceRefs": { "$ref": "#/$defs/stringList" }, "reviewNote": { "type": "string", "minLength": 1 } }
+    }
+  },
+  "$defs": {
+    "ref": { "type": "object", "additionalProperties": false, "required": ["id", "officialName"], "properties": { "id": { "type": "string" }, "officialName": { "type": "string" } } },
+    "stringList": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  }
+}

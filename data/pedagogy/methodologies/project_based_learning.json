@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "project-based-learning",
+  "code": "project_based_learning",
+  "displayName": "Aprendizaje Basado en Proyectos",
+  "description": "Organiza un proceso prolongado de investigación, construcción y comunicación alrededor de una pregunta y un producto final relevante.",
+  "status": "pilot",
+  "suitableLevels": ["initial", "primary", "secondary"],
+  "recommendedPhases": [
+    { "id": "launch", "label": "Lanzamiento", "purpose": "Presentar la situación y construir la pregunta orientadora.", "mode": "recommended" },
+    { "id": "team-organization", "label": "Organización", "purpose": "Acordar equipos, roles y responsabilidades.", "mode": "recommended" },
+    { "id": "planning", "label": "Planificación", "purpose": "Definir ruta, tareas, recursos y tiempos.", "mode": "recommended" },
+    { "id": "research", "label": "Investigación", "purpose": "Buscar, contrastar y organizar información pertinente.", "mode": "recommended" },
+    { "id": "development", "label": "Desarrollo", "purpose": "Aplicar aprendizajes y tomar decisiones fundamentadas.", "mode": "recommended" },
+    { "id": "product-construction", "label": "Construcción del producto", "purpose": "Integrar los avances en un producto revisable.", "mode": "recommended" },
+    { "id": "presentation", "label": "Presentación", "purpose": "Comunicar y defender el producto ante una audiencia.", "mode": "recommended" },
+    { "id": "reflection", "label": "Reflexión", "purpose": "Evaluar aprendizajes, proceso y producto.", "mode": "recommended" }
+  ],
+  "fieldRules": [
+    { "id": "project-driving-question", "path": "drivingQuestion", "operator": "non_empty", "severity": "warning", "message": "Conviene definir una pregunta orientadora clara para el proyecto." },
+    { "id": "project-final-product", "path": "finalProduct", "operator": "non_empty", "severity": "warning", "message": "El aprendizaje basado en proyectos debería culminar en un producto final relevante." },
+    { "id": "project-audience", "path": "finalProduct.audience", "operator": "non_empty", "severity": "suggestion", "message": "Definir una audiencia auténtica fortalece el sentido del producto." }
+  ],
+  "sequenceRules": [
+    { "id": "project-partial-products", "path": "milestones", "operator": "milestone_partial_product_present", "severity": "suggestion", "message": "Distribuye productos parciales o revisiones antes del producto final." }
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el proceso y el producto con criterios conocidos desde el inicio.",
+    "Incorporar retroalimentación, autoevaluación y revisión entre pares."
+  ],
+  "promptRules": {
+    "prioritize": ["pregunta orientadora", "investigación", "decisiones del estudiante", "productos parciales", "audiencia auténtica", "reflexión"],
+    "avoid": ["producto decorativo desconectado del currículo", "fases rígidas sin adaptación docente", "generar todas las sesiones sin revisar el mapa"]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-project-based-learning-2025"],
+    "reviewNote": "Fases internas adaptables derivadas de orientaciones oficiales; no constituyen una secuencia obligatoria."
+  }
+}

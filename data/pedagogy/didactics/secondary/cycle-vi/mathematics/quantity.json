@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-mathematics-quantity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary", "cycle": "VI",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-quantity-problems", "officialName": "Resuelve problemas de cantidad" },
+    "capacities": [
+      { "id": "translates-quantities-to-numerical-expressions", "officialName": "Traduce cantidades a expresiones numéricas" },
+      { "id": "communicates-understanding-of-numbers-and-operations", "officialName": "Comunica su comprensión sobre los números y las operaciones" },
+      { "id": "uses-estimation-and-calculation-strategies", "officialName": "Usa estrategias y procedimientos de estimación y cálculo" },
+      { "id": "argues-about-numerical-relations-and-operations", "officialName": "Argumenta afirmaciones sobre las relaciones numéricas y las operaciones" }
+    ]
+  },
+  "approach": "Resolución de problemas",
+  "recommendedStrategies": ["comprender la situación", "representar relaciones", "seleccionar estrategias", "contrastar procedimientos", "argumentar y comunicar"],
+  "assessmentRecommendations": ["Observar representaciones, estrategias y argumentos.", "Valorar la pertinencia del procedimiento además del resultado."],
+  "promptRules": {
+    "prioritize": ["problemas contextualizados", "múltiples estrategias", "representaciones", "justificación", "verificación"],
+    "avoid": ["procedimientos únicos obligatorios", "ejercicios descontextualizados como experiencia central", "criterios limitados a la respuesta final"]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-mathematics-situations-2024"],
+    "reviewNote": "Separación V3 del componente didáctico incluido anteriormente en el perfil combinado."
+  }
+}

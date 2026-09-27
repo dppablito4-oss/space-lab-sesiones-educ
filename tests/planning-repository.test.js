@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const PlanningContainer = require('../js/planning/planning-container.js');
+const PlanningContainerV2 = require('../js/planning/planning-container-v2.js');
 const PlanningRepository = require('../js/planning/planning-repository.js');
 
 function memoryStorage() {
@@ -116,6 +117,16 @@ function validContainer(id = 'plan-prueba-001') {
     });
     anonymous.save(validContainer('plan-anonimo-001'));
     assert.equal((await anonymous.sync()).reason, 'authentication_required');
+
+    const v2Storage = memoryStorage();
+    const v2Repository = PlanningRepository.create({ storage: v2Storage, validator: PlanningContainerV2 });
+    const v2Fixture = JSON.parse(fs.readFileSync(
+        path.join(__dirname, '..', 'data', 'pedagogy', 'fixtures', 'secondary_math_project_unit.v2.json'),
+        'utf8'
+    ));
+    v2Repository.save(v2Fixture);
+    assert.equal(v2Repository.readAll(true)[0].schemaVersion, '2.0');
+    assert.equal(v2Repository.get(v2Fixture.id).methodologyConfig.primary.code, 'project_based_learning');
 
     const migration = fs.readFileSync(
         path.join(__dirname, '..', 'supabase', 'migrations', '202609260012_planning_containers.sql'),

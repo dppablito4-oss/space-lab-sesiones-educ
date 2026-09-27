@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/session-planning-link-v2.json",
+  "title": "Space Lab SessionPlanningLink 2.0",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["linkVersion", "mode", "planningContainerId", "planningRevision", "sequenceItemId", "sequenceIndex", "inheritedContextSnapshot"],
+  "properties": {
+    "linkVersion": { "const": "2.0" },
+    "mode": { "enum": ["standalone", "linked"] },
+    "planningContainerId": { "type": ["string", "null"] },
+    "planningRevision": { "type": ["integer", "null"], "minimum": 1 },
+    "sequenceItemId": { "type": ["string", "null"] },
+    "sequenceIndex": { "type": ["integer", "null"], "minimum": 1 },
+    "inheritedContextSnapshot": {
+      "type": ["object", "null"],
+      "properties": {
+        "schemaVersion": { "const": "2.0" },
+        "planningContainerId": { "type": "string" },
+        "planningRevision": { "type": "integer", "minimum": 1 },
+        "sequenceItemId": { "type": "string" },
+        "sequenceIndex": { "type": "integer", "minimum": 1 },
+        "capturedAt": { "type": "string", "format": "date-time" },
+        "precedingSequence": { "type": "array" },
+        "followingSequence": { "type": "array" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "mode": { "const": "standalone" } } },
+      "then": {
+        "properties": {
+          "planningContainerId": { "type": "null" }, "planningRevision": { "type": "null" },
+          "sequenceItemId": { "type": "null" }, "sequenceIndex": { "type": "null" },
+          "inheritedContextSnapshot": { "type": "null" }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "mode": { "const": "linked" } } },
+      "then": {
+        "properties": {
+          "planningContainerId": { "type": "string" }, "planningRevision": { "type": "integer" },
+          "sequenceItemId": { "type": "string" }, "sequenceIndex": { "type": "integer" },
+          "inheritedContextSnapshot": { "type": "object" }
+        }
+      }
+    }
+  ]
+}

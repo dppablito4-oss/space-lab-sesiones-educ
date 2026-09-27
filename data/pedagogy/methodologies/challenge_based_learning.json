@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "challenge-based-learning",
+  "code": "challenge_based_learning",
+  "displayName": "Aprendizaje Basado en Retos",
+  "description": "Organiza el aprendizaje alrededor de un reto auténtico que conduce a investigar, implementar una solución y evaluar su impacto.",
+  "status": "pilot",
+  "suitableLevels": ["primary", "secondary"],
+  "recommendedPhases": [
+    { "id": "engage", "label": "Involucrar", "purpose": "Pasar de una idea amplia a un reto concreto y accionable.", "mode": "recommended" },
+    { "id": "investigate", "label": "Investigar", "purpose": "Construir conocimiento mediante preguntas, actividades y recursos guía.", "mode": "recommended" },
+    { "id": "act", "label": "Actuar", "purpose": "Desarrollar, implementar y evaluar una solución con audiencia auténtica.", "mode": "recommended" }
+  ],
+  "fieldRules": [
+    { "id": "challenge-statement", "path": "methodologyConfig.challenge.challengeStatement", "operator": "non_empty", "severity": "warning", "message": "Formula un reto concreto, auténtico y accionable." },
+    { "id": "challenge-implementation", "path": "methodologyConfig.challenge.implementationPlan", "operator": "non_empty", "severity": "warning", "message": "Un reto debería incluir la implementación de una solución." },
+    { "id": "challenge-impact", "path": "methodologyConfig.challenge.impactIndicators", "operator": "non_empty", "severity": "warning", "message": "Define cómo se observará o medirá el impacto de la acción." }
+  ],
+  "sequenceRules": [
+    { "id": "challenge-action-item", "path": "sequence", "operator": "sequence_type_present", "value": "challenge_action", "severity": "warning", "message": "Incluye al menos una acción de implementación, no solo el diseño teórico." }
+  ],
+  "assessmentRecommendations": ["Recoger evidencia del proceso, de la implementación y del impacto.", "Incorporar reflexión continua y comunicación a una audiencia auténtica."],
+  "promptRules": {
+    "prioritize": ["idea amplia", "pregunta esencial", "reto accionable", "preguntas guía", "implementación", "evaluación de impacto"],
+    "avoid": ["confundir reto con pregunta decorativa", "terminar en una propuesta no implementada", "afirmar impacto sin evidencia"]
+  },
+  "provenance": {
+    "sourceRefs": ["challenge-based-learning-framework-2016"],
+    "reviewNote": "Engage, Investigate y Act se conservan como marco recomendado, con adaptación docente permitida."
+  }
+}

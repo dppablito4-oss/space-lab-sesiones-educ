@@ -1,0 +1,31 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "game-based-learning",
+  "code": "game_based_learning",
+  "displayName": "Aprendizaje Basado en Juegos",
+  "description": "Utiliza uno o más juegos como medio central para movilizar aprendizajes y promover reflexión sobre la experiencia.",
+  "status": "pilot",
+  "suitableLevels": ["initial", "primary", "secondary"],
+  "recommendedPhases": [
+    { "id": "prepare", "label": "Preparación", "purpose": "Presentar propósito, reglas, materiales y condiciones de participación.", "mode": "recommended" },
+    { "id": "play", "label": "Juego", "purpose": "Participar, decidir, experimentar y recibir retroalimentación del sistema de juego.", "mode": "recommended" },
+    { "id": "debrief", "label": "Reflexión", "purpose": "Analizar decisiones, estrategias y aprendizajes surgidos del juego.", "mode": "recommended" },
+    { "id": "transfer", "label": "Transferencia", "purpose": "Aplicar lo aprendido en una situación relacionada.", "mode": "recommended" }
+  ],
+  "fieldRules": [
+    { "id": "game-learning-purpose", "path": "purpose.summary", "operator": "non_empty", "severity": "warning", "message": "Explicita qué aprendizaje moviliza el juego." }
+  ],
+  "sequenceRules": [
+    { "id": "game-debrief", "path": "sequence", "operator": "sequence_type_present", "value": "reflection", "severity": "suggestion", "message": "Incluye reflexión posterior para conectar la experiencia de juego con el aprendizaje." }
+  ],
+  "assessmentRecommendations": ["Observar decisiones, estrategias, participación y transferencia, no únicamente quién gana.", "Permitir diversas formas de participación y ajustar barreras de acceso."],
+  "promptRules": {
+    "prioritize": ["propósito de aprendizaje", "reglas comprensibles", "decisiones significativas", "participación inclusiva", "reflexión", "transferencia"],
+    "avoid": ["confundir juego con gamificación", "premiar solo velocidad o competencia", "usar el juego sin reflexión pedagógica"]
+  },
+  "provenance": {
+    "sourceRefs": ["intef-game-based-learning"],
+    "reviewNote": "Perfil inicial para uso principal o complementario; requiere revisión especializada por nivel y área."
+  }
+}

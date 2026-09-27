@@ -12,6 +12,7 @@ const PlanningRepository = (() => {
     function createRecord(container, lastSaved, synced = false) {
         return {
             id: container.id,
+            schemaVersion: container.schemaVersion,
             revision: container.revision,
             status: container.status,
             title: container.identity.title,
@@ -26,7 +27,9 @@ const PlanningRepository = (() => {
 
     function create(options = {}) {
         const storage = options.storage || (typeof localStorage !== 'undefined' ? localStorage : null);
-        const validator = options.validator || (typeof PlanningContainer !== 'undefined' ? PlanningContainer : null);
+        const validator = options.validator
+            || (typeof PlanningContainerV2 !== 'undefined' ? PlanningContainerV2 : null)
+            || (typeof PlanningContainer !== 'undefined' ? PlanningContainer : null);
         const cloud = options.cloud || (typeof window !== 'undefined' ? window.SupabaseClient : null);
         const now = options.now || (() => new Date().toISOString());
         if (!storage) throw new Error('PlanningRepository requiere almacenamiento local.');

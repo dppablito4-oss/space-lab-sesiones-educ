@@ -316,6 +316,7 @@ window.SupabaseClient = (() => {
         if (error) throw error;
         return (data || []).map(row => ({
             id: row.id,
+            schemaVersion: row.schema_version,
             revision: row.revision,
             status: row.status,
             title: row.title,
@@ -338,7 +339,7 @@ window.SupabaseClient = (() => {
             .upsert({
                 user_id: user.id,
                 id: record.id,
-                schema_version: '1.0',
+                schema_version: record.schemaVersion || record.containerData?.schemaVersion,
                 revision: record.revision,
                 status: record.status,
                 title: record.title,

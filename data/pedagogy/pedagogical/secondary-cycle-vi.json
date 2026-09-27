@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "2.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi",
+  "status": "pilot",
+  "scope": { "level": "secondary", "cycle": "VI", "grades": ["1", "2"], "ages": [] },
+  "allowedPlanningTypes": ["unit", "project", "learning_experience"],
+  "activityCharacteristics": [
+    "Situaciones relacionadas con decisiones y problemas relevantes para adolescentes.",
+    "Participación activa, colaboración y autonomía progresiva.",
+    "Uso crítico de información, representaciones y argumentos."
+  ],
+  "recommendedStructure": ["situación significativa", "propósito", "mapa curricular", "progresión", "evaluación formativa", "reflexión"],
+  "representationProgression": [],
+  "assessmentCharacteristics": ["criterios comprensibles", "evidencias distribuidas", "retroalimentación oportuna", "autoevaluación y coevaluación cuando sean pertinentes"],
+  "promptRules": {
+    "prioritize": ["agencia del estudiante", "reto cognitivo", "contexto auténtico", "progresión entre sesiones"],
+    "avoid": ["infantilización", "actividades repetitivas sin propósito", "exposición docente como única experiencia"]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-planning-faq-2022"],
+    "reviewNote": "Perfil piloto del ciclo VI; requiere validación pedagógica humana antes de pasar a reviewed."
+  }
+}

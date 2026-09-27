@@ -1,0 +1,25 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "custom-methodology",
+  "code": "custom",
+  "displayName": "Metodología personalizada",
+  "description": "Permite representar una organización metodológica institucional o docente que no corresponde a un perfil predefinido.",
+  "status": "pilot",
+  "suitableLevels": ["initial", "primary", "secondary"],
+  "recommendedPhases": [],
+  "fieldRules": [
+    { "id": "custom-name", "path": "methodologyConfig.custom.name", "operator": "non_empty", "severity": "warning", "message": "Asigna un nombre claro a la metodología personalizada." },
+    { "id": "custom-phases", "path": "methodologyConfig.custom.phases", "operator": "non_empty", "severity": "suggestion", "message": "Describe las fases propias si organizan la secuencia." }
+  ],
+  "sequenceRules": [],
+  "assessmentRecommendations": ["Alinear las decisiones metodológicas con propósito, criterios y evidencias."],
+  "promptRules": {
+    "prioritize": ["intención docente", "flexibilidad", "coherencia entre propósito, actividades y evaluación"],
+    "avoid": ["inventar fases no declaradas por el docente", "reemplazar el criterio profesional con una etiqueta"]
+  },
+  "provenance": {
+    "sourceRefs": [],
+    "reviewNote": "Perfil de extensión interna; no representa una metodología oficial específica."
+  }
+}

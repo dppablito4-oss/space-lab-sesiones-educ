@@ -1,0 +1,36 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "problem-based-learning",
+  "code": "problem_based_learning",
+  "displayName": "Aprendizaje Basado en Problemas",
+  "description": "Impulsa el aprendizaje mediante la comprensión e investigación de un problema abierto y la construcción de una solución argumentada.",
+  "status": "pilot",
+  "suitableLevels": ["primary", "secondary"],
+  "recommendedPhases": [
+    { "id": "problem-presentation", "label": "Presentación del problema", "purpose": "Situar un problema significativo y abierto.", "mode": "recommended" },
+    { "id": "clarification", "label": "Clarificación", "purpose": "Aclarar términos, condiciones y alcance.", "mode": "recommended" },
+    { "id": "prior-knowledge", "label": "Saberes previos", "purpose": "Reconocer explicaciones, hipótesis y conocimientos disponibles.", "mode": "recommended" },
+    { "id": "learning-needs", "label": "Necesidades de aprendizaje", "purpose": "Identificar qué se necesita investigar.", "mode": "recommended" },
+    { "id": "investigation", "label": "Investigación", "purpose": "Obtener y contrastar información relevante.", "mode": "recommended" },
+    { "id": "analysis", "label": "Análisis", "purpose": "Valorar hallazgos, hipótesis y alternativas.", "mode": "recommended" },
+    { "id": "solution-construction", "label": "Construcción de solución", "purpose": "Formular una respuesta fundamentada.", "mode": "recommended" },
+    { "id": "discussion", "label": "Discusión", "purpose": "Comunicar y contrastar soluciones.", "mode": "recommended" },
+    { "id": "reflection", "label": "Reflexión", "purpose": "Reconocer aprendizajes y evaluar el proceso.", "mode": "recommended" }
+  ],
+  "fieldRules": [
+    { "id": "problem-central-problem", "path": "significantSituation.problemOrOpportunity", "operator": "non_empty", "severity": "warning", "message": "Define el problema central que impulsará la investigación." }
+  ],
+  "sequenceRules": [
+    { "id": "problem-learning-needs", "path": "milestones", "operator": "milestone_phase_present", "value": "learning-needs", "severity": "suggestion", "message": "Incluye un momento para reconocer qué se sabe y qué se necesita aprender." }
+  ],
+  "assessmentRecommendations": ["Valorar investigación, argumentación, contraste de alternativas y reflexión.", "Hacer visibles los criterios antes de construir la solución."],
+  "promptRules": {
+    "prioritize": ["problema abierto", "saberes previos", "necesidades de aprendizaje", "investigación", "alternativas", "solución argumentada"],
+    "avoid": ["reducir el problema a un ejercicio con respuesta única", "forzar un producto físico", "entregar la solución antes de investigar"]
+  },
+  "provenance": {
+    "sourceRefs": ["intef-problem-based-learning"],
+    "reviewNote": "Perfil basado en orientaciones de CEDEC/INTEF y adaptado como recomendación flexible."
+  }
+}

@@ -19,7 +19,20 @@ data/pedagogy/
 ├── schemas/
 │   ├── pedagogical-profile.schema.json
 │   ├── planning-container.schema.json
-│   └── session-planning-link.schema.json
+│   ├── planning-container-v2.schema.json
+│   ├── session-planning-link.schema.json
+│   ├── session-planning-link-v2.schema.json
+│   └── methodology-profile.schema.json
+├── methodologies/
+│   ├── catalog.json
+│   ├── sources.json
+│   └── *.json
+├── fixtures/
+│   └── secondary_math_project_unit.v2.json
+├── pedagogical/
+│   └── secondary-cycle-vi.json
+├── didactics/
+│   └── secondary/cycle-vi/mathematics/quantity.json
 └── secondary/
     └── cycle-vi/
         └── mathematics/
@@ -29,3 +42,5 @@ data/pedagogy/
 Los perfiles publicados deben estar registrados en `catalog.json` y pasar `node tests/pedagogy-catalog.test.js`.
 
 `PlanningContainer v1` modela una unidad, proyecto, experiencia o planificación de contexto con revisiones explícitas. Una sesión mantiene su independencia: el vínculo se guarda en el sobre de persistencia como `session.planning`, fuera de `SessionDocumentV1`. Las sesiones vinculadas reciben un snapshot del contexto heredado para que una revisión posterior del plan no cambie documentos ya generados.
+
+`PlanningContainer 2.0` implementa Planning Core V3: separa tipo de planificación y metodología, incorpora mapa curricular, hitos, productos parciales/finales y evaluación global. Los perfiles metodológicos son recomendaciones versionadas y nunca pasos obligatorios.

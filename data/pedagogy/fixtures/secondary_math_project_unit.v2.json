@@ -1,0 +1,151 @@
+{
+  "schemaVersion": "2.0",
+  "id": "plan-secondary-math-finance-001",
+  "revision": 1,
+  "status": "reviewed",
+  "identity": {
+    "title": "Tomamos decisiones financieras responsables en nuestra comunidad",
+    "planningType": "unit",
+    "level": "secondary",
+    "cycle": "VI",
+    "grade": "2",
+    "age": null,
+    "startDate": "2026-10-05",
+    "endDate": "2026-10-23",
+    "duration": { "value": 3, "unit": "weeks" }
+  },
+  "administrativeContext": {
+    "institution": "IE piloto", "dre": "", "ugel": "", "teacher": "Docente piloto", "director": "", "sections": ["A"]
+  },
+  "learnerContext": {
+    "students": "Estudiantes de segundo grado de Secundaria",
+    "diagnosis": "El grupo resuelve operaciones, pero necesita justificar decisiones que combinan porcentajes y comparación de alternativas.",
+    "interests": ["emprendimientos", "tecnología", "economía familiar"],
+    "localContext": "Familias y pequeños negocios comparan ofertas y opciones de financiamiento."
+  },
+  "significantSituation": {
+    "context": "En los comercios de la comunidad se ofrecen descuentos, pagos en cuotas y promociones difíciles de comparar.",
+    "problemOrOpportunity": "Las decisiones basadas solo en el precio anunciado pueden generar gastos mayores a los previstos.",
+    "affectedActors": ["estudiantes", "familias", "emprendedores locales"],
+    "relevance": "Comprender porcentajes y costos permite tomar decisiones informadas y responsables.",
+    "studentRole": "Equipo asesor que analiza alternativas y comunica recomendaciones.",
+    "expectedResponse": "Una guía comparativa sustentada con cálculos, representaciones y argumentos."
+  },
+  "drivingQuestion": "¿Cómo podemos comparar promociones y opciones de pago para recomendar decisiones financieras responsables?",
+  "purpose": {
+    "summary": "Resolver y argumentar situaciones de cantidad para comparar alternativas financieras del entorno.",
+    "what": "Porcentajes, aumentos, descuentos y comparación de costos.",
+    "why": "Tomar y comunicar decisiones financieras fundamentadas.",
+    "context": "Promociones y opciones de pago presentes en la comunidad."
+  },
+  "methodologyConfig": {
+    "primary": { "profileId": "project-based-learning", "profileVersion": "2026.1", "code": "project_based_learning" },
+    "supportingStrategies": [{ "code": "collaborative_learning", "label": "Aprendizaje colaborativo" }],
+    "custom": null,
+    "challenge": null
+  },
+  "curriculumMap": [{
+    "id": "map-quantity",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-quantity-problems", "officialName": "Resuelve problemas de cantidad" },
+    "capacities": [
+      { "id": "translates-quantities-to-numerical-expressions", "officialName": "Traduce cantidades a expresiones numéricas" },
+      { "id": "communicates-understanding-of-numbers-and-operations", "officialName": "Comunica su comprensión sobre los números y las operaciones" },
+      { "id": "uses-estimation-and-calculation-strategies", "officialName": "Usa estrategias y procedimientos de estimación y cálculo" },
+      { "id": "argues-about-numerical-relations-and-operations", "officialName": "Argumenta afirmaciones sobre las relaciones numéricas y las operaciones" }
+    ],
+    "standard": {
+      "description": "Resuelve problemas referidos a relaciones entre cantidades y los representa con expresiones numéricas pertinentes a su ciclo.",
+      "sourceRef": "minedu-secondary-curriculum-2016"
+    },
+    "performances": [
+      { "id": "performance-percentages", "description": "Establece relaciones entre datos y las transforma en expresiones con porcentajes." },
+      { "id": "performance-arguments", "description": "Justifica la validez de sus procedimientos y conclusiones." }
+    ],
+    "criteria": [
+      { "id": "criterion-model", "description": "Representa descuentos y aumentos porcentuales con expresiones numéricas coherentes." },
+      { "id": "criterion-strategy", "description": "Selecciona y ejecuta estrategias de cálculo pertinentes." },
+      { "id": "criterion-argument", "description": "Sustenta una recomendación comparando resultados y condiciones." }
+    ],
+    "expectedEvidence": [
+      { "id": "evidence-comparison", "description": "Tabla comparativa con cálculos verificados." },
+      { "id": "evidence-recommendation", "description": "Recomendación escrita y argumentada." }
+    ],
+    "curricularSourceRefs": ["minedu-secondary-curriculum-2016"]
+  }],
+  "transversalElements": [{
+    "id": "common-good", "name": "Orientación al bien común", "valuesOrAttitudes": ["responsabilidad", "solidaridad"]
+  }],
+  "finalProduct": {
+    "id": "product-financial-guide", "title": "Guía para comparar promociones y pagos",
+    "description": "Documento breve con casos, cálculos y recomendaciones para familias y estudiantes.",
+    "type": "guide", "expectedComponents": ["casos comparados", "procedimientos", "recomendaciones"],
+    "audience": "Familias y comunidad educativa", "criterionRefs": ["criterion-model", "criterion-strategy", "criterion-argument"]
+  },
+  "milestones": [
+    {
+      "id": "milestone-research", "title": "Reconocemos y analizamos promociones", "phase": "research",
+      "objective": "Recoger casos y comprender la información que comunican.",
+      "partialProduct": { "id": "partial-case-file", "title": "Ficha de casos", "description": "Registro organizado de promociones reales o simuladas." },
+      "sequenceItemIds": ["session-01"], "completionCriteria": ["Los casos contienen datos suficientes y fuentes identificadas."]
+    },
+    {
+      "id": "milestone-development", "title": "Comparamos alternativas", "phase": "development",
+      "objective": "Modelar porcentajes y sustentar comparaciones.",
+      "partialProduct": { "id": "partial-comparison", "title": "Tabla comparativa", "description": "Cálculos, condiciones y conclusiones provisionales." },
+      "sequenceItemIds": ["session-02"], "completionCriteria": ["Los procedimientos son verificables y la comparación es coherente."]
+    },
+    {
+      "id": "milestone-presentation", "title": "Comunicamos la guía", "phase": "presentation",
+      "objective": "Integrar y presentar recomendaciones a una audiencia.",
+      "partialProduct": null, "sequenceItemIds": ["session-03"],
+      "completionCriteria": ["La guía integra cálculos, argumentos y lenguaje comprensible."]
+    }
+  ],
+  "sequence": [
+    {
+      "id": "session-01", "index": 1, "type": "session", "title": "¿Qué dicen realmente las promociones?", "week": 1, "date": "2026-10-05",
+      "duration": { "value": 90, "unit": "minutes" }, "milestoneId": "milestone-research",
+      "curriculumMapRefs": ["map-quantity"], "competencyRefs": ["solves-quantity-problems"],
+      "capacityRefs": ["translates-quantities-to-numerical-expressions", "communicates-understanding-of-numbers-and-operations"],
+      "criterionRefs": ["criterion-model"], "knowledge": ["porcentajes", "descuentos"],
+      "activities": ["Analizar anuncios", "Organizar datos", "Representar descuentos"],
+      "evidence": [{ "id": "evidence-session-01", "description": "Ficha con datos y representación de promociones." }],
+      "partialProduct": { "id": "partial-case-file", "title": "Ficha de casos", "description": "Casos seleccionados por el equipo." },
+      "assessmentInstruments": [{ "id": "checklist-cases", "label": "Lista de cotejo" }], "linkedDocumentRef": null, "status": "planned"
+    },
+    {
+      "id": "session-02", "index": 2, "type": "session", "title": "Comparamos el costo real", "week": 2, "date": "2026-10-12",
+      "duration": { "value": 90, "unit": "minutes" }, "milestoneId": "milestone-development",
+      "curriculumMapRefs": ["map-quantity"], "competencyRefs": ["solves-quantity-problems"],
+      "capacityRefs": ["uses-estimation-and-calculation-strategies", "argues-about-numerical-relations-and-operations"],
+      "criterionRefs": ["criterion-strategy", "criterion-argument"], "knowledge": ["aumentos", "descuentos sucesivos", "costo total"],
+      "activities": ["Resolver casos", "Contrastar estrategias", "Sustentar una comparación"],
+      "evidence": [{ "id": "evidence-session-02", "description": "Tabla comparativa con procedimientos y conclusión." }],
+      "partialProduct": { "id": "partial-comparison", "title": "Tabla comparativa", "description": "Comparación verificada de alternativas." },
+      "assessmentInstruments": [{ "id": "rubric-comparison", "label": "Rúbrica analítica" }], "linkedDocumentRef": null, "status": "planned"
+    },
+    {
+      "id": "session-03", "index": 3, "type": "presentation", "title": "Presentamos recomendaciones responsables", "week": 3, "date": "2026-10-19",
+      "duration": { "value": 90, "unit": "minutes" }, "milestoneId": "milestone-presentation",
+      "curriculumMapRefs": ["map-quantity"], "competencyRefs": ["solves-quantity-problems"],
+      "capacityRefs": ["communicates-understanding-of-numbers-and-operations", "argues-about-numerical-relations-and-operations"],
+      "criterionRefs": ["criterion-model", "criterion-strategy", "criterion-argument"], "knowledge": ["comunicación matemática", "argumentación"],
+      "activities": ["Revisar la guía", "Presentar recomendaciones", "Recibir retroalimentación"],
+      "evidence": [{ "id": "evidence-session-03", "description": "Presentación y defensa de la guía final." }],
+      "partialProduct": null,
+      "assessmentInstruments": [{ "id": "rubric-final-product", "label": "Rúbrica del producto final" }], "linkedDocumentRef": null, "status": "planned"
+    }
+  ],
+  "assessmentPlan": {
+    "formativeAssessment": "Recoger evidencias en cada hito y ajustar las decisiones mediante retroalimentación.",
+    "feedbackApproach": "Preguntas, descripción de avances y acuerdos de mejora.",
+    "selfAssessment": "Semáforo de progreso al cerrar cada hito.",
+    "peerAssessment": "Revisión cruzada de tablas y argumentos.",
+    "teacherAssessment": "Observación, listas de cotejo y rúbrica analítica.",
+    "recommendedInstruments": ["lista de cotejo", "rúbrica analítica"]
+  },
+  "resources": [{ "id": "resource-promotions", "title": "Anuncios y casos contextualizados", "type": "case_collection", "url": null }],
+  "bibliography": [{ "id": "bibliography-cneb-secondary", "citation": "Ministerio de Educación del Perú. Programa curricular de Educación Secundaria.", "url": "https://repositorio.minedu.gob.pe/handle/20.500.12799/4550" }],
+  "audit": { "createdAt": "2026-09-26T22:00:00.000Z", "updatedAt": "2026-09-26T22:00:00.000Z" }
+}

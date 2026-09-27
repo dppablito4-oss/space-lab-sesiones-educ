@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "sources": [
+    {
+      "id": "minedu-project-based-learning-2025",
+      "title": "Fascículo de la competencia Diseña y construye soluciones tecnológicas para resolver problemas de su entorno",
+      "publisher": "Ministerio de Educación del Perú",
+      "year": 2025,
+      "url": "https://repositorio.minedu.gob.pe/handle/20.500.12799/11845",
+      "accessedAt": "2026-09-26"
+    },
+    {
+      "id": "intef-problem-based-learning",
+      "title": "Aprendizaje Basado en Problemas: orientaciones metodológicas",
+      "publisher": "CEDEC / INTEF",
+      "year": null,
+      "url": "https://descargas.intef.es/cedec/proyectoedia/guias/contenidos/orientaciones_metodologia/aprendizaje_basado_en_problemas_abpr.html",
+      "accessedAt": "2026-09-26"
+    },
+    {
+      "id": "challenge-based-learning-framework-2016",
+      "title": "Challenge Based Learning Framework",
+      "publisher": "Challenge Based Learning",
+      "year": 2016,
+      "url": "https://www.challengebasedlearning.org/wp-content/uploads/2019/02/CBL_Guide2016.pdf",
+      "accessedAt": "2026-09-26"
+    },
+    {
+      "id": "intef-game-based-learning",
+      "title": "Guía educativa: Aprendizaje Basado en Juegos",
+      "publisher": "INTEF",
+      "year": 2021,
+      "url": "https://descargas.intef.es/recursos_educativos/aprendemos_clan/guias_1_28/23._ABJ/index.html",
+      "accessedAt": "2026-09-26"
+    }
+  ]
+}
