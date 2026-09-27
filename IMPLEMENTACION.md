@@ -209,6 +209,48 @@ de overflow y acceso independiente a `Crear nueva sesión`.
 **Gate E4:** se cierra después de suite completa, Validate & Build y GitHub
 Pages verdes. E5 permanece fuera de alcance.
 
+## BLOQUE E5
+
+**SessionPlanningLink real:**
+
+- Solo un `PlanningContainer 2.0` con estado `reviewed` puede preparar una
+  sesión vinculada. Los borradores se rechazan antes de alterar el editor.
+- `PlanningLinkedSession` resuelve la planificación mediante
+  `PlanningRepository`, crea el `SessionPlanningLink 2.0` y traduce el
+  `SequenceItem` a los campos del editor de sesiones existente.
+- El `inheritedContextSnapshot` congela la revisión, el ítem, el contexto
+  global, currículo referenciado, metodología, producto, hito, evaluación y
+  las sesiones anteriores y posteriores.
+- El generador `generate_session` existente recibe el snapshot como contexto
+  pedagógico no confiable. Sigue produciendo exactamente `SessionDocument v1`.
+- AI Gateway verifica por RLS la planificación del usuario, exige que la copia
+  actual continúe `reviewed` con la misma revisión e ítem y reconstruye el
+  snapshot desde `planning_containers`; no confía en el JSON enviado por el
+  navegador.
+- La relación se guarda fuera del documento canónico, en `session.planning`.
+  La exportación DOCX/PDF/JSON canónica no incorpora ese metadato.
+- Al guardar la sesión, el `SequenceItem` registra `linkedDocumentRef` y estado
+  `generated` sin cambiar el estado `reviewed` ni incrementar la revisión
+  pedagógica. Si la planificación cambió desde el snapshot, la sesión se guarda
+  pero la referencia operativa no se sobrescribe.
+- Una copia creada con `Guardar como` se vuelve standalone para evitar dos
+  sesiones reclamando el mismo `SequenceItem`.
+
+**Pruebas específicas:**
+
+```bash
+node tests/linked-session.test.js
+deno test tests/ai-prompt-builder.test.ts
+python tests/ui_linked_session_smoke.py
+```
+
+La navegación visual, los botones `Generar` / `Abrir` y el regreso desde la
+sesión a su planificación no forman parte de E5; quedan reservados para E6.
+
+**Gate E5:** se cierra después de desplegar los routers que comparten el prompt,
+ejecutar la suite completa y confirmar Validate & Build y GitHub Pages verdes.
+E6 permanece fuera de alcance.
+
 ---
 
 # Implementación de fórmulas matemáticas en Word

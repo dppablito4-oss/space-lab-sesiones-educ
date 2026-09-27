@@ -9,6 +9,7 @@ import {
   type AiRouteDecision,
   type AiRoutingInput,
 } from "../_shared/ai-routing.ts";
+import { createTrustedLinkedSnapshot, replaceLinkedSnapshot, requestedLinkedSnapshot } from "../_shared/linked-session-context.ts";
 
 interface GatewayAttempt {
   requestId: string;
@@ -99,6 +100,33 @@ serve(async (req) => {
   const action = typeof payload.action === "string" ? payload.action.trim() : "";
   if (!UUID_PATTERN.test(requestId) || !action) {
     return jsonResponse(req, { error: "Solicitud de IA inválida.", code: "INVALID_AI_REQUEST" }, 400);
+  }
+
+  const requestedSnapshot = requestedLinkedSnapshot(payload);
+  if (requestedSnapshot) {
+    const planningContainerId = typeof requestedSnapshot.planningContainerId === "string"
+      ? requestedSnapshot.planningContainerId
+      : "";
+    const { data: planningRecord, error: planningError } = await auth.client
+      .from("planning_containers")
+      .select("container_data")
+      .eq("id", planningContainerId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (planningError) {
+      console.error("[AI Gateway] No se pudo verificar la planificación vinculada:", planningError);
+      return jsonResponse(req, { error: "No se pudo verificar la planificación vinculada.", code: "LINKED_PLANNING_UNAVAILABLE" }, 503);
+    }
+    try {
+      if (!planningRecord?.container_data) throw new Error("No se encontró la planificación revisada.");
+      const trustedSnapshot = createTrustedLinkedSnapshot(planningRecord.container_data, requestedSnapshot);
+      payload = replaceLinkedSnapshot(payload, trustedSnapshot) as AiRoutingInput & Record<string, unknown>;
+    } catch (error) {
+      return jsonResponse(req, {
+        error: error instanceof Error ? error.message : "La planificación vinculada no es válida.",
+        code: "LINKED_PLANNING_REJECTED",
+      }, 409);
+    }
   }
 
   const primary = decideAiRoute(payload);

@@ -79,6 +79,9 @@ assert.deepEqual(envelope.data, sessionData, 'El vínculo no debe contaminar Ses
 assert.throws(() => PlanningContainerV2.attachSessionLink(
     { id: 'session-broken', data: sessionData }, { ...linked, planningRevision: 99 }
 ), /snapshot/);
+const draftLink = structuredClone(fixture);
+draftLink.status = 'draft';
+assert.throws(() => PlanningContainerV2.createLinkedSessionLink(draftLink, 'session-01'), /revisada/);
 
 const revised = PlanningContainerV2.revise(fixture, {
     purpose: { summary: 'Propósito ajustado por la docente.' }

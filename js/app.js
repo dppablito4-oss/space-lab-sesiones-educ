@@ -33,6 +33,7 @@
         undoStack: [],
         redoStack: [],
         completedWorkflowTabs: new Set(),
+        pendingPlanningLink: null,
         backendOnline: false,
         backendRunning: false
     };
@@ -247,6 +248,7 @@
         window.getCurrentSession = () => AppState.currentSession;
         window.appOpenSession = (sessionId) => loadSession(sessionId);
         window.appStartNewSession = () => forceNewSession();
+        window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);
         window.appReloadSessions = () => {
             renderSavedList();
             loadLastSession();
@@ -1159,6 +1161,30 @@
         checkTimeBalance: (...args) => checkTimeBalance(...args),
         loadProfileDefaults
     });
+
+    async function startLinkedSession(planningContainerId, sequenceItemId) {
+        if (!window.PlanningLinkedSession) throw new Error('No se cargó el vínculo de planificación.');
+        const prepared = PlanningLinkedSession.prepare(planningContainerId, sequenceItemId);
+        await forceNewSession();
+        const metadata = prepared.metadata;
+        populateForm({
+            template: 'estandar',
+            metadata: {
+                ...metadata,
+                numeroSesion: metadata.numero_sesion,
+                duracionMinutos: parseMinutes(metadata.duracion) || 90
+            },
+            proposito: {
+                competencia: metadata.competencia,
+                capacidades: String(metadata.capacidad || '').split(';').map(value => value.trim()).filter(Boolean),
+                desempeno: metadata.desempeno,
+                enfoque: metadata.enfoque,
+                enfoque2: metadata.enfoque2
+            }
+        });
+        AppState.pendingPlanningLink = prepared.link;
+        return prepared;
+    }
 
     const {
         handlePrint,

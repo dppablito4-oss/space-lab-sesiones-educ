@@ -74,6 +74,7 @@ jobs:
           node tests/planning-container.test.js
           node tests/planning-container-v2.test.js
           node tests/planning-repository.test.js
+          node tests/linked-session.test.js
           node tests/planning-wizard.test.js
           node tests/planning-wizard-ai.test.js
           node tests/planning-view.test.js
@@ -124,6 +125,7 @@ jobs:
           python tests/ui_smoke.py
           python tests/ui_planning_smoke.py
           python tests/ui_planning_view_smoke.py
+          python tests/ui_linked_session_smoke.py
           python tests/ui_planning_ai_smoke.py
           python tests/ui_presentation_smoke.py
           python tests/ui_theme_smoke.py
@@ -133,6 +135,7 @@ jobs:
       - name: Check Supabase Edge Functions
         run: |
           deno test tests/ai-prompt-builder.test.ts
+          deno test tests/linked-session-context.test.ts
           deno test tests/planning-map-prompt.test.ts
           deno test tests/ai-credits.test.ts
           deno check supabase/functions/openai-router/index.ts

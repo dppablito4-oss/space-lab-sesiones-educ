@@ -81,14 +81,15 @@ window.SpaceLabAiController = (() => {
                 }
 
                 Loader.show('Generando sesión con IA...');
-        
+                const planningLink = AppState.currentSession?.planning || AppState.pendingPlanningLink || null;
                 const generationRequest = {
                     ...formData.metadata,
                     ...formData.proposito,
                     template: DOM.selectTemplate.value,
                     sourceFile: AppState.sourceFileData,
                     sourceInstruction: DOM.inputSourceInstruction ? DOM.inputSourceInstruction.value.trim() : '',
-                    pedagogyBrief: (window.PedagogyBrief ? PedagogyBrief.getSummary() : null)
+                    pedagogyBrief: (window.PedagogyBrief ? PedagogyBrief.getSummary() : null),
+                    inheritedContextSnapshot: planningLink?.inheritedContextSnapshot || null
                 };
         
                 // Normalize at the AI boundary so the web and DOCX builders share
@@ -144,15 +145,17 @@ window.SpaceLabAiController = (() => {
                     throw new Error(`La IA devolvió contenido incompleto después de reintentarlo: ${qualityErrors.join('; ')}`);
                 }
         
-                const session = {
+                let session = {
                     id: AppState.currentSession?.id || Storage.generateId(),
                     template: DOM.selectTemplate.value,
                     ...canonical,
                     presentation: formData.presentation,
                     createdAt: AppState.currentSession?.createdAt || new Date().toISOString()
                 };
+                if (planningLink) session = PlanningLinkedSession.attachGeneratedSession(session, planningLink);
         
                 AppState.currentSession = session;
+                AppState.pendingPlanningLink = null;
         
                 DOM.inputTitulo.value = canonical.metadata.titulo || '';
                 DOM.inputCompetencia.value = canonical.proposito.competencia || '';

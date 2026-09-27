@@ -35,6 +35,15 @@ window.SpaceLabSessionController = (() => {
             };
         
             if (Storage.saveSession(session)) {
+                if (session.planning?.mode === 'linked' && window.PlanningLinkedSession) {
+                    try {
+                        PlanningLinkedSession.recordGeneratedSession(session.planning, session.id);
+                        PlanningLinkedSession.sync().catch(error => console.warn('[PlanningLinkedSession] No se pudo sincronizar:', error));
+                    } catch (error) {
+                        console.warn('[PlanningLinkedSession] La sesión se guardó sin actualizar la secuencia:', error);
+                        Toast.warning('La sesión se guardó, pero la planificación cambió y no pudo actualizarse.');
+                    }
+                }
                 Toast.success('Sesión guardada correctamente');
                 renderSavedList();
             } else {
@@ -68,6 +77,7 @@ window.SpaceLabSessionController = (() => {
             // Crear clon profundo del objeto de sesión actual
             const clon = JSON.parse(JSON.stringify(AppState.currentSession));
             clon.id = Storage.generateId();
+            if (clon.planning?.mode === 'linked') delete clon.planning;
             clon.titulo = tituloFinal;
             if (clon.metadata) {
                 clon.metadata.titulo = tituloFinal;
@@ -362,6 +372,7 @@ window.SpaceLabSessionController = (() => {
             }
         
             AppState.currentSession = session;
+            AppState.pendingPlanningLink = null;
             populateForm(session);
         
             if (session.htmlContent) {
@@ -399,6 +410,7 @@ window.SpaceLabSessionController = (() => {
         async function forceNewSession() {
             // Reset
             AppState.currentSession = null;
+            AppState.pendingPlanningLink = null;
             DOM.form.querySelectorAll('input, textarea, select').forEach(el => {
                 if (el.type === 'date') {
                     el.valueAsDate = new Date();

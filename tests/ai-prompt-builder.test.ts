@@ -96,6 +96,33 @@ Deno.test("canonical and legacy project methodology codes are compatible", () =>
   assert(!problem.systemPrompt.includes("Aprendizaje Basado en Proyectos"), "problem-based learning must not be confused with legacy abp");
 });
 
+Deno.test("generate_session preserves a validated inherited planning snapshot", () => {
+  const snapshot = {
+    schemaVersion: "2.0", planningContainerId: "plan-reviewed", planningRevision: 4,
+    sequenceItemId: "session-02", sequenceIndex: 2, capturedAt: "2026-09-27T20:00:00.000Z",
+    identity: { title: "Unidad financiera" },
+    sequenceItem: { id: "session-02", index: 2, title: "Comparamos costos" },
+    curriculumMap: [{ area: { officialName: "Matemática" } }],
+    precedingSequence: [{ id: "session-01", index: 1, title: "Reconocemos promociones" }],
+    followingSequence: [{ id: "session-03", index: 3, title: "Comunicamos recomendaciones" }],
+  };
+  const result = buildPromptRequest({
+    action: "generate_session", requestId: REQUEST_ID,
+    input: { metadata: { nivel: "SECUNDARIA", titulo: "Comparamos costos", inheritedContextSnapshot: snapshot } },
+  });
+  assert(result.systemPrompt.includes("datos pedagógicos no confiables"), "the server must protect against instructions in planning text");
+  assert(result.userPrompt.includes("CONTEXTO HEREDADO DE PLANIFICACIÓN REVISADA"), "linked context must reach the existing generator");
+  assert(result.userPrompt.includes('"planningRevision":4'), "the frozen planning revision must be preserved");
+  assert(result.userPrompt.includes('"sequenceItemId":"session-02"'), "the selected sequence item must be preserved");
+
+  const mismatched = structuredClone(snapshot);
+  mismatched.sequenceItem.id = "session-99";
+  assertThrows(() => buildPromptRequest({
+    action: "generate_session", requestId: REQUEST_ID,
+    input: { metadata: { inheritedContextSnapshot: mismatched } },
+  }), /no coincide/i);
+});
+
 Deno.test("invalid actions and request ids are rejected", () => {
   assertThrows(() => buildPromptRequest({ action: "raw_prompt", requestId: REQUEST_ID, input: {} }), /no permitida/i);
   assertThrows(() => buildPromptRequest({ action: "generate_criteria", requestId: "duplicate-me", input: {} }), /UUID válido/i);

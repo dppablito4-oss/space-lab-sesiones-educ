@@ -255,6 +255,9 @@ const PlanningContainerV2 = (() => {
     }
 
     function createLinkedSessionLink(container, sequenceItemId, capturedAt) {
+        if (container?.status !== 'reviewed') {
+            throw new Error('Solo una planificación revisada puede generar sesiones vinculadas.');
+        }
         const snapshot = createInheritedContextSnapshot(container, sequenceItemId, capturedAt);
         return deepFreeze({
             linkVersion: '2.0', mode: 'linked', planningContainerId: container.id,
