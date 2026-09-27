@@ -2,6 +2,10 @@
 const PlanningRepository = (() => {
     'use strict';
 
+    const validationErrors = typeof module !== 'undefined' && module.exports
+        ? require('../core/validation-errors.js')
+        : window.SpaceLabValidationErrors;
+
     const STORAGE_KEY = 'spacelab_planning_containers';
     const clone = value => JSON.parse(JSON.stringify(value));
     const timestamp = value => {
@@ -63,7 +67,7 @@ const PlanningRepository = (() => {
 
         function save(container) {
             const result = validator.validate(container);
-            if (!result.valid) throw new TypeError(`PlanningContainer inválido: ${result.errors.join(' ')}`);
+            if (!result.valid) throw new TypeError(`PlanningContainer inválido: ${validationErrors.formatValidationErrors(result.errors)}`);
             const records = readAll(true);
             const index = records.findIndex(item => item.id === container.id);
             const record = createRecord(container, now(), false);

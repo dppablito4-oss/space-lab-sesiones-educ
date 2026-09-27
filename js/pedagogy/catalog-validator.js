@@ -206,7 +206,60 @@ const PedagogyCatalogValidator = (() => {
         return { valid: errors.length === 0, errors };
     }
 
-    return { validateSources, validateProfile, validateCatalog };
+    function validateCatalogV2(catalog, profilesByPath = {}) {
+        const errors = [];
+        if (!isObject(catalog) || catalog.schemaVersion !== '2.0') errors.push('catalog.schemaVersion debe ser "2.0".');
+        if (!/^\d{4}\.\d+$/.test(catalog?.catalogVersion || '')) errors.push('catalog.catalogVersion debe usar YYYY.N.');
+        if (!STATUSES.has(catalog?.status)) errors.push('catalog.status no es reconocido.');
+        const ids = new Set();
+
+        function validateEntry(entry, path, legacy = false) {
+            if (!isObject(entry)) {
+                errors.push(`${path} debe ser un objeto.`);
+                return;
+            }
+            if (!STABLE_ID.test(entry.id || '')) errors.push(`${path}.id no es válido.`);
+            if (ids.has(entry.id)) errors.push(`${path}.id está duplicado.`);
+            ids.add(entry.id);
+            if (!STATUSES.has(entry.status)) errors.push(`${path}.status no es reconocido.`);
+            if (!/^[a-z0-9_./-]+\.json$/.test(entry.path || '') || entry.path.includes('..') || entry.path.startsWith('/')) {
+                errors.push(`${path}.path no es seguro.`);
+            }
+            const profile = profilesByPath[entry.path];
+            if (!profile) errors.push(`${path}.path no existe: "${entry.path}".`);
+            else if (profile.id !== entry.id) errors.push(`${path}.id no coincide con el perfil.`);
+            else if (!legacy && profile.status !== entry.status) errors.push(`${path}.status no coincide con el perfil.`);
+            if (!legacy && entry.status === 'archived') errors.push(`${path} no puede registrar un perfil archivado como activo.`);
+        }
+
+        for (const group of ['pedagogicalProfiles', 'didacticProfiles', 'methodologyProfiles']) {
+            if (!Array.isArray(catalog?.[group]) || catalog[group].length === 0) {
+                errors.push(`catalog.${group} no puede estar vacío.`);
+                continue;
+            }
+            catalog[group].forEach((entry, index) => validateEntry(entry, `catalog.${group}[${index}]`));
+        }
+
+        const pedagogicalIds = new Set((catalog?.pedagogicalProfiles || []).map(entry => entry.id));
+        const didacticIds = new Set((catalog?.didacticProfiles || []).map(entry => entry.id));
+        if (!Array.isArray(catalog?.legacyProfiles)) {
+            errors.push('catalog.legacyProfiles debe ser una lista.');
+        } else {
+            catalog.legacyProfiles.forEach((entry, index) => {
+                const path = `catalog.legacyProfiles[${index}]`;
+                validateEntry(entry, path, true);
+                if (entry?.status !== 'archived') errors.push(`${path}.status debe ser "archived".`);
+                if (!isObject(entry?.replacement)
+                    || !pedagogicalIds.has(entry.replacement.pedagogicalProfileId)
+                    || !didacticIds.has(entry.replacement.didacticProfileId)) {
+                    errors.push(`${path}.replacement debe apuntar a perfiles activos registrados.`);
+                }
+            });
+        }
+        return { valid: errors.length === 0, errors };
+    }
+
+    return { validateSources, validateProfile, validateCatalog: validateCatalogV2 };
 })();
 
 if (typeof window !== 'undefined') window.PedagogyCatalogValidator = PedagogyCatalogValidator;

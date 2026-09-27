@@ -894,7 +894,7 @@
                 duracion: DOM.inputDuracion.value,
                 unidad: DOM.inputUnidad.value,
                 titulo: DOM.inputTitulo.value,
-                methodology: DOM.selectMethodology.value,
+                methodology: window.SpaceLabMethodologyCodes.normalizeMethodologyCode(DOM.selectMethodology.value),
                 ai_provider: DOM.selectAiProvider.value,
                 logo_regional_url: secondLogo.url || '',
                 logo_left_url: firstLogo.url || '',
@@ -964,7 +964,7 @@
         if (session.template) {
             DOM.selectTemplate.value = session.template;
         }
-        DOM.selectMethodology.value = m.methodology || '';
+        DOM.selectMethodology.value = window.SpaceLabMethodologyCodes.normalizeMethodologyCode(m.methodology);
         
         let prov = m.ai_provider || 'automatic';
         const legacyQualities = {

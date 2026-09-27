@@ -6,7 +6,7 @@
   "displayName": "Aprendizaje Basado en Retos",
   "description": "Organiza el aprendizaje alrededor de un reto auténtico que conduce a investigar, implementar una solución y evaluar su impacto.",
   "status": "pilot",
-  "suitableLevels": ["primary", "secondary"],
+  "suitableScopes": [{ "level": "secondary", "cycles": ["VI"] }],
   "recommendedPhases": [
     { "id": "engage", "label": "Involucrar", "purpose": "Pasar de una idea amplia a un reto concreto y accionable.", "mode": "recommended" },
     { "id": "investigate", "label": "Investigar", "purpose": "Construir conocimiento mediante preguntas, actividades y recursos guía.", "mode": "recommended" },

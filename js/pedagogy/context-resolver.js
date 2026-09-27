@@ -8,6 +8,12 @@ const PedagogicalContextResolver = (() => {
     };
     const ref = profile => ({ id: profile.id, profileVersion: profile.profileVersion, status: profile.status });
 
+    function isMethodologySuitable(profile, level, cycle) {
+        return Array.isArray(profile?.suitableScopes) && profile.suitableScopes.some(scope =>
+            scope?.level === level && Array.isArray(scope.cycles) && scope.cycles.includes(cycle)
+        );
+    }
+
     function resolve(input, catalogs) {
         const errors = [];
         const warnings = [];
@@ -32,8 +38,8 @@ const PedagogicalContextResolver = (() => {
         if (!pedagogical.allowedPlanningTypes.includes(input.planningType)) {
             warnings.push({ code: 'planning_type_not_recommended', message: 'El tipo de planificación no está recomendado actualmente por el perfil pedagógico.' });
         }
-        if (!methodology.suitableLevels.includes(input.level)) {
-            warnings.push({ code: 'methodology_level_not_recommended', message: 'La metodología no está recomendada actualmente para este nivel.' });
+        if (!isMethodologySuitable(methodology, input.level, input.cycle)) {
+            warnings.push({ code: 'methodology_scope_not_recommended', message: 'La metodología no está recomendada actualmente para este nivel y ciclo.' });
         }
         for (const profile of [pedagogical, didactic, methodology]) {
             if (profile.status !== 'reviewed') warnings.push({ code: 'profile_requires_review', profileId: profile.id, message: `El perfil ${profile.id} todavía es piloto.` });
@@ -74,7 +80,7 @@ const PedagogicalContextResolver = (() => {
         return { resolved: true, errors, warnings, context };
     }
 
-    return { resolve };
+    return { resolve, isMethodologySuitable };
 })();
 
 if (typeof window !== 'undefined') window.PedagogicalContextResolver = PedagogicalContextResolver;

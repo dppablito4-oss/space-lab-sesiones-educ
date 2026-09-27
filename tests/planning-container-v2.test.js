@@ -8,8 +8,9 @@ const read = relative => JSON.parse(fs.readFileSync(path.join(ROOT, relative), '
 const fixture = read('data/pedagogy/fixtures/secondary_math_project_unit.v2.json');
 const projectProfile = read('data/pedagogy/methodologies/project_based_learning.json');
 const challengeProfile = read('data/pedagogy/methodologies/challenge_based_learning.json');
+const pedagogicalProfile = read('data/pedagogy/pedagogical/secondary-cycle-vi.json');
 
-const result = PlanningContainerV2.validate(fixture, { forReview: true, methodologyProfile: projectProfile });
+const result = PlanningContainerV2.validate(fixture, { forReview: true, methodologyProfile: projectProfile, pedagogicalProfile });
 assert.deepEqual(result.errors, []);
 assert.deepEqual(result.warnings, []);
 assert.deepEqual(result.suggestions, []);
@@ -21,6 +22,24 @@ assert.equal(PlanningContainerV2.validate(draft).valid, true, 'Un borrador incom
 const reviewResult = PlanningContainerV2.validate(draft, { forReview: true });
 assert.equal(reviewResult.valid, false);
 assert.ok(reviewResult.errors.some(item => item.code === 'review_required'));
+
+for (const grade of ['1', '2']) {
+    const inScope = structuredClone(fixture);
+    inScope.identity.grade = grade;
+    assert.equal(PlanningContainerV2.validate(inScope, { pedagogicalProfile }).valid, true);
+}
+const outOfScope = structuredClone(fixture);
+outOfScope.identity.grade = '4';
+const outOfScopeResult = PlanningContainerV2.validate(outOfScope, { pedagogicalProfile });
+assert.equal(outOfScopeResult.valid, false);
+assert.ok(outOfScopeResult.errors.some(item => item.code === 'grade_out_of_scope'));
+const incompatibleProfile = structuredClone(pedagogicalProfile);
+incompatibleProfile.scope.cycle = 'VII';
+assert.ok(PlanningContainerV2.validate(fixture, { pedagogicalProfile: incompatibleProfile }).errors.some(item => item.code === 'pedagogical_profile_mismatch'));
+const permissiveDraft = structuredClone(fixture);
+permissiveDraft.status = 'draft';
+permissiveDraft.identity.grade = null;
+assert.equal(PlanningContainerV2.validate(permissiveDraft, { pedagogicalProfile: incompatibleProfile }).valid, true);
 
 const withoutProduct = structuredClone(fixture);
 withoutProduct.finalProduct = null;

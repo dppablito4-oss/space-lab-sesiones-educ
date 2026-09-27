@@ -6,7 +6,7 @@
   "displayName": "Aprendizaje Basado en Juegos",
   "description": "Utiliza uno o más juegos como medio central para movilizar aprendizajes y promover reflexión sobre la experiencia.",
   "status": "pilot",
-  "suitableLevels": ["initial", "primary", "secondary"],
+  "suitableScopes": [{ "level": "secondary", "cycles": ["VI"] }],
   "recommendedPhases": [
     { "id": "prepare", "label": "Preparación", "purpose": "Presentar propósito, reglas, materiales y condiciones de participación.", "mode": "recommended" },
     { "id": "play", "label": "Juego", "purpose": "Participar, decidir, experimentar y recibir retroalimentación del sistema de juego.", "mode": "recommended" },

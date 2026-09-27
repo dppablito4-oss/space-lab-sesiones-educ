@@ -6,50 +6,37 @@ const Validator = require('../js/pedagogy/catalog-validator.js');
 const ROOT = path.resolve(__dirname, '..');
 const PEDAGOGY_ROOT = path.join(ROOT, 'data', 'pedagogy');
 const readJson = relativePath => JSON.parse(fs.readFileSync(path.join(PEDAGOGY_ROOT, relativePath), 'utf8'));
-
-const sources = readJson('sources.json');
-const sourceResult = Validator.validateSources(sources);
-assert.deepEqual(sourceResult.errors, []);
-assert.equal(sourceResult.valid, true);
-
 const catalog = readJson('catalog.json');
-const profilesByPath = Object.fromEntries(catalog.profiles.map(entry => [entry.path, readJson(entry.path)]));
-const catalogResult = Validator.validateCatalog(catalog, profilesByPath);
-assert.deepEqual(catalogResult.errors, []);
-assert.equal(catalogResult.valid, true);
+const entries = [
+    ...catalog.pedagogicalProfiles,
+    ...catalog.didacticProfiles,
+    ...catalog.methodologyProfiles,
+    ...catalog.legacyProfiles
+];
+const profilesByPath = Object.fromEntries(entries.map(entry => [entry.path, readJson(entry.path)]));
 
-for (const entry of catalog.profiles) {
-    const profile = profilesByPath[entry.path];
-    const result = Validator.validateProfile(profile, sourceResult.sourceIds);
-    assert.deepEqual(result.errors, [], `${entry.id}: ${result.errors.join('; ')}`);
-    assert.equal(result.valid, true);
-    assert.equal(profile.didacticProfile.sequencePolicy, 'adaptive');
-    assert.equal(profile.didacticProfile.stepsAreMandatory, false);
-    assert.ok(profile.didacticProfile.strategies.every(strategy => strategy.mode === 'recommended'));
-}
+const result = Validator.validateCatalog(catalog, profilesByPath);
+assert.deepEqual(result.errors, []);
+assert.equal(result.valid, true);
+assert.equal(catalog.schemaVersion, '2.0');
+assert.ok(catalog.pedagogicalProfiles.some(entry => entry.id === 'secondary-cycle-vi'));
+assert.ok(catalog.didacticProfiles.some(entry => entry.id === 'secondary-cycle-vi-mathematics-quantity'));
+assert.equal(catalog.methodologyProfiles.length, 5);
+assert.ok(catalog.legacyProfiles.every(entry => entry.status === 'archived'));
+assert.ok(!catalog.pedagogicalProfiles.some(entry => entry.id.includes('.')));
 
-const curriculum = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'competencias.json'), 'utf8'));
-const pilot = profilesByPath['secondary/cycle-vi/mathematics/quantity.json'];
-const mathematics = curriculum.areas[pilot.scope.area.officialName];
-assert.ok(mathematics, 'El área piloto debe existir en el catálogo CNEB actual.');
-const competency = mathematics.competencias.find(item => item.nombre === pilot.scope.competency.officialName);
-assert.ok(competency, 'La competencia piloto debe existir en el catálogo CNEB actual.');
-assert.deepEqual(
-    pilot.scope.competency.capacities.map(item => item.officialName),
-    competency.capacidades,
-    'Las capacidades normativas no deben divergir del catálogo existente.',
-);
+const missing = structuredClone(profilesByPath);
+delete missing[catalog.pedagogicalProfiles[0].path];
+assert.equal(Validator.validateCatalog(catalog, missing).valid, false);
 
-const mandatoryCopy = structuredClone(pilot);
-mandatoryCopy.didacticProfile.stepsAreMandatory = true;
-const mandatoryResult = Validator.validateProfile(mandatoryCopy, sourceResult.sourceIds);
-assert.equal(mandatoryResult.valid, false);
-assert.ok(mandatoryResult.errors.some(error => error.includes('stepsAreMandatory')));
+const duplicate = structuredClone(catalog);
+duplicate.didacticProfiles[0].id = duplicate.pedagogicalProfiles[0].id;
+assert.ok(Validator.validateCatalog(duplicate, profilesByPath).errors.some(error => error.includes('duplicado')));
 
-const unknownSourceCopy = structuredClone(pilot);
-unknownSourceCopy.provenance.guidanceSourceRefs.push('fuente-inventada');
-const sourceReferenceResult = Validator.validateProfile(unknownSourceCopy, sourceResult.sourceIds);
-assert.equal(sourceReferenceResult.valid, false);
-assert.ok(sourceReferenceResult.errors.some(error => error.includes('fuente-inventada')));
+const legacySources = readJson('sources.json');
+const sourceResult = Validator.validateSources(legacySources);
+assert.equal(sourceResult.valid, true);
+const legacy = profilesByPath['secondary/cycle-vi/mathematics/quantity.json'];
+assert.equal(Validator.validateProfile(legacy, sourceResult.sourceIds).valid, true);
 
 console.log('pedagogy-catalog.test.js: OK');

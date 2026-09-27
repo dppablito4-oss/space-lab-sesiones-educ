@@ -66,8 +66,13 @@ const PlanningContainerV2 = (() => {
             errors.push(issue('methodology_profile_mismatch', 'methodologyConfig.primary', 'La referencia no coincide con el MethodologyProfile proporcionado.'));
             return;
         }
-        if (!profile.suitableLevels.includes(container.identity.level)) {
-            warnings.push(issue('methodology_level', 'methodologyConfig.primary', `La metodología no está recomendada actualmente para ${container.identity.level}.`));
+        const suitable = Array.isArray(profile.suitableScopes) && profile.suitableScopes.some(scope =>
+            scope?.level === container.identity.level
+            && Array.isArray(scope.cycles)
+            && scope.cycles.includes(container.identity.cycle)
+        );
+        if (!suitable) {
+            warnings.push(issue('methodology_scope', 'methodologyConfig.primary', `La metodología no está recomendada actualmente para ${container.identity.level}, ciclo ${container.identity.cycle}.`));
         }
         [...profile.fieldRules, ...profile.sequenceRules].forEach(rule => {
             if (!ruleTriggered(container, rule)) return;
@@ -162,6 +167,24 @@ const PlanningContainerV2 = (() => {
             if (container.curriculumMap.length === 0) errors.push(issue('review_required', 'curriculumMap', 'Agrega al menos una relación curricular.'));
             if (container.sequence.length === 0) errors.push(issue('review_required', 'sequence', 'Agrega al menos un elemento de secuencia.'));
             if (criterionIds.size === 0) errors.push(issue('review_required', 'curriculumMap.criteria', 'Agrega criterios de evaluación.'));
+        }
+
+        if (requireComplete && options.pedagogicalProfile) {
+            const profile = options.pedagogicalProfile;
+            const scope = profile.scope || {};
+            if (scope.level !== identity.level || scope.cycle !== identity.cycle) {
+                errors.push(issue('pedagogical_profile_mismatch', 'identity', 'El nivel y ciclo no coinciden con el PedagogicalProfile proporcionado.'));
+            }
+            if (Array.isArray(scope.grades) && scope.grades.length > 0
+                && identity.grade !== null && identity.grade !== undefined
+                && !scope.grades.map(String).includes(String(identity.grade))) {
+                errors.push(issue('grade_out_of_scope', 'identity.grade', `El grado ${identity.grade} no pertenece al perfil ${profile.displayName || profile.id}.`));
+            }
+            if (Array.isArray(scope.ages) && scope.ages.length > 0
+                && identity.age !== null && identity.age !== undefined
+                && !scope.ages.map(String).includes(String(identity.age))) {
+                errors.push(issue('age_out_of_scope', 'identity.age', `La edad ${identity.age} no pertenece al perfil ${profile.displayName || profile.id}.`));
+            }
         }
 
         applyMethodologyRules(container, options.methodologyProfile, errors, warnings, suggestions);

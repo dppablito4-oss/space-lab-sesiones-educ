@@ -186,7 +186,7 @@ const PedagogyBrief = (() => {
             `Área: ${_formData.area || '—'}`,
             `Grado: ${_formData.grado || '—'}`,
             _formData.titulo  ? `Tema: "${_formData.titulo}"`     : '',
-            _formData.methodology ? `Metodología: ${_formData.methodology}` : '',
+            _formData.methodology ? `Metodología: ${window.SpaceLabMethodologyCodes.getMethodologyDisplayName(_formData.methodology)}` : '',
             _formData.sourceFile  ? '(El docente tiene un archivo de referencia adjunto)' : ''
         ].filter(Boolean).join('\n');
 

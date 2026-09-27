@@ -11,7 +11,7 @@ const MethodologyCatalogValidator = (() => {
     const SEVERITIES = new Set(['warning', 'suggestion']);
     const OPERATORS = new Set(['non_empty', 'sequence_type_present', 'milestone_phase_present', 'milestone_partial_product_present', 'always']);
     const HOSTS = new Set([
-        'repositorio.minedu.gob.pe', 'descargas.intef.es',
+        'minedu.gob.pe', 'www.minedu.gob.pe', 'repositorio.minedu.gob.pe', 'descargas.intef.es',
         'intef.es', 'www.challengebasedlearning.org'
     ]);
     const ID = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -67,8 +67,22 @@ const MethodologyCatalogValidator = (() => {
         if (!CODES.has(profile.code)) errors.push('code no es reconocido.');
         if (!isText(profile.displayName) || !isText(profile.description)) errors.push('displayName y description son requeridos.');
         if (!STATUSES.has(profile.status)) errors.push('status no es reconocido.');
-        if (!Array.isArray(profile.suitableLevels) || profile.suitableLevels.length === 0 || profile.suitableLevels.some(level => !LEVELS.has(level))) {
-            errors.push('suitableLevels debe contener niveles reconocidos.');
+        if (!Array.isArray(profile.suitableScopes) || profile.suitableScopes.length === 0) {
+            errors.push('suitableScopes debe contener al menos un alcance.');
+        } else {
+            const scopeKeys = new Set();
+            profile.suitableScopes.forEach((scope, index) => {
+                const path = `suitableScopes[${index}]`;
+                if (!isObject(scope) || !LEVELS.has(scope.level)) errors.push(`${path}.level no es reconocido.`);
+                if (!Array.isArray(scope?.cycles) || scope.cycles.length === 0 || scope.cycles.some(cycle => !isText(cycle))) {
+                    errors.push(`${path}.cycles debe contener ciclos válidos.`);
+                    return;
+                }
+                if (new Set(scope.cycles).size !== scope.cycles.length) errors.push(`${path}.cycles contiene duplicados.`);
+                const key = `${scope.level}:${[...scope.cycles].sort().join(',')}`;
+                if (scopeKeys.has(key)) errors.push(`${path} está duplicado.`);
+                scopeKeys.add(key);
+            });
         }
         if (!Array.isArray(profile.recommendedPhases)) errors.push('recommendedPhases debe ser una lista.');
         else {
@@ -120,7 +134,31 @@ const MethodologyCatalogValidator = (() => {
         return { valid: errors.length === 0, errors };
     }
 
-    return { validateSources, validateProfile, validateCatalog };
+    function validateRootCatalog(catalog, profilesByPath, sourceIds) {
+        const errors = [];
+        const ids = new Set();
+        const codes = new Set();
+        if (catalog?.schemaVersion !== '2.0' || !Array.isArray(catalog?.methodologyProfiles)) {
+            return { valid: false, errors: ['El catálogo raíz no es válido.'] };
+        }
+        catalog.methodologyProfiles.forEach((entry, index) => {
+            const path = `methodologyProfiles[${index}]`;
+            if (!ID.test(entry?.id || '') || ids.has(entry.id)) errors.push(`${path}.id no es válido o está duplicado.`);
+            ids.add(entry.id);
+            if (!/^methodologies\/[a-z0-9_]+\.json$/.test(entry?.path || '') || entry.path.includes('..')) errors.push(`${path}.path no es seguro.`);
+            const profile = profilesByPath[entry.path];
+            if (!profile) errors.push(`No existe ${entry.path}.`);
+            else {
+                if (profile.id !== entry.id) errors.push(`${entry.path} no coincide con el id del catálogo.`);
+                if (codes.has(profile.code)) errors.push(`code duplicado: ${profile.code}.`);
+                codes.add(profile.code);
+                errors.push(...validateProfile(profile, sourceIds).errors.map(error => `${entry.path}: ${error}`));
+            }
+        });
+        return { valid: errors.length === 0, errors };
+    }
+
+    return { validateSources, validateProfile, validateCatalog: validateRootCatalog };
 })();
 
 if (typeof window !== 'undefined') window.MethodologyCatalogValidator = MethodologyCatalogValidator;

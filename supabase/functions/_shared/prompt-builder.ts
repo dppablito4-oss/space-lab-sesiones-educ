@@ -28,7 +28,7 @@ const MAX_SOURCE_BASE64_CHARS = 4 * 1024 * 1024;
 const METHODOLOGY_PROMPTS: Record<string, string> = {
   polya: `La secuencia de DESARROLLO debe seguir los procesos oficiales de Matemática de MINEDU: familiarización con el problema, búsqueda y ejecución de estrategias, socialización de representaciones y reflexión/formalización. Crea exactamente cuatro procesos con los ids "familiarizacion", "busqueda_estrategias", "socializacion" y "formalizacion_reflexion", en ese orden.`,
   erca: `La secuencia de DESARROLLO debe seguir estrictamente el ciclo ERCA: experiencia, reflexión, conceptualización y aplicación. Crea exactamente cuatro procesos con los ids "experiencia", "reflexion", "conceptualizacion" y "aplicacion", en ese orden.`,
-  abp: `La secuencia de DESARROLLO debe seguir Aprendizaje Basado en Proyectos: lanzamiento/desafío, indagación, desarrollo del producto y difusión/evaluación. Crea exactamente cuatro procesos con los ids "lanzamiento", "indagacion", "desarrollo_producto" y "difusion_evaluacion", en ese orden.`,
+  project_based_learning: `La secuencia de DESARROLLO debe seguir Aprendizaje Basado en Proyectos: lanzamiento/desafío, indagación, desarrollo del producto y difusión/evaluación. Crea exactamente cuatro procesos con los ids "lanzamiento", "indagacion", "desarrollo_producto" y "difusion_evaluacion", en ese orden.`,
   flipped: `La secuencia de DESARROLLO debe seguir Aula Invertida: conexión de saberes externos, aplicación guiada/taller activo y consolidación con retroalimentación. Crea exactamente tres procesos con los ids "conexion_externa", "aplicacion_guiada" y "consolidacion_retroalimentacion", en ese orden.`,
   indagacion: `La secuencia de DESARROLLO debe seguir indagación científica: problematización, diseño de estrategias, generación/análisis de datos y estructuración/comunicación. Crea exactamente cuatro procesos con los ids "problematizacion", "diseno_estrategias", "generacion_analisis_datos" y "estructuracion_comunicacion", en ese orden.`,
   cooperativo: `La secuencia de DESARROLLO debe seguir aprendizaje cooperativo: organización de roles, interdependencia positiva, interacción promotora y autoevaluación grupal. Crea exactamente cuatro procesos con los ids "organizacion_roles", "interdependencia_positiva", "interaccion_promotora" y "autoevaluacion_grupal", en ese orden.`,
@@ -128,7 +128,8 @@ function buildSessionPrompt(input: Record<string, unknown>): BuiltPrompt {
   }
 
   let systemPrompt = SESSION_SYSTEM_PROMPT;
-  const methodology = cleanText(metadata.methodology, 40).toLowerCase();
+  const rawMethodology = cleanText(metadata.methodology, 40).toLowerCase();
+  const methodology = rawMethodology === "abp" ? "project_based_learning" : rawMethodology;
   if (METHODOLOGY_PROMPTS[methodology]) systemPrompt += `\n\nMETODOLOGÍA OBLIGATORIA:\n${METHODOLOGY_PROMPTS[methodology]}`;
   const template = cleanText(metadata.template, 40).toLowerCase();
   const level = cleanText(metadata.nivel, 80).toUpperCase();

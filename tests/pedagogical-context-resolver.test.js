@@ -36,4 +36,36 @@ const missing = Resolver.resolve({
 assert.equal(missing.resolved, false);
 assert.ok(missing.errors.some(item => item.code === 'pedagogical_profile_not_found'));
 
+const project = catalogs.methodologyProfiles[0];
+assert.equal(Resolver.isMethodologySuitable(project, 'secondary', 'VI'), true);
+const withCycleVII = structuredClone(project);
+withCycleVII.suitableScopes[0].cycles.push('VII');
+assert.equal(Resolver.isMethodologySuitable(withCycleVII, 'secondary', 'VII'), true);
+
+function catalogsForInitial(cycle, methodology) {
+    const pedagogical = structuredClone(catalogs.pedagogicalProfiles[0]);
+    pedagogical.id = `initial-cycle-${cycle.toLowerCase()}`;
+    pedagogical.scope = { level: 'initial', cycle, grades: ['5'], ages: [] };
+    const didactic = structuredClone(catalogs.didacticProfiles[0]);
+    didactic.id = `initial-cycle-${cycle.toLowerCase()}-mathematics-quantity`;
+    didactic.scope.level = 'initial';
+    didactic.scope.cycle = cycle;
+    return { pedagogicalProfiles: [pedagogical], didacticProfiles: [didactic], methodologyProfiles: [methodology] };
+}
+
+const initialInput = {
+    level: 'initial', cycle: 'I', grade: 5,
+    area: 'mathematics', competency: 'solves-quantity-problems',
+    planningType: 'unit', methodology: 'project_based_learning'
+};
+const initialI = Resolver.resolve(initialInput, catalogsForInitial('I', project));
+assert.equal(initialI.resolved, true);
+assert.ok(initialI.warnings.some(item => item.code === 'methodology_scope_not_recommended'));
+
+const initialMethodology = structuredClone(project);
+initialMethodology.suitableScopes = [{ level: 'initial', cycles: ['II'] }];
+const initialII = Resolver.resolve({ ...initialInput, cycle: 'II' }, catalogsForInitial('II', initialMethodology));
+assert.equal(initialII.resolved, true);
+assert.equal(initialII.warnings.some(item => item.code === 'methodology_scope_not_recommended'), false);
+
 console.log('pedagogical-context-resolver.test.js: OK');

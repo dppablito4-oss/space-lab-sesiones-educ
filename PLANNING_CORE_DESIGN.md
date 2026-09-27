@@ -18,6 +18,18 @@ Este documento convierte la Arquitectura Pedagógica V3 en decisiones técnicas 
 - Currículo, perfiles y metodologías: slugs semánticos versionados.
 - Una referencia a un perfil incluye su `id` y `profileVersion`.
 
+## Catálogo y capas de perfiles
+
+`data/pedagogy/catalog.json` es el único registro de perfiles activos. El resolver compone tres capas independientes:
+
+```text
+PedagogicalProfile + DidacticProfile + MethodologyProfile
+                         ↓
+             PedagogicalContextResolver
+```
+
+Los perfiles combinados anteriores permanecen archivados únicamente para compatibilidad de lectura; no se usan para planificaciones nuevas. Un `MethodologyProfile` declara `suitableScopes` mediante nivel y ciclos. Un alcance no declarado genera una advertencia y no invalida la planificación.
+
 ## PlanningContainer 2.0
 
 ```text
@@ -82,5 +94,7 @@ Teacher Input
 Acciones previstas del gateway: `planning.map.generate`, `planning.sequence.generate`, `planning.item.generate` y `planning.item.regenerate`.
 
 ## Compatibilidad
+
+El código histórico de metodología `abp` se normaliza al leer como `project_based_learning`; las sesiones nuevas solo escriben el código canónico.
 
 `PlanningContainer 1.0` se conserva para lectura. Los nuevos mapas usan `2.0`. La persistencia local y Supabase guardan el JSON completo y continúan utilizando revisión, soft delete y RLS por usuario.

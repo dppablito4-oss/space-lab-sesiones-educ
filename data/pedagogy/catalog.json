@@ -1,12 +1,37 @@
 {
-  "schemaVersion": "1.0",
-  "catalogVersion": "2026.1",
+  "schemaVersion": "2.0",
+  "catalogVersion": "2026.2",
   "status": "pilot",
-  "profiles": [
+  "pedagogicalProfiles": [
+    {
+      "id": "secondary-cycle-vi",
+      "path": "pedagogical/secondary-cycle-vi.json",
+      "status": "pilot"
+    }
+  ],
+  "didacticProfiles": [
+    {
+      "id": "secondary-cycle-vi-mathematics-quantity",
+      "path": "didactics/secondary/cycle-vi/mathematics/quantity.json",
+      "status": "pilot"
+    }
+  ],
+  "methodologyProfiles": [
+    { "id": "project-based-learning", "path": "methodologies/project_based_learning.json", "status": "pilot" },
+    { "id": "problem-based-learning", "path": "methodologies/problem_based_learning.json", "status": "pilot" },
+    { "id": "challenge-based-learning", "path": "methodologies/challenge_based_learning.json", "status": "pilot" },
+    { "id": "game-based-learning", "path": "methodologies/game_based_learning.json", "status": "pilot" },
+    { "id": "custom-methodology", "path": "methodologies/custom.json", "status": "pilot" }
+  ],
+  "legacyProfiles": [
     {
       "id": "secondary.cycle-vi.mathematics.quantity",
       "path": "secondary/cycle-vi/mathematics/quantity.json",
-      "status": "pilot"
+      "status": "archived",
+      "replacement": {
+        "pedagogicalProfileId": "secondary-cycle-vi",
+        "didacticProfileId": "secondary-cycle-vi-mathematics-quantity"
+      }
     }
   ]
 }

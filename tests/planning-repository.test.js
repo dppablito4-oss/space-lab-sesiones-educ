@@ -127,6 +127,10 @@ function validContainer(id = 'plan-prueba-001') {
     v2Repository.save(v2Fixture);
     assert.equal(v2Repository.readAll(true)[0].schemaVersion, '2.0');
     assert.equal(v2Repository.get(v2Fixture.id).methodologyConfig.primary.code, 'project_based_learning');
+    assert.throws(
+        () => v2Repository.save({ ...v2Fixture, identity: { ...v2Fixture.identity, level: 'unknown' } }),
+        error => error instanceof TypeError && !error.message.includes('[object Object]') && error.message.includes('identity.level')
+    );
 
     const migration = fs.readFileSync(
         path.join(__dirname, '..', 'supabase', 'migrations', '202609260012_planning_containers.sql'),

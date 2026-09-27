@@ -6,7 +6,7 @@
   "displayName": "Aprendizaje Basado en Problemas",
   "description": "Impulsa el aprendizaje mediante la comprensión e investigación de un problema abierto y la construcción de una solución argumentada.",
   "status": "pilot",
-  "suitableLevels": ["primary", "secondary"],
+  "suitableScopes": [{ "level": "secondary", "cycles": ["VI"] }],
   "recommendedPhases": [
     { "id": "problem-presentation", "label": "Presentación del problema", "purpose": "Situar un problema significativo y abierto.", "mode": "recommended" },
     { "id": "clarification", "label": "Clarificación", "purpose": "Aclarar términos, condiciones y alcance.", "mode": "recommended" },

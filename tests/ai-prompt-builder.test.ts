@@ -77,6 +77,19 @@ Deno.test("actions receive different server-owned prompts and budgets", () => {
   assert(chatbot.userPrompt.includes("Recomienda un diseño accesible"), "chat history must be preserved");
 });
 
+Deno.test("canonical and legacy project methodology codes are compatible", () => {
+  const build = (methodology: string) => buildPromptRequest({
+    action: "generate_session", requestId: REQUEST_ID,
+    input: { metadata: { nivel: "SECUNDARIA", grado: "2", area: "Matemática", titulo: "Proyecto", methodology } },
+  });
+  const canonical = build("project_based_learning");
+  const legacy = build("abp");
+  const problem = build("problem_based_learning");
+  assert(canonical.systemPrompt.includes("desarrollo_producto"), "canonical project code must select the project prompt");
+  assert(legacy.systemPrompt.includes("desarrollo_producto"), "legacy abp must retain read compatibility");
+  assert(!problem.systemPrompt.includes("desarrollo_producto"), "problem-based learning must not be confused with legacy abp");
+});
+
 Deno.test("invalid actions and request ids are rejected", () => {
   assertThrows(() => buildPromptRequest({ action: "raw_prompt", requestId: REQUEST_ID, input: {} }), /no permitida/i);
   assertThrows(() => buildPromptRequest({ action: "generate_criteria", requestId: "duplicate-me", input: {} }), /UUID válido/i);

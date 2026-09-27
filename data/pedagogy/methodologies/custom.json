@@ -6,7 +6,7 @@
   "displayName": "Metodología personalizada",
   "description": "Permite representar una organización metodológica institucional o docente que no corresponde a un perfil predefinido.",
   "status": "pilot",
-  "suitableLevels": ["initial", "primary", "secondary"],
+  "suitableScopes": [{ "level": "secondary", "cycles": ["VI"] }],
   "recommendedPhases": [],
   "fieldRules": [
     { "id": "custom-name", "path": "methodologyConfig.custom.name", "operator": "non_empty", "severity": "warning", "message": "Asigna un nombre claro a la metodología personalizada." },

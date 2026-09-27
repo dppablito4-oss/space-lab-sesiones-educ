@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="e5bf4a27764e0c97">
+    <meta name="app-build" content="0d1bfd2a3b057642">
     <script defer src="js/app-update.js?v=b027f6ec44b9"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
@@ -1044,7 +1044,7 @@
                                     <option value="">-- Por defecto del Área --</option>
                                     <option value="polya">Método de Polya — resolución de problemas</option>
                                     <option value="erca">Ciclo ERCA — experiencia, reflexión, conceptualización y aplicación</option>
-                                    <option value="abp">Aprendizaje basado en proyectos (ABP)</option>
+                                    <option value="project_based_learning">Aprendizaje Basado en Proyectos</option>
                                     <option value="flipped">Aula invertida</option>
                                     <option value="indagacion">Indagación científica (STEAM)</option>
                                     <option value="cooperativo">Aprendizaje cooperativo</option>
@@ -2229,6 +2229,8 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <!-- Scripts -->
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8"></script>
     <script defer src="js/core/profile-fields.js?v=11c2bee60ff0"></script>
+    <script defer src="js/core/validation-errors.js?v=68784095d1d7"></script>
+    <script defer src="js/pedagogy/methodology-codes.js?v=bf062db3fa95"></script>
     <script defer src="js/supabase-client.js?v=a92884e80b7c"></script>
     <script defer src="js/ai-credit-ui.js?v=008e205c31a6"></script>
     <script defer src="js/components/toast.js?v=333b8e1e59d3"></script>
@@ -2238,9 +2240,9 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="js/auth-ui.js?v=345ebad3b302"></script>
     <script defer src="js/storage.js?v=56793733a365"></script>
     <script defer src="js/planning/planning-container.js?v=0f4ac6e970bb"></script>
-    <script defer src="js/planning/planning-container-v2.js?v=bfcbf4889c42"></script>
-    <script defer src="js/planning/planning-repository.js?v=0bb5d0ced92a"></script>
-    <script defer src="js/pedagogy/context-resolver.js?v=1e69ca48013c"></script>
+    <script defer src="js/planning/planning-container-v2.js?v=18d2d3413c93"></script>
+    <script defer src="js/planning/planning-repository.js?v=c9e2f0531532"></script>
+    <script defer src="js/pedagogy/context-resolver.js?v=b8f9ea3e8279"></script>
     <!-- Shell visible e interactivo antes de descargar el editor completo. -->
     <script defer src="js/home.js?v=ac2299c8cb4b"></script>
     <script defer src="js/landing.js?v=e10294989697"></script>
@@ -2251,7 +2253,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="js/services/local-export-client.js?v=1298f823c518"></script>
     <script defer src="js/services/document-source-processor.js?v=528ade7ddaed"></script>
     <script defer src="js/controllers/export-controller.js?v=fe63cb0a4fb4"></script>
-    <script defer src="js/controllers/ai-controller.js?v=1ba8d0446553"></script>
+    <script defer src="js/controllers/ai-controller.js?v=0808b163bb93"></script>
     <script defer src="js/controllers/workflow-controller.js?v=41a361cce2f9"></script>
     <script defer src="js/controllers/students-controller.js?v=eab84a81fb46"></script>
     <script defer src="js/controllers/session-controller.js?v=8200e4a6ddb8"></script>
@@ -2260,14 +2262,14 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="js/ai/session-adapter.js?v=2536137777ca"></script>
     <script defer src="js/ai/session-export.js?v=c8e3395fa3dc"></script>
     <script defer src="js/chatbot.js?v=f343615d8cac"></script>
-    <script defer src="js/pedagogy-brief.js?v=7e61d26176d0"></script>
+    <script defer src="js/pedagogy-brief.js?v=64c492af2bf1"></script>
     <!-- KaTeX — renderizado matemático (debe cargarse antes de app.js) -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script defer src="js/paginador.js?v=d765e6e6e46d"></script>
     <script defer src="js/ui-shell.js?v=2ecdd9416d68"></script>
-    <script defer src="js/app.js?v=e477e1736de0"></script>
+    <script defer src="js/app.js?v=59b8654f9a71"></script>
     <script defer src="js/ficha-external-prompt.js?v=37839d226210"></script>
 </body>
 

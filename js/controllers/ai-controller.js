@@ -29,7 +29,7 @@ window.SpaceLabAiController = (() => {
                 area: formData.metadata.area || '',
                 titulo: formData.metadata.titulo || '',
                 grado: formData.metadata.grado || '',
-                methodology: DOM.selectMethodology ? DOM.selectMethodology.value : '',
+                methodology: window.SpaceLabMethodologyCodes.normalizeMethodologyCode(DOM.selectMethodology ? DOM.selectMethodology.value : ''),
                 sourceFile: AppState.sourceFileData || null
             });
         }

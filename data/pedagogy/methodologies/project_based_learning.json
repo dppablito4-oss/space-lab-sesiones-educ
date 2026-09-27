@@ -6,7 +6,7 @@
   "displayName": "Aprendizaje Basado en Proyectos",
   "description": "Organiza un proceso prolongado de investigación, construcción y comunicación alrededor de una pregunta y un producto final relevante.",
   "status": "pilot",
-  "suitableLevels": ["initial", "primary", "secondary"],
+  "suitableScopes": [{ "level": "secondary", "cycles": ["VI"] }],
   "recommendedPhases": [
     { "id": "launch", "label": "Lanzamiento", "purpose": "Presentar la situación y construir la pregunta orientadora.", "mode": "recommended" },
     { "id": "team-organization", "label": "Organización", "purpose": "Acordar equipos, roles y responsabilidades.", "mode": "recommended" },
@@ -34,7 +34,7 @@
     "avoid": ["producto decorativo desconectado del currículo", "fases rígidas sin adaptación docente", "generar todas las sesiones sin revisar el mapa"]
   },
   "provenance": {
-    "sourceRefs": ["minedu-project-based-learning-2025"],
+    "sourceRefs": ["minedu-project-based-learning-2022"],
     "reviewNote": "Fases internas adaptables derivadas de orientaciones oficiales; no constituyen una secuencia obligatoria."
   }
 }
