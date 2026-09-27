@@ -28,7 +28,7 @@ const MAX_SOURCE_BASE64_CHARS = 4 * 1024 * 1024;
 const METHODOLOGY_PROMPTS: Record<string, string> = {
   polya: `La secuencia de DESARROLLO debe seguir los procesos oficiales de Matemática de MINEDU: familiarización con el problema, búsqueda y ejecución de estrategias, socialización de representaciones y reflexión/formalización. Crea exactamente cuatro procesos con los ids "familiarizacion", "busqueda_estrategias", "socializacion" y "formalizacion_reflexion", en ese orden.`,
   erca: `La secuencia de DESARROLLO debe seguir estrictamente el ciclo ERCA: experiencia, reflexión, conceptualización y aplicación. Crea exactamente cuatro procesos con los ids "experiencia", "reflexion", "conceptualizacion" y "aplicacion", en ese orden.`,
-  project_based_learning: `La secuencia de DESARROLLO debe seguir Aprendizaje Basado en Proyectos: lanzamiento/desafío, indagación, desarrollo del producto y difusión/evaluación. Crea exactamente cuatro procesos con los ids "lanzamiento", "indagacion", "desarrollo_producto" y "difusion_evaluacion", en ese orden.`,
+  project_based_learning: `El docente ha seleccionado Aprendizaje Basado en Proyectos. Adapta el desarrollo para contribuir de forma coherente al proyecto general. Cuando corresponda al propósito concreto de esta sesión, prioriza la comprensión del reto o pregunta orientadora, la investigación o búsqueda de información, la participación activa y toma de decisiones del estudiante, la construcción progresiva de productos parciales, el avance hacia el producto final, la comunicación de hallazgos o resultados y la reflexión sobre el proceso. No fuerces todas las fases del proyecto dentro de una sola sesión. La sesión puede corresponder a una fase o hito del proyecto. Respeta el propósito de la sesión, el contexto declarado por el docente, la competencia y criterios, el nivel y grado, y cualquier contexto heredado de una planificación superior.`,
   flipped: `La secuencia de DESARROLLO debe seguir Aula Invertida: conexión de saberes externos, aplicación guiada/taller activo y consolidación con retroalimentación. Crea exactamente tres procesos con los ids "conexion_externa", "aplicacion_guiada" y "consolidacion_retroalimentacion", en ese orden.`,
   indagacion: `La secuencia de DESARROLLO debe seguir indagación científica: problematización, diseño de estrategias, generación/análisis de datos y estructuración/comunicación. Crea exactamente cuatro procesos con los ids "problematizacion", "diseno_estrategias", "generacion_analisis_datos" y "estructuracion_comunicacion", en ese orden.`,
   cooperativo: `La secuencia de DESARROLLO debe seguir aprendizaje cooperativo: organización de roles, interdependencia positiva, interacción promotora y autoevaluación grupal. Crea exactamente cuatro procesos con los ids "organizacion_roles", "interdependencia_positiva", "interaccion_promotora" y "autoevaluacion_grupal", en ese orden.`,
@@ -41,7 +41,7 @@ REGLAS:
 2. La respuesta debe cumplir SessionDocument v1 y declarar "schemaVersion": "1.0".
 3. Usa HTML básico seguro en contenido: p, br, strong, em, ul, ol, li y tablas simples. No uses script, iframe, eventos, URLs javascript: ni CSS externo.
 4. Incluye acciones concretas del docente y estudiantes, preguntas mediadoras, organización, recursos y evidencias parciales.
-5. Incluye como mínimo 3 capacidades, entre 3 y 5 criterios observables, 4 procesos de inicio, los procesos de la metodología y 3 procesos de cierre.
+5. Incluye como mínimo 3 capacidades, entre 3 y 5 criterios observables, 4 procesos de inicio, los procesos metodológicos pertinentes al propósito de la sesión y 3 procesos de cierre.
 6. momentos.inicio, momentos.desarrollo y momentos.cierre deben contener tiempoMinutos y un array procesos. Cada proceso contiene id, orden, titulo y contenido {"format":"html","value":"..."}.
 7. Incluye proposito, competenciasTransversales, enfoquesTransversales, recursos, evaluacion, fichaTrabajo, juegoLibreSectores y listaCotejo.
 8. En Matemática escribe expresiones con LaTeX: $...$ en línea y $$...$$ en bloque.
@@ -130,7 +130,7 @@ function buildSessionPrompt(input: Record<string, unknown>): BuiltPrompt {
   let systemPrompt = SESSION_SYSTEM_PROMPT;
   const rawMethodology = cleanText(metadata.methodology, 40).toLowerCase();
   const methodology = rawMethodology === "abp" ? "project_based_learning" : rawMethodology;
-  if (METHODOLOGY_PROMPTS[methodology]) systemPrompt += `\n\nMETODOLOGÍA OBLIGATORIA:\n${METHODOLOGY_PROMPTS[methodology]}`;
+  if (METHODOLOGY_PROMPTS[methodology]) systemPrompt += `\n\nORIENTACIÓN METODOLÓGICA:\n${METHODOLOGY_PROMPTS[methodology]}`;
   const template = cleanText(metadata.template, 40).toLowerCase();
   const level = cleanText(metadata.nivel, 80).toUpperCase();
   if (template === "inicial" || level === "INICIAL") {

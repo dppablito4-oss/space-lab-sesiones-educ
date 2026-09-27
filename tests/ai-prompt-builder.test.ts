@@ -85,9 +85,15 @@ Deno.test("canonical and legacy project methodology codes are compatible", () =>
   const canonical = build("project_based_learning");
   const legacy = build("abp");
   const problem = build("problem_based_learning");
-  assert(canonical.systemPrompt.includes("desarrollo_producto"), "canonical project code must select the project prompt");
-  assert(legacy.systemPrompt.includes("desarrollo_producto"), "legacy abp must retain read compatibility");
-  assert(!problem.systemPrompt.includes("desarrollo_producto"), "problem-based learning must not be confused with legacy abp");
+  assert(canonical.systemPrompt.includes("Aprendizaje Basado en Proyectos"), "canonical project code must select the project guidance");
+  assert(canonical.systemPrompt.includes("ORIENTACIÓN METODOLÓGICA"), "methodology must be presented as guidance");
+  assert(!canonical.systemPrompt.includes("METODOLOGÍA OBLIGATORIA"), "project guidance must not be mandatory");
+  assert(!canonical.systemPrompt.includes("exactamente cuatro procesos"), "a project session must not force four processes");
+  assert(canonical.systemPrompt.includes("No fuerces todas las fases del proyecto dentro de una sola sesión"), "project phases must remain distributable");
+  assert(canonical.systemPrompt.includes("La sesión puede corresponder a una fase o hito del proyecto"), "one session may represent one project phase");
+  assert(canonical.systemPrompt.includes('"schemaVersion": "1.0"'), "SessionDocument v1 must remain unchanged");
+  assert(legacy.systemPrompt === canonical.systemPrompt, "legacy abp must produce the same guidance as the canonical code");
+  assert(!problem.systemPrompt.includes("Aprendizaje Basado en Proyectos"), "problem-based learning must not be confused with legacy abp");
 });
 
 Deno.test("invalid actions and request ids are rejected", () => {
