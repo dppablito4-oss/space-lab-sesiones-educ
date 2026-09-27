@@ -25,3 +25,4 @@ Reglas:
 
 - `202609210001_profile_hardening.sql`: protección de campos de identidad y seguridad en perfiles.
 - `202609210002_ai_credits.sql`: planes, billeteras, historial y operaciones atómicas de créditos IA.
+- `202609270001_planning_map_ai_action.sql`: registra el costo y el entitlement independientes de `planning.map.generate`.

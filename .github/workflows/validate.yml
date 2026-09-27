@@ -75,6 +75,8 @@ jobs:
           node tests/planning-container-v2.test.js
           node tests/planning-repository.test.js
           node tests/planning-wizard.test.js
+          node tests/planning-map-generation.test.js
+          node tests/planning-map-ai-action.test.js
           node tests/validation-errors.test.js
           node tests/test_adapter_v1.js
           node tests/test_templates_v1.js
@@ -127,6 +129,7 @@ jobs:
       - name: Check Supabase Edge Functions
         run: |
           deno test tests/ai-prompt-builder.test.ts
+          deno test tests/planning-map-prompt.test.ts
           deno test tests/ai-credits.test.ts
           deno check supabase/functions/openai-router/index.ts
           deno check supabase/functions/gemini-router/index.ts

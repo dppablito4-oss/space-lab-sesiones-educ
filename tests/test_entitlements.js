@@ -37,6 +37,7 @@ const {
 
 assert.equal(getRequiredFeatureKey('generate_session'), 'session.generate');
 assert.equal(getRequiredFeatureKey('chatbot'), 'ai.chat');
+assert.equal(getRequiredFeatureKey('planning.map.generate'), 'planning.ai');
 assert.deepEqual(
   getRequiredFeatureKeys('generate_session', { hasAttachment: true, modelQuality: 'max_quality' }),
   ['session.generate', 'ai.attach_file', 'ai.quality_max'],

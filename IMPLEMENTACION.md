@@ -10,8 +10,9 @@ actual del repositorio y conserva `SessionDocument v1` y `PlanningContainer 2.0`
   `Guardar borrador` y `Marcar como revisada`. La segunda acción se habilita solo
   cuando `PlanningContainerV2.validate(..., { forReview: true })` acepta el
   documento con sus perfiles pedagógico y metodológico resueltos.
-- **E2 — `planning.map.generate`: pendiente.** Es el siguiente bloque y requiere
-  acción económica, prompt versionado, validación JSON e idempotencia en AI Gateway.
+- **E2 — `planning.map.generate`: implementado y validado.** La acción usa AI
+  Gateway, prompt versionado, crédito propio, entitlement, validación JSON y
+  validación completa de `PlanningContainer 2.0` antes de aceptar el borrador.
 - **E3–E6: pendientes y dependientes de E2.** No se adelantaron para respetar el
   gate secuencial del plan maestro.
 - **V1, C1–C3, P1–P5, I1–I5, IC1–IC2 y R1–R4: pendientes.** V1 requiere un piloto
@@ -64,6 +65,71 @@ Playwright y Deno también está verde.
 - `SessionDocument v1`, exportación, AI Gateway, créditos y billing no cambiaron.
 - Gate E1: cumplido localmente; queda pendiente la confirmación del workflow
   remoto de CI.
+
+## BLOQUE E2
+
+**Archivos principales:**
+
+- `supabase/functions/_shared/prompt-builder.ts`
+- `supabase/functions/_shared/entitlements.ts`
+- `supabase/functions/gemini-router/index.ts`
+- `supabase/functions/deepseek-router/index.ts`
+- `js/planning/planning-map-generator.js`
+- `supabase/migrations/202609270001_planning_map_ai_action.sql`
+- `tests/planning-map-prompt.test.ts`
+- `tests/planning-map-generation.test.js`
+- `tests/planning-map-ai-action.test.js`
+
+**Contrato y seguridad:**
+
+- La acción pública es `planning.map.generate` y siempre entra por
+  `ai-gateway`; el servicio del navegador no permite indicar un router directo.
+- El prompt exige JSON puro y un `PlanningContainer 2.0` completo con estado
+  inicial `draft`; no solicita sesiones completas.
+- Los tres perfiles resueltos y las referencias curriculares oficiales viajan
+  como contexto. La respuesta se rechaza si cambia ids, nombres oficiales o
+  capacidades.
+- Antes de entregar el borrador se ejecuta
+  `PlanningContainerV2.validate(..., { forReview: true })`. Ninguna respuesta
+  inválida se persiste.
+- Gemini, DeepSeek y OpenAI validan la sintaxis JSON antes de confirmar el
+  consumo. Un JSON inválido genera reembolso y puede activar el fallback
+  limitado del AI Gateway.
+- `requestId` se conserva como clave idempotente. Los errores de cuota y
+  entitlement mantienen códigos estructurados en el servicio.
+
+**Metering y despliegue:**
+
+- Costo inicial: 8 créditos por mapa, configurado en base de datos y no en el
+  frontend.
+- Entitlement: `planning.ai`, habilitado para `beta_teacher` y `pro`.
+- La migración incremental fue aplicada al proyecto Supabase enlazado.
+- Los routers OpenAI, Gemini y DeepSeek fueron desplegados nuevamente con el
+  prompt, entitlement y validación JSON de esta acción.
+
+**Pruebas del bloque:**
+
+```bash
+npx --yes deno test tests/planning-map-prompt.test.ts
+node tests/planning-map-generation.test.js
+node tests/planning-map-ai-action.test.js
+node tests/test_entitlements.js
+node tests/test_ai_gateway_routing.js
+npx --yes deno check supabase/functions/openai-router/index.ts
+npx --yes deno check supabase/functions/gemini-router/index.ts
+npx --yes deno check supabase/functions/deepseek-router/index.ts
+npx --yes deno check supabase/functions/ai-gateway/index.ts
+```
+
+Casos cubiertos: entrada válida, perfil inexistente, metodología inexistente,
+JSON inválido, referencias curriculares alteradas, respuesta válida,
+idempotencia, cuota excedida y entitlement denegado.
+
+Resultado: suite completa JavaScript, Python, Playwright y Deno en verde.
+
+**Gate E2:** cumplido localmente. El siguiente bloque es E3, que incorporará la
+acción al wizard con vista previa, aceptar, editar, regenerar y volver al flujo
+manual.
 
 ---
 

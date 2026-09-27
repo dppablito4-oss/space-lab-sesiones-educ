@@ -52,6 +52,9 @@ export function getRequiredFeatureKeys(
   const required: string[] = [];
 
   switch (action) {
+    case "planning.map.generate":
+      required.push("planning.ai");
+      break;
     case "chatbot":
       required.push("ai.chat");
       break;

@@ -102,6 +102,13 @@ serve(async (req) => {
       const data = await response.json();
       const reply = data.choices?.[0]?.message?.content;
       if (typeof reply !== "string" || !reply) throw new Error("EMPTY_PROVIDER_RESPONSE");
+      if (aiRequest.expectsJson) {
+        try {
+          JSON.parse(reply);
+        } catch {
+          throw new Error("INVALID_PROVIDER_JSON");
+        }
+      }
 
       const inputTokens = data.usage?.prompt_tokens ?? 0;
       const outputTokens = data.usage?.completion_tokens ?? 0;
