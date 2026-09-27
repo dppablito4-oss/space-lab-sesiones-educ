@@ -8,6 +8,7 @@ __pycache__/
 backend/build/
 backend/dist/
 backend/bin/
+/DESCARGAS.EXE/
 *.log
 connection_token.txt
 backend/connection_token.txt

@@ -82,4 +82,21 @@ assert.equal(reviewed.status, 'reviewed');
 assert.equal(reviewed.revision, 2, 'La transición conserva la historia e incrementa la revisión.');
 assert.equal(repository.get(reviewed.id).status, 'reviewed');
 assert.equal(Repository.create({ storage, validator: Core }).get(reviewed.id).status, 'reviewed');
+
+const unchangedSave = Wizard.prepareSave(structuredClone(reviewed), reviewed);
+assert.equal(unchangedSave.status, 'reviewed', 'Guardar sin cambios no degrada una planificación revisada.');
+assert.equal(unchangedSave.revision, 2, 'Guardar sin cambios no crea una revisión innecesaria.');
+
+const editedReview = structuredClone(reviewed);
+editedReview.identity.title = 'Unidad revisada con cambios';
+const reopenedDraft = Wizard.prepareSave(editedReview, reviewed);
+assert.equal(reopenedDraft.status, 'draft', 'Una planificación revisada con cambios vuelve a borrador.');
+assert.equal(reopenedDraft.revision, 3, 'Los cambios sobre una planificación revisada crean una nueva revisión.');
+
+const reviewedAgain = Wizard.prepareReview(reopenedDraft, reopenedDraft, {
+    pedagogicalProfile,
+    methodologyProfile: customProfile
+});
+assert.equal(reviewedAgain.status, 'reviewed', 'El borrador modificado puede revisarse nuevamente.');
+assert.equal(reviewedAgain.revision, 4, 'La nueva revisión conserva el historial del lifecycle.');
 console.log('planning-wizard.test.js: OK');

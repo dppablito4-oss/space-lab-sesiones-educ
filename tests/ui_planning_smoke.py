@@ -49,7 +49,7 @@ def run():
                 page.locator('[data-path="identity.duration.value"]').fill('3')
                 page.locator('[data-planning-action="save"]').click()
                 page.locator('#planning-notice').filter(has_text='Borrador guardado').wait_for()
-                page.wait_for_function("!document.querySelector('[data-planning-action=save]').disabled")
+                assert page.locator('[data-planning-action="save"]').is_disabled()
                 page.locator('[data-step="6"]').click()
                 assert page.locator('[data-planning-action="review"]').is_disabled()
                 page.locator('.planning-steps [data-step="2"]').click()
@@ -89,6 +89,9 @@ def run():
                 assert page.locator('[data-planning-action="review"]').inner_text() == 'Planificación revisada'
                 saved_review = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
                 assert saved_review['revision'] == 2 and saved_review['status'] == 'reviewed'
+                assert page.locator('[data-planning-action="save"]').is_disabled()
+                unchanged_review = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
+                assert unchanged_review['revision'] == 2 and unchanged_review['status'] == 'reviewed'
                 page.locator('[data-planning-action="close"]').click()
                 page.evaluate("localStorage.removeItem('spacelab_planning_containers')")
                 page.reload(wait_until='domcontentloaded')
@@ -102,8 +105,10 @@ def run():
                 page.locator('[data-planning-action="open"]').click()
                 assert page.locator('[data-path="identity.title"]').input_value() == 'Mi unidad <segura>'
                 page.locator('[data-path="identity.title"]').fill('Unidad revisada')
+                assert page.locator('[data-planning-action="save"]').is_enabled()
                 page.locator('[data-planning-action="save"]').click()
-                page.wait_for_function("!document.querySelector('[data-planning-action=save]').disabled")
+                page.locator('#planning-notice').filter(has_text='Borrador guardado').wait_for()
+                assert page.locator('[data-planning-action="save"]').is_disabled()
                 saved = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
                 assert saved['schemaVersion'] == '2.0' and saved['revision'] == 3
                 assert saved['status'] == 'draft'
@@ -112,6 +117,12 @@ def run():
                 assert saved['sequence'][1]['criterionRefs'] == [c['id'] for c in saved['curriculumMap'][0]['criteria']]
                 assert saved['sequence'][1]['partialProduct']['title'] == 'Borrador de guía'
                 assert saved['milestones'][0]['sequenceItemIds'] == [saved['sequence'][1]['id']]
+                page.locator('[data-step="6"]').click()
+                assert page.locator('[data-planning-action="review"]').is_enabled()
+                page.locator('[data-planning-action="review"]').click()
+                page.locator('#planning-notice').filter(has_text='Planificación revisada').wait_for()
+                reviewed_again = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
+                assert reviewed_again['status'] == 'reviewed' and reviewed_again['revision'] == 4
                 assert page.locator('#planning-dialog').evaluate('el => el.scrollWidth <= el.clientWidth')
                 page.locator('[data-planning-action="close"]').click()
                 page.locator('[data-home-action="new-session"]').first.click()

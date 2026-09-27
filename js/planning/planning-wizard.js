@@ -69,8 +69,9 @@ const PlanningWizard = (() => {
 
     function prepareSave(draft, previous) {
         const changes = copy(draft);
-        changes.status = 'draft';
         assertSaveable(changes);
+        if (previous && JSON.stringify(changes) === JSON.stringify(previous)) return copy(previous);
+        changes.status = 'draft';
         if (previous) return core.revise(previous, changes);
         return core.createDraft(changes);
     }
@@ -176,10 +177,19 @@ const PlanningWizard = (() => {
                 ? `<button type="button" class="btn btn-primary" data-planning-action="review" aria-describedby="planning-review-help" ${reviewResult.valid && !alreadyReviewed ? '' : 'disabled'}>${alreadyReviewed ? 'Planificación revisada' : 'Marcar como revisada'}</button>`
                     + `<span id="planning-review-help" class="planning-action-help">${alreadyReviewed ? 'Edita algún campo para crear una revisión nueva.' : reviewResult.valid ? 'La planificación cumple los requisitos de revisión.' : 'Completa los campos indicados para habilitar la revisión.'}</span>`
                 : '';
-            shell(`<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-ghost" data-planning-action="save">Guardar borrador</button>${reviewAction}</footer>`);
+            shell(`<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-ghost" data-planning-action="save" ${dirty ? '' : 'disabled'}>Guardar borrador</button>${reviewAction}</footer>`);
+        }
+        function markDirty() {
+            dirty = true;
+            const saveButton = dialog.querySelector('[data-planning-action="save"]');
+            if (saveButton) saveButton.disabled = false;
         }
         function mayLeave() { return !dirty || window.confirm('Hay cambios sin guardar. ¿Quieres descartarlos?'); }
         async function save(asReviewed = false) {
+            if (!asReviewed && previous && !dirty) {
+                notice('No hay cambios por guardar.');
+                return;
+            }
             const invalid = [...dialog.querySelectorAll('input')].find(input => !input.checkValidity());
             if (invalid) { invalid.reportValidity(); return; }
             const validationOptions = asReviewed ? {
@@ -190,7 +200,7 @@ const PlanningWizard = (() => {
             repository.save(value);
             draft = copy(value); previous = copy(value); dirty = false;
             const label = asReviewed ? 'Planificación revisada' : 'Borrador guardado';
-            if (asReviewed) render();
+            render();
             notice(`${label} en este dispositivo. Sincronizando…`);
             try {
                 const result = await repository.sync();
@@ -216,14 +226,14 @@ const PlanningWizard = (() => {
                 if (draft.finalProduct) draft.finalProduct.criterionRefs = [...ids];
             }
             if (path.endsWith('.milestoneId')) draft.milestones.forEach(m => { m.sequenceItemIds = draft.sequence.filter(s => s.milestoneId === m.id).map(s => s.id); });
-            dirty = true;
+            markDirty();
         });
         dialog.addEventListener('change', event => {
             if (event.target.id !== 'planning-methodology') return;
             const profile = profiles.methodologies.find(p => p.code === event.target.value);
             draft.methodologyConfig.primary = profile ? { profileId: profile.id, profileVersion: profile.profileVersion, code: profile.code } : null;
             if (profile?.code === 'custom' && !draft.methodologyConfig.custom) draft.methodologyConfig.custom = { name: '', phases: [] };
-            dirty = true; render(); dialog.querySelector('#planning-methodology').focus();
+            markDirty(); render(); dialog.querySelector('#planning-methodology').focus();
         });
         dialog.addEventListener('click', async event => {
             const target = event.target.closest('[data-planning-action]');
@@ -253,7 +263,7 @@ const PlanningWizard = (() => {
                 else if (action === 'next') step = Math.min(6, step + 1);
                 else if (action === 'previous') step = Math.max(0, step - 1);
                 else {
-                    dirty = true;
+                    markDirty();
                     if (action === 'curriculum') addCurriculum(draft, profiles.didactic);
                     if (action === 'session') addSession(draft);
                     if (action === 'up' || action === 'down') reorder(draft, index, action === 'up' ? -1 : 1);
