@@ -195,6 +195,7 @@ const PlanningWizard = (() => {
         const repository = window.PlanningRepository.create({ validator: core });
         let draft = null, previous = null, step = 0, dirty = false, busy = false;
         let creationMode = 'manual', aiProposal = null, generating = false;
+        let returnToView = false;
         let profiles = null;
         const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
         const read = path => path.split('.').reduce((obj, key) => obj?.[key], draft);
@@ -226,7 +227,7 @@ const PlanningWizard = (() => {
             dialog.innerHTML = `<div class="planning-shell"><header class="planning-header"><div><span class="home-eyebrow">Beta · Secundaria, ciclo VI</span><h2 id="planning-title">Planificación articulada</h2></div>${button('close', 'Cerrar')}</header><p id="planning-notice" tabindex="-1" role="status"></p>${content}</div>`;
         }
         function library() {
-            draft = null; previous = null; dirty = false; creationMode = 'manual'; aiProposal = null; generating = false;
+            draft = null; previous = null; dirty = false; creationMode = 'manual'; aiProposal = null; generating = false; returnToView = false;
             const plans = repository.list().filter(p => p.schemaVersion === '2.0' && ['draft', 'reviewed'].includes(p.status)
                 && p.identity.level === 'secondary' && p.identity.cycle === 'VI' && types[p.identity.planningType]);
             shell(`<h3>¿Qué quieres crear?</h3><p>Construye tu planificación paso a paso. Puedes guardar un borrador en cualquier momento.</p><div class="planning-actions">${Object.entries(types).map(([type, label]) => button('create', esc(label), `data-type="${type}"`)).join('')}</div><h3>Mis planificaciones</h3><div class="planning-library">${plans.length ? plans.map(p => `<article class="planning-card"><div><strong>${esc(p.identity.title || 'Sin título')}</strong><p>${types[p.identity.planningType]} · ${p.status === 'reviewed' ? 'Revisada' : 'Borrador'} · Revisión ${p.revision}</p></div>${button('open', 'Abrir', `data-id="${esc(p.id)}"`)}</article>`).join('') : '<p>Aún no tienes planificaciones guardadas para este piloto.</p>'}</div>${button('sync', 'Sincronizar con mi cuenta')}`);
@@ -241,6 +242,15 @@ const PlanningWizard = (() => {
                 return response.json();
             }));
             profiles = { didactic: results[0], pedagogical: results[1], methodologies: results.slice(2) };
+        }
+        async function editExisting(containerId) {
+            await loadProfiles();
+            const loaded = repository.get(containerId);
+            if (!loaded || !core.validate(loaded).valid) throw new Error('No se pudo abrir esta planificación para editarla.');
+            draft = copy(loaded); previous = copy(loaded); step = 0; dirty = false;
+            creationMode = 'manual'; aiProposal = null; generating = false; returnToView = true;
+            render();
+            dialog.querySelector('#planning-step-title')?.focus();
         }
         function review() {
             const result = core.validate(draft, { forReview: true, pedagogicalProfile: profiles.pedagogical,
@@ -385,6 +395,7 @@ const PlanningWizard = (() => {
                 const result = await repository.sync();
                 notice(result.synced ? `${label} y sincronizado con tu cuenta.` : `${label} en este dispositivo. La nube no está disponible.`);
             } catch (_error) { notice(`${label} en este dispositivo. No se pudo sincronizar; puedes reintentar desde Mis planificaciones.`); }
+            if (returnToView && window.PlanningView?.open) await window.PlanningView.open(value.id);
         }
         dialog.addEventListener('input', event => {
             const input = event.target;
@@ -451,17 +462,21 @@ const PlanningWizard = (() => {
                     else { const result = await repository.sync(); library(); notice(result.synced ? 'Biblioteca sincronizada.' : 'Sin conexión a tu cuenta. Se muestran los borradores locales.'); }
                     return;
                 }
-                if (action === 'create' || action === 'open') {
+                if (action === 'open') {
                     busy = true;
-                    if (action === 'create') {
-                        const entitlements = await window.SupabaseClient?.getUserEntitlements?.();
-                        if (!canCreate(target.dataset.type, entitlements)) throw new Error('No se pudo habilitar esta opción con los permisos de tu cuenta. Comprueba tu conexión y el acceso a planificación de tu plan. Puedes seguir abriendo tus borradores guardados.');
-                    }
+                    if (!window.PlanningView?.open) throw new Error('La vista de planificación no está disponible.');
+                    await window.PlanningView.open(target.dataset.id);
+                    return;
+                }
+                if (action === 'create') {
+                    busy = true;
+                    const entitlements = await window.SupabaseClient?.getUserEntitlements?.();
+                    if (!canCreate(target.dataset.type, entitlements)) throw new Error('No se pudo habilitar esta opción con los permisos de tu cuenta. Comprueba tu conexión y el acceso a planificación de tu plan. Puedes seguir abriendo tus borradores guardados.');
                     await loadProfiles();
-                    const loaded = action === 'open' ? repository.get(target.dataset.id) : create(target.dataset.type);
+                    const loaded = create(target.dataset.type);
                     if (!loaded || !core.validate(loaded).valid) throw new Error('No se pudo abrir este borrador.');
-                    draft = copy(loaded); previous = action === 'open' ? copy(loaded) : null; step = 0; dirty = action === 'create';
-                    creationMode = action === 'create' ? 'choose' : 'manual'; aiProposal = null; generating = false;
+                    draft = copy(loaded); previous = null; step = 0; dirty = true;
+                    creationMode = 'choose'; aiProposal = null; generating = false; returnToView = false;
                 } else if (action === 'step') step = Number(target.dataset.step);
                 else if (action === 'next') step = Math.min(6, step + 1);
                 else if (action === 'previous') step = Math.max(0, step - 1);
@@ -482,6 +497,14 @@ const PlanningWizard = (() => {
         });
         dialog.addEventListener('cancel', event => { if (busy || !mayLeave()) event.preventDefault(); else dirty = false; });
         window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });
+        window.addEventListener('planning:view-library', () => library());
+        window.addEventListener('planning:view-edit', async event => {
+            if (busy || !event.detail?.id) return;
+            busy = true;
+            try { await editExisting(event.detail.id); }
+            catch (error) { library(); notice(error.message, true); }
+            finally { busy = false; }
+        });
         document.querySelectorAll('[data-open-planning]').forEach(button => button.addEventListener('click', () => { library(); dialog.showModal(); }));
     }
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });

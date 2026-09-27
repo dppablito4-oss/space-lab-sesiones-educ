@@ -39,9 +39,40 @@
 .planning-ai-panel .planning-actions { margin: 0; justify-content: flex-end; }
 .planning-proposal h3 { margin-top: 8px; }
 .planning-proposal ol { display: grid; gap: 8px; }
+.planning-view-header { padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.planning-view-header h2 { margin-block: 8px; }
+.planning-view-header p { color: var(--text-secondary); }
+.planning-view-badges, .planning-view-actions, .planning-sequence-meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 10px;
+}
+.planning-view-badges span, .planning-item-status {
+    padding: 6px 10px; border: 1px solid var(--border); border-radius: 999px; background: var(--color-card); font-size: .9rem;
+}
+.planning-status-reviewed { border-color: var(--color-primary); color: var(--color-primary); }
+.planning-status-draft { color: var(--text-secondary); }
+.planning-view-layout { display: grid; grid-template-columns: minmax(180px, 240px) minmax(0, 1fr); gap: 24px; align-items: start; }
+.planning-view-summary { position: sticky; top: 0; padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: var(--color-card); }
+.planning-view-content { min-width: 0; }
+.planning-view-section { padding-block: 20px; border-bottom: 1px solid var(--border); }
+.planning-view-section > h3 { margin-top: 0; }
+.planning-view-detail h4, .planning-view-section h5 { margin-bottom: 6px; }
+.planning-curriculum-card, .planning-milestone, .planning-sequence-item {
+    padding: 16px; margin-block: 12px; border: 1px solid var(--border); border-radius: 12px; background: var(--color-card);
+}
+.planning-methodology-name { font-size: 1.05rem; font-weight: 700; }
+.planning-week + .planning-week { margin-top: 24px; }
+.planning-sequence-list { display: grid; gap: 12px; }
+.planning-sequence-heading { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: start; }
+.planning-sequence-heading h5 { margin: 0; font-size: 1rem; }
+.planning-sequence-index { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary-dim); font-weight: 700; }
+.planning-sequence-meta { margin-top: 6px; color: var(--text-secondary); font-size: .9rem; }
 #planning-notice { overflow-wrap: anywhere; }
 @media (max-width: 600px) {
     .planning-grid { grid-template-columns: 1fr; }
     .planning-ai-panel { align-items: stretch; flex-direction: column; }
     .planning-ai-panel .planning-actions { justify-content: flex-start; }
+    .planning-view-layout { grid-template-columns: 1fr; }
+    .planning-view-summary { position: static; }
+    .planning-sequence-heading { grid-template-columns: auto minmax(0, 1fr); }
+    .planning-item-status { grid-column: 2; justify-self: start; }
 }

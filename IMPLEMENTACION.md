@@ -176,6 +176,39 @@ mantienen como regresión.
 **Gate E3:** se cierra únicamente después de suite completa, Validate & Build y
 GitHub Pages verdes. E4 permanece fuera de alcance.
 
+## BLOQUE E4
+
+**Vista de planificación:**
+
+- `PlanningView` representa directamente un `PlanningContainer 2.0` obtenido
+  mediante `PlanningRepository`; no crea un modelo ni almacenamiento paralelo.
+- `Abrir` desde la biblioteca muestra primero la vista de lectura. Desde allí,
+  `Editar planificación` abre el wizard existente con el mismo identificador,
+  estado y revisión.
+- Guardar un cambio o marcarlo como revisado devuelve a la vista actualizada.
+  La biblioteca conserva título, tipo, estado y revisión.
+- La vista presenta metadatos, situación, pregunta retadora, propósito,
+  currículo, metodología, producto, evaluación, hitos y secuencia sin exponer
+  identificadores internos.
+- No se incorpora generación de sesiones ni `SessionPlanningLink`; ambos
+  permanecen reservados para E5.
+- No se ofrece `Archivar`: el repository solo dispone de eliminación lógica y
+  no existe aún un estado de archivo integrado de extremo a extremo.
+
+**Pruebas específicas:**
+
+```bash
+node tests/planning-view.test.js
+python tests/ui_planning_view_smoke.py
+```
+
+El smoke de UI cubre 375 px, 768 px y 1280 px; borrador y revisada; retorno a
+biblioteca; edición y revisión con incremento correcto; teclado, foco, ausencia
+de overflow y acceso independiente a `Crear nueva sesión`.
+
+**Gate E4:** se cierra después de suite completa, Validate & Build y GitHub
+Pages verdes. E5 permanece fuera de alcance.
+
 ---
 
 # Implementación de fórmulas matemáticas en Word
