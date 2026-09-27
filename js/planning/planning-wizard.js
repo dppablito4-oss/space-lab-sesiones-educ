@@ -55,9 +55,7 @@ const PlanningWizard = (() => {
         draft.sequence.forEach((item, i) => { item.index = i + 1; });
     }
 
-    function prepareSave(draft, previous) {
-        const changes = copy(draft);
-        changes.status = 'draft';
+    function assertSaveable(changes) {
         if (!changes.identity.title.trim()) throw new Error('Escribe un título para guardar la planificación. Puedes cambiarlo después.');
         for (const item of changes.sequence) {
             if (!item.title.trim()) throw new Error('Cada sesión necesita un título. Revísalo en Secuencia.');
@@ -67,8 +65,25 @@ const PlanningWizard = (() => {
         if (changes.milestones.some(m => !m.title.trim())) throw new Error('Cada hito necesita un título.');
         if (changes.finalProduct && !changes.finalProduct.title.trim()) throw new Error('El producto final necesita un título.');
         if (changes.sequence.some(s => s.partialProduct && !s.partialProduct.title.trim())) throw new Error('Cada producto parcial necesita un título.');
+    }
+
+    function prepareSave(draft, previous) {
+        const changes = copy(draft);
+        changes.status = 'draft';
+        assertSaveable(changes);
         if (previous) return core.revise(previous, changes);
         return core.createDraft(changes);
+    }
+
+    function prepareReview(draft, previous, validationOptions = {}) {
+        const changes = { ...copy(draft), status: 'reviewed' };
+        assertSaveable(changes);
+        const reviewBase = previous || core.createDraft({ ...changes, status: 'draft' });
+        const reviewed = core.revise(reviewBase, changes, undefined, {
+            ...validationOptions,
+            forReview: true
+        });
+        return reviewed;
     }
 
     function mount() {
@@ -108,9 +123,9 @@ const PlanningWizard = (() => {
         }
         function library() {
             draft = null; previous = null; dirty = false;
-            const plans = repository.list().filter(p => p.schemaVersion === '2.0' && p.status === 'draft'
+            const plans = repository.list().filter(p => p.schemaVersion === '2.0' && ['draft', 'reviewed'].includes(p.status)
                 && p.identity.level === 'secondary' && p.identity.cycle === 'VI' && types[p.identity.planningType]);
-            shell(`<h3>¿Qué quieres crear?</h3><p>Construye tu planificación paso a paso. Puedes guardar un borrador en cualquier momento.</p><div class="planning-actions">${Object.entries(types).map(([type, label]) => button('create', esc(label), `data-type="${type}"`)).join('')}</div><h3>Mis borradores</h3><div class="planning-library">${plans.length ? plans.map(p => `<article class="planning-card"><div><strong>${esc(p.identity.title || 'Sin título')}</strong><p>${types[p.identity.planningType]} · Borrador · Revisión ${p.revision}</p></div>${button('open', 'Abrir', `data-id="${esc(p.id)}"`)}</article>`).join('') : '<p>Aún no tienes planificaciones guardadas para este piloto.</p>'}</div>${button('sync', 'Sincronizar con mi cuenta')}`);
+            shell(`<h3>¿Qué quieres crear?</h3><p>Construye tu planificación paso a paso. Puedes guardar un borrador en cualquier momento.</p><div class="planning-actions">${Object.entries(types).map(([type, label]) => button('create', esc(label), `data-type="${type}"`)).join('')}</div><h3>Mis planificaciones</h3><div class="planning-library">${plans.length ? plans.map(p => `<article class="planning-card"><div><strong>${esc(p.identity.title || 'Sin título')}</strong><p>${types[p.identity.planningType]} · ${p.status === 'reviewed' ? 'Revisada' : 'Borrador'} · Revisión ${p.revision}</p></div>${button('open', 'Abrir', `data-id="${esc(p.id)}"`)}</article>`).join('') : '<p>Aún no tienes planificaciones guardadas para este piloto.</p>'}</div>${button('sync', 'Sincronizar con mi cuenta')}`);
         }
         async function loadProfiles() {
             if (profiles) return;
@@ -151,20 +166,34 @@ const PlanningWizard = (() => {
             }
         }
         function render() {
-            shell(`<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-primary" data-planning-action="save">Guardar borrador</button></footer>`);
+            const reviewResult = profiles && draft ? core.validate(draft, {
+                forReview: true,
+                pedagogicalProfile: profiles.pedagogical,
+                methodologyProfile: profiles.methodologies.find(p => p.code === draft.methodologyConfig.primary?.code)
+            }) : { valid: false };
+            const reviewAction = step === 6
+                ? `<button type="button" class="btn btn-primary" data-planning-action="review" aria-describedby="planning-review-help" ${reviewResult.valid ? '' : 'disabled'}>Marcar como revisada</button>`
+                    + `<span id="planning-review-help" class="planning-action-help">${reviewResult.valid ? 'La planificación cumple los requisitos de revisión.' : 'Completa los campos indicados para habilitar la revisión.'}</span>`
+                : '';
+            shell(`<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-ghost" data-planning-action="save">Guardar borrador</button>${reviewAction}</footer>`);
         }
         function mayLeave() { return !dirty || window.confirm('Hay cambios sin guardar. ¿Quieres descartarlos?'); }
-        async function save() {
+        async function save(asReviewed = false) {
             const invalid = [...dialog.querySelectorAll('input')].find(input => !input.checkValidity());
             if (invalid) { invalid.reportValidity(); return; }
-            const value = prepareSave(draft, previous);
+            const validationOptions = asReviewed ? {
+                pedagogicalProfile: profiles.pedagogical,
+                methodologyProfile: profiles.methodologies.find(p => p.code === draft.methodologyConfig.primary?.code)
+            } : {};
+            const value = asReviewed ? prepareReview(draft, previous, validationOptions) : prepareSave(draft, previous);
             repository.save(value);
             draft = copy(value); previous = copy(value); dirty = false;
-            notice('Borrador guardado en este dispositivo. Sincronizando…');
+            const label = asReviewed ? 'Planificación revisada' : 'Borrador guardado';
+            notice(`${label} en este dispositivo. Sincronizando…`);
             try {
                 const result = await repository.sync();
-                notice(result.synced ? 'Borrador guardado y sincronizado con tu cuenta.' : 'Borrador guardado en este dispositivo. La nube no está disponible.');
-            } catch (_error) { notice('Borrador guardado en este dispositivo. No se pudo sincronizar; puedes reintentar desde Mis planificaciones.'); }
+                notice(result.synced ? `${label} y sincronizado con tu cuenta.` : `${label} en este dispositivo. La nube no está disponible.`);
+            } catch (_error) { notice(`${label} en este dispositivo. No se pudo sincronizar; puedes reintentar desde Mis planificaciones.`); }
         }
         dialog.addEventListener('input', event => {
             const input = event.target;
@@ -202,9 +231,9 @@ const PlanningWizard = (() => {
             try {
                 if (action === 'close') { if (mayLeave()) { dirty = false; dialog.close(); } return; }
                 if (action === 'library') { if (mayLeave()) library(); return; }
-                if (action === 'sync' || action === 'save') {
+                if (action === 'sync' || action === 'save' || action === 'review') {
                     busy = true; target.disabled = true;
-                    if (action === 'save') await save();
+                    if (action === 'save' || action === 'review') await save(action === 'review');
                     else { const result = await repository.sync(); library(); notice(result.synced ? 'Biblioteca sincronizada.' : 'Sin conexión a tu cuenta. Se muestran los borradores locales.'); }
                     return;
                 }
@@ -240,6 +269,6 @@ const PlanningWizard = (() => {
         document.querySelectorAll('[data-open-planning]').forEach(button => button.addEventListener('click', () => { library(); dialog.showModal(); }));
     }
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
-    return { create, canCreate, addCurriculum, addSession, reorder, removeSession, prepareSave };
+    return { create, canCreate, addCurriculum, addSession, reorder, removeSession, prepareSave, prepareReview };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = PlanningWizard;

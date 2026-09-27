@@ -1,3 +1,72 @@
+# Implementación del plan maestro de Experiencias y Unidades
+
+Fuente revisada: `PLAN_MAESTRO_EXPERIENCIAS_UNIDADES_SEGURAS.md`, baseline descrito
+en ese documento `main @ 6f86a6f8`. La implementación se aplica sobre el estado
+actual del repositorio y conserva `SessionDocument v1` y `PlanningContainer 2.0`.
+
+## Estado por bloque
+
+- **E1 — Draft → Reviewed: implementado y validado.** El Paso 7 muestra
+  `Guardar borrador` y `Marcar como revisada`. La segunda acción se habilita solo
+  cuando `PlanningContainerV2.validate(..., { forReview: true })` acepta el
+  documento con sus perfiles pedagógico y metodológico resueltos.
+- **E2 — `planning.map.generate`: pendiente.** Es el siguiente bloque y requiere
+  acción económica, prompt versionado, validación JSON e idempotencia en AI Gateway.
+- **E3–E6: pendientes y dependientes de E2.** No se adelantaron para respetar el
+  gate secuencial del plan maestro.
+- **V1, C1–C3, P1–P5, I1–I5, IC1–IC2 y R1–R4: pendientes.** V1 requiere un piloto
+  con al menos dos docentes; la matriz CNEB y los niveles Primaria/Inicial no se
+  deben completar con contenido generado sin fuentes y revisión humana.
+
+## BLOQUE E1
+
+**Archivos modificados:**
+
+- `js/planning/planning-wizard.js`
+- `css/planning.css`
+- `tests/planning-wizard.test.js`
+- `tests/ui_planning_smoke.py`
+- archivos HTML y `app-version.json` actualizados por versionado de assets
+
+**Comportamiento:**
+
+- Un borrador incompleto sigue pudiendo guardarse.
+- Un borrador inválido no puede pasar a `reviewed`.
+- Una planificación completa pasa a `reviewed` mediante una revisión nueva.
+- El estado se persiste localmente, se sincroniza y vuelve a abrirse desde
+  `Mis planificaciones`.
+- Al editar y guardar una planificación revisada, vuelve a `draft` y requiere
+  revisión nuevamente.
+- El botón deshabilitado comunica por qué aún no puede revisarse y tiene un
+  estado visual distinguible.
+
+**Pruebas del bloque:**
+
+```bash
+node --check js/planning/planning-wizard.js
+node tests/planning-container-v2.test.js
+node tests/planning-repository.test.js
+node tests/planning-wizard.test.js
+node tests/pedagogical-context-resolver.test.js
+node tests/pedagogy-catalog.test.js
+node tests/methodology-catalog.test.js
+python tests/ui_planning_smoke.py
+```
+
+Resultado: todas verdes. La suite local completa de JavaScript, Python,
+Playwright y Deno también está verde.
+
+**Riesgos y gate:**
+
+- La validación revisada depende de que los perfiles del piloto carguen.
+- El estado de nube usa el repositorio y la tabla existentes; no hizo falta una
+  migración.
+- `SessionDocument v1`, exportación, AI Gateway, créditos y billing no cambiaron.
+- Gate E1: cumplido localmente; queda pendiente la confirmación del workflow
+  remoto de CI.
+
+---
+
 # Implementación de fórmulas matemáticas en Word
 
 ## Objetivo

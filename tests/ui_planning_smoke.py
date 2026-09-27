@@ -46,12 +46,20 @@ def run():
                 page.evaluate("window.SupabaseClient.getUserEntitlements = async () => ({ok: true, features: {'planning.unit': true, 'planning.experience': true}})")
                 page.locator('[data-type="unit"]').click()
                 page.locator('[data-path="identity.title"]').fill('Mi unidad <segura>')
+                page.locator('[data-path="identity.duration.value"]').fill('3')
                 page.locator('[data-planning-action="save"]').click()
                 page.locator('#planning-notice').filter(has_text='Borrador guardado').wait_for()
                 page.wait_for_function("!document.querySelector('[data-planning-action=save]').disabled")
-                page.locator('[data-step="2"]').click()
+                page.locator('[data-step="6"]').click()
+                assert page.locator('[data-planning-action="review"]').is_disabled()
+                page.locator('.planning-steps [data-step="2"]').click()
                 page.locator('[data-planning-action="curriculum"]').click()
                 page.locator('[data-path="curriculumMap.0.criteria"]').fill('Argumenta su respuesta\nVerifica sus resultados')
+                page.locator('[data-step="1"]').click()
+                page.locator('[data-path="significantSituation.context"]').fill('La comunidad analiza decisiones de consumo.')
+                page.locator('[data-path="significantSituation.problemOrOpportunity"]').fill('Se necesita comparar cantidades.')
+                page.locator('[data-path="drivingQuestion"]').fill('¿Cómo decidimos usando cantidades?')
+                page.locator('[data-path="purpose.summary"]').fill('Resolver problemas de cantidad y justificar decisiones.')
                 page.locator('[data-step="3"]').click()
                 page.locator('#planning-methodology').select_option('custom')
                 page.locator('[data-path="methodologyConfig.custom.name"]').fill('Trabajo colaborativo')
@@ -70,12 +78,14 @@ def run():
                 page.locator('[data-planning-action="session"]').click()
                 page.locator('[data-planning-action="up"][data-index="1"]').click()
                 page.locator('[data-step="6"]').click()
-                assert page.locator('#planning-dialog').inner_text().find('Pendiente de completar') >= 0
+                assert page.locator('#planning-dialog').inner_text().find('Campos de revisión completos') >= 0
+                assert page.locator('[data-planning-action="review"]').is_enabled()
                 screenshots = ROOT / 'artifacts' / 'planning-wizard'
                 screenshots.mkdir(parents=True, exist_ok=True)
                 page.screenshot(path=str(screenshots / f'review-{width}.png'))
-                page.locator('[data-planning-action="save"]').click()
-                page.wait_for_function("!document.querySelector('[data-planning-action=save]').disabled")
+                page.locator('[data-planning-action="review"]').click()
+                page.locator('#planning-notice').filter(has_text='Planificación revisada').wait_for()
+                page.wait_for_function("!document.querySelector('[data-planning-action=review]').disabled")
                 page.locator('[data-planning-action="close"]').click()
                 page.evaluate("localStorage.removeItem('spacelab_planning_containers')")
                 page.reload(wait_until='domcontentloaded')
@@ -85,6 +95,7 @@ def run():
                 page.locator('[data-planning-action="sync"]').click()
                 page.locator('#planning-notice').filter(has_text='Biblioteca sincronizada').wait_for()
                 assert page.locator('.planning-library').inner_text().find('Mi unidad <segura>') >= 0
+                assert page.locator('.planning-library').inner_text().find('Revisada') >= 0
                 page.locator('[data-planning-action="open"]').click()
                 assert page.locator('[data-path="identity.title"]').input_value() == 'Mi unidad <segura>'
                 page.locator('[data-path="identity.title"]').fill('Unidad revisada')

@@ -28,5 +28,7 @@
 .planning-card { padding: 16px; border: 1px solid var(--border); border-radius: 12px; margin-block: 16px; overflow-wrap: anywhere; }
 .planning-actions { margin-block: 20px 8px; }
 .planning-dialog .btn { min-height: 44px; white-space: normal; }
+.planning-dialog .btn:disabled { cursor: not-allowed; opacity: .5; }
+.planning-action-help { flex-basis: 100%; color: var(--text-secondary); font-size: .85rem; }
 #planning-notice { overflow-wrap: anywhere; }
 @media (max-width: 600px) { .planning-grid { grid-template-columns: 1fr; } }

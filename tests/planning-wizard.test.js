@@ -3,6 +3,8 @@ const Wizard = require('../js/planning/planning-wizard.js');
 const Core = require('../js/planning/planning-container-v2.js');
 const Repository = require('../js/planning/planning-repository.js');
 const profile = require('../data/pedagogy/didactics/secondary/cycle-vi/mathematics/quantity.json');
+const pedagogicalProfile = require('../data/pedagogy/pedagogical/secondary-cycle-vi.json');
+const customProfile = require('../data/pedagogy/methodologies/custom.json');
 
 const values = new Map();
 const storage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
@@ -56,4 +58,28 @@ const earlySequence = Wizard.create('unit');
 Wizard.addSession(earlySequence);
 Wizard.addCurriculum(earlySequence, profile);
 assert.deepEqual(earlySequence.sequence[0].curriculumMapRefs, [earlySequence.curriculumMap[0].id]);
+
+const incomplete = Wizard.create('unit', 'plan-incomplete-review');
+assert.throws(() => Wizard.prepareReview(incomplete, null, {
+    pedagogicalProfile,
+    methodologyProfile: customProfile
+}), /Revisión inválida/);
+
+const complete = Wizard.create('unit', 'plan-complete-review');
+complete.identity.duration.value = 3;
+complete.significantSituation.context = 'La comunidad necesita tomar mejores decisiones de consumo.';
+complete.significantSituation.problemOrOpportunity = 'Se requiere comparar cantidades y justificar decisiones.';
+complete.drivingQuestion = '¿Cómo tomamos decisiones responsables con cantidades?';
+complete.purpose.summary = 'Resolver y comunicar problemas de cantidad del contexto.';
+complete.methodologyConfig.primary = { profileId: customProfile.id, profileVersion: customProfile.profileVersion, code: customProfile.code };
+complete.methodologyConfig.custom = { name: 'Trabajo colaborativo', phases: [] };
+Wizard.addCurriculum(complete, profile);
+complete.curriculumMap[0].criteria.push({ id: 'criterion-review', description: 'Justifica sus procedimientos.' });
+Wizard.addSession(complete);
+const reviewed = Wizard.prepareReview(complete, null, { pedagogicalProfile, methodologyProfile: customProfile });
+repository.save(reviewed);
+assert.equal(reviewed.status, 'reviewed');
+assert.equal(reviewed.revision, 2, 'La transición conserva la historia e incrementa la revisión.');
+assert.equal(repository.get(reviewed.id).status, 'reviewed');
+assert.equal(Repository.create({ storage, validator: Core }).get(reviewed.id).status, 'reviewed');
 console.log('planning-wizard.test.js: OK');
