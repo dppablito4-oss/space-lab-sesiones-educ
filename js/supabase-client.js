@@ -306,6 +306,52 @@ window.SupabaseClient = (() => {
         return true;
     }
 
+    /** Obtiene los registros de planificación, incluidos sus tombstones. */
+    async function getPlanningRecordsCloud() {
+        if (!supabase) return [];
+        const { data, error } = await supabase
+            .from('planning_containers')
+            .select('*')
+            .order('last_saved', { ascending: false });
+        if (error) throw error;
+        return (data || []).map(row => ({
+            id: row.id,
+            revision: row.revision,
+            status: row.status,
+            title: row.title,
+            planningType: row.planning_type,
+            level: row.education_level,
+            containerData: row.container_data,
+            lastSaved: row.last_saved,
+            deletedAt: row.deleted_at,
+            synced: true
+        }));
+    }
+
+    /** Inserta o actualiza un registro validado de PlanningContainer. */
+    async function savePlanningRecordCloud(record) {
+        if (!supabase) return false;
+        const user = await getCurrentUser();
+        if (!user) return false;
+        const { error } = await supabase
+            .from('planning_containers')
+            .upsert({
+                user_id: user.id,
+                id: record.id,
+                schema_version: '1.0',
+                revision: record.revision,
+                status: record.status,
+                title: record.title,
+                planning_type: record.planningType,
+                education_level: record.level,
+                container_data: record.containerData,
+                last_saved: record.lastSaved || new Date().toISOString(),
+                deleted_at: record.deletedAt || null
+            }, { onConflict: 'user_id,id' });
+        if (error) throw error;
+        return true;
+    }
+
     /**
      * Inserta un log de seguridad
      */
@@ -585,6 +631,8 @@ window.SupabaseClient = (() => {
         getSessionsCloud,
         saveSessionCloud,
         deleteSessionCloud,
+        getPlanningRecordsCloud,
+        savePlanningRecordCloud,
         logAction,
         getUserProfile,
         updateUserProfile,

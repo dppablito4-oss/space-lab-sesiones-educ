@@ -69,6 +69,7 @@ jobs:
           node tests/test_contract_v1.js
           node tests/pedagogy-catalog.test.js
           node tests/planning-container.test.js
+          node tests/planning-repository.test.js
           node tests/test_adapter_v1.js
           node tests/test_templates_v1.js
           node tests/test_presentation.js
