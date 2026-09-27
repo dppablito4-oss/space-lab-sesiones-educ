@@ -315,6 +315,35 @@ En el modal de Términos y Condiciones de la aplicación y en `descargas_landing
 
 ---
 
+## Planificación articulada (beta manual)
+
+Desde **Mi espacio → Planificación articulada** se pueden crear Experiencias,
+Unidades y Proyectos mediante siete pasos: Contexto, Propósito, Currículo,
+Metodología, Producto/evidencias, Secuencia y Revisión. El piloto está limitado
+a Secundaria, ciclo VI, grados 1.º/2.º y Matemática — Resuelve problemas de cantidad.
+
+El wizard crea `PlanningContainer 2.0`, valida con `PlanningContainerV2` y guarda
+mediante `PlanningRepository`. Permite guardar incompletos como `draft`, reabrir,
+editar y aumentar la revisión. Guardar intenta sincronizar con Supabase; si no
+hay conexión, informa del guardado local y permite reintentar desde la biblioteca.
+Cada borrador recibe un título inicial editable porque la tabla remota exige uno.
+La biblioteca muestra los borradores compatibles con este piloto.
+
+La creación consulta los entitlements existentes: `planning.unit` para Unidad
+y `planning.experience` para Experiencia/Proyecto (no existe una capacidad de
+Proyecto separada). No se cambian planes, créditos ni políticas de Supabase.
+La edición de borradores locales existentes sigue disponible sin conexión.
+
+Este bloque implementa el alcance de las secciones 40–41 de
+[PLAN_EXPERIENCIAS_UNIDADES_V1.md](PLAN_EXPERIENCIAS_UNIDADES_V1.md).
+La revisión informa campos pendientes y recomendaciones; el documento permanece
+como borrador. La generación IA del mapa y las sesiones vinculadas corresponden
+a fases posteriores. Sesión individual conserva su flujo actual.
+
+Pruebas del bloque: `node tests/planning-wizard.test.js` y
+`python tests/ui_planning_smoke.py`, además de las pruebas existentes del core y
+repositorio. Ambas están incorporadas al workflow de validación.
+
 ## Contacto y Soporte
 
 Si tienes dudas, sugerencias o requieres asistencia técnica personalizada:

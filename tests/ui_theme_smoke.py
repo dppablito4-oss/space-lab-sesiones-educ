@@ -44,7 +44,8 @@ def run() -> None:
     try:
         with sync_playwright() as playwright:
             browser = playwright.chromium.launch(headless=True)
-            page = browser.new_page(viewport={"width": 1440, "height": 900})
+            # Measure settled theme colors without sampling a CSS transition.
+            page = browser.new_page(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
             page.add_init_script(
                 "if (!localStorage.getItem('spacelab_theme_preference')) localStorage.setItem('spacelab_theme_preference', 'light')"
             )
@@ -96,7 +97,13 @@ def run() -> None:
             workspace_styles = {}
             for theme in ("light", "dark"):
                 page.evaluate("theme => window.SpaceLabTheme.setPreference(theme)", theme)
-                page.wait_for_timeout(350)
+                page.wait_for_function(
+                    """() => ['.home-tool-card-active', '.home-tool-copy h3',
+                        '.home-tool-copy p', '.home-plan-card', '.home-plan-card h3',
+                        '.home-plan-description'].every(selector =>
+                            [...document.querySelector(selector).getAnimations()].every(
+                                animation => animation.playState === 'finished'))"""
+                )
                 workspace_styles[theme] = page.evaluate(
                     """
                     () => {
@@ -116,7 +123,7 @@ def run() -> None:
                 )
 
             assert workspace_styles["light"]["card"] != workspace_styles["dark"]["card"], workspace_styles
-            assert luminance(rgb(workspace_styles["light"]["card"])) > 0.8
+            assert luminance(rgb(workspace_styles["light"]["card"])) > 0.8, workspace_styles
             assert luminance(rgb(workspace_styles["dark"]["card"])) < 0.03
             for theme in ("light", "dark"):
                 styles = workspace_styles[theme]
@@ -127,8 +134,14 @@ def run() -> None:
                 assert contrast(styles["planCopy"], styles["planCard"]) >= 4.5
 
             page.set_viewport_size({"width": 390, "height": 844})
+            page.wait_for_function("document.querySelector('#home-view').getBoundingClientRect().width <= innerWidth")
             assert page.locator("#home-view").is_visible()
-            assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth")
+            assert page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), page.evaluate(
+                """() => ({scrollWidth: document.documentElement.scrollWidth,
+                    offenders: [...document.querySelectorAll('body *')]
+                        .filter(el => el.getBoundingClientRect().right > innerWidth + 1)
+                        .slice(0, 10).map(el => [el.tagName, el.className, el.getBoundingClientRect().right])})"""
+            )
             assert plans_dialog.is_visible()
             assert plans_dialog.evaluate("element => element.scrollWidth <= element.clientWidth")
             assert page.locator('.home-plans-grid').evaluate(

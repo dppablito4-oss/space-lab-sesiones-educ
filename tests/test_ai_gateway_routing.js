@@ -2,6 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 
 const source = fs.readFileSync('supabase/functions/_shared/ai-routing.ts', 'utf8')
+    .replace(/\r\n?/g, '\n')
     .replace(/export type .*?;\n/g, '')
     .replace(/export interface [\s\S]*?\n}\n/g, '')
     .replace(/: Record<[^>]+>/g, '')

@@ -4,6 +4,7 @@ const fs = require('node:fs');
 console.log('=== TEST ENTITLEMENTS & CAPABILITY RESOLUTION (FASE 4) ===');
 
 const source = fs.readFileSync('supabase/functions/_shared/entitlements.ts', 'utf8')
+  .replace(/\r\n?/g, '\n')
   .replace(/export interface [\s\S]*?\n}\n/g, '')
   .replace(/: string\[\]/g, '')
   .replace(/: string/g, '')

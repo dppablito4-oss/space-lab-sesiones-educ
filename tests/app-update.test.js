@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const vm = require('node:vm');
 
 const manifest = JSON.parse(fs.readFileSync('app-version.json', 'utf8'));
-const updateScript = fs.readFileSync('js/app-update.js', 'utf8');
+const updateScript = fs.readFileSync('js/app-update.js', 'utf8').replace(/\r\n?/g, '\n');
 const scriptHash = crypto.createHash('sha256').update(updateScript).digest('hex').slice(0, 12);
 const pages = ['index.html', 'admin.html', 'conexion.html', 'descargas_landing.html'];
 

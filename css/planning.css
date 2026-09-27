@@ -1,0 +1,32 @@
+.planning-dialog {
+    width: min(960px, calc(100vw - 24px));
+    max-height: calc(100dvh - 24px);
+    margin: auto;
+    padding: 0;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    background: var(--color-background);
+    color: var(--text-primary);
+}
+.planning-dialog::backdrop { background: rgb(0 0 0 / 65%); }
+.planning-shell { padding: clamp(16px, 3vw, 32px); }
+.planning-header, .planning-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.planning-header { justify-content: space-between; }
+.planning-shell h3, .planning-shell h4 { margin-block: 20px 12px; }
+.planning-shell p { margin-block: 10px; }
+.planning-shell ul, .planning-shell ol { padding-left: 24px; }
+.planning-steps { display: flex; flex-wrap: wrap; gap: 6px; margin-block: 16px; }
+.planning-steps [aria-current] { background: var(--color-primary-dim); border-color: var(--color-primary); color: var(--text-primary); font-weight: 700; }
+.planning-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.planning-field { display: flex; flex-direction: column; gap: 8px; margin-block: 12px; min-width: 0; }
+.planning-field input, .planning-field select, .planning-field textarea {
+    width: 100%; min-width: 0; padding: 12px; border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text-primary); background: var(--color-card); font: inherit;
+}
+.planning-field textarea { resize: vertical; }
+.planning-dialog :focus-visible { outline: 2px solid var(--color-primary); outline-offset: 3px; }
+.planning-card { padding: 16px; border: 1px solid var(--border); border-radius: 12px; margin-block: 16px; overflow-wrap: anywhere; }
+.planning-actions { margin-block: 20px 8px; }
+.planning-dialog .btn { min-height: 44px; white-space: normal; }
+#planning-notice { overflow-wrap: anywhere; }
+@media (max-width: 600px) { .planning-grid { grid-template-columns: 1fr; } }

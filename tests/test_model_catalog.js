@@ -3,6 +3,7 @@ const fs = require('node:fs');
 
 // Cargar y evaluar model-catalog transpiled o como módulo JS
 const source = fs.readFileSync('supabase/functions/_shared/model-catalog.ts', 'utf8')
+  .replace(/\r\n?/g, '\n')
   .replace(/export interface [\s\S]*?\n}\n/g, '')
   .replace(/: string = 0/g, ' = 0')
   .replace(/: number = 0/g, ' = 0')
