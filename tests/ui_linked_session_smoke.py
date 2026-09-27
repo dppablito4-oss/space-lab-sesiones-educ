@@ -130,6 +130,7 @@ def run_width(browser, port, width):
     page.locator('#btn-save-as').evaluate('button => button.click()')
     page.wait_for_function("id => window.getCurrentSession()?.id !== id", arg=linked_id)
     assert page.evaluate("window.getCurrentSession().planning") is None
+    assert not page.locator('#linked-planning-context').is_visible()
     assert page.evaluate("id => window.StorageManager.getSession(id).planning.mode", linked_id) == 'linked'
     assert page.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth')
     assert not errors, errors

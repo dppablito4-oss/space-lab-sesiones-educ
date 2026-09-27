@@ -44,8 +44,12 @@ def assert_overview(page, status, revision, title):
         'Evaluación', 'Fases e hitos', 'Progresión', f'Estado: {status}', f'Revisión {revision}',
     ):
         assert expected in text
-    for hidden in ('project_based_learning', 'map-quantity', 'session-01', 'Generar sesión'):
+    for hidden in ('project_based_learning', 'map-quantity', 'session-01'):
         assert hidden not in text
+    if status == 'Borrador':
+        assert 'Generar sesión' not in text
+    else:
+        assert page.locator('[data-planning-view-action="generate-session"]').count() == 2
     assert page.locator('#planning-dialog').evaluate('el => el.scrollWidth <= el.clientWidth')
     assert page.evaluate('document.documentElement.scrollWidth <= document.documentElement.clientWidth')
 

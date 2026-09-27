@@ -30,6 +30,15 @@
 .planning-dialog .btn { min-height: 44px; white-space: normal; }
 .planning-dialog .btn:disabled { cursor: not-allowed; opacity: .5; }
 .planning-action-help { flex-basis: 100%; color: var(--text-secondary); font-size: .85rem; }
+.linked-planning-context {
+    width: min(820px, calc(100% - 24px)); margin: 12px auto 0; padding: 12px 16px;
+    display: flex; align-items: center; gap: 14px; border: 1px solid var(--border);
+    border-radius: 12px; background: var(--color-card); overflow-wrap: anywhere;
+}
+.linked-planning-context.hidden { display: none; }
+.linked-planning-copy { display: grid; min-width: 0; gap: 2px; }
+.linked-planning-title { font-weight: 700; }
+.linked-planning-position { color: var(--text-secondary); font-size: .85rem; }
 .planning-ai-choice, .planning-ai-panel, .planning-proposal {
     padding: clamp(16px, 3vw, 24px); border: 1px solid var(--border); border-radius: 14px;
     background: var(--color-card); overflow-wrap: anywhere;
@@ -66,6 +75,9 @@
 .planning-sequence-heading h5 { margin: 0; font-size: 1rem; }
 .planning-sequence-index { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--color-primary-dim); font-weight: 700; }
 .planning-sequence-meta { margin-top: 6px; color: var(--text-secondary); font-size: .9rem; }
+.planning-sequence-actions { display: flex; align-items: center; gap: 10px; margin-top: 16px; }
+.planning-sequence-help { color: var(--text-secondary); font-size: .9rem; }
+.planning-sequence-item:focus { border-color: var(--color-primary); box-shadow: 0 0 0 2px var(--color-primary-dim); }
 #planning-notice { overflow-wrap: anywhere; }
 @media (max-width: 600px) {
     .planning-grid { grid-template-columns: 1fr; }
@@ -75,4 +87,7 @@
     .planning-view-summary { position: static; }
     .planning-sequence-heading { grid-template-columns: auto minmax(0, 1fr); }
     .planning-item-status { grid-column: 2; justify-self: start; }
+    .planning-sequence-actions .btn { width: 100%; }
+    .linked-planning-context { align-items: stretch; flex-direction: column; }
+    .linked-planning-context .btn { width: 100%; }
 }

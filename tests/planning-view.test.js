@@ -12,6 +12,8 @@ assert.match(draftHtml, /Tomamos decisiones financieras responsables/);
 assert.match(draftHtml, /Estado: Borrador/);
 assert.match(draftHtml, /Revisión 4/);
 assert.match(draftHtml, /Secundaria · Ciclo VI · 2\.º/);
+assert.doesNotMatch(draftHtml, /data-planning-view-action="generate-session"/);
+assert.match(draftHtml, /Revisa esta planificación para generar sus sesiones/);
 
 const reviewedHtml = PlanningView.render(fixture, { methodologyProfile: methodology });
 assert.match(reviewedHtml, /Estado: Revisada/);
@@ -31,6 +33,8 @@ assert.match(reviewedHtml, /Reconocemos y analizamos promociones/);
 assert.match(reviewedHtml, /Semana 1/);
 assert.match(reviewedHtml, /Estado: Revisada/);
 assert.match(reviewedHtml, />Planeada</);
+assert.match(reviewedHtml, /data-planning-view-action="generate-session"/);
+assert.match(reviewedHtml, />Generar sesión</);
 
 const unordered = structuredClone(fixture);
 unordered.sequence.reverse();
@@ -49,10 +53,28 @@ const sparseHtml = PlanningView.render(sparse, { methodologyProfile: methodology
 assert.doesNotMatch(sparseHtml, /Relevancia|Rol de los estudiantes|Respuesta esperada|Producto final/);
 assert.doesNotMatch(sparseHtml, /undefined|null/);
 
-for (const internalId of ['map-quantity', 'criterion-model', 'milestone-research', 'session-01']) {
+for (const internalId of ['map-quantity', 'criterion-model', 'milestone-research']) {
     assert.doesNotMatch(reviewedHtml, new RegExp(internalId), `No debe mostrarse el ID interno ${internalId}.`);
 }
-assert.doesNotMatch(reviewedHtml, /Generar sesión|linkedDocumentRef|curriculumMapRefs/);
+assert.doesNotMatch(reviewedHtml, /linkedDocumentRef|curriculumMapRefs/);
 assert.match(reviewedHtml, /data-planning-view-action="edit"/);
 assert.match(reviewedHtml, /data-planning-view-action="back"/);
+
+const generated = structuredClone(fixture);
+generated.sequence[0].status = 'generated';
+generated.sequence[0].linkedDocumentRef = { id: 'saved-session-01', schemaVersion: '1.0', revision: 1, status: 'draft' };
+const generatedHtml = PlanningView.render(generated, { methodologyProfile: methodology, sessionExists: () => true });
+assert.match(generatedHtml, />Generada</);
+assert.match(generatedHtml, /data-planning-view-action="open-session"/);
+assert.match(generatedHtml, />Abrir sesión</);
+assert.doesNotMatch(generatedHtml, /data-sequence-item-id="session-01">Generar sesión/);
+
+const missingHtml = PlanningView.render(generated, { methodologyProfile: methodology, sessionExists: () => false });
+assert.match(missingHtml, /Sesión no disponible/);
+assert.doesNotMatch(missingHtml, /data-planning-view-action="open-session"/);
+
+const nonSession = structuredClone(fixture);
+nonSession.sequence[0].type = 'activity';
+const nonSessionHtml = PlanningView.render(nonSession, { methodologyProfile: methodology });
+assert.doesNotMatch(nonSessionHtml, /data-sequence-item-id="session-01"/);
 console.log('planning-view.test.js: OK');

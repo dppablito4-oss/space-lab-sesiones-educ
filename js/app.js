@@ -34,6 +34,7 @@
         redoStack: [],
         completedWorkflowTabs: new Set(),
         pendingPlanningLink: null,
+        sessionDirty: false,
         backendOnline: false,
         backendRunning: false
     };
@@ -149,6 +150,10 @@
         loadModal: $('#load-modal'),
         loadList: $('#load-list'),
         saveIndicator: $('#save-indicator'),
+        linkedPlanningContext: $('#linked-planning-context'),
+        linkedPlanningTitle: $('#linked-planning-title'),
+        linkedPlanningPosition: $('#linked-planning-position'),
+        btnReturnPlanning: $('#btn-return-planning'),
         spaceBg: $('#space-bg')
     };
 
@@ -188,6 +193,7 @@
         DOM.form.addEventListener('input', () => {
             syncSessionContextTitle();
             if (AppState.currentSession) {
+                AppState.sessionDirty = true;
                 const data = getFormData();
                 AppState.currentSession.metadata = {
                     ...AppState.currentSession.metadata,
@@ -250,6 +256,7 @@
         window.appOpenSession = (sessionId) => loadSession(sessionId);
         window.appStartNewSession = () => forceNewSession();
         window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);
+        window.appOpenPlanning = (planningContainerId, options) => window.PlanningView?.open(planningContainerId, options);
         window.appReloadSessions = () => {
             renderSavedList();
             loadLastSession();
@@ -400,7 +407,10 @@
         }
 
         // Live Time Balance updates
-        DOM.sessionSheet.addEventListener('input', checkTimeBalance);
+        DOM.sessionSheet.addEventListener('input', () => {
+            if (AppState.currentSession) AppState.sessionDirty = true;
+            checkTimeBalance();
+        });
         if (DOM.inputDuracion) {
             DOM.inputDuracion.addEventListener('input', checkTimeBalance);
             DOM.inputDuracion.addEventListener('change', checkTimeBalance);
@@ -453,6 +463,11 @@
         DOM.btnNew.addEventListener('click', handleNew);
         DOM.btnCleanFormat.addEventListener('click', handleCleanFormat);
         if (DOM.btnCloseSession) DOM.btnCloseSession.addEventListener('click', handleCloseSession);
+        if (DOM.btnReturnPlanning) DOM.btnReturnPlanning.addEventListener('click', returnToLinkedPlanning);
+        window.addEventListener('spacelab:session-loaded', event => updateLinkedPlanningContext(event.detail?.session));
+        window.addEventListener('spacelab:session-generated', event => updateLinkedPlanningContext(event.detail?.session));
+        window.addEventListener('spacelab:session-saved', event => updateLinkedPlanningContext(event.detail?.session));
+        window.addEventListener('spacelab:session-cleared', () => updateLinkedPlanningContext(null));
 
         // CNEB Curriculum dropdowns
         DOM.inputArea.addEventListener('change', handleAreaChange);
@@ -1147,6 +1162,7 @@
         handleNew,
         forceNewSession,
         handleCloseSession,
+        hasUnsavedChanges,
         renderSavedList
     } = window.SpaceLabSessionController.create({
         state: AppState,
@@ -1162,6 +1178,39 @@
         checkTimeBalance: (...args) => checkTimeBalance(...args),
         loadProfileDefaults
     });
+
+    function updateLinkedPlanningContext(session = AppState.currentSession) {
+        const link = session?.planning;
+        const isLinked = link?.mode === 'linked' && link.planningContainerId;
+        DOM.linkedPlanningContext?.classList.toggle('hidden', !isLinked);
+        if (!isLinked) return;
+        const snapshot = link.inheritedContextSnapshot || {};
+        const title = snapshot.identity?.title || session.metadata?.unidad || 'Planificación vinculada';
+        const total = (snapshot.precedingSequence?.length || 0) + 1 + (snapshot.followingSequence?.length || 0);
+        if (DOM.linkedPlanningTitle) DOM.linkedPlanningTitle.textContent = `Unidad: ${title}`;
+        if (DOM.linkedPlanningPosition) {
+            DOM.linkedPlanningPosition.textContent = `Sesión ${link.sequenceIndex}${total > 1 ? ` de ${total}` : ''}`;
+        }
+    }
+
+    async function returnToLinkedPlanning() {
+        const link = AppState.currentSession?.planning;
+        if (link?.mode !== 'linked') return false;
+        if (hasUnsavedChanges()) {
+            const choice = await ConfirmDialog.show({
+                title: '¿Volver a la planificación?',
+                message: 'Hay cambios sin guardar en esta sesión.',
+                showDenyButton: true,
+                confirmText: 'Guardar y volver',
+                denyText: 'Volver sin guardar',
+                cancelText: 'Cancelar'
+            });
+            if (choice === 'cancel') return false;
+            if (choice === 'confirm' && !handleSave()) return false;
+        }
+        await window.PlanningView.open(link.planningContainerId, { focusSequenceItemId: link.sequenceItemId });
+        return true;
+    }
 
     async function startLinkedSession(planningContainerId, sequenceItemId) {
         if (!window.PlanningLinkedSession) throw new Error('No se cargó el vínculo de planificación.');

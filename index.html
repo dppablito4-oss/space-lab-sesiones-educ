@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="f52c16969e1e5856">
+    <meta name="app-build" content="09dac5076192397e">
     <script defer src="js/app-update.js?v=b027f6ec44b9"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
@@ -97,7 +97,7 @@
     <link rel="stylesheet" href="css/app-theme.css?v=a809f0368131">
     <link rel="stylesheet" href="css/landing.css?v=7358dc7672f4">
     <link rel="stylesheet" href="css/home.css?v=8c103ed38555">
-    <link rel="stylesheet" href="css/planning.css?v=5c3a498bc780">
+    <link rel="stylesheet" href="css/planning.css?v=af85f8d43a70">
     <link rel="stylesheet" href="css/print.css?v=45bfd665f39e" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) asíncrono -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -1615,6 +1615,13 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
 
                 <!-- Print Preview Container (hidden by default) -->
                 <div id="print-preview" class="print-preview hidden">
+                    <nav id="linked-planning-context" class="linked-planning-context no-print hidden" aria-label="Origen de la sesión">
+                        <button type="button" id="btn-return-planning" class="btn btn-ghost btn-sm">← Volver a planificación</button>
+                        <div class="linked-planning-copy">
+                            <span id="linked-planning-title" class="linked-planning-title"></span>
+                            <span id="linked-planning-position" class="linked-planning-position"></span>
+                        </div>
+                    </nav>
                     <!-- Session Preview Mode Toggle -->
                     <div class="preview-toolbar no-print">
                         <!-- Group 1: Text Editor (Word Style) -->
@@ -2238,7 +2245,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="js/planning/planning-container-v2.js?v=1ce6fa51b0a2"></script>
     <script defer src="js/planning/planning-repository.js?v=c9e2f0531532"></script>
     <script defer src="js/planning/linked-session.js?v=497038413dd1"></script>
-    <script defer src="js/planning/planning-view.js?v=1cd87fd760f8"></script>
+    <script defer src="js/planning/planning-view.js?v=fd24c411eafc"></script>
     <script defer src="js/planning/planning-map-generator.js?v=3d9e4dcd1d29"></script>
     <script defer src="js/planning/planning-wizard.js?v=fb3d3e648ea0"></script>
     <script defer src="js/pedagogy/context-resolver.js?v=b8f9ea3e8279"></script>
@@ -2255,7 +2262,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="js/controllers/ai-controller.js?v=d24a3fc54865"></script>
     <script defer src="js/controllers/workflow-controller.js?v=41a361cce2f9"></script>
     <script defer src="js/controllers/students-controller.js?v=eab84a81fb46"></script>
-    <script defer src="js/controllers/session-controller.js?v=eef682768896"></script>
+    <script defer src="js/controllers/session-controller.js?v=1e11cdbbe3f8"></script>
     <script defer src="js/controllers/design-controller.js?v=8a8f8e479610"></script>
     <script defer src="js/ai/session-validator.js?v=78a19190eff0"></script>
     <script defer src="js/ai/session-adapter.js?v=2536137777ca"></script>
@@ -2268,7 +2275,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script defer src="js/paginador.js?v=d765e6e6e46d"></script>
     <script defer src="js/ui-shell.js?v=2ecdd9416d68"></script>
-    <script defer src="js/app.js?v=1793b689c670"></script>
+    <script defer src="js/app.js?v=bd0e4f906301"></script>
     <script defer src="js/ficha-external-prompt.js?v=37839d226210"></script>
 </body>
 

@@ -21,7 +21,7 @@ window.SpaceLabSessionController = (() => {
         function handleSave() {
             if (!AppState.currentSession) {
                 Toast.warning('No hay sesión para guardar');
-                return;
+                return false;
             }
         
             saveCurrentState();
@@ -35,6 +35,7 @@ window.SpaceLabSessionController = (() => {
             };
         
             if (Storage.saveSession(session)) {
+                AppState.sessionDirty = false;
                 if (session.planning?.mode === 'linked' && window.PlanningLinkedSession) {
                     try {
                         PlanningLinkedSession.recordGeneratedSession(session.planning, session);
@@ -46,9 +47,30 @@ window.SpaceLabSessionController = (() => {
                 }
                 Toast.success('Sesión guardada correctamente');
                 renderSavedList();
+                window.dispatchEvent(new CustomEvent('spacelab:session-saved', { detail: { session } }));
+                return true;
             } else {
                 Toast.error('Error al guardar la sesión');
+                return false;
             }
+        }
+
+        function hasUnsavedChanges() {
+            const current = AppState.currentSession;
+            if (!current?.id) return false;
+            if (AppState.sessionDirty) return true;
+            const saved = Storage.getSession(current.id);
+            if (!saved) return true;
+            const currentHtml = window.SpaceLabSanitizer
+                ? SpaceLabSanitizer.sanitizeSessionHTML(DOM.sessionSheet.innerHTML)
+                : DOM.sessionSheet.textContent;
+            const comparable = value => {
+                const copy = JSON.parse(JSON.stringify(value));
+                delete copy.lastSaved;
+                delete copy.synced;
+                return copy;
+            };
+            return JSON.stringify(comparable({ ...current, htmlContent: currentHtml })) !== JSON.stringify(comparable(saved));
         }
         
         function handleSaveAs() {
@@ -90,6 +112,7 @@ window.SpaceLabSessionController = (() => {
             if (Storage.saveSession(clon)) {
                 // Establecer la nueva sesión como la activa
                 AppState.currentSession = clon;
+                AppState.sessionDirty = false;
                 Storage.setCurrentSession(clon);
                 populateForm(clon);
         
@@ -101,6 +124,7 @@ window.SpaceLabSessionController = (() => {
         
                 renderSavedList();
                 Toast.success('Copia de sesión creada correctamente');
+                window.dispatchEvent(new CustomEvent('spacelab:session-loaded', { detail: { session: clon } }));
             } else {
                 Toast.error('Error al crear la copia de la sesión');
             }
@@ -285,6 +309,7 @@ window.SpaceLabSessionController = (() => {
             const current = Storage.getCurrentSession();
             if (current && current.htmlContent) {
                 AppState.currentSession = current;
+                AppState.sessionDirty = false;
                 populateForm(current);
         
                 DOM.sessionSheet.innerHTML = window.SpaceLabSanitizer
@@ -301,6 +326,7 @@ window.SpaceLabSessionController = (() => {
                 }
         
                 Toast.info('Última sesión restaurada');
+                window.dispatchEvent(new CustomEvent('spacelab:session-loaded', { detail: { session: current } }));
         
                 // Check time balance
                 checkTimeBalance();
@@ -372,6 +398,7 @@ window.SpaceLabSessionController = (() => {
             }
         
             AppState.currentSession = session;
+            AppState.sessionDirty = false;
             AppState.pendingPlanningLink = null;
             populateForm(session);
         
@@ -411,6 +438,7 @@ window.SpaceLabSessionController = (() => {
         async function forceNewSession() {
             // Reset
             AppState.currentSession = null;
+            AppState.sessionDirty = false;
             AppState.pendingPlanningLink = null;
             DOM.form.querySelectorAll('input, textarea, select').forEach(el => {
                 if (el.type === 'date') {
@@ -437,6 +465,7 @@ window.SpaceLabSessionController = (() => {
             Storage.clearCurrentSession();
             await loadProfileDefaults();
             Toast.info('Nueva sesión iniciada');
+            window.dispatchEvent(new CustomEvent('spacelab:session-cleared'));
         }
         
         async function handleCloseSession() {
@@ -529,6 +558,7 @@ window.SpaceLabSessionController = (() => {
         
         return {
             handleSave,
+            hasUnsavedChanges,
             handleSaveAs,
             saveCurrentState,
             undo,

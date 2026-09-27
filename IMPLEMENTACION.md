@@ -274,6 +274,34 @@ E6 permanece fuera de alcance.
 **Gate E5.1:** exige suite completa, routers/backend activos, Validate & Build
 y GitHub Pages verdes. La navegación y los botones de E6 siguen fuera de alcance.
 
+## BLOQUE E6
+
+**Navegación final Unidad / Experiencia ↔ Sesión:**
+
+- `PlanningView` muestra `Generar sesión` exclusivamente para items `session`
+  planeados, sin referencia y dentro de una planificación revisada. Los
+  borradores explican que primero deben revisarse y los demás tipos no ofrecen
+  acciones de sesión.
+- Una referencia generada y disponible muestra `Abrir sesión`; se carga el ID
+  existente sin invocar IA ni consumir créditos. Una referencia cuyo documento
+  local ya no existe se presenta como `Sesión no disponible` y genera un warning.
+- Las sesiones linked muestran una barra discreta con la unidad de origen,
+  posición en la secuencia y `Volver a planificación`. Las standalone mantienen
+  la interfaz anterior sin elementos vacíos.
+- El regreso reutiliza `ConfirmDialog` para guardar y volver, volver sin guardar
+  o cancelar. `PlanningView.open()` relee siempre `PlanningRepository` y enfoca
+  el `SequenceItem` de origen.
+- Abrir, volver y generar no incrementan `PlanningContainer.revision` ni cambian
+  su estado `reviewed`. Cada sesión conserva su propio snapshot y
+  `SessionDocument v1` permanece sin cambios.
+- Deuda deliberada: al eliminar una sesión linked no se borra ni modifica la
+  planificación. La reconciliación de referencias eliminadas queda para un bloque
+  posterior; E6 nunca limpia `linkedDocumentRef` silenciosamente.
+
+**Gate E6:** roundtrip de dos sesiones en 375 px y 1280 px, regresión completa,
+Validate & Build y GitHub Pages verdes. Después corresponde piloto docente, no
+expansión de niveles ni nuevos perfiles CNEB.
+
 ---
 
 # Implementación de fórmulas matemáticas en Word

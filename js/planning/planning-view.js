@@ -136,7 +136,24 @@ const PlanningView = (() => {
         return section('Fases e hitos', milestones);
     }
 
-    function renderSequence(container) {
+    function sequenceAction(container, item, sessionExists = () => true) {
+        if (item.type !== 'session') return { kind: 'none' };
+        if (item.status === 'planned' && item.linkedDocumentRef === null) {
+            return container.status === 'reviewed'
+                ? { kind: 'generate', label: 'Generar sesión' }
+                : { kind: 'draft', label: 'Revisa esta planificación para generar sus sesiones.' };
+        }
+        if (item.status === 'generated' && item.linkedDocumentRef?.id) {
+            if (sessionExists(item.linkedDocumentRef.id)) {
+                return { kind: 'open', label: 'Abrir sesión', sessionId: item.linkedDocumentRef.id };
+            }
+            return { kind: 'missing', label: 'Sesión no disponible' };
+        }
+        return { kind: 'none' };
+    }
+
+    function renderSequence(container, options = {}) {
+        const sessionExists = typeof options.sessionExists === 'function' ? options.sessionExists : () => true;
         const milestoneById = new Map((container.milestones || []).map(item => [item.id, item]));
         const ordered = [...(container.sequence || [])].sort((left, right) => left.index - right.index);
         const weeks = new Map();
@@ -152,7 +169,16 @@ const PlanningView = (() => {
             const evidence = item.evidence?.length ? `<h5>Evidencia</h5>${list(item.evidence)}` : '';
             const partial = item.partialProduct ? detail('Producto parcial', item.partialProduct.title) : '';
             const instruments = item.assessmentInstruments?.length ? `<h5>Instrumentos</h5>${list(item.assessmentInstruments)}` : '';
-            return `<article class="planning-sequence-item"><div class="planning-sequence-heading"><span class="planning-sequence-index">${String(item.index).padStart(2, '0')}</span><div><h5>${esc(item.title)}</h5><div class="planning-sequence-meta">${metadata}</div></div><span class="planning-item-status">${esc(status)}</span></div>${milestone ? `<p><strong>Fase:</strong> ${esc(milestone.title)}</p>` : ''}${evidence}${partial}${instruments}</article>`;
+            const action = sequenceAction(container, item, sessionExists);
+            let actionHtml = '';
+            if (action.kind === 'generate') {
+                actionHtml = `<button type="button" class="btn btn-primary" data-planning-view-action="generate-session" data-sequence-item-id="${esc(item.id)}">${esc(action.label)}</button>`;
+            } else if (action.kind === 'open') {
+                actionHtml = `<button type="button" class="btn btn-primary" data-planning-view-action="open-session" data-session-id="${esc(action.sessionId)}" data-sequence-item-id="${esc(item.id)}">${esc(action.label)}</button>`;
+            } else if (action.kind === 'draft' || action.kind === 'missing') {
+                actionHtml = `<p class="planning-sequence-help" role="status">${esc(action.label)}</p>`;
+            }
+            return `<article class="planning-sequence-item" data-sequence-card-id="${esc(item.id)}" tabindex="-1"><div class="planning-sequence-heading"><span class="planning-sequence-index">${String(item.index).padStart(2, '0')}</span><div><h5>${esc(item.title)}</h5><div class="planning-sequence-meta">${metadata}</div></div><span class="planning-item-status">${esc(status)}</span></div>${milestone ? `<p><strong>Fase:</strong> ${esc(milestone.title)}</p>` : ''}${evidence}${partial}${instruments}${actionHtml ? `<div class="planning-sequence-actions">${actionHtml}</div>` : ''}</article>`;
         }).join('')}</div></section>`).join('');
         return section('Progresión', content || '<p>Aún no se ha definido una secuencia.</p>', 'planning-progression');
     }
@@ -168,7 +194,7 @@ const PlanningView = (() => {
             + renderProduct(container)
             + renderAssessment(container)
             + renderMilestones(container)
-            + renderSequence(container);
+            + renderSequence(container, options);
         return `<div class="planning-shell planning-view-shell">${renderHeader(container)}<div class="planning-view-actions"><button type="button" class="btn btn-ghost" data-planning-view-action="back">← Mis planificaciones</button><button type="button" class="btn btn-primary" data-planning-view-action="edit">Editar planificación</button><button type="button" class="btn btn-ghost" data-planning-view-action="close">Cerrar</button></div><div class="planning-view-layout"><aside class="planning-view-summary" aria-label="Resumen de la planificación"><h3>Resumen</h3><p><strong>${esc(TYPES[container.identity.planningType] || 'Planificación')}</strong></p><p>${esc(STATUSES[container.status] || container.status)}</p><p>Revisión ${container.revision}</p></aside><div class="planning-view-content">${main}</div></div></div>`;
     }
 
@@ -183,9 +209,10 @@ const PlanningView = (() => {
         }
     }
 
-    async function open(containerId) {
+    async function open(containerId, options = {}) {
         const dialog = document.getElementById('planning-dialog');
         if (!dialog) throw new Error('No se encontró la vista de planificación.');
+        window.LandingRouter?.showHome?.(false);
         repository ||= repositoryModule.create({ validator: core });
         const container = repository.get(containerId);
         if (!container) throw new Error('No se encontró la planificación solicitada.');
@@ -193,8 +220,22 @@ const PlanningView = (() => {
         dialog.innerHTML = '<div class="planning-shell"><p role="status">Cargando planificación…</p></div>';
         if (!dialog.open) dialog.showModal();
         const methodologyProfile = await loadMethodologyProfile(container);
-        dialog.innerHTML = render(container, { methodologyProfile });
-        dialog.querySelector('#planning-title')?.focus();
+        const sessionExists = id => Boolean(window.StorageManager?.getSession?.(id));
+        dialog.innerHTML = render(container, { methodologyProfile, sessionExists });
+        (container.sequence || []).forEach(item => {
+            if (item.status === 'generated' && item.linkedDocumentRef?.id && !sessionExists(item.linkedDocumentRef.id)) {
+                console.warn('[PlanningView] La sesión vinculada no está disponible:', item.linkedDocumentRef.id);
+            }
+        });
+        const focusTarget = options.focusSequenceItemId
+            ? dialog.querySelector(`[data-sequence-card-id="${CSS.escape(options.focusSequenceItemId)}"]`)
+            : null;
+        if (focusTarget) {
+            focusTarget.scrollIntoView({ block: 'center' });
+            focusTarget.focus({ preventScroll: true });
+        } else {
+            dialog.querySelector('#planning-title')?.focus();
+        }
         return container;
     }
 
@@ -207,18 +248,41 @@ const PlanningView = (() => {
     function mount() {
         const dialog = document.getElementById('planning-dialog');
         if (!dialog) return;
-        dialog.addEventListener('click', event => {
+        dialog.addEventListener('click', async event => {
             const target = event.target.closest('[data-planning-view-action]');
             if (!target) return;
             const action = target.dataset.planningViewAction;
             if (action === 'close') close();
             if (action === 'back') window.dispatchEvent(new CustomEvent('planning:view-library'));
             if (action === 'edit' && currentId) window.dispatchEvent(new CustomEvent('planning:view-edit', { detail: { id: currentId } }));
+            if (action === 'generate-session' && currentId) {
+                try {
+                    const prepared = await window.appStartLinkedSession?.(currentId, target.dataset.sequenceItemId);
+                    if (prepared) {
+                        close();
+                        window.LandingRouter?.showApp?.(false);
+                    }
+                } catch (error) {
+                    console.warn('[PlanningView] No se pudo iniciar la sesión vinculada:', error);
+                    window.Toast?.error?.(error.message || 'No se pudo iniciar la sesión.');
+                }
+            }
+            if (action === 'open-session') {
+                const sessionId = target.dataset.sessionId;
+                if (!window.StorageManager?.getSession?.(sessionId)) {
+                    console.warn('[PlanningView] No se abrió una referencia inexistente:', sessionId);
+                    await open(currentId, { focusSequenceItemId: target.dataset.sequenceItemId });
+                    return;
+                }
+                window.appOpenSession?.(sessionId);
+                close();
+                window.LandingRouter?.showApp?.(false);
+            }
         });
     }
 
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
-    return { open, render, close, renderHeader, renderSituation, renderCurriculum, renderMethodology,
+    return { open, render, close, sequenceAction, renderHeader, renderSituation, renderCurriculum, renderMethodology,
         renderProduct, renderAssessment, renderMilestones, renderSequence };
 })();
 
