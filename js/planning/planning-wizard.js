@@ -171,9 +171,10 @@ const PlanningWizard = (() => {
                 pedagogicalProfile: profiles.pedagogical,
                 methodologyProfile: profiles.methodologies.find(p => p.code === draft.methodologyConfig.primary?.code)
             }) : { valid: false };
+            const alreadyReviewed = draft?.status === 'reviewed' && !dirty;
             const reviewAction = step === 6
-                ? `<button type="button" class="btn btn-primary" data-planning-action="review" aria-describedby="planning-review-help" ${reviewResult.valid ? '' : 'disabled'}>Marcar como revisada</button>`
-                    + `<span id="planning-review-help" class="planning-action-help">${reviewResult.valid ? 'La planificación cumple los requisitos de revisión.' : 'Completa los campos indicados para habilitar la revisión.'}</span>`
+                ? `<button type="button" class="btn btn-primary" data-planning-action="review" aria-describedby="planning-review-help" ${reviewResult.valid && !alreadyReviewed ? '' : 'disabled'}>${alreadyReviewed ? 'Planificación revisada' : 'Marcar como revisada'}</button>`
+                    + `<span id="planning-review-help" class="planning-action-help">${alreadyReviewed ? 'Edita algún campo para crear una revisión nueva.' : reviewResult.valid ? 'La planificación cumple los requisitos de revisión.' : 'Completa los campos indicados para habilitar la revisión.'}</span>`
                 : '';
             shell(`<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-ghost" data-planning-action="save">Guardar borrador</button>${reviewAction}</footer>`);
         }
@@ -189,6 +190,7 @@ const PlanningWizard = (() => {
             repository.save(value);
             draft = copy(value); previous = copy(value); dirty = false;
             const label = asReviewed ? 'Planificación revisada' : 'Borrador guardado';
+            if (asReviewed) render();
             notice(`${label} en este dispositivo. Sincronizando…`);
             try {
                 const result = await repository.sync();

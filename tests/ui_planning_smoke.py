@@ -85,7 +85,10 @@ def run():
                 page.screenshot(path=str(screenshots / f'review-{width}.png'))
                 page.locator('[data-planning-action="review"]').click()
                 page.locator('#planning-notice').filter(has_text='Planificación revisada').wait_for()
-                page.wait_for_function("!document.querySelector('[data-planning-action=review]').disabled")
+                assert page.locator('[data-planning-action="review"]').is_disabled()
+                assert page.locator('[data-planning-action="review"]').inner_text() == 'Planificación revisada'
+                saved_review = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
+                assert saved_review['revision'] == 2 and saved_review['status'] == 'reviewed'
                 page.locator('[data-planning-action="close"]').click()
                 page.evaluate("localStorage.removeItem('spacelab_planning_containers')")
                 page.reload(wait_until='domcontentloaded')
