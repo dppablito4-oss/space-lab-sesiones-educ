@@ -9,6 +9,15 @@ window.LandingRouter = (() => {
     let appView = null;
     let routeRequest = 0;
     let eventsBound = false;
+    const SESSION_CHECK_TIMEOUT_MS = 3000;
+    const SESSION_CHECK_TIMEOUT = Symbol('session-check-timeout');
+
+    function sessionCheckWithDeadline(promise) {
+        return Promise.race([
+            Promise.resolve(promise),
+            new Promise(resolve => window.setTimeout(() => resolve(SESSION_CHECK_TIMEOUT), SESSION_CHECK_TIMEOUT_MS))
+        ]);
+    }
 
     async function init() {
         landingView = document.getElementById('landing-view');
@@ -110,8 +119,12 @@ window.LandingRouter = (() => {
                 const readUser = typeof window.SupabaseClient.getSessionUser === 'function'
                     ? window.SupabaseClient.getSessionUser
                     : window.SupabaseClient.getCurrentUser;
-                const user = await readUser();
+                const user = await sessionCheckWithDeadline(readUser());
                 if (requestId !== routeRequest) return;
+                if (user === SESSION_CHECK_TIMEOUT) {
+                    console.warn('[LandingRouter] La verificación local tardó demasiado; se mantiene la vista disponible.');
+                    return;
+                }
                 if (user) {
                     showHome(false, { scrollToSessions: hash === '#/sessions' });
                     return;

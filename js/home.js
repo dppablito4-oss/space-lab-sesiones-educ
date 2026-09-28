@@ -4,6 +4,15 @@ window.SpaceLabHome = (() => {
     let initialized = false;
     let showAllSessions = false;
     let currentPlanCode = null;
+    let refreshRequest = 0;
+    const REMOTE_SUMMARY_TIMEOUT_MS = 6000;
+
+    function withDeadline(promise, fallback = null) {
+        return Promise.race([
+            Promise.resolve(promise).catch(() => fallback),
+            new Promise(resolve => window.setTimeout(() => resolve(fallback), REMOTE_SUMMARY_TIMEOUT_MS))
+        ]);
+    }
 
     const PLAN_LABELS = {
         free: 'Gratuito',
@@ -168,6 +177,7 @@ window.SpaceLabHome = (() => {
     }
 
     async function refresh(options = {}) {
+        const requestId = ++refreshRequest;
         const homeView = byId('home-view');
         if (!homeView || homeView.classList.contains('hidden')) return;
 
@@ -185,13 +195,14 @@ window.SpaceLabHome = (() => {
         }
 
         try {
-            const user = await window.SupabaseClient?.getCurrentUser?.();
-            if (!user) return;
+            const user = await withDeadline(window.SupabaseClient?.getCurrentUser?.());
+            if (!user || requestId !== refreshRequest) return;
             const [profile, wallet, commercialPlan] = await Promise.all([
-                window.SupabaseClient.getUserProfile?.().catch(() => null),
-                window.SupabaseClient.getAiCreditBalance?.().catch(() => null),
-                window.SupabaseClient.getCommercialPlan?.(true).catch(() => null)
+                withDeadline(window.SupabaseClient.getUserProfile?.()),
+                withDeadline(window.SupabaseClient.getAiCreditBalance?.()),
+                withDeadline(window.SupabaseClient.getCommercialPlan?.(true))
             ]);
+            if (requestId !== refreshRequest || homeView.classList.contains('hidden')) return;
             const name = displayName(user, profile);
             const firstName = name.split(/\s+/)[0];
             byId('home-welcome-title').textContent = `Hola, ${firstName}. ¿Qué planificamos hoy?`;

@@ -32,6 +32,8 @@ assert.match(router, /showHome\(false/);
 assert.match(router, /hash === '#\/app' \|\| hash === '#\/editor'/);
 assert.match(router, /getCurrentUser/);
 assert.match(router, /getSessionUser/);
+assert.match(router, /SESSION_CHECK_TIMEOUT_MS/);
+assert.match(router, /Promise\.race/);
 assert.match(router, /persist:\s*false/);
 assert.match(router, /DOMContentLoaded['"],\s*startLandingRouter/);
 
@@ -46,6 +48,8 @@ assert.equal(
 assert.match(home, /StorageManager\.getAllSessions/);
 assert.match(home, /getAiCreditBalance/);
 assert.match(home, /getCommercialPlan/);
+assert.match(home, /REMOTE_SUMMARY_TIMEOUT_MS/);
+assert.match(home, /requestId !== refreshRequest/);
 assert.doesNotMatch(home, /wallet\?\.planId/);
 assert.match(home, /showModal\(\)/);
 assert.match(home, /card\.dataset\.planCode === currentPlanCode/);

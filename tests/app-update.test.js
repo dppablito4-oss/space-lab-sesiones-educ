@@ -37,6 +37,7 @@ assert.match(updateScript, /sessionStorage/);
     let renderedBanner;
     let replacementUrl = '';
     let canonicalizedUrl = '';
+    let pageShowHandler;
     const sessionValues = new Map();
 
     function element(tag) {
@@ -72,8 +73,13 @@ assert.match(updateScript, /sessionStorage/);
         },
         addEventListener(name, handler) {
             if (name === 'load') loadHandler = handler;
+            if (name === 'pageshow') pageShowHandler = handler;
         },
-        setTimeout(handler) { pendingCheck = Promise.resolve(handler()); },
+        setTimeout(handler, delay) {
+            if (delay === 1500) pendingCheck = Promise.resolve(handler());
+            return delay;
+        },
+        clearTimeout() {},
         setInterval() {},
     };
 
@@ -110,12 +116,15 @@ assert.match(updateScript, /sessionStorage/);
     assert.match(replacementUrl, /mode=teacher/);
     assert.doesNotMatch(replacementUrl, /index\.html|app_version/);
     assert.match(replacementUrl, /_app_build=new-build/);
+    assert.match(replacementUrl, /_app_refresh=\d+/);
     assert.match(replacementUrl, /#editor$/);
     assert.equal(sessionValues.get('requested-app-build'), 'new-build');
+    assert.equal(typeof pageShowHandler, 'function');
 
     // La siguiente carga limpia el cache-bust visualmente sin otra navegación.
     const reloadedCanonical = new URL(replacementUrl);
     reloadedCanonical.searchParams.delete('_app_build');
+    reloadedCanonical.searchParams.delete('_app_refresh');
     assert.equal(reloadedCanonical.toString(), 'https://example.test/?mode=teacher#editor');
 
     console.log('app-update.test.js: OK');

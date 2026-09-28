@@ -7,12 +7,28 @@
     const BANNER_ID = 'app-update-banner';
     const REQUESTED_BUILD_KEY = 'requested-app-build';
     const RELOAD_BUILD_PARAM = '_app_build';
+    const RELOAD_NONCE_PARAM = '_app_refresh';
+    const CHECK_TIMEOUT_MS = 8000;
+    let checkInFlight = null;
+
+    function sessionGet(key) {
+        try { return sessionStorage.getItem(key); } catch (_error) { return null; }
+    }
+
+    function sessionSet(key, value) {
+        try { sessionStorage.setItem(key, value); return true; } catch (_error) { return false; }
+    }
+
+    function sessionRemove(key) {
+        try { sessionStorage.removeItem(key); } catch (_error) { /* Storage can be unavailable in privacy modes. */ }
+    }
 
     function canonicalEntryUrl(value = window.location.href) {
         const url = new URL(value);
         url.pathname = url.pathname.replace(/\/index\.html$/i, '/');
         url.searchParams.delete('app_version');
         url.searchParams.delete(RELOAD_BUILD_PARAM);
+        url.searchParams.delete(RELOAD_NONCE_PARAM);
         return url;
     }
 
@@ -34,19 +50,24 @@
     }
 
     function reloadWithBuild(build) {
-        sessionStorage.setItem(REQUESTED_BUILD_KEY, build);
-        const url = canonicalEntryUrl();
-
-        // Navegar a una URL distinta obliga al navegador/CDN a solicitar el HTML
-        // nuevo. En la siguiente carga normalizeEntryUrl() elimina este parámetro
-        // de la barra de direcciones sin provocar otra navegación.
-        url.searchParams.set(RELOAD_BUILD_PARAM, build);
-        window.location.replace(url.toString());
+        try {
+            sessionSet(REQUESTED_BUILD_KEY, build);
+            const url = canonicalEntryUrl();
+            // A query unique to this deployment forces CDNs and browser caches to
+            // retrieve the new HTML. normalizeEntryUrl removes it after startup.
+            url.searchParams.set(RELOAD_BUILD_PARAM, build);
+            url.searchParams.set(RELOAD_NONCE_PARAM, String(Date.now()));
+            window.location.replace(url.toString());
+            return true;
+        } catch (error) {
+            console.warn('[App Update] No se pudo iniciar la recarga:', error);
+            return false;
+        }
     }
 
     function showUpdateBanner(build) {
         if (!build || document.getElementById(BANNER_ID)) return;
-        if (sessionStorage.getItem('dismissed-app-build') === build) return;
+        if (sessionGet('dismissed-app-build') === build) return;
 
         const banner = document.createElement('section');
         banner.id = BANNER_ID;
@@ -84,7 +105,7 @@
         laterButton.textContent = 'Más tarde';
         laterButton.style.cssText = 'padding:8px 12px;border:0;background:transparent;color:#cbd5e1;cursor:pointer';
         laterButton.addEventListener('click', function () {
-            sessionStorage.setItem('dismissed-app-build', build);
+            sessionSet('dismissed-app-build', build);
             banner.remove();
         });
 
@@ -95,7 +116,18 @@
         updateButton.addEventListener('click', function () {
             updateButton.disabled = true;
             updateButton.textContent = 'Actualizando…';
-            reloadWithBuild(build);
+            if (!reloadWithBuild(build)) {
+                updateButton.disabled = false;
+                updateButton.textContent = 'Reintentar';
+                message.textContent = 'No se pudo recargar. Tu trabajo sigue seguro; vuelve a intentarlo.';
+                return;
+            }
+            window.setTimeout(() => {
+                if (!document.getElementById(BANNER_ID)) return;
+                updateButton.disabled = false;
+                updateButton.textContent = 'Reintentar';
+                message.textContent = 'La recarga está tardando. Tu trabajo sigue seguro; puedes reintentarlo.';
+            }, 12000);
         });
 
         actions.append(laterButton, updateButton);
@@ -103,19 +135,22 @@
         document.body.appendChild(banner);
     }
 
-    async function checkForUpdate() {
+    async function performUpdateCheck() {
         const localBuild = currentBuild();
         if (!localBuild) return;
 
-        if (sessionStorage.getItem(REQUESTED_BUILD_KEY) === localBuild) {
-            sessionStorage.removeItem(REQUESTED_BUILD_KEY);
+        if (sessionGet(REQUESTED_BUILD_KEY) === localBuild) {
+            sessionRemove(REQUESTED_BUILD_KEY);
         }
 
+        const controller = typeof AbortController === 'function' ? new AbortController() : null;
+        const timeoutId = window.setTimeout(() => controller?.abort(), CHECK_TIMEOUT_MS);
         try {
             const response = await fetch(manifestUrl(), {
                 cache: 'no-store',
                 credentials: 'same-origin',
                 headers: { 'Cache-Control': 'no-cache' },
+                signal: controller?.signal,
             });
             if (!response.ok) return;
 
@@ -124,7 +159,23 @@
             if (remoteBuild && remoteBuild !== localBuild) showUpdateBanner(remoteBuild);
         } catch (error) {
             console.debug('[App Update] No se pudo comprobar la versión:', error);
+        } finally {
+            window.clearTimeout(timeoutId);
         }
+    }
+
+    function checkForUpdate() {
+        if (!checkInFlight) {
+            checkInFlight = performUpdateCheck().finally(() => { checkInFlight = null; });
+        }
+        return checkInFlight;
+    }
+
+    function recoverFromPageRestore(event) {
+        if (!event.persisted) return;
+        document.getElementById('loader-overlay')?.classList.add('hidden');
+        document.documentElement.classList.remove('app-updating');
+        checkForUpdate();
     }
 
     normalizeEntryUrl();
@@ -133,6 +184,7 @@
         window.setTimeout(checkForUpdate, 1500);
         window.setInterval(checkForUpdate, CHECK_INTERVAL_MS);
     });
+    window.addEventListener('pageshow', recoverFromPageRestore);
 
     document.addEventListener('visibilitychange', function () {
         if (document.visibilityState === 'visible') checkForUpdate();

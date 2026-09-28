@@ -33,9 +33,24 @@ def run() -> None:
             # el shell, las rutas y el acceso deben continuar disponibles.
             page.route("https://cdn.jsdelivr.net/**", lambda route: route.abort())
             page.route("**/js/app.js?*", lambda route: route.abort())
+            page.route(
+                "**/app-version.json?*",
+                lambda route: route.fulfill(
+                    status=200,
+                    content_type="application/json",
+                    body='{"build":"new-resilient-build","strategy":"content-sha256"}',
+                ),
+            )
 
             errors: list[str] = []
+            document_urls: list[str] = []
             page.on("pageerror", lambda error: errors.append(str(error)))
+            page.on(
+                "request",
+                lambda request: document_urls.append(request.url)
+                if request.resource_type == "document"
+                else None,
+            )
             response = page.goto(
                 f"http://127.0.0.1:{server.server_port}/index.html?app_version=stale",
                 wait_until="domcontentloaded",
@@ -49,8 +64,40 @@ def run() -> None:
             assert "/index.html" not in page.url
             assert "app_version" not in page.url
 
+            page.locator("#app-update-banner").wait_for(timeout=5000)
+            with page.expect_navigation(wait_until="domcontentloaded"):
+                page.get_by_role("button", name="Actualizar ahora").click()
+            assert any("_app_build=new-resilient-build" in url for url in document_urls)
+            assert any("_app_refresh=" in url for url in document_urls)
+            assert "_app_build" not in page.url
+            assert page.locator("#landing-view").is_visible()
+
             page.locator('[data-action="open-login"]').first.click()
             assert page.locator("#auth-modal").is_visible()
+
+            # Una lectura local de autenticación bloqueada no debe ocultar ni
+            # congelar el workspace provisional.
+            page.locator("#btn-close-auth").click()
+            page.evaluate(
+                """() => {
+                    window.SupabaseClient.getSessionUser = () => new Promise(() => {});
+                    window.location.hash = '#/home';
+                }"""
+            )
+            page.wait_for_timeout(3300)
+            assert page.locator("#home-view").is_visible()
+            assert page.locator('[data-home-action="new-session"]').first.is_enabled()
+
+            # Restaurar una pestaña desde BFCache limpia loaders antiguos que
+            # de otro modo interceptarían todos los clics.
+            page.evaluate(
+                """() => {
+                    const loader = document.getElementById('loader-overlay');
+                    loader.classList.remove('hidden');
+                    window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true }));
+                }"""
+            )
+            assert page.locator("#loader-overlay").evaluate("el => el.classList.contains('hidden')")
 
             browser.close()
     finally:
