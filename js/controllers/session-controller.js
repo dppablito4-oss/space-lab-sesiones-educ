@@ -463,7 +463,20 @@ window.SpaceLabSessionController = (() => {
             DOM.selectCnebCapacidad.classList.add('hidden');
         
             Storage.clearCurrentSession();
-            await loadProfileDefaults();
+
+            // El editor debe quedar listo de inmediato. Los predeterminados viven en
+            // Supabase y una red lenta no debe bloquear la creación de otra sesión.
+            // La carga continúa en segundo plano; loadProfileDefaults ya maneja sus
+            // propios errores.
+            Promise.resolve()
+                .then(() => loadProfileDefaults())
+                .catch(error => console.warn('[Profile] No se pudieron restaurar predeterminados:', error));
+
+            // Limpia cualquier overlay de una operación anterior para evitar que una
+            // sesión recién creada parezca congelada.
+            window.Loader?.hide?.();
+            DOM.loadModal?.classList.add('hidden');
+
             Toast.info('Nueva sesión iniciada');
             window.dispatchEvent(new CustomEvent('spacelab:session-cleared'));
         }
