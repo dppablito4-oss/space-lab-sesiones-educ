@@ -27,6 +27,7 @@ assert.match(updateScript, /cache:\s*'no-store'/);
 assert.match(updateScript, /_cache_bust/);
 assert.match(updateScript, /canonicalEntryUrl/);
 assert.doesNotMatch(updateScript, /searchParams\.set\(['"]app_version/);
+assert.match(updateScript, /RELOAD_BUILD_PARAM/);
 assert.match(updateScript, /Nueva versión disponible/);
 assert.match(updateScript, /sessionStorage/);
 
@@ -108,8 +109,14 @@ assert.match(updateScript, /sessionStorage/);
     updateButton.handlers.click();
     assert.match(replacementUrl, /mode=teacher/);
     assert.doesNotMatch(replacementUrl, /index\.html|app_version/);
+    assert.match(replacementUrl, /_app_build=new-build/);
     assert.match(replacementUrl, /#editor$/);
     assert.equal(sessionValues.get('requested-app-build'), 'new-build');
+
+    // La siguiente carga limpia el cache-bust visualmente sin otra navegación.
+    const reloadedCanonical = new URL(replacementUrl);
+    reloadedCanonical.searchParams.delete('_app_build');
+    assert.equal(reloadedCanonical.toString(), 'https://example.test/?mode=teacher#editor');
 
     console.log('app-update.test.js: OK');
 })().catch((error) => {
