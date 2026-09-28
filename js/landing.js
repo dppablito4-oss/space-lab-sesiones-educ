@@ -126,7 +126,7 @@ window.LandingRouter = (() => {
                     return;
                 }
                 if (user) {
-                    showHome(false, { scrollToSessions: hash === '#/sessions' });
+                    showHome(false, { scrollToSessions: hash === '#/sessions', user });
                     return;
                 }
             } catch (err) {

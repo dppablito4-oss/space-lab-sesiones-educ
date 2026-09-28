@@ -99,6 +99,43 @@ def run() -> None:
             )
             assert page.locator("#loader-overlay").evaluate("el => el.classList.contains('hidden')")
 
+            # El workspace debe reconocer la sesión local aunque la validación
+            # remota de auth no responda. Cada dato del encabezado se hidrata
+            # independientemente y reutiliza el usuario ya reconocido.
+            page.evaluate(
+                """() => {
+                    const user = {
+                        id: 'teacher-session-1',
+                        email: 'maria.quipe@example.com',
+                        user_metadata: { full_name: 'María Quispe' }
+                    };
+                    window.__homeSummaryUsers = [];
+                    window.SupabaseClient.getSessionUser = async () => user;
+                    window.SupabaseClient.getCurrentUser = () => new Promise(() => {});
+                    window.SupabaseClient.getUserProfile = async sessionUser => {
+                        window.__homeSummaryUsers.push(['profile', sessionUser?.id]);
+                        return { docente: 'María Quispe' };
+                    };
+                    window.SupabaseClient.getAiCreditBalance = async sessionUser => {
+                        window.__homeSummaryUsers.push(['wallet', sessionUser?.id]);
+                        return { balance: 87 };
+                    };
+                    window.SupabaseClient.getCommercialPlan = async (_force, sessionUser) => {
+                        window.__homeSummaryUsers.push(['plan', sessionUser?.id]);
+                        return 'beta_teacher';
+                    };
+                    window.SpaceLabHome.refresh({ user });
+                }"""
+            )
+            page.locator("#home-account-name").get_by_text("María Quispe", exact=True).wait_for()
+            assert page.locator("#home-credit-count").inner_text() == "87"
+            assert page.locator("#home-account-plan").inner_text() == "Plan Docente Beta"
+            assert page.evaluate("window.__homeSummaryUsers") == [
+                ["profile", "teacher-session-1"],
+                ["wallet", "teacher-session-1"],
+                ["plan", "teacher-session-1"],
+            ]
+
             browser.close()
     finally:
         server.shutdown()

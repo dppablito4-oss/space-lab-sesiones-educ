@@ -12,13 +12,13 @@ const walletFunction = clientSource.split(
   2,
 )[1].split('/** Read-only recent usage;', 1)[0];
 
-assert.match(clientSource, /async function getCommercialPlan\(forceRefresh = false\)/);
-assert.match(clientSource, /getUserEntitlements\(forceRefresh\)/);
+assert.match(clientSource, /async function getCommercialPlan\(forceRefresh = false, sessionUser = null\)/);
+assert.match(clientSource, /getUserEntitlements\(forceRefresh, sessionUser\)/);
 assert.match(clientSource, /getCommercialPlan,/);
 assert.match(walletFunction, /\.select\('balance, updated_at'\)/);
 assert.doesNotMatch(walletFunction, /plan_id|planId|cycle_started_at|cycleStartedAt/);
 
-assert.match(homeSource, /getCommercialPlan\?\.\(true\)/);
+assert.match(homeSource, /getCommercialPlan\?\.\(true, user\)/);
 assert.doesNotMatch(homeSource, /wallet\?\.planId|wallet\.planId/);
 assert.match(creditUiSource, /getCommercialPlan\?\.\(true\)/);
 assert.doesNotMatch(creditUiSource, /wallet\?\.planId|wallet\.planId/);

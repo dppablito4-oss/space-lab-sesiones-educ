@@ -6,11 +6,12 @@ window.SpaceLabHome = (() => {
     let currentPlanCode = null;
     let refreshRequest = 0;
     const REMOTE_SUMMARY_TIMEOUT_MS = 6000;
+    const SESSION_USER_TIMEOUT_MS = 1500;
 
-    function withDeadline(promise, fallback = null) {
+    function withDeadline(promise, fallback = null, timeoutMs = REMOTE_SUMMARY_TIMEOUT_MS) {
         return Promise.race([
             Promise.resolve(promise).catch(() => fallback),
-            new Promise(resolve => window.setTimeout(() => resolve(fallback), REMOTE_SUMMARY_TIMEOUT_MS))
+            new Promise(resolve => window.setTimeout(() => resolve(fallback), timeoutMs))
         ]);
     }
 
@@ -134,6 +135,28 @@ window.SpaceLabHome = (() => {
         if (credits) credits.textContent = wallet ? String(wallet.balance) : '--';
     }
 
+    function renderIdentity(user, profile = null) {
+        const name = displayName(user, profile);
+        const firstName = name.split(/\s+/)[0];
+        byId('home-welcome-title').textContent = `Hola, ${firstName}. ¿Qué planificamos hoy?`;
+        byId('home-account-name').textContent = name;
+        byId('home-account-name').title = user?.email || '';
+        byId('home-account-avatar').textContent = initials(name);
+    }
+
+    function isCurrentRefresh(requestId, homeView) {
+        return requestId === refreshRequest && !homeView.classList.contains('hidden');
+    }
+
+    function hydrateSummary(promise, apply, requestId, homeView, label) {
+        const hydration = Promise.resolve(promise)
+            .then(value => {
+                if (isCurrentRefresh(requestId, homeView)) apply(value);
+            })
+            .catch(error => console.warn(`[Mi espacio] No se pudo cargar ${label}:`, error));
+        return withDeadline(hydration);
+    }
+
     function renderCommercialPlan(planCode) {
         const plan = byId('home-plan-name');
         const accountPlan = byId('home-account-plan');
@@ -195,22 +218,42 @@ window.SpaceLabHome = (() => {
         }
 
         try {
-            const user = await withDeadline(window.SupabaseClient?.getCurrentUser?.());
-            if (!user || requestId !== refreshRequest) return;
-            const [profile, wallet, commercialPlan] = await Promise.all([
-                withDeadline(window.SupabaseClient.getUserProfile?.()),
-                withDeadline(window.SupabaseClient.getAiCreditBalance?.()),
-                withDeadline(window.SupabaseClient.getCommercialPlan?.(true))
+            const client = window.SupabaseClient;
+            let user = options.user || await withDeadline(
+                client?.getSessionUser?.(),
+                null,
+                SESSION_USER_TIMEOUT_MS
+            );
+            if (!user) user = await withDeadline(client?.getCurrentUser?.());
+            if (!user || !isCurrentRefresh(requestId, homeView)) return;
+
+            // La identidad local debe aparecer inmediatamente. Perfil, wallet y
+            // plan se hidratan por separado para que una consulta lenta no deje
+            // todo el encabezado en sus valores genéricos.
+            renderIdentity(user);
+            await Promise.all([
+                hydrateSummary(
+                    client.getUserProfile?.(user),
+                    profile => renderIdentity(user, profile),
+                    requestId,
+                    homeView,
+                    'el perfil'
+                ),
+                hydrateSummary(
+                    client.getAiCreditBalance?.(user),
+                    renderWallet,
+                    requestId,
+                    homeView,
+                    'los créditos'
+                ),
+                hydrateSummary(
+                    client.getCommercialPlan?.(true, user),
+                    renderCommercialPlan,
+                    requestId,
+                    homeView,
+                    'el plan'
+                )
             ]);
-            if (requestId !== refreshRequest || homeView.classList.contains('hidden')) return;
-            const name = displayName(user, profile);
-            const firstName = name.split(/\s+/)[0];
-            byId('home-welcome-title').textContent = `Hola, ${firstName}. ¿Qué planificamos hoy?`;
-            byId('home-account-name').textContent = name;
-            byId('home-account-name').title = user.email || '';
-            byId('home-account-avatar').textContent = initials(name);
-            renderWallet(wallet);
-            renderCommercialPlan(commercialPlan);
         } catch (error) {
             console.warn('[Mi espacio] No se pudo cargar todo el resumen:', error);
         }

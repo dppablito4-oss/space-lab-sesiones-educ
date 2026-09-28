@@ -373,9 +373,9 @@ window.SupabaseClient = (() => {
     /**
      * Obtiene el perfil completo del usuario actual
      */
-    async function getUserProfile() {
+    async function getUserProfile(sessionUser = null) {
         if (!supabase) return null;
-        const user = await getCurrentUser();
+        const user = sessionUser || await getCurrentUser();
         if (!user) return null;
         try {
             const { data, error } = await supabase
@@ -417,9 +417,9 @@ window.SupabaseClient = (() => {
     let cachedEntitlementsUserId = null;
 
     /** Consulta las capacidades y plan comercial del usuario (RPC get_user_entitlements) */
-    async function getUserEntitlements(forceRefresh = false) {
+    async function getUserEntitlements(forceRefresh = false, sessionUser = null) {
         if (!supabase) return { ok: false, plan: 'anonymous', features: {} };
-        const user = await getCurrentUser();
+        const user = sessionUser || await getCurrentUser();
         if (!forceRefresh && cachedEntitlements && cachedEntitlementsUserId === (user ? user.id : null)) {
             return cachedEntitlements;
         }
@@ -456,8 +456,8 @@ window.SupabaseClient = (() => {
     }
 
     /** Devuelve el codigo del plan comercial; nunca lo infiere desde el wallet. */
-    async function getCommercialPlan(forceRefresh = false) {
-        const entitlements = await getUserEntitlements(forceRefresh);
+    async function getCommercialPlan(forceRefresh = false, sessionUser = null) {
+        const entitlements = await getUserEntitlements(forceRefresh, sessionUser);
         const plan = typeof entitlements?.plan === 'string' ? entitlements.plan.trim() : '';
         if (entitlements?.ok !== true || !plan || ['anonymous', 'unknown', 'fallback'].includes(plan)) {
             return null;
@@ -466,9 +466,9 @@ window.SupabaseClient = (() => {
     }
 
     /** Read-only view of the authenticated user's AI wallet. */
-    async function getAiCreditBalance() {
+    async function getAiCreditBalance(sessionUser = null) {
         if (!supabase) return null;
-        const user = await getCurrentUser();
+        const user = sessionUser || await getCurrentUser();
         if (!user) return null;
         const { data, error } = await supabase
             .from('ai_credit_wallets')
