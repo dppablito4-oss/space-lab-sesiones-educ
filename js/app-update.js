@@ -6,11 +6,13 @@
     const CHECK_INTERVAL_MS = 5 * 60 * 1000;
     const BANNER_ID = 'app-update-banner';
     const REQUESTED_BUILD_KEY = 'requested-app-build';
+    const RELOAD_BUILD_PARAM = '_app_build';
 
     function canonicalEntryUrl(value = window.location.href) {
         const url = new URL(value);
         url.pathname = url.pathname.replace(/\/index\.html$/i, '/');
         url.searchParams.delete('app_version');
+        url.searchParams.delete(RELOAD_BUILD_PARAM);
         return url;
     }
 
@@ -34,6 +36,11 @@
     function reloadWithBuild(build) {
         sessionStorage.setItem(REQUESTED_BUILD_KEY, build);
         const url = canonicalEntryUrl();
+
+        // Navegar a una URL distinta obliga al navegador/CDN a solicitar el HTML
+        // nuevo. En la siguiente carga normalizeEntryUrl() elimina este parámetro
+        // de la barra de direcciones sin provocar otra navegación.
+        url.searchParams.set(RELOAD_BUILD_PARAM, build);
         window.location.replace(url.toString());
     }
 
