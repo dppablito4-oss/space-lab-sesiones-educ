@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://sesiones.sypablitodp.site/schemas/curriculum-profile-v1.json",
+  "title": "Space Lab CurriculumProfile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "profileVersion", "id", "status", "scope", "competency", "capacities", "standard", "performancesByGrade", "provenance"],
+  "properties": {
+    "schemaVersion": { "const": "1.0" },
+    "profileVersion": { "type": "string", "pattern": "^[0-9]{4}\\.[0-9]+$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+    "status": { "enum": ["draft", "pilot", "reviewed", "archived"] },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "cycle", "grades", "area"],
+      "properties": {
+        "level": { "enum": ["initial", "primary", "secondary"] },
+        "cycle": { "type": "string", "minLength": 1 },
+        "grades": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string" } },
+        "area": { "$ref": "#/$defs/reference" }
+      }
+    },
+    "competency": { "$ref": "#/$defs/reference" },
+    "capacities": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/reference" } },
+    "standard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["description", "sourceRef"],
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "sourceRef": { "type": "string", "minLength": 1 }
+      }
+    },
+    "performancesByGrade": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "array",
+        "minItems": 1,
+        "items": { "$ref": "#/$defs/performance" }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sourceRefs", "reviewNote"],
+      "properties": {
+        "sourceRefs": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "reviewNote": { "type": "string", "minLength": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "officialName"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "officialName": { "type": "string", "minLength": 1 }
+      }
+    },
+    "performance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

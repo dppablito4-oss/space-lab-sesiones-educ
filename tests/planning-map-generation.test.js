@@ -3,6 +3,7 @@ const Generator = require('../js/planning/planning-map-generator.js');
 const fixture = require('../data/pedagogy/fixtures/secondary_math_project_unit.v2.json');
 const pedagogical = require('../data/pedagogy/pedagogical/secondary-cycle-vi.json');
 const didactic = require('../data/pedagogy/didactics/secondary/cycle-vi/mathematics/quantity.json');
+const curriculum = require('../data/pedagogy/curriculum/secondary/cycle-vi/mathematics/quantity.json');
 const methodology = require('../data/pedagogy/methodologies/project_based_learning.json');
 
 const REQUEST_ID = '896a0f93-1234-4abc-8def-1234567890ab';
@@ -14,7 +15,13 @@ const input = {
     significantSituationInput: fixture.significantSituation,
     methodology: { code: methodology.code },
     curriculumReferences: fixture.curriculumMap,
-    profiles: { pedagogical, didactic, methodology }
+    area: fixture.curriculumMap[0].area,
+    competency: fixture.curriculumMap[0].competency,
+    capacities: fixture.curriculumMap[0].capacities,
+    standard: fixture.curriculumMap[0].standard,
+    performances: fixture.curriculumMap[0].performances,
+    curricularSourceRefs: fixture.curriculumMap[0].curricularSourceRefs,
+    profiles: { pedagogical, curriculum, didactic, methodology }
 };
 
 const request = Generator.createRequest(input, REQUEST_ID);

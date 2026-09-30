@@ -96,6 +96,36 @@ const PedagogyCatalogValidator = (() => {
         validateSourceRefs(group.sourceRefs, `${path}.sourceRefs`, sourceIds, errors);
     }
 
+    function validateCurriculumProfile(profile, sourceIds = new Set()) {
+        const errors = [];
+        if (!isObject(profile)) return { valid: false, errors: ['El perfil curricular debe ser un objeto.'] };
+        if (profile.schemaVersion !== '1.0') errors.push('schemaVersion debe ser "1.0".');
+        if (!/^\d{4}\.\d+$/.test(profile.profileVersion || '')) errors.push('profileVersion debe usar YYYY.N.');
+        if (!KEBAB_ID.test(profile.id || '')) errors.push('id debe usar kebab-case.');
+        if (!STATUSES.has(profile.status)) errors.push('status no es reconocido.');
+        const scope = profile.scope;
+        if (!isObject(scope) || !LEVELS.has(scope.level) || !scope.cycle || !Array.isArray(scope.grades) || scope.grades.length === 0) {
+            errors.push('scope debe declarar level, cycle y grades.');
+        } else if (new Set(scope.grades.map(String)).size !== scope.grades.length) {
+            errors.push('scope.grades no puede contener duplicados.');
+        }
+        validateCurriculumReference(scope?.area, 'scope.area', errors);
+        validateCurriculumReference(profile.competency, 'competency', errors);
+        if (!Array.isArray(profile.capacities) || profile.capacities.length === 0) errors.push('capacities no puede estar vacío.');
+        else profile.capacities.forEach((capacity, index) => validateCurriculumReference(capacity, `capacities[${index}]`, errors));
+        if (!isObject(profile.standard) || !profile.standard.description || !profile.standard.sourceRef) errors.push('standard requiere description y sourceRef.');
+        if (!isObject(profile.performancesByGrade)) errors.push('performancesByGrade es requerido.');
+        else for (const grade of scope?.grades || []) {
+            const performances = profile.performancesByGrade[String(grade)];
+            if (!Array.isArray(performances) || performances.length === 0 || performances.some(item => !KEBAB_ID.test(item?.id || '') || !item?.description)) {
+                errors.push(`performancesByGrade.${grade} debe contener desempeños identificados.`);
+            }
+        }
+        validateSourceRefs(profile.provenance?.sourceRefs, 'provenance.sourceRefs', sourceIds, errors);
+        if (!profile.provenance?.reviewNote) errors.push('provenance.reviewNote es requerido.');
+        return { valid: errors.length === 0, errors };
+    }
+
     function validateProfile(profile, sourceIds = new Set()) {
         const errors = [];
         const warnings = [];
@@ -232,7 +262,7 @@ const PedagogyCatalogValidator = (() => {
             if (!legacy && entry.status === 'archived') errors.push(`${path} no puede registrar un perfil archivado como activo.`);
         }
 
-        for (const group of ['pedagogicalProfiles', 'didacticProfiles', 'methodologyProfiles']) {
+        for (const group of ['pedagogicalProfiles', 'curriculumProfiles', 'didacticProfiles', 'methodologyProfiles']) {
             if (!Array.isArray(catalog?.[group]) || catalog[group].length === 0) {
                 errors.push(`catalog.${group} no puede estar vacío.`);
                 continue;
@@ -259,7 +289,7 @@ const PedagogyCatalogValidator = (() => {
         return { valid: errors.length === 0, errors };
     }
 
-    return { validateSources, validateProfile, validateCatalog: validateCatalogV2 };
+    return { validateSources, validateProfile, validateCurriculumProfile, validateCatalog: validateCatalogV2 };
 })();
 
 if (typeof window !== 'undefined') window.PedagogyCatalogValidator = PedagogyCatalogValidator;

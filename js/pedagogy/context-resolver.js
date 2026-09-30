@@ -7,6 +7,18 @@ const PedagogicalContextResolver = (() => {
         Object.freeze(value); Object.values(value).forEach(freeze); return value;
     };
     const ref = profile => ({ id: profile.id, profileVersion: profile.profileVersion, status: profile.status });
+    const SECONDARY_CYCLES = Object.freeze({ '1': 'VI', '2': 'VI', '3': 'VII', '4': 'VII', '5': 'VII' });
+
+    function resolveSecondaryCycle(grade) {
+        const normalized = grade === null || grade === undefined ? '' : String(grade).trim();
+        const cycle = SECONDARY_CYCLES[normalized];
+        if (!cycle) {
+            const error = new RangeError('El grado de secundaria debe estar entre 1 y 5.');
+            error.code = 'invalid_secondary_grade';
+            throw error;
+        }
+        return cycle;
+    }
 
     function isMethodologySuitable(profile, level, cycle) {
         return Array.isArray(profile?.suitableScopes) && profile.suitableScopes.some(scope =>
@@ -17,20 +29,40 @@ const PedagogicalContextResolver = (() => {
     function resolve(input, catalogs) {
         const errors = [];
         const warnings = [];
+        let cycle = input?.cycle;
+        if (input?.level === 'secondary') {
+            try { cycle = resolveSecondaryCycle(input.grade); }
+            catch (error) {
+                return { resolved: false, errors: [{ code: error.code, message: error.message }], warnings, context: null };
+            }
+            if (input.cycle && input.cycle !== cycle) {
+                return { resolved: false, errors: [{ code: 'cycle_grade_mismatch', message: `El grado ${input.grade} corresponde al ciclo ${cycle}.` }], warnings, context: null };
+            }
+        }
         const pedagogical = (catalogs?.pedagogicalProfiles || []).find(profile =>
             profile.scope.level === input.level
-            && profile.scope.cycle === input.cycle
+            && profile.scope.cycle === cycle
             && (profile.scope.grades.length === 0 || profile.scope.grades.includes(String(input.grade)))
+        );
+        const curriculum = (catalogs?.curriculumProfiles || []).find(profile =>
+            profile.scope.level === input.level
+            && profile.scope.cycle === cycle
+            && profile.scope.grades.includes(String(input.grade))
+            && profile.scope.area.id === input.area
+            && profile.competency.id === input.competency
         );
         const didactic = (catalogs?.didacticProfiles || []).find(profile =>
             profile.scope.level === input.level
-            && profile.scope.cycle === input.cycle
+            && profile.scope.cycle === cycle
             && profile.scope.area.id === input.area
             && profile.scope.competency.id === input.competency
         );
         const methodology = (catalogs?.methodologyProfiles || []).find(profile => profile.code === input.methodology);
 
         if (!pedagogical) errors.push({ code: 'pedagogical_profile_not_found', message: 'No existe un perfil para el nivel, ciclo y grado.' });
+        if (!curriculum || !Array.isArray(curriculum.performancesByGrade?.[String(input.grade)])) {
+            errors.push({ code: 'curriculum_profile_not_found', message: 'No existe currículo oficial para el nivel, ciclo, área, competencia y grado seleccionados.' });
+        }
         if (!didactic) errors.push({ code: 'didactic_profile_not_found', message: 'No existe un perfil para el área y competencia.' });
         if (!methodology) errors.push({ code: 'methodology_profile_not_found', message: 'No existe el perfil metodológico solicitado.' });
         if (errors.length > 0) return { resolved: false, errors, warnings, context: null };
@@ -38,23 +70,25 @@ const PedagogicalContextResolver = (() => {
         if (!pedagogical.allowedPlanningTypes.includes(input.planningType)) {
             warnings.push({ code: 'planning_type_not_recommended', message: 'El tipo de planificación no está recomendado actualmente por el perfil pedagógico.' });
         }
-        if (!isMethodologySuitable(methodology, input.level, input.cycle)) {
+        if (!isMethodologySuitable(methodology, input.level, cycle)) {
             warnings.push({ code: 'methodology_scope_not_recommended', message: 'La metodología no está recomendada actualmente para este nivel y ciclo.' });
         }
-        for (const profile of [pedagogical, didactic, methodology]) {
+        for (const profile of [pedagogical, curriculum, didactic, methodology]) {
             if (profile.status !== 'reviewed') warnings.push({ code: 'profile_requires_review', profileId: profile.id, message: `El perfil ${profile.id} todavía es piloto.` });
         }
 
         const context = freeze(clone({
             curriculumContext: {
-                level: input.level, cycle: input.cycle, grade: String(input.grade),
-                area: didactic.scope.area, competency: didactic.scope.competency,
-                capacities: didactic.scope.capacities,
-                curricularSourceRefs: didactic.provenance.sourceRefs
+                level: input.level, cycle, grade: String(input.grade),
+                area: curriculum.scope.area, competency: curriculum.competency,
+                capacities: curriculum.capacities,
+                standard: curriculum.standard,
+                performances: curriculum.performancesByGrade[String(input.grade)],
+                curricularSourceRefs: curriculum.provenance.sourceRefs
             },
             planningType: input.planningType,
             profiles: {
-                pedagogical: ref(pedagogical), didactic: ref(didactic), methodology: ref(methodology)
+                pedagogical: ref(pedagogical), curriculum: ref(curriculum), didactic: ref(didactic), methodology: ref(methodology)
             },
             pedagogicalGuidance: {
                 activityCharacteristics: pedagogical.activityCharacteristics,
@@ -80,7 +114,7 @@ const PedagogicalContextResolver = (() => {
         return { resolved: true, errors, warnings, context };
     }
 
-    return { resolve, isMethodologySuitable };
+    return { resolve, resolveSecondaryCycle, isMethodologySuitable };
 })();
 
 if (typeof window !== 'undefined') window.PedagogicalContextResolver = PedagogicalContextResolver;

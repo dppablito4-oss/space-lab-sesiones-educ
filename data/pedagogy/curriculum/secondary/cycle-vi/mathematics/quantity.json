@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-mathematics-quantity-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-quantity-problems", "officialName": "Resuelve problemas de cantidad" },
+  "capacities": [
+    { "id": "translates-quantities-to-numerical-expressions", "officialName": "Traduce cantidades a expresiones numéricas" },
+    { "id": "communicates-understanding-of-numbers-and-operations", "officialName": "Comunica su comprensión sobre los números y las operaciones" },
+    { "id": "uses-estimation-and-calculation-strategies", "officialName": "Usa estrategias y procedimientos de estimación y cálculo" },
+    { "id": "argues-about-numerical-relations-and-operations", "officialName": "Argumenta afirmaciones sobre relaciones numéricas y las operaciones" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas referidos a las relaciones entre cantidades o magnitudes, traduciéndolas a expresiones numéricas y operativas con números naturales, enteros y racionales, y descuentos porcentuales sucesivos, verificando si estas expresiones cumplen con las condiciones iniciales del problema. Expresa su comprensión de la relación entre los órdenes del sistema de numeración decimal con las potencias de base diez, y entre las operaciones con números enteros y racionales; y las usa para interpretar enunciados o textos diversos de contenido matemático. Representa relaciones de equivalencia entre expresiones decimales, fraccionarias y porcentuales, entre unidades de masa, tiempo y monetarias; empleando lenguaje matemático. Selecciona, emplea y combina recursos, estrategias, procedimientos y propiedades de las operaciones y de los números para estimar o calcular con enteros y racionales; y realizar conversiones entre unidades de masa, tiempo y temperatura, verificando su eficacia. Plantea afirmaciones sobre los números enteros y racionales, sus propiedades y relaciones, y las justifica mediante ejemplos y sus conocimientos de las operaciones, e identifica errores o vacíos en las argumentaciones propias o de otros y las corrige.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-translate", "description": "Traduce relaciones entre datos y acciones de comparar e igualar cantidades, y aumentos o descuentos porcentuales, a expresiones numéricas con enteros, proporcionalidad y expresiones porcentuales, fraccionarias o decimales." },
+      { "id": "grade-1-communicate", "description": "Expresa el significado del valor posicional, las unidades de medida, el porcentaje como fracción, el descuento porcentual, el signo de enteros y las equivalencias entre fracciones, decimales y porcentajes con lenguaje matemático y representaciones." },
+      { "id": "grade-1-strategies", "description": "Selecciona y emplea estrategias de cálculo, estimación y procedimientos para operar con enteros, fracciones y decimales, simplificar expresiones y realizar mediciones y conversiones pertinentes." },
+      { "id": "grade-1-argue", "description": "Plantea y justifica afirmaciones sobre divisibilidad, propiedades de las operaciones y relaciones inversas; reconoce y corrige errores en las justificaciones." }
+    ],
+    "2": [
+      { "id": "grade-2-translate", "description": "Traduce comparaciones e igualaciones de cantidades, aumentos y descuentos sucesivos a expresiones con enteros, fracciones, decimales, porcentajes, potencias de base diez y proporcionalidad directa o inversa." },
+      { "id": "grade-2-communicate", "description": "Expresa relaciones del sistema decimal, equivalencias entre racionales y unidades, aumentos y descuentos sucesivos, IGV y propiedades de potencias usando lenguaje matemático y representaciones." },
+      { "id": "grade-2-strategies", "description": "Selecciona, emplea y combina estrategias y propiedades para operar y simplificar expresiones con enteros y racionales, y para estimar, medir y convertir unidades." },
+      { "id": "grade-2-argue", "description": "Plantea y justifica afirmaciones sobre potenciación, radicación, orden de racionales y descuentos sucesivos; reconoce errores o vacíos y los corrige." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria, pp. 141-143; requiere cotejo pedagógico humano."
+  }
+}

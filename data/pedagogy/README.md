@@ -5,6 +5,7 @@
 ## Perfiles V3
 
 - `PedagogicalProfile`: características pedagógicas y alcance por nivel, ciclo, grado o edad.
+- `CurriculumProfile`: competencia, capacidades y estándar compartidos por ciclo, con desempeños separados por grado y trazabilidad oficial.
 - `DidacticProfile`: orientación propia del área y la competencia.
 - `MethodologyProfile`: metodología opcional y reglas blandas; declara `suitableScopes` como pares de `level + cycles`.
 
@@ -18,6 +19,7 @@ data/pedagogy/
 ├── sources.json                         fuentes curriculares/guías
 ├── schemas/
 ├── pedagogical/
+├── curriculum/
 ├── didactics/
 ├── methodologies/
 │   ├── sources.json
@@ -26,7 +28,7 @@ data/pedagogy/
 └── secondary/                           perfiles combinados legacy
 ```
 
-El catálogo raíz registra por separado `pedagogicalProfiles`, `didacticProfiles` y `methodologyProfiles`. `legacyProfiles` existe solo para compatibilidad de lectura, tiene estado `archived` y apunta a sus reemplazos V3. No se deben crear ni mantener nuevos perfiles combinados.
+El catálogo raíz registra por separado `pedagogicalProfiles`, `curriculumProfiles`, `didacticProfiles` y `methodologyProfiles`. `legacyProfiles` existe solo para compatibilidad de lectura, tiene estado `archived` y apunta a sus reemplazos V3. No se deben crear ni mantener nuevos perfiles combinados.
 
 Las recomendaciones internas deben declarar su procedencia. Las metodologías permanecen como `warning` o `suggestion`; no son pasos universales obligatorios.
 
@@ -38,4 +40,5 @@ Los cambios deben pasar, como mínimo:
 node tests/pedagogy-catalog.test.js
 node tests/methodology-catalog.test.js
 node tests/pedagogical-context-resolver.test.js
+node tests/secondary-cycle-vii.test.js
 ```

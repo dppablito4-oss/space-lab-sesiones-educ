@@ -29,7 +29,7 @@ const PlanningMapGenerator = (() => {
         object(input.duration, 'duration');
         if (!Number.isInteger(input.duration.value) || input.duration.value < 1) throw new PlanningMapError('INVALID_INPUT', 'La duración debe ser positiva.');
         for (const key of ['teacherContext', 'learnerContext', 'significantSituationInput', 'methodology', 'profiles']) object(input[key], key);
-        for (const key of ['pedagogical', 'didactic', 'methodology']) {
+        for (const key of ['pedagogical', 'curriculum', 'didactic', 'methodology']) {
             const profile = object(input.profiles[key], `profiles.${key}`);
             if (!profile.id || !profile.profileVersion) throw new PlanningMapError('PROFILE_NOT_FOUND', `No existe un perfil ${key} versionado.`);
         }
@@ -38,6 +38,10 @@ const PlanningMapGenerator = (() => {
         }
         if (!Array.isArray(input.curriculumReferences) || input.curriculumReferences.length === 0) {
             throw new PlanningMapError('CURRICULUM_NOT_FOUND', 'No hay referencias curriculares resueltas.');
+        }
+        for (const key of ['area', 'competency', 'standard']) object(input[key], key);
+        for (const key of ['capacities', 'performances', 'curricularSourceRefs']) {
+            if (!Array.isArray(input[key]) || input[key].length === 0) throw new PlanningMapError('CURRICULUM_NOT_FOUND', `${key} no contiene currículo resuelto para el grado.`);
         }
         return input;
     }

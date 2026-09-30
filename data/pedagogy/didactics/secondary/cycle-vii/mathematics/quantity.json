@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-quantity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary", "cycle": "VII",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-quantity-problems", "officialName": "Resuelve problemas de cantidad" },
+    "capacities": [
+      { "id": "translates-quantities-to-numerical-expressions", "officialName": "Traduce cantidades a expresiones numéricas" },
+      { "id": "communicates-understanding-of-numbers-and-operations", "officialName": "Comunica su comprensión sobre los números y las operaciones" },
+      { "id": "uses-estimation-and-calculation-strategies", "officialName": "Usa estrategias y procedimientos de estimación y cálculo" },
+      { "id": "argues-about-numerical-relations-and-operations", "officialName": "Argumenta afirmaciones sobre relaciones numéricas y las operaciones" }
+    ]
+  },
+  "approach": "Resolución de problemas",
+  "recommendedStrategies": ["modelar relaciones cuantitativas", "comparar y adaptar estrategias", "integrar representaciones", "evaluar precisión y pertinencia", "formular y contrastar argumentos"],
+  "assessmentRecommendations": ["Recoger evidencia de la modelación, las decisiones y la evaluación de estrategias.", "Valorar argumentos, contraejemplos y el nivel de precisión elegido, además del resultado."],
+  "promptRules": {
+    "prioritize": ["problemas auténticos de mayor complejidad", "decisiones justificadas", "múltiples fuentes y representaciones", "evaluación de estrategias", "argumentación y contraejemplos"],
+    "avoid": ["secuencias únicas obligatorias", "aplicación mecánica de fórmulas", "contextos financieros sin análisis crítico", "evaluación limitada a respuestas finales"]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-mathematics-situations-2024"],
+    "reviewNote": "Orientación didáctica piloto para Matemática/Cantidad en ciclo VII; las estrategias son recomendaciones adaptables y requieren validación humana."
+  }
+}

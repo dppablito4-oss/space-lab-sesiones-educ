@@ -1,11 +1,28 @@
 {
   "schemaVersion": "2.0",
-  "catalogVersion": "2026.2",
+  "catalogVersion": "2026.3",
   "status": "pilot",
   "pedagogicalProfiles": [
     {
       "id": "secondary-cycle-vi",
       "path": "pedagogical/secondary-cycle-vi.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii",
+      "path": "pedagogical/secondary-cycle-vii.json",
+      "status": "pilot"
+    }
+  ],
+  "curriculumProfiles": [
+    {
+      "id": "secondary-cycle-vi-mathematics-quantity-curriculum",
+      "path": "curriculum/secondary/cycle-vi/mathematics/quantity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-quantity-curriculum",
+      "path": "curriculum/secondary/cycle-vii/mathematics/quantity.json",
       "status": "pilot"
     }
   ],
@@ -13,6 +30,11 @@
     {
       "id": "secondary-cycle-vi-mathematics-quantity",
       "path": "didactics/secondary/cycle-vi/mathematics/quantity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-quantity",
+      "path": "didactics/secondary/cycle-vii/mathematics/quantity.json",
       "status": "pilot"
     }
   ],

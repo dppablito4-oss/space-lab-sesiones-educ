@@ -101,21 +101,29 @@ def run_width(browser, port, width):
     assert planning(page)["status"] == "reviewed"
 
     calls_before_open = page.evaluate("window.__generationCalls")
+    page.evaluate("() => { window.__roundtripLoaded = false; window.addEventListener('spacelab:session-loaded', () => { window.__roundtripLoaded = true; }, { once: true }); }")
     first.locator('[data-planning-view-action="open-session"]').click()
+    page.wait_for_function("window.__roundtripLoaded === true")
     page.wait_for_function("id => window.getCurrentSession()?.id === id", arg=first_id)
-    assert page.locator("#planning-dialog").evaluate("el => !el.open")
+    page.wait_for_function("!document.querySelector('#planning-dialog').open")
     assert page.evaluate("window.__generationCalls") == calls_before_open
     assert context_bar.is_visible()
 
     # An unsaved edit must offer the existing three-way lifecycle; cancel keeps the editor.
-    page.locator("#session-sheet").evaluate(
-        "el => { el.insertAdjacentHTML('beforeend', '<p>cambio pendiente</p>'); el.dispatchEvent(new Event('input', { bubbles: true })); }"
-    )
-    page.evaluate("() => { ConfirmDialog.show = async () => 'cancel'; }")
+    page.evaluate("""() => {
+        window.getCurrentSession().metadata.titulo = 'Sesión vinculada con cambio pendiente';
+        window.__roundtripGetSession = StorageManager.getSession;
+        StorageManager.getSession = () => null;
+        window.__confirmCalls = 0;
+        ConfirmDialog.show = async () => { window.__confirmCalls += 1; return 'cancel'; };
+    }""")
     page.locator("#btn-return-planning").evaluate("button => button.click()")
-    page.wait_for_timeout(100)
+    page.wait_for_timeout(500)
+    confirm_calls = page.evaluate("window.__confirmCalls")
+    assert confirm_calls == 1, confirm_calls
     assert page.locator("#planning-dialog").evaluate("el => !el.open")
     assert page.evaluate("window.getCurrentSession().id") == first_id
+    page.evaluate("() => { StorageManager.getSession = window.__roundtripGetSession; }")
     page.evaluate("() => { ConfirmDialog.show = async options => options.showDenyButton ? 'deny' : true; }")
     page.locator("#btn-return-planning").evaluate("button => button.click()")
     first.locator('[data-planning-view-action="open-session"]').wait_for()

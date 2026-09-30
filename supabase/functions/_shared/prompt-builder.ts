@@ -257,7 +257,7 @@ function buildPlanningMapPrompt(input: Record<string, unknown>): BuiltPrompt {
   const significantSituationInput = asObject(input.significantSituationInput, 'input.significantSituationInput');
   const methodology = asObject(input.methodology, 'input.methodology');
   const profiles = asObject(input.profiles, 'input.profiles');
-  for (const key of ['pedagogical', 'didactic', 'methodology']) {
+  for (const key of ['pedagogical', 'curriculum', 'didactic', 'methodology']) {
     const profile = asObject(profiles[key], `input.profiles.${key}`);
     if (!cleanText(profile.id, 100) || !cleanText(profile.profileVersion, 50)) throw new Error(`El perfil '${key}' no existe o no está versionado.`);
   }
@@ -272,9 +272,17 @@ function buildPlanningMapPrompt(input: Record<string, unknown>): BuiltPrompt {
       throw new Error(`La referencia curricular ${index + 1} es inválida.`);
     }
   }
+  const area = asObject(input.area, 'input.area');
+  const competency = asObject(input.competency, 'input.competency');
+  const standard = asObject(input.standard, 'input.standard');
+  for (const key of ['capacities', 'performances', 'curricularSourceRefs']) {
+    if (!Array.isArray(input[key]) || input[key].length === 0) throw new Error(`${key} debe contener el currículo resuelto del grado.`);
+  }
   const safeInput = JSON.stringify({
     planningType, level, cycle, grade,
     areas: input.areas,
+    area, competency, capacities: input.capacities, standard,
+    performances: input.performances, curricularSourceRefs: input.curricularSourceRefs,
     curriculumReferences, teacherContext, learnerContext, significantSituationInput,
     methodology, duration, profiles,
   });

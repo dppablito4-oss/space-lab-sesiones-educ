@@ -9,6 +9,7 @@ const readJson = relativePath => JSON.parse(fs.readFileSync(path.join(PEDAGOGY_R
 const catalog = readJson('catalog.json');
 const entries = [
     ...catalog.pedagogicalProfiles,
+    ...catalog.curriculumProfiles,
     ...catalog.didacticProfiles,
     ...catalog.methodologyProfiles,
     ...catalog.legacyProfiles
@@ -20,7 +21,11 @@ assert.deepEqual(result.errors, []);
 assert.equal(result.valid, true);
 assert.equal(catalog.schemaVersion, '2.0');
 assert.ok(catalog.pedagogicalProfiles.some(entry => entry.id === 'secondary-cycle-vi'));
+assert.ok(catalog.pedagogicalProfiles.some(entry => entry.id === 'secondary-cycle-vii'));
+assert.ok(catalog.curriculumProfiles.some(entry => entry.id === 'secondary-cycle-vi-mathematics-quantity-curriculum'));
+assert.ok(catalog.curriculumProfiles.some(entry => entry.id === 'secondary-cycle-vii-mathematics-quantity-curriculum'));
 assert.ok(catalog.didacticProfiles.some(entry => entry.id === 'secondary-cycle-vi-mathematics-quantity'));
+assert.ok(catalog.didacticProfiles.some(entry => entry.id === 'secondary-cycle-vii-mathematics-quantity'));
 assert.equal(catalog.methodologyProfiles.length, 5);
 assert.ok(catalog.legacyProfiles.every(entry => entry.status === 'archived'));
 assert.ok(!catalog.pedagogicalProfiles.some(entry => entry.id.includes('.')));
@@ -36,6 +41,11 @@ assert.ok(Validator.validateCatalog(duplicate, profilesByPath).errors.some(error
 const legacySources = readJson('sources.json');
 const sourceResult = Validator.validateSources(legacySources);
 assert.equal(sourceResult.valid, true);
+for (const entry of catalog.curriculumProfiles) {
+    const validation = Validator.validateCurriculumProfile(profilesByPath[entry.path], sourceResult.sourceIds);
+    assert.deepEqual(validation.errors, [], entry.id);
+    assert.equal(validation.valid, true, entry.id);
+}
 const legacy = profilesByPath['secondary/cycle-vi/mathematics/quantity.json'];
 assert.equal(Validator.validateProfile(legacy, sourceResult.sourceIds).valid, true);
 

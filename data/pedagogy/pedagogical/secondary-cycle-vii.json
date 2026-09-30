@@ -1,0 +1,24 @@
+{
+  "schemaVersion": "2.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii",
+  "status": "pilot",
+  "scope": { "level": "secondary", "cycle": "VII", "grades": ["3", "4", "5"], "ages": [] },
+  "allowedPlanningTypes": ["unit", "project", "learning_experience"],
+  "activityCharacteristics": [
+    "Problemas abiertos que demanden integrar información, modelar relaciones y tomar decisiones fundamentadas.",
+    "Trabajo autónomo y colaborativo con responsabilidades, decisiones y revisión de estrategias.",
+    "Contraste crítico de fuentes, procedimientos, supuestos y consecuencias en contextos científicos, sociales o financieros."
+  ],
+  "recommendedStructure": ["situación significativa compleja", "propósito y criterios", "mapa curricular", "investigación y toma de decisiones", "argumentación", "evaluación formativa", "reflexión y transferencia"],
+  "representationProgression": ["integrar representaciones simbólicas, gráficas y formales", "evaluar la pertinencia y precisión de modelos", "comunicar conclusiones sustentadas"],
+  "assessmentCharacteristics": ["criterios vinculados con decisiones y argumentos", "evidencias de integración de conocimientos", "retroalimentación para revisar modelos y estrategias", "autoevaluación y coevaluación fundamentadas"],
+  "promptRules": {
+    "prioritize": ["autonomía responsable", "análisis crítico", "integración de conocimientos", "argumentación con evidencia", "toma de decisiones"],
+    "avoid": ["secuencias rígidas", "actividades mecánicas sin decisión", "simplificación que elimine la complejidad pertinente", "afirmaciones sin sustento"]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-planning-faq-2022"],
+    "reviewNote": "Perfil piloto del ciclo VII derivado del Programa curricular de Educación Secundaria; requiere validación pedagógica humana antes de pasar a reviewed."
+  }
+}

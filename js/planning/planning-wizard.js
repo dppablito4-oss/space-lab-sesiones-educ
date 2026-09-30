@@ -5,6 +5,8 @@ const PlanningWizard = (() => {
         ? require('./planning-container-v2.js') : window.PlanningContainerV2;
     const mapGenerator = typeof module !== 'undefined' && module.exports
         ? require('./planning-map-generator.js') : window.PlanningMapGenerator;
+    const contextResolver = typeof module !== 'undefined' && module.exports
+        ? require('../pedagogy/context-resolver.js') : window.PedagogicalContextResolver;
     const copy = value => JSON.parse(JSON.stringify(value));
     const uid = prefix => `${prefix}-${globalThis.crypto.randomUUID()}`;
     const types = { learning_experience: 'Experiencia de aprendizaje', unit: 'Unidad', project: 'Proyecto' };
@@ -73,7 +75,7 @@ const PlanningWizard = (() => {
             && draft.curriculumMap.every(entry => entry?.area?.id && entry?.competency?.id && entry?.capacities?.length);
         if (!curriculumReady) missing.push('área y competencia');
         if (!methodologyProfileFor(draft, profiles)) missing.push('metodología');
-        if (!profiles?.pedagogical || !profiles?.didactic) missing.push('perfiles pedagógicos');
+        if (!profiles?.pedagogical || !profiles?.curriculum || !profiles?.didactic) missing.push('perfiles pedagógicos y curriculares');
         return { ready: missing.length === 0, missing };
     }
 
@@ -91,8 +93,19 @@ const PlanningWizard = (() => {
             significantSituationInput: copy(draft.significantSituation),
             methodology: { code: draft.methodologyConfig.primary?.code || '' },
             curriculumReferences: copy(draft.curriculumMap),
+            area: copy(draft.curriculumMap[0].area),
+            competency: copy(draft.curriculumMap[0].competency),
+            capacities: copy(draft.curriculumMap[0].capacities),
+            standard: copy(draft.curriculumMap[0].standard),
+            performances: copy(draft.curriculumMap[0].performances),
+            curricularSourceRefs: copy(draft.curriculumMap[0].curricularSourceRefs),
             profiles: {
                 pedagogical: copy(profiles.pedagogical),
+                curriculum: {
+                    id: profiles.curriculum.id,
+                    profileVersion: profiles.curriculum.profileVersion,
+                    status: profiles.curriculum.status
+                },
                 didactic: copy(profiles.didactic),
                 methodology: methodologyProfile ? copy(methodologyProfile) : null
             }
@@ -146,22 +159,56 @@ const PlanningWizard = (() => {
         return Boolean(types[type] && entitlements?.ok === true && entitlements.features?.[feature] === true);
     }
 
-    function create(type, id = uid('plan')) {
+    function create(type, id = uid('plan'), grade = '2') {
         if (!types[type]) throw new Error('Selecciona un tipo de planificación.');
-        return core.createDraft({ id, identity: { title: `Nueva ${types[type].toLowerCase()}`, planningType: type, cycle: 'VI', grade: '2' } });
+        const cycle = contextResolver.resolveSecondaryCycle(grade);
+        return core.createDraft({ id, identity: { title: `Nueva ${types[type].toLowerCase()}`, planningType: type, cycle, grade: String(grade) } });
     }
 
-    function addCurriculum(draft, profile) {
+    function curriculumEntry(draft, profile, curriculum = null, previous = null) {
+        const grade = String(draft.identity.grade);
+        return {
+            id: previous?.id || uid('map'),
+            area: copy(curriculum?.scope.area || profile.scope.area),
+            competency: copy(curriculum?.competency || profile.scope.competency),
+            capacities: copy(curriculum?.capacities || profile.scope.capacities),
+            standard: copy(curriculum?.standard || { description: '', sourceRef: '' }),
+            performances: copy(curriculum?.performancesByGrade?.[grade] || []),
+            criteria: copy(previous?.criteria || []), expectedEvidence: copy(previous?.expectedEvidence || []),
+            curricularSourceRefs: copy(curriculum?.provenance.sourceRefs || [])
+        };
+    }
+
+    function addCurriculum(draft, profile, curriculum = null) {
         if (draft.curriculumMap.length) return;
-        const scope = profile.scope;
-        draft.curriculumMap.push({ id: uid('map'), area: copy(scope.area), competency: copy(scope.competency),
-            capacities: copy(scope.capacities), standard: { description: '', sourceRef: '' },
-            performances: [], criteria: [], expectedEvidence: [], curricularSourceRefs: [] });
+        draft.curriculumMap.push(curriculumEntry(draft, profile, curriculum));
         const entry = draft.curriculumMap[0];
         draft.sequence.forEach(item => {
             item.curriculumMapRefs = [entry.id]; item.competencyRefs = [entry.competency.id];
             item.capacityRefs = entry.capacities.map(c => c.id);
         });
+    }
+
+    function resolvePlanningProfiles(identity, catalogs) {
+        const methodology = identity.methodology || catalogs?.methodologyProfiles?.[0]?.code;
+        const result = contextResolver.resolve({
+            level: identity.level, cycle: identity.cycle, grade: identity.grade,
+            area: 'mathematics', competency: 'solves-quantity-problems',
+            planningType: identity.planningType, methodology
+        }, catalogs);
+        if (!result.resolved) {
+            const error = new Error(result.errors[0]?.message || 'No se pudo resolver el contexto pedagógico.');
+            error.code = result.errors[0]?.code || 'profile_not_found';
+            throw error;
+        }
+        const refs = result.context.profiles;
+        return {
+            pedagogical: catalogs.pedagogicalProfiles.find(profile => profile.id === refs.pedagogical.id),
+            curriculum: catalogs.curriculumProfiles.find(profile => profile.id === refs.curriculum.id),
+            didactic: catalogs.didacticProfiles.find(profile => profile.id === refs.didactic.id),
+            methodologies: catalogs.methodologyProfiles,
+            context: result.context
+        };
     }
 
     function addSession(draft) {
@@ -228,7 +275,7 @@ const PlanningWizard = (() => {
         let draft = null, previous = null, step = 0, dirty = false, busy = false;
         let creationMode = 'manual', aiProposal = null, generating = false;
         let returnToView = false;
-        let profiles = null;
+        let profiles = null, catalogs = null;
         let previewMode = 'summary', previewOpen = false, previewTimer = null, showValidation = false;
         const requiredPaths = new Set(['identity.title', 'identity.duration.value', 'significantSituation.context',
             'significantSituation.problemOrOpportunity', 'drivingQuestion', 'purpose.summary']);
@@ -266,30 +313,37 @@ const PlanningWizard = (() => {
             if (error) element.focus();
         }
         function shell(content) {
-            dialog.innerHTML = `<div class="planning-shell"><header class="planning-header"><div><span class="home-eyebrow">Beta · Secundaria, ciclo VI</span><h2 id="planning-title">Planificación articulada</h2></div>${button('close', 'Cerrar')}</header><p id="planning-notice" tabindex="-1" role="status"></p>${content}</div>`;
+            dialog.innerHTML = `<div class="planning-shell"><header class="planning-header"><div><span class="home-eyebrow">Beta · Secundaria, ciclos VI y VII</span><h2 id="planning-title">Planificación articulada</h2></div>${button('close', 'Cerrar')}</header><p id="planning-notice" tabindex="-1" role="status"></p>${content}</div>`;
         }
         function library() {
             draft = null; previous = null; dirty = false; creationMode = 'manual'; aiProposal = null; generating = false; returnToView = false;
             const plans = repository.list().filter(p => p.schemaVersion === '2.0' && ['draft', 'reviewed'].includes(p.status)
-                && p.identity.level === 'secondary' && p.identity.cycle === 'VI' && types[p.identity.planningType]);
+                && p.identity.level === 'secondary' && ['VI', 'VII'].includes(p.identity.cycle) && types[p.identity.planningType]);
             shell(`<h3>¿Qué quieres crear?</h3><p>Construye tu planificación paso a paso. Puedes guardar un borrador en cualquier momento.</p><div class="planning-actions">${Object.entries(types).map(([type, label]) => button('create', esc(label), `data-type="${type}"`)).join('')}</div><h3>Mis planificaciones</h3><div class="planning-library">${plans.length ? plans.map(p => `<article class="planning-card"><div><strong>${esc(p.identity.title || 'Sin título')}</strong><p>${types[p.identity.planningType]} · ${p.status === 'reviewed' ? 'Revisada' : 'Borrador'} · Revisión ${p.revision}</p></div>${button('open', 'Abrir', `data-id="${esc(p.id)}"`)}</article>`).join('') : '<p>Aún no tienes planificaciones guardadas para este piloto.</p>'}</div>${button('sync', 'Sincronizar con mi cuenta')}`);
         }
         async function loadProfiles() {
-            if (profiles) return;
-            const codes = ['project_based_learning', 'problem_based_learning', 'challenge_based_learning', 'game_based_learning', 'custom'];
-            const paths = ['didactics/secondary/cycle-vi/mathematics/quantity', 'pedagogical/secondary-cycle-vi', ...codes.map(c => `methodologies/${c}`)];
-            const results = await Promise.all(paths.map(async path => {
-                const response = await fetch(`data/pedagogy/${path}.json`);
-                if (!response.ok) throw new Error('No se pudieron cargar los perfiles. Intenta abrir nuevamente.');
-                return response.json();
-            }));
-            profiles = { didactic: results[0], pedagogical: results[1], methodologies: results.slice(2) };
+            if (catalogs) return;
+            const catalogResponse = await fetch('data/pedagogy/catalog.json');
+            if (!catalogResponse.ok) throw new Error('No se pudo cargar el catálogo pedagógico.');
+            const catalog = await catalogResponse.json();
+            async function loadGroup(group) {
+                return Promise.all((catalog[group] || []).map(async entry => {
+                    const response = await fetch(`data/pedagogy/${entry.path}`);
+                    if (!response.ok) throw new Error('No se pudieron cargar los perfiles. Intenta abrir nuevamente.');
+                    return response.json();
+                }));
+            }
+            const [pedagogicalProfiles, curriculumProfiles, didacticProfiles, methodologyProfiles] = await Promise.all([
+                loadGroup('pedagogicalProfiles'), loadGroup('curriculumProfiles'), loadGroup('didacticProfiles'), loadGroup('methodologyProfiles')
+            ]);
+            catalogs = { pedagogicalProfiles, curriculumProfiles, didacticProfiles, methodologyProfiles };
         }
         async function editExisting(containerId) {
             await loadProfiles();
             const loaded = repository.get(containerId);
             if (!loaded || !core.validate(loaded).valid) throw new Error('No se pudo abrir esta planificación para editarla.');
             draft = copy(loaded); previous = copy(loaded); step = 0; dirty = false; showValidation = false;
+            profiles = resolvePlanningProfiles({ ...draft.identity, methodology: draft.methodologyConfig.primary?.code }, catalogs);
             creationMode = 'manual'; aiProposal = null; generating = false; returnToView = true;
             render();
             dialog.querySelector('#planning-step-title')?.focus();
@@ -309,17 +363,6 @@ const PlanningWizard = (() => {
                 return `<li>${button('step', esc(label), `data-step="${targetStep}"`)}: ${esc(error.message)}</li>`;
             }).join('');
             return `<h3>${esc(draft.identity.title || 'Sin título')}</h3><p>${types[draft.identity.planningType]} · ${draft.identity.duration.value} semanas · ${draft.sequence.length} sesiones</p><p>${esc(draft.purpose.summary)}</p><h4>Producto final</h4><p>${esc(draft.finalProduct?.title || 'Por definir')}</p><ol>${draft.sequence.map(s => `<li>Semana ${s.week || '—'}: ${esc(s.title)}${s.date ? ` · ${esc(s.date)}` : ''}</li>`).join('')}</ol><h4>${result.valid ? 'Campos de revisión completos' : 'Pendiente de completar'}</h4><ul>${pending}</ul><h4>Orientaciones metodológicas</h4><ul>${[...result.warnings, ...result.suggestions].map(e => `<li>${esc(e.message)}</li>`).join('') || '<li>Sin observaciones.</li>'}</ul><p>Se guardará como borrador editable. Las orientaciones no bloquean el guardado.</p>`;
-        }
-        function legacyContent() {
-            switch (step) {
-            case 0: return `<p>Piloto: Secundaria · Ciclo VI · Matemática.</p><div class="planning-grid">${field('identity.title', 'Título')}${field('identity.grade', 'Grado', 'text', [['1', '1.º'], ['2', '2.º']])}${field('administrativeContext.institution', 'Institución')}${field('administrativeContext.teacher', 'Docente')}${field('administrativeContext.sections', 'Secciones (una por línea)', 'lines')}${field('identity.duration.value', 'Duración en semanas', 'number')}${field('identity.startDate', 'Fecha de inicio', 'date')}${field('identity.endDate', 'Fecha de fin', 'date')}${field('learnerContext.students', 'Contexto del grupo', 'textarea')}${field('learnerContext.diagnosis', 'Necesidades', 'textarea')}${field('learnerContext.interests', 'Intereses (uno por línea)', 'lines')}${field('learnerContext.localContext', 'Situación local', 'textarea')}</div>`;
-            case 1: return field('significantSituation.context', 'Situación significativa: contexto', 'textarea') + field('significantSituation.problemOrOpportunity', 'Problema u oportunidad', 'textarea') + field('drivingQuestion', 'Pregunta retadora', 'textarea') + field('purpose.summary', 'Propósito de aprendizaje', 'textarea');
-            case 2: return draft.curriculumMap.length ? draft.curriculumMap.map((entry, i) => `<article class="planning-card"><h3>${esc(entry.area.officialName)} · ${esc(entry.competency.officialName)}</h3><p>Capacidades: ${entry.capacities.map(c => esc(c.officialName)).join('; ')}.</p>${field(`curriculumMap.${i}.standard.description`, 'Estándar (consigna el correspondiente al ciclo)', 'textarea')}${field(`curriculumMap.${i}.performances`, 'Desempeños (uno por línea)', 'descriptions')}${field(`curriculumMap.${i}.criteria`, 'Criterios (uno por línea)', 'descriptions')}${field(`curriculumMap.${i}.expectedEvidence`, 'Evidencias esperadas (una por línea)', 'descriptions')}</article>`).join('') : `<p>El piloto trabaja Matemática: Resuelve problemas de cantidad.</p>${button('curriculum', 'Agregar competencia del piloto')}`;
-            case 3: return `<label class="planning-field"><span>Metodología principal</span><select id="planning-methodology"><option value="">Por definir</option>${profiles.methodologies.map(p => `<option value="${p.code}" ${draft.methodologyConfig.primary?.code === p.code ? 'selected' : ''}>${esc(p.displayName)}</option>`).join('')}</select></label>${draft.methodologyConfig.primary?.code === 'custom' ? field('methodologyConfig.custom.name', 'Nombre de la metodología') : ''}`;
-            case 4: return `${draft.finalProduct ? field('finalProduct.title', 'Producto final') + field('finalProduct.description', 'Descripción del producto final', 'textarea') + field('finalProduct.audience', 'Destinatarios') : button('product', 'Definir producto final')}<p>Las evidencias se definen en Currículo y en cada sesión; los productos parciales se definen en la secuencia.</p>${field('assessmentPlan.formativeAssessment', 'Evaluación formativa', 'textarea')}${field('assessmentPlan.feedbackApproach', 'Retroalimentación', 'textarea')}`;
-            case 5: return `${button('milestone', 'Agregar hito')}${draft.milestones.map((m, i) => `<article class="planning-card">${field(`milestones.${i}.title`, 'Hito')}${field(`milestones.${i}.phase`, 'Fase metodológica')}${field(`milestones.${i}.objective`, 'Objetivo', 'textarea')}</article>`).join('')}${button('session', 'Agregar sesión al mapa')}<p>Define la secuencia manual. Cada sesión referencia las capacidades y criterios del mapa curricular.</p>${draft.sequence.map((s, i) => `<article class="planning-card"><h3>Sesión ${i + 1}</h3><div class="planning-grid">${field(`sequence.${i}.title`, 'Título de sesión')}${field(`sequence.${i}.week`, 'Semana', 'number')}${field(`sequence.${i}.date`, 'Fecha', 'date')}${field(`sequence.${i}.duration.value`, 'Duración en minutos', 'number')}${field(`sequence.${i}.milestoneId`, 'Hito', 'text', [['', 'Sin hito'], ...draft.milestones.map(m => [m.id, m.title])])}${field(`sequence.${i}.knowledge`, 'Conocimientos (uno por línea)', 'lines')}${field(`sequence.${i}.evidence`, 'Evidencias (una por línea)', 'descriptions')}${field(`sequence.${i}.assessmentInstruments`, 'Instrumentos (uno por línea)', 'labels')}</div>${s.partialProduct ? field(`sequence.${i}.partialProduct.title`, 'Producto parcial') + field(`sequence.${i}.partialProduct.description`, 'Descripción del producto parcial', 'textarea') : button('partial', 'Definir producto parcial', `data-index="${i}"`)}<div class="planning-actions">${button('up', 'Subir', `data-index="${i}" ${i === 0 ? 'disabled' : ''}`)}${button('down', 'Bajar', `data-index="${i}" ${i === draft.sequence.length - 1 ? 'disabled' : ''}`)}${button('remove', 'Quitar sesión', `data-index="${i}"`)}</div></article>`).join('')}`;
-            default: return review();
-            }
         }
         function sectionCard(title, description, body, extraClass = '') {
             return `<section class="planning-form-card ${extraClass}"><header><h4>${esc(title)}</h4><p>${esc(description)}</p></header>${body}</section>`;
@@ -354,8 +397,8 @@ const PlanningWizard = (() => {
         function content() {
             switch (step) {
             case 0:
-                return `${sectionCard('Contexto general', 'Identifica la planificación y su marco de trabajo.',
-                    `<div class="planning-grid">${field('identity.title', 'Título')}${field('identity.grade', 'Grado', 'text', [['1', '1.º'], ['2', '2.º']])}${field('identity.duration.value', 'Duración en semanas', 'number')}${field('identity.startDate', 'Fecha de inicio', 'date')}${field('identity.endDate', 'Fecha de fin', 'date')}</div>`)}
+                return `${sectionCard('Contexto general', `${draft.identity.grade}.º de Secundaria · Ciclo ${draft.identity.cycle}. El ciclo se resuelve automáticamente desde el grado.`,
+                    `<div class="planning-grid">${field('identity.title', 'Título')}${field('identity.grade', 'Grado', 'text', [['1', '1.º'], ['2', '2.º'], ['3', '3.º'], ['4', '4.º'], ['5', '5.º']])}${field('identity.duration.value', 'Duración en semanas', 'number')}${field('identity.startDate', 'Fecha de inicio', 'date')}${field('identity.endDate', 'Fecha de fin', 'date')}</div>`)}
                     ${sectionCard('Comunidad educativa', 'Registra los datos que ayudan a situar la experiencia.',
                     `<div class="planning-grid">${field('administrativeContext.institution', 'Institución')}${field('administrativeContext.teacher', 'Docente')}${field('administrativeContext.sections', 'Secciones (una por línea)', 'lines')}</div>`)}
                     ${sectionCard('Conoce al grupo', 'Resume necesidades, intereses y oportunidades del contexto.',
@@ -370,8 +413,9 @@ const PlanningWizard = (() => {
                     entry.area.officialName, entry.competency.officialName,
                     `<div class="planning-capabilities"><strong>Capacidades</strong><ul>${entry.capacities.map(capacity => `<li><span aria-hidden="true">✓</span>${esc(capacity.officialName)}</li>`).join('')}</ul></div>
                     <details class="planning-details" open><summary>Referentes y evaluación</summary>
-                    ${field(`curriculumMap.${index}.standard.description`, 'Estándar del ciclo', 'textarea')}
-                    <div class="planning-grid">${field(`curriculumMap.${index}.performances`, 'Desempeños (uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.criteria`, 'Criterios (uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.expectedEvidence`, 'Evidencias esperadas (una por línea)', 'descriptions')}</div></details>`, 'planning-curriculum-editor')).join('')
+                    <section data-curriculum-standard><strong>Estándar del ciclo ${esc(draft.identity.cycle)}</strong><p>${esc(entry.standard?.description || '')}</p></section>
+                    <section data-curriculum-performances><strong>Desempeños de ${esc(draft.identity.grade)}.º</strong><ul>${entry.performances.map(performance => `<li>${esc(performance.description)}</li>`).join('')}</ul></section>
+                    <div class="planning-grid">${field(`curriculumMap.${index}.criteria`, 'Criterios (uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.expectedEvidence`, 'Evidencias esperadas (una por línea)', 'descriptions')}</div></details>`, 'planning-curriculum-editor')).join('')
                     : `<div class="planning-empty-state"><span class="planning-empty-icon" aria-hidden="true">◎</span><h4>Conecta el currículo</h4><p>El piloto trabaja Matemática: Resuelve problemas de cantidad.</p>${button('curriculum', 'Agregar competencia del piloto')}</div>`;
             case 3:
                 return sectionCard('Metodología principal', 'Elige el enfoque que guiará la secuencia. Los códigos internos se conservan sin cambios.',
@@ -577,6 +621,20 @@ const PlanningWizard = (() => {
                 value = kind === 'lines' ? [...new Set(lines)] : lines.map((line, i) => ({ id: old[i]?.id || uid('item'), [kind === 'labels' ? 'label' : 'description']: line }));
             }
             write(path, value);
+            if (path === 'identity.grade') {
+                draft.identity.cycle = contextResolver.resolveSecondaryCycle(value);
+                profiles = resolvePlanningProfiles({ ...draft.identity, methodology: draft.methodologyConfig.primary?.code }, catalogs);
+                if (draft.curriculumMap.length) {
+                    const previousEntry = { ...draft.curriculumMap[0], grade: value };
+                    draft.curriculumMap = [curriculumEntry(draft, profiles.didactic, profiles.curriculum, previousEntry)];
+                    const entry = draft.curriculumMap[0];
+                    draft.sequence.forEach(item => {
+                        item.curriculumMapRefs = [entry.id];
+                        item.competencyRefs = [entry.competency.id];
+                        item.capacityRefs = entry.capacities.map(capacity => capacity.id);
+                    });
+                }
+            }
             if (path.endsWith('.criteria')) {
                 const ids = draft.curriculumMap.flatMap(e => e.criteria.map(c => c.id));
                 draft.sequence.forEach(s => { s.criterionRefs = [...ids]; });
@@ -584,6 +642,10 @@ const PlanningWizard = (() => {
             }
             if (path.endsWith('.milestoneId')) draft.milestones.forEach(m => { m.sequenceItemIds = draft.sequence.filter(s => s.milestoneId === m.id).map(s => s.id); });
             markDirty();
+            if (path === 'identity.grade') {
+                render();
+                dialog.querySelector('[data-path="identity.grade"]')?.focus();
+            }
         });
         dialog.addEventListener('change', event => {
             if (event.target.id !== 'planning-methodology') return;
@@ -657,6 +719,7 @@ const PlanningWizard = (() => {
                     const loaded = create(target.dataset.type);
                     if (!loaded || !core.validate(loaded).valid) throw new Error('No se pudo abrir este borrador.');
                     draft = copy(loaded); previous = null; step = 0; dirty = true; showValidation = false;
+                    profiles = resolvePlanningProfiles(draft.identity, catalogs);
                     creationMode = 'choose'; aiProposal = null; generating = false; returnToView = false;
                 } else if (action === 'step') step = Number(target.dataset.step);
                 else if (action === 'goto-sequence') step = 5;
@@ -669,7 +732,7 @@ const PlanningWizard = (() => {
                         draft.methodologyConfig.primary = profile ? { profileId: profile.id, profileVersion: profile.profileVersion, code: profile.code } : null;
                         if (profile?.code === 'custom' && !draft.methodologyConfig.custom) draft.methodologyConfig.custom = { name: '', phases: [] };
                     }
-                    if (action === 'curriculum') addCurriculum(draft, profiles.didactic);
+                    if (action === 'curriculum') addCurriculum(draft, profiles.didactic, profiles.curriculum);
                     if (action === 'session') addSession(draft);
                     if (action === 'up' || action === 'down') reorder(draft, index, action === 'up' ? -1 : 1);
                     if (action === 'remove') removeSession(draft, index);
@@ -698,6 +761,6 @@ const PlanningWizard = (() => {
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
     return { create, canCreate, addCurriculum, addSession, reorder, removeSession, prepareSave, prepareReview, requiredCompletion,
         generationReadiness, buildGenerationInput, hasMeaningfulManualContent, acceptGeneratedProposal,
-        formatAiError, generateProposal };
+        formatAiError, generateProposal, resolvePlanningProfiles };
 })();
 if (typeof module !== 'undefined' && module.exports) module.exports = PlanningWizard;

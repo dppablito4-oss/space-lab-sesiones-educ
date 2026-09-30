@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-quantity-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-quantity-problems", "officialName": "Resuelve problemas de cantidad" },
+  "capacities": [
+    { "id": "translates-quantities-to-numerical-expressions", "officialName": "Traduce cantidades a expresiones numéricas" },
+    { "id": "communicates-understanding-of-numbers-and-operations", "officialName": "Comunica su comprensión sobre los números y las operaciones" },
+    { "id": "uses-estimation-and-calculation-strategies", "officialName": "Usa estrategias y procedimientos de estimación y cálculo" },
+    { "id": "argues-about-numerical-relations-and-operations", "officialName": "Argumenta afirmaciones sobre relaciones numéricas y las operaciones" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas referidos a las relaciones entre cantidades muy grandes o muy pequeñas, magnitudes o intercambios financieros, traduciéndolos a expresiones numéricas y operativas con números irracionales o racionales, notación científica, intervalos y tasa de interés simple y compuesto. Evalúa si estas expresiones cumplen las condiciones iniciales. Expresa su comprensión de los números racionales e irracionales, sus operaciones y propiedades, y la notación científica; interpreta e integra información de varias fuentes. Representa equivalencias entre múltiplos y submúltiplos de unidades de masa y tiempo, y entre escalas de temperatura. Selecciona, combina y adapta recursos, estrategias y procedimientos de cálculo y estimación, los evalúa y elige los más idóneos. Plantea y compara afirmaciones sobre números racionales y sus propiedades, formula casos opuestos o especiales y justifica, comprueba o descarta su validez mediante contraejemplos o propiedades matemáticas.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-translate", "description": "Traduce relaciones entre cantidades, magnitudes y tasas de interés simple a expresiones con números racionales, notación exponencial y modelos financieros; comprueba que reproduzcan las condiciones de la situación." },
+      { "id": "grade-3-communicate", "description": "Expresa el significado de racionales como decimales periódicos, operaciones y propiedades, notación científica y términos de interés simple mediante lenguaje matemático y representaciones simbólicas." },
+      { "id": "grade-3-strategies", "description": "Selecciona, emplea y combina estrategias, recursos y propiedades para operar con racionales, estimar tasas e impuestos y realizar mediciones y conversiones pertinentes." },
+      { "id": "grade-3-argue", "description": "Plantea y compara afirmaciones sobre propiedades de operaciones con racionales, equivalencias entre tasas de interés y procedimientos tributarios; las justifica y comprueba con ejemplos." }
+    ],
+    "4": [
+      { "id": "grade-4-translate", "description": "Traduce relaciones entre cantidades, magnitudes derivadas y tasas de interés simple y compuesto a expresiones con racionales, raíces inexactas, notación exponencial y científica o modelos financieros; evalúa el modelo usado." },
+      { "id": "grade-4-communicate", "description": "Expresa equivalencias entre racionales y decimales periódicos, notación científica, raíces inexactas, densidad de racionales y términos de modelos financieros con representaciones simbólicas y formales." },
+      { "id": "grade-4-strategies", "description": "Selecciona, combina y adapta estrategias para operar con racionales, raíces inexactas, notación científica e intervalos, estimar interés compuesto y medir magnitudes derivadas con la exactitud requerida." },
+      { "id": "grade-4-argue", "description": "Plantea y compara afirmaciones sobre operaciones, raíces inexactas, densidad de racionales e intercambios financieros; justifica y comprueba su validez mediante ejemplos, contraejemplos y razonamiento." }
+    ],
+    "5": [
+      { "id": "grade-5-translate", "description": "Traduce relaciones entre cantidades, magnitudes derivadas y tasas de interés simple y compuesto a expresiones con racionales, raíces inexactas, notación científica o modelos financieros; evalúa si reproducen las condiciones y facilitan la solución." },
+      { "id": "grade-5-communicate", "description": "Expresa equivalencias y operaciones en notación científica, propiedades de raíces inexactas, números irracionales y términos financieros mediante lenguaje matemático y representaciones gráficas, simbólicas y formales." },
+      { "id": "grade-5-strategies", "description": "Selecciona, combina y adapta estrategias y propiedades con racionales, raíces aproximadas, notación científica e intervalos; elige procedimientos idóneos y unidades según la exactitud requerida." },
+      { "id": "grade-5-argue", "description": "Plantea y compara afirmaciones sobre números, raíces aproximadas y conveniencia de tasas o índices financieros; las justifica y comprueba con ejemplos, contraejemplos y razonamiento inductivo o deductivo." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria, pp. 143-146; requiere cotejo pedagógico humano."
+  }
+}
