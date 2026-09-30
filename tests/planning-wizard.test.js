@@ -9,6 +9,10 @@ const customProfile = require('../data/pedagogy/methodologies/custom.json');
 const values = new Map();
 const storage = { getItem: key => values.get(key) ?? null, setItem: (key, value) => values.set(key, value) };
 const repository = Repository.create({ storage, validator: Core });
+const emptyProgress = Wizard.requiredCompletion(Wizard.create('unit', 'plan-progress'));
+assert.equal(emptyProgress.total, 11);
+assert.ok(emptyProgress.percentage < 100);
+assert.equal(emptyProgress.byStep.length, 7);
 for (const type of ['unit', 'project', 'learning_experience']) {
     const draft = Wizard.create(type, `plan-${type.replaceAll('_', '-')}`);
     assert.equal(draft.schemaVersion, '2.0');
@@ -77,6 +81,7 @@ Wizard.addCurriculum(complete, profile);
 complete.curriculumMap[0].criteria.push({ id: 'criterion-review', description: 'Justifica sus procedimientos.' });
 Wizard.addSession(complete);
 const reviewed = Wizard.prepareReview(complete, null, { pedagogicalProfile, methodologyProfile: customProfile });
+assert.equal(Wizard.requiredCompletion(complete).percentage, 100, 'El progreso usa únicamente requisitos de revisión existentes.');
 repository.save(reviewed);
 assert.equal(reviewed.status, 'reviewed');
 assert.equal(reviewed.revision, 2, 'La transición conserva la historia e incrementa la revisión.');

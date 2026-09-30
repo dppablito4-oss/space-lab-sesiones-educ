@@ -8,7 +8,39 @@ const PlanningWizard = (() => {
     const copy = value => JSON.parse(JSON.stringify(value));
     const uid = prefix => `${prefix}-${globalThis.crypto.randomUUID()}`;
     const types = { learning_experience: 'Experiencia de aprendizaje', unit: 'Unidad', project: 'Proyecto' };
-    const steps = ['Contexto', 'Propósito', 'Currículo', 'Metodología', 'Producto / evidencias', 'Secuencia', 'Revisión'];
+    const steps = ['Datos y contexto', 'Situación y propósito', 'Currículo', 'Metodología', 'Producto y evaluación', 'Secuencia', 'Revisión'];
+    const stepDescriptions = [
+        'Define los datos generales y conoce el punto de partida de tu grupo.',
+        'Conecta una situación significativa con un propósito claro.',
+        'Selecciona los referentes curriculares y criterios de evaluación.',
+        'Elige cómo se organizará la experiencia de aprendizaje.',
+        'Aclara el producto, las evidencias y la estrategia de evaluación.',
+        'Organiza las sesiones, hitos y productos parciales.',
+        'Comprueba que todo esté listo antes de marcarla como revisada.'
+    ];
+
+    function requiredCompletion(draft) {
+        const requirements = [
+            [0, 'identity.title', Boolean(draft?.identity?.title?.trim())],
+            [0, 'identity.cycle', Boolean(draft?.identity?.cycle?.trim())],
+            [0, 'identity.duration', Number.isInteger(draft?.identity?.duration?.value) && draft.identity.duration.value > 0],
+            [1, 'significantSituation.context', Boolean(draft?.significantSituation?.context?.trim())],
+            [1, 'significantSituation.problemOrOpportunity', Boolean(draft?.significantSituation?.problemOrOpportunity?.trim())],
+            [1, 'drivingQuestion', Boolean(draft?.drivingQuestion?.trim())],
+            [1, 'purpose.summary', Boolean(draft?.purpose?.summary?.trim())],
+            [2, 'curriculumMap', Boolean(draft?.curriculumMap?.length)],
+            [2, 'curriculumMap.criteria', Boolean(draft?.curriculumMap?.some(entry => entry.criteria?.length))],
+            [3, 'methodologyConfig.primary', Boolean(draft?.methodologyConfig?.primary)],
+            [5, 'sequence', Boolean(draft?.sequence?.length)]
+        ];
+        const completed = requirements.filter(([, , ready]) => ready).length;
+        const byStep = steps.map((_, index) => requirements.filter(([target]) => target === index));
+        return {
+            completed, total: requirements.length,
+            percentage: Math.round((completed / requirements.length) * 100),
+            byStep: byStep.map(fields => ({ total: fields.length, complete: fields.length > 0 && fields.every(([, , ready]) => ready) }))
+        };
+    }
     const AI_ERROR_MESSAGES = {
         GATEWAY_UNAVAILABLE: 'No se pudo conectar con el servicio de IA. Comprueba tu sesión y conexión.',
         INVALID_INPUT: 'Completa el contexto mínimo antes de generar la propuesta.',
@@ -197,6 +229,9 @@ const PlanningWizard = (() => {
         let creationMode = 'manual', aiProposal = null, generating = false;
         let returnToView = false;
         let profiles = null;
+        let previewMode = 'summary', previewOpen = false, previewTimer = null, showValidation = false;
+        const requiredPaths = new Set(['identity.title', 'identity.duration.value', 'significantSituation.context',
+            'significantSituation.problemOrOpportunity', 'drivingQuestion', 'purpose.summary']);
         const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
         const read = path => path.split('.').reduce((obj, key) => obj?.[key], draft);
         const write = (path, value) => {
@@ -208,14 +243,21 @@ const PlanningWizard = (() => {
         function field(path, label, kind = 'text', choices = null) {
             const value = read(path);
             const id = `planning-${path.replaceAll('.', '-')}`;
-            const attrs = `id="${id}" data-path="${path}" data-kind="${kind}"`;
+            const required = requiredPaths.has(path);
+            const validationPath = path === 'identity.duration.value' ? 'identity.duration'
+                : /^curriculumMap\.\d+\.criteria$/.test(path) ? 'curriculumMap.criteria' : path;
+            const error = showValidation && profiles ? core.validate(draft, { forReview: true,
+                pedagogicalProfile: profiles.pedagogical,
+                methodologyProfile: profiles.methodologies.find(profile => profile.code === draft.methodologyConfig.primary?.code)
+            }).errors.find(item => item.path === validationPath) : null;
+            const attrs = `id="${id}" data-path="${path}" data-kind="${kind}" ${required ? 'aria-required="true"' : ''} ${error ? `aria-invalid="true" aria-describedby="${id}-error"` : ''}`;
             let control;
             if (choices) control = `<select ${attrs}>${choices.map(([v, text]) => `<option value="${esc(v)}" ${String(value ?? '') === String(v) ? 'selected' : ''}>${esc(text)}</option>`).join('')}</select>`;
             else if (['textarea', 'lines', 'descriptions', 'labels'].includes(kind)) {
                 const content = kind === 'lines' ? value.join('\n') : kind === 'descriptions' ? value.map(v => v.description).join('\n') : kind === 'labels' ? value.map(v => v.label).join('\n') : value;
                 control = `<textarea ${attrs} rows="3">${esc(content)}</textarea>`;
             } else control = `<input ${attrs} type="${kind}" value="${esc(value)}" ${kind === 'number' ? 'min="0" step="1"' : ''}>`;
-            return `<label class="planning-field" for="${id}"><span>${esc(label)}</span>${control}</label>`;
+            return `<label class="planning-field" for="${id}"><span>${esc(label)}${required ? '<span class="planning-required" aria-hidden="true"> *</span>' : ''}</span>${control}${error ? `<small id="${id}-error" class="planning-field-error">${esc(error.message)}</small>` : ''}</label>`;
         }
         function notice(message, error = false) {
             const element = dialog.querySelector('#planning-notice');
@@ -247,7 +289,7 @@ const PlanningWizard = (() => {
             await loadProfiles();
             const loaded = repository.get(containerId);
             if (!loaded || !core.validate(loaded).valid) throw new Error('No se pudo abrir esta planificación para editarla.');
-            draft = copy(loaded); previous = copy(loaded); step = 0; dirty = false;
+            draft = copy(loaded); previous = copy(loaded); step = 0; dirty = false; showValidation = false;
             creationMode = 'manual'; aiProposal = null; generating = false; returnToView = true;
             render();
             dialog.querySelector('#planning-step-title')?.focus();
@@ -268,7 +310,7 @@ const PlanningWizard = (() => {
             }).join('');
             return `<h3>${esc(draft.identity.title || 'Sin título')}</h3><p>${types[draft.identity.planningType]} · ${draft.identity.duration.value} semanas · ${draft.sequence.length} sesiones</p><p>${esc(draft.purpose.summary)}</p><h4>Producto final</h4><p>${esc(draft.finalProduct?.title || 'Por definir')}</p><ol>${draft.sequence.map(s => `<li>Semana ${s.week || '—'}: ${esc(s.title)}${s.date ? ` · ${esc(s.date)}` : ''}</li>`).join('')}</ol><h4>${result.valid ? 'Campos de revisión completos' : 'Pendiente de completar'}</h4><ul>${pending}</ul><h4>Orientaciones metodológicas</h4><ul>${[...result.warnings, ...result.suggestions].map(e => `<li>${esc(e.message)}</li>`).join('') || '<li>Sin observaciones.</li>'}</ul><p>Se guardará como borrador editable. Las orientaciones no bloquean el guardado.</p>`;
         }
-        function content() {
+        function legacyContent() {
             switch (step) {
             case 0: return `<p>Piloto: Secundaria · Ciclo VI · Matemática.</p><div class="planning-grid">${field('identity.title', 'Título')}${field('identity.grade', 'Grado', 'text', [['1', '1.º'], ['2', '2.º']])}${field('administrativeContext.institution', 'Institución')}${field('administrativeContext.teacher', 'Docente')}${field('administrativeContext.sections', 'Secciones (una por línea)', 'lines')}${field('identity.duration.value', 'Duración en semanas', 'number')}${field('identity.startDate', 'Fecha de inicio', 'date')}${field('identity.endDate', 'Fecha de fin', 'date')}${field('learnerContext.students', 'Contexto del grupo', 'textarea')}${field('learnerContext.diagnosis', 'Necesidades', 'textarea')}${field('learnerContext.interests', 'Intereses (uno por línea)', 'lines')}${field('learnerContext.localContext', 'Situación local', 'textarea')}</div>`;
             case 1: return field('significantSituation.context', 'Situación significativa: contexto', 'textarea') + field('significantSituation.problemOrOpportunity', 'Problema u oportunidad', 'textarea') + field('drivingQuestion', 'Pregunta retadora', 'textarea') + field('purpose.summary', 'Propósito de aprendizaje', 'textarea');
@@ -278,6 +320,93 @@ const PlanningWizard = (() => {
             case 5: return `${button('milestone', 'Agregar hito')}${draft.milestones.map((m, i) => `<article class="planning-card">${field(`milestones.${i}.title`, 'Hito')}${field(`milestones.${i}.phase`, 'Fase metodológica')}${field(`milestones.${i}.objective`, 'Objetivo', 'textarea')}</article>`).join('')}${button('session', 'Agregar sesión al mapa')}<p>Define la secuencia manual. Cada sesión referencia las capacidades y criterios del mapa curricular.</p>${draft.sequence.map((s, i) => `<article class="planning-card"><h3>Sesión ${i + 1}</h3><div class="planning-grid">${field(`sequence.${i}.title`, 'Título de sesión')}${field(`sequence.${i}.week`, 'Semana', 'number')}${field(`sequence.${i}.date`, 'Fecha', 'date')}${field(`sequence.${i}.duration.value`, 'Duración en minutos', 'number')}${field(`sequence.${i}.milestoneId`, 'Hito', 'text', [['', 'Sin hito'], ...draft.milestones.map(m => [m.id, m.title])])}${field(`sequence.${i}.knowledge`, 'Conocimientos (uno por línea)', 'lines')}${field(`sequence.${i}.evidence`, 'Evidencias (una por línea)', 'descriptions')}${field(`sequence.${i}.assessmentInstruments`, 'Instrumentos (uno por línea)', 'labels')}</div>${s.partialProduct ? field(`sequence.${i}.partialProduct.title`, 'Producto parcial') + field(`sequence.${i}.partialProduct.description`, 'Descripción del producto parcial', 'textarea') : button('partial', 'Definir producto parcial', `data-index="${i}"`)}<div class="planning-actions">${button('up', 'Subir', `data-index="${i}" ${i === 0 ? 'disabled' : ''}`)}${button('down', 'Bajar', `data-index="${i}" ${i === draft.sequence.length - 1 ? 'disabled' : ''}`)}${button('remove', 'Quitar sesión', `data-index="${i}"`)}</div></article>`).join('')}`;
             default: return review();
             }
+        }
+        function sectionCard(title, description, body, extraClass = '') {
+            return `<section class="planning-form-card ${extraClass}"><header><h4>${esc(title)}</h4><p>${esc(description)}</p></header>${body}</section>`;
+        }
+        function reviewResult() {
+            return core.validate(draft, { forReview: true, pedagogicalProfile: profiles.pedagogical,
+                methodologyProfile: profiles.methodologies.find(p => p.code === draft.methodologyConfig.primary?.code) });
+        }
+        function reviewContent() {
+            const result = reviewResult();
+            const completion = requiredCompletion(draft);
+            const labels = { 'identity.title': [0, 'Contexto'], 'identity.cycle': [0, 'Contexto'],
+                'identity.duration': [0, 'Contexto'], 'identity.endDate': [0, 'Contexto'],
+                'significantSituation.context': [1, 'Propósito'],
+                'significantSituation.problemOrOpportunity': [1, 'Propósito'], drivingQuestion: [1, 'Propósito'],
+                'purpose.summary': [1, 'Propósito'], curriculumMap: [2, 'Currículo'],
+                'curriculumMap.criteria': [2, 'Currículo'], 'methodologyConfig.primary': [3, 'Metodología'], sequence: [5, 'Secuencia'] };
+            const checklist = steps.slice(0, 6).map((label, index) => {
+                const matching = result.errors.filter(error => (labels[error.path]?.[0] ?? -1) === index);
+                const complete = completion.byStep[index].complete && !matching.length;
+                return `<li class="planning-review-item ${complete ? 'is-complete' : 'has-warning'}">
+                    <span aria-hidden="true">${complete ? '✓' : '!'}</span><div><strong>${esc(label)}</strong>
+                    <p>${complete ? 'Listo para revisión' : esc(matching[0]?.message || 'Puedes completar esta sección.')}</p></div>
+                    ${complete ? '' : button('step', 'Revisar', `data-step="${index}" aria-label="Revisar ${esc(label)}"`)}</li>`;
+            }).join('');
+            const observations = [...result.warnings, ...result.suggestions];
+            return `${sectionCard('Resumen de validación', result.valid ? 'Campos de revisión completos' : 'Revisa los puntos pendientes antes de finalizar.',
+                `<ul class="planning-review-list">${checklist}</ul>`, 'planning-review-card')}
+                ${sectionCard('Orientaciones metodológicas', 'Estas recomendaciones no bloquean el guardado.',
+                    `<ul class="planning-observations">${observations.map(item => `<li>${esc(item.message)}</li>`).join('') || '<li>Sin observaciones.</li>'}</ul>`)}`;
+        }
+        function content() {
+            switch (step) {
+            case 0:
+                return `${sectionCard('Contexto general', 'Identifica la planificación y su marco de trabajo.',
+                    `<div class="planning-grid">${field('identity.title', 'Título')}${field('identity.grade', 'Grado', 'text', [['1', '1.º'], ['2', '2.º']])}${field('identity.duration.value', 'Duración en semanas', 'number')}${field('identity.startDate', 'Fecha de inicio', 'date')}${field('identity.endDate', 'Fecha de fin', 'date')}</div>`)}
+                    ${sectionCard('Comunidad educativa', 'Registra los datos que ayudan a situar la experiencia.',
+                    `<div class="planning-grid">${field('administrativeContext.institution', 'Institución')}${field('administrativeContext.teacher', 'Docente')}${field('administrativeContext.sections', 'Secciones (una por línea)', 'lines')}</div>`)}
+                    ${sectionCard('Conoce al grupo', 'Resume necesidades, intereses y oportunidades del contexto.',
+                    `<div class="planning-grid">${field('learnerContext.students', 'Contexto del grupo', 'textarea')}${field('learnerContext.diagnosis', 'Necesidades', 'textarea')}${field('learnerContext.interests', 'Intereses (uno por línea)', 'lines')}${field('learnerContext.localContext', 'Situación local', 'textarea')}</div>`)}`;
+            case 1:
+                return `${sectionCard('Situación significativa', 'Describe el contexto real y el desafío que movilizará los aprendizajes.',
+                    field('significantSituation.context', 'Contexto', 'textarea') + field('significantSituation.problemOrOpportunity', 'Problema u oportunidad', 'textarea'))}
+                    ${sectionCard('Propósito de aprendizaje', 'Formula una pregunta movilizadora y el aprendizaje esperado.',
+                    field('drivingQuestion', 'Pregunta retadora', 'textarea') + field('purpose.summary', 'Propósito de aprendizaje', 'textarea'))}`;
+            case 2:
+                return draft.curriculumMap.length ? draft.curriculumMap.map((entry, index) => sectionCard(
+                    entry.area.officialName, entry.competency.officialName,
+                    `<div class="planning-capabilities"><strong>Capacidades</strong><ul>${entry.capacities.map(capacity => `<li><span aria-hidden="true">✓</span>${esc(capacity.officialName)}</li>`).join('')}</ul></div>
+                    <details class="planning-details" open><summary>Referentes y evaluación</summary>
+                    ${field(`curriculumMap.${index}.standard.description`, 'Estándar del ciclo', 'textarea')}
+                    <div class="planning-grid">${field(`curriculumMap.${index}.performances`, 'Desempeños (uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.criteria`, 'Criterios (uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.expectedEvidence`, 'Evidencias esperadas (una por línea)', 'descriptions')}</div></details>`, 'planning-curriculum-editor')).join('')
+                    : `<div class="planning-empty-state"><span class="planning-empty-icon" aria-hidden="true">◎</span><h4>Conecta el currículo</h4><p>El piloto trabaja Matemática: Resuelve problemas de cantidad.</p>${button('curriculum', 'Agregar competencia del piloto')}</div>`;
+            case 3:
+                return sectionCard('Metodología principal', 'Elige el enfoque que guiará la secuencia. Los códigos internos se conservan sin cambios.',
+                    `<label class="planning-field planning-methodology-select"><span>Metodología</span><select id="planning-methodology"><option value="">Por definir</option>${profiles.methodologies.map(profile => `<option value="${profile.code}" ${draft.methodologyConfig.primary?.code === profile.code ? 'selected' : ''}>${esc(profile.displayName)}</option>`).join('')}</select></label>
+                    <div class="planning-methodology-grid" role="list" aria-label="Metodologías disponibles">${profiles.methodologies.map(profile => {
+                        const selected = draft.methodologyConfig.primary?.code === profile.code;
+                        return `<button type="button" class="planning-methodology-option ${selected ? 'is-selected' : ''}" data-planning-action="methodology" data-code="${esc(profile.code)}" role="listitem" aria-pressed="${selected}"><span class="planning-methodology-mark" aria-hidden="true">${selected ? '✓' : '○'}</span><strong>${esc(profile.displayName)}</strong></button>`;
+                    }).join('')}</div>${draft.methodologyConfig.primary?.code === 'custom' ? field('methodologyConfig.custom.name', 'Nombre de la metodología') : ''}`);
+            case 4:
+                return `<div class="planning-product-grid">${sectionCard('Producto final', 'Resultado integrador que presentará el grupo.',
+                    draft.finalProduct ? field('finalProduct.title', 'Nombre del producto') + field('finalProduct.description', 'Descripción', 'textarea') + field('finalProduct.audience', 'Destinatarios') : `<div class="planning-empty-inline"><p>Aún no has definido el producto final.</p>${button('product', 'Definir producto final')}</div>`)}
+                    ${sectionCard('Productos parciales', 'Se construyen dentro de cada sesión de la secuencia.', `<p class="planning-muted">${draft.sequence.filter(item => item.partialProduct).length} productos parciales definidos.</p>${button('goto-sequence', 'Ir a secuencia')}`)}
+                    ${sectionCard('Evidencias', 'Se mantienen vinculadas al currículo y a cada sesión.', `<p class="planning-muted">${draft.curriculumMap.flatMap(entry => entry.expectedEvidence || []).length} evidencias curriculares · ${draft.sequence.flatMap(item => item.evidence || []).length} evidencias de sesión.</p>`)}
+                    ${sectionCard('Evaluación', 'Define cómo acompañarás el aprendizaje.', field('assessmentPlan.formativeAssessment', 'Evaluación formativa', 'textarea') + field('assessmentPlan.feedbackApproach', 'Retroalimentación', 'textarea'))}</div>`;
+            case 5:
+                return `<div class="planning-sequence-toolbar"><div><strong>Mapa de sesiones</strong><p>Organiza la progresión sin cambiar la estructura de SequenceItem.</p></div><div class="planning-actions">${button('milestone', '+ Añadir hito')}${button('session', '+ Añadir sesión')}</div></div>
+                    ${draft.milestones.map((milestone, index) => sectionCard(`Hito ${index + 1}`, 'Punto de avance metodológico.', `<div class="planning-grid">${field(`milestones.${index}.title`, 'Nombre del hito')}${field(`milestones.${index}.phase`, 'Fase metodológica')}${field(`milestones.${index}.objective`, 'Objetivo', 'textarea')}</div>`, 'planning-milestone-editor')).join('')}
+                    <div class="planning-sequence-editor">${draft.sequence.map((item, index) => `<article class="planning-session-card" data-sequence-editor-id="${esc(item.id)}">
+                        <header class="planning-session-header"><span class="planning-session-number">${String(index + 1).padStart(2, '0')}</span><div><span class="planning-session-week">SEMANA ${item.week || '—'}</span><h4>${esc(item.title || `Sesión ${index + 1}`)}</h4></div><span class="planning-item-status">${item.status === 'generated' ? 'Generada' : 'Planeada'}</span></header>
+                        <div class="planning-session-summary"><span>${item.duration.value} min</span><span>${esc(draft.milestones.find(entry => entry.id === item.milestoneId)?.phase || 'Sin fase')}</span></div>
+                        <details class="planning-session-details" open><summary>Editar sesión</summary><div class="planning-grid">${field(`sequence.${index}.title`, 'Título de sesión')}${field(`sequence.${index}.week`, 'Semana', 'number')}${field(`sequence.${index}.date`, 'Fecha', 'date')}${field(`sequence.${index}.duration.value`, 'Duración en minutos', 'number')}${field(`sequence.${index}.milestoneId`, 'Hito', 'text', [['', 'Sin hito'], ...draft.milestones.map(milestone => [milestone.id, milestone.title])])}${field(`sequence.${index}.knowledge`, 'Conocimientos (uno por línea)', 'lines')}${field(`sequence.${index}.evidence`, 'Evidencias (una por línea)', 'descriptions')}${field(`sequence.${index}.assessmentInstruments`, 'Instrumentos (uno por línea)', 'labels')}</div>
+                        <div class="planning-partial-product">${item.partialProduct ? field(`sequence.${index}.partialProduct.title`, 'Producto parcial') + field(`sequence.${index}.partialProduct.description`, 'Descripción del producto parcial', 'textarea') : button('partial', 'Definir producto parcial', `data-index="${index}"`)}</div></details>
+                        <footer class="planning-session-actions" aria-label="Acciones de la sesión ${index + 1}">${button('up', '↑ Subir', `data-index="${index}" aria-label="Subir sesión ${index + 1}" ${index === 0 ? 'disabled' : ''}`)}${button('down', '↓ Bajar', `data-index="${index}" aria-label="Bajar sesión ${index + 1}" ${index === draft.sequence.length - 1 ? 'disabled' : ''}`)}${button('remove', 'Quitar', `data-index="${index}" aria-label="Quitar sesión ${index + 1}"`)}</footer>
+                    </article>`).join('') || '<div class="planning-empty-state"><h4>Construye la secuencia</h4><p>Añade la primera sesión para comenzar el mapa.</p></div>'}</div>`;
+            default: return reviewContent();
+            }
+        }
+        function previewMarkup() {
+            const title = esc(draft.identity.title || 'Planificación sin título');
+            const situation = esc(draft.significantSituation.context || 'La situación significativa aparecerá aquí.');
+            const purpose = esc(draft.purpose.summary || 'El propósito de aprendizaje aparecerá aquí.');
+            const product = esc(draft.finalProduct?.title || 'Por definir');
+            const meta = `Secundaria · ${draft.identity.grade ? `${esc(draft.identity.grade)}.º` : 'grado por definir'} · ${draft.identity.duration.value || 0} semanas`;
+            if (previewMode === 'document') return `<article class="planning-document-preview"><span class="planning-document-kicker">${esc(types[draft.identity.planningType]).toUpperCase()}</span><h3>${title}</h3><p class="planning-document-meta">${meta}</p><hr><h4>Situación significativa</h4><p>${situation}</p><h4>Pregunta retadora</h4><p>${esc(draft.drivingQuestion || 'Por definir')}</p><h4>Propósito</h4><p>${purpose}</p><h4>Producto final</h4><p>${product}</p><h4>Secuencia</h4><ol>${draft.sequence.map(item => `<li>${esc(item.title)}</li>`).join('') || '<li>Sin sesiones todavía.</li>'}</ol></article>`;
+            return `<article class="planning-summary-preview"><span class="planning-document-kicker">${esc(types[draft.identity.planningType]).toUpperCase()}</span><h3>${title}</h3><p class="planning-document-meta">${meta}</p><dl><div><dt>Situación significativa</dt><dd>${situation}</dd></div><div><dt>Propósito</dt><dd>${purpose}</dd></div><div><dt>Producto final</dt><dd>${product}</dd></div><div><dt>Secuencia</dt><dd>${draft.sequence.length} ${draft.sequence.length === 1 ? 'sesión' : 'sesiones'}</dd></div></dl></article>`;
         }
         function modeChoice() {
             return `<section class="planning-ai-choice" aria-labelledby="planning-mode-title"><h3 id="planning-mode-title" tabindex="-1">¿Cómo quieres comenzar?</h3><p>${esc(types[draft.identity.planningType])}. Puedes construirla paso a paso o preparar el contexto mínimo para recibir una propuesta con IA.</p><div class="planning-actions">${button('mode-manual', 'Crear manualmente')}<button type="button" class="btn btn-primary" data-planning-action="mode-ai">Generar propuesta con IA</button></div><p class="planning-action-help">La IA siempre crea un borrador editable y nunca marca la planificación como revisada.</p></section>`;
@@ -306,17 +435,49 @@ const PlanningWizard = (() => {
                 proposalView();
                 return;
             }
-            const reviewResult = profiles && draft ? core.validate(draft, {
+            const validation = profiles && draft ? core.validate(draft, {
                 forReview: true,
                 pedagogicalProfile: profiles.pedagogical,
                 methodologyProfile: profiles.methodologies.find(p => p.code === draft.methodologyConfig.primary?.code)
             }) : { valid: false };
+            const completion = requiredCompletion(draft);
             const alreadyReviewed = draft?.status === 'reviewed' && !dirty;
             const reviewAction = step === 6
-                ? `<button type="button" class="btn btn-primary" data-planning-action="review" aria-describedby="planning-review-help" ${reviewResult.valid && !alreadyReviewed ? '' : 'disabled'}>${alreadyReviewed ? 'Planificación revisada' : 'Marcar como revisada'}</button>`
-                    + `<span id="planning-review-help" class="planning-action-help">${alreadyReviewed ? 'Edita algún campo para crear una revisión nueva.' : reviewResult.valid ? 'La planificación cumple los requisitos de revisión.' : 'Completa los campos indicados para habilitar la revisión.'}</span>`
+                ? `<button type="button" class="btn btn-primary" data-planning-action="review" aria-describedby="planning-review-help" ${validation.valid && !alreadyReviewed ? '' : 'disabled'}>${alreadyReviewed ? 'Planificación revisada' : 'Marcar como revisada'}</button>`
+                    + `<span id="planning-review-help" class="planning-action-help">${alreadyReviewed ? 'Edita algún campo para crear una revisión nueva.' : validation.valid ? 'La planificación cumple los requisitos de revisión.' : 'Completa los campos indicados para habilitar la revisión.'}</span>`
                 : '';
-            shell(`${aiPanel()}<nav class="planning-steps" aria-label="Pasos de planificación">${steps.map((label, i) => button('step', `${i + 1}. ${label}`, `data-step="${i}" ${i === step ? 'aria-current="step"' : ''}`)).join('')}</nav><h3 id="planning-step-title" tabindex="-1">${step + 1}. ${steps[step]}</h3><div class="planning-content">${content()}</div><footer class="planning-actions">${button('library', 'Mis planificaciones')}${button('previous', 'Anterior', step === 0 ? 'disabled' : '')}${step < 6 ? button('next', 'Siguiente') : ''}<button type="button" class="btn btn-ghost" data-planning-action="save" ${dirty ? '' : 'disabled'}>Guardar borrador</button>${reviewAction}</footer>`);
+            const pathSteps = { 'identity.title': 0, 'identity.cycle': 0, 'identity.duration': 0, 'identity.endDate': 0,
+                'significantSituation.context': 1, 'significantSituation.problemOrOpportunity': 1, drivingQuestion: 1,
+                'purpose.summary': 1, curriculumMap: 2, 'curriculumMap.criteria': 2,
+                'methodologyConfig.primary': 3, sequence: 5 };
+            const stepper = steps.map((label, index) => {
+                const hasError = step === 6 && validation.errors?.some(error => pathSteps[error.path] === index);
+                const state = index === step ? 'current' : hasError ? 'error' : completion.byStep[index].complete ? 'complete' : 'pending';
+                const icon = state === 'complete' ? '✓' : state === 'current' ? '●' : state === 'error' ? '!' : '○';
+                return `<button type="button" class="planning-step" data-planning-action="step" data-step="${index}" data-state="${state}" ${index === step ? 'aria-current="step"' : ''}><span class="planning-step-number">${String(index + 1).padStart(2, '0')}</span><span class="planning-step-label">${esc(label)}</span><span class="planning-step-state" aria-hidden="true">${icon}</span></button>`;
+            }).join('');
+            const preview = `<aside id="planning-preview" class="planning-preview ${previewOpen ? 'is-open' : ''}" aria-label="Vista previa de la planificación">
+                <header class="planning-preview-header"><div><span class="home-eyebrow">Vista previa</span><h3>Documento</h3></div>${button('preview', 'Cerrar', 'aria-label="Cerrar vista previa"')}</header>
+                <div class="planning-preview-tabs" role="tablist" aria-label="Formato de vista previa"><button type="button" role="tab" data-planning-action="preview-mode" data-mode="summary" aria-selected="${previewMode === 'summary'}">Resumen</button><button type="button" role="tab" data-planning-action="preview-mode" data-mode="document" aria-selected="${previewMode === 'document'}">Vista documento</button></div>
+                <div class="planning-preview-body" aria-live="polite">${previewMarkup()}</div></aside>`;
+            shell(`${aiPanel()}<div class="planning-mobile-heading"><span>Paso ${step + 1} de 7</span>${button('preview', 'Vista previa', 'aria-controls="planning-preview" aria-expanded="false"')}</div>
+                <div class="planning-studio-layout"><aside class="planning-stepper"><div class="planning-stepper-heading"><span class="home-eyebrow">Planificación</span><strong>Tu ruta de trabajo</strong></div><nav class="planning-steps" aria-label="Pasos de planificación">${stepper}</nav><div class="planning-progress"><div><span>Planificación completada</span><strong data-progress-label>${completion.percentage} %</strong></div><progress max="100" value="${completion.percentage}" aria-label="Planificación completada al ${completion.percentage} por ciento"></progress><small>${completion.completed} de ${completion.total} campos requeridos</small></div>${button('library', 'Mis planificaciones')}</aside>
+                <main class="planning-form-pane"><header class="planning-section-heading"><div><span class="planning-step-overline">Paso ${step + 1} de 7</span><h3 id="planning-step-title" tabindex="-1">${esc(steps[step])}</h3><p>${esc(stepDescriptions[step])}</p></div>${button('preview', 'Vista previa', 'aria-controls="planning-preview" aria-expanded="false"')}</header><div class="planning-content">${content()}</div></main>${preview}</div>
+                <footer class="planning-studio-actions"><div class="planning-save-state" role="status"><span aria-hidden="true">${dirty ? '●' : '✓'}</span><span data-save-state>${dirty ? 'Cambios sin guardar' : previous ? 'Guardado' : 'Borrador nuevo'}</span></div><div class="planning-footer-buttons">${button('previous', '← Anterior', step === 0 ? 'disabled' : '')}<button type="button" class="btn btn-ghost" data-planning-action="save" ${dirty ? '' : 'disabled'}>Guardar borrador</button>${step < 6 ? button('next', 'Siguiente →') : ''}${reviewAction}</div></footer>`);
+        }
+        function scheduleStudioUpdate() {
+            clearTimeout(previewTimer);
+            previewTimer = setTimeout(() => {
+                const previewBody = dialog.querySelector('.planning-preview-body');
+                if (previewBody) previewBody.innerHTML = previewMarkup();
+                const completion = requiredCompletion(draft);
+                const progress = dialog.querySelector('.planning-progress progress');
+                const label = dialog.querySelector('[data-progress-label]');
+                const detail = dialog.querySelector('.planning-progress small');
+                if (progress) { progress.value = completion.percentage; progress.setAttribute('aria-label', `Planificación completada al ${completion.percentage} por ciento`); }
+                if (label) label.textContent = `${completion.percentage} %`;
+                if (detail) detail.textContent = `${completion.completed} de ${completion.total} campos requeridos`;
+            }, 80);
         }
         function updateAiAvailability() {
             const generateButton = dialog.querySelector('[data-planning-action="generate-ai"]');
@@ -332,7 +493,10 @@ const PlanningWizard = (() => {
             dirty = true;
             const saveButton = dialog.querySelector('[data-planning-action="save"]');
             if (saveButton) saveButton.disabled = false;
+            const saveState = dialog.querySelector('[data-save-state]');
+            if (saveState) saveState.textContent = 'Cambios sin guardar';
             updateAiAvailability();
+            scheduleStudioUpdate();
         }
         function mayLeave() { return !dirty || window.confirm('Hay cambios sin guardar. ¿Quieres descartarlos?'); }
         async function confirmAiReplacement(regenerating = false) {
@@ -379,6 +543,9 @@ const PlanningWizard = (() => {
                 notice('No hay cambios por guardar.');
                 return;
             }
+            notice('Guardando…');
+            const saveState = dialog.querySelector('[data-save-state]');
+            if (saveState) saveState.textContent = 'Guardando…';
             const invalid = [...dialog.querySelectorAll('input')].find(input => !input.checkValidity());
             if (invalid) { invalid.reportValidity(); return; }
             const validationOptions = asReviewed ? {
@@ -431,6 +598,20 @@ const PlanningWizard = (() => {
             const action = target.dataset.planningAction;
             const index = Number(target.dataset.index);
             try {
+                if (action === 'preview') {
+                    previewOpen = !previewOpen;
+                    dialog.querySelector('#planning-preview')?.classList.toggle('is-open', previewOpen);
+                    dialog.querySelectorAll('[aria-controls="planning-preview"]').forEach(control => control.setAttribute('aria-expanded', String(previewOpen)));
+                    if (previewOpen) dialog.querySelector('.planning-preview [role="tab"][aria-selected="true"]')?.focus();
+                    return;
+                }
+                if (action === 'preview-mode') {
+                    previewMode = target.dataset.mode === 'document' ? 'document' : 'summary';
+                    dialog.querySelectorAll('.planning-preview [role="tab"]').forEach(tab => tab.setAttribute('aria-selected', String(tab === target)));
+                    const previewBody = dialog.querySelector('.planning-preview-body');
+                    if (previewBody) previewBody.innerHTML = previewMarkup();
+                    return;
+                }
                 if (action === 'close') { if (mayLeave()) { dirty = false; dialog.close(); } return; }
                 if (action === 'library') { if (mayLeave()) library(); return; }
                 if (action === 'mode-manual' || action === 'mode-ai') {
@@ -475,13 +656,19 @@ const PlanningWizard = (() => {
                     await loadProfiles();
                     const loaded = create(target.dataset.type);
                     if (!loaded || !core.validate(loaded).valid) throw new Error('No se pudo abrir este borrador.');
-                    draft = copy(loaded); previous = null; step = 0; dirty = true;
+                    draft = copy(loaded); previous = null; step = 0; dirty = true; showValidation = false;
                     creationMode = 'choose'; aiProposal = null; generating = false; returnToView = false;
                 } else if (action === 'step') step = Number(target.dataset.step);
+                else if (action === 'goto-sequence') step = 5;
                 else if (action === 'next') step = Math.min(6, step + 1);
                 else if (action === 'previous') step = Math.max(0, step - 1);
                 else {
                     markDirty();
+                    if (action === 'methodology') {
+                        const profile = profiles.methodologies.find(entry => entry.code === target.dataset.code);
+                        draft.methodologyConfig.primary = profile ? { profileId: profile.id, profileVersion: profile.profileVersion, code: profile.code } : null;
+                        if (profile?.code === 'custom' && !draft.methodologyConfig.custom) draft.methodologyConfig.custom = { name: '', phases: [] };
+                    }
                     if (action === 'curriculum') addCurriculum(draft, profiles.didactic);
                     if (action === 'session') addSession(draft);
                     if (action === 'up' || action === 'down') reorder(draft, index, action === 'up' ? -1 : 1);
@@ -490,6 +677,7 @@ const PlanningWizard = (() => {
                     if (action === 'product') draft.finalProduct = { id: uid('product'), title: 'Producto final', description: '', type: '', expectedComponents: [], audience: '', criterionRefs: draft.curriculumMap.flatMap(e => e.criteria.map(c => c.id)) };
                     if (action === 'milestone') draft.milestones.push({ id: uid('milestone'), title: `Hito ${draft.milestones.length + 1}`, phase: '', objective: '', partialProduct: null, sequenceItemIds: [], completionCriteria: [] });
                 }
+                if (step === 6) showValidation = true;
                 render();
                 (dialog.querySelector('#planning-mode-title') || dialog.querySelector('#planning-step-title'))?.focus();
             } catch (error) { notice(error.message, true); }
@@ -508,7 +696,7 @@ const PlanningWizard = (() => {
         document.querySelectorAll('[data-open-planning]').forEach(button => button.addEventListener('click', () => { library(); dialog.showModal(); }));
     }
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
-    return { create, canCreate, addCurriculum, addSession, reorder, removeSession, prepareSave, prepareReview,
+    return { create, canCreate, addCurriculum, addSession, reorder, removeSession, prepareSave, prepareReview, requiredCompletion,
         generationReadiness, buildGenerationInput, hasMeaningfulManualContent, acceptGeneratedProposal,
         formatAiError, generateProposal };
 })();
