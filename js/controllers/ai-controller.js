@@ -2,6 +2,12 @@
 window.SpaceLabAiController = (() => {
     'use strict';
 
+    function generationPlanningContext(currentSession, pendingPlanningLink) {
+        const link = [currentSession?.planning, pendingPlanningLink]
+            .find(candidate => candidate?.mode === 'linked' && candidate.inheritedContextSnapshot) || null;
+        return { link, requestMetadata: link ? { inheritedContextSnapshot: link.inheritedContextSnapshot } : {} };
+    }
+
     function create(dependencies) {
         const {
             state: AppState,
@@ -81,7 +87,8 @@ window.SpaceLabAiController = (() => {
                 }
 
                 Loader.show('Generando sesión con IA...');
-                const planningLink = AppState.currentSession?.planning || AppState.pendingPlanningLink || null;
+                const planningContext = generationPlanningContext(AppState.currentSession, AppState.pendingPlanningLink);
+                const planningLink = planningContext.link;
                 const generationRequest = {
                     ...formData.metadata,
                     ...formData.proposito,
@@ -89,7 +96,7 @@ window.SpaceLabAiController = (() => {
                     sourceFile: AppState.sourceFileData,
                     sourceInstruction: DOM.inputSourceInstruction ? DOM.inputSourceInstruction.value.trim() : '',
                     pedagogyBrief: (window.PedagogyBrief ? PedagogyBrief.getSummary() : null),
-                    inheritedContextSnapshot: planningLink?.inheritedContextSnapshot || null
+                    ...planningContext.requestMetadata
                 };
         
                 // Normalize at the AI boundary so the web and DOCX builders share
@@ -580,5 +587,5 @@ window.SpaceLabAiController = (() => {
         };
     }
 
-    return { create };
+    return { create, generationPlanningContext };
 })();

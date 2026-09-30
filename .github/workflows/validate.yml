@@ -79,6 +79,7 @@ jobs:
           node tests/planning-wizard-ai.test.js
           node tests/planning-view.test.js
           node tests/planning-navigation.test.js
+          node tests/session-generation-mode.test.js
           node tests/planning-map-generation.test.js
           node tests/planning-map-ai-action.test.js
           node tests/validation-errors.test.js
@@ -125,6 +126,7 @@ jobs:
           python tests/frontend_security.py
           python tests/ui_smoke.py
           python tests/ui_session_lifecycle_smoke.py
+          python tests/ui_standalone_session_regression.py
           python tests/ui_planning_smoke.py
           python tests/ui_planning_studio_smoke.py
           python tests/ui_planning_view_smoke.py
