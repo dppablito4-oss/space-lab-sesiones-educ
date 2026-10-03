@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-shape",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-shape-problems", "officialName": "Resuelve problemas de forma, movimiento y localización", "alias": "shape" },
+    "capacities": [
+      { "id": "models-objects-with-geometric-forms", "officialName": "Modela objetos con formas geométricas y sus transformaciones" },
+      { "id": "communicates-understanding-of-geometric-forms-and-relations", "officialName": "Comunica su comprensión sobre las formas y relaciones geométricas" },
+      { "id": "uses-strategies-for-spatial-orientation", "officialName": "Usa estrategias y procedimientos para orientarse en el espacio" },
+      { "id": "argues-about-geometric-relations", "officialName": "Argumenta afirmaciones sobre relaciones geométricas" }
+    ]
+  },
+  "approach": "Resolución de problemas",
+  "recommendedStrategies": [
+    "modelar formas compuestas, cuerpos de revolución y estructuras complejas",
+    "determinar distancias y ángulos inaccesibles mediante razones trigonométricas",
+    "integrar coordenadas cartesianas, ecuación de la recta y secciones cónicas",
+    "analizar transformaciones homotéticas y relaciones métricas en triángulos",
+    "sustentar afirmaciones y teoremas mediante deducción matemática formal y contraejemplos"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la pertinencia de las razones trigonométricas, ecuaciones y modelos analíticos elegidos.",
+    "Valorar la precisión en demostraciones deductivas y la resolución de situaciones espaciales complejas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "geometría analítica, rectas y cónicas en contextos reales",
+      "razones trigonométricas y resolución de triángulos oblicuángulos",
+      "cuerpos de revolución, truncados y optimización geométrica",
+      "demostraciones formales y deducciones matemáticas",
+      "orientación espacial en mapas topográficos y planos a escala"
+    ],
+    "avoid": [
+      "memorización de identidades trigonométricas sin aplicación geométrica",
+      "recetas algebraicas en geometría analítica sin soporte visual",
+      "problemas geométricos abstractos desconectados de la realidad",
+      "evaluación centrada exclusivamente en el resultado numérico"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-mathematics-situations-2024"],
+    "reviewNote": "Orientación didáctica piloto para Forma en Ciclo VII; las estrategias son recomendaciones adaptables y requieren validación humana."
+  }
+}

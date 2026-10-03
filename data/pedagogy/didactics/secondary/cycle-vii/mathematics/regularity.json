@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-regularity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-regularity-problems", "officialName": "Resuelve problemas de regularidad, equivalencia y cambio", "alias": "regularity" },
+    "capacities": [
+      { "id": "translates-data-to-algebraic-expressions", "officialName": "Traduce datos y condiciones a expresiones algebraicas y gráficas" },
+      { "id": "communicates-understanding-of-algebraic-relations", "officialName": "Comunica su comprensión sobre las relaciones algebraicas" },
+      { "id": "uses-strategies-for-equivalences-and-general-rules", "officialName": "Usa estrategias y procedimientos para encontrar equivalencias y reglas generales" },
+      { "id": "argues-about-change-and-equivalence-relations", "officialName": "Argumenta afirmaciones sobre relaciones de cambio y equivalencia" }
+    ]
+  },
+  "approach": "Resolución de problemas",
+  "recommendedStrategies": [
+    "modelar cambios discontinuos, periódicos y fenómenos cuadráticos",
+    "analizar sistemas de ecuaciones lineales e inecuaciones en situaciones de optimización",
+    "integrar representaciones simbólicas y gráficas de funciones cuadráticas y exponenciales",
+    "evaluar la pertinencia de diversos métodos algebraicos y gráficos",
+    "formular demostraciones deductivas y refutar conjeturas mediante contraejemplos"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la capacidad de seleccionar y adaptar el modelo algebraico o funcional más idóneo.",
+    "Valorar la argumentación formal, el análisis de dominios y restricciones y la interpretación del conjunto solución."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "problemas contextualizados de modelación funcional y optimización",
+      "sistemas de ecuaciones y análisis de soluciones múltiples",
+      "relaciones de cambio cuadrático, exponencial y trigonométrico",
+      "argumentación deductiva y uso de contraejemplos",
+      "interpretación crítica de gráficas y parámetros"
+    ],
+    "avoid": [
+      "secuencias algorítmicas rígidas y obligatorias",
+      "aplicación mecánica de fórmulas cuadráticas sin análisis gráfico",
+      "graficación punto a punto sin comprensión global de la función",
+      "evaluación centrada exclusivamente en el resultado algebraico"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-mathematics-situations-2024"],
+    "reviewNote": "Orientación didáctica piloto para Regularidad en Ciclo VII; las estrategias son recomendaciones adaptables y requieren validación humana."
+  }
+}

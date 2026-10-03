@@ -21,8 +21,38 @@
       "status": "pilot"
     },
     {
+      "id": "secondary-cycle-vi-mathematics-regularity-curriculum",
+      "path": "curriculum/secondary/cycle-vi/mathematics/regularity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-mathematics-shape-curriculum",
+      "path": "curriculum/secondary/cycle-vi/mathematics/shape.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-mathematics-data-uncertainty-curriculum",
+      "path": "curriculum/secondary/cycle-vi/mathematics/data-uncertainty.json",
+      "status": "pilot"
+    },
+    {
       "id": "secondary-cycle-vii-mathematics-quantity-curriculum",
       "path": "curriculum/secondary/cycle-vii/mathematics/quantity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-regularity-curriculum",
+      "path": "curriculum/secondary/cycle-vii/mathematics/regularity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-shape-curriculum",
+      "path": "curriculum/secondary/cycle-vii/mathematics/shape.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-data-uncertainty-curriculum",
+      "path": "curriculum/secondary/cycle-vii/mathematics/data-uncertainty.json",
       "status": "pilot"
     }
   ],
@@ -33,8 +63,38 @@
       "status": "pilot"
     },
     {
+      "id": "secondary-cycle-vi-mathematics-regularity",
+      "path": "didactics/secondary/cycle-vi/mathematics/regularity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-mathematics-shape",
+      "path": "didactics/secondary/cycle-vi/mathematics/shape.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-mathematics-data-uncertainty",
+      "path": "didactics/secondary/cycle-vi/mathematics/data-uncertainty.json",
+      "status": "pilot"
+    },
+    {
       "id": "secondary-cycle-vii-mathematics-quantity",
       "path": "didactics/secondary/cycle-vii/mathematics/quantity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-regularity",
+      "path": "didactics/secondary/cycle-vii/mathematics/regularity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-shape",
+      "path": "didactics/secondary/cycle-vii/mathematics/shape.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-mathematics-data-uncertainty",
+      "path": "didactics/secondary/cycle-vii/mathematics/data-uncertainty.json",
       "status": "pilot"
     }
   ],

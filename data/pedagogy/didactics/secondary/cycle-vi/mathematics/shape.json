@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-mathematics-shape",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-shape-problems", "officialName": "Resuelve problemas de forma, movimiento y localización", "alias": "shape" },
+    "capacities": [
+      { "id": "models-objects-with-geometric-forms", "officialName": "Modela objetos con formas geométricas y sus transformaciones" },
+      { "id": "communicates-understanding-of-geometric-forms-and-relations", "officialName": "Comunica su comprensión sobre las formas y relaciones geométricas" },
+      { "id": "uses-strategies-for-spatial-orientation", "officialName": "Usa estrategias y procedimientos para orientarse en el espacio" },
+      { "id": "argues-about-geometric-relations", "officialName": "Argumenta afirmaciones sobre relaciones geométricas" }
+    ]
+  },
+  "approach": "Resolución de problemas",
+  "recommendedStrategies": [
+    "explorar y manipular objetos tridimensionales y formas geométricas reales",
+    "visualizar y construir vistas (frontal, superior, lateral) y desarrollos de cuerpos",
+    "construir figuras y planos a escala usando regla, compás y cuadrículas",
+    "aplicar transformaciones rígidas (traslación, rotación, reflexión) en el plano cartesiano",
+    "argumentar relaciones de congruencia, semejanza, perímetro y área"
+  ],
+  "assessmentRecommendations": [
+    "Recoger evidencia gráfica de construcciones a escala, vistas y transformaciones espaciales.",
+    "Valorar la justificación de propiedades geométricas y el análisis dimensional de perímetros y áreas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "modelación geométrica conectada con objetos y entornos reales",
+      "visualización espacial y perspectivas múltiples",
+      "representaciones y planos a escala",
+      "transformaciones geométricas en el plano",
+      "argumentación y propiedades de congruencia y semejanza"
+    ],
+    "avoid": [
+      "aplicación memorística de fórmulas de área y volumen",
+      "reducir la geometría al cálculo numérico sin representaciones visuales",
+      "prescindir de instrumentos de dibujo y construcción geométrica",
+      "evaluación reducida a respuestas finales sin justificación espacial"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-mathematics-situations-2024"],
+    "reviewNote": "Orientación didáctica piloto para Forma en Ciclo VI; las estrategias son recomendaciones adaptables y requieren validación humana."
+  }
+}

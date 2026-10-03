@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-shape-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-shape-problems", "officialName": "Resuelve problemas de forma, movimiento y localización", "alias": "shape" },
+  "capacities": [
+    { "id": "models-objects-with-geometric-forms", "officialName": "Modela objetos con formas geométricas y sus transformaciones" },
+    { "id": "communicates-understanding-of-geometric-forms-and-relations", "officialName": "Comunica su comprensión sobre las formas y relaciones geométricas" },
+    { "id": "uses-strategies-for-spatial-orientation", "officialName": "Usa estrategias y procedimientos para orientarse en el espacio" },
+    { "id": "argues-about-geometric-relations", "officialName": "Argumenta afirmaciones sobre relaciones geométricas" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas en los que modela características de objetos con formas geométricas compuestas, cuerpos de revolución, sus elementos y propiedades, líneas, puntos notables, relaciones métricas de triángulos, distancia entre dos puntos, ecuación de la recta y parábola; la ubicación, distancias inaccesibles, movimiento y trayectorias complejas de objetos mediante razones trigonométricas, mapas y planos a escala, y transformaciones. Expresa su comprensión de la relación entre las medidas de los lados de un triángulo y sus proyecciones, la distinción entre traslación, rotación y reflexión de formas bidimensionales y tridimensionales; las propiedades de las razones trigonométricas, propiedades de cuerpos de revolución y formas compuestas; usando construcciones con regla y compás y lenguaje geométrico. Clasifica formas geométricas compuestas y cuerpos de revolución según sus propiedades. Selecciona y combina estrategias, procedimientos y recursos para determinar la longitud, el área y el volumen de cuerpos geométricos compuestos y de revolución, así como distancias inaccesibles y posiciones en planos, empleando razones trigonométricas, coordenadas cartesianas y la ecuación de la recta y parábola. Plantea afirmaciones sobre relaciones métricas entre formas geométricas, razones trigonométricas, y las justifica a partir de principios o propiedades matemáticas, deducciones o contraejemplos.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-model", "description": "Modela características de objetos con pirámides, conos, esferas y relaciones métricas en el triángulo rectángulo (teorema de Pitágoras), así como distancias y alturas inaccesibles mediante razones trigonométricas y mapas topográficos a escala." },
+      { "id": "grade-3-communicate", "description": "Expresa su comprensión sobre las razones trigonométricas (seno, coseno, tangente) de ángulos agudos, propiedades de cuerpos de revolución y mapas a escala usando representaciones gráficas y lenguaje geométrico formal." },
+      { "id": "grade-3-strategies", "description": "Selecciona, combina y adapta procedimientos para determinar distancias inaccesibles con razones trigonométricas, y calcular área superficial y volumen de pirámides, conos y esferas." },
+      { "id": "grade-3-argue", "description": "Plantea afirmaciones sobre las relaciones métricas en triángulos rectángulos y propiedades de razones trigonométricas de ángulos notables; las justifica mediante deducciones y principios matemáticos." }
+    ],
+    "4": [
+      { "id": "grade-4-model", "description": "Modela formas compuestas y relaciones métricas espaciales mediante triángulos oblicuángulos (ley de senos y cosenos), la ecuación de la recta en el plano cartesiano y transformaciones homotéticas; evalúa el modelo." },
+      { "id": "grade-4-communicate", "description": "Expresa la comprensión de la pendiente, paralelismo y perpendicularidad de rectas, relaciones métricas en triángulos no rectángulos y propiedades de cuerpos truncados mediante representaciones gráficas y simbólicas." },
+      { "id": "grade-4-strategies", "description": "Selecciona, combina y adapta estrategias analíticas y trigonométricas para resolver triángulos oblicuángulos, determinar ecuaciones de rectas y calcular área y volumen de sólidos truncados." },
+      { "id": "grade-4-argue", "description": "Plantea y justifica afirmaciones sobre relaciones trigonométricas, condiciones de perpendicularidad de rectas y transformaciones homotéticas; las valida con deducciones lógicas y contraejemplos." }
+    ],
+    "5": [
+      { "id": "grade-5-model", "description": "Modela trayectorias y estructuras complejas mediante secciones cónicas (parábola, elipse, circunferencia), razones trigonométricas en el plano cartesiano y vectores o geometría analítica tridimensional." },
+      { "id": "grade-5-communicate", "description": "Expresa su comprensión de los elementos y ecuaciones de las cónicas (foco, directriz, vértice), ángulos de elevación y depresión, y funciones trigonométricas integrando lenguaje geométrico analítico." },
+      { "id": "grade-5-strategies", "description": "Selecciona, combina y adapta procedimientos de geometría analítica, identidades trigonométricas y optimización espacial para resolver problemas de diseño, ingeniería y trayectorias." },
+      { "id": "grade-5-argue", "description": "Plantea y sustenta afirmaciones sobre propiedades de secciones cónicas, condiciones de tangencia y validez de modelos espaciales; las demuestra mediante razonamiento formal y teoremas matemáticos." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria (Forma Ciclo VII, pp. 161-167); requiere cotejo pedagógico humano."
+  }
+}

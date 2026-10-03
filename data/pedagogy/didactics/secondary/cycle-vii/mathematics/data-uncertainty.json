@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-data-uncertainty",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-data-uncertainty-problems", "officialName": "Resuelve problemas de gestión de datos e incertidumbre", "alias": "data-uncertainty" },
+    "capacities": [
+      { "id": "represents-data-with-graphics-and-measures", "officialName": "Representa datos con gráficos y medidas estadísticas o probabilísticas" },
+      { "id": "communicates-understanding-of-statistical-and-probabilistic-concepts", "officialName": "Comunica su comprensión de los conceptos estadísticos y probabilísticos" },
+      { "id": "uses-strategies-to-collect-and-process-data", "officialName": "Usa estrategias y procedimientos para recopilar y procesar datos" },
+      { "id": "sustains-conclusions-or-decisions-based-on-information", "officialName": "Sustenta conclusiones o decisiones con base en la información obtenida" }
+    ]
+  },
+  "approach": "Resolución de problemas",
+  "recommendedStrategies": [
+    "determinar muestras representativas mediante técnicas de muestreo aleatorio",
+    "analizar la variabilidad y dispersión con rango, varianza y desviación estándar",
+    "comparar distribuciones mediante medidas de localización y coeficientes de variación",
+    "modelar incertidumbre y calcular probabilidades condicionales y compuestas",
+    "evaluar críticamente estudios estadísticos, identificar sesgos y sustentar decisiones estratégicas"
+  ],
+  "assessmentRecommendations": [
+    "Recoger evidencia de la toma de decisiones basada en medidas de dispersión, posición y probabilidad.",
+    "Valorar la detección de sesgos muestrales, la interpretación de correlaciones y la solidez de conclusiones."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "muestreo aleatorio, representatividad y tamaño muestral",
+      "medidas de dispersión y comparación de poblaciones",
+      "probabilidad condicional y modelos estocásticos en situaciones reales",
+      "análisis crítico de estudios estadísticos, falacias y sesgos",
+      "argumentación rigurosa basada en evidencia cuantitativa"
+    ],
+    "avoid": [
+      "cálculo mecánico de fórmulas de dispersión sin interpretación",
+      "reducción de la probabilidad al azar de juegos sin modelar eventos reales",
+      "aceptación pasiva de informes estadísticos sin cuestionar su metodología",
+      "evaluación limitada a la memorización de fórmulas estadísticas"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-mathematics-situations-2024"],
+    "reviewNote": "Orientación didáctica piloto para Datos e Incertidumbre en Ciclo VII; las estrategias son recomendaciones adaptables y requieren validación humana."
+  }
+}

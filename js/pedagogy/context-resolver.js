@@ -44,18 +44,22 @@ const PedagogicalContextResolver = (() => {
             && profile.scope.cycle === cycle
             && (profile.scope.grades.length === 0 || profile.scope.grades.includes(String(input.grade)))
         );
+        const matchesCompetency = (comp, target) => {
+            if (!comp || !target) return false;
+            return comp.id === target || comp.alias === target || comp.id === `solves-${target}-problems` || comp.id === String(target).replace(/^solves-/, '').replace(/-problems$/, '');
+        };
         const curriculum = (catalogs?.curriculumProfiles || []).find(profile =>
             profile.scope.level === input.level
             && profile.scope.cycle === cycle
             && profile.scope.grades.includes(String(input.grade))
             && profile.scope.area.id === input.area
-            && profile.competency.id === input.competency
+            && matchesCompetency(profile.competency, input.competency)
         );
         const didactic = (catalogs?.didacticProfiles || []).find(profile =>
             profile.scope.level === input.level
             && profile.scope.cycle === cycle
             && profile.scope.area.id === input.area
-            && profile.scope.competency.id === input.competency
+            && matchesCompetency(profile.scope.competency, input.competency)
         );
         const methodology = (catalogs?.methodologyProfiles || []).find(profile => profile.code === input.methodology);
 

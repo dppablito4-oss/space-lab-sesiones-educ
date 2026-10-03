@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-mathematics-data-uncertainty-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-data-uncertainty-problems", "officialName": "Resuelve problemas de gestión de datos e incertidumbre", "alias": "data-uncertainty" },
+  "capacities": [
+    { "id": "represents-data-with-graphics-and-measures", "officialName": "Representa datos con gráficos y medidas estadísticas o probabilísticas" },
+    { "id": "communicates-understanding-of-statistical-and-probabilistic-concepts", "officialName": "Comunica su comprensión de los conceptos estadísticos y probabilísticos" },
+    { "id": "uses-strategies-to-collect-and-process-data", "officialName": "Usa estrategias y procedimientos para recopilar y procesar datos" },
+    { "id": "sustains-conclusions-or-decisions-based-on-information", "officialName": "Sustenta conclusiones o decisiones con base en la información obtenida" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas en los que plantea temas de estudio, identificando la población pertinente y las variables cuantitativas continuas, así como cualitativas nominales y ordinales. Recolecta datos mediante encuestas y los registra en tablas de datos agrupados, así también determina la media, mediana y moda de datos no agrupados y agrupados; determina el espacio muestral de un suceso aleatorio y la probabilidad de un suceso a través de su regla de Laplace. Representa el comportamiento de estos usando gráficos estadísticos (histogramas, polígonos de frecuencia y circulares). Interpreta la información contenida en estos gráficos y tablas, y a partir de ello produce nueva información; deduce el significado de las medidas de tendencia central y de la probabilidad de sucesos aleatorios. Emplea procedimientos para recopilar datos, organizarlos y procesarlos. Plantea y contrasta conclusiones sobre las características de una población a partir del análisis de datos; propone decisiones sustentadas y las justifica a partir de la información obtenida.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-represent", "description": "Representa el comportamiento de datos de una muestra sobre variables cualitativas y cuantitativas discretas mediante tablas de frecuencias absolutas y relativas, gráficos de barras, circulares y medidas de tendencia central (media, mediana, moda)." },
+      { "id": "grade-1-communicate", "description": "Expresa la comprensión de la media, mediana y moda como medidas de tendencia central y la lectura e interpretación de gráficos estadísticos y de la probabilidad de sucesos equiprobables mediante la regla de Laplace." },
+      { "id": "grade-1-strategies", "description": "Selecciona y emplea procedimientos para recopilar datos mediante encuestas breves, organizarlos en tablas de frecuencias no agrupadas y calcular medidas de tendencia central y probabilidades elementales." },
+      { "id": "grade-1-sustain", "description": "Plantea conclusiones sobre las características de la población estudiada a partir de los datos procesados; propone decisiones informadas y reconoce errores o sesgos en interpretaciones." }
+    ],
+    "2": [
+      { "id": "grade-2-represent", "description": "Representa el comportamiento de datos de variables cuantitativas continuas mediante tablas de frecuencias con datos agrupados en intervalos, histogramas, polígonos de frecuencia y el espacio muestral de sucesos simples." },
+      { "id": "grade-2-communicate", "description": "Expresa la pertinencia de usar la media, mediana o moda según la distribución de los datos, la lectura de histogramas y la probabilidad de sucesos compuestos usando lenguaje estadístico formal." },
+      { "id": "grade-2-strategies", "description": "Selecciona, combina y adapta procedimientos para recopilar datos por muestreo estratificado sencillo o encuestas, agrupar datos en intervalos de clase y calcular la media ponderada y probabilidades teóricas." },
+      { "id": "grade-2-sustain", "description": "Plantea afirmaciones y conclusiones sobre tendencias, homogeneidad de datos y probabilidad de ocurrencia de eventos; las justifica a partir de tablas, gráficos y medidas de tendencia central." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria (Datos Ciclo VI, pp. 168-171); requiere cotejo pedagógico humano."
+  }
+}

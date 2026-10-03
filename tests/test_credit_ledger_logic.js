@@ -120,7 +120,8 @@ function refundUsage(state, { requestId, action = 'generate_session' }) {
 const state = createAccountingState();
 
 // Promo: prioridad 10 (se debe consumir primero)
-addGrant(state, { id: 'grant-promo', sourceType: 'promo', credits: 10, priority: 10, expiresAt: '2026-10-01' });
+const futureDate = new Date(Date.now() + 30 * 86400000).toISOString();
+addGrant(state, { id: 'grant-promo', sourceType: 'promo', credits: 10, priority: 10, expiresAt: futureDate });
 
 // Suscripción: prioridad 20 (se debe consumir segundo)
 addGrant(state, { id: 'grant-sub', sourceType: 'subscription', credits: 50, priority: 20 });

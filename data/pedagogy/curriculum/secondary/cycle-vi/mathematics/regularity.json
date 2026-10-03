@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-mathematics-regularity-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-regularity-problems", "officialName": "Resuelve problemas de regularidad, equivalencia y cambio", "alias": "regularity" },
+  "capacities": [
+    { "id": "translates-data-to-algebraic-expressions", "officialName": "Traduce datos y condiciones a expresiones algebraicas y gráficas" },
+    { "id": "communicates-understanding-of-algebraic-relations", "officialName": "Comunica su comprensión sobre las relaciones algebraicas" },
+    { "id": "uses-strategies-for-equivalences-and-general-rules", "officialName": "Usa estrategias y procedimientos para encontrar equivalencias y reglas generales" },
+    { "id": "argues-about-change-and-equivalence-relations", "officialName": "Argumenta afirmaciones sobre relaciones de cambio y equivalencia" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas referidos a interpretar cambios constantes o regularidades entre magnitudes, valores o entre expresiones; traduciéndolas a patrones numéricos y gráficos, progresiones aritméticas, ecuaciones e inecuaciones lineales con una incógnita, funciones lineales y afín, y relaciones de proporcionalidad directa e inversa. Comprueba si la expresión algebraica usada expresó o reprodujo las condiciones del problema. Expresa su comprensión de: la relación entre función lineal y proporcionalidad directa; las diferencias entre una ecuación e inecuación lineal y sus propiedades; la variable como un valor que cambia; el conjunto de valores que puede tomar un término desconocido para verificar una inecuación; las usa para interpretar enunciados, expresiones algebraicas o un texto diverso de contenido matemático. Selecciona, emplea y combina recursos, estrategias, métodos gráficos y procedimientos matemáticos para determinar el valor de términos desconocidos en una progresión aritmética, simplificar expresiones algebraicas y dar solución a ecuaciones e inecuaciones lineales, e interpretar la gráfica de una función lineal y afín. Plantea afirmaciones sobre propiedades de las progresiones aritméticas, ecuaciones e inecuaciones así como de una función lineal, lineal afín con base a sus experiencias, y las justifica mediante ejemplos y propiedades matemáticas; encuentra errores o vacíos en las argumentaciones propias y las de otros y las corrige.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-translate", "description": "Traduce relaciones entre datos, regularidades, valores desconocidos y relaciones de proporcionalidad directa a patrones gráficos, progresiones aritméticas, ecuaciones lineales con una incógnita y funciones lineales." },
+      { "id": "grade-1-communicate", "description": "Expresa el significado de la regla de formación de progresiones aritméticas, ecuaciones lineales de la forma ax + b = c, la proporcionalidad directa y la función lineal mediante tablas, gráficas y lenguaje algebraico." },
+      { "id": "grade-1-strategies", "description": "Selecciona y emplea estrategias heurísticas y procedimientos algebraicos para hallar términos en progresiones aritméticas, simplificar expresiones y resolver ecuaciones lineales con propiedades de la igualdad." },
+      { "id": "grade-1-argue", "description": "Plantea y justifica afirmaciones sobre regularidades en progresiones aritméticas, relaciones de cambio en funciones lineales y equivalencias entre expresiones algebraicas; reconoce errores y los corrige." }
+    ],
+    "2": [
+      { "id": "grade-2-translate", "description": "Traduce condiciones de desigualdad, variación entre magnitudes y relaciones lineales a progresiones aritméticas, ecuaciones ax + b = cx + d, inecuaciones ax + b ≤ c, funciones lineales afines y proporcionalidad directa o inversa." },
+      { "id": "grade-2-communicate", "description": "Expresa la comprensión de la pendiente e intercepto de una función afín, la constante de proporcionalidad y el conjunto solución de ecuaciones e inecuaciones lineales con representaciones tabulares, gráficas y simbólicas." },
+      { "id": "grade-2-strategies", "description": "Selecciona, combina y adapta estrategias algebraicas, métodos gráficos y propiedades de las operaciones para operar con expresiones algebraicas y solucionar ecuaciones, inecuaciones y progresiones aritméticas." },
+      { "id": "grade-2-argue", "description": "Plantea y justifica afirmaciones sobre el comportamiento de funciones afines, la variación en la constante de proporcionalidad y propiedades de inecuaciones lineales; identifica vacíos en argumentaciones y los rectifica." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria (Regularidad Ciclo VI, pp. 147-151); requiere cotejo pedagógico humano."
+  }
+}

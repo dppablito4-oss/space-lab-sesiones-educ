@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-data-uncertainty-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-data-uncertainty-problems", "officialName": "Resuelve problemas de gestión de datos e incertidumbre", "alias": "data-uncertainty" },
+  "capacities": [
+    { "id": "represents-data-with-graphics-and-measures", "officialName": "Representa datos con gráficos y medidas estadísticas o probabilísticas" },
+    { "id": "communicates-understanding-of-statistical-and-probabilistic-concepts", "officialName": "Comunica su comprensión de los conceptos estadísticos y probabilísticos" },
+    { "id": "uses-strategies-to-collect-and-process-data", "officialName": "Usa estrategias y procedimientos para recopilar y procesar datos" },
+    { "id": "sustains-conclusions-or-decisions-based-on-information", "officialName": "Sustenta conclusiones o decisiones con base en la información obtenida" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas en los que plantea temas de estudio, caracterizando la población y la muestra e identificando las variables a estudiar; empleando el muestreo aleatorio para determinar una muestra representativa. Recolecta datos mediante encuestas y los registra en tablas, determina terciles, cuartiles y quintiles; la desviación estándar, y el rango de un conjunto de datos; representa el comportamiento de estos usando gráficos estadísticos pertinentes a la situación de estudio. Interpreta la información contenida en estos, o la información relacionada a su tema de estudio proveniente de diversas fuentes, haciendo uso del significado de la desviación estándar, las medidas de localización estudiadas y el lenguaje estadístico; basado en esto contrasta y justifica conclusiones sobre las características de la población. Expresa la ocurrencia de sucesos dependientes, independientes, simples o compuestos de una situación aleatoria mediante la probabilidad, y determina su espacio muestral; interpreta las propiedades básicas de la probabilidad de acuerdo a las condiciones de la situación. Justifica sus predicciones con base a los resultados de su experimento o propiedades.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-represent", "description": "Representa el comportamiento de datos de muestras representativas mediante medidas de localización (cuartiles, percentiles), medidas de dispersión (rango, desviación estándar) y gráficos estadísticos pertinentes (histogramas y diagramas de dispersión básica)." },
+      { "id": "grade-3-communicate", "description": "Expresa la comprensión sobre la desviación estándar como medida de dispersión respecto a la media, el significado de los cuartiles y la probabilidad condicional de sucesos independientes y dependientes." },
+      { "id": "grade-3-strategies", "description": "Selecciona, combina y adapta procedimientos para realizar muestreo aleatorio simple, calcular cuartiles y desviación estándar en datos agrupados, y hallar la probabilidad de sucesos compuestos." },
+      { "id": "grade-3-sustain", "description": "Sustenta conclusiones sobre la variabilidad y distribución de la población; contrasta inferencias estadísticas y evalúa la representatividad de la muestra para tomar decisiones fundamentadas." }
+    ],
+    "4": [
+      { "id": "grade-4-represent", "description": "Representa el comportamiento de datos de muestras estratificadas mediante medidas de localización (deciles, percentiles), varianza, desviación estándar, coeficiente de variación y diagramas de correlación bivariada." },
+      { "id": "grade-4-communicate", "description": "Expresa el significado del coeficiente de variación para comparar homogeneidad entre grupos de datos, la correlación entre variables y la probabilidad de sucesos compuestos independientes y dependientes." },
+      { "id": "grade-4-strategies", "description": "Selecciona, combina y adapta procedimientos para seleccionar muestras aleatorias sistemáticas o estratificadas, procesar datos bivariados, calcular varianza y coeficiente de variación y calcular probabilidades compuestas." },
+      { "id": "grade-4-sustain", "description": "Sustenta conclusiones y decisiones en situaciones de incertidumbre basándose en medidas de dispersión y tendencias bivariadas; reconoce posibles sesgos en encuestas y análisis de datos." }
+    ],
+    "5": [
+      { "id": "grade-5-represent", "description": "Representa datos multivariados o inferenciales mediante distribuciones de probabilidad (binomial y normal aproximada), rectas de regresión lineal, coeficiente de correlación de Pearson y gráficos de dispersión con línea de tendencia." },
+      { "id": "grade-5-communicate", "description": "Expresa la comprensión de la distribución normal, el coeficiente de correlación y la significancia estadística al analizar fenómenos socioeconómicos, demográficos o científicos mediante lenguaje formal." },
+      { "id": "grade-5-strategies", "description": "Selecciona, combina y adapta métodos de análisis estadístico avanzado, estimación de parámetros, intervalos de confianza y modelos de regresión lineal para pronósticos en condiciones de incertidumbre." },
+      { "id": "grade-5-sustain", "description": "Sustenta predicciones, decisiones estratégicas y conclusiones críticas evaluando la validez de estudios estadísticos de diversas fuentes, identificando falacias, sesgos de muestreo y errores metodológicos." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria (Datos Ciclo VII, pp. 171-176); requiere cotejo pedagógico humano."
+  }
+}

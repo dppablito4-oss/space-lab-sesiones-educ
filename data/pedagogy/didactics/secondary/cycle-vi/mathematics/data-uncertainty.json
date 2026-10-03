@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-mathematics-data-uncertainty",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "mathematics", "officialName": "Matemática" },
+    "competency": { "id": "solves-data-uncertainty-problems", "officialName": "Resuelve problemas de gestión de datos e incertidumbre", "alias": "data-uncertainty" },
+    "capacities": [
+      { "id": "represents-data-with-graphics-and-measures", "officialName": "Representa datos con gráficos y medidas estadísticas o probabilísticas" },
+      { "id": "communicates-understanding-of-statistical-and-probabilistic-concepts", "officialName": "Comunica su comprensión de los conceptos estadísticos y probabilísticos" },
+      { "id": "uses-strategies-to-collect-and-process-data", "officialName": "Usa estrategias y procedimientos para recopilar y procesar datos" },
+      { "id": "sustains-conclusions-or-decisions-based-on-information", "officialName": "Sustenta conclusiones o decisiones con base en la información obtenida" }
+    ]
+  },
+  "approach": "Resolución de problemas",
+  "recommendedStrategies": [
+    "plantear temas de estudio de interés escolar, comunitario o social",
+    "diseñar y aplicar encuestas breves para recolectar datos de muestras sencillas",
+    "organizar datos en tablas de frecuencias y construir gráficos pertinentes",
+    "interpretar y seleccionar la medida de tendencia central más representativa",
+    "analizar probabilidades elementales por Laplace y sustentar decisiones informadas"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la interpretación crítica de tablas, histogramas y polígonos de frecuencia.",
+    "Valorar la pertinencia de las conclusiones y decisiones fundamentadas en los datos obtenidos."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "temas de estudio auténticos y significativos para el estudiante",
+      "recolección sistemática y organización en tablas de frecuencias",
+      "interpretación crítica de gráficos estadísticos",
+      "pertinencia de medidas de tendencia central según la forma de los datos",
+      "toma de decisiones sustentadas y argumentación con datos"
+    ],
+    "avoid": [
+      "reducir la estadística al dibujo de gráficos sin análisis crítico",
+      "cálculo automático de la media sin considerar datos atípicos o asimetría",
+      "ejercicios con datos aislados carentes de contexto real",
+      "evaluación limitada a la memorización de definiciones estadísticas"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016", "minedu-mathematics-situations-2024"],
+    "reviewNote": "Orientación didáctica piloto para Datos e Incertidumbre en Ciclo VI; las estrategias son recomendaciones adaptables y requieren validación humana."
+  }
+}

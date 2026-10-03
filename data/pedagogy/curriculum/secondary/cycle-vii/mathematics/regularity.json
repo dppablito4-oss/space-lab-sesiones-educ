@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-mathematics-regularity-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-regularity-problems", "officialName": "Resuelve problemas de regularidad, equivalencia y cambio", "alias": "regularity" },
+  "capacities": [
+    { "id": "translates-data-to-algebraic-expressions", "officialName": "Traduce datos y condiciones a expresiones algebraicas y gráficas" },
+    { "id": "communicates-understanding-of-algebraic-relations", "officialName": "Comunica su comprensión sobre las relaciones algebraicas" },
+    { "id": "uses-strategies-for-equivalences-and-general-rules", "officialName": "Usa estrategias y procedimientos para encontrar equivalencias y reglas generales" },
+    { "id": "argues-about-change-and-equivalence-relations", "officialName": "Argumenta afirmaciones sobre relaciones de cambio y equivalencia" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas referidos a: analizar cambios continuos o periódicos, o regularidades entre magnitudes, valores o expresiones, traduciéndolas a expresiones que involucran la regla de formación de sucesiones y progresiones geométricas, series, funciones cuadráticas, exponenciales y trigonométricas, sistemas de ecuaciones lineales e inecuaciones. Evalúa si la expresión algebraica reproduce las condiciones del problema. Expresa su comprensión de: la regla de formación de una sucesión, las relaciones entre la expresión gráfica y simbólica de funciones cuadráticas, exponenciales y trigonométricas, y las propiedades que diferencian una función de una relación; las soluciones o conjunto solución de un sistema de ecuaciones lineales e inecuaciones; usa este conocimiento para interpretar enunciados o textos de contenido matemático. Selecciona, combina y adapta variados recursos, estrategias y procedimientos matemáticos para solucionar sistemas de ecuaciones lineales, inecuaciones, determinar términos desconocidos en sucesiones o progresiones geométricas y simplificar expresiones que involucran funciones; evalúa y opta por aquellos más idóneos según la situación. Plantea afirmaciones sobre relaciones de cambio que observa entre variables de una función o el comportamiento de sucesiones o progresiones geométricas, así como las soluciones de sistemas de ecuaciones e inecuaciones; las justifica con argumentos matemáticos, propiedades, casos especiales o contraejemplos.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-translate", "description": "Traduce relaciones de equivalencia y variación cuadrática a sistemas de dos ecuaciones lineales, inecuaciones lineales y funciones cuadráticas de la forma f(x) = ax² + c o f(x) = ax² + bx; comprueba si cumplen las condiciones del problema." },
+      { "id": "grade-3-communicate", "description": "Expresa el significado del conjunto solución de un sistema de ecuaciones lineales, el vértice e interceptos de la parábola y el comportamiento de funciones cuadráticas mediante tablas, gráficas cartesianas y lenguaje algebraico." },
+      { "id": "grade-3-strategies", "description": "Selecciona, combina y adapta estrategias algebraicas (sustitución, reducción, igualación) y factorización para resolver sistemas lineales, hallar raíces de ecuaciones cuadráticas y operar polinomios." },
+      { "id": "grade-3-argue", "description": "Plantea y justifica afirmaciones sobre las soluciones de sistemas lineales y el vértice de una función cuadrática; sustenta razonamientos y refuta afirmaciones falsas mediante contraejemplos." }
+    ],
+    "4": [
+      { "id": "grade-4-translate", "description": "Traduce relaciones entre variables, sucesiones crecientes y condiciones de optimización a progresiones geométricas, ecuaciones e inecuaciones cuadráticas completas ax² + bx + c = 0 y funciones cuadráticas generales; evalúa el modelo." },
+      { "id": "grade-4-communicate", "description": "Expresa la comprensión del discriminante en ecuaciones cuadráticas, la traslación de funciones cuadráticas y la razón en progresiones geométricas integrando representaciones gráficas, tabulares y algebraicas." },
+      { "id": "grade-4-strategies", "description": "Selecciona, combina y adapta estrategias de factorización, completación de cuadrados, fórmula general y suma de términos de progresiones geométricas, evaluando la eficacia del método." },
+      { "id": "grade-4-argue", "description": "Plantea y justifica afirmaciones sobre la existencia y naturaleza de raíces reales en ecuaciones cuadráticas, el valor máximo o mínimo de funciones y convergencia de progresiones; las valida con razonamiento deductivo." }
+    ],
+    "5": [
+      { "id": "grade-5-translate", "description": "Traduce fenómenos de crecimiento exponencial, periodicidad y restricciones complejas a funciones exponenciales, logarítmicas o trigonométricas, sucesiones y sistemas de inecuaciones lineales; evalúa si el modelo reproduce fielmente la situación." },
+      { "id": "grade-5-communicate", "description": "Expresa la comprensión de la asíntota, período, amplitud y dominio de funciones exponenciales y trigonométricas, así como de la región factible en sistemas de inecuaciones mediante lenguaje formal y representaciones simbólicas." },
+      { "id": "grade-5-strategies", "description": "Selecciona, combina y adapta métodos de resolución analítica, propiedades de logaritmos, identidades trigonométricas fundamentales y análisis de inecuaciones lineales para modelar y optimizar situaciones problemáticas." },
+      { "id": "grade-5-argue", "description": "Plantea y contrasta afirmaciones sobre el comportamiento asintótico, periodicidad y optimalidad de soluciones; las justifica y demuestra con rigor matemático, propiedades y contraejemplos." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria (Regularidad Ciclo VII, pp. 151-156); requiere cotejo pedagógico humano."
+  }
+}

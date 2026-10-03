@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-mathematics-shape-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "mathematics", "officialName": "Matemática" }
+  },
+  "competency": { "id": "solves-shape-problems", "officialName": "Resuelve problemas de forma, movimiento y localización", "alias": "shape" },
+  "capacities": [
+    { "id": "models-objects-with-geometric-forms", "officialName": "Modela objetos con formas geométricas y sus transformaciones" },
+    { "id": "communicates-understanding-of-geometric-forms-and-relations", "officialName": "Comunica su comprensión sobre las formas y relaciones geométricas" },
+    { "id": "uses-strategies-for-spatial-orientation", "officialName": "Usa estrategias y procedimientos para orientarse en el espacio" },
+    { "id": "argues-about-geometric-relations", "officialName": "Argumenta afirmaciones sobre relaciones geométricas" }
+  ],
+  "standard": {
+    "description": "Resuelve problemas en los que modela características de objetos mediante prismas, pirámides y polígonos, sus elementos y propiedades, y la semejanza y congruencia de formas geométricas; así como la ubicación y movimiento mediante coordenadas en el plano cartesiano, mapas y planos a escala, y transformaciones. Expresa su comprensión de las formas congruentes y semejantes, la relación entre una forma geométrica y sus diferentes perspectivas; usando dibujos y construcciones. Clasifica prismas, pirámides y polígonos, según sus propiedades. Selecciona y emplea estrategias, procedimientos y recursos para determinar la longitud, área o volumen de formas geométricas en unidades convencionales y para construir formas geométricas a escala. Plantea afirmaciones sobre la semejanza y congruencia de formas, entre el área de una forma geométrica y su volumen, a partir de ejemplos y contraejemplos o propiedades conocidas.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-model", "description": "Modela características y medidas de objetos reales mediante triángulos, cuadriláteros, prismas rectos y pirámides, así como posiciones y desplazamientos mediante coordenadas cartesianas, planos a escala y transformaciones rígidas (traslaciones y reflexiones)." },
+      { "id": "grade-1-communicate", "description": "Expresa con dibujos, construcciones con regla y compás y lenguaje geométrico su comprensión sobre propiedades de prismas rectos, triángulos y cuadriláteros, y vistas de un cuerpo geométrico (frontal, lateral y superior)." },
+      { "id": "grade-1-strategies", "description": "Selecciona y emplea estrategias y procedimientos para determinar perímetro, área de polígonos regulares y volumen de prismas rectos, así como para reproducir figuras a escala en cuadrículas." },
+      { "id": "grade-1-argue", "description": "Plantea y justifica afirmaciones sobre las relaciones entre lados y ángulos de triángulos y cuadriláteros, y la conservación del área en transformaciones; reconoce y corrige errores en las justificaciones." }
+    ],
+    "2": [
+      { "id": "grade-2-model", "description": "Modela atributos de objetos mediante prismas rectos, cilindros, polígonos regulares y formas compuestas, así como la ubicación y trayectorias mediante planos a escala, rotaciones y composición de transformaciones en el plano cartesiano." },
+      { "id": "grade-2-communicate", "description": "Expresa con lenguaje geométrico y representaciones gráficas su comprensión de la congruencia y semejanza de triángulos, propiedades del círculo, cilindro y prismas, y el efecto de rotaciones y reflexiones." },
+      { "id": "grade-2-strategies", "description": "Selecciona, combina y adapta estrategias heurísticas, recursos de medición y fórmulas para calcular perímetro, área de figuras compuestas, superficie lateral y volumen de prismas y cilindros." },
+      { "id": "grade-2-argue", "description": "Plantea afirmaciones sobre criterios de semejanza y congruencia de triángulos y la variación del área y volumen al modificar dimensiones a escala; las justifica mediante propiedades y contraejemplos." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Matriz curricular piloto transcrita y condensada del Programa curricular de Educación Secundaria (Forma Ciclo VI, pp. 157-161); requiere cotejo pedagógico humano."
+  }
+}
