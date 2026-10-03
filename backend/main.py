@@ -48,8 +48,10 @@ from playwright.async_api import async_playwright
 from bs4 import BeautifulSoup
 from docx_builder import build_docx_from_json, build_docx_from_html
 from docx_builder_v1 import build_docx_from_v1
+from docx_builder_planning import build_docx_from_planning_v2
 from adapters.legacy_to_v1 import adapt_legacy_to_v1
 from models.session_document import SessionDocumentV1
+from models.planning_document import PlanningContainerV2
 from version import ENGINE_VERSION
 
 # Librerías para estilizar consola
@@ -2076,6 +2078,32 @@ async def exportar_docx_json(raw: dict = Body(...)):
             )
         except Exception as exc:
             raise HTTPException(status_code=422, detail=f"SessionDocument v1 inválido: {exc}")
+
+    if raw.get("schemaVersion") == "2.0":
+        token = raw.get("token", "")
+        if token != CONNECTION_TOKEN:
+            raise HTTPException(status_code=401, detail="No autorizado: Token de conexión inválido.")
+        try:
+            v2_payload = dict(raw)
+            v2_payload.pop("token", None)
+            container_v2 = PlanningContainerV2(**v2_payload)
+            titulo = container_v2.identity.title or "Unidad_de_Aprendizaje"
+            filename = re.sub(r'[^a-zA-Z0-9-_\s]', '', titulo).replace(' ', '_')
+            nombre_archivo = f"{filename}.docx"
+            docx_stream = build_docx_from_planning_v2(container_v2)
+            if console:
+                console.print(f"[blue]✓ [UNIDAD EXPORTADA] Generada con éxito: {nombre_archivo}[/blue]")
+            return StreamingResponse(
+                docx_stream,
+                media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                headers={
+                    "Content-Disposition": f"attachment; filename={nombre_archivo}",
+                    "Access-Control-Expose-Headers": "Content-Disposition"
+                }
+            )
+        except Exception as exc:
+            raise HTTPException(status_code=422, detail=f"PlanningContainer v2 inválido: {exc}")
+
 
     # Normalizar y adaptar llaves antes de validar con Pydantic
     normalized = normalize_sesion_data(raw)

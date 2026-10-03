@@ -59,6 +59,8 @@ for (const internalId of ['map-quantity', 'criterion-model', 'milestone-research
 assert.doesNotMatch(reviewedHtml, /linkedDocumentRef|curriculumMapRefs/);
 assert.match(reviewedHtml, /data-planning-view-action="edit"/);
 assert.match(reviewedHtml, /data-planning-view-action="back"/);
+assert.match(reviewedHtml, /data-planning-view-action="export-docx"/);
+assert.match(reviewedHtml, /Descargar Word \(\.docx\)/);
 
 const generated = structuredClone(fixture);
 generated.sequence[0].status = 'generated';

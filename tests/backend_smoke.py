@@ -129,9 +129,20 @@ def run() -> None:
     assert word_v1.content[:2] == b"PK"
     assert len(word_v1.content) > 10_000
 
+    v2_payload = json.loads(
+        (ROOT / "data" / "pedagogy" / "fixtures" / "secondary_math_project_unit.v2.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    v2_payload["token"] = main.CONNECTION_TOKEN
+    word_v2 = client.post("/exportar-docx-json", json=v2_payload)
+    assert word_v2.status_code == 200, word_v2.text
+    assert word_v2.content[:2] == b"PK"
+    assert len(word_v2.content) > 10_000
+
     print(
         "backend_smoke.py: OK "
-        f"({len(word.content)} legacy, {len(word_v1.content)} v1, CORS y límite OK)"
+        f"({len(word.content)} legacy, {len(word_v1.content)} v1, {len(word_v2.content)} v2 planning, CORS y límite OK)"
     )
 
 

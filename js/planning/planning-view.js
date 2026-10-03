@@ -195,7 +195,7 @@ const PlanningView = (() => {
             + renderAssessment(container)
             + renderMilestones(container)
             + renderSequence(container, options);
-        return `<div class="planning-shell planning-view-shell">${renderHeader(container)}<div class="planning-view-actions"><button type="button" class="btn btn-ghost" data-planning-view-action="back">← Mis planificaciones</button><button type="button" class="btn btn-primary" data-planning-view-action="edit">Editar planificación</button><button type="button" class="btn btn-ghost" data-planning-view-action="close">Cerrar</button></div><div class="planning-view-layout"><aside class="planning-view-summary" aria-label="Resumen de la planificación"><h3>Resumen</h3><p><strong>${esc(TYPES[container.identity.planningType] || 'Planificación')}</strong></p><p>${esc(STATUSES[container.status] || container.status)}</p><p>Revisión ${container.revision}</p></aside><div class="planning-view-content">${main}</div></div></div>`;
+        return `<div class="planning-shell planning-view-shell">${renderHeader(container)}<div class="planning-view-actions"><button type="button" class="btn btn-ghost" data-planning-view-action="back">← Mis planificaciones</button><button type="button" class="btn btn-secondary" data-planning-view-action="export-docx">Descargar Word (.docx)</button><button type="button" class="btn btn-primary" data-planning-view-action="edit">Editar planificación</button><button type="button" class="btn btn-ghost" data-planning-view-action="close">Cerrar</button></div><div class="planning-view-layout"><aside class="planning-view-summary" aria-label="Resumen de la planificación"><h3>Resumen</h3><p><strong>${esc(TYPES[container.identity.planningType] || 'Planificación')}</strong></p><p>${esc(STATUSES[container.status] || container.status)}</p><p>Revisión ${container.revision}</p></aside><div class="planning-view-content">${main}</div></div></div>`;
     }
 
     async function loadMethodologyProfile(container) {
@@ -245,6 +245,38 @@ const PlanningView = (() => {
         if (dialog?.open) dialog.close();
     }
 
+    async function exportPlanningDocx(containerId) {
+        repository ||= repositoryModule.create({ validator: core });
+        const container = repository.get(containerId);
+        if (!container) throw new Error('No se encontró la planificación solicitada.');
+
+        const token = localStorage.getItem('connection_token') || '';
+        const payload = { ...container, token };
+        const titulo = container.identity?.title || 'Unidad_de_Aprendizaje';
+
+        if (window.Loader?.show) window.Loader.show('Generando Unidad en Word (.docx)...');
+        try {
+            const client = window.LocalExportClient || (typeof require !== 'undefined' ? require('../services/local-export-client.js') : null);
+            if (!client) throw new Error('Cliente de exportación no disponible.');
+            const blob = await client.exportDocument('docx', payload);
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            const cleanTitle = (titulo || 'Unidad').replace(/[^a-zA-Z0-9-_\s]/g, '').trim().replace(/\s+/g, '_') || 'Unidad_de_Aprendizaje';
+            a.download = `${cleanTitle}.docx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            window.Toast?.success?.('¡Unidad exportada exitosamente a Word (.docx)!');
+        } catch (error) {
+            console.error('[PlanningView Export DOCX] Error:', error);
+            window.Toast?.error?.('Error al exportar Word (.docx): ' + error.message);
+        } finally {
+            if (window.Loader?.hide) window.Loader.hide();
+        }
+    }
+
     function mount() {
         const dialog = document.getElementById('planning-dialog');
         if (!dialog) return;
@@ -255,6 +287,9 @@ const PlanningView = (() => {
             if (action === 'close') close();
             if (action === 'back') window.dispatchEvent(new CustomEvent('planning:view-library'));
             if (action === 'edit' && currentId) window.dispatchEvent(new CustomEvent('planning:view-edit', { detail: { id: currentId } }));
+            if (action === 'export-docx' && currentId) {
+                await exportPlanningDocx(currentId);
+            }
             if (action === 'generate-session' && currentId) {
                 try {
                     const prepared = await window.appStartLinkedSession?.(currentId, target.dataset.sequenceItemId);
@@ -282,7 +317,7 @@ const PlanningView = (() => {
     }
 
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
-    return { open, render, close, sequenceAction, renderHeader, renderSituation, renderCurriculum, renderMethodology,
+    return { open, render, close, exportDocx: exportPlanningDocx, sequenceAction, renderHeader, renderSituation, renderCurriculum, renderMethodology,
         renderProduct, renderAssessment, renderMilestones, renderSequence };
 })();
 

@@ -220,15 +220,38 @@ Cada perfil curricular conserva rigurosamente:
 
 ---
 
-## 6. Próximo Paso Desbloqueado: Motor de Python DOCX para Unidades
+## 6. Motor de Python DOCX para Unidades y Proyectos de Aprendizaje (Completado y Certificado)
 
-Habiendo cumplido al 100% el mandato del usuario (*"primero termina con los cursos y luego ya iremos al motor de python"*), el siguiente paso es la implementación del **Motor de Exportación DOCX en Python para Unidades de Aprendizaje y Programaciones Anuales** (`PlanningContainer 2.0`):
+Se ha implementado e integrado con éxito el **Motor de Exportación DOCX en Python para Unidades, Proyectos y Experiencias de Aprendizaje** ([`PlanningContainer 2.0`](file:///e:/sesiones_educ_ia/backend/models/planning_document.py)):
 
-1. **Diseño del Esquema de Exportación de Unidad:** Mapeo de `PlanningContainer 2.0` a tablas DOCX oficiales MINEDU con tipografía calibrada, colores del diseño institucional y cuadrícula estricta de 10,490 twips.
-2. **Tablas de la Unidad:**
-   - Datos informativos (Título, ciclo, grado, docente, duración).
-   - Situación significativa y pregunta retadora.
-   - Matriz curricular (Competencias, capacidades, desempeños precisados, criterios de evaluación, evidencias e instrumentos).
-   - Secuencia de sesiones planificadas (número, título, duración, campo temático, actividades clave).
-   - Recursos y materiales educativos oficiales MINEDU.
-3. **Integración con el Backend FastAPI / PyInstaller:** Endpoint de exportación nativo para descargar la unidad completa en formato Word editable listo para presentar a la Dirección o UGEL.
+### Componentes Técnicos Implementados:
+1. **Modelo Pydantic Canónico ([`backend/models/planning_document.py`](file:///e:/sesiones_educ_ia/backend/models/planning_document.py)):**
+   - Modela fielmente `PlanningContainerV2` según el esquema oficial `schemas/planning-container.v2.schema.json`.
+   - Soporte para metadatos de identidad, contexto administrativo, situación significativa, pregunta retadora, propósitos curriculares, matriz CNEB, enfoques transversales, hitos, secuencia didáctica de sesiones y evaluación formativa.
+
+2. **Builder DOCX de Alta Fidelidad ([`backend/docx_builder_planning.py`](file:///e:/sesiones_educ_ia/backend/docx_builder_planning.py)):**
+   - Formato A4 con márgenes oficiales (0.75 in).
+   - Cuadrícula de imprenta estricta de **10,490 twips** en todas las tablas (`sum(gridCols) == 10490`).
+   - I. Datos Informativos (tabla de 4 columnas, 10,490 twips).
+   - II. Situación Significativa y Pregunta Retadora (con resaltado estilizado).
+   - III. Matriz de Propósitos de Aprendizaje y Evaluación (competencias, capacidades, estándar de ciclo, desempeños precisados de grado, criterios y evidencias).
+   - IV. Enfoques Transversales y Actitudes Observables.
+   - V. Secuencia Didáctica y Progresión de Sesiones de Aprendizaje (tabla de 5 columnas, 10,490 twips).
+   - VI. Producto o Evidencia Final de la Unidad.
+   - VII. Materiales y Recursos Educativos (Docente / Estudiante).
+   - VIII. Orientaciones para la Evaluación Formativa (Diagnóstica, Formativa y Sumativa).
+   - IX. Firmas de Responsabilidad Pedagógica.
+
+3. **Integración en el Backend FastAPI ([`backend/main.py`](file:///e:/sesiones_educ_ia/backend/main.py)):**
+   - Endpoint universal `/exportar-docx-json` procesa documentos `schemaVersion: "2.0"` generando el archivo Word oficial en streaming con headers de descarga.
+   - Protección de token de conexión y límites de payload.
+
+4. **Integración en Interfaz de Usuario ([`js/planning/planning-view.js`](file:///e:/sesiones_educ_ia/js/planning/planning-view.js)):**
+   - Acción directa **"Descargar Word (.docx)"** en la barra superior de la vista de planificación.
+   - Descarga interactiva automática con sanitización del nombre de archivo.
+
+5. **Pruebas Automatizadas (100% de Aprobación):**
+   - [`tests/test_planning_docx_builder.py`](file:///e:/sesiones_educ_ia/tests/test_planning_docx_builder.py): Validación de fixtures, unidades multidisciplinarias y resiliencia.
+   - [`tests/backend_smoke.py`](file:///e:/sesiones_educ_ia/tests/backend_smoke.py): Verificación del endpoint `/exportar-docx-json` con payload v2 (>64,500 bytes generados).
+   - [`tests/planning-view.test.js`](file:///e:/sesiones_educ_ia/tests/planning-view.test.js): Verificación del botón de descarga en la UI.
+
