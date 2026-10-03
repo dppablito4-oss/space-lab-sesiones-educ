@@ -27,6 +27,7 @@ class AdministrativeContext(BaseModel):
     ugel: str = Field(default="", description="Unidad de Gestión Educativa Local")
     teacher: str = Field(default="", description="Nombre del docente responsable")
     director: str = Field(default="", description="Nombre del director(a)")
+    coordinator: Optional[str] = Field(default="", description="Nombre del coordinador(a) pedagógico(a) JEC")
     academicYear: Union[str, int] = "2026"
     period: str = Field(default="", description="Bimestre o trimestre")
     sections: List[str] = Field(default_factory=list)

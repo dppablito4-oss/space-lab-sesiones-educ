@@ -255,3 +255,29 @@ Se ha implementado e integrado con éxito el **Motor de Exportación DOCX en Pyt
    - [`tests/backend_smoke.py`](file:///e:/sesiones_educ_ia/tests/backend_smoke.py): Verificación del endpoint `/exportar-docx-json` con payload v2 (>64,500 bytes generados).
    - [`tests/planning-view.test.js`](file:///e:/sesiones_educ_ia/tests/planning-view.test.js): Verificación del botón de descarga en la UI.
 
+---
+
+## 7. Adecuación de la Unidad al Formato Oficial de 12 Tablas para Secundaria
+
+Se adaptó el motor y la interfaz al modelo oficial de Secundaria (contrastado con el estándar de UGEL Padre Abad / DRE Ucayali):
+
+1. **Tabla Dual de Propósito vs. Producto Final Integrador:** Fusión visual y curricular en la pág. 1 del documento, donde el propósito del aprendizaje responde directamente al reto y se evalúa mediante un producto integrador tangible.
+2. **Matriz Curricular con Criterios C1–C4:** Mapeo explícito de los criterios alineados a las capacidades del área.
+3. **Secuencia Didáctica Semanal en 7 Columnas:** (`Competencia`, `Semana / Fecha`, `Sesión`, `Criterios ❖ C1-C4`, `Campo Temático`, `Evidencia`, `Instrumento`).
+4. **Competencias Transversales CNEB:** Tablas dedicadas para TIC (Se desenvuelve en entornos virtuales) y Autonomía (Gestiona su aprendizaje de manera autónoma) con desempeños de Secundaria.
+5. **Enfoques Transversales en 4 Columnas:** Enfoque, Valor, Actitud Observable y Demostración en el aula.
+6. **Orientaciones para la Evaluación Formativa:** Marco de la RVM 094-2020-MINEDU (Autoevaluación, Coevaluación y Heteroevaluación).
+7. **Firmas Institucionales Duales:** Coordinador(a) Pedagógico(a) JEC y Docente Responsable.
+8. **Auditoría de Geometría e Impresión:** 12/12 tablas en **10,490 twips** con sangría institucional de `-289 twips` (-0.2 in), márgenes de hoja A4 de 0.75 in, `cantSplit` en todas las filas y `tblHeader` en cabeceras repetitivas.
+
+---
+
+## 8. Vinculación Bidireccional de Sesiones Individuales (Linked Sessions)
+
+Se implementó el ciclo de vida completo entre la **Unidad de Aprendizaje matriz** y las **Sesiones individuales**:
+
+1. **Herencia Automática de Metadatos:** La sesión individual hereda Institución, DRE, UGEL, Director, Coordinador Pedagógico, Docente, Grado, Sección y Ciclo.
+2. **Herencia Curricular y Didáctica:** La sesión individual precarga Competencia, Capacidades, Desempeño precisado, Criterios de Evaluación C1–C4, Campo temático, Tiempo, Evidencia e Instrumento definidos en la secuencia de la unidad.
+3. **Trazabilidad Inmutable:** Se asigna `planning.mode = 'linked'` a la sesión creada y la unidad matriz actualiza el estado de la actividad a `generated` con su puntero permanente `linkedDocumentRef`.
+4. **Certificación Automatizada:** Suite [`tests/test_secondary_linked_session_flow.js`](file:///e:/sesiones_educ_ia/tests/test_secondary_linked_session_flow.js) aprobada al 100%.
+

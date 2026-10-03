@@ -189,12 +189,12 @@ const PlanningView = (() => {
         const main = renderSituation(container)
             + section('Pregunta retadora', text(container.drivingQuestion) ? `<p>${esc(container.drivingQuestion)}</p>` : '')
             + renderPurpose(container)
+            + renderProduct(container)
             + renderCurriculum(container)
             + renderMethodology(container, options.methodologyProfile)
-            + renderProduct(container)
-            + renderAssessment(container)
             + renderMilestones(container)
-            + renderSequence(container, options);
+            + renderSequence(container, options)
+            + renderAssessment(container);
         return `<div class="planning-shell planning-view-shell">${renderHeader(container)}<div class="planning-view-actions"><button type="button" class="btn btn-ghost" data-planning-view-action="back">← Mis planificaciones</button><button type="button" class="btn btn-secondary" data-planning-view-action="export-docx">Descargar Word (.docx)</button><button type="button" class="btn btn-primary" data-planning-view-action="edit">Editar planificación</button><button type="button" class="btn btn-ghost" data-planning-view-action="close">Cerrar</button></div><div class="planning-view-layout"><aside class="planning-view-summary" aria-label="Resumen de la planificación"><h3>Resumen</h3><p><strong>${esc(TYPES[container.identity.planningType] || 'Planificación')}</strong></p><p>${esc(STATUSES[container.status] || container.status)}</p><p>Revisión ${container.revision}</p></aside><div class="planning-view-content">${main}</div></div></div>`;
     }
 

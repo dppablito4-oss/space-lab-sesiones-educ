@@ -204,7 +204,7 @@ const PlanningContainerV2 = (() => {
         return {
             schemaVersion: '2.0', id, revision: 1, status: 'draft',
             identity: { title: '', planningType: 'unit', level: 'secondary', cycle: '', grade: null, age: null, startDate: null, endDate: null, duration: { value: 0, unit: 'weeks' } },
-            administrativeContext: { institution: '', dre: '', ugel: '', teacher: '', director: '', sections: [] },
+            administrativeContext: { institution: '', dre: '', ugel: '', teacher: '', director: '', coordinator: '', period: '', sections: [] },
             learnerContext: { students: '', diagnosis: '', interests: [], localContext: '' },
             significantSituation: { context: '', problemOrOpportunity: '', affectedActors: [], relevance: '', studentRole: '', expectedResponse: '' },
             drivingQuestion: '', purpose: { summary: '', what: '', why: '', context: '' },

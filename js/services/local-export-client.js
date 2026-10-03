@@ -2,7 +2,7 @@
 const LocalExportClient = (() => {
     'use strict';
 
-    const DEFAULT_HOSTS = Object.freeze(['localhost:8000', '127.0.0.1:8000']);
+    const DEFAULT_HOSTS = Object.freeze(['127.0.0.1:8000', 'localhost:8000']);
     const EXPORT_ENDPOINTS = Object.freeze({ pdf: 'exportar-pdf-json', docx: 'exportar-docx-json' });
 
     function create(options = {}) {
@@ -43,6 +43,7 @@ const LocalExportClient = (() => {
         }
 
         async function exportDocument(format, payload) {
+            await findRunningHost();
             const endpoint = EXPORT_ENDPOINTS[format];
             if (!endpoint) throw new Error(`Formato de exportación no compatible: ${format}`);
             const response = await fetchImpl(`http://${activeHost}/${endpoint}`, {

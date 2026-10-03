@@ -471,6 +471,9 @@ window.AuthUi = (() => {
         openModal,
         openRegister,
         openTermsModal,
+        closeModal,
         checkSessionState
     };
 })();
+
+window.AuthUI = window.AuthUi;

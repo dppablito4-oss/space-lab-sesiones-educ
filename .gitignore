@@ -25,4 +25,7 @@ supabase/.temp/
 .DS_Store
 Thumbs.db
 .vscode/
-
+# Temporary office files and screenshots
+~$*
+tests/screenshots/
+tests/fixtures/unidad_3sec_ept_manual_*.docx

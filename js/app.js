@@ -1229,6 +1229,10 @@
                 competencia: metadata.competencia,
                 capacidades: String(metadata.capacidad || '').split(';').map(value => value.trim()).filter(Boolean),
                 desempeno: metadata.desempeno,
+                criterios: Array.isArray(metadata.criterios) && metadata.criterios.length ? metadata.criterios : String(metadata.criterio || '').split(';').map(v => v.trim()).filter(Boolean),
+                producto_evidencia: metadata.producto_evidencia || '',
+                instrumento: metadata.instrumento || '',
+                conocimientos: metadata.conocimientos || '',
                 enfoque: metadata.enfoque,
                 enfoque2: metadata.enfoque2
             }

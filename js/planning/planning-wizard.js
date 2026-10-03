@@ -307,7 +307,11 @@ const PlanningWizard = (() => {
         const write = (path, value) => {
             const keys = path.split('.');
             const last = keys.pop();
-            keys.reduce((obj, key) => obj[key], draft)[last] = value;
+            const target = keys.reduce((obj, key) => {
+                if (!obj[key] || typeof obj[key] !== 'object') obj[key] = {};
+                return obj[key];
+            }, draft);
+            target[last] = value;
         };
         const button = (action, label, extra = '') => `<button type="button" class="btn btn-ghost" data-planning-action="${action}" ${extra}>${label}</button>`;
         function field(path, label, kind = 'text', choices = null) {
@@ -422,15 +426,31 @@ const PlanningWizard = (() => {
             case 0:
                 return `${sectionCard('Contexto general', `${draft.identity.grade}.º de Secundaria · Ciclo ${draft.identity.cycle}. El ciclo se resuelve automáticamente desde el grado.`,
                     `<div class="planning-grid">${field('identity.title', 'Título')}${field('identity.grade', 'Grado', 'text', [['1', '1.º'], ['2', '2.º'], ['3', '3.º'], ['4', '4.º'], ['5', '5.º']])}${field('identity.duration.value', 'Duración en semanas', 'number')}${field('identity.startDate', 'Fecha de inicio', 'date')}${field('identity.endDate', 'Fecha de fin', 'date')}</div>`)}
-                    ${sectionCard('Comunidad educativa', 'Registra los datos que ayudan a situar la experiencia.',
-                    `<div class="planning-grid">${field('administrativeContext.institution', 'Institución')}${field('administrativeContext.teacher', 'Docente')}${field('administrativeContext.sections', 'Secciones (una por línea)', 'lines')}</div>`)}
+                    ${sectionCard('Comunidad educativa y Gestión Pedagógica (Secundaria)', 'Registra los datos institucionales de la I.E. y el equipo pedagógico.',
+                    `<div class="planning-grid">
+                        ${field('administrativeContext.institution', 'Institución Educativa')}
+                        ${field('administrativeContext.director', 'Director(a)')}
+                        ${field('administrativeContext.coordinator', 'Coordinador(a) Pedagógico(a) JEC')}
+                        ${field('administrativeContext.teacher', 'Docente Responsable')}
+                        ${field('administrativeContext.dre', 'DRE')}
+                        ${field('administrativeContext.ugel', 'UGEL')}
+                        ${field('administrativeContext.period', 'Periodo / Bimestre')}
+                        ${field('administrativeContext.sections', 'Secciones (una por línea)', 'lines')}
+                    </div>`)}
                     ${sectionCard('Conoce al grupo', 'Resume necesidades, intereses y oportunidades del contexto.',
                     `<div class="planning-grid">${field('learnerContext.students', 'Contexto del grupo', 'textarea')}${field('learnerContext.diagnosis', 'Necesidades', 'textarea')}${field('learnerContext.interests', 'Intereses (uno por línea)', 'lines')}${field('learnerContext.localContext', 'Situación local', 'textarea')}</div>`)}`;
             case 1:
-                return `${sectionCard('Situación significativa', 'Describe el contexto real y el desafío que movilizará los aprendizajes.',
-                    field('significantSituation.context', 'Contexto', 'textarea') + field('significantSituation.problemOrOpportunity', 'Problema u oportunidad', 'textarea'))}
-                    ${sectionCard('Propósito de aprendizaje', 'Formula una pregunta movilizadora y el aprendizaje esperado.',
-                    field('drivingQuestion', 'Pregunta retadora', 'textarea') + field('purpose.summary', 'Propósito de aprendizaje', 'textarea'))}`;
+                if (!draft.finalProduct) {
+                    draft.finalProduct = { id: uid('product'), title: '', description: '', type: '', expectedComponents: [], audience: '', criterionRefs: [] };
+                }
+                return `${sectionCard('Situación significativa y Reto', 'Describe el contexto real y el desafío que movilizará los aprendizajes de Secundaria.',
+                    field('significantSituation.context', 'Contexto y Diagnóstico', 'textarea') + field('significantSituation.problemOrOpportunity', 'Problema o Reto de la comunidad', 'textarea') + field('drivingQuestion', 'Pregunta retadora', 'textarea'))}
+                    ${sectionCard('Propósito de la Unidad y Producto Integrador (Tabla Dual)', 'Define el aprendizaje global esperado y el producto final que lo evidencia.',
+                    `<div class="planning-grid">
+                        ${field('purpose.summary', 'Propósito de Aprendizaje', 'textarea')}
+                        ${field('finalProduct.title', 'Producto Final Integrador')}
+                        ${field('finalProduct.description', 'Descripción y características del producto', 'textarea')}
+                    </div>`)}`;
             case 2: {
                 const availableCurricula = (catalogs?.curriculumProfiles || []).filter(p =>
                     p.scope.level === draft.identity.level &&
@@ -458,7 +478,7 @@ const PlanningWizard = (() => {
                     <details class="planning-details" open><summary>Referentes y evaluación</summary>
                     <section data-curriculum-standard><strong>Estándar del ciclo ${esc(draft.identity.cycle)}</strong><p>${esc(entry.standard?.description || '')}</p></section>
                     <section data-curriculum-performances><strong>Desempeños de ${esc(draft.identity.grade)}.º</strong><ul>${entry.performances.map(performance => `<li>${esc(performance.description)}</li>`).join('')}</ul></section>
-                    <div class="planning-grid">${field(`curriculumMap.${index}.criteria`, 'Criterios (uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.expectedEvidence`, 'Evidencias esperadas (una por línea)', 'descriptions')}</div></details>`, 'planning-curriculum-editor')).join('')
+                    <div class="planning-grid">${field(`curriculumMap.${index}.criteria`, 'Criterios de Evaluación (C1, C2, C3, C4 - uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.expectedEvidence`, 'Evidencias esperadas (una por línea)', 'descriptions')}</div></details>`, 'planning-curriculum-editor')).join('')
                     : `<div class="planning-empty-state"><span class="planning-empty-icon" aria-hidden="true">◎</span><h4>Conecta el currículo</h4><p>Selecciona una competencia para tu planificación.</p>${selector}${button('curriculum', 'Agregar competencia')}</div>`;
             }
             case 3:

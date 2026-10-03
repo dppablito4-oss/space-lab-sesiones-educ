@@ -76,7 +76,7 @@ def test_fixture_planning_unit():
         assert total_w == 10490, f"Tabla {i} no cumple con 10,490 twips exactos (tiene {total_w})"
 
     # 4. Validar contenido específico en la matriz curricular
-    tbl_mat = doc.tables[2]
+    tbl_mat = next(tbl for tbl in doc.tables if "DESEMPEÑOS PRECISADOS" in " ".join(c.text for row in tbl.rows for c in row.cells))
     mat_text = " ".join(cell.text for row in tbl_mat.rows for cell in row.cells)
     assert "Resuelve problemas de cantidad" in mat_text
     assert "Traduce cantidades a expresiones numéricas" in mat_text
@@ -84,13 +84,13 @@ def test_fixture_planning_unit():
     assert "Representa descuentos y aumentos porcentuales" in mat_text
 
     # 5. Validar secuencia de sesiones
-    tbl_seq = doc.tables[4]
+    tbl_seq = next(tbl for tbl in doc.tables if "SESIÓN DE" in " ".join(c.text for row in tbl.rows for c in row.cells) or "SESIÓN /" in " ".join(c.text for row in tbl.rows for c in row.cells))
     seq_text = " ".join(cell.text for row in tbl_seq.rows for cell in row.cells)
-    assert "SESIÓN 01" in seq_text
+    assert "SESIÓN 01" in seq_text or "Sesión 01" in seq_text
     assert "¿Qué dicen realmente las promociones?" in seq_text
-    assert "SESIÓN 02" in seq_text
+    assert "SESIÓN 02" in seq_text or "Sesión 02" in seq_text
     assert "Comparamos el costo real" in seq_text
-    assert "SESIÓN 03" in seq_text
+    assert "SESIÓN 03" in seq_text or "Sesión 03" in seq_text
     assert "Presentamos recomendaciones responsables" in seq_text
 
     print(f"  ✓ Fixture probado con éxito ({size} bytes, {len(doc.tables)} tablas, 10,490 twips verificado)")
@@ -183,7 +183,7 @@ def test_multidisciplinary_unit():
     assert "PROYECTO DE APRENDIZAJE" in all_text
     assert "Indagamos el consumo de energía eléctrica" in all_text
 
-    tbl_mat = doc.tables[2]
+    tbl_mat = next(tbl for tbl in doc.tables if "DESEMPEÑOS PRECISADOS" in " ".join(c.text for row in tbl.rows for c in row.cells))
     mat_text = " ".join(cell.text for row in tbl_mat.rows for cell in row.cells)
     assert "Ciencia y Tecnología" in mat_text
     assert "Indaga mediante métodos científicos" in mat_text

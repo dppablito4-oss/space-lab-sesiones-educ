@@ -2220,6 +2220,7 @@ def descargar_chromium_nativo():
 @app.on_event("startup")
 async def startup_event():
     """Evento que se dispara al iniciar FastAPI para mostrar la URL de conexión segura en los logs."""
+    rotate_and_store_connection_token()
     target_url = pairing_url()
     print(f"🌐 [MOTOR ONLINE] Servidor de exportación corriendo en http://localhost:8000")
     print(f"🔗 [ENLACE SEGURO] URL de vinculación segura:\n{target_url}\n")
