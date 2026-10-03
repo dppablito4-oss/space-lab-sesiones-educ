@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-communication-reading",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "communication", "officialName": "Comunicación" },
+    "competency": { "id": "reads-texts", "officialName": "Lee diversos tipos de textos escritos en su lengua materna", "alias": "reading" },
+    "capacities": [
+      { "id": "obtains-information-written", "officialName": "Obtiene información del texto escrito" },
+      { "id": "infers-interprets-written", "officialName": "Infiere e interpreta información del texto" },
+      { "id": "reflects-evaluates-written", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto" }
+    ]
+  },
+  "approach": "Enfoque comunicativo",
+  "recommendedStrategies": [
+    "estrategias antes, durante y después de la lectura",
+    "predicciones e hipótesis a partir de elementos paratextuales",
+    "sumillado, subrayado jerárquico y parafraseo de ideas",
+    "organizadores visuales (mapas conceptuales, cuadros sinópticos)",
+    "tertulias dialógicas literarias y círculos de lectura"
+  ],
+  "assessmentRecommendations": [
+    "Verificar la comprensión literal, inferencial y crítico-valorativa a través de preguntas abiertas.",
+    "Valorar la contrastación de fuentes y la fundamentación de posturas personales frente al texto."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "lectura de textos continuos y discontinuos auténticos (noticias, infografías, ensayos)",
+      "construcción colectiva e individual del sentido global del texto",
+      "desarrollo del pensamiento crítico y la toma de postura sustentada",
+      "reconocimiento de la intención del autor, sesgos y recursos retóricos",
+      "intertextualidad y conexión con vivencias de la comunidad"
+    ],
+    "avoid": [
+      "cuestionarios cerrados centrados únicamente en la memoria literal",
+      "fragmentación excesiva del texto que impida captar el sentido global",
+      "lectura obligatoria desvinculada de situaciones comunicativas reales",
+      "imposición de una interpretación única o dogmática sobre la obra"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Comprensión Lectora en Ciclo VI; sujeta a validación pedagógica humana."
+  }
+}

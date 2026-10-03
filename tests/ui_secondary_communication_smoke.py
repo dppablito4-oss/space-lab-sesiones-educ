@@ -1,9 +1,9 @@
-"""Planning Studio resolves all 4 secondary mathematics competencies for Ciclo VII (Grade 4).
+"""Planning Studio resolves all 3 secondary Comunicación competencies for Ciclo VII (Grade 4).
 
 Tests responsive viewports (375px and 1280px) and interactive competency switching:
-- Regularidad: verifies Cycle VII standard and Grade 4 performances
-- Forma: switches and verifies Cycle VII standard and Grade 4 performances
-- Datos: switches and verifies Cycle VII standard and Grade 4 performances
+- Se comunica oralmente: verifies Cycle VII standard and Grade 4 performances
+- Lee diversos tipos de textos: switches and verifies Cycle VII standard and Grade 4 performances
+- Escribe diversos tipos de textos: switches and verifies Cycle VII standard and Grade 4 performances
 - Validates no JS errors or unhandled exceptions.
 """
 from functools import partial
@@ -48,10 +48,11 @@ def run():
                 page.locator('.planning-steps [data-step="2"]').click()
 
                 competency_select = page.locator('#planning-competency')
-                assert competency_select.locator('option').count() >= 4
+                # 4 math + 3 communication = 7 options total
+                assert competency_select.locator('option').count() == 7
 
-                # 1. Switch to Regularidad
-                competency_select.select_option('solves-regularity-problems')
+                # 1. Switch to Comunicación Oral
+                competency_select.select_option('communicates-orally')
                 page.wait_for_timeout(100)
 
                 # If curriculum entry is empty, trigger add button
@@ -61,41 +62,41 @@ def run():
 
                 standard = page.locator('[data-curriculum-standard]').inner_text()
                 performances = page.locator('[data-curriculum-performances]').inner_text()
-                assert 'funciones cuadráticas' in standard or 'sistemas de ecuaciones' in standard, f"Unexpected regularity standard: {standard}"
-                assert 'progresiones geométricas' in performances or 'ecuaciones e inecuaciones cuadráticas' in performances, f"Unexpected regularity performances: {performances}"
-                assert 'rectas' not in performances
-                assert 'desviación estándar' not in performances
+                assert 'falacias' in standard or 'interlocutores' in standard, f"Unexpected oral standard: {standard}"
+                assert 'discursos persuasivos' in performances or 'modula el timbre' in performances or 'timbre' in performances, f"Unexpected oral performances: {performances}"
+                assert 'tratados filosóficos' not in performances
+                assert 'artículos de opinión' not in performances
 
-                # 2. Switch to Forma
+                # 2. Switch to Lectura
                 competency_select = page.locator('#planning-competency')
-                competency_select.select_option('solves-shape-problems')
+                competency_select.select_option('reads-texts')
                 page.wait_for_timeout(100)
 
                 standard = page.locator('[data-curriculum-standard]').inner_text()
                 performances = page.locator('[data-curriculum-performances]').inner_text()
-                assert 'ecuación de la recta' in standard or 'cuerpos de revolución' in standard, f"Unexpected shape standard: {standard}"
-                assert 'ecuación de la recta' in performances or 'triángulos oblicuángulos' in performances, f"Unexpected shape performances: {performances}"
-                assert 'progresiones geométricas' not in performances
-                assert 'desviación estándar' not in performances
+                assert 'relaciones de poder' in standard or 'estrategias discursivas' in standard, f"Unexpected reading standard: {standard}"
+                assert 'tratados filosóficos' in performances or 'marcos teóricos implícitos' in performances or 'ensayos académicos' in performances, f"Unexpected reading performances: {performances}"
+                assert 'modula el timbre' not in performances
+                assert 'cadena de razonamiento' not in performances
 
-                # 3. Switch to Datos
+                # 3. Switch to Escritura
                 competency_select = page.locator('#planning-competency')
-                competency_select.select_option('solves-data-uncertainty-problems')
+                competency_select.select_option('writes-texts')
                 page.wait_for_timeout(100)
 
                 standard = page.locator('[data-curriculum-standard]').inner_text()
                 performances = page.locator('[data-curriculum-performances]').inner_text()
-                assert 'muestra representativa' in standard or 'desviación estándar' in standard, f"Unexpected data standard: {standard}"
-                assert 'desviación estándar' in performances or 'coeficiente de variación' in performances, f"Unexpected data performances: {performances}"
-                assert 'ecuación de la recta' not in performances
-                assert 'progresiones geométricas' not in performances
+                assert 'párrafos, capítulos o apartados' in standard or 'contraargumentar' in standard, f"Unexpected writing standard: {standard}"
+                assert 'cadena de razonamiento' in performances or 'artículos de opinión' in performances, f"Unexpected writing performances: {performances}"
+                assert 'modula el timbre' not in performances
+                assert 'obras de la literatura universal' not in performances
 
                 assert not errors, f"Errors encountered at {width}px: {errors}"
                 page.close()
             browser.close()
     finally:
         server.shutdown()
-    print('ui_secondary_mathematics_smoke.py: OK')
+    print('ui_secondary_communication_smoke.py: OK')
 
 
 if __name__ == '__main__':

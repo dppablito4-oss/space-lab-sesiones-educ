@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-communication-oral-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "communication", "officialName": "Comunicación" }
+  },
+  "competency": { "id": "communicates-orally", "officialName": "Se comunica oralmente en su lengua materna", "alias": "oral" },
+  "capacities": [
+    { "id": "obtains-information-oral", "officialName": "Obtiene información del texto oral" },
+    { "id": "infers-interprets-oral", "officialName": "Infiere e interpreta información del texto oral" },
+    { "id": "adapts-organizes-oral", "officialName": "Adecúa, organiza y desarrolla las ideas de forma coherente y cohesionada" },
+    { "id": "uses-nonverbal-resources", "officialName": "Utiliza recursos no verbales y paraverbales de forma estratégica" },
+    { "id": "interacts-strategically", "officialName": "Interactúa estratégicamente con distintos interlocutores" },
+    { "id": "reflects-evaluates-oral", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral" }
+  ],
+  "standard": {
+    "description": "Se comunica oralmente mediante diversos tipos de textos; infiere información relevante y conclusiones e interpreta la intención del interlocutor y las relaciones de poder en discursos que contienen sesgos, falacias y ambigüedades. Se expresa adecuándose a situaciones comunicativas formales e informales y a los géneros discursivos orales en que participa. Organiza y desarrolla sus ideas en torno a un tema y las relaciona mediante el uso de diversos recursos cohesivos; incorpora un vocabulario especializado y enfatiza los significados mediante el uso de recursos no verbales y paraverbales. Reflexiona sobre el texto y evalúa la validez de la información y su efecto en los interlocutores, de acuerdo a sus conocimientos, fuentes de información y al contexto sociocultural. En un intercambio, hace contribuciones y evalúa las ideas de los otros para contraargumentar, eligiendo estratégicamente cómo y en qué momento participa.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-obtain-oral", "description": "Recupera información explícita de textos orales del ámbito académico, social y ciudadano, integrando datos especializados y citas de fuentes orales directas." },
+      { "id": "grade-3-infer-oral", "description": "Deduce conclusiones, intenciones implícitas y falacias argumentativas sencillas en textos orales polémicos, distinguiendo premisas sólidas de generalizaciones apresuradas." },
+      { "id": "grade-3-adapt-oral", "description": "Adecúa el texto oral a la situación comunicativa formal e informal adaptando el registro a destinatarios diversos en debates, simposios y foros juveniles." },
+      { "id": "grade-3-express-oral", "description": "Estructura discursos orales con introducción, argumentación sustentada y síntesis conclusiva; utiliza conectores de contraste, ejemplificación y consecuencia con naturalidad." },
+      { "id": "grade-3-nonverbal-oral", "description": "Emplea estratégicamente pausas dramáticas, énfasis en palabras clave y contacto visual para persuadir y captar la atención del auditorio." },
+      { "id": "grade-3-interact-oral", "description": "Participa en intercambios orales de deliberación ciudadana rebatiendo argumentos con datos contrastados y sintetizando posturas divergentes." },
+      { "id": "grade-3-reflect-oral", "description": "Evalúa la consistencia de los argumentos orales, el sesgo ideológico y la eficacia de los recursos persuasivos considerando el contexto sociocultural." }
+    ],
+    "4": [
+      { "id": "grade-4-obtain-oral", "description": "Recupera y contrasta información compleja en discursos orales extensos, ponencias académicas y debates televisados o parlamentarios." },
+      { "id": "grade-4-infer-oral", "description": "Infiere las relaciones de poder, los intereses subyacentes, ambigüedades e ironías en discursos persuasivos y políticos de alta complejidad." },
+      { "id": "grade-4-adapt-oral", "description": "Adecúa el discurso oral con rigor técnico y vocabulario especializado a situaciones comunicativas académicas y públicas exigentes." },
+      { "id": "grade-4-express-oral", "description": "Expone argumentos sólidos sustentados en evidencias científicas, históricas y filosóficas; articula contraargumentos de manera fluida y cohesionada." },
+      { "id": "grade-4-nonverbal-oral", "description": "Modula el timbre, la velocidad de elocución y el lenguaje corporal con dominio escénico y asertividad discursiva." },
+      { "id": "grade-4-interact-oral", "description": "Lidera discusiones grupales y debates competitivos regulando las intervenciones, formulando preguntas inquisitivas y desmontando falacias retóricas." },
+      { "id": "grade-4-reflect-oral", "description": "Evalúa críticamente la validez epistemológica de discursos orales, analizando el impacto de los estereotipos, prejuicios y estrategias de manipulación informativa." }
+    ],
+    "5": [
+      { "id": "grade-5-obtain-oral", "description": "Sintetiza e interpreta en tiempo real discursos orales de expertos en foros académicos, conferencias magistrales e interpelaciones públicas complejas." },
+      { "id": "grade-5-infer-oral", "description": "Interpreta y desmantela falacias formales e informales complejas, dobles discursos e ideologías implícitas en debates de alto nivel deliberativo." },
+      { "id": "grade-5-adapt-oral", "description": "Domina con solvencia el registro formal, académico o diplomático en géneros orales especializados como defensas de proyectos, conferencias y alegatos." },
+      { "id": "grade-5-express-oral", "description": "Construye disertaciones filosóficas, científicas o literarias integrando marcos conceptuales interdisciplinarios con elocuencia, coherencia y elegancia retórica." },
+      { "id": "grade-5-nonverbal-oral", "description": "Utiliza con maestría recursos paraverbales y no verbales para matizar significados sutiles, inspirar credibilidad y generar convicción ética." },
+      { "id": "grade-5-interact-oral", "description": "Participa en asambleas ciudadanas y debates de políticas públicas negociando consensos fundamentados, contraargumentando con rigor analítico y solvencia dialógica." },
+      { "id": "grade-5-reflect-oral", "description": "Evalúa el valor ético, estético y político de discursos orales de trascendencia histórica o coyuntural, ponderando su legitimidad y sus repercusiones en la sociedad." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y condensado del Programa curricular de Educación Secundaria MINEDU 2016 (Comunicación Ciclo VII, pp. 80-87); sujeto a validación pedagógica humana."
+  }
+}

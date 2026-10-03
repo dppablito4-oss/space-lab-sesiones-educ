@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-communication-oral-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "communication", "officialName": "Comunicación" }
+  },
+  "competency": { "id": "communicates-orally", "officialName": "Se comunica oralmente en su lengua materna", "alias": "oral" },
+  "capacities": [
+    { "id": "obtains-information-oral", "officialName": "Obtiene información del texto oral" },
+    { "id": "infers-interprets-oral", "officialName": "Infiere e interpreta información del texto oral" },
+    { "id": "adapts-organizes-oral", "officialName": "Adecúa, organiza y desarrolla las ideas de forma coherente y cohesionada" },
+    { "id": "uses-nonverbal-resources", "officialName": "Utiliza recursos no verbales y paraverbales de forma estratégica" },
+    { "id": "interacts-strategically", "officialName": "Interactúa estratégicamente con distintos interlocutores" },
+    { "id": "reflects-evaluates-oral", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral" }
+  ],
+  "standard": {
+    "description": "Se comunica oralmente mediante diversos tipos de textos; infiere el tema, propósito, hechos y conclusiones a partir de información explícita e implícita, e interpreta la intención del interlocutor en discursos que contienen ironías y sesgos. Organiza y desarrolla sus ideas en torno a un tema y las relaciona mediante el uso de diversos conectores y referentes, así como de un vocabulario variado y pertinente. Enfatiza significados mediante el uso de recursos no verbales y paraverbales. Reflexiona sobre el texto y evalúa su fiabilidad de acuerdo a sus conocimientos y al contexto sociocultural. Se expresa adecuándose a situaciones comunicativas formales e informales, y a los géneros discursivos orales en que participa. En un intercambio, hace preguntas y utiliza las respuestas escuchadas para desarrollar sus ideas, y sus contribuciones toman en cuenta los puntos de vista de otros.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-obtain-oral", "description": "Recupera información explícita de los textos orales que escucha seleccionando datos específicos y vocabulario pertinente en exposiciones, diálogos y narraciones orales estructuradas." },
+      { "id": "grade-1-infer-oral", "description": "Deduce relaciones lógicas entre las ideas (causa-efecto, semejanza-diferencia) a partir de información explícita e implícita en textos orales; señala el tema, subtemas y el propósito comunicativo." },
+      { "id": "grade-1-adapt-oral", "description": "Adecúa el texto oral a la situación comunicativa considerando el propósito comunicativo, el tipo textual y algunas características del género discursivo con registro formal o informal." },
+      { "id": "grade-1-express-oral", "description": "Expresa oralmente ideas y emociones de forma coherente y cohesionada; ordena sus ideas en torno a un tema y las desarrolla para ampliar la información empleando conectores y referentes." },
+      { "id": "grade-1-nonverbal-oral", "description": "Emplea gestos, posturas corporales y modulación de la voz (volumen, entonación, pausas) para enfatizar lo que dice en presentaciones y debates guiados." },
+      { "id": "grade-1-interact-oral", "description": "Participa en intercambios orales formulando preguntas y haciendo comentarios relevantes al tema, respetando los turnos de conversación y los puntos de vista ajenos." },
+      { "id": "grade-1-reflect-oral", "description": "Opina sobre el contenido, la intención del emisor y el efecto del texto oral en el oyente a partir de su experiencia y los contextos socioculturales." }
+    ],
+    "2": [
+      { "id": "grade-2-obtain-oral", "description": "Recupera información explícita de textos orales complejos integrando datos específicos y términos especializados en paneles, debates escolares y mesas redondas." },
+      { "id": "grade-2-infer-oral", "description": "Deduce conclusiones, la intención del emisor e ironías en textos orales con información contrapuesta y vocabulario variado, distinguiendo hechos de opiniones." },
+      { "id": "grade-2-adapt-oral", "description": "Adecúa el texto oral a situaciones comunicativas formales e informales adaptando el registro a los destinatarios y distinguiendo el género discursivo oral pertinente." },
+      { "id": "grade-2-express-oral", "description": "Desarrolla ideas en torno a un tema evitando digresiones, contradicciones o vacíos de información; utiliza conectores de causa, consecuencia y oposición con fluidez." },
+      { "id": "grade-2-nonverbal-oral", "description": "Regula estratégicamente la distancia física, la mirada, la gesticulación y el ritmo vocal para transmitir emociones y mantener el interés del auditorio." },
+      { "id": "grade-2-interact-oral", "description": "Participa activamente en discusiones guiadas contraargumentando de manera asertiva, sintetizando acuerdos y discrepancias con fundamento." },
+      { "id": "grade-2-reflect-oral", "description": "Evalúa la eficacia de los recursos verbales, no verbales y la validez de los argumentos en textos orales considerando el contexto comunicativo." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y condensado del Programa curricular de Educación Secundaria MINEDU 2016 (Comunicación Ciclo VI, pp. 60-66); sujeto a validación pedagógica humana."
+  }
+}

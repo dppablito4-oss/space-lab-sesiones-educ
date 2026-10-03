@@ -44,21 +44,28 @@ const PedagogicalContextResolver = (() => {
             && profile.scope.cycle === cycle
             && (profile.scope.grades.length === 0 || profile.scope.grades.includes(String(input.grade)))
         );
+        const matchesArea = (areaObj, target) => {
+            if (!areaObj || !target) return false;
+            const t = String(target).trim().toLowerCase();
+            return areaObj.id.toLowerCase() === t || areaObj.officialName.toLowerCase() === t;
+        };
         const matchesCompetency = (comp, target) => {
             if (!comp || !target) return false;
-            return comp.id === target || comp.alias === target || comp.id === `solves-${target}-problems` || comp.id === String(target).replace(/^solves-/, '').replace(/-problems$/, '');
+            const t = String(target).trim();
+            return comp.id === t || comp.alias === t || comp.officialName === t
+                || comp.id === `solves-${t}-problems` || comp.id === t.replace(/^solves-/, '').replace(/-problems$/, '');
         };
         const curriculum = (catalogs?.curriculumProfiles || []).find(profile =>
             profile.scope.level === input.level
             && profile.scope.cycle === cycle
             && profile.scope.grades.includes(String(input.grade))
-            && profile.scope.area.id === input.area
+            && matchesArea(profile.scope.area, input.area)
             && matchesCompetency(profile.competency, input.competency)
         );
         const didactic = (catalogs?.didacticProfiles || []).find(profile =>
             profile.scope.level === input.level
             && profile.scope.cycle === cycle
-            && profile.scope.area.id === input.area
+            && matchesArea(profile.scope.area, input.area)
             && matchesCompetency(profile.scope.competency, input.competency)
         );
         const methodology = (catalogs?.methodologyProfiles || []).find(profile => profile.code === input.methodology);

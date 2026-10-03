@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-communication-oral",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "communication", "officialName": "Comunicación" },
+    "competency": { "id": "communicates-orally", "officialName": "Se comunica oralmente en su lengua materna", "alias": "oral" },
+    "capacities": [
+      { "id": "obtains-information-oral", "officialName": "Obtiene información del texto oral" },
+      { "id": "infers-interprets-oral", "officialName": "Infiere e interpreta información del texto oral" },
+      { "id": "adapts-organizes-oral", "officialName": "Adecúa, organiza y desarrolla las ideas de forma coherente y cohesionada" },
+      { "id": "uses-nonverbal-resources", "officialName": "Utiliza recursos no verbales y paraverbales de forma estratégica" },
+      { "id": "interacts-strategically", "officialName": "Interactúa estratégicamente con distintos interlocutores" },
+      { "id": "reflects-evaluates-oral", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral" }
+    ]
+  },
+  "approach": "Enfoque comunicativo",
+  "recommendedStrategies": [
+    "participación en asambleas de aula y diálogos estructurados",
+    "exposiciones orales con apoyo visual o multimedia",
+    "juegos de roles y dramatizaciones de situaciones cotidianas",
+    "escucha activa y toma de notas de discursos y conferencias",
+    "debates escolares guiados con turnos y reglas acordadas"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la fluidez, la modulación vocal y la coherencia en la exposición oral.",
+    "Observar la capacidad de escucha activa, respeto a los turnos y asertividad en las respuestas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "prácticas sociales del lenguaje auténticas y significativas",
+      "interacción oral dialogante y escucha respetuosa",
+      "adecuación del registro formal e informal según el contexto",
+      "integración reflexiva de recursos no verbales y paraverbales",
+      "argumentación inicial basada en razones claras y ejemplos"
+    ],
+    "avoid": [
+      "evaluación reducida a la memorización mecánica de discursos",
+      "monopolio del uso de la palabra por parte del docente",
+      "corrección punitiva que inhiba la espontaneidad y confianza del estudiante",
+      "actividades descontextualizadas de declamación sin propósito comunicativo"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Comunicación Oral en Ciclo VI; sujeta a validación pedagógica humana."
+  }
+}

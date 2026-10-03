@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-communication-writing-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "communication", "officialName": "Comunicación" }
+  },
+  "competency": { "id": "writes-texts", "officialName": "Escribe diversos tipos de textos en su lengua materna", "alias": "writing" },
+  "capacities": [
+    { "id": "adapts-text-situation", "officialName": "Adecúa el texto a la situación comunicativa" },
+    { "id": "organizes-develops-ideas", "officialName": "Organiza y desarrolla las ideas de forma coherente y cohesionada" },
+    { "id": "uses-written-conventions", "officialName": "Utiliza convenciones del lenguaje escrito de forma pertinente" },
+    { "id": "reflects-evaluates-written-text", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+  ],
+  "standard": {
+    "description": "Escribe diversos tipos de textos de forma reflexiva. Adecúa su texto al destinatario, propósito y el registro a partir de su experiencia previa, de fuentes de información complementarias y divergentes, y de su conocimiento del contexto histórico y sociocultural. Organiza y desarrolla lógicamente las ideas en torno a un tema, y las estructura en párrafos, capítulos o apartados de acuerdo a distintos géneros discursivos. Establece relaciones entre ideas a través del uso preciso de diversos recursos cohesivos. Emplea vocabulario variado, especializado y preciso, así como una variedad de recursos ortográficos y textuales para darle claridad y sentido a su texto. Reflexiona y evalúa de manera permanente la validez de la información, la coherencia y cohesión de las ideas en el texto que escribe; controla el lenguaje para contraargumentar, reforzar o sugerir sentidos y producir diversos efectos en el lector según la situación comunicativa.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-adapt-writing", "description": "Adecúa el texto a la situación comunicativa considerando el propósito argumentativo o expositivo, el tipo textual y las características del ensayo y la monografía escolar; mantiene un registro formal con propiedad léxica." },
+      { "id": "grade-3-organize-writing", "description": "Escribe textos argumentativos complejos formulando tesis claras, argumentos lógicos y contraargumentos refutados; estructura apartados con títulos y subtítulos jerarquizados." },
+      { "id": "grade-3-conventions-writing", "description": "Aplica normas ortográficas de puntuación para incisos (comas explicativas, paréntesis, rayas), tilde en palabras compuestas y convenciones de citación básica (APA)." },
+      { "id": "grade-3-reflect-writing", "description": "Evalúa de forma permanente la consistencia lógica de las premisas, la pertinencia de las evidencias aportadas y la cohesión interparrafal en el texto." }
+    ],
+    "4": [
+      { "id": "grade-4-adapt-writing", "description": "Adecúa el texto a situaciones comunicativas académicas y de debate público seleccionando información de fuentes especializadas y adaptando el estilo retórico al público destinatario." },
+      { "id": "grade-4-organize-writing", "description": "Redacta ensayos académicos y artículos de opinión articulando una sólida cadena de razonamiento con conectores lógicos de concesión, condición y reformulación explicativa." },
+      { "id": "grade-4-conventions-writing", "description": "Maneja con precisión el léxico especializado, los recursos retóricos (metáforas conceptuales, paralelismos) y el sistema formal de referencias y citas académicas." },
+      { "id": "grade-4-reflect-writing", "description": "Revisa y corrige críticamente el texto contrastando la validez epistemológica de sus argumentos, la ausencia de falacias y el impacto persuasivo en el lector." }
+    ],
+    "5": [
+      { "id": "grade-5-adapt-writing", "description": "Adecúa tratados, manifiestos y artículos de investigación a contextos socioculturales diversos y exigentes comunidades discursivas con rigor metodológico y estilo depurado." },
+      { "id": "grade-5-organize-writing", "description": "Produce monografías de investigación y ensayos filosóficos integrando marcos teóricos interdisciplinarios, defendiendo posturas originales con exhaustividad y maestría dialógica." },
+      { "id": "grade-5-conventions-writing", "description": "Domina con exactitud la normativa lingüística culta, los recursos estilísticos avanzados y el estándar internacional de citación y aparato crítico académico." },
+      { "id": "grade-5-reflect-writing", "description": "Dictamina la trascendencia ética, social y académica de su producción escrita, evaluando su originalidad, su aporte al debate contemporáneo y su honestidad intelectual." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y condensado del Programa curricular de Educación Secundaria MINEDU 2016 (Comunicación Ciclo VII, pp. 95-102); sujeto a validación pedagógica humana."
+  }
+}

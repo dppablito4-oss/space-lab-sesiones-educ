@@ -73,6 +73,7 @@ jobs:
           node tests/pedagogical-context-resolver.test.js
           node tests/secondary-cycle-vii.test.js
           node tests/secondary-mathematics-full.test.js
+          node tests/secondary-communication-full.test.js
           node tests/planning-container.test.js
           node tests/planning-container-v2.test.js
           node tests/planning-repository.test.js
@@ -133,6 +134,7 @@ jobs:
           python tests/ui_planning_studio_smoke.py
           python tests/ui_secondary_cycle_vii_smoke.py
           python tests/ui_secondary_mathematics_smoke.py
+          python tests/ui_secondary_communication_smoke.py
           python tests/ui_planning_view_smoke.py
           python tests/ui_linked_session_smoke.py
           python tests/ui_planning_roundtrip_smoke.py

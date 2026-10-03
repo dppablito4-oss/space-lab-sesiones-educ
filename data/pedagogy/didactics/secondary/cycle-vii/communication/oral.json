@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-communication-oral",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "communication", "officialName": "Comunicación" },
+    "competency": { "id": "communicates-orally", "officialName": "Se comunica oralmente en su lengua materna", "alias": "oral" },
+    "capacities": [
+      { "id": "obtains-information-oral", "officialName": "Obtiene información del texto oral" },
+      { "id": "infers-interprets-oral", "officialName": "Infiere e interpreta información del texto oral" },
+      { "id": "adapts-organizes-oral", "officialName": "Adecúa, organiza y desarrolla las ideas de forma coherente y cohesionada" },
+      { "id": "uses-nonverbal-resources", "officialName": "Utiliza recursos no verbales y paraverbales de forma estratégica" },
+      { "id": "interacts-strategically", "officialName": "Interactúa estratégicamente con distintos interlocutores" },
+      { "id": "reflects-evaluates-oral", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral" }
+    ]
+  },
+  "approach": "Enfoque comunicativo",
+  "recommendedStrategies": [
+    "debates parlamentarios, académicos y mesas de concertación ciudadana",
+    "análisis crítico de discursos mediáticos, políticos y publicitarios",
+    "conferencias magistrales juveniles, ponencias y coloquios",
+    "técnicas avanzadas de oratoria, argumentación y refutación retórica",
+    "evaluación entre pares con criterios dialógicos y deliberativos"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la consistencia lógica de la argumentación y la detección de falacias en el discurso.",
+    "Ponderar el dominio del registro formal y el control de los recursos paraverbales y de persuasión ética."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "deliberación crítica sobre asuntos públicos y dilemas morales contemporáneos",
+      "argumentación rigurosa sustentada en fuentes académicas e investigaciones",
+      "detección y refutación analítica de falacias formales e informales",
+      "dominio de géneros orales formales (ponencias, defensas de tesis, alegatos)",
+      "construcción democrática de consensos y respeto por la diversidad discursiva"
+    ],
+    "avoid": [
+      "debates agresivos o polarizantes sin fundamentación basada en evidencias",
+      "evaluaciones centradas en la elocuencia superficial sin rigor conceptual",
+      "imposición de puntos de vista o silenciamiento de posturas divergentes",
+      "discursos memorísticos carentes de capacidad de respuesta e interacción"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Comunicación Oral en Ciclo VII; sujeta a validación pedagógica humana."
+  }
+}

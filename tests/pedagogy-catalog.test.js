@@ -22,12 +22,16 @@ assert.equal(result.valid, true);
 assert.equal(catalog.schemaVersion, '2.0');
 assert.ok(catalog.pedagogicalProfiles.some(entry => entry.id === 'secondary-cycle-vi'));
 assert.ok(catalog.pedagogicalProfiles.some(entry => entry.id === 'secondary-cycle-vii'));
-assert.equal(catalog.curriculumProfiles.length, 8);
-assert.equal(catalog.didacticProfiles.length, 8);
+assert.equal(catalog.curriculumProfiles.length, 14);
+assert.equal(catalog.didacticProfiles.length, 14);
 for (const cycle of ['vi', 'vii']) {
     for (const comp of ['quantity', 'regularity', 'shape', 'data-uncertainty']) {
         assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-mathematics-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
         assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-mathematics-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['oral', 'reading', 'writing']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-communication-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-communication-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
     }
 }
 assert.equal(catalog.methodologyProfiles.length, 5);

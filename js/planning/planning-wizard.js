@@ -192,9 +192,13 @@ const PlanningWizard = (() => {
     function resolvePlanningProfiles(identity, catalogs) {
         const methodology = identity.methodology || catalogs?.methodologyProfiles?.[0]?.code;
         const competency = identity.competency || 'solves-quantity-problems';
+        const matchedCurriculum = (catalogs?.curriculumProfiles || []).find(p =>
+            p.competency.id === competency || p.competency.alias === competency
+        );
+        const area = identity.area || identity.subject || matchedCurriculum?.scope.area.id || 'mathematics';
         const result = contextResolver.resolve({
             level: identity.level, cycle: identity.cycle, grade: identity.grade,
-            area: 'mathematics', competency,
+            area, competency,
             planningType: identity.planningType, methodology
         }, catalogs);
         if (!result.resolved) {
@@ -431,15 +435,21 @@ const PlanningWizard = (() => {
                 const availableCurricula = (catalogs?.curriculumProfiles || []).filter(p =>
                     p.scope.level === draft.identity.level &&
                     p.scope.cycle === draft.identity.cycle &&
-                    p.scope.area.id === 'mathematics' &&
                     p.scope.grades.includes(String(draft.identity.grade))
                 );
                 const currentCompId = draft.curriculumMap[0]?.competency?.id || profiles?.curriculum?.competency?.id || availableCurricula[0]?.competency?.id;
                 const selector = availableCurricula.length > 0 ? `
                     <div class="planning-field planning-competency-select">
-                        <label for="planning-competency"><span>Competencia de Matemática</span></label>
-                        <select id="planning-competency" data-planning-action="competency" aria-label="Competencia de Matemática">
-                            ${availableCurricula.map(p => `<option value="${p.competency.id}" ${currentCompId === p.competency.id ? 'selected' : ''}>${esc(p.competency.officialName)}</option>`).join('')}
+                        <label for="planning-competency"><span>Competencia curricular</span></label>
+                        <select id="planning-competency" data-planning-action="competency" aria-label="Competencia curricular">
+                            ${['mathematics', 'communication'].map(areaId => {
+                                const areaCurricula = availableCurricula.filter(p => p.scope.area.id === areaId);
+                                if (!areaCurricula.length) return '';
+                                const areaName = areaCurricula[0].scope.area.officialName;
+                                return `<optgroup label="${esc(areaName)}">${areaCurricula.map(p =>
+                                    `<option value="${p.competency.id}" ${currentCompId === p.competency.id ? 'selected' : ''}>${esc(p.competency.officialName)}</option>`
+                                ).join('')}</optgroup>`;
+                            }).join('')}
                         </select>
                     </div>` : '';
                 return draft.curriculumMap.length ? draft.curriculumMap.map((entry, index) => sectionCard(
@@ -449,7 +459,7 @@ const PlanningWizard = (() => {
                     <section data-curriculum-standard><strong>Estándar del ciclo ${esc(draft.identity.cycle)}</strong><p>${esc(entry.standard?.description || '')}</p></section>
                     <section data-curriculum-performances><strong>Desempeños de ${esc(draft.identity.grade)}.º</strong><ul>${entry.performances.map(performance => `<li>${esc(performance.description)}</li>`).join('')}</ul></section>
                     <div class="planning-grid">${field(`curriculumMap.${index}.criteria`, 'Criterios (uno por línea)', 'descriptions')}${field(`curriculumMap.${index}.expectedEvidence`, 'Evidencias esperadas (una por línea)', 'descriptions')}</div></details>`, 'planning-curriculum-editor')).join('')
-                    : `<div class="planning-empty-state"><span class="planning-empty-icon" aria-hidden="true">◎</span><h4>Conecta el currículo</h4><p>Selecciona una competencia de Matemática para tu planificación.</p>${selector}${button('curriculum', 'Agregar competencia')}</div>`;
+                    : `<div class="planning-empty-state"><span class="planning-empty-icon" aria-hidden="true">◎</span><h4>Conecta el currículo</h4><p>Selecciona una competencia para tu planificación.</p>${selector}${button('curriculum', 'Agregar competencia')}</div>`;
             }
             case 3:
                 return sectionCard('Metodología principal', 'Elige el enfoque que guiará la secuencia. Los códigos internos se conservan sin cambios.',

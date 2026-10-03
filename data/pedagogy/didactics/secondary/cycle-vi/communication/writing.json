@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-communication-writing",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "communication", "officialName": "Comunicación" },
+    "competency": { "id": "writes-texts", "officialName": "Escribe diversos tipos de textos en su lengua materna", "alias": "writing" },
+    "capacities": [
+      { "id": "adapts-text-situation", "officialName": "Adecúa el texto a la situación comunicativa" },
+      { "id": "organizes-develops-ideas", "officialName": "Organiza y desarrolla las ideas de forma coherente y cohesionada" },
+      { "id": "uses-written-conventions", "officialName": "Utiliza convenciones del lenguaje escrito de forma pertinente" },
+      { "id": "reflects-evaluates-written-text", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+    ]
+  },
+  "approach": "Enfoque comunicativo",
+  "recommendedStrategies": [
+    "proceso recursivo de escritura: planificación, textualización y revisión",
+    "diseño de planes de escritura considerando propósito, destinatario y género",
+    "talleres de escritura creativa y modelado conjunto de textos",
+    "coevaluación entre pares con rúbricas y listas de cotejo claras",
+    "publicación auténtica (murales escolares, fanzines, blogs escolares)"
+  ],
+  "assessmentRecommendations": [
+    "Monitorear la evolución de los borradores sucesivos antes de evaluar la versión final.",
+    "Comprobar el uso adecuado de conectores lógicos, signos de puntuación y la consistencia temática."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "escritura con destinatarios y propósitos reales (cartas abiertas, ensayos breves, crónicas)",
+      "planificación guiada y estructuración lógica por párrafos",
+      "retroalimentación formativa y autorregulación del proceso escritor",
+      "ortografía y gramática al servicio de la claridad comunicativa",
+      "versiones sucesivas y edición reflexiva del texto"
+    ],
+    "avoid": [
+      "redacción como acto espontáneo e improvisado de un solo intento",
+      "copia o transcripción mecánica sin producción reflexiva",
+      "enfoque exclusivo en la corrección ortográfica ignorando coherencia y propósito",
+      "temas artificiales desconectados de los intereses y contexto del estudiante"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Producción Escrita en Ciclo VI; sujeta a validación pedagógica humana."
+  }
+}

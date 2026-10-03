@@ -54,6 +54,36 @@
       "id": "secondary-cycle-vii-mathematics-data-uncertainty-curriculum",
       "path": "curriculum/secondary/cycle-vii/mathematics/data-uncertainty.json",
       "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-communication-oral-curriculum",
+      "path": "curriculum/secondary/cycle-vi/communication/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-communication-reading-curriculum",
+      "path": "curriculum/secondary/cycle-vi/communication/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-communication-writing-curriculum",
+      "path": "curriculum/secondary/cycle-vi/communication/writing.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-communication-oral-curriculum",
+      "path": "curriculum/secondary/cycle-vii/communication/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-communication-reading-curriculum",
+      "path": "curriculum/secondary/cycle-vii/communication/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-communication-writing-curriculum",
+      "path": "curriculum/secondary/cycle-vii/communication/writing.json",
+      "status": "pilot"
     }
   ],
   "didacticProfiles": [
@@ -95,6 +125,36 @@
     {
       "id": "secondary-cycle-vii-mathematics-data-uncertainty",
       "path": "didactics/secondary/cycle-vii/mathematics/data-uncertainty.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-communication-oral",
+      "path": "didactics/secondary/cycle-vi/communication/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-communication-reading",
+      "path": "didactics/secondary/cycle-vi/communication/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-communication-writing",
+      "path": "didactics/secondary/cycle-vi/communication/writing.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-communication-oral",
+      "path": "didactics/secondary/cycle-vii/communication/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-communication-reading",
+      "path": "didactics/secondary/cycle-vii/communication/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-communication-writing",
+      "path": "didactics/secondary/cycle-vii/communication/writing.json",
       "status": "pilot"
     }
   ],

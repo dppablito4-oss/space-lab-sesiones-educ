@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-communication-reading-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "communication", "officialName": "Comunicación" }
+  },
+  "competency": { "id": "reads-texts", "officialName": "Lee diversos tipos de textos escritos en su lengua materna", "alias": "reading" },
+  "capacities": [
+    { "id": "obtains-information-written", "officialName": "Obtiene información del texto escrito" },
+    { "id": "infers-interprets-written", "officialName": "Infiere e interpreta información del texto" },
+    { "id": "reflects-evaluates-written", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto" }
+  ],
+  "standard": {
+    "description": "Lee diversos tipos de textos con estructuras complejas, vocabulario variado y especializado. Integra información contrapuesta y ambigua que está en distintas partes del texto. Interpreta el texto considerando información relevante y de detalle para construir su sentido global, valiéndose de otros textos y reconociendo distintas posturas y sentidos. Reflexiona sobre formas y contenidos del texto y asume una posición sobre las relaciones de poder que este presenta. Evalúa el uso del lenguaje, la validez de la información, el estilo del texto, la intención de estrategias discursivas y recursos textuales. Explica el efecto del texto en el lector a partir de su conocimiento y del contexto sociocultural en el que fue escrito.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-obtain-reading", "description": "Integra datos explícitos de textos argumentativos, ensayos y artículos de divulgación científica con terminología especializada y referencias bibliográficas." },
+      { "id": "grade-3-infer-reading", "description": "Deduce la tesis, contraargumentos y premisas implícitas en textos controversiales; distingue argumentos de autoridad, de ejemplificación y analogías." },
+      { "id": "grade-3-interpret-reading", "description": "Explica la intención comunicativa de figuras retóricas (metáforas, hipérboles, antítesis) y recursos paratextuales en textos literarios y ensayos de opinión." },
+      { "id": "grade-3-reflect-reading", "description": "Emite un juicio crítico sobre la validez de los argumentos, los sesgos del autor y la pertinencia de las fuentes consultadas en relación con problemáticas de su comunidad." }
+    ],
+    "4": [
+      { "id": "grade-4-obtain-reading", "description": "Sintetiza información dispersa y ambigua en ensayos académicos, tratados filosóficos y textos jurídicos o normativos con vocabulario técnico y abstracto." },
+      { "id": "grade-4-infer-reading", "description": "Infiere presuposiciones ideológicas, marcos teóricos implícitos y falacias argumentativas en editoriales periodísticos y discursos de coyuntura nacional." },
+      { "id": "grade-4-interpret-reading", "description": "Analiza las intertextualidades, alusiones históricas y la cosmovisión plasmada en obras de la literatura universal y latinoamericana contemporánea." },
+      { "id": "grade-4-reflect-reading", "description": "Evalúa críticamente la consistencia lógica de las tesis planteadas, los intereses políticos o económicos que condicionan la producción textual y el impacto ético en la sociedad." }
+    ],
+    "5": [
+      { "id": "grade-5-obtain-reading", "description": "Analiza e integra sistemáticamente cuerpos documentales extensos, investigaciones académicas arbitradas y ensayos de crítica social y epistemológica." },
+      { "id": "grade-5-infer-reading", "description": "Desentraña matices sutiles, paradojas, dobles discursos y la genealogía conceptual en textos de alta densidad teórica y literaria." },
+      { "id": "grade-5-interpret-reading", "description": "Interpreta el sentido estético, los dispositivos metanarrativos y las rupturas vanguardistas en obras maestras de la literatura y el pensamiento crítico." },
+      { "id": "grade-5-reflect-reading", "description": "Asume una postura ético-crítica frente a discursos hegemónicos y relaciones de poder, evaluando el impacto ideológico, cultural e histórico del texto en el devenir humano." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y condensado del Programa curricular de Educación Secundaria MINEDU 2016 (Comunicación Ciclo VII, pp. 88-94); sujeto a validación pedagógica humana."
+  }
+}

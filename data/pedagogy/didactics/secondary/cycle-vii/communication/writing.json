@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-communication-writing",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "communication", "officialName": "Comunicación" },
+    "competency": { "id": "writes-texts", "officialName": "Escribe diversos tipos de textos en su lengua materna", "alias": "writing" },
+    "capacities": [
+      { "id": "adapts-text-situation", "officialName": "Adecúa el texto a la situación comunicativa" },
+      { "id": "organizes-develops-ideas", "officialName": "Organiza y desarrolla las ideas de forma coherente y cohesionada" },
+      { "id": "uses-written-conventions", "officialName": "Utiliza convenciones del lenguaje escrito de forma pertinente" },
+      { "id": "reflects-evaluates-written-text", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+    ]
+  },
+  "approach": "Enfoque comunicativo",
+  "recommendedStrategies": [
+    "escritura académica: formulación de tesis, estado de la cuestión y argumentación",
+    "redacción de ensayos argumentativos, artículos de opinión y monografías",
+    "revisión por pares y comités editoriales estudiantiles",
+    "aplicación rigurosa de normas de citación (APA) y ética académica",
+    "talleres de estilo, elocuencia discursiva y ensayo literario"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la consistencia epistemológica de la tesis y la solidez de la cadena argumentativa.",
+    "Comprobar la precisión léxica, el manejo de la norma culta y el uso honesto y riguroso de fuentes documentales."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "escritura de géneros académicos y de opinión con posturas autónomas e informadas",
+      "articulación de contraargumentos y refutación dialéctica fundamentada",
+      "manejo solvente del léxico disciplinar, la polifonía y el aparato crítico",
+      "evaluación metacognitiva del estilo personal y la eficacia persuasiva",
+      "promoción de la probidad académica y la originalidad del pensamiento"
+    ],
+    "avoid": [
+      "redacción fragmentaria que carezca de unidad temática y estructural",
+      "plagio o yuxtaposición acrítica de citas sin voz autoral propia",
+      "evaluación meramente normativa que desatienda el fondo y la contundencia de las ideas",
+      "ausencia de etapas rigurosas de planificación y revisión editorial"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Producción Escrita en Ciclo VII; sujeta a validación pedagógica humana."
+  }
+}
