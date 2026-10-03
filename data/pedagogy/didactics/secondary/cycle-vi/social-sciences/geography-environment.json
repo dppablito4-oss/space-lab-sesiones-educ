@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-social-sciences-geography-environment",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" },
+    "competency": { "id": "manages-space-environment", "officialName": "Gestiona responsablemente el espacio y el ambiente", "alias": "geography-environment" },
+    "capacities": [
+      { "id": "understands-relations-natural-social", "officialName": "Comprende las relaciones entre los elementos naturales y sociales" },
+      { "id": "manages-information-sources-geography", "officialName": "Maneja fuentes de información para comprender el espacio geográfico y el ambiente" },
+      { "id": "generates-actions-conserve-environment", "officialName": "Genera acciones para conservar el ambiente local y global" }
+    ]
+  },
+  "approach": "Enfoque socioespacial y de sostenibilidad ambiental",
+  "recommendedStrategies": [
+    "lectura e interpretación de planos y mapas temáticos a diferentes escalas",
+    "mapeo participativo de zonas de riesgo y vulnerabilidad en la escuela y comunidad",
+    "salidas de campo virtuales o presenciales para observar la transformación del paisaje",
+    "árbol de problemas sobre conflictos socioambientales en el uso del agua o suelo",
+    "proyectos escolares de ecoeficiencia y reciclaje integral de residuos"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la comprensión de la interacción dialéctica entre sociedad y naturaleza en el territorio.",
+    "Valorar la pertinencia de las propuestas de gestión del riesgo y preservación de áreas ecológicas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "estudio del territorio local y regional vivo, dinámico y en constante transformación",
+      "uso activo de herramientas cartográficas, escalas y coordenadas geográficas",
+      "visión multicausal y multiescalar de los desastres y del cambio climático",
+      "compromiso ciudadano concreto en el cuidado ambiental y reducción de vulnerabilidades",
+      "análisis de las decisiones de los actores sociales en la organización del espacio"
+    ],
+    "avoid": [
+      "geografía puramente descriptiva y memorística de capitales, ríos y accidentes orográficos",
+      "culpar a la 'naturaleza' de los desastres ignorando la vulnerabilidad social construida",
+      "ignorar los saberes ancestrales de manejo del territorio y conservación ecológica",
+      "actividades sin conexión con problemáticas reales de la localidad o cuenca hidrográfica"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Espacio y Ambiente en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

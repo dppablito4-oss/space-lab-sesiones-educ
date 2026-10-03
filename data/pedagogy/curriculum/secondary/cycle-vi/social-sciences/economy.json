@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-social-sciences-economy-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" }
+  },
+  "competency": { "id": "manages-economic-resources", "officialName": "Gestiona responsablemente los recursos económicos", "alias": "economy" },
+  "capacities": [
+    { "id": "understands-economic-financial-system", "officialName": "Comprende el funcionamiento del sistema económico y financiero" },
+    { "id": "takes-economic-financial-decisions", "officialName": "Toma decisiones económicas y financieras" }
+  ],
+  "standard": {
+    "description": "Gestiona responsablemente los recursos económicos al promover el ahorro y la inversión de los recursos. Promueve el consumo informado frente a los recursos económicos y los productos y servicios financieros, asumiendo una postura crítica respecto a la publicidad y rechazando toda actividad financiera informal e ilegal. Explica las interrelaciones entre los agentes del sistema económico y financiero nacional (familia, empresa, Estado) teniendo como referencia el mercado. Explica el rol del Estado en el financiamiento del presupuesto nacional.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-agents-economy", "description": "Explica los roles de la familia, las empresas y el Estado en la economía local, reconociendo que los recursos son escasos y las necesidades ilimitadas." },
+      { "id": "grade-1-budget-economy", "description": "Elabora presupuestos familiares y personales considerando ingresos, egresos, ahorro e inversión para tomar decisiones de consumo responsable." },
+      { "id": "grade-1-informed-consumption-economy", "description": "Analiza críticamente los mensajes publicitarios y ejerce sus derechos como consumidor informado al elegir productos y servicios básicos." },
+      { "id": "grade-1-financial-culture-economy", "description": "Reconoce la importancia del ahorro formal y explica los riesgos del endeudamiento excesivo y las transacciones financieras informales." }
+    ],
+    "2": [
+      { "id": "grade-2-agents-economy", "description": "Explica la dinámica de la oferta y la demanda en el mercado local y el rol regulador del Estado en la fijación de impuestos y financiamiento público." },
+      { "id": "grade-2-budget-economy", "description": "Formula un plan de ahorro e inversión para un emprendimiento escolar, evaluando costos fijos, variables y punto de equilibrio." },
+      { "id": "grade-2-informed-consumption-economy", "description": "Evalúa el impacto del consumismo en el ambiente y la economía familiar; promueve el consumo ético, sustentable y solidario." },
+      { "id": "grade-2-financial-culture-economy", "description": "Compara las tasas de interés (TCEA y TREA) y los servicios de intermediación financiera bancaria y no bancaria regulados por la SBS." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencias Sociales Ciclo VI, pp. 113-118); sujeto a revisión pedagógica."
+  }
+}

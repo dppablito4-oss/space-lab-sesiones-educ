@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-work-education-entrepreneurship-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "work-education", "officialName": "Educación para el Trabajo" }
+  },
+  "competency": { "id": "manages-entrepreneurship-projects", "officialName": "Gestiona proyectos de emprendimiento económico o social", "alias": "entrepreneurship" },
+  "capacities": [
+    { "id": "creates-value-proposals", "officialName": "Crea propuestas de valor" },
+    { "id": "applies-technical-skills", "officialName": "Aplica habilidades técnicas" },
+    { "id": "works-cooperatively-goals", "officialName": "Trabaja cooperativamente para lograr objetivos y metas" },
+    { "id": "evaluates-project-results", "officialName": "Evalúa los resultados del proyecto de emprendimiento" }
+  ],
+  "standard": {
+    "description": "Gestiona proyectos de emprendimiento económico o social cuando integra activamente información sobre una situación que afecta a un grupo de usuarios, genera explicaciones y define patrones sobre sus necesidades y expectativas para crear una alternativa de solución viable que considera aspectos éticos y culturales y redefine sus patrones para generar resultados sociales y ambientales positivos. Implementa sus ideas combinando habilidades técnicas, proyecta en función a escenarios las acciones y recursos que necesitará y trabaja cooperativamente reasignando tareas de forma flexible conforme a las necesidades individuales y del grupo. Evalúa los procesos y resultados parciales analizando el equilibrio entre inversión y beneficio, la satisfacción de usuarios, y los beneficios sociales y ambientales generados. Incorpora mejoras para aumentar la sostenibilidad del proyecto en el tiempo.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-value-proposal-ept", "description": "Formula propuestas de valor innovadoras que resuelven necesidades insatisfechas a partir de la investigación de mercado y el análisis de la competencia en su región." },
+      { "id": "grade-3-technical-skills-ept", "description": "Aplica herramientas tecnológicas y software de gestión en la planificación, costeo y control de la producción o prestación de servicios técnicos." },
+      { "id": "grade-3-cooperative-work-ept", "description": "Lidera equipos de trabajo distribuyendo responsabilidades con base en las fortalezas individuales y fomentando la resolución proactiva de contingencias." },
+      { "id": "grade-3-evaluate-results-ept", "description": "Evalúa la rentabilidad económica y el impacto socioambiental del proyecto utilizando indicadores de costo-beneficio y satisfacción del cliente." }
+    ],
+    "4": [
+      { "id": "grade-4-value-proposal-ept", "description": "Diseña modelos de negocio sostenibles aplicando Lean Startup y Business Model Canvas, adaptando la propuesta de valor a tendencias del mercado digital o ecológico." },
+      { "id": "grade-4-technical-skills-ept", "description": "Estandariza procesos técnicos y aplica sistemas de gestión de calidad, seguridad laboral y normativas legales y tributarias para formalizar el emprendimiento." },
+      { "id": "grade-4-cooperative-work-ept", "description": "Gestiona equipos ágiles (Scrum/Kanban) promoviendo la adaptabilidad ante cambios del entorno y la toma de decisiones basada en consensos." },
+      { "id": "grade-4-evaluate-results-ept", "description": "Analiza métricas de tracción (conversión, retención de clientes, retorno de inversión) y propone estrategias de escalabilidad y alianzas estratégicas." }
+    ],
+    "5": [
+      { "id": "grade-5-value-proposal-ept", "description": "Valida propuestas de valor de alto impacto social o tecnológico formulando hipótesis de negocio y ejecutando pruebas de concepto con usuarios reales." },
+      { "id": "grade-5-technical-skills-ept", "description": "Integra tecnologías digitales, comercio electrónico y marketing digital multicanal para optimizar la cadena de valor y la competitividad del emprendimiento." },
+      { "id": "grade-5-cooperative-work-ept", "description": "Consolida redes de colaboración y negociación con actores del ecosistema emprendedor (proveedores, clientes, mentores, inversionistas locales)." },
+      { "id": "grade-5-evaluate-results-ept", "description": "Evalúa el balance integral de sostenibilidad (económica, social y ambiental) del emprendimiento y sustenta el plan de negocio ante paneles de evaluación." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (EPT Ciclo VII, pp. 173-180); sujeto a revisión pedagógica."
+  }
+}

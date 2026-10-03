@@ -1,6 +1,6 @@
 {
   "schemaVersion": "2.0",
-  "catalogVersion": "2026.3",
+  "catalogVersion": "2026.6",
   "status": "pilot",
   "pedagogicalProfiles": [
     {
@@ -84,6 +84,196 @@
       "id": "secondary-cycle-vii-communication-writing-curriculum",
       "path": "curriculum/secondary/cycle-vii/communication/writing.json",
       "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-science-technology-inquiry-curriculum",
+      "path": "curriculum/secondary/cycle-vi/science-technology/inquiry.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-science-technology-physical-world-curriculum",
+      "path": "curriculum/secondary/cycle-vi/science-technology/physical-world.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-science-technology-technological-solution-curriculum",
+      "path": "curriculum/secondary/cycle-vi/science-technology/technological-solution.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-science-technology-inquiry-curriculum",
+      "path": "curriculum/secondary/cycle-vii/science-technology/inquiry.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-science-technology-physical-world-curriculum",
+      "path": "curriculum/secondary/cycle-vii/science-technology/physical-world.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-science-technology-technological-solution-curriculum",
+      "path": "curriculum/secondary/cycle-vii/science-technology/technological-solution.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-social-sciences-history-curriculum",
+      "path": "curriculum/secondary/cycle-vi/social-sciences/history.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-social-sciences-geography-environment-curriculum",
+      "path": "curriculum/secondary/cycle-vi/social-sciences/geography-environment.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-social-sciences-economy-curriculum",
+      "path": "curriculum/secondary/cycle-vi/social-sciences/economy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-social-sciences-history-curriculum",
+      "path": "curriculum/secondary/cycle-vii/social-sciences/history.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-social-sciences-geography-environment-curriculum",
+      "path": "curriculum/secondary/cycle-vii/social-sciences/geography-environment.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-social-sciences-economy-curriculum",
+      "path": "curriculum/secondary/cycle-vii/social-sciences/economy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-dpcc-identity-curriculum",
+      "path": "curriculum/secondary/cycle-vi/dpcc/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-dpcc-citizenship-curriculum",
+      "path": "curriculum/secondary/cycle-vi/dpcc/citizenship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-dpcc-identity-curriculum",
+      "path": "curriculum/secondary/cycle-vii/dpcc/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-dpcc-citizenship-curriculum",
+      "path": "curriculum/secondary/cycle-vii/dpcc/citizenship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-work-education-entrepreneurship-curriculum",
+      "path": "curriculum/secondary/cycle-vi/work-education/entrepreneurship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-work-education-entrepreneurship-curriculum",
+      "path": "curriculum/secondary/cycle-vii/work-education/entrepreneurship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-english-oral-curriculum",
+      "path": "curriculum/secondary/cycle-vi/english/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-english-reading-curriculum",
+      "path": "curriculum/secondary/cycle-vi/english/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-english-writing-curriculum",
+      "path": "curriculum/secondary/cycle-vi/english/writing.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-english-oral-curriculum",
+      "path": "curriculum/secondary/cycle-vii/english/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-english-reading-curriculum",
+      "path": "curriculum/secondary/cycle-vii/english/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-english-writing-curriculum",
+      "path": "curriculum/secondary/cycle-vii/english/writing.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-arts-culture-appreciation-curriculum",
+      "path": "curriculum/secondary/cycle-vi/arts-culture/appreciation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-arts-culture-creation-curriculum",
+      "path": "curriculum/secondary/cycle-vi/arts-culture/creation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-arts-culture-appreciation-curriculum",
+      "path": "curriculum/secondary/cycle-vii/arts-culture/appreciation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-arts-culture-creation-curriculum",
+      "path": "curriculum/secondary/cycle-vii/arts-culture/creation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-physical-education-motor-curriculum",
+      "path": "curriculum/secondary/cycle-vi/physical-education/motor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-physical-education-healthy-curriculum",
+      "path": "curriculum/secondary/cycle-vi/physical-education/healthy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-physical-education-sociomotor-curriculum",
+      "path": "curriculum/secondary/cycle-vi/physical-education/sociomotor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-physical-education-motor-curriculum",
+      "path": "curriculum/secondary/cycle-vii/physical-education/motor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-physical-education-healthy-curriculum",
+      "path": "curriculum/secondary/cycle-vii/physical-education/healthy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-physical-education-sociomotor-curriculum",
+      "path": "curriculum/secondary/cycle-vii/physical-education/sociomotor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-religious-education-identity-curriculum",
+      "path": "curriculum/secondary/cycle-vi/religious-education/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-religious-education-encounter-curriculum",
+      "path": "curriculum/secondary/cycle-vi/religious-education/encounter.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-religious-education-identity-curriculum",
+      "path": "curriculum/secondary/cycle-vii/religious-education/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-religious-education-encounter-curriculum",
+      "path": "curriculum/secondary/cycle-vii/religious-education/encounter.json",
+      "status": "pilot"
     }
   ],
   "didacticProfiles": [
@@ -155,6 +345,196 @@
     {
       "id": "secondary-cycle-vii-communication-writing",
       "path": "didactics/secondary/cycle-vii/communication/writing.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-science-technology-inquiry",
+      "path": "didactics/secondary/cycle-vi/science-technology/inquiry.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-science-technology-physical-world",
+      "path": "didactics/secondary/cycle-vi/science-technology/physical-world.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-science-technology-technological-solution",
+      "path": "didactics/secondary/cycle-vi/science-technology/technological-solution.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-science-technology-inquiry",
+      "path": "didactics/secondary/cycle-vii/science-technology/inquiry.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-science-technology-physical-world",
+      "path": "didactics/secondary/cycle-vii/science-technology/physical-world.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-science-technology-technological-solution",
+      "path": "didactics/secondary/cycle-vii/science-technology/technological-solution.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-social-sciences-history",
+      "path": "didactics/secondary/cycle-vi/social-sciences/history.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-social-sciences-geography-environment",
+      "path": "didactics/secondary/cycle-vi/social-sciences/geography-environment.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-social-sciences-economy",
+      "path": "didactics/secondary/cycle-vi/social-sciences/economy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-social-sciences-history",
+      "path": "didactics/secondary/cycle-vii/social-sciences/history.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-social-sciences-geography-environment",
+      "path": "didactics/secondary/cycle-vii/social-sciences/geography-environment.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-social-sciences-economy",
+      "path": "didactics/secondary/cycle-vii/social-sciences/economy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-dpcc-identity",
+      "path": "didactics/secondary/cycle-vi/dpcc/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-dpcc-citizenship",
+      "path": "didactics/secondary/cycle-vi/dpcc/citizenship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-dpcc-identity",
+      "path": "didactics/secondary/cycle-vii/dpcc/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-dpcc-citizenship",
+      "path": "didactics/secondary/cycle-vii/dpcc/citizenship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-work-education-entrepreneurship",
+      "path": "didactics/secondary/cycle-vi/work-education/entrepreneurship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-work-education-entrepreneurship",
+      "path": "didactics/secondary/cycle-vii/work-education/entrepreneurship.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-english-oral",
+      "path": "didactics/secondary/cycle-vi/english/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-english-reading",
+      "path": "didactics/secondary/cycle-vi/english/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-english-writing",
+      "path": "didactics/secondary/cycle-vi/english/writing.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-english-oral",
+      "path": "didactics/secondary/cycle-vii/english/oral.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-english-reading",
+      "path": "didactics/secondary/cycle-vii/english/reading.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-english-writing",
+      "path": "didactics/secondary/cycle-vii/english/writing.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-arts-culture-appreciation",
+      "path": "didactics/secondary/cycle-vi/arts-culture/appreciation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-arts-culture-creation",
+      "path": "didactics/secondary/cycle-vi/arts-culture/creation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-arts-culture-appreciation",
+      "path": "didactics/secondary/cycle-vii/arts-culture/appreciation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-arts-culture-creation",
+      "path": "didactics/secondary/cycle-vii/arts-culture/creation.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-physical-education-motor",
+      "path": "didactics/secondary/cycle-vi/physical-education/motor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-physical-education-healthy",
+      "path": "didactics/secondary/cycle-vi/physical-education/healthy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-physical-education-sociomotor",
+      "path": "didactics/secondary/cycle-vi/physical-education/sociomotor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-physical-education-motor",
+      "path": "didactics/secondary/cycle-vii/physical-education/motor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-physical-education-healthy",
+      "path": "didactics/secondary/cycle-vii/physical-education/healthy.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-physical-education-sociomotor",
+      "path": "didactics/secondary/cycle-vii/physical-education/sociomotor.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-religious-education-identity",
+      "path": "didactics/secondary/cycle-vi/religious-education/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vi-religious-education-encounter",
+      "path": "didactics/secondary/cycle-vi/religious-education/encounter.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-religious-education-identity",
+      "path": "didactics/secondary/cycle-vii/religious-education/identity.json",
+      "status": "pilot"
+    },
+    {
+      "id": "secondary-cycle-vii-religious-education-encounter",
+      "path": "didactics/secondary/cycle-vii/religious-education/encounter.json",
       "status": "pilot"
     }
   ],

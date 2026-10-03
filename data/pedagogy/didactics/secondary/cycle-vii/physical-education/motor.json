@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-physical-education-motor",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "physical-education", "officialName": "Educación Física" },
+    "competency": { "id": "moves-autonomously", "officialName": "Se desenvuelve de manera autónoma a través de su motricidad", "alias": "physical-motor" },
+    "capacities": [
+      { "id": "understands-ones-body", "officialName": "Comprende su cuerpo" },
+      { "id": "expresses-corporally", "officialName": "Se expresa corporalmente" }
+    ]
+  },
+  "approach": "Corporeidad avanzada, rendimiento motor autónomo y expresión artística",
+  "recommendedStrategies": [
+    "entrenamientos técnicos específicos de disciplinas deportivas individuales y colectivas",
+    "montajes coreográficos complejos de danzas contemporáneas y autóctonas",
+    "evaluación biomecánica y autogestión de patrones de movimiento eficiente",
+    "sesiones de yoga, pilates o gimnasia suave para el equilibrio psicofísico",
+    "proyectos escolares de expresión corporal y acrobacia básica segura"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el dominio y plasticidad en la ejecución de gestos técnicos especializados.",
+    "Valorar la autonomía en la autorregulación respiratoria y el diseño de propuestas coreográficas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "autonomía total en la dosificación del esfuerzo y la preparación física personal",
+      "creatividad e identidad cultural expresada a través de la motricidad",
+      "actitud reflexiva y crítica sobre el cuidado del cuerpo y la estética corporal",
+      "prevención rigurosa de sobrecargas musculares y lesiones articulares",
+      "integración armoniosa entre mente, cuerpo y emoción"
+    ],
+    "avoid": [
+      "mecanización repetitiva sin comprensión de la biomecánica del movimiento",
+      "presionar a estudiantes hacia un rendimiento deportivo competitivo no deseado",
+      "imponer modelos de belleza corporal inalcanzables o perjudiciales para la salud",
+      "ejecutar destrezas gimnásticas de alto riesgo sin colchonetas o supervisión"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Motricidad en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-physical-education-healthy-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "physical-education", "officialName": "Educación Física" }
+  },
+  "competency": { "id": "assumes-healthy-life", "officialName": "Asume una vida saludable", "alias": "physical-healthy" },
+  "capacities": [
+    { "id": "understands-relations-activity-health", "officialName": "Comprende las relaciones entre la actividad física, alimentación, postura e higiene personal y del ambiente, y la salud" },
+    { "id": "incorporates-quality-of-life-practices", "officialName": "Incorpora prácticas que mejoran su calidad de vida" }
+  ],
+  "standard": {
+    "description": "Asume una vida saludable cuando comprende los beneficios que la práctica de actividad física produce sobre su salud, para mejorar su aptitud física y calidad de vida. Conoce su estado nutricional e identifica los beneficios nutritivos y el origen de los alimentos de su región, distingue alimentos saludables de aquellos que no lo son y elabora dietas balanceadas para su actividad física y para la salud. Previene lesiones adoptando posturas adecuadas en la práctica de actividad física y en su vida cotidiana. Realiza prácticas que ayuden a mejorar sus capacidades físicas a través de la práctica de actividad física y de higiene personal y ambiental.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-understanding-healthy", "description": "Explica la relación entre la actividad física habitual, el descanso, la hidratación y el estado nutricional saludable." },
+      { "id": "grade-1-posture-healthy", "description": "Aplica técnicas básicas de calentamiento, estiramiento y relajación adoptando posturas ergonómicas para evitar lesiones." },
+      { "id": "grade-1-nutrition-healthy", "description": "Selecciona alimentos nutritivos locales y elabora menús balanceados evitando el consumo excesivo de ultraprocesados y azúcares." }
+    ],
+    "2": [
+      { "id": "grade-2-understanding-healthy", "description": "Calcula su índice de masa corporal (IMC) y monitorea su frecuencia cardíaca y respiratoria antes, durante y después del ejercicio." },
+      { "id": "grade-2-posture-healthy", "description": "Ejecuta rutinas de acondicionamiento físico adaptadas a sus capacidades físicas básicas (resistencia, fuerza, velocidad y flexibilidad)." },
+      { "id": "grade-2-nutrition-healthy", "description": "Diseña un plan personal de actividad física diaria y alimentación saludable promoviendo hábitos de higiene y cuidado ambiental." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Física Ciclo VI, pp. 151-156); sujeto a revisión pedagógica."
+  }
+}

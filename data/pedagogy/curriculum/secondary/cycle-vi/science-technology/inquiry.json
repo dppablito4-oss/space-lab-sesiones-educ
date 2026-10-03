@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-science-technology-inquiry-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" }
+  },
+  "competency": { "id": "inquires-scientific-methods", "officialName": "Indaga mediante métodos científicos para construir conocimientos", "alias": "inquiry" },
+  "capacities": [
+    { "id": "problematizes-situations", "officialName": "Problematiza situaciones para hacer indagación" },
+    { "id": "designs-strategies-inquiry", "officialName": "Diseña estrategias para hacer indagación" },
+    { "id": "generates-registers-data", "officialName": "Genera y registra datos e información" },
+    { "id": "analyzes-data-information", "officialName": "Analiza datos e información" },
+    { "id": "evaluates-communicates-inquiry", "officialName": "Evalúa y comunica el proceso y resultados de su indagación" }
+  ],
+  "standard": {
+    "description": "Indaga a partir de preguntas e hipótesis que son verificables de forma experimental o descriptiva con base en su conocimiento científico para explicar las causas o describir el fenómeno identificado. Diseña un plan de recojo de datos con base en observaciones o experimentos. Colecta datos que contribuyan a comprobar o refutar la hipótesis. Analiza tendencias o relaciones en los datos, los interpreta tomando en cuenta el error y reproducibilidad, los interpreta con base en conocimientos científicos y formula conclusiones. Evalúa si sus conclusiones responden a la pregunta de indagación y las comunica. Evalúa la fiabilidad de los métodos y las interpretaciones de los resultados de su indagación.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-problematize-inquiry", "description": "Formula preguntas acerca de las variables que influyen en un hecho, fenómeno u objeto natural o tecnológico, y selecciona aquella que puede ser indagada científicamente. Plantea hipótesis en las que establece relaciones de causalidad entre las variables." },
+      { "id": "grade-1-design-inquiry", "description": "Propone procedimientos para observar, manipular la variable independiente, medir la variable dependiente y controlar aspectos que modifican la experimentación. Selecciona herramientas, materiales e instrumentos para recoger datos." },
+      { "id": "grade-1-generate-inquiry", "description": "Obtiene datos cualitativos o cuantitativos a partir de la manipulación de la variable independiente y mediciones repetidas de la variable dependiente. Organiza los datos y hace los cálculos necesarios en tablas y gráficas." },
+      { "id": "grade-1-analyze-inquiry", "description": "Compara los datos obtenidos para establecer relaciones de causalidad o similitud; contrasta los resultados con su hipótesis e información científica, y elabora conclusiones que la confirman o refutan." },
+      { "id": "grade-1-evaluate-inquiry", "description": "Sustenta si sus conclusiones responden a la pregunta de indagación, y si los procedimientos y mediciones contribuyeron a demostrar su hipótesis. Comunica su indagación a través de medios virtuales o presenciales." }
+    ],
+    "2": [
+      { "id": "grade-2-problematize-inquiry", "description": "Formula preguntas acerca de las variables que influyen en un hecho o fenómeno, y plantea hipótesis en las que establece relaciones de causalidad considerando la variable interviniente." },
+      { "id": "grade-2-design-inquiry", "description": "Propone procedimientos para manipular la variable independiente, medir la dependiente y controlar intervinientes. Selecciona herramientas e instrumentos considerando el tiempo y las medidas de seguridad." },
+      { "id": "grade-2-generate-inquiry", "description": "Obtiene datos cualitativos y cuantitativos a partir de mediciones repetidas y control de variables intervinientes; organiza los datos en tablas y produce gráficos." },
+      { "id": "grade-2-analyze-inquiry", "description": "Compara las tendencias o relaciones en los datos tomados en cuenta el error y reproducibilidad; los contrasta con su hipótesis y formula conclusiones fundamentadas." },
+      { "id": "grade-2-evaluate-inquiry", "description": "Sustenta si sus conclusiones responden a la pregunta de indagación y la fiabilidad de los métodos e instrumentos. Justifica los ajustes realizados en el procedimiento y comunica sus resultados." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencia y Tecnología Ciclo VI, pp. 195-200); sujeto a revisión pedagógica."
+  }
+}

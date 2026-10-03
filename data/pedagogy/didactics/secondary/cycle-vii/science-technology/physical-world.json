@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-science-technology-physical-world",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" },
+    "competency": { "id": "explains-physical-world", "officialName": "Explica el mundo físico basándose en conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo", "alias": "physical-world" },
+    "capacities": [
+      { "id": "understands-uses-scientific-knowledge", "officialName": "Comprende y usa conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo" },
+      { "id": "evaluates-implications-science-technology", "officialName": "Evalúa las implicancias del saber y del quehacer científico y tecnológico" }
+    ]
+  },
+  "approach": "Indagación científica y alfabetización científica y tecnológica",
+  "recommendedStrategies": [
+    "modelización matemática y conceptual de sistemas termodinámicos, moleculares y astronómicos",
+    "análisis bioético y legal de biotecnología, transgénicos y CRISPR/Cas9",
+    "estudio de la evolución biológica y geológica integrando genética molecular y registros fósiles",
+    "simulaciones computacionales interactivas de campos electromagnéticos y dinámica celular",
+    "seminarios de discusión sobre crisis climática global y matrices de descarbonización"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la solvencia para explicar la reactividad química, la transducción energética y los mecanismos genéticos.",
+    "Valorar la solidez argumentativa frente a los dilemas bioéticos y de soberanía tecnológica del siglo XXI."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "integración profunda entre microestructura (átomos, moléculas, genes) y propiedades macroscópicas observables",
+      "modelos científicos cuantitativos y leyes fundamentales de la física y química",
+      "evaluación multidimensional de las aplicaciones tecnológicas (salud, agricultura, industria y ambiente)",
+      "discusión reflexiva sobre paradigmas científicos y evolución histórica del conocimiento",
+      "toma de decisiones sustentada en evidencia para la sostenibilidad planetaria"
+    ],
+    "avoid": [
+      "resolución mecánica de problemas numéricos sin interpretación física o química",
+      "simplificaciones erróneas o desactualizadas de conceptos biológicos y cosmológicos",
+      "asumir posturas acríticas frente a controversias científicas",
+      "sesgo reduccionista que aísle la ciencia de los contextos sociales y éticos"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Explica el Mundo Físico en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

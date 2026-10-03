@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-arts-culture-appreciation-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" }
+  },
+  "competency": { "id": "appreciates-artistic-manifestations", "officialName": "Aprecia de manera crítica manifestaciones artístico-culturales", "alias": "arts-appreciation" },
+  "capacities": [
+    { "id": "perceives-artistic-manifestations", "officialName": "Percibe manifestaciones artístico-culturales" },
+    { "id": "contextualizes-artistic-manifestations", "officialName": "Contextualiza manifestaciones artístico-culturales" },
+    { "id": "reflects-creatively-critically-arts", "officialName": "Reflexiona creativa y críticamente sobre manifestaciones artístico-culturales" }
+  ],
+  "standard": {
+    "description": "Aprecia de manera crítica manifestaciones artístico-culturales cuando reconoce en estas la función comunicativa de los elementos y códigos de los lenguajes de las artes de diversas épocas y lugares; comprende que generan diferentes reacciones en las personas y que están enmarcadas en sistemas de creencias, cosmovisiones e ideologías. Investiga las diferentes respuestas que han suscitado estas manifestaciones a lo largo del tiempo, contrastando las diversas perspectivas e interpretaciones. Integra la información recogida de diversas fuentes para fundamentar su opinión sobre el impacto de las manifestaciones artístico-culturales en sí mismo y en la sociedad, y para emitir juicios de valor sustentados.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-perceive-arts", "description": "Analiza cómo los artistas combinan códigos formales y simbólicos en manifestaciones tradicionales y contemporáneas para expresar discursos identitarios." },
+      { "id": "grade-3-context-arts", "description": "Investiga los factores históricos, ideológicos y de género que influyen en la producción y recepción de obras de arte peruanas y universales." },
+      { "id": "grade-3-reflect-arts", "description": "Sustenta juicios estéticos fundamentados acerca del significado social y político de obras de arte contemporáneo contrastando diversas posturas críticas." }
+    ],
+    "4": [
+      { "id": "grade-4-perceive-arts", "description": "Interpreta el sentido de obras complejas e instalaciones artísticas analizando la interacción entre soporte, espacio, luz y recursos tecnológicos." },
+      { "id": "grade-4-context-arts", "description": "Compara las respuestas e interpretaciones que una misma manifestación artístico-cultural ha suscitado en distintos períodos históricos y comunidades." },
+      { "id": "grade-4-reflect-arts", "description": "Evalúa críticamente la función del arte como vehículo de resistencia cultural, denuncia social y transformación comunitaria en América Latina." }
+    ],
+    "5": [
+      { "id": "grade-5-perceive-arts", "description": "Decodifica el lenguaje visual, sonoro o corporal en obras de vanguardia y arte conceptual desentrañando metáforas e intencionalidades estéticas complejas." },
+      { "id": "grade-5-context-arts", "description": "Analiza la relación entre mercado del arte, industrias culturales y preservación del patrimonio material e inmaterial en un mundo globalizado." },
+      { "id": "grade-5-reflect-arts", "description": "Formula ensayos críticos rigurosos sobre el papel del arte en la construcción de memorias colectivas y la emancipación humana." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Arte y Cultura Ciclo VII, pp. 73-80); sujeto a revisión pedagógica."
+  }
+}

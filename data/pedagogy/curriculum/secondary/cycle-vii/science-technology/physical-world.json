@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-science-technology-physical-world-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" }
+  },
+  "competency": { "id": "explains-physical-world", "officialName": "Explica el mundo físico basándose en conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo", "alias": "physical-world" },
+  "capacities": [
+    { "id": "understands-uses-scientific-knowledge", "officialName": "Comprende y usa conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo" },
+    { "id": "evaluates-implications-science-technology", "officialName": "Evalúa las implicancias del saber y del quehacer científico y tecnológico" }
+  ],
+  "standard": {
+    "description": "Explica, con base en evidencias con respaldo científico, las relaciones cualitativas y las cuantificables entre: la estructura microscópica de un material y su reactividad con otros materiales o con campos y ondas; la información genética, las funciones de las células con las funciones de los sistemas (homeostasis); el origen de la Tierra, su composición, evolución física, química y biológica con los registros fósiles. Argumenta su posición frente a las implicancias éticas, sociales y ambientales de situaciones sociocientíficas o frente a cambios en la cosmovisión suscitados por el desarrollo de la ciencia y tecnología.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-explain-chemical-reactions", "description": "Explica cualitativa y cuantitativamente la formación de compuestos a partir de la configuración electrónica, enlaces químicos y las leyes de conservación de la materia y energía." },
+      { "id": "grade-3-explain-cellular-respiration", "description": "Explica cómo la fotosíntesis y la respiración celular transforman energía para sintetizar ATP y regular las funciones metabólicas y homeostáticas de la célula." },
+      { "id": "grade-3-explain-geological-evolution", "description": "Explica la evolución de la Tierra a partir de la tectónica global, eras geológicas y registros fósiles que evidencian extinciones y diversificación biológica." },
+      { "id": "grade-3-evaluate-science-paradigms", "description": "Argumenta cómo el desarrollo de modelos científicos transforma la comprensión del mundo y fundamenta su postura frente a controversias sociocientíficas." }
+    ],
+    "4": [
+      { "id": "grade-4-explain-macromolecules", "description": "Explica la estructura del carbono y la función biológica de las biomoléculas orgánicas (proteínas, lípidos, glúcidos y ácidos nucleicos) en los seres vivos." },
+      { "id": "grade-4-explain-genetics", "description": "Explica la transmisión de caracteres hereditarios según las leyes mendelianas y los mecanismos moleculares del ADN, mutaciones y variabilidad genética." },
+      { "id": "grade-4-explain-waves-fields", "description": "Explica el comportamiento de las ondas electromagnéticas, el espectro visible y las interacciones de campos gravitacionales y magnéticos en el universo." },
+      { "id": "grade-4-evaluate-biotechnology", "description": "Sustenta una postura crítica y ética frente al uso de biotecnología moderna, edición genética y organismos genéticamente modificados en la sociedad." }
+    ],
+    "5": [
+      { "id": "grade-5-explain-thermodynamics", "description": "Explica las leyes de la termodinámica, la entropía y el equilibrio químico en reacciones espontáneas y no espontáneas de sistemas naturales e industriales." },
+      { "id": "grade-5-explain-homeostasis-neuroscience", "description": "Explica cómo la integración neuroendocrina mantiene la homeostasis corporal y coordina respuestas fisiológicas complejas ante perturbaciones del entorno." },
+      { "id": "grade-5-explain-cosmology", "description": "Explica la evolución estelar, la nucleosíntesis estelar y el modelo del Big Bang fundamentándose en datos astronómicos y leyes de la física moderna." },
+      { "id": "grade-5-evaluate-global-implications", "description": "Evalúa críticamente las implicancias socioambientales del cambio climático, la transición hacia energías limpias y la bioética en la investigación científica contemporánea." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencia y Tecnología Ciclo VII, pp. 221-228); sujeto a revisión pedagógica."
+  }
+}

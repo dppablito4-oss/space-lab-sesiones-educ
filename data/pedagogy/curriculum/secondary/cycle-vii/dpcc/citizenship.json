@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-dpcc-citizenship-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "dpcc", "officialName": "Desarrollo Personal, Ciudadanía y Cívica" }
+  },
+  "competency": { "id": "coexists-participates-democratically", "officialName": "Convive y participa democráticamente en la búsqueda del bien común", "alias": "citizenship" },
+  "capacities": [
+    { "id": "interacts-with-all-people", "officialName": "Interactúa con todas las personas" },
+    { "id": "builds-norms-assumes-agreements", "officialName": "Construye normas y asume acuerdos y leyes" },
+    { "id": "manages-conflicts-constructively", "officialName": "Maneja conflictos de manera constructiva" },
+    { "id": "deliberates-public-matters", "officialName": "Delibera sobre asuntos públicos" },
+    { "id": "participates-actions-common-good", "officialName": "Participa en acciones que promueven el bienestar común" }
+  ],
+  "standard": {
+    "description": "Convive y participa democráticamente, relacionándose con los demás, respetando las diferencias y promoviendo los derechos de todos, así como cumpliendo sus deberes y evaluando sus consecuencias. Se relaciona con personas de diferentes culturas respetando sus costumbres y enriqueciendo su propia identidad. Evalúa la eficacia de las normas para la convivencia armónica a partir de los principios democráticos y los derechos humanos. Maneja conflictos a través de la mediación y el diálogo respetuoso y constructivo, promoviendo el establecimiento de acuerdos duraderos. Delibera sobre asuntos públicos sustentando su posición en fuentes confiables, los principios democráticos y la institucionalidad del Estado de derecho. Diseña, ejecuta y evalúa proyectos participativos para la promoción del bien común y la vigencia del Estado de derecho.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-interact-citizenship", "description": "Promueve la equidad, la inclusión social y los derechos de los pueblos indígenas u originarios y grupos vulnerables en su entorno comunitario." },
+      { "id": "grade-3-norms-citizenship", "description": "Analiza la jerarquía de las leyes y tratados internacionales de derechos humanos suscritos por el Estado peruano, evaluando su aplicación en la justicia ordinaria." },
+      { "id": "grade-3-conflicts-citizenship", "description": "Utiliza técnicas de negociación y resolución colaborativa de conflictos intergrupales promoviendo la no violencia y la cohesión social." },
+      { "id": "grade-3-deliberate-citizenship", "description": "Delibera con argumentos jurídicos y éticos sobre asuntos públicos de impacto regional (corrupción, acceso a la salud y educación)." },
+      { "id": "grade-3-participate-citizenship", "description": "Diseña y ejecuta proyectos participativos escolares orientados al ejercicio pleno de la ciudadanía activa y la transparencia pública." }
+    ],
+    "4": [
+      { "id": "grade-4-interact-citizenship", "description": "Combate activamente cualquier manifestación de racismo, clasismo, xenofobia o violencia de género promoviendo una cultura de paz e interculturalidad." },
+      { "id": "grade-4-norms-citizenship", "description": "Evalúa críticamente la constitucionalidad de proyectos normativos y políticas públicas desde los estándares del Estado constitucional de derecho." },
+      { "id": "grade-4-conflicts-citizenship", "description": "Promueve la mediación escolar y comunitaria ante conflictos sociales complejos, facilitando el diálogo entre autoridades y población civil." },
+      { "id": "grade-4-deliberate-citizenship", "description": "Sustenta posturas informadas en foros y cabildos juveniles sobre temas de reforma política, gobernabilidad democrática y derechos ambientales." },
+      { "id": "grade-4-participate-citizenship", "description": "Coordina con organizaciones de la sociedad civil y municipios escolares proyectos de fiscalización ciudadana y veeduría juvenil." }
+    ],
+    "5": [
+      { "id": "grade-5-interact-citizenship", "description": "Ejerce una ciudadanía global e intercultural comprometida con la dignidad intrínseca de todas las personas sin distinción alguna en cualquier ámbito." },
+      { "id": "grade-5-norms-citizenship", "description": "Defiende la supremacía constitucional, la separación de poderes y la independencia judicial como pilares inviolables de la república democrática." },
+      { "id": "grade-5-conflicts-citizenship", "description": "Lidera procesos de diálogo y consenso pacífico ante polarizaciones sociales o crisis institucionales apegándose al derecho y la ética cívica." },
+      { "id": "grade-5-deliberate-citizenship", "description": "Debate rigurosamente sobre el futuro institucional del Perú, la reforma del sistema judicial y el fortalecimiento de los partidos y la participación ciudadana." },
+      { "id": "grade-5-participate-citizenship", "description": "Diseña, implementa y evalúa planes de incidencia política y proyectos participativos de impacto social que fortalecen la institucionalidad democrática." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (DPCC Ciclo VII, pp. 49-56); sujeto a revisión pedagógica."
+  }
+}

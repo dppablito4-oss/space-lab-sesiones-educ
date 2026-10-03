@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-physical-education-motor-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "physical-education", "officialName": "Educación Física" }
+  },
+  "competency": { "id": "moves-autonomously", "officialName": "Se desenvuelve de manera autónoma a través de su motricidad", "alias": "physical-motor" },
+  "capacities": [
+    { "id": "understands-ones-body", "officialName": "Comprende su cuerpo" },
+    { "id": "expresses-corporally", "officialName": "Se expresa corporalmente" }
+  ],
+  "standard": {
+    "description": "Se desenvuelve de manera autónoma a través de su motricidad cuando relaciona cómo su imagen corporal y la aceptación de los otros influyen en el concepto de sí mismo. Realiza habilidades motrices específicas, regulando su tono, postura, equilibrio y tomando como referencia la trayectoria de objetos, los otros y sus propios desplazamientos. Produce secuencias de movimientos y gestos corporales para manifestar sus emociones con base en el ritmo y la música y utilizando diferentes materiales.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-body-motor", "description": "Regula su postura, tono muscular y equilibrio al ejecutar habilidades motrices específicas en diversas actividades físicas y predeportivas." },
+      { "id": "grade-1-expression-motor", "description": "Crea secuencias rítmicas individuales o colectivas coordinando movimientos y gestos corporales al compás de la música tradicional o moderna." },
+      { "id": "grade-1-awareness-motor", "description": "Afianza su imagen corporal y autoestima reconociendo sus posibilidades y limitaciones motrices con actitud positiva." }
+    ],
+    "2": [
+      { "id": "grade-2-body-motor", "description": "Coordina con precisión habilidades motrices complejas adaptando sus desplazamientos a trayectorias de objetos y compañeros en el espacio." },
+      { "id": "grade-2-expression-motor", "description": "Diseña coreografías expresivas que comunican mensajes y emociones complejas integrando diversos elementos del lenguaje corporal." },
+      { "id": "grade-2-awareness-motor", "description": "Valora su corporalidad y rechaza estereotipos de belleza o rendimiento físico que afecten su bienestar emocional." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Física Ciclo VI, pp. 143-150); sujeto a revisión pedagógica."
+  }
+}

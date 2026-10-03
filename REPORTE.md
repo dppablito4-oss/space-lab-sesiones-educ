@@ -8,218 +8,227 @@
 - **Organización / Propietario**: S.Y. PABLITO_DP (`dppablito4-oss`)
 - **Repositorio**: `dppablito4-oss/space-lab-sesiones-educ`
 - **Ruta de Trabajo Local**: `e:\sesiones_educ_ia`
-- **Rama Actual**: `main` (sincronizada al 100% con `origin/main`)
-- **Últimos Commits Implementados y Publicados**:
-  1. `3b3a228` — *feat(pedagogy): complete secondary communication curriculum*
-  2. `1e1a83f` — *feat(pedagogy): complete secondary mathematics curriculum*
+- **Rama Actual**: `main`
 - **Plataforma en Producción**: [https://sesiones.sypablitodp.site](https://sesiones.sypablitodp.site)
 - **Web del Creador**: [https://space.sypablitodp.site](https://space.sypablitodp.site)
-- **Fecha de Auditoría**: 2 de Octubre de 2026
-- **Estado Global de Certificación**: **APROBADO — 100% TESTS PASSING (PRODUCCIÓN & CI/CD VERDE)**
+- **Fecha de Certificación**: Octubre de 2026
+- **Estado Global de Certificación**: **APROBADO — 100% DE CURSOS DE SECUNDARIA FINALIZADOS (26 COMPETENCIAS / 130 COMBINACIONES)**
 
 ---
 
-## 1. Resumen Ejecutivo de la Implementación
+## 1. Resumen Ejecutivo: 100% Cobertura Curricular de Educación Secundaria
 
-En este ciclo de trabajo se completó la cobertura curricular y didáctica oficial del **Currículo Nacional de la Educación Básica (CNEB / MINEDU 2016)** para toda la **Educación Secundaria (1.º a 5.º de Secundaria)** en sus dos áreas troncales: **Matemática** y **Comunicación**, utilizando la arquitectura pedagógica V3.
+Se ha completado al **100% la cobertura curricular y didáctica oficial del Currículo Nacional de la Educación Básica (CNEB / MINEDU 2016)** para **todas las 10 áreas curriculares de Educación Secundaria (1.º a 5.º de Secundaria)** en la arquitectura pedagógica V3 de Space Lab.
 
-Se pasó de un estado preliminar con solo 1 competencia piloto (Cantidad) a una matriz completa y operativa de **7 competencias oficiales**, **28 perfiles pedagógicos especializados** y **35 combinaciones validadas**:
+Toda la matriz oficial de **26 competencias curriculares**, distribuidas en los **Ciclos VI (1.º y 2.º) y VII (3.º, 4.º y 5.º)**, se encuentra plenamente codificada, validada y enlazada con aislamiento de desempeños por grado:
 
 ```text
 ========================================================================================
-ESTADO ANTERIOR:
-Secundaria
-└── Matemática
-    ├── Cantidad (1.º a 5.º)                  ✅ (Piloto preliminar)
-    ├── Regularidad, equivalencia y cambio    ❌
-    ├── Forma, movimiento y localización      ❌
-    └── Gestión de datos e incertidumbre      ❌
-└── Comunicación                              ❌ (Sin cobertura V3)
-
+ESTADO CERTIFICADO: 100% OFICIAL DE EDUCACIÓN SECUNDARIA (MINEDU / CNEB)
 ========================================================================================
-ESTADO ACTUAL CERTIFICADO (100% OPERATIVO):
-Secundaria
-├── MATEMÁTICA (Ciclos VI y VII — 1.º a 5.º)
-│   ├── Cantidad                              ✅ (8 perfiles / 5 grados)
-│   ├── Regularidad, equivalencia y cambio    ✅ (8 perfiles / 5 grados)
-│   ├── Forma, movimiento y localización      ✅ (8 perfiles / 5 grados)
-│   └── Gestión de datos e incertidumbre      ✅ (8 perfiles / 5 grados)
+Secundaria (1.º a 5.º Grado · Ciclos VI y VII)
+├── 1. MATEMÁTICA (4 competencias · 20 combinaciones grado/área)
+│   ├── Resuelve problemas de cantidad                               ✅ (1.º a 5.º)
+│   ├── Resuelve problemas de regularidad, equivalencia y cambio     ✅ (1.º a 5.º)
+│   ├── Resuelve problemas de forma, movimiento y localización       ✅ (1.º a 5.º)
+│   └── Resuelve problemas de gestión de datos e incertidumbre       ✅ (1.º a 5.º)
 │
-└── COMUNICACIÓN (Ciclos VI y VII — 1.º a 5.º)
-    ├── Se comunica oralmente en su lengua    ✅ (6 perfiles / 5 grados)
-    ├── Lee diversos tipos de textos          ✅ (6 perfiles / 5 grados)
-    └── Escribe diversos tipos de textos      ✅ (6 perfiles / 5 grados)
+├── 2. COMUNICACIÓN (3 competencias · 15 combinaciones)
+│   ├── Se comunica oralmente en su lengua materna                   ✅ (1.º a 5.º)
+│   ├── Lee diversos tipos de textos en su lengua materna            ✅ (1.º a 5.º)
+│   └── Escribe diversos tipos de textos en su lengua materna        ✅ (1.º a 5.º)
+│
+├── 3. CIENCIA Y TECNOLOGÍA (3 competencias · 15 combinaciones)
+│   ├── Indaga mediante métodos científicos                          ✅ (1.º a 5.º)
+│   ├── Explica el mundo físico basándose en conocimientos           ✅ (1.º a 5.º)
+│   └── Diseña y construye soluciones tecnológicas                   ✅ (1.º a 5.º)
+│
+├── 4. CIENCIAS SOCIALES (3 competencias · 15 combinaciones)
+│   ├── Construye interpretaciones históricas                        ✅ (1.º a 5.º)
+│   ├── Gestiona responsablemente el espacio y el ambiente           ✅ (1.º a 5.º)
+│   └── Gestiona responsablemente los recursos económicos            ✅ (1.º a 5.º)
+│
+├── 5. DESARROLLO PERSONAL, CIUDADANÍA Y CÍVICA - DPCC (2 comp · 10 comb)
+│   ├── Construye su identidad                                       ✅ (1.º a 5.º)
+│   └── Convive y participa democráticamente en el bien común        ✅ (1.º a 5.º)
+│
+├── 6. EDUCACIÓN PARA EL TRABAJO - EPT (1 competencia · 5 combinaciones)
+│   └── Gestiona proyectos de emprendimiento económico o social      ✅ (1.º a 5.º)
+│
+├── 7. INGLÉS COMO LENGUA EXTRANJERA (3 competencias · 15 combinaciones)
+│   ├── Se comunica oralmente en inglés como lengua extranjera       ✅ (1.º a 5.º)
+│   ├── Lee diversos tipos de textos en inglés como lengua extranjera✅ (1.º a 5.º)
+│   └── Escribe diversos tipos de textos en inglés                   ✅ (1.º a 5.º)
+│
+├── 8. ARTE Y CULTURA (2 competencias · 10 combinaciones)
+│   ├── Aprecia de manera crítica manifestaciones artístico-culturales✅ (1.º a 5.º)
+│   └── Crea proyectos desde los lenguajes artísticos                ✅ (1.º a 5.º)
+│
+├── 9. EDUCACIÓN FÍSICA (3 competencias · 15 combinaciones)
+│   ├── Se desenvuelve de manera autónoma a través de su motricidad  ✅ (1.º a 5.º)
+│   ├── Asume una vida saludable                                     ✅ (1.º a 5.º)
+│   └── Interactúa a través de sus habilidades sociomotrices         ✅ (1.º a 5.º)
+│
+└── 10. EDUCACIÓN RELIGIOSA (2 competencias · 10 combinaciones)
+    ├── Construye su identidad como persona amada por Dios           ✅ (1.º a 5.º)
+    └── Asume la experiencia del encuentro con Dios                  ✅ (1.º a 5.º)
+========================================================================================
+TOTAL: 10 ÁREAS · 26 COMPETENCIAS · 52 CURRICULUM + 52 DIDACTIC = 104 PERFILES
+130 COMBINACIONES GRADO × COMPETENCIA 100% OPERATIVAS Y CERTIFICADAS
 ========================================================================================
 ```
 
 ---
 
-## 2. Matriz Curricular y Didáctica Oficial (24 Nuevos Perfiles JSON)
+## 2. Inventario de Perfiles Oficiales CNEB (104 Archivos JSON)
 
-Cada perfil curricular conserva su fuente oficial (`provenance.sourceRefs: ["minedu-secondary-curriculum-2016"]`), estándar oficial del ciclo (Ciclo VI o Ciclo VII), capacidades CNEB y listado estricto de desempeños por grado sin mezcla ni generalizaciones artificiales.
+Cada perfil curricular conserva rigurosamente:
+1. `provenance.sourceRefs: ["minedu-secondary-curriculum-2016"]`
+2. Estándar oficial CNEB del ciclo (Ciclo VI o Ciclo VII)
+3. Capacidades desagregadas
+4. Desempeños aislados por grado (IDs con prefijo canónico `grade-1-`, `grade-2-`, etc.) sin traslapes ni contaminaciones entre grados.
 
-### A. Matemática Secundaria (12 perfiles implementados)
-- **Ciclo VI (1.º y 2.º Grado):**
-  - `data/pedagogy/curriculum/secondary/cycle-vi/mathematics/regularity.json`
-  - `data/pedagogy/didactics/secondary/cycle-vi/mathematics/regularity.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vi/mathematics/shape.json`
-  - `data/pedagogy/didactics/secondary/cycle-vi/mathematics/shape.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vi/mathematics/data-uncertainty.json`
-  - `data/pedagogy/didactics/secondary/cycle-vi/mathematics/data-uncertainty.json`
-- **Ciclo VII (3.º, 4.º y 5.º Grado):**
-  - `data/pedagogy/curriculum/secondary/cycle-vii/mathematics/regularity.json`
-  - `data/pedagogy/didactics/secondary/cycle-vii/mathematics/regularity.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vii/mathematics/shape.json`
-  - `data/pedagogy/didactics/secondary/cycle-vii/mathematics/shape.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vii/mathematics/data-uncertainty.json`
-  - `data/pedagogy/didactics/secondary/cycle-vii/mathematics/data-uncertainty.json`
-
-### B. Comunicación Secundaria (12 perfiles implementados)
-- **Ciclo VI (1.º y 2.º Grado):**
-  - `data/pedagogy/curriculum/secondary/cycle-vi/communication/oral.json`
-  - `data/pedagogy/didactics/secondary/cycle-vi/communication/oral.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vi/communication/reading.json`
-  - `data/pedagogy/didactics/secondary/cycle-vi/communication/reading.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vi/communication/writing.json`
-  - `data/pedagogy/didactics/secondary/cycle-vi/communication/writing.json`
-- **Ciclo VII (3.º, 4.º y 5.º Grado):**
-  - `data/pedagogy/curriculum/secondary/cycle-vii/communication/oral.json`
-  - `data/pedagogy/didactics/secondary/cycle-vii/communication/oral.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vii/communication/reading.json`
-  - `data/pedagogy/didactics/secondary/cycle-vii/communication/reading.json`
-  - `data/pedagogy/curriculum/secondary/cycle-vii/communication/writing.json`
-  - `data/pedagogy/didactics/secondary/cycle-vii/communication/writing.json`
+### Estructura de Directorios en `data/pedagogy/`:
+- **Curriculares:** `data/pedagogy/curriculum/secondary/`
+  - `cycle-vi/` (1.º y 2.º) y `cycle-vii/` (3.º, 4.º y 5.º) en:
+    - `mathematics/` (4 competencias: quantity, regularity, shape, data-uncertainty)
+    - `communication/` (3 competencias: oral, reading, writing)
+    - `science-technology/` (3 competencias: inquiry, physical-world, technological-solution)
+    - `social-sciences/` (3 competencias: history, geography-environment, economy)
+    - `dpcc/` (2 competencias: identity, citizenship)
+    - `work-education/` (1 competencia: entrepreneurship)
+    - `english/` (3 competencias: oral, reading, writing)
+    - `arts-culture/` (2 competencias: appreciation, creation)
+    - `physical-education/` (3 competencias: motor, healthy, sociomotor)
+    - `religious-education/` (2 competencias: identity, encounter)
+- **Didácticos:** `data/pedagogy/didactics/secondary/` (con los mismos 52 perfiles correspondientes con enfoques pedagógicos, estrategias recomendadas, pautas de evaluación formativa y reglas para prompts de IA).
 
 ---
 
 ## 3. Actualizaciones en el Core de la Arquitectura V3
 
-1. **Catálogo Único (`data/pedagogy/catalog.json`):**
-   - Registra **14 CurriculumProfiles** y **14 DidacticProfiles** activos.
-   - Preserva los 2 perfiles pedagógicos por ciclo (`secondary-cycle-vi` y `secondary-cycle-vii`) y 5 perfiles metodológicos sin duplicación.
-   - Pasa la validación canónica de `PedagogyCatalogValidator` sin errores.
+1. **Catálogo Unificado (`data/pedagogy/catalog.json` - versión 2026.6):**
+   - Registra **52 CurriculumProfiles** y **52 DidacticProfiles** oficiales.
+   - Pasa la validación canónica de [PedagogyCatalogValidator](file:///e:/sesiones_educ_ia/js/pedagogy/catalog-validator.js) con 0 errores y 0 advertencias de unicidad.
 
 2. **Resolutor de Contexto (`js/pedagogy/context-resolver.js`):**
-   - Implementación de `matchesArea` para soportar identificadores canónicos (`mathematics`, `communication`) y nombres oficiales (`Matemática`, `Comunicación`).
-   - Implementación de `matchesCompetency` para resolver por ID, alias o nombre oficial sin recurrir a bifurcaciones rígidas `if/else`.
-   - **Regla estricta de NO fallback:** Si un área o competencia solicitada no existe, el resolutor emite un error explícito (`curriculum_profile_not_found` o `didactic_profile_not_found`), impidiendo degradar a otra competencia.
+   - Resuelve dinámicamente las 10 áreas secundarias por ID canónico (`work-education`, `english`, `arts-culture`, `physical-education`, `religious-education`, etc.) y por sus nombres oficiales en español.
+   - Resuelve por ID canónico de competencia o alias sin colisiones.
+   - **Regla estricta de NO fallback:** Si un área o competencia no existe para un ciclo, el resolutor rechaza con error explícito sin degradar jamás a otra área.
 
-3. **Planning Studio y Asistente Reactivo (`js/planning/planning-wizard.js`):**
-   - Selector dinámico `#planning-competency` con soporte de `<optgroup>` para Matemática y Comunicación, mostrando las 7 competencias oficiales por grado.
-   - Actualización en tiempo real: al cambiar de competencia o grado, el estándar y los desempeños se refrescan inmediatamente en la vista previa sin recargar la página.
-   - Sincronización automática de ciclo (1.º y 2.º → Ciclo VI; 3.º, 4.º y 5.º → Ciclo VII).
+3. **Planning Studio Reactivo (`js/planning/planning-wizard.js`):**
+   - El selector `#planning-competency` agrupa dinámicamente las 10 áreas mediante etiquetas `<optgroup>`, ofreciendo las 26 competencias de Secundaria.
+   - Al seleccionar cualquier competencia y cambiar de grado (1.º a 5.º), la vista previa actualiza de inmediato el estándar y la lista de desempeños específicos sin recargar.
 
-4. **Blindaje Curricular en Generación con IA (`buildGenerationInput`):**
-   - El payload enviado a `planning.map.generate` transporta estrictamente el estándar, las capacidades y los desempeños del grado de la competencia seleccionada.
-   - La IA tiene prohibido alterar o mezclar referencias curriculares protegidas mediante `PlanningMapGenerator.assertTrustedCurriculum()`.
-   - Las sesiones vinculadas (`SequenceItem` → `PlanningLinkedSession`) conservan un snapshot curricular inmutable.
+4. **Blindaje en la Generación con IA (`buildGenerationInput`):**
+   - El input transmitido a la IA encapsula estrictamente el área, la competencia seleccionada, el estándar del ciclo y los desempeños del grado.
+   - Inmutabilidad de referencias curriculares asegurada por `PlanningMapGenerator.assertTrustedCurriculum()`.
+   - Las sesiones vinculadas (`PlanningLinkedSession`) conservan un snapshot curricular inmutable.
 
-5. **Compatibilidad Inalterada (`SessionDocument v1` y Modo Standalone):**
-   - No se modificó el esquema canónico `schemas/session-document.v1.schema.json`.
-   - La creación de sesiones individuales independientes sigue funcionando al 100% sin depender de un contenedor de planificación.
-   - El motor de exportación a Word `.docx` con ecuaciones nativas **OMML** y cuadrícula oficial MINEDU de 10,490 twips se mantiene íntegro.
+5. **Invarianza de `SessionDocument v1` y DOCX Standalone:**
+   - No se alteró el esquema ni los flujos de sesiones individuales.
+   - El generador DOCX con matrices de 10,490 twips y ecuaciones OMML nativas se mantiene 100% operativo.
 
 ---
 
-## 4. Resultados de la Suite de Pruebas (100% de Éxito)
+## 4. Resultados de la Suite Completa de Pruebas (100% Verde)
 
-### A. Pruebas Unitarias y de Integración (Node.js)
+### A. Pruebas Unitarias y de Integración Curricular (Node.js)
 ```text
-  ✓ tests/pedagogy-catalog.test.js: OK (14 curriculum, 14 didactic, 2 pedagogical, 5 methodology)
-  ✓ tests/methodology-catalog.test.js: OK
-  ✓ tests/pedagogical-context-resolver.test.js: OK
-  ✓ tests/secondary-cycle-vii.test.js: OK
+  ✓ tests/pedagogy-catalog.test.js: OK
+      - 52 curriculum profiles validados (10 áreas oficiales)
+      - 52 didactic profiles validados (10 áreas oficiales)
+      - 2 pedagogical profiles (Ciclo VI y VII)
+      - 5 methodology profiles
   ✓ tests/secondary-mathematics-full.test.js: OK
-      - 20 combinaciones (5 grados × 4 competencias de Matemática)
-      - Validación de estándares VI y VII
-      - Aislamiento estricto de desempeños por grado
-      - Generación de unidades y snapshots de sesiones vinculadas
+      - 20 combinaciones (5 grados × 4 competencias)
   ✓ tests/secondary-communication-full.test.js: OK
-      - 15 combinaciones (5 grados × 3 competencias de Comunicación)
-      - Validación de capacidades y estándares oficiales
-      - Aislamiento de prompt y preservación de metadatos en sesiones vinculadas
-  ✓ tests/planning-container-v2.test.js: OK
-  ✓ tests/planning-wizard.test.js: OK
-  ✓ tests/linked-session.test.js: OK
-  ✓ tests/session-generation-mode.test.js: OK
-  ✓ tests/test_contract_v1.js: OK
-  ✓ tests/test_adapter_v1.js: OK
-  ✓ tests/test_credit_ledger_logic.js: OK
+      - 15 combinaciones (5 grados × 3 competencias)
+  ✓ tests/secondary-science-technology-full.test.js: OK
+      - 15 combinaciones (5 grados × 3 competencias)
+  ✓ tests/secondary-social-sciences-dpcc-full.test.js: OK
+      - 15 combinaciones de Ciencias Sociales (Historia, Geografía, Economía)
+      - 10 combinaciones de DPCC (Identidad, Ciudadanía)
+  ✓ tests/secondary-remaining-courses-full.test.js: OK
+      - 5 combinaciones de EPT (Emprendimiento)
+      - 15 combinaciones de Inglés (Oral, Lectura, Escritura)
+      - 10 combinaciones de Arte y Cultura (Apreciación, Creación)
+      - 15 combinaciones de Educación Física (Motricidad, Saludable, Sociomotriz)
+      - 10 combinaciones de Educación Religiosa (Identidad, Trascendencia)
+      - Total del archivo: 55 combinaciones validadas
 ```
 
-### B. Pruebas de Interfaz End-to-End con Playwright (Desktop & Mobile)
+### B. Pruebas E2E de Interfaz de Usuario con Playwright
 ```text
-  ✓ tests/ui_secondary_mathematics_smoke.py: OK (375 px y 1280 px)
-      - Conmutación interactiva Regularidad → Forma → Datos en 4.º grado (Ciclo VII)
-      - Estándares y desempeños actualizados reactivamente sin errores JS
-  ✓ tests/ui_secondary_communication_smoke.py: OK (375 px y 1280 px)
-      - Conmutación interactiva Oralidad → Lectura → Escritura en 4.º grado (Ciclo VII)
-      - Estándares y desempeños actualizados reactivamente sin errores JS
+  ✓ tests/ui_secondary_all_courses_smoke.py: OK (375 px y 1280 px)
+      - Verifica 26 opciones en 10 optgroups en el selector de competencias
+      - Conmutación dinámica a EPT, Inglés y demás áreas
+      - Verificación de estándares y desempeños específicos en tiempo real
+      - Cero errores en consola
+  ✓ tests/ui_secondary_mathematics_smoke.py: OK
+  ✓ tests/ui_secondary_communication_smoke.py: OK
+  ✓ tests/ui_secondary_science_technology_smoke.py: OK
   ✓ tests/ui_secondary_cycle_vii_smoke.py: OK
-  ✓ tests/ui_planning_studio_smoke.py: OK
-  ✓ tests/ui_standalone_session_regression.py: OK
-  ✓ tests/ui_session_lifecycle_smoke.py: OK
-  ✓ tests/ui_startup_resilience.py: OK
 ```
 
-### C. Backend Python y Fidelidad de Imprenta DOCX
+### C. Backend Python, DOCX Fidelity y Seguridad
 ```text
-  ✓ tests/test_contract_v1.py: OK (Validación Pydantic de fixtures Inicial, Primaria, Secundaria)
-  ✓ tests/test_adapter_v1_py.py: OK (Normalización y compatibilidad v1)
-  ✓ tests/test_docx_builder_v1.py: OK (Generación nativa de .docx sin Office instalado)
-  ✓ tests/test_word_math.py: OK (Detección de segmentos matemáticos y estructuras OMML)
-  ✓ tests/test_docx_fidelity.py: OK (Cuadrícula exacta de 10,490 twips MINEDU)
+  ✓ tests/test_contract_v1.py: OK
+  ✓ tests/test_adapter_v1_py.py: OK
+  ✓ tests/test_docx_builder_v1.py: OK
+  ✓ tests/test_word_math.py: OK (OMML nativo)
+  ✓ tests/test_docx_fidelity.py: OK (10,490 twips MINEDU)
   ✓ tests/backend_smoke.py: OK
-```
-
-### D. Supabase Edge Functions (Deno)
-```text
-  ✓ tests/ai-prompt-builder.test.ts: OK
-  ✓ tests/linked-session-context.test.ts: OK
-  ✓ tests/planning-map-prompt.test.ts: OK
-  ✓ tests/ai-credits.test.ts: OK
-  ✓ Deno typecheck en las 5 Edge Functions (openai, gemini, deepseek, ai-gateway, pablito-mailer): OK
+  ✓ tests/repository_hygiene.py: OK
+  ✓ tests/profile_security.py: OK
+  ✓ tests/ai_credit_security.py: OK
+  ✓ tests/plan_entitlements.py: OK
 ```
 
 ---
 
-## 5. Tabla de Cobertura Curricular Consolidada
+## 5. Tabla Maestra de Cobertura Curricular de Secundaria (26 Competencias)
 
-| Área | Competencia Oficial CNEB | ID Canónico | Perfil VI | Perfil VII | Grados Cubiertos |
-|---|---|---|:---:|:---:|:---:|
-| **Matemática** | Resuelve problemas de cantidad | `solves-quantity-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
-| **Matemática** | Resuelve problemas de regularidad, equivalencia y cambio | `solves-regularity-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
-| **Matemática** | Resuelve problemas de forma, movimiento y localización | `solves-shape-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
-| **Matemática** | Resuelve problemas de gestión de datos e incertidumbre | `solves-data-uncertainty-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
-| **Comunicación** | Se comunica oralmente en su lengua materna | `communicates-orally` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
-| **Comunicación** | Lee diversos tipos de textos escritos en su lengua materna | `reads-texts` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
-| **Comunicación** | Escribe diversos tipos de textos en su lengua materna | `writes-texts` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
-
-**Métricas Totales:**
-- **7 competencias oficiales cubiertas**.
-- **14 CurriculumProfiles oficiales**.
-- **14 DidacticProfiles oficiales**.
-- **35 combinaciones grado × competencia 100% operativas**.
+| N.º | Área Curricular | Competencia Oficial CNEB | ID Canónico | Perfiles VI/VII | Grados |
+|:---:|---|---|---|:---:|:---:|
+| 1 | **Matemática** | Resuelve problemas de cantidad | `solves-quantity-problems` | ✅ / ✅ | 1.º a 5.º |
+| 2 | **Matemática** | Resuelve problemas de regularidad, equivalencia y cambio | `solves-regularity-problems` | ✅ / ✅ | 1.º a 5.º |
+| 3 | **Matemática** | Resuelve problemas de forma, movimiento y localización | `solves-shape-problems` | ✅ / ✅ | 1.º a 5.º |
+| 4 | **Matemática** | Resuelve problemas de gestión de datos e incertidumbre | `solves-data-uncertainty-problems` | ✅ / ✅ | 1.º a 5.º |
+| 5 | **Comunicación** | Se comunica oralmente en su lengua materna | `communicates-orally` | ✅ / ✅ | 1.º a 5.º |
+| 6 | **Comunicación** | Lee diversos tipos de textos en su lengua materna | `reads-texts` | ✅ / ✅ | 1.º a 5.º |
+| 7 | **Comunicación** | Escribe diversos tipos de textos en su lengua materna | `writes-texts` | ✅ / ✅ | 1.º a 5.º |
+| 8 | **Ciencia y Tecnología** | Indaga mediante métodos científicos | `inquires-scientific-methods` | ✅ / ✅ | 1.º a 5.º |
+| 9 | **Ciencia y Tecnología** | Explica el mundo físico basándose en conocimientos | `explains-physical-world` | ✅ / ✅ | 1.º a 5.º |
+| 10 | **Ciencia y Tecnología** | Diseña y construye soluciones tecnológicas | `designs-technological-solutions` | ✅ / ✅ | 1.º a 5.º |
+| 11 | **Ciencias Sociales** | Construye interpretaciones históricas | `constructs-historical-interpretations` | ✅ / ✅ | 1.º a 5.º |
+| 12 | **Ciencias Sociales** | Gestiona responsablemente el espacio y el ambiente | `manages-space-environment` | ✅ / ✅ | 1.º a 5.º |
+| 13 | **Ciencias Sociales** | Gestiona responsablemente los recursos económicos | `manages-economic-resources` | ✅ / ✅ | 1.º a 5.º |
+| 14 | **DPCC** | Construye su identidad | `builds-identity` | ✅ / ✅ | 1.º a 5.º |
+| 15 | **DPCC** | Convive y participa democráticamente en el bien común | `coexists-participates-democratically` | ✅ / ✅ | 1.º a 5.º |
+| 16 | **Educación para el Trabajo** | Gestiona proyectos de emprendimiento económico o social | `manages-entrepreneurship-projects` | ✅ / ✅ | 1.º a 5.º |
+| 17 | **Inglés** | Se comunica oralmente en inglés | `communicates-orally-english` | ✅ / ✅ | 1.º a 5.º |
+| 18 | **Inglés** | Lee diversos tipos de textos en inglés | `reads-texts-english` | ✅ / ✅ | 1.º a 5.º |
+| 19 | **Inglés** | Escribe diversos tipos de textos en inglés | `writes-texts-english` | ✅ / ✅ | 1.º a 5.º |
+| 20 | **Arte y Cultura** | Aprecia de manera crítica manifestaciones artístico-culturales | `appreciates-artistic-manifestations` | ✅ / ✅ | 1.º a 5.º |
+| 21 | **Arte y Cultura** | Crea proyectos desde los lenguajes artísticos | `creates-artistic-projects` | ✅ / ✅ | 1.º a 5.º |
+| 22 | **Educación Física** | Se desenvuelve de manera autónoma a través de su motricidad | `moves-autonomously` | ✅ / ✅ | 1.º a 5.º |
+| 23 | **Educación Física** | Asume una vida saludable | `assumes-healthy-life` | ✅ / ✅ | 1.º a 5.º |
+| 24 | **Educación Física** | Interactúa a través de sus habilidades sociomotrices | `interacts-sociomotor-skills` | ✅ / ✅ | 1.º a 5.º |
+| 25 | **Educación Religiosa** | Construye su identidad como persona amada por Dios | `builds-religious-identity` | ✅ / ✅ | 1.º a 5.º |
+| 26 | **Educación Religiosa** | Asume la experiencia del encuentro con Dios | `experiences-encounter-god` | ✅ / ✅ | 1.º a 5.º |
 
 ---
 
-## 6. Integración Continua y Despliegue (GitHub Pages)
+## 6. Próximo Paso Desbloqueado: Motor de Python DOCX para Unidades
 
-- **Workflow de Validación:** [`.github/workflows/validate.yml`](file:///e:/sesiones_educ_ia/.github/workflows/validate.yml) actualizado con:
-  - `node tests/secondary-mathematics-full.test.js`
-  - `node tests/secondary-communication-full.test.js`
-  - `python tests/ui_secondary_mathematics_smoke.py`
-  - `python tests/ui_secondary_communication_smoke.py`
-- **Gestión de Caché:** Sincronizado mediante `python scripts/version_assets.py --write` para garantizar la actualización inmediata en los navegadores de los usuarios tras el despliegue.
-- **Git:** Rama `main` sincronizada con `origin/main`. Árbol de trabajo local limpio.
+Habiendo cumplido al 100% el mandato del usuario (*"primero termina con los cursos y luego ya iremos al motor de python"*), el siguiente paso es la implementación del **Motor de Exportación DOCX en Python para Unidades de Aprendizaje y Programaciones Anuales** (`PlanningContainer 2.0`):
 
----
-
-## 7. Próximo Bloque Recomendado
-
-Concluida y certificada la totalidad de **Matemática** y **Comunicación** para toda Secundaria, el siguiente bloque curricular recomendado es:
-
-**Área: Ciencia y Tecnología — Secundaria (1.º a 5.º Grado)**
-- Competencia 1: *Indaga mediante métodos científicos para construir conocimientos*
-- Competencia 2: *Explica el mundo físico basándose en conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo*
-- Competencia 3: *Diseña y construye soluciones tecnológicas para resolver problemas de su entorno*
+1. **Diseño del Esquema de Exportación de Unidad:** Mapeo de `PlanningContainer 2.0` a tablas DOCX oficiales MINEDU con tipografía calibrada, colores del diseño institucional y cuadrícula estricta de 10,490 twips.
+2. **Tablas de la Unidad:**
+   - Datos informativos (Título, ciclo, grado, docente, duración).
+   - Situación significativa y pregunta retadora.
+   - Matriz curricular (Competencias, capacidades, desempeños precisados, criterios de evaluación, evidencias e instrumentos).
+   - Secuencia de sesiones planificadas (número, título, duración, campo temático, actividades clave).
+   - Recursos y materiales educativos oficiales MINEDU.
+3. **Integración con el Backend FastAPI / PyInstaller:** Endpoint de exportación nativo para descargar la unidad completa en formato Word editable listo para presentar a la Dirección o UGEL.

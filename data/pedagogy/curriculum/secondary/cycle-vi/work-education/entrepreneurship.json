@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-work-education-entrepreneurship-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "work-education", "officialName": "Educación para el Trabajo" }
+  },
+  "competency": { "id": "manages-entrepreneurship-projects", "officialName": "Gestiona proyectos de emprendimiento económico o social", "alias": "entrepreneurship" },
+  "capacities": [
+    { "id": "creates-value-proposals", "officialName": "Crea propuestas de valor" },
+    { "id": "applies-technical-skills", "officialName": "Aplica habilidades técnicas" },
+    { "id": "works-cooperatively-goals", "officialName": "Trabaja cooperativamente para lograr objetivos y metas" },
+    { "id": "evaluates-project-results", "officialName": "Evalúa los resultados del proyecto de emprendimiento" }
+  ],
+  "standard": {
+    "description": "Gestiona proyectos de emprendimiento económico o social cuando se cuestiona sobre una situación que afecta a un grupo de usuarios y explora sus necesidades y expectativas para crear una alternativa de solución viable y reconocer aspectos éticos y culturales así como los posibles resultados sociales y ambientales que implica. Implementa sus ideas empleando habilidades técnicas, anticipa las acciones y los recursos que necesitará y trabaja cooperativamente cumpliendo sus roles y responsabilidades individuales para el logro de una meta común, propone actividades y facilita a la iniciativa y perseverancia colectiva. Evalúa el logro de resultados parciales relacionando la cantidad de insumos empleados con los beneficios sociales y ambientales generados; realiza mejoras considerando además el juicio ético y las opiniones de los usuarios.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-value-proposal-ept", "description": "Recoge información sobre necesidades y problemas de un grupo de usuarios de su entorno mediante entrevistas y observaciones; define el problema y formula propuestas de valor creativas y éticas." },
+      { "id": "grade-1-technical-skills-ept", "description": "Planifica las actividades de su equipo y aplica habilidades técnicas básicas en el uso seguro de herramientas, máquinas y materiales para elaborar prototipos." },
+      { "id": "grade-1-cooperative-work-ept", "description": "Trabaja en equipo asumiendo roles con responsabilidad e iniciativa para lograr los objetivos comunes del proyecto de emprendimiento." },
+      { "id": "grade-1-evaluate-results-ept", "description": "Evalúa los resultados del prototipo a través de pruebas con los usuarios e incorpora sugerencias de mejora considerando el uso eficiente de insumos." }
+    ],
+    "2": [
+      { "id": "grade-2-value-proposal-ept", "description": "Delimita necesidades y aspiraciones de los usuarios aplicando técnicas de Design Thinking; diseña alternativas de solución innovadoras que optimizan recursos locales y reducen impacto ambiental." },
+      { "id": "grade-2-technical-skills-ept", "description": "Elabora diagramas de operaciones de proceso (DOP), calcula costos unitarios y presupuestos, y aplica técnicas de fabricación o prestación de servicios con normas de seguridad." },
+      { "id": "grade-2-cooperative-work-ept", "description": "Coordina las tareas del equipo fomentando la perseverancia, el liderazgo compartido y la resolución dialogada de desacuerdos durante la ejecución del proyecto." },
+      { "id": "grade-2-evaluate-results-ept", "description": "Evalúa los procesos y el impacto social y ambiental de su producto o servicio; formula estrategias para comercializar o difundir la propuesta de valor en el mercado local." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (EPT Ciclo VI, pp. 165-172); sujeto a revisión pedagógica."
+  }
+}

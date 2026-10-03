@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-english-writing",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" },
+    "competency": { "id": "writes-texts-english", "officialName": "Escribe diversos tipos de textos en inglés como lengua extranjera", "alias": "english-writing" },
+    "capacities": [
+      { "id": "adapts-text-english", "officialName": "Adecúa el texto a la situación comunicativa" },
+      { "id": "organizes-develops-ideas-english", "officialName": "Organiza y desarrolla las ideas de forma coherente y cohesionada" },
+      { "id": "uses-written-conventions-english", "officialName": "Utiliza convenciones del lenguaje escrito de forma pertinente" },
+      { "id": "reflects-evaluates-written-text-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+    ]
+  },
+  "approach": "Enfoque comunicativo y proceso de escritura (Process Writing)",
+  "recommendedStrategies": [
+    "etapas del proceso de escritura: planificación, redacción, revisión y publicación",
+    "modelado de textos modelo (mentor texts) para identificar estructuras y fórmulas",
+    "uso de plantillas guía (scaffolding templates) y bancos de palabras clave",
+    "revisión colaborativa entre pares con rúbricas o listas de cotejo sencillas",
+    "producción de textos breves con propósito real (emails, posts, afiches, recetas)"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la adecuación al propósito comunicativo y la claridad del mensaje transmitido.",
+    "Valorar el esfuerzo en la revisión y corrección de borradores hacia la versión final."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "escritura guiada y estructurada que genere confianza y éxito en la producción",
+      "andamiaje explícito con conectores y fórmulas lingüísticas básicas",
+      "retroalimentación formativa oportuna orientada a la mejora del borrador",
+      "publicación y socialización de los textos producidos en murales o medios digitales",
+      "celebración del avance comunicativo individual del estudiante"
+    ],
+    "avoid": [
+      "ejercicios de traducción descontextualizada de oraciones aisladas",
+      "corrección punitiva en rojo que desmotive la expresión escrita en inglés",
+      "exigir textos largos o complejos sin modelado previo paso a paso",
+      "ignorar el proceso de planificación y borrador pasando directamente al producto final"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Escritura en Inglés Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

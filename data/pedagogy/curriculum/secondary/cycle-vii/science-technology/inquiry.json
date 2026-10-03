@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-science-technology-inquiry-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" }
+  },
+  "competency": { "id": "inquires-scientific-methods", "officialName": "Indaga mediante métodos científicos para construir conocimientos", "alias": "inquiry" },
+  "capacities": [
+    { "id": "problematizes-situations", "officialName": "Problematiza situaciones para hacer indagación" },
+    { "id": "designs-strategies-inquiry", "officialName": "Diseña estrategias para hacer indagación" },
+    { "id": "generates-registers-data", "officialName": "Genera y registra datos e información" },
+    { "id": "analyzes-data-information", "officialName": "Analiza datos e información" },
+    { "id": "evaluates-communicates-inquiry", "officialName": "Evalúa y comunica el proceso y resultados de su indagación" }
+  ],
+  "standard": {
+    "description": "Indaga a partir de preguntas y plantea hipótesis con base en conocimientos científicos y observaciones previas. Elabora el plan de observaciones o experimentos y los argumenta utilizando principios científicos y los objetivos planteados. Realiza mediciones y comparaciones sistemáticas que evidencian la acción de diversos tipos de variables. Analiza tendencias y relaciones en los datos tomando en cuenta la teoría de errores, reproducibilidad, los interpreta con base en conocimientos científicos y formula conclusiones, las argumenta apoyándose en sus resultados e información confiable. Evalúa la fiabilidad de los métodos y las interpretaciones de los resultados de su indagación.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-problematize-inquiry", "description": "Formula preguntas sobre el fenómeno delimitando el problema. Determina el comportamiento de las variables y plantea hipótesis basadas en conocimientos científicos estableciendo relaciones de causalidad." },
+      { "id": "grade-3-design-inquiry", "description": "Propone y fundamenta procedimientos para manipular y medir variables, prever tiempo, medidas de seguridad y materiales cualitativos/cuantitativos para confirmar o refutar la hipótesis." },
+      { "id": "grade-3-generate-inquiry", "description": "Obtiene datos cualitativos/cuantitativos manipulando la variable independiente y mediciones repetidas de la dependiente; calcula medidas de tendencia central y los representa en gráficas." },
+      { "id": "grade-3-analyze-inquiry", "description": "Compara datos obtenidos estableciendo relaciones de causalidad y correspondencia; contrasta resultados con su hipótesis e información científica para elaborar conclusiones fundamentadas." },
+      { "id": "grade-3-evaluate-inquiry", "description": "Sustenta, con base científica, sus conclusiones, procedimientos, mediciones y cálculos realizados, y si permitieron validar su hipótesis. Comunica su indagación por medios diversos." }
+    ],
+    "4": [
+      { "id": "grade-4-problematize-inquiry", "description": "Formula preguntas complejas para delimitar el problema de indagación; plantea hipótesis basadas en teorías científicas considerando variables intervinientes y formula objetivos específicos." },
+      { "id": "grade-4-design-inquiry", "description": "Propone y fundamenta procedimientos para manipular, medir variables y prever un grupo de control, considerando el margen de error, instrumental de precisión y normas de bioseguridad." },
+      { "id": "grade-4-generate-inquiry", "description": "Obtiene y organiza datos cualitativos/cuantitativos con mediciones repetidas y control de intervinientes; realiza cálculos estadísticos (tendencia central, dispersión) con margen de error." },
+      { "id": "grade-4-analyze-inquiry", "description": "Compara datos estableciendo tendencias y correlaciones; contrasta resultados con modelos y teorías científicas para confirmar o refutar la hipótesis y formular conclusiones." },
+      { "id": "grade-4-evaluate-inquiry", "description": "Sustenta la reducción del error experimental a través del grupo de control y calibración de instrumentos; evalúa la fiabilidad de los resultados y comunica su investigación con rigor." }
+    ],
+    "5": [
+      { "id": "grade-5-problematize-inquiry", "description": "Formula preguntas de indagación sobre sistemas complejos delimitando variables críticas; formula hipótesis científicas integrando múltiples variables y objetivos de investigación rigurosos." },
+      { "id": "grade-5-design-inquiry", "description": "Diseña y sustenta un protocolo experimental con grupo de control, técnicas de muestreo, cálculo de incertidumbre experimental y contingencias metodológicas y ambientales." },
+      { "id": "grade-5-generate-inquiry", "description": "Obtiene y procesa datos con alta precisión; calcula medidas de dispersión, incertidumbre y error estándar; genera representaciones gráficas multivariables normalizadas." },
+      { "id": "grade-5-analyze-inquiry", "description": "Analiza tendencias complejas y correlaciones estadísticas; contrasta la evidencia empírica con literatura científica de frontera y elabora conclusiones y generalizaciones." },
+      { "id": "grade-5-evaluate-inquiry", "description": "Sustenta la validez interna y externa de la investigación, el alcance de los resultados, limitaciones del diseño y nuevas líneas de indagación; elabora un reporte formal de divulgación." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencia y Tecnología Ciclo VII, pp. 213-220); sujeto a revisión pedagógica."
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-science-technology-physical-world",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" },
+    "competency": { "id": "explains-physical-world", "officialName": "Explica el mundo físico basándose en conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo", "alias": "physical-world" },
+    "capacities": [
+      { "id": "understands-uses-scientific-knowledge", "officialName": "Comprende y usa conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo" },
+      { "id": "evaluates-implications-science-technology", "officialName": "Evalúa las implicancias del saber y del quehacer científico y tecnológico" }
+    ]
+  },
+  "approach": "Indagación científica y alfabetización científica y tecnológica",
+  "recommendedStrategies": [
+    "uso de modelos analógicos y representaciones visuales de fenómenos microscópicos y macroscópicos",
+    "análisis de dilemas y controversias sociocientíficas locales",
+    "diagramas de flujo de materia y transformaciones de energía",
+    "estudio de casos sobre impacto ambiental y biodiversidad",
+    "debates argumentativos fundamentados en fuentes con respaldo científico"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la capacidad de interrelacionar conceptos y leyes científicas para justificar fenómenos cotidianos.",
+    "Valorar la fundamentación ética y ambiental ante problemas derivados de la intervención humana y tecnológica."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "conexión explícita entre conceptos abstractos y aplicaciones observables en la vida real",
+      "modelización de procesos celulares, ecosistémicos y termodinámicos",
+      "argumentación estructurada con datos y respaldo de la comunidad científica",
+      "análisis crítico del impacto de la ciencia y tecnología en el entorno comunitario",
+      "fomento del pensamiento divergente y la alfabetización científica"
+    ],
+    "avoid": [
+      "memorización de nomenclaturas y fórmulas sin comprensión de su significado físico o biológico",
+      "presentación dogmática de teorías científicas como verdades inmutables",
+      "ejercicios descontextualizados sin vínculo con la realidad del estudiante",
+      "evaluaciones reducidas a marcar opciones múltiples sin argumentación cualitativa"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Explica el Mundo Físico en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

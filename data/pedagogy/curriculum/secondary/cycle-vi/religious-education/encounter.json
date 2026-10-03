@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-religious-education-encounter-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" }
+  },
+  "competency": { "id": "experiences-encounter-god", "officialName": "Asume la experiencia del encuentro personal y comunitario con Dios en su proyecto de vida en coherencia con su creencia religiosa", "alias": "religious-encounter" },
+  "capacities": [
+    { "id": "transforms-environment-faith", "officialName": "Transforma su entorno desde el encuentro personal y comunitario con Dios y desde la fe que profesa" },
+    { "id": "acts-coherently-faith", "officialName": "Actúa coherentemente en razón de su fe según los principios de su conciencia moral en situaciones concretas de la vida" }
+  ],
+  "standard": {
+    "description": "Asume la experiencia del encuentro personal y comunitario con Dios en su proyecto de vida cuando reconoce que Dios actúa en su historia y en su comunidad a través de la oración, los sacramentos y la vivencia comunitaria. Actúa con coherencia moral a partir de los valores del Evangelio, promoviendo la solidaridad, el perdón y el cuidado de la creación en su familia y entorno escolar.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-encounter-practice-religion", "description": "Reconoce los signos de la presencia de Dios en su vida cotidiana a través de la naturaleza, la familia y el servicio desinteresado al prójimo." },
+      { "id": "grade-1-creation-care-religion", "description": "Participa en acciones escolares de cuidado de la creación (laudato si') y solidaridad con los más necesitados de su comunidad." },
+      { "id": "grade-1-moral-conscience-religion", "description": "Examina su conciencia a la luz de los mandamientos y las enseñanzas de Jesús asumiendo actitudes de reconciliación y verdad." }
+    ],
+    "2": [
+      { "id": "grade-2-encounter-practice-religion", "description": "Formula metas personales inspiradas en los valores cristianos integrándolas en su proyecto formativo y vocacional inicial." },
+      { "id": "grade-2-creation-care-religion", "description": "Promueve iniciativas comunitarias de voluntariado y fraternidad escolar como manifestación viva de su fe y compromiso social." },
+      { "id": "grade-2-moral-conscience-religion", "description": "Toma decisiones morales éticas fundamentadas en el amor al prójimo y la justicia frente a presiones grupales o injusticias del entorno." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Religiosa Ciclo VI, pp. 197-204); sujeto a revisión pedagógica."
+  }
+}

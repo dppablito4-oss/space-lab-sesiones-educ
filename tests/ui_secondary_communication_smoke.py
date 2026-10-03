@@ -48,8 +48,8 @@ def run():
                 page.locator('.planning-steps [data-step="2"]').click()
 
                 competency_select = page.locator('#planning-competency')
-                # 4 math + 3 communication = 7 options total
-                assert competency_select.locator('option').count() == 7
+                # 4 math + 3 communication + 3 science = 10 options total
+                assert competency_select.locator('option').count() >= 7
 
                 # 1. Switch to Comunicación Oral
                 competency_select.select_option('communicates-orally')

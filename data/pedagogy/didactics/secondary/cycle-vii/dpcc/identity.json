@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-dpcc-identity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "dpcc", "officialName": "Desarrollo Personal, Ciudadanía y Cívica" },
+    "competency": { "id": "builds-identity", "officialName": "Construye su identidad", "alias": "identity" },
+    "capacities": [
+      { "id": "values-oneself", "officialName": "Se valora a sí mismo" },
+      { "id": "self-regulates-emotions", "officialName": "Autorregula sus emociones" },
+      { "id": "reflects-argues-ethically", "officialName": "Reflexiona y argumenta éticamente" },
+      { "id": "lives-sexuality-responsibly", "officialName": "Vive su sexualidad de manera integral y responsable" }
+    ]
+  },
+  "approach": "Desarrollo personal y ciudadanía activa",
+  "recommendedStrategies": [
+    "elaboración de proyectos de vida vocacionales, profesionales y ciudadanos integrales",
+    "análisis filosófico de dilemas éticos contemporáneos y corrientes morales clásicas",
+    "debates sobre identidades juveniles, tribus urbanas e hiperconectividad digital",
+    "talleres de educación sexual integral (ESI) con enfoque de género y derechos humanos",
+    "mentoría entre pares y resiliencia ante el estrés preuniversitario y laboral"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la claridad y realismo en la formulación de metas del proyecto de vida.",
+    "Valorar la solidez del razonamiento moral autónomo frente a presiones sociales o dogmáticas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "autonomía moral y pensamiento ético fundamentado en la dignidad universal",
+      "visión esperanzadora y proactiva del futuro vocacional y profesional",
+      "relaciones interpersonales basadas en el consentimiento, la reciprocidad y la equidad",
+      "conciencia de la identidad individual inscrita en una ciudadanía intercultural global",
+      "cuidado integral de la salud mental y bienestar emocional"
+    ],
+    "avoid": [
+      "orientación vocacional encasillada en estereotipos de estatus o género",
+      "juzgar opciones de vida legítimas desde prejuicios personales del docente",
+      "desconocer el impacto de las tecnologías digitales y redes sociales en el autoconcepto",
+      "abordar la sexualidad exclusivamente desde el miedo o la patologización"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Construye su Identidad en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

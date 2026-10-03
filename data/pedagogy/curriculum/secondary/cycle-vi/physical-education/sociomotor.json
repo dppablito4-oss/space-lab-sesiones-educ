@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-physical-education-sociomotor-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "physical-education", "officialName": "Educación Física" }
+  },
+  "competency": { "id": "interacts-sociomotor-skills", "officialName": "Interactúa a través de sus habilidades sociomotrices", "alias": "physical-interaction" },
+  "capacities": [
+    { "id": "relates-using-sociomotor-skills", "officialName": "Se relaciona utilizando sus habilidades sociomotrices" },
+    { "id": "creates-applies-game-strategies", "officialName": "Crea y aplica estrategias y tácticas de juego" }
+  ],
+  "standard": {
+    "description": "Interactúa a través de sus habilidades sociomotrices con autonomía en situaciones que no le son favorables y asume con una actitud de liderazgo los desafíos propios de la práctica de actividades lúdicas y deportivas, experimentando el placer y disfrute que ellas le representan. Formula y aplica estrategias para solucionar problemas individuales y colectivos, incorporando elementos técnicos y tácticos, adecuándose a los cambios que se dan en la práctica. Analiza los posibles aciertos y dificultades ocurridos durante la práctica para mejorar la estrategia de juego.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-teamwork-sociomotor", "description": "Se relaciona asertivamente con sus compañeros en juegos cooperativos y predeportivos respetando las reglas y evitando la discriminación." },
+      { "id": "grade-1-strategy-sociomotor", "description": "Aplica estrategias ofensivas y defensivas básicas en juegos colectivos adaptando su accionar a las situaciones cambiantes del juego." },
+      { "id": "grade-1-fairplay-sociomotor", "description": "Demuestra juego limpio (fair play), tolerancia y compañerismo aceptando la victoria o la derrota con deportividad." }
+    ],
+    "2": [
+      { "id": "grade-2-teamwork-sociomotor", "description": "Asume roles de liderazgo y colaboración activa en la organización y ejecución de torneos y actividades recreativas escolares." },
+      { "id": "grade-2-strategy-sociomotor", "description": "Diseña y ajusta tácticas de juego en equipo considerando las fortalezas y debilidades individuales para lograr el objetivo común." },
+      { "id": "grade-2-fairplay-sociomotor", "description": "Promueve la inclusión de pares con diferentes niveles de habilidad motriz resolviendo desacuerdos de forma pacífica y constructiva." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Física Ciclo VI, pp. 157-164); sujeto a revisión pedagógica."
+  }
+}

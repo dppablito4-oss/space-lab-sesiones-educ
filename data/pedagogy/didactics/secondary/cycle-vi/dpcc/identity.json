@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-dpcc-identity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "dpcc", "officialName": "Desarrollo Personal, Ciudadanía y Cívica" },
+    "competency": { "id": "builds-identity", "officialName": "Construye su identidad", "alias": "identity" },
+    "capacities": [
+      { "id": "values-oneself", "officialName": "Se valora a sí mismo" },
+      { "id": "self-regulates-emotions", "officialName": "Autorregula sus emociones" },
+      { "id": "reflects-argues-ethically", "officialName": "Reflexiona y argumenta éticamente" },
+      { "id": "lives-sexuality-responsibly", "officialName": "Vive su sexualidad de manera integral y responsable" }
+    ]
+  },
+  "approach": "Desarrollo personal y ciudadanía activa",
+  "recommendedStrategies": [
+    "dinámicas de autoconocimiento y autobiografía escolar",
+    "técnicas de respiración y autorregulación emocional vivencial",
+    "discusión guiada de dilemas morales de la vida cotidiana",
+    "análisis de mitos y estereotipos de género en medios de comunicación",
+    "talleres reflexivos sobre autocuidado, salud mental y prevención del riesgo"
+  ],
+  "assessmentRecommendations": [
+    "Observar la capacidad de autoafirmación y expresión honesta de emociones sin vulnerar a los pares.",
+    "Valorar la coherencia en la fundamentación ética de decisiones ante dilemas morales cotidianos."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "ambiente seguro de confianza y escucha respetuosa sin juicios de valor destructivos",
+      "validación de las emociones del estudiante y enseñanza práctica de autocontrol",
+      "promoción de la igualdad de género y relaciones afectivas saludables",
+      "reforzamiento de la autoestima, autoimagen positiva y pertenencia cultural",
+      "acompañamiento empático en la transición de la pubertad a la adolescencia"
+    ],
+    "avoid": [
+      "ridiculizar o invalidar las dudas, inseguridades o emociones de los adolescentes",
+      "moralismo dogmático que sancione sin propiciar la reflexión ética autónoma",
+      "reproducir roles y estereotipos machistas o discriminatorios en los ejemplos",
+      "exponer intimidades o situaciones personales de vulnerabilidad frente al grupo"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Construye su Identidad en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

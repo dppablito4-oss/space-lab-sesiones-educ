@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-arts-culture-appreciation",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" },
+    "competency": { "id": "appreciates-artistic-manifestations", "officialName": "Aprecia de manera crítica manifestaciones artístico-culturales", "alias": "arts-appreciation" },
+    "capacities": [
+      { "id": "perceives-artistic-manifestations", "officialName": "Percibe manifestaciones artístico-culturales" },
+      { "id": "contextualizes-artistic-manifestations", "officialName": "Contextualiza manifestaciones artístico-culturales" },
+      { "id": "reflects-creatively-critically-arts", "officialName": "Reflexiona creativa y críticamente sobre manifestaciones artístico-culturales" }
+    ]
+  },
+  "approach": "Multicultural e interdisciplinario centrado en la apreciación estética crítica",
+  "recommendedStrategies": [
+    "rutinas de pensamiento visual (VTS - Visual Thinking Strategies): ¿qué ves?, ¿qué te hace decir eso?",
+    "visitas virtuales y presenciales a museos, sitios arqueológicos y talleres artesanales",
+    "fichas de apreciación artística estética y sensorial de música, danza, teatro y pintura",
+    "conversatorios con cultores y portadores de tradiciones artísticas locales",
+    "ensayos reflexivos sobre el patrimonio cultural inmaterial de las regiones peruanas"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la descripción fundada de los elementos formales del lenguaje artístico analizado.",
+    "Valorar la comprensión del contexto sociocultural y el respeto por la diversidad de cosmovisiones."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "contacto directo y sensible con manifestaciones artísticas patrimoniales y contemporáneas",
+      "apertura a diversas interpretaciones sin imponer cánones estéticos hegemónicos únicos",
+      "valoración del arte originario peruano (andino, amazónico, afroperuano)",
+      "argumentación de juicios de valor basados en evidencia estética y contextual",
+      "desarrollo de la empatía cultural y la sensibilidad estética"
+    ],
+    "avoid": [
+      "reducir la apreciación a una ficha biográfica memorística sobre la vida del artista",
+      "descalificar expresiones culturales populares o no occidentales como 'no arte'",
+      "evaluaciones subjetivas que califiquen el 'gusto personal' en vez de la argumentación crítica",
+      "observación pasiva sin preguntas problematizadoras o debate grupal"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Apreciación Artística en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-science-technology-technological-solution",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" },
+    "competency": { "id": "designs-technological-solutions", "officialName": "Diseña y construye soluciones tecnológicas para resolver problemas de su entorno", "alias": "technological-solution" },
+    "capacities": [
+      { "id": "determines-technological-solution", "officialName": "Determina una alternativa de solución tecnológica" },
+      { "id": "designs-technological-solution", "officialName": "Diseña la alternativa de solución tecnológica" },
+      { "id": "implements-validates-solution", "officialName": "Implementa y valida la alternativa de solución tecnológica" },
+      { "id": "evaluates-communicates-solution", "officialName": "Evalúa y comunica el funcionamiento y los impactos de su alternativa de solución tecnológica" }
+    ]
+  },
+  "approach": "Indagación científica y alfabetización científica y tecnológica / Diseño en ingeniería",
+  "recommendedStrategies": [
+    "ciclo de diseño tecnológico: empatizar, diseñar, construir, probar y ajustar",
+    "dibujo técnico estructurado a escala con vistas y despiece de componentes",
+    "selección crítica de materiales locales reciclables o de bajo costo",
+    "ensayos de funcionamiento y protocolos de calibración",
+    "elaboración de fichas técnicas y presupuesto de prototipos"
+  ],
+  "assessmentRecommendations": [
+    "Verificar la relación directa entre el problema identificado y los requerimientos funcionales del diseño.",
+    "Evaluar los ajustes sistemáticos realizados durante la construcción y la justificación de mejoras con base científica."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "problemas tecnológicos reales y concretos de la escuela o comunidad",
+      "diseño iterativo donde el error y el reajuste forman parte del aprendizaje",
+      "fundamentación científica del funcionamiento de cada pieza o etapa",
+      "uso seguro y responsable de herramientas y materiales ecoeficientes",
+      "comunicación clara de los resultados mediante informes o ferias de prototipos"
+    ],
+    "avoid": [
+      "manualidades o maquetas decorativas sin función tecnológica operativa",
+      "copiar modelos comerciales sin análisis previo de necesidades y requerimientos",
+      "ignorar las normas de seguridad e higiene durante la manipulación de herramientas",
+      "centrarse exclusivamente en el objeto final sin evaluar el proceso de diseño y rediseño"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Diseña Soluciones Tecnológicas en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

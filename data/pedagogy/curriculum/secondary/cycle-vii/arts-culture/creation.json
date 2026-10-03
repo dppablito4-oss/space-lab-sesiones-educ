@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-arts-culture-creation-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" }
+  },
+  "competency": { "id": "creates-artistic-projects", "officialName": "Crea proyectos desde los lenguajes artísticos", "alias": "arts-creation" },
+  "capacities": [
+    { "id": "explores-experiments-artistic-languages", "officialName": "Explora y experimenta los lenguajes artísticos" },
+    { "id": "applies-creative-processes-arts", "officialName": "Aplica procesos creativos" },
+    { "id": "evaluates-communicates-arts-processes", "officialName": "Evalúa y comunica sus procesos y proyectos" }
+  ],
+  "standard": {
+    "description": "Crea proyectos artísticos que integran las artes o combinan diferentes lenguajes artísticos para transmitir sus propias experiencias o reflexionar sobre problemas y problemáticas de su comunidad y del mundo contemporáneo. Selecciona y domina técnicas, medios, soportes y tecnologías tradicionales y digitales para lograr efectos intencionales en sus creaciones. Desarrolla y profundiza ideas a través de procesos de investigación artística, experimentación iterativa y toma de decisiones estéticas. Planifica, ejecuta y perfecciona sus proyectos artísticos, evaluando críticamente el impacto estético, social y cultural de sus producciones y comunicando el proceso creador con rigor reflexivo.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-explore-create-arts", "description": "Investiga y combina técnicas avanzadas de artes visuales, medios audiovisuales, música o dramaturgia para lograr cualidades expresivas deliberadas." },
+      { "id": "grade-3-process-create-arts", "description": "Diseña y ejecuta proyectos artísticos colectivos interdisciplinarios que abordan temas de identidad, diversidad o memoria comunitaria." },
+      { "id": "grade-3-evaluate-create-arts", "description": "Documenta la bitácora del proceso creador, evalúa la pertinencia estética de las decisiones tomadas y socializa la obra ante la comunidad escolar." }
+    ],
+    "4": [
+      { "id": "grade-4-explore-create-arts", "description": "Experimenta con nuevos medios, arte digital, videoarte, diseño escenográfico o performance para generar metáforas visuales o sonoras de impacto." },
+      { "id": "grade-4-process-create-arts", "description": "Desarrolla propuestas artísticas conceptuales que cuestionan problemáticas contemporáneas basándose en investigación documental y formal." },
+      { "id": "grade-4-evaluate-create-arts", "description": "Evalúa el diálogo entre la obra creada y el público espectador, analizando las diversas reacciones e interpretaciones generadas." }
+    ],
+    "5": [
+      { "id": "grade-5-explore-create-arts", "description": "Demuestra dominio y virtuosismo en el uso integrado de lenguajes artísticos tradicionales y nuevas tecnologías con una propuesta estética singular y madura." },
+      { "id": "grade-5-process-create-arts", "description": "Produce y gestiona proyectos artísticos de alto valor estético y social (exposiciones, obras teatrales completas, conciertos, producciones audiovisuales)." },
+      { "id": "grade-5-evaluate-create-arts", "description": "Sustenta una memoria reflexiva del proceso creativo analizando el impacto de su producción en la sensibilidad comunitaria y el diálogo intercultural." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Arte y Cultura Ciclo VII, pp. 81-88); sujeto a revisión pedagógica."
+  }
+}

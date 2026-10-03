@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-english-oral-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" }
+  },
+  "competency": { "id": "communicates-orally-english", "officialName": "Se comunica oralmente en inglés como lengua extranjera", "alias": "english-oral" },
+  "capacities": [
+    { "id": "obtains-info-oral-english", "officialName": "Obtiene información de textos orales" },
+    { "id": "infers-interprets-oral-english", "officialName": "Infiere e interpreta información de textos orales" },
+    { "id": "adapts-organizes-oral-english", "officialName": "Adecúa, organiza y desarrolla las ideas de forma coherente y cohesionada" },
+    { "id": "uses-nonverbal-oral-english", "officialName": "Utiliza recursos no verbales y paraverbales de forma estratégica" },
+    { "id": "interacts-strategically-english", "officialName": "Interactúa estratégicamente con distintos interlocutores" },
+    { "id": "reflects-evaluates-oral-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral" }
+  ],
+  "standard": {
+    "description": "Se comunica oralmente mediante textos orales en inglés en situaciones comunicativas cotidianas. Infiere información y deduce relaciones de causa-efecto a partir de información explícita e implícita. Expresa ideas sobre temas cotidianos organizando sus ideas con coherencia y cohesión; utiliza vocabulario de uso frecuente y pronunciación clara. Interactúa en situaciones comunicativas cotidianas formulando y respondiendo preguntas breves.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-obtain-oral-english", "description": "Recupera información explícita y relevante en textos orales sencillos en inglés sobre datos personales, rutinas, gustos y preferencias." },
+      { "id": "grade-1-infer-oral-english", "description": "Deduce el significado de palabras y expresiones cotidianas a partir del contexto y la entonación del hablante." },
+      { "id": "grade-1-express-oral-english", "description": "Expresa oralmente frases breves y sencillas organizando sus ideas en torno a temas cotidianos con vocabulario básico y pronunciación comprensible." },
+      { "id": "grade-1-interact-oral-english", "description": "Participa en intercambios orales sencillos en inglés formulando y respondiendo preguntas sobre temas conocidos." }
+    ],
+    "2": [
+      { "id": "grade-2-obtain-oral-english", "description": "Integra información explícita en conversaciones y descripciones orales sobre experiencias pasadas, planes futuros y pasatiempos." },
+      { "id": "grade-2-infer-oral-english", "description": "Deduce el propósito comunicativo, relaciones temporales y de causa-efecto en textos orales en inglés de mediana extensión." },
+      { "id": "grade-2-express-oral-english", "description": "Desarrolla ideas con mayor fluidez utilizando conectores básicos (and, but, because) y recursos no verbales para enfatizar el mensaje." },
+      { "id": "grade-2-interact-oral-english", "description": "Mantiene diálogos cotidianos en inglés adaptando su registro y colaborando con su interlocutor para asegurar la comprensión." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Inglés Ciclo VI, pp. 81-88); sujeto a revisión pedagógica."
+  }
+}

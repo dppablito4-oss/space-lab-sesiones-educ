@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-social-sciences-economy",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" },
+    "competency": { "id": "manages-economic-resources", "officialName": "Gestiona responsablemente los recursos económicos", "alias": "economy" },
+    "capacities": [
+      { "id": "understands-economic-financial-system", "officialName": "Comprende el funcionamiento del sistema económico y financiero" },
+      { "id": "takes-economic-financial-decisions", "officialName": "Toma decisiones económicas y financieras" }
+    ]
+  },
+  "approach": "Economía política, finanzas para el desarrollo y ciudadanía tributaria",
+  "recommendedStrategies": [
+    "análisis de indicadores macroeconómicos (PBI, inflación, balanza de pagos, desempleo)",
+    "estudio comparativo de modelos económicos y el rol redistributivo del Estado",
+    "diseño de planes de inversión financiera a largo plazo y fondos de pensiones",
+    "debates sobre evasión fiscal, informalidad laboral y políticas de inclusión productiva",
+    "simulaciones de comercio internacional y aranceles en el marco de tratados de libre comercio"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la capacidad de argumentar sobre el impacto de las políticas fiscales y monetarias en el bienestar social.",
+    "Valorar la responsabilidad ética en la toma de decisiones económicas personales, empresariales y ciudadanas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "comprensión integral de la economía como ciencia social orientada al bienestar humano",
+      "conciencia de los derechos laborales, previsionales y tributarios ciudadanos",
+      "análisis de las finanzas globales y su repercusión en la canasta básica familiar",
+      "promoción de la innovación, el emprendimiento formal y la economía solidaria",
+      "uso de datos estadísticos oficiales del INEI, BCRP, MEF y SUNAT"
+    ],
+    "avoid": [
+      "dogmatismos doctrinarios que descarten el debate plural de escuelas económicas",
+      "abordar las finanzas personales desconociendo los condicionantes estructurales del mercado laboral",
+      "normalizar o tolerar la evasión de impuestos o el trabajo precario",
+      "presentar el crecimiento económico desvinculado del desarrollo humano y ambiental"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Recursos Económicos en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

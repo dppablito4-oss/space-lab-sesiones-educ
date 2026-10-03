@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-physical-education-healthy-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "physical-education", "officialName": "Educación Física" }
+  },
+  "competency": { "id": "assumes-healthy-life", "officialName": "Asume una vida saludable", "alias": "physical-healthy" },
+  "capacities": [
+    { "id": "understands-relations-activity-health", "officialName": "Comprende las relaciones entre la actividad física, alimentación, postura e higiene personal y del ambiente, y la salud" },
+    { "id": "incorporates-quality-of-life-practices", "officialName": "Incorpora prácticas que mejoran su calidad de vida" }
+  ],
+  "standard": {
+    "description": "Asume una vida saludable cuando evalúa sus necesidades calóricas y toma en cuenta su gasto calórico diario, los alimentos que consume, su origen e inocuidad para elaborar un plan de alimentación saludable y sostenible para su salud. Regula su esfuerzo al participar en actividades físicas de diferente intensidad y evalúa sus efectos sobre su organismo. Aplica con autonomía técnicas de activación y relajación corporal y previene lesiones adoptando posturas adecuadas en la actividad física y su vida cotidiana. Promueve hábitos de higiene y cuidado ambiental para una vida saludable en su comunidad.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-understanding-healthy", "description": "Evalúa el balance calórico diario entre la ingesta de alimentos y el gasto energético según las actividades físicas que realiza." },
+      { "id": "grade-3-posture-healthy", "description": "Aplica programas de entrenamiento físico personalizados que mejoran su resistencia cardiorrespiratoria y tono muscular con seguridad." },
+      { "id": "grade-3-nutrition-healthy", "description": "Elabora planes nutricionales equilibrados aprovechando los recursos agroalimentarios de su región y promoviendo la inocuidad." }
+    ],
+    "4": [
+      { "id": "grade-4-understanding-healthy", "description": "Analiza las respuestas fisiológicas del organismo (frecuencia cardíaca, VO2 máx, recuperación) ante entrenamientos de distinta intensidad." },
+      { "id": "grade-4-posture-healthy", "description": "Implementa técnicas de prevención de lesiones y ergonomía postural aplicables tanto al deporte como al trabajo y estudio." },
+      { "id": "grade-4-nutrition-healthy", "description": "Promueve campañas en su colegio contra los trastornos alimentarios (anorexia, bulimia, vigorexia) y el consumo de sustancias nocivas." }
+    ],
+    "5": [
+      { "id": "grade-5-understanding-healthy", "description": "Diseña, ejecuta y evalúa un plan integral de vida saludable para la etapa post-escolar considerando actividad física, nutrición y salud mental." },
+      { "id": "grade-5-posture-healthy", "description": "Domina métodos avanzados de acondicionamiento físico, relajación y gestión del estrés psicofísico para una óptima calidad de vida." },
+      { "id": "grade-5-nutrition-healthy", "description": "Lidera iniciativas comunitarias de promoción de la salud pública, la actividad física al aire libre y la sostenibilidad ambiental." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Física Ciclo VII, pp. 173-180); sujeto a revisión pedagógica."
+  }
+}

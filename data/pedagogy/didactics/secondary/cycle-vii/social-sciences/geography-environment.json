@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-social-sciences-geography-environment",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" },
+    "competency": { "id": "manages-space-environment", "officialName": "Gestiona responsablemente el espacio y el ambiente", "alias": "geography-environment" },
+    "capacities": [
+      { "id": "understands-relations-natural-social", "officialName": "Comprende las relaciones entre los elementos naturales y sociales" },
+      { "id": "manages-information-sources-geography", "officialName": "Maneja fuentes de información para comprender el espacio geográfico y el ambiente" },
+      { "id": "generates-actions-conserve-environment", "officialName": "Genera acciones para conservar el ambiente local y global" }
+    ]
+  },
+  "approach": "Enfoque socioespacial, geopolítico y de justicia climática",
+  "recommendedStrategies": [
+    "modelización geoespacial con visores SIG digitales y análisis de capas vectoriales/ráster",
+    "estudio multidimensional de planes de ordenamiento territorial comunal y metropolitano",
+    "mesas de diálogo simuladas para la resolución de conflictos socioambientales mineros y forestales",
+    "diagnósticos de riesgo de desastres según metodología de CENEPRED e INDECI",
+    "campañas de incidencia ciudadana por el cumplimiento de los ODS y la transición ecológica"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la profundidad del análisis de la interrelación entre decisiones geopolíticas, económicas y transformaciones del paisaje.",
+    "Valorar la solidez técnica y viabilidad social de las propuestas de mitigación y ordenamiento territorial."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "escalas global, regional y local articuladas en el análisis socioambiental",
+      "análisis crítico de la gobernanza de recursos estratégicos en el siglo XXI",
+      "visión prospectiva y preventiva del riesgo ante eventos climáticos extremos",
+      "empoderamiento de las juventudes como agentes de cambio ecológico y comunitario",
+      "uso de fuentes cartográficas oficiales (IGN, SENAMHI, MINAM, ANA)"
+    ],
+    "avoid": [
+      "reducción de la geografía a memorizar mapas estáticos sin análisis socioeconómico",
+      "tratamiento superficial del cambio climático sin abordar causas estructurales de emisión",
+      "estigmatizar a comunidades o actores locales involucrados en disputas por recursos",
+      "propuestas ambientales ingenuas o desvinculadas de la gobernanza municipal real"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Espacio y Ambiente en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

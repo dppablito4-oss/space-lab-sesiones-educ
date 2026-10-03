@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-arts-culture-creation-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" }
+  },
+  "competency": { "id": "creates-artistic-projects", "officialName": "Crea proyectos desde los lenguajes artísticos", "alias": "arts-creation" },
+  "capacities": [
+    { "id": "explores-experiments-artistic-languages", "officialName": "Explora y experimenta los lenguajes artísticos" },
+    { "id": "applies-creative-processes-arts", "officialName": "Aplica procesos creativos" },
+    { "id": "evaluates-communicates-arts-processes", "officialName": "Evalúa y comunica sus procesos y proyectos" }
+  ],
+  "standard": {
+    "description": "Crea proyectos artísticos individuales o colaborativos que representan y comunican ideas sobre su entorno a través de la experimentación con diversos lenguajes artísticos (artes visuales, música, teatro, danza). Selecciona y combina intencionalmente elementos, medios, técnicas, herramientas y tecnologías tradicionales o contemporáneas. Desarrolla sus ideas a partir de observaciones, experiencias y el trabajo artístico de otros, seleccionando los elementos más adecuados para comunicar su intención. Planifica y elabora sus proyectos artísticos a través de un proceso iterativo de diseño y ajustes, y evalúa el impacto de su trabajo en sí mismo y en los demás, comunicando sus descubrimientos y elecciones.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-explore-create-arts", "description": "Experimenta con técnicas de dibujo, pintura, ensamblaje, instrumentos musicales o expresión corporal para explorar sus posibilidades expresivas." },
+      { "id": "grade-1-process-create-arts", "description": "Planifica y elabora un proyecto artístico individual o colectivo (mural, puesta en escena, composición musical) comunicando un mensaje sobre su entorno." },
+      { "id": "grade-1-evaluate-create-arts", "description": "Registra las etapas de su proceso creativo y comparte con sus pares el proyecto final evaluando sus aciertos y dificultades." }
+    ],
+    "2": [
+      { "id": "grade-2-explore-create-arts", "description": "Combina técnicas tradicionales y digitales de artes visuales, música o artes escénicas para generar efectos expresivos intencionados." },
+      { "id": "grade-2-process-create-arts", "description": "Desarrolla proyectos artísticos interdisciplinarios que abordan problemáticas de la escuela o la comunidad basándose en bocetos y ensayos previos." },
+      { "id": "grade-2-evaluate-create-arts", "description": "Evalúa la eficacia de los medios empleados en su creación artística para transmitir el mensaje y documenta su proceso en un portafolio de arte." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Arte y Cultura Ciclo VI, pp. 65-72); sujeto a revisión pedagógica."
+  }
+}

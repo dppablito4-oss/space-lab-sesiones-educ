@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-religious-education-identity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" },
+    "competency": { "id": "builds-religious-identity", "officialName": "Construye su identidad como persona humana, amada por Dios, digna, libre y trascendente, comprendiendo la doctrina de su propia religión, abierto al diálogo con las que le son cercanas", "alias": "religious-identity" },
+    "capacities": [
+      { "id": "knows-god-assumes-identity", "officialName": "Conoce a Dios y asume su identidad religiosa y espiritual como persona digna, libre y trascendente" },
+      { "id": "cultivates-values-manifestations", "officialName": "Cultiva y valora las manifestaciones religiosas de su entorno argumentando su fe de manera comprensible y respetuosa" }
+    ]
+  },
+  "approach": "Humanista cristiano, cristocéntrico y comunitario",
+  "recommendedStrategies": [
+    "lectura orante y reflexiva de pasajes bíblicos (Lectio Divina)",
+    "análisis de parábolas y enseñanzas de Jesús aplicadas a dilemas juveniles",
+    "estudio y valoración de fiestas y tradiciones religiosas populares peruanas",
+    "diálogos reflexivos sobre el respeto a la libertad religiosa y la dignidad humana",
+    "talleres de oración, silencio contemplativo y expresión de la fe"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la comprensión del mensaje del Evangelio y su aplicación a la vida diaria.",
+    "Valorar la actitud de respeto, tolerancia y acogida fraterna hacia quienes tienen creencias distintas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "centralidad del amor de Dios y la dignidad inalienable de la persona humana",
+      "diálogo fraterno y ecuménico fundamentado en el respeto mutuo",
+      "vivencia de valores evangélicos: perdón, misericordia, verdad y justicia",
+      "aprecio por las manifestaciones de piedad popular de las diversas regiones del Perú",
+      "educación de la conciencia moral libre y responsable"
+    ],
+    "avoid": [
+      "adoctrinamiento memorístico de fórmulas dogmáticas sin sentido vital",
+      "fomentar el fanatismo, la intolerancia o el desprecio hacia otras confesiones religiosas",
+      "presentar a Dios como una figura castigadora o autoritaria",
+      "obligar a prácticas devocionales a estudiantes que ejercen su derecho a la objeción de conciencia"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Identidad Religiosa en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

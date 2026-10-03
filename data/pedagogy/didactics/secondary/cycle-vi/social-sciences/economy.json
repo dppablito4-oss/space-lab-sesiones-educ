@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-social-sciences-economy",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" },
+    "competency": { "id": "manages-economic-resources", "officialName": "Gestiona responsablemente los recursos económicos", "alias": "economy" },
+    "capacities": [
+      { "id": "understands-economic-financial-system", "officialName": "Comprende el funcionamiento del sistema económico y financiero" },
+      { "id": "takes-economic-financial-decisions", "officialName": "Toma decisiones económicas y financieras" }
+    ]
+  },
+  "approach": "Educación económica y financiera ciudadana",
+  "recommendedStrategies": [
+    "elaboración y simulación de presupuestos personales y familiares con metas de ahorro",
+    "análisis crítico de anuncios publicitarios y tácticas de persuasión del consumo",
+    "juego de simulación de mercado analizando precios según oferta y demanda",
+    "estudio de casos sobre consecuencias de préstamos informales (gota a gota)",
+    "análisis de los derechos y canales de reclamo del consumidor ante INDECOPI"
+  ],
+  "assessmentRecommendations": [
+    "Verificar la coherencia en la planificación de ingresos y gastos priorizando necesidades sobre deseos.",
+    "Valorar la comprensión crítica del funcionamiento del mercado y el rechazo a prácticas financieras ilegales."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "toma de decisiones financieras informadas y prudentes contextualizadas en la economía familiar",
+      "fomento del hábito del ahorro formal y la previsión ante imprevistos",
+      "consumo responsable, ético y ambientalmente consciente",
+      "comprensión del rol redistributivo de los impuestos y los servicios públicos",
+      "visión preventiva frente a estafas y endeudamiento nocivo"
+    ],
+    "avoid": [
+      "enfoque puramente contable o fórmulas matemáticas sin sentido económico práctico",
+      "promoción del consumismo como indicador de éxito o estatus personal",
+      "ignorar las condiciones socioeconómicas diversas de las familias de los estudiantes",
+      "tratar la economía como un sistema técnico neutro ajeno a los derechos ciudadanos"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Recursos Económicos en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

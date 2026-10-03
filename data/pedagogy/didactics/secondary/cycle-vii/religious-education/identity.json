@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-religious-education-identity",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" },
+    "competency": { "id": "builds-religious-identity", "officialName": "Construye su identidad como persona humana, amada por Dios, digna, libre y trascendente, comprendiendo la doctrina de su propia religión, abierto al diálogo con las que le son cercanas", "alias": "religious-identity" },
+    "capacities": [
+      { "id": "knows-god-assumes-identity", "officialName": "Conoce a Dios y asume su identidad religiosa y espiritual como persona digna, libre y trascendente" },
+      { "id": "cultivates-values-manifestations", "officialName": "Cultiva y valora las manifestaciones religiosas de su entorno argumentando su fe de manera comprensible y respetuosa" }
+    ]
+  },
+  "approach": "Doctrina Social de la Iglesia, diálogo ecuménico y bioética humanista",
+  "recommendedStrategies": [
+    "estudio analítico de encíclicas papales (Fratelli Tutti, Laudato Si', Caritas in Veritate)",
+    "debates sobre bioética, defensa irrestricta de la vida humana y dignidad de los marginados",
+    "coloquios sobre fe, razón, ciencia y espiritualidad en el mundo universitario",
+    "mesas interreligiosas sobre paz, desarme y reconciliación global",
+    "talleres de discernimiento vocacional laical, profesional y consagrado"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la solvencia conceptual en la aplicación de la Doctrina Social de la Iglesia a problemáticas actuales.",
+    "Valorar la solidez argumentativa en la defensa del valor trascendente de la persona y el respeto ecuménico."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "madurez doctrinal y diálogo abierto y constructivo con la cultura contemporánea",
+      "compromiso activo en la transformación social hacia estructuras más justas",
+      "defensa integral de los derechos humanos y la ecología humana y ambiental",
+      "visión esperanzadora de la vocación humana orientada a la trascendencia",
+      "respeto riguroso a la libertad de conciencia y pensamiento"
+    ],
+    "avoid": [
+      "fundamentalismos religiosos o condenación de ideas contrarias sin diálogo",
+      "separación artificial entre fe religiosa y responsabilidad social ciudadana",
+      "abordar la bioética desde el dogma ciego sin atender al rigor científico y ético",
+      "desalentar la formulación de dudas de fe o cuestionamientos sinceros de los jóvenes"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Identidad Religiosa en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

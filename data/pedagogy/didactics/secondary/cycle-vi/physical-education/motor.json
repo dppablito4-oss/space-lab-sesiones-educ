@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-physical-education-motor",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "physical-education", "officialName": "Educación Física" },
+    "competency": { "id": "moves-autonomously", "officialName": "Se desenvuelve de manera autónoma a través de su motricidad", "alias": "physical-motor" },
+    "capacities": [
+      { "id": "understands-ones-body", "officialName": "Comprende su cuerpo" },
+      { "id": "expresses-corporally", "officialName": "Se expresa corporalmente" }
+    ]
+  },
+  "approach": "Corporeidad y desarrollo motriz autónomo",
+  "recommendedStrategies": [
+    "circuitos de coordinación motriz y habilidades motrices básicas y específicas",
+    "talleres de expresión corporal, danzas folclóricas peruanas y ritmos modernos",
+    "actividades de equilibrio dinámico y estático con implementos diversos",
+    "ejercicios de respiración consciente, relajación muscular y conciencia postural",
+    "juegos de orientación espacial y temporal con desplazamientos rítmicos"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el control tónico-postural y la precisión en la ejecución motriz.",
+    "Valorar la soltura expresiva y la capacidad de comunicar emociones mediante el movimiento."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "vivencia positiva del cuerpo promoviendo una imagen corporal saludable y segura",
+      "diversidad de experiencias motrices adaptadas a las posibilidades de cada estudiante",
+      "disfrute del movimiento y la creatividad corporal",
+      "respeto irrestricto a los diferentes biotipos y ritmos de desarrollo",
+      "uso seguro de los espacios e implementos deportivos escolares"
+    ],
+    "avoid": [
+      "calificar en función a un patrón biomecánico rígido o elitista de atleta profesional",
+      "ejercicios monótonos o castigos físicos ante errores de ejecución motriz",
+      "reproducir burlas o comparaciones sobre el peso, estatura o contextura de los alumnos",
+      "excluir a estudiantes con menor destreza de las actividades rítmicas o motrices"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Motricidad en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

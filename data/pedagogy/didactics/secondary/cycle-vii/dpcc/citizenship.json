@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-dpcc-citizenship",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "dpcc", "officialName": "Desarrollo Personal, Ciudadanía y Cívica" },
+    "competency": { "id": "coexists-participates-democratically", "officialName": "Convive y participa democráticamente en la búsqueda del bien común", "alias": "citizenship" },
+    "capacities": [
+      { "id": "interacts-with-all-people", "officialName": "Interactúa con todas las personas" },
+      { "id": "builds-norms-assumes-agreements", "officialName": "Construye normas y asume acuerdos y leyes" },
+      { "id": "manages-conflicts-constructively", "officialName": "Maneja conflictos de manera constructiva" },
+      { "id": "deliberates-public-matters", "officialName": "Delibera sobre asuntos públicos" },
+      { "id": "participates-actions-common-good", "officialName": "Participa en acciones que promueven el bienestar común" }
+    ]
+  },
+  "approach": "Desarrollo personal y ciudadanía activa",
+  "recommendedStrategies": [
+    "diseño e implementación de proyectos participativos de interés público escolar o comunitario",
+    "simulaciones de sesiones parlamentarias, audiencias públicas y cabildos abiertos",
+    "análisis de jurisprudencia constitucional y sentencias emblemáticas sobre derechos fundamentales",
+    "veedurías ciudadanas juveniles y fiscalización participativa del presupuesto escolar/municipal",
+    "talleres de diálogo democrático y mediación avanzada en conflictos comunitarios"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el impacto concreto de las acciones de incidencia ciudadana desarrolladas en el proyecto participativo.",
+    "Valorar la rigurosidad conceptual y jurídica en la defensa del Estado de derecho y los derechos humanos."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "ejercicio efectivo de la ciudadanía activa y protagónica en la esfera pública",
+      "defensa irrestricta de la democracia representativa, participativa y comunitaria",
+      "argumentación jurídica y constitucional frente a abusos de poder o discriminación",
+      "construcción de consensos que articulen demandas diversas en pro del bien común",
+      "fortalecimiento del sentido de pertenencia y compromiso con la nación peruana diversa"
+    ],
+    "avoid": [
+      "partidismo político proselitista o adoctrinamiento ideológico en la deliberación escolar",
+      "limitar la participación a simulacros formales sin repercusión real en la convivencia",
+      "desalentar la crítica constructiva a las instituciones del Estado",
+      "fomentar la apatía o resignación frente a problemas estructurales de corrupción o desigualdad"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Convivencia y Participación en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

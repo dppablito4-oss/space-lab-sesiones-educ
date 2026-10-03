@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-english-oral-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" }
+  },
+  "competency": { "id": "communicates-orally-english", "officialName": "Se comunica oralmente en inglés como lengua extranjera", "alias": "english-oral" },
+  "capacities": [
+    { "id": "obtains-info-oral-english", "officialName": "Obtiene información de textos orales" },
+    { "id": "infers-interprets-oral-english", "officialName": "Infiere e interpreta información de textos orales" },
+    { "id": "adapts-organizes-oral-english", "officialName": "Adecúa, organiza y desarrolla las ideas de forma coherente y cohesionada" },
+    { "id": "uses-nonverbal-oral-english", "officialName": "Utiliza recursos no verbales y paraverbales de forma estratégica" },
+    { "id": "interacts-strategically-english", "officialName": "Interactúa estratégicamente con distintos interlocutores" },
+    { "id": "reflects-evaluates-oral-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto oral" }
+  ],
+  "standard": {
+    "description": "Se comunica oralmente mediante diversos tipos de textos en inglés. Infiere el tema, propósito, hechos y conclusiones a partir de información explícita e implícita. Expresa ideas y opiniones sobre temas variados con fluidez, coherencia y cohesión; utiliza vocabulario variado y estructuras gramaticales complejas. Interactúa estratégicamente adaptando su discurso al contexto y la intención comunicativa.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-obtain-oral-english", "description": "Recupera información específica y datos relevantes en textos orales complejos en inglés sobre temas de interés global y juvenil." },
+      { "id": "grade-3-infer-oral-english", "description": "Deduce la postura del hablante, intenciones y relaciones complejas de causa, contraste y condición en el discurso oral." },
+      { "id": "grade-3-express-oral-english", "description": "Organiza exposiciones orales breves en inglés con fluidez y entonación adecuada utilizando conectores lógicos variados (however, therefore)." },
+      { "id": "grade-3-interact-oral-english", "description": "Participa en debates y discusiones grupales en inglés defendiendo sus puntos de vista y negociando significados con sus pares." }
+    ],
+    "4": [
+      { "id": "grade-4-obtain-oral-english", "description": "Sintetiza información clave de conferencias, entrevistas y podcasts en inglés identificando argumentos principales y secundarios." },
+      { "id": "grade-4-infer-oral-english", "description": "Interpreta el sentido figurado, ironías y matices de opinión en discursos orales en inglés en contextos académicos o profesionales." },
+      { "id": "grade-4-express-oral-english", "description": "Sustenta presentaciones orales estructuradas en inglés con vocabulario técnico básico y modulación adecuada de la voz." },
+      { "id": "grade-4-interact-oral-english", "description": "Interactúa fluidamente en simulaciones de entrevistas o paneles en inglés respondiendo preguntas imprevistas con solvencia." }
+    ],
+    "5": [
+      { "id": "grade-5-obtain-oral-english", "description": "Integra información de múltiples fuentes orales en inglés evaluando la confiabilidad de los argumentos y la perspectiva de los emisores." },
+      { "id": "grade-5-infer-oral-english", "description": "Infiere conclusiones complejas y premisas implícitas en debates y foros internacionales en inglés." },
+      { "id": "grade-5-express-oral-english", "description": "Emite discursos persuasivos y ponencias en inglés con alta corrección gramatical, recursos retóricos y pronunciación natural." },
+      { "id": "grade-5-interact-oral-english", "description": "Lidera intercambios dialógicos complejos en inglés con hablantes nativos o no nativos en contextos formales y socioculturales diversos." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Inglés Ciclo VII, pp. 101-108); sujeto a revisión pedagógica."
+  }
+}

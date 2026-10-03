@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-physical-education-motor-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "physical-education", "officialName": "Educación Física" }
+  },
+  "competency": { "id": "moves-autonomously", "officialName": "Se desenvuelve de manera autónoma a través de su motricidad", "alias": "physical-motor" },
+  "capacities": [
+    { "id": "understands-ones-body", "officialName": "Comprende su cuerpo" },
+    { "id": "expresses-corporally", "officialName": "Se expresa corporalmente" }
+  ],
+  "standard": {
+    "description": "Se desenvuelve de manera autónoma a través de su motricidad cuando toma conciencia de cómo su imagen corporal contribuye a la construcción de su identidad y autoestima. Organiza su cuerpo en relación a las acciones y habilidades motrices según la práctica de actividad física que quiere desarrollar. Es autónomo al regular su frecuencia respiratoria y cardíaca al realizar actividades motrices de diferente intensidad y duración. Produce secuencias complejas de movimiento que expresan su mundo interno y emociones, con base en el ritmo y la música y utilizando diferentes materiales.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-body-motor", "description": "Organiza su cuerpo ejecutando con fluidez habilidades motrices específicas y técnicas deportivas complejas con economía de esfuerzo." },
+      { "id": "grade-3-expression-motor", "description": "Crea y dirige composiciones corporales y danzas grupales que comunican mensajes temáticos sobre identidad oproblemáticas juveniles." },
+      { "id": "grade-3-awareness-motor", "description": "Autorregula su frecuencia respiratoria y cardíaca dosificando el esfuerzo según los requerimientos de la actividad física." }
+    ],
+    "4": [
+      { "id": "grade-4-body-motor", "description": "Perfecciona patrones motrices especializados y gestos técnicos deportivos adaptándolos a situaciones de alta exigencia física y mental." },
+      { "id": "grade-4-expression-motor", "description": "Diseña proyectos escénicos corporales integrando elementos coreográficos, musicales y expresivos con alto nivel estético." },
+      { "id": "grade-4-awareness-motor", "description": "Consolida una imagen corporal armónica y asertiva que refuerza su seguridad personal y su interacción social positiva." }
+    ],
+    "5": [
+      { "id": "grade-5-body-motor", "description": "Demuestra maestría motriz y control cinestésico avanzado ejecutando actividades físicas y deportivas especializadas con precisión." },
+      { "id": "grade-5-expression-motor", "description": "Lidera montajes de expresión corporal y artística que transmiten reflexiones críticas y valores trascendentes a la comunidad escolar." },
+      { "id": "grade-5-awareness-motor", "description": "Gestiona con total autonomía su preparación física y bienestar postural incorporándolo como hábito permanente en su estilo de vida." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Física Ciclo VII, pp. 165-172); sujeto a revisión pedagógica."
+  }
+}

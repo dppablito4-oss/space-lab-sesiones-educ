@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-english-reading",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" },
+    "competency": { "id": "reads-texts-english", "officialName": "Lee diversos tipos de textos en inglés como lengua extranjera", "alias": "english-reading" },
+    "capacities": [
+      { "id": "obtains-info-written-english", "officialName": "Obtiene información del texto escrito" },
+      { "id": "infers-interprets-written-english", "officialName": "Infiere e interpreta información del texto" },
+      { "id": "reflects-evaluates-written-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+    ]
+  },
+  "approach": "Lectura crítica, analítica e intertextual en lengua extranjera",
+  "recommendedStrategies": [
+    "análisis de estructura retórica de artículos de opinión y ensayos en inglés",
+    "identificación de sesgos, falacias y posturas implícitas en fuentes periodísticas anglosajonas",
+    "lectura comparativa de dos o más fuentes en inglés sobre una misma controversia",
+    "círculos de lectura de literatura juvenil y textos de divulgación científica en inglés",
+    "fichas de síntesis y mapas de relaciones conceptuales en lengua extranjera"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la comprensión inferencial profunda y la contrastación crítica de perspectivas del autor.",
+    "Valorar la habilidad para fundamentar juicios valorativos propios sobre el texto leído."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "textos auténticos de actualidad global (cambio climático, tecnología, sociedad, cultura)",
+      "estrategias metacognitivas para abordar léxico complejo sin recurrir al diccionario constantemente",
+      "desarrollo del pensamiento crítico y la evaluación de la fiabilidad de las fuentes en inglés",
+      "intertextualidad y conexión entre literatura anglosajona y realidades locales",
+      "fomento del hábito lector autónomo en lengua extranjera"
+    ],
+    "avoid": [
+      "ejercicios de traducción literal descontextualizada como método central de lectura",
+      "fragmentación de textos en párrafos aislados que impidan captar la tesis global",
+      "evaluaciones reducidas a preguntas literales de memorización de palabras",
+      "imposición de una sola interpretación dogmática del texto analizado"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Lectura en Inglés Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

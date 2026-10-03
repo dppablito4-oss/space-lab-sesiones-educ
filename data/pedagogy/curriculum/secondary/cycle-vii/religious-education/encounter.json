@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-religious-education-encounter-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" }
+  },
+  "competency": { "id": "experiences-encounter-god", "officialName": "Asume la experiencia del encuentro personal y comunitario con Dios en su proyecto de vida en coherencia con su creencia religiosa", "alias": "religious-encounter" },
+  "capacities": [
+    { "id": "transforms-environment-faith", "officialName": "Transforma su entorno desde el encuentro personal y comunitario con Dios y desde la fe que profesa" },
+    { "id": "acts-coherently-faith", "officialName": "Actúa coherentemente en razón de su fe según los principios de su conciencia moral en situaciones concretas de la vida" }
+  ],
+  "standard": {
+    "description": "Asume la experiencia del encuentro personal y comunitario con Dios en su proyecto de vida cuando integra su fe con su vocación personal, profesional y ciudadana. Transforma su entorno familiar y comunitario a través de acciones solidarias de misericordia y promoción de la paz y la justicia social. Ejerce un testimonio de vida coherente con su conciencia ética, enfrentando con valentía los desafíos éticos del mundo contemporáneo.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-witness-encounter-religion", "description": "Integra su fe cristiana con sus metas vocacionales y profesionales, asumiendo el servicio al prójimo como eje formativo." },
+      { "id": "grade-3-solidarity-action-religion", "description": "Diseña y ejecuta proyectos pastorales y solidarios de apoyo a sectores vulnerables de su parroquia, escuela o comunidad." },
+      { "id": "grade-3-ethical-coherence-religion", "description": "Actúa con valentía moral rechazando prácticas deshonestas, la violencia y la discriminación en su vida diaria." }
+    ],
+    "4": [
+      { "id": "grade-4-witness-encounter-religion", "description": "Demuestra coherencia entre los principios del Evangelio y sus decisiones cotidianas ante dilemas de justicia social y ética profesional." },
+      { "id": "grade-4-solidarity-action-religion", "description": "Promueve redes juveniles de voluntariado y defensa de los derechos humanos y la ecología integral en su entorno regional." },
+      { "id": "grade-4-ethical-coherence-religion", "description": "Afronta con discernimiento cristiano y madurez los desafíos culturales, la secularización y las tendencias consumistas del mundo actual." }
+    ],
+    "5": [
+      { "id": "grade-5-witness-encounter-religion", "description": "Asume un liderazgo transformador y testimonial en la sociedad civil y eclesial viviendo su vocación como constructor de paz y fraternidad." },
+      { "id": "grade-5-solidarity-action-religion", "description": "Institucionaliza proyectos solidarios sostenibles que promueven el desarrollo humano integral de comunidades marginadas." },
+      { "id": "grade-5-ethical-coherence-religion", "description": "Sustenta un proyecto de vida coherente donde la fe, el conocimiento y la acción ciudadana convergen en la búsqueda del bien común." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Religiosa Ciclo VII, pp. 213-220); sujeto a revisión pedagógica."
+  }
+}

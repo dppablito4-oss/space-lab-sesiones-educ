@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-social-sciences-history",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" },
+    "competency": { "id": "constructs-historical-interpretations", "officialName": "Construye interpretaciones históricas", "alias": "history" },
+    "capacities": [
+      { "id": "critically-interprets-sources", "officialName": "Interpreta críticamente fuentes diversas" },
+      { "id": "understands-historical-time", "officialName": "Comprende el tiempo histórico" },
+      { "id": "elaborates-historical-explanations", "officialName": "Elabora explicaciones sobre procesos históricos" }
+    ]
+  },
+  "approach": "Pensamiento histórico y ciudadanía crítica",
+  "recommendedStrategies": [
+    "crítica externa e interna de fuentes historiográficas complejas y contradictorias",
+    "análisis de conceptos historiográficos abstractos (modernidad, imperialismo, fascismo, estado-nación)",
+    "ensayos argumentativos sobre controversias y debates historiográficos del siglo XIX y XX",
+    "talleres de historia oral y recuperación de memoria histórica con enfoque de derechos humanos",
+    "seminarios de investigación histórica escolar con rigor metodológico"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la solvencia para articular fuentes contrastadas y jerarquizar causas estructurales y coyunturales.",
+    "Valorar la empatía histórica (comprender las motivaciones de los protagonistas sin justificar violaciones de derechos)."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "problemas históricos abiertos y complejos que admiten múltiples interpretaciones académicas",
+      "contraste explícito de sesgos ideológicos, políticos y culturales en las fuentes consultadas",
+      "conexión analítica entre legados históricos y retos del Perú contemporáneo",
+      "promoción de la memoria, reconciliación y defensa irrestricta de la democracia",
+      "construcción de explicaciones históricas con estructura lógica y evidencia rigurosa"
+    ],
+    "avoid": [
+      "adoctrinamiento ideológico o imposición de versiones oficiales maniqueas (buenos vs. malos)",
+      "evitar temas sensibles o traumáticos de la historia reciente por temor a la controversia",
+      "relativismo epistemológico donde cualquier opinión sin sustento se considere válida",
+      "explicaciones conspirativas o simplificaciones mono-causales de procesos históricos complejos"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Historia en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

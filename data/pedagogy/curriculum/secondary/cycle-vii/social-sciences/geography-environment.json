@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-social-sciences-geography-environment-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" }
+  },
+  "competency": { "id": "manages-space-environment", "officialName": "Gestiona responsablemente el espacio y el ambiente", "alias": "geography-environment" },
+  "capacities": [
+    { "id": "understands-relations-natural-social", "officialName": "Comprende las relaciones entre los elementos naturales y sociales" },
+    { "id": "manages-information-sources-geography", "officialName": "Maneja fuentes de información para comprender el espacio geográfico y el ambiente" },
+    { "id": "generates-actions-conserve-environment", "officialName": "Genera acciones para conservar el ambiente local y global" }
+  ],
+  "standard": {
+    "description": "Gestiona responsablemente el espacio y ambiente al proponer alternativas y promover la sostenibilidad del ambiente, la mitigación y adaptación al cambio climático y la prevención de riesgo de desastre, considerando las múltiples dimensiones. Explica las diferentes formas en las que se organiza el espacio geográfico y el ambiente como resultado de las decisiones (acciones o intervención) de los actores sociales. Utiliza fuentes de información y herramientas cartográficas y digitales para representar e interpretar el espacio geográfico y el ambiente.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-actors-space-geography", "description": "Explica cómo las actividades económicas de los actores sociales configuran el espacio geográfico en las ecorregiones del Perú y el impacto ambiental de la minería, agricultura e hidrocarburos." },
+      { "id": "grade-3-gis-cartography-geography", "description": "Utiliza Sistemas de Información Geográfica (SIG), fotografías aéreas y mapas temáticos para analizar dinámicas de ordenamiento territorial y cuencas hidrográficas." },
+      { "id": "grade-3-disaster-risk-geography", "description": "Evalúa los niveles de vulnerabilidad física, social y económica ante desastres de origen hidrometeorológico y geodinámico en su región, proponiendo planes de contingencia." },
+      { "id": "grade-3-sustainable-actions-geography", "description": "Promueve proyectos ambientales escolares para la conservación de ecosistemas frágiles y la gestión sostenible de los recursos hídricos locales." }
+    ],
+    "4": [
+      { "id": "grade-4-actors-space-geography", "description": "Explica la dinámica de la urbanización descontrolada, el crecimiento demográfico y los procesos de metropolización y conurbación en el territorio peruano." },
+      { "id": "grade-4-gis-cartography-geography", "description": "Compara cartografía histórica y mapas digitales multitemporales para evidenciar la deforestación, pérdida de glaciares y desertificación en el territorio nacional." },
+      { "id": "grade-4-disaster-risk-geography", "description": "Propone políticas y estrategias de gestión prospectiva y correctiva del riesgo de desastres a nivel municipal y regional basadas en la normativa del SINAGERD." },
+      { "id": "grade-4-sustainable-actions-geography", "description": "Diseña campañas comunitarias para la reducción de la huella de carbono, el uso de energías limpias y la defensa de áreas protegidas y reservas comunales." }
+    ],
+    "5": [
+      { "id": "grade-5-actors-space-geography", "description": "Analiza los impactos geopolíticos globales de la escasez de recursos estratégicos (agua, minerales, litio, alimentos) y las tensiones fronterizas en el orden mundial." },
+      { "id": "grade-5-gis-cartography-geography", "description": "Aplica modelos geoespaciales avanzados e indicadores ambientales globales (huella hídrica, bioproductividad) para formular diagnósticos territoriales integrales." },
+      { "id": "grade-5-disaster-risk-geography", "description": "Sustenta planes de ordenamiento territorial sostenible que articulan la resiliencia urbana ante el cambio climático global y la gobernanza del suelo." },
+      { "id": "grade-5-sustainable-actions-geography", "description": "Ejerce liderazgo en iniciativas de desarrollo sostenible y justicia climática, demandando el cumplimiento de convenios internacionales (Acuerdo de París, ODS 2030)." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencias Sociales Ciclo VII, pp. 127-134); sujeto a revisión pedagógica."
+  }
+}

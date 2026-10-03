@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-science-technology-technological-solution",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" },
+    "competency": { "id": "designs-technological-solutions", "officialName": "Diseña y construye soluciones tecnológicas para resolver problemas de su entorno", "alias": "technological-solution" },
+    "capacities": [
+      { "id": "determines-technological-solution", "officialName": "Determina una alternativa de solución tecnológica" },
+      { "id": "designs-technological-solution", "officialName": "Diseña la alternativa de solución tecnológica" },
+      { "id": "implements-validates-solution", "officialName": "Implementa y valida la alternativa de solución tecnológica" },
+      { "id": "evaluates-communicates-solution", "officialName": "Evalúa y comunica el funcionamiento y los impactos de su alternativa de solución tecnológica" }
+    ]
+  },
+  "approach": "Indagación científica y alfabetización científica y tecnológica / Ingeniería y diseño",
+  "recommendedStrategies": [
+    "diseño de ingeniería integral: definición de especificaciones, modelado CAD, prototipado y validación",
+    "análisis de ciclo de vida (ACV) y balance de masa y energía del prototipo",
+    "programación y control de automatismos básicos, sensores o mecanismos eficientes",
+    "protocolos estandarizados de control de calidad, calibración y seguridad ocupacional",
+    "redacción de patentes escolares, memorias técnicas y planes de negocio social o transferencia"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la justificación técnica de la solución basada en leyes físicas, químicas o biológicas.",
+    "Valorar la eficiencia energética, la minimización de impactos ambientales negativos y la optimización iterativa del prototipo."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "desafíos tecnológicos de impacto comunitario, regional o global (energías renovables, purificación de agua, automatización agrícola)",
+      "planos y diagramas técnicos con especificaciones normalizadas, escalas y tolerancias",
+      "evaluación experimental cuantitativa de la eficiencia y durabilidad del prototipo",
+      "incorporación de principios de economía circular y sostenibilidad integral",
+      "comunicación profesional de especificaciones técnicas ante audiencias especializadas"
+    ],
+    "avoid": [
+      "soluciones cosméticas sin componentes mecánicos, químicos, biológicos o electrónicos funcionales",
+      "omitir el análisis de costo-beneficio y viabilidad económica real",
+      "falta de pruebas empíricas rigurosas que demuestren el rendimiento del prototipo",
+      "desconocer o desestimar el impacto del ciclo de vida de los materiales empleados"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Diseña Soluciones Tecnológicas en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

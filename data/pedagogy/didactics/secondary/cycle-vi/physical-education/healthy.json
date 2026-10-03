@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-physical-education-healthy",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "physical-education", "officialName": "Educación Física" },
+    "competency": { "id": "assumes-healthy-life", "officialName": "Asume una vida saludable", "alias": "physical-healthy" },
+    "capacities": [
+      { "id": "understands-relations-activity-health", "officialName": "Comprende las relaciones entre la actividad física, alimentación, postura e higiene personal y del ambiente, y la salud" },
+      { "id": "incorporates-quality-of-life-practices", "officialName": "Incorpora prácticas que mejoran su calidad de vida" }
+    ]
+  },
+  "approach": "Salud integral, bienestar físico y estilo de vida activo",
+  "recommendedStrategies": [
+    "toma de pulsaciones y registro de frecuencia cardíaca antes y después del esfuerzo",
+    "elaboración de diarios de actividad física, descanso y alimentación personal",
+    "talleres prácticos de hidratación correcta y selección de alimentos saludables",
+    "circuitos de acondicionamiento físico adaptados a la edad y condición de salud",
+    "prácticas sistemáticas de higiene corporal post-ejercicio y cuidado del agua"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la comprensión de la relación entre esfuerzo físico, hidratación y alimentación nutritiva.",
+    "Valorar la adopción habitual de rutinas de calentamiento previo y hábitos de higiene."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "hábitos de vida activa y saludable practicables en la vida diaria y familiar",
+      "autocuidado frente a lesiones, insolación y deshidratación durante la práctica",
+      "valoración de la gastronomía y productos agropecuarios saludables de la región",
+      "prevención del sedentarismo provocado por el exceso de pantallas",
+      "actitud reflexiva y responsable sobre la propia salud"
+    ],
+    "avoid": [
+      "ejercicios de esfuerzo extremo que excedan la capacidad fisiológica del estudiante",
+      "promoción de dietas restrictivas o suplementos artificiales no regulados",
+      "obviar las etapas fundamentales de calentamiento o vuelta a la calma",
+      "calificar la salud exclusivamente en base al peso corporal o la báscula"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Vida Saludable en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

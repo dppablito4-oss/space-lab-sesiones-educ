@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-science-technology-technological-solution-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" }
+  },
+  "competency": { "id": "designs-technological-solutions", "officialName": "Diseña y construye soluciones tecnológicas para resolver problemas de su entorno", "alias": "technological-solution" },
+  "capacities": [
+    { "id": "determines-technological-solution", "officialName": "Determina una alternativa de solución tecnológica" },
+    { "id": "designs-technological-solution", "officialName": "Diseña la alternativa de solución tecnológica" },
+    { "id": "implements-validates-solution", "officialName": "Implementa y valida la alternativa de solución tecnológica" },
+    { "id": "evaluates-communicates-solution", "officialName": "Evalúa y comunica el funcionamiento y los impactos de su alternativa de solución tecnológica" }
+  ],
+  "standard": {
+    "description": "Diseña y construye soluciones tecnológicas al justificar el alcance del problema tecnológico, determinar la interrelación de los factores involucrados en él y justificar su alternativa de solución basado en conocimientos científicos. Representa la alternativa de solución a través de esquemas o dibujos estructurados a escala, con vistas y perspectivas, incluyendo sus partes o etapas. Establece características de forma, estructura, función y explica el procedimiento, los recursos para implementarlas, así como las herramientas y materiales seleccionados. Verifica el funcionamiento de la solución tecnológica considerando los requerimientos, detecta imprecisiones en la construcción de la solución tecnológica y realiza ajustes o rediseña su alternativa de solución. Explica el conocimiento científico y el procedimiento aplicado, así como las dificultades del diseño y la implementación, evalúa su funcionamiento, la eficiencia y propone estrategias para mejorarlo. Infiere impactos de la solución tecnológica y elabora estrategias para reducir los impactos negativos.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-determine-solution", "description": "Fundamenta el problema tecnológico y la interrelación entre factores involucrados; justifica la viabilidad técnica y ambiental de su alternativa de solución con base en fuentes científicas." },
+      { "id": "grade-3-design-solution", "description": "Elabora planos técnicos o esquemas a escala con tolerancias y vistas; determina propiedades físicas y químicas de los materiales, presupuesto detallado y cronograma." },
+      { "id": "grade-3-implement-solution", "description": "Implementa la solución tecnológica optimizando recursos e instrumental; valida el funcionamiento de partes y mecanismos realizando ajustes de precisión." },
+      { "id": "grade-3-evaluate-solution", "description": "Determina la eficiencia de la solución tecnológica contrastando los resultados esperados con mediciones directas; sustenta optimizaciones y elabora un informe técnico." }
+    ],
+    "4": [
+      { "id": "grade-4-determine-solution", "description": "Delimita problemas sociotecnológicos complejos de su entorno; justifica la alternativa de solución sobre la base de principios científicos rigurosos y criterios de ecoeficiencia." },
+      { "id": "grade-4-design-solution", "description": "Modela la solución tecnológica con dibujos técnicos normalizados o asistidos por computadora; selecciona materiales de alto rendimiento y programa ensayos de esfuerzo." },
+      { "id": "grade-4-implement-solution", "description": "Construye el prototipo ejecutando pruebas de resistencia, estabilidad y calibración; resuelve fallas mediante rediseño iterativo y control de calidad." },
+      { "id": "grade-4-evaluate-solution", "description": "Evalúa la tasa de eficiencia, durabilidad y costo-beneficio de la solución; infiere externalidades ambientales y propone estrategias para mitigar impactos negativos." }
+    ],
+    "5": [
+      { "id": "grade-5-determine-solution", "description": "Delimita y justifica problemas estratégicos locales o regionales; formula requerimientos técnicos, normativos, de seguridad y criterios de sostenibilidad global para su solución." },
+      { "id": "grade-5-design-solution", "description": "Diseña sistemas tecnológicos integrados y modulares con memoria descriptiva, diagramas de flujo y especificaciones técnicas de interoperabilidad y durabilidad." },
+      { "id": "grade-5-implement-solution", "description": "Ensambla y pone a punto el sistema tecnológico aplicando protocolos de prueba rigurosos; optimiza componentes para maximizar la eficiencia y confiabilidad operativa." },
+      { "id": "grade-5-evaluate-solution", "description": "Evalúa el ciclo de vida del producto tecnológico, su huella ambiental y viabilidad de escalabilidad o transferencia comunitaria; divulga los resultados con rigor técnico." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencia y Tecnología Ciclo VII, pp. 229-236); sujeto a revisión pedagógica."
+  }
+}

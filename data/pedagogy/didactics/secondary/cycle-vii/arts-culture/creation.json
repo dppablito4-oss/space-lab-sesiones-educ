@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-arts-culture-creation",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" },
+    "competency": { "id": "creates-artistic-projects", "officialName": "Crea proyectos desde los lenguajes artísticos", "alias": "arts-creation" },
+    "capacities": [
+      { "id": "explores-experiments-artistic-languages", "officialName": "Explora y experimenta los lenguajes artísticos" },
+      { "id": "applies-creative-processes-arts", "officialName": "Aplica procesos creativos" },
+      { "id": "evaluates-communicates-arts-processes", "officialName": "Evalúa y comunica sus procesos y proyectos" }
+    ]
+  },
+  "approach": "Práctica artística contemporánea, investigación-creación y gestión cultural",
+  "recommendedStrategies": [
+    "proyectos de arte de sitio específico (site-specific) e intervenciones en el espacio público",
+    "producción de cortometrajes, podcasts narrativos o piezas de arte sonoro y lumínico",
+    "laboratorios de creación interdisciplinaria que combinan ciencias, humanidades y artes (STEAM)",
+    "gestión y curaduría integral de festivales artísticos, conciertos o publicaciones fanzine",
+    "redacción de manifiestos artísticos y memorias descriptivas de proyectos de autor"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la coherencia conceptual entre la intención temática y los recursos plásticos, escénicos o sonoros.",
+    "Valorar la autonomía en la resolución de problemas técnicos y la madurez reflexiva de la bitácora."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "proyectos de autor o colectivos de alta densidad conceptual y compromiso ético",
+      "hibridación fluida entre lenguajes artísticos tradicionales y entornos digitales",
+      "visión integral que incluya producción, difusión y mediación con el público",
+      "búsqueda de un lenguaje estético propio y contextualizado en la realidad juvenil",
+      "cuidado riguroso del detalle técnico y la presentación formal de la obra"
+    ],
+    "avoid": [
+      "actividades desarticuladas que no desemboquen en proyectos artísticos consolidados",
+      "limitar la creación a la repetición de modelos consagrados sin aporte personal",
+      "imponer criterios estéticos rígidos del docente sobre la visión creadora del estudiante",
+      "descuidar la seguridad física en el uso de materiales químicos, herramientas o instalaciones eléctricas"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Creación Artística en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

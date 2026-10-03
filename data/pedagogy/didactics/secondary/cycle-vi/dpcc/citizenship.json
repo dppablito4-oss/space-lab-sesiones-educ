@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-dpcc-citizenship",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "dpcc", "officialName": "Desarrollo Personal, Ciudadanía y Cívica" },
+    "competency": { "id": "coexists-participates-democratically", "officialName": "Convive y participa democráticamente en la búsqueda del bien común", "alias": "citizenship" },
+    "capacities": [
+      { "id": "interacts-with-all-people", "officialName": "Interactúa con todas las personas" },
+      { "id": "builds-norms-assumes-agreements", "officialName": "Construye normas y asume acuerdos y leyes" },
+      { "id": "manages-conflicts-constructively", "officialName": "Maneja conflictos de manera constructiva" },
+      { "id": "deliberates-public-matters", "officialName": "Delibera sobre asuntos públicos" },
+      { "id": "participates-actions-common-good", "officialName": "Participa en acciones que promueven el bienestar común" }
+    ]
+  },
+  "approach": "Desarrollo personal y ciudadanía activa",
+  "recommendedStrategies": [
+    "asambleas de aula para la concertación de acuerdos y resolución dialogada de conflictos",
+    "debates reglados sobre asuntos públicos de interés comunal y escolar",
+    "juego de roles sobre mediación escolar y empatía entre partes en conflicto",
+    "campañas de sensibilización contra el acoso escolar (bullying) y la discriminación",
+    "proyectos participativos de mejora del entorno y fomento de la solidaridad"
+  ],
+  "assessmentRecommendations": [
+    "Verificar la disposición al diálogo, la escucha empática y el cumplimiento voluntario de los acuerdos.",
+    "Evaluar el uso de argumentos sustentados en derechos y la capacidad de concertar soluciones pacíficas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "práctica democrática real en el aula y en la toma de decisiones compartidas",
+      "prevención proactiva de la violencia escolar y promoción de la no discriminación",
+      "deliberación crítica basada en fuentes fidedignas y principios de derechos humanos",
+      "valoración activa de la diversidad cultural, étnica y lingüística",
+      "participación protagónica de los estudiantes en proyectos de bien común"
+    ],
+    "avoid": [
+      "imposición autoritaria de normas sin participación ni comprensión de los estudiantes",
+      "reducir la ciudadanía a un listado memorístico de leyes o instituciones públicas",
+      "fomentar la competencia destructiva o el individualismo en dinámicas de grupo",
+      "ignorar las situaciones de conflicto latente o exclusión en el aula"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Convivencia y Participación en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

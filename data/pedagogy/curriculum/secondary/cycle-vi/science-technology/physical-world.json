@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-science-technology-physical-world-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" }
+  },
+  "competency": { "id": "explains-physical-world", "officialName": "Explica el mundo físico basándose en conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo", "alias": "physical-world" },
+  "capacities": [
+    { "id": "understands-uses-scientific-knowledge", "officialName": "Comprende y usa conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo" },
+    { "id": "evaluates-implications-science-technology", "officialName": "Evalúa las implicancias del saber y del quehacer científico y tecnológico" }
+  ],
+  "standard": {
+    "description": "Explica, con base en evidencia con respaldo científico, las relaciones cualitativas y las cuantificables entre: el campo eléctrico con la estructura del átomo, la energía con el trabajo o el movimiento, las funciones de la célula con sus requerimientos de energía y materia, la selección natural o artificial con el origen y evolución de especies, los flujos de materia y energía en la Tierra o los fenómenos meteorológicos con el funcionamiento de la biosfera. Argumenta su posición frente a las implicancias éticas, sociales y ambientales de situaciones sociocientíficas o frente a cambios en la cosmovisión suscitados por el desarrollo de la ciencia y tecnología.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-explain-matter-cell", "description": "Explica cómo las propiedades de la materia se relacionan con su estructura microscópica y cómo la célula es la unidad básica y funcional que realiza funciones vitales mediante el intercambio de materia y energía." },
+      { "id": "grade-1-explain-ecosystems", "description": "Explica cómo la energía del Sol fluye a través de las redes tróficas y cómo la materia cicla en los ecosistemas permitiendo la sostenibilidad de la vida en la biosfera." },
+      { "id": "grade-1-explain-earth-dynamics", "description": "Explica cómo la dinámica interna y externa de la Tierra (tectónica de placas, ciclo hidrológico y atmósfera) determina el relieve y los fenómenos meteorológicos." },
+      { "id": "grade-1-evaluate-impact", "description": "Fundamenta su posición respecto al impacto de las actividades humanas en los ecosistemas y argumenta sobre las implicancias sociales y ambientales del desarrollo científico y tecnológico." }
+    ],
+    "2": [
+      { "id": "grade-2-explain-motion-energy", "description": "Explica cualitativa y cuantitativamente la relación entre el trabajo mecánico, la energía cinética, potencial y el calor en sistemas físicos y térmicos con base en principios de conservación." },
+      { "id": "grade-2-explain-body-systems", "description": "Explica cómo los órganos y sistemas del cuerpo humano interactúan de forma coordinada para mantener las funciones vitales, la homeostasis y la nutrición celular." },
+      { "id": "grade-2-explain-evolution", "description": "Explica cómo la selección natural y las adaptaciones anatómicas y fisiológicas impulsan la biodiversidad y la supervivencia de las especies a lo largo del tiempo geológico." },
+      { "id": "grade-2-evaluate-socioscientific", "description": "Argumenta éticamente sobre las implicancias del uso de fuentes de energía convencionales y alternativas en la sociedad y el equilibrio ambiental." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencia y Tecnología Ciclo VI, pp. 201-206); sujeto a revisión pedagógica."
+  }
+}

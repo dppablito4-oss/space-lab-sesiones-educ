@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-dpcc-identity-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "dpcc", "officialName": "Desarrollo Personal, Ciudadanía y Cívica" }
+  },
+  "competency": { "id": "builds-identity", "officialName": "Construye su identidad", "alias": "identity" },
+  "capacities": [
+    { "id": "values-oneself", "officialName": "Se valora a sí mismo" },
+    { "id": "self-regulates-emotions", "officialName": "Autorregula sus emociones" },
+    { "id": "reflects-argues-ethically", "officialName": "Reflexiona y argumenta éticamente" },
+    { "id": "lives-sexuality-responsibly", "officialName": "Vive su sexualidad de manera integral y responsable" }
+  ],
+  "standard": {
+    "description": "Construye su identidad al tomar conciencia de los aspectos que lo hacen único, cuando se reconoce a sí mismo y valora sus identidades, sus logros y los cambios que le permiten comprender su proyecto de vida. Se reconoce como parte de un mundo globalizado y diverso. Manifiesta de manera reflexiva sus emociones, sentimientos, logros e ideas a través de diferentes formas de expresión y autorregulación, en función del bienestar propio y el de los demás. Sustenta sus decisiones con base en principios éticos, las leyes y los derechos humanos universales en situaciones de dilema moral. Manifiesta su pertenencia a diversos grupos con base en la afinidad y los proyectos comunes. Establece relaciones afectivas basadas en el respeto, el consentimiento y el cuidado mutuo. Evalúa los riesgos en su salud sexual y reproductiva proponiendo medidas de prevención y autocuidado integral.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-self-esteem-identity", "description": "Valora sus características personales, potencialidades e intereses para ir construyendo su proyecto de vida vocacional y ocupacional en un contexto cambiante." },
+      { "id": "grade-3-emotion-regulation-identity", "description": "Utiliza estrategias metacognitivas y de autorregulación para canalizar emociones complejas (frustración, ansiedad) propiciando el autocontrol y el bienestar." },
+      { "id": "grade-3-moral-dilemmas-identity", "description": "Analiza dilemas morales complejos que involucran la justicia y la solidaridad, fundamentando su postura en los derechos humanos universales." },
+      { "id": "grade-3-sexuality-care-identity", "description": "Establece vínculos afectivos basados en la equidad de género, la reciprocidad y el consentimiento, previniendo situaciones de violencia en el noviazgo." }
+    ],
+    "4": [
+      { "id": "grade-4-self-esteem-identity", "description": "Explica la influencia de la globalización, las redes sociales y la cultura de masas en la configuración de las identidades juveniles y su sentido de pertenencia." },
+      { "id": "grade-4-emotion-regulation-identity", "description": "Expresa sus convicciones, dudas y proyectos con asertividad y resiliencia frente a la presión social y los estereotipos imperantes." },
+      { "id": "grade-4-moral-dilemmas-identity", "description": "Sustenta decisiones éticas ante dilemas bioéticos y de justicia social confrontando diversas teorías morales (utilitarismo, deontología, ética del cuidado)." },
+      { "id": "grade-4-sexuality-care-identity", "description": "Evalúa críticamente los roles de género y toma decisiones responsables e informadas sobre su salud sexual y reproductiva y su proyecto familiar futuro." }
+    ],
+    "5": [
+      { "id": "grade-5-self-esteem-identity", "description": "Consolida su proyecto de vida personal, profesional y ciudadano asumiendo un compromiso ético consigo mismo, su comunidad y el país." },
+      { "id": "grade-5-emotion-regulation-identity", "description": "Demuestra madurez emocional y empatía activa para liderar iniciativas de convivencia armónica y resolución pacífica de crisis existenciales o interpersonales." },
+      { "id": "grade-5-moral-dilemmas-identity", "description": "Argumenta una posición ética autónoma y fundamentada frente a la corrupción, la discriminación estructural y la vulneración de los derechos fundamentales." },
+      { "id": "grade-5-sexuality-care-identity", "description": "Ejerce su sexualidad con madurez, libertad, responsabilidad y respeto irrestricto hacia la diversidad y la dignidad humana en toda circunstancia." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (DPCC Ciclo VII, pp. 41-48); sujeto a revisión pedagógica."
+  }
+}

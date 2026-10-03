@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-english-writing-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" }
+  },
+  "competency": { "id": "writes-texts-english", "officialName": "Escribe diversos tipos de textos en inglés como lengua extranjera", "alias": "english-writing" },
+  "capacities": [
+    { "id": "adapts-text-english", "officialName": "Adecúa el texto a la situación comunicativa" },
+    { "id": "organizes-develops-ideas-english", "officialName": "Organiza y desarrolla las ideas de forma coherente y cohesionada" },
+    { "id": "uses-written-conventions-english", "officialName": "Utiliza convenciones del lenguaje escrito de forma pertinente" },
+    { "id": "reflects-evaluates-written-text-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+  ],
+  "standard": {
+    "description": "Escribe diversos tipos de textos en inglés con vocabulario variado y estructuras sintácticas complejas. Adecúa su texto al destinatario, propósito y registro formal o informal. Organiza y desarrolla sus ideas en párrafos cohesionados mediante conectores lógicos variados. Utiliza convenciones ortográficas y gramaticales con precisión y evalúa críticamente su producción escrita para perfeccionar su estilo y eficacia comunicativa.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-adapt-writing-english", "description": "Adecúa el texto a situaciones comunicativas variadas determinando el registro y género textual (artículos breves, cartas de presentación, ensayos de opinión)." },
+      { "id": "grade-3-organize-writing-english", "description": "Escribe textos de varios párrafos organizando ideas con coherencia y conectores de causa, contraste y conclusión (moreover, although, in conclusion)." },
+      { "id": "grade-3-conventions-writing-english", "description": "Aplica tiempos verbales perfectos, oraciones condicionales y voz pasiva con precisión ortográfica y gramatical." },
+      { "id": "grade-3-reflect-writing-english", "description": "Evalúa y revisa sus textos asegurando la progresión temática, la riqueza léxica y la solidez argumentativa." }
+    ],
+    "4": [
+      { "id": "grade-4-adapt-writing-english", "description": "Produce textos académicos y profesionales en inglés (informes, abstracts, propuestas) adaptando con rigor el tono y registro a la audiencia." },
+      { "id": "grade-4-organize-writing-english", "description": "Estructura argumentos y contraargumentos en ensayos persuasivos en inglés con transiciones fluidas y cohesión textual avanzada." },
+      { "id": "grade-4-conventions-writing-english", "description": "Emplea estructuras sintácticas complejas, modales de deducción y vocabulario idiomático con corrección formal." },
+      { "id": "grade-4-reflect-writing-english", "description": "Reescribe sus textos perfeccionando el estilo retórico, la precisión terminológica y la fuerza persuasiva." }
+    ],
+    "5": [
+      { "id": "grade-5-adapt-writing-english", "description": "Redacta textos formales de alto nivel comunicativo en inglés (declaraciones personales, papers escolares, discursos) para audiencias internacionales." },
+      { "id": "grade-5-organize-writing-english", "description": "Desarrolla tesis complejas con argumentación rigurosa, evidencia documentada y conclusiones propositivas en inglés." },
+      { "id": "grade-5-conventions-writing-english", "description": "Domina convenciones avanzadas de puntuación, ortografía y sintaxis del inglés estándar internacional." },
+      { "id": "grade-5-reflect-writing-english", "description": "Evalúa críticamente el impacto y la resonancia comunicativa de su texto, garantizando originalidad y apego a normas de citación." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Inglés Ciclo VII, pp. 117-124); sujeto a revisión pedagógica."
+  }
+}

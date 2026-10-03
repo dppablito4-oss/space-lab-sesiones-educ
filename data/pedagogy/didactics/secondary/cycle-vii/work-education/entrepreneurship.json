@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-work-education-entrepreneurship",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "work-education", "officialName": "Educación para el Trabajo" },
+    "competency": { "id": "manages-entrepreneurship-projects", "officialName": "Gestiona proyectos de emprendimiento económico o social", "alias": "entrepreneurship" },
+    "capacities": [
+      { "id": "creates-value-proposals", "officialName": "Crea propuestas de valor" },
+      { "id": "applies-technical-skills", "officialName": "Aplica habilidades técnicas" },
+      { "id": "works-cooperatively-goals", "officialName": "Trabaja cooperativamente para lograr objetivos y metas" },
+      { "id": "evaluates-project-results", "officialName": "Evalúa los resultados del proyecto de emprendimiento" }
+    ]
+  },
+  "approach": "Pedagogía emprendedora, metodologías ágiles e innovación social",
+  "recommendedStrategies": [
+    "validación de hipótesis con experimentos de producto mínimo viable (MVP)",
+    "gestión de proyectos ágiles con tableros Kanban y ceremonias Scrum",
+    "estrategias de marketing digital, branding y storytelling comercial",
+    "análisis de estructura de costos, margen de contribución y punto de equilibrio",
+    "ferias de emprendimiento y rondas de inversión escolar (Shark Tank educativo)"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la capacidad de adaptación y rediseño de la propuesta de valor basada en métricas de validación.",
+    "Valorar el rigor en el costeo, el cumplimiento de estándares de calidad y la sostenibilidad del modelo."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "proyectos escalables con modelos de negocio circulares o de triple impacto (social, económico, ambiental)",
+      "integración de herramientas digitales y comercio electrónico en la propuesta",
+      "autonomía y liderazgo distributivo en la gestión de equipos multidisciplinarios",
+      "visión formal, legal y tributaria del emprendimiento en el Perú",
+      "comunicación asertiva y persuasiva para la captación de clientes y aliados"
+    ],
+    "avoid": [
+      "proyectos abstractos sin validación real con usuarios o clientes potenciales",
+      "trabajo individualista donde un solo estudiante asume la carga del proyecto",
+      "omitir el análisis financiero riguroso de costos e ingresos reales",
+      "descuidar el cumplimiento de la propiedad intelectual y el registro de marcas"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Emprendimiento en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

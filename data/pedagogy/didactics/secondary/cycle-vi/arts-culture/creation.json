@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-arts-culture-creation",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" },
+    "competency": { "id": "creates-artistic-projects", "officialName": "Crea proyectos desde los lenguajes artísticos", "alias": "arts-creation" },
+    "capacities": [
+      { "id": "explores-experiments-artistic-languages", "officialName": "Explora y experimenta los lenguajes artísticos" },
+      { "id": "applies-creative-processes-arts", "officialName": "Aplica procesos creativos" },
+      { "id": "evaluates-communicates-arts-processes", "officialName": "Evalúa y comunica sus procesos y proyectos" }
+    ]
+  },
+  "approach": "Multicultural e interdisciplinario centrado en el proceso creador y la experimentación",
+  "recommendedStrategies": [
+    "talleres de exploración sensorial con materiales reciclados, pigmentos naturales y sonidos del entorno",
+    "elaboración de bitácoras artísticas y bocetos preparatorios",
+    "técnicas de improvisación teatral y expresión corporal libre",
+    "proyectos colaborativos de muralismo o ensamblaje escultórico escolar",
+    "exposiciones colectivas de arte y muestras interdisciplinarias abiertas a la comunidad"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el proceso de indagación y toma de decisiones estéticas registrado en la bitácora.",
+    "Valorar la originalidad expresiva, el trabajo en equipo y la capacidad de comunicar un mensaje intencional."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "libertad creadora guiada donde el error forme parte del descubrimiento artístico",
+      "experimentación con múltiples lenguajes (visual, musical, escénico, audiovisual)",
+      "temáticas auténticas con sentido de pertenencia comunitaria y ambiental",
+      "uso seguro y responsable de herramientas y técnicas plásticas",
+      "socialización comunitaria de la producción artística como experiencia colectiva"
+    ],
+    "avoid": [
+      "copia mecánica de plantillas o dibujos prefabricados ('colorear sin salirse de la línea')",
+      "evaluar el talento innato en vez del desarrollo de competencias y procesos creativos",
+      "imponer una sola técnica obligatoria para todos sin permitir la exploración individual",
+      "ignorar la etapa de reflexión y autoevaluación del proceso creador"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Creación Artística en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

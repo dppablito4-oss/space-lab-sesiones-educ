@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-work-education-entrepreneurship",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "work-education", "officialName": "Educación para el Trabajo" },
+    "competency": { "id": "manages-entrepreneurship-projects", "officialName": "Gestiona proyectos de emprendimiento económico o social", "alias": "entrepreneurship" },
+    "capacities": [
+      { "id": "creates-value-proposals", "officialName": "Crea propuestas de valor" },
+      { "id": "applies-technical-skills", "officialName": "Aplica habilidades técnicas" },
+      { "id": "works-cooperatively-goals", "officialName": "Trabaja cooperativamente para lograr objetivos y metas" },
+      { "id": "evaluates-project-results", "officialName": "Evalúa los resultados del proyecto de emprendimiento" }
+    ]
+  },
+  "approach": "Pedagogía emprendedora y metodologías ágiles de diseño (Design Thinking / Lean)",
+  "recommendedStrategies": [
+    "fases del Design Thinking (empatizar, definir, idear, prototipar, testear)",
+    "lienzo Lean Canvas adaptado para la estructuración de ideas de negocio",
+    "elaboración de diagramas de flujo y diagramas de operaciones de proceso (DOP)",
+    "técnicas de role-playing y elevator pitch para la presentación de propuestas",
+    "talleres prácticos de prototipado rápido con materiales de bajo costo y ecoeficientes"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la pertinencia de la propuesta de valor frente a las necesidades reales del usuario.",
+    "Valorar la responsabilidad individual en el trabajo colaborativo y la iteración del prototipo según el feedback."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "proyectos auténticos vinculados al desarrollo productivo y social de la comunidad",
+      "enfoque en la resolución creativa de problemas centrada en el usuario",
+      "aprendizaje vivencial del trabajo cooperativo y el liderazgo horizontal",
+      "conciencia de la sostenibilidad ambiental y la ética empresarial",
+      "habilidades socioemocionales para el emprendimiento (resiliencia, iniciativa, tolerancia a la frustración)"
+    ],
+    "avoid": [
+      "trabajo manual repetitivo sin componente de propuesta de valor o diseño",
+      "imponer proyectos idénticos a toda la clase sin libertad de elección de los estudiantes",
+      "descuidar las medidas de seguridad e higiene laboral en los talleres",
+      "reducir el emprendimiento a una visión meramente mercantil sin impacto social o ético"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Emprendimiento en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

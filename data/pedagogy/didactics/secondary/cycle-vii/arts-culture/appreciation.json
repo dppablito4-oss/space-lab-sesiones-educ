@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-arts-culture-appreciation",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" },
+    "competency": { "id": "appreciates-artistic-manifestations", "officialName": "Aprecia de manera crítica manifestaciones artístico-culturales", "alias": "arts-appreciation" },
+    "capacities": [
+      { "id": "perceives-artistic-manifestations", "officialName": "Percibe manifestaciones artístico-culturales" },
+      { "id": "contextualizes-artistic-manifestations", "officialName": "Contextualiza manifestaciones artístico-culturales" },
+      { "id": "reflects-creatively-critically-arts", "officialName": "Reflexiona creativa y críticamente sobre manifestaciones artístico-culturales" }
+    ]
+  },
+  "approach": "Estética crítica, semiótica del arte y estudios culturales",
+  "recommendedStrategies": [
+    "análisis semiótico de códigos visuales, sonoros y espaciales en arte contemporáneo e instalaciones",
+    "estudio comparativo de corrientes estéticas (modernismo, vanguardias, arte conceptual, arte digital)",
+    "elaboración de ensayos y reseñas críticas de cine, teatro o exposiciones de arte",
+    "debates sobre censura, libertad de expresión y mercantilización de la cultura",
+    "investigación etnográfica escolar sobre expresiones artísticas urbanas y tradicionales"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la profundidad del análisis de los discursos ideológicos y políticos inscritos en las obras.",
+    "Valorar la fundamentación de juicios estéticos propios frente a lecturas canónicas o comerciales."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "mirada crítica y descolonizadora sobre la historia del arte y las artes populares",
+      "comprensión del arte como mediador de memoria, resistencia e interculturalidad",
+      "análisis de nuevos medios (net art, videoarte, mapping, arte sonoro)",
+      "argumentación rigurosa con terminología estética especializada",
+      "sensibilidad hacia los dilemas éticos y sociales del mundo actual reflejados en el arte"
+    ],
+    "avoid": [
+      "reducción del análisis a la mera descripción formalista sin contextualización sociopolítica",
+      "eludir obras complejas o controvertidas por temor a la discusión ética o ideológica",
+      "asumir posturas academicistas excluyentes que desvaloricen el arte contemporáneo o urbano",
+      "evaluaciones reproductivas que premien la memorización de biografías de artistas"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Apreciación Artística en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-social-sciences-history",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" },
+    "competency": { "id": "constructs-historical-interpretations", "officialName": "Construye interpretaciones históricas", "alias": "history" },
+    "capacities": [
+      { "id": "critically-interprets-sources", "officialName": "Interpreta críticamente fuentes diversas" },
+      { "id": "understands-historical-time", "officialName": "Comprende el tiempo histórico" },
+      { "id": "elaborates-historical-explanations", "officialName": "Elabora explicaciones sobre procesos históricos" }
+    ]
+  },
+  "approach": "Pensamiento histórico y ciudadanía crítica",
+  "recommendedStrategies": [
+    "contrastación de fuentes primarias y secundarias con preguntas problematizadoras",
+    "líneas de tiempo comparativas y matrices de simultaneidad cronológica",
+    "diagramas causales distinguiendo causas estructurales, coyunturales y detonantes",
+    "juego de roles y análisis de la perspectiva de actores invisibilizados",
+    "estudio de casos sobre cambios y permanencias en la vida cotidiana"
+  ],
+  "assessmentRecommendations": [
+    "Verificar la capacidad de diferenciar entre el hecho histórico y la interpretación subjetiva del autor de la fuente.",
+    "Evaluar el uso de categorías temporales precisas y la formulación de hipótesis causales argumentadas."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "preguntas retadoras sobre procesos históricos que conecten el pasado con dilemas del presente",
+      "trabajo directo con fragmentos auténticos de fuentes históricas (crónicas, cartas, vestigios materiales)",
+      "multiperspectividad y análisis de intereses contrapuestos entre sectores sociales",
+      "uso riguroso de convenciones temporales y conceptos sociopolíticos básicos",
+      "producción de textos explicativos propios en vez de meras copias informativas"
+    ],
+    "avoid": [
+      "memorización pasiva de fechas, nombres de gobernantes y batallas descontextualizadas",
+      "presentar la historia como un relato lineal, único e incuestionable",
+      "juicios anacrónicos que juzguen el pasado desde valores o tecnologías actuales sin contexto",
+      "cuestionarios de opción múltiple que no promuevan la argumentación histórica"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Historia en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

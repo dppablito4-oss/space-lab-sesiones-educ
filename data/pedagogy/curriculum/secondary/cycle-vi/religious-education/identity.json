@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-religious-education-identity-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" }
+  },
+  "competency": { "id": "builds-religious-identity", "officialName": "Construye su identidad como persona humana, amada por Dios, digna, libre y trascendente, comprendiendo la doctrina de su propia religión, abierto al diálogo con las que le son cercanas", "alias": "religious-identity" },
+  "capacities": [
+    { "id": "knows-god-assumes-identity", "officialName": "Conoce a Dios y asume su identidad religiosa y espiritual como persona digna, libre y trascendente" },
+    { "id": "cultivates-values-manifestations", "officialName": "Cultiva y valora las manifestaciones religiosas de su entorno argumentando su fe de manera comprensible y respetuosa" }
+  ],
+  "standard": {
+    "description": "Construye su identidad como persona humana, amada por Dios, digna, libre y trascendente, cuando comprende el mensaje bíblico y la revelación de Dios a través de Jesucristo. Argumenta su fe de manera comprensible y respetuosa frente a otras creencias y manifestaciones culturales y religiosas. Asume las enseñanzas cristianas en su vida cotidiana, reconociendo el plan de salvación y actuando en defensa de la dignidad humana y el bien común.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-revelation-religion", "description": "Explica la historia de la salvación en el Antiguo y Nuevo Testamento reconociendo el amor incondicional de Dios y la dignidad sagrada de la persona humana." },
+      { "id": "grade-1-dialogue-religion", "description": "Valora las tradiciones y festividades religiosas de su comunidad argumentando su fe con respeto ante personas de credos distintos." },
+      { "id": "grade-1-gospel-religion", "description": "Aplica las enseñanzas del Evangelio y las Bienaventuranzas en sus relaciones cotidianas promoviendo el perdón y la solidaridad." }
+    ],
+    "2": [
+      { "id": "grade-2-revelation-religion", "description": "Comprende la misión de Jesucristo y el nacimiento de la Iglesia fundamentando su fe en la lectura orante de las Sagradas Escrituras." },
+      { "id": "grade-2-dialogue-religion", "description": "Promueve el diálogo ecuménico e interreligioso reconociendo valores éticos compartidos orientados a la paz y el bien común." },
+      { "id": "grade-2-gospel-religion", "description": "Argumenta la importancia de la oración y los sacramentos en el crecimiento espiritual y la defensa de la vida humana." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Religiosa Ciclo VI, pp. 189-196); sujeto a revisión pedagógica."
+  }
+}

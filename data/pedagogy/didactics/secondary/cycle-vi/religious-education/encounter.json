@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-religious-education-encounter",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" },
+    "competency": { "id": "experiences-encounter-god", "officialName": "Asume la experiencia del encuentro personal y comunitario con Dios en su proyecto de vida en coherencia con su creencia religiosa", "alias": "religious-encounter" },
+    "capacities": [
+      { "id": "transforms-environment-faith", "officialName": "Transforma su entorno desde el encuentro personal y comunitario con Dios y desde la fe que profesa" },
+      { "id": "acts-coherently-faith", "officialName": "Actúa coherentemente en razón de su fe según los principios de su conciencia moral en situaciones concretas de la vida" }
+    ]
+  },
+  "approach": "Humanista cristiano, testimonial y de ecología integral",
+  "recommendedStrategies": [
+    "proyectos de servicio solidario y visitas de apoyo a comedores o asilos locales",
+    "campañas escolares para el cuidado de la creación inspiradas en la encíclica Laudato Si'",
+    "celebraciones litúrgicas participativas y paraliturgias comunitarias",
+    "análisis de testimonios de vida de santos, beatos y líderes de paz",
+    "dinámicas de discernimiento y examen de conciencia sobre las acciones cotidianas"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el compromiso personal en acciones concretas de solidaridad y cuidado ambiental.",
+    "Valorar la coherencia ética entre los valores de fe expresados y las actitudes de convivencia en el aula."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "la fe traducida en obras de misericordia, justicia y solidaridad comunitaria",
+      "promoción activa del cuidado de la casa común y la fraternidad universal",
+      "acompañamiento pastoral empático y respetuoso de la interioridad del estudiante",
+      "testimonio personal de honestidad, empatía y perdón",
+      "vinculación entre proyecto de vida personal y vocación de servicio al prójimo"
+    ],
+    "avoid": [
+      "reducir la fe a rituales formales vacíos desvinculados de la justicia social",
+      "imponer tareas de voluntariado de forma coactiva o punitiva",
+      "juzgar o etiquetar moralmente a los estudiantes por sus errores personales",
+      "desvincular la espiritualidad del compromiso con la realidad social del país"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Encuentro con Dios en Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

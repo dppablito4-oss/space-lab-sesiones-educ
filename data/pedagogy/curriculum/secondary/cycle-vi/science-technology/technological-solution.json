@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-science-technology-technological-solution-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" }
+  },
+  "competency": { "id": "designs-technological-solutions", "officialName": "Diseña y construye soluciones tecnológicas para resolver problemas de su entorno", "alias": "technological-solution" },
+  "capacities": [
+    { "id": "determines-technological-solution", "officialName": "Determina una alternativa de solución tecnológica" },
+    { "id": "designs-technological-solution", "officialName": "Diseña la alternativa de solución tecnológica" },
+    { "id": "implements-validates-solution", "officialName": "Implementa y valida la alternativa de solución tecnológica" },
+    { "id": "evaluates-communicates-solution", "officialName": "Evalúa y comunica el funcionamiento y los impactos de su alternativa de solución tecnológica" }
+  ],
+  "standard": {
+    "description": "Diseña y construye soluciones tecnológicas al delimitar el alcance del problema tecnológico y las causas que lo generan, y proponer alternativas de solución basado en conocimientos científicos. Representa la alternativa de solución, a través de esquemas o dibujos estructurados a escala, con vistas y perspectivas, incluyendo sus partes o etapas. Establece características de forma, estructura, función y explica el procedimiento, los recursos para implementarlas, así como las herramientas y materiales seleccionados. Verifica el funcionamiento de la solución tecnológica considerando los requerimientos, detecta imprecisiones en las dimensiones y omisiones en la selección de materiales, y realiza ajustes. Explica el procedimiento, conocimiento científico aplicado, así como las dificultades en el diseño y la implementación, evalúa el alcance de su funcionamiento a través de pruebas considerando los requerimientos establecidos y propone mejoras. Infiere impactos de la solución tecnológica.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-determine-solution", "description": "Describe el problema tecnológico y sus causas. Explica su alternativa de solución tecnológica sobre la base de conocimientos científicos o prácticas locales; da a conocer los requerimientos y recursos disponibles." },
+      { "id": "grade-1-design-solution", "description": "Representa su alternativa de solución con dibujos estructurados a escala. Describe sus partes o etapas, la secuencia de pasos, características y función; selecciona materiales, herramientas y prevé costos y tiempo." },
+      { "id": "grade-1-implement-solution", "description": "Ejecuta la secuencia de pasos manipulando materiales y herramientas con normas de seguridad. Verifica el funcionamiento de cada etapa, detecta errores y realiza ajustes pertinentes." },
+      { "id": "grade-1-evaluate-solution", "description": "Comprueba el funcionamiento de su solución tecnológica según los requerimientos establecidos y propone mejoras; explica el conocimiento científico aplicado y determina sus impactos ambientales y sociales." }
+    ],
+    "2": [
+      { "id": "grade-2-determine-solution", "description": "Delimita el alcance del problema tecnológico analizando causas y efectos. Justifica su propuesta con conocimientos científicos o prácticas locales; establece requerimientos de eficiencia y limitaciones de recursos." },
+      { "id": "grade-2-design-solution", "description": "Representa su alternativa de solución con esquemas a escala incluyendo vistas y perspectivas. Detalla partes, materiales, costos y cronograma; selecciona herramientas considerando ecoeficiencia y seguridad." },
+      { "id": "grade-2-implement-solution", "description": "Construye la alternativa de solución ensamblando sus partes. Realiza pruebas para verificar el cumplimiento de requerimientos y efectúa calibraciones o ajustes ante fallas detectadas." },
+      { "id": "grade-2-evaluate-solution", "description": "Evalúa el funcionamiento mediante pruebas y mediciones cuantitativas. Explica el conocimiento aplicado y dificultades superadas; propone mejoras y evalúa la reducción de impactos negativos en el entorno." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencia y Tecnología Ciclo VI, pp. 207-212); sujeto a revisión pedagógica."
+  }
+}

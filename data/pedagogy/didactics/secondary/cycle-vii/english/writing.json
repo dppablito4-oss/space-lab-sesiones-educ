@@ -1,0 +1,49 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-english-writing",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" },
+    "competency": { "id": "writes-texts-english", "officialName": "Escribe diversos tipos de textos en inglés como lengua extranjera", "alias": "english-writing" },
+    "capacities": [
+      { "id": "adapts-text-english", "officialName": "Adecúa el texto a la situación comunicativa" },
+      { "id": "organizes-develops-ideas-english", "officialName": "Organiza y desarrolla las ideas de forma coherente y cohesionada" },
+      { "id": "uses-written-conventions-english", "officialName": "Utiliza convenciones del lenguaje escrito de forma pertinente" },
+      { "id": "reflects-evaluates-written-text-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+    ]
+  },
+  "approach": "Escritura académica, persuasiva y de proceso en lengua extranjera (Academic Writing)",
+  "recommendedStrategies": [
+    "escritura de ensayos de cinco párrafos (introducción con tesis, desarrollo y conclusión)",
+    "uso sistemático de organizadores gráficos para planificar argumentos y contraargumentos",
+    "talleres de edición y corrección de estilo (proofreading y peer editing)",
+    "análisis de conectores avanzados de transición y marcadores del discurso",
+    "publicación de artículos, blogs o cartas de opinión dirigidas a comunidades internacionales"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la solidez de la tesis, la consistencia de los argumentos y la riqueza del vocabulario académico.",
+    "Valorar la precisión sintáctica, ortográfica y la capacidad de autorrevisión crítica del texto."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "géneros textuales académicos y de opinión auténticos (essays, cover letters, reviews, abstracts)",
+      "estructuración lógica de párrafos con oraciones temáticas (topic sentences) y evidencia de respaldo",
+      "precisión en el uso de modales, voz pasiva y oraciones subordinadas complejas",
+      "respeto a las normas éticas de citación y prevención del plagio",
+      "desarrollo de una voz propia y convincente en lengua inglesa"
+    ],
+    "avoid": [
+      "ejercicios de traducción descontextualizada del español al inglés",
+      "redacción libre sin planificación previa ni esquema organizativo",
+      "corrección superficial que solo atienda a la ortografía ignorando la coherencia global",
+      "proponer temas irrelevantes o desvinculados de los intereses académicos de los estudiantes"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Escritura en Inglés Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

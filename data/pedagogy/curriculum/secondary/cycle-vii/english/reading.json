@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-english-reading-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" }
+  },
+  "competency": { "id": "reads-texts-english", "officialName": "Lee diversos tipos de textos en inglés como lengua extranjera", "alias": "english-reading" },
+  "capacities": [
+    { "id": "obtains-info-written-english", "officialName": "Obtiene información del texto escrito" },
+    { "id": "infers-interprets-written-english", "officialName": "Infiere e interpreta información del texto" },
+    { "id": "reflects-evaluates-written-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+  ],
+  "standard": {
+    "description": "Lee diversos tipos de texto en inglés con vocabulario variado y estructuras sintácticas complejas. Integra información contrapuesta ubicada en distintas partes del texto. Interpreta el sentido global construyendo conclusiones sustentadas y evaluando la validez de los argumentos y la intención del autor desde una perspectiva crítica.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-obtain-reading-english", "description": "Localiza información explícita y detalles secundarios en artículos de divulgación, noticias y ensayos breves en inglés." },
+      { "id": "grade-3-infer-reading-english", "description": "Deduce la tesis del autor, argumentos a favor o en contra y el significado de vocabulario especializado por contexto." },
+      { "id": "grade-3-reflect-reading-english", "description": "Emite juicios críticos sobre el contenido y la intención del autor comparando el texto con sus conocimientos previos." }
+    ],
+    "4": [
+      { "id": "grade-4-obtain-reading-english", "description": "Sintetiza información relevante de textos auténticos complejos en inglés (artículos científicos escolares, reportes, literatura juvenil)." },
+      { "id": "grade-4-infer-reading-english", "description": "Infiere sesgos, posturas implícitas y relaciones intertextuales complejas en artículos de opinión y editoriales en inglés." },
+      { "id": "grade-4-reflect-reading-english", "description": "Evalúa la eficacia de la argumentación, el estilo retórico y la pertinencia de las fuentes citadas en el texto escrito." }
+    ],
+    "5": [
+      { "id": "grade-5-obtain-reading-english", "description": "Integra información de múltiples textos académicos y literarios en inglés contrastando tesis divergentes sobre un mismo tema." },
+      { "id": "grade-5-infer-reading-english", "description": "Interpreta sutilezas estilísticas, metáforas culturales y supuestos ideológicos en ensayos críticos y papers en inglés." },
+      { "id": "grade-5-reflect-reading-english", "description": "Sustenta una postura fundamentada sobre la vigencia del mensaje del texto y su impacto en debates globales contemporáneos." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Inglés Ciclo VII, pp. 109-116); sujeto a revisión pedagógica."
+  }
+}

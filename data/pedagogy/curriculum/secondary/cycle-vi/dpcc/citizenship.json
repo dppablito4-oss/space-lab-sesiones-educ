@@ -1,0 +1,44 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-dpcc-citizenship-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "dpcc", "officialName": "Desarrollo Personal, Ciudadanía y Cívica" }
+  },
+  "competency": { "id": "coexists-participates-democratically", "officialName": "Convive y participa democráticamente en la búsqueda del bien común", "alias": "citizenship" },
+  "capacities": [
+    { "id": "interacts-with-all-people", "officialName": "Interactúa con todas las personas" },
+    { "id": "builds-norms-assumes-agreements", "officialName": "Construye normas y asume acuerdos y leyes" },
+    { "id": "manages-conflicts-constructively", "officialName": "Maneja conflictos de manera constructiva" },
+    { "id": "deliberates-public-matters", "officialName": "Delibera sobre asuntos públicos" },
+    { "id": "participates-actions-common-good", "officialName": "Participa en acciones que promueven el bienestar común" }
+  ],
+  "standard": {
+    "description": "Convive y participa democráticamente cuando se relaciona con los demás, respetando las diferencias y los derechos de cada uno, cumpliendo sus deberes y buscando que otros también las cumplan. Se relaciona con personas de culturas distintas, respetando sus costumbres. Construye y evalúa de manera colectiva las normas de convivencia en el aula y en la escuela con base en principios democráticos. Ejerce el rol de mediador en su grupo haciendo uso de la negociación y el diálogo para el manejo de conflictos. Propone, planifica y ejecuta acciones de manera cooperativa, dirigidas a promover el bien común, la defensa de sus derechos y el cumplimiento de sus deberes como miembro de una comunidad. Delibera sobre asuntos públicos con argumentos basados en fuentes confiables, los principios democráticos y la institucionalidad, y aporta a la construcción de consensos que contribuyan al bien común.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-interact-citizenship", "description": "Establece relaciones basadas en el respeto, la tolerancia hacia las diferencias culturales y rechaza todo tipo de discriminación o exclusión en el aula." },
+      { "id": "grade-1-norms-citizenship", "description": "Participa en la elaboración consensuada de acuerdos y normas de convivencia escolar evaluando su cumplimiento y pertinencia para el bien común." },
+      { "id": "grade-1-conflicts-citizenship", "description": "Aplica mecanismos de diálogo y escucha activa para resolver desacuerdos interpersonales sin recurrir a la agresión física o verbal." },
+      { "id": "grade-1-deliberate-citizenship", "description": "Delibera sobre asuntos públicos de su escuela o localidad basándose en fuentes confiables y formula propuestas viables de solución." },
+      { "id": "grade-1-participate-citizenship", "description": "Participa en proyectos cooperativos orientados a la mejora del entorno escolar y la defensa de los derechos de la infancia y adolescencia." }
+    ],
+    "2": [
+      { "id": "grade-2-interact-citizenship", "description": "Promueve el diálogo intercultural y la valoración de la diversidad étnica y lingüística en la escuela como fuente de enriquecimiento mutuo." },
+      { "id": "grade-2-norms-citizenship", "description": "Explica la importancia de la Constitución Política y las leyes para la vida democrática y evalúa el cumplimiento de los reglamentos escolares." },
+      { "id": "grade-2-conflicts-citizenship", "description": "Actúa como mediador en conflictos escolares promoviendo la empatía, el reconocimiento de responsabilidades y la reconciliación entre pares." },
+      { "id": "grade-2-deliberate-citizenship", "description": "Sustenta su posición sobre problemas que afectan a la comunidad (inseguridad, discriminación) contrastando diversas opiniones y construyendo consensos." },
+      { "id": "grade-2-participate-citizenship", "description": "Organiza y lidera acciones solidarias y de voluntariado escolar que defienden los derechos humanos y el cuidado de los espacios públicos." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (DPCC Ciclo VI, pp. 33-40); sujeto a revisión pedagógica."
+  }
+}

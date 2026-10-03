@@ -1,0 +1,41 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-english-writing-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" }
+  },
+  "competency": { "id": "writes-texts-english", "officialName": "Escribe diversos tipos de textos en inglés como lengua extranjera", "alias": "english-writing" },
+  "capacities": [
+    { "id": "adapts-text-english", "officialName": "Adecúa el texto a la situación comunicativa" },
+    { "id": "organizes-develops-ideas-english", "officialName": "Organiza y desarrolla las ideas de forma coherente y cohesionada" },
+    { "id": "uses-written-conventions-english", "officialName": "Utiliza convenciones del lenguaje escrito de forma pertinente" },
+    { "id": "reflects-evaluates-written-text-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+  ],
+  "standard": {
+    "description": "Escribe diversos tipos de textos en inglés de estructura simple y mediana extensión. Adecúa su texto al destinatario, propósito y registro. Organiza y desarrolla sus ideas en oraciones y párrafos breves cohesionados con conectores básicos. Emplea convenciones gramaticales y ortográficas básicas y reflexiona sobre el contenido de su texto para mejorarlo.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-adapt-writing-english", "description": "Adecúa el texto a la situación comunicativa considerando el propósito, formato sencillo y destinatario en textos breves (postales, mensajes, perfiles)." },
+      { "id": "grade-1-organize-writing-english", "description": "Produce oraciones breves y coherentes vinculadas por conectores básicos (and, but) sobre rutinas, gustos y descripciones personales." },
+      { "id": "grade-1-conventions-writing-english", "description": "Utiliza convenciones ortográficas básicas (mayúsculas, punto final) y estructuras gramaticales elementales del presente simple." },
+      { "id": "grade-1-reflect-writing-english", "description": "Revisa su texto con apoyo del docente o pares para corregir errores ortográficos y asegurar la claridad del mensaje." }
+    ],
+    "2": [
+      { "id": "grade-2-adapt-writing-english", "description": "Adecúa el texto a la situación comunicativa formal o informal según el destinatario, propósito y tipo textual (anécdotas, correos, descripciones)." },
+      { "id": "grade-2-organize-writing-english", "description": "Desarrolla párrafos articulados utilizando conectores de secuencia y causa (first, then, because, so) evitando digresiones." },
+      { "id": "grade-2-conventions-writing-english", "description": "Emplea estructuras gramaticales de tiempo pasado, presente continuo y vocabulario variado con ortografía correcta." },
+      { "id": "grade-2-reflect-writing-english", "description": "Evalúa y reescribe su texto verificando la coherencia, cohesión y adecuación al propósito comunicativo establecido." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Inglés Ciclo VI, pp. 95-100); sujeto a revisión pedagógica."
+  }
+}

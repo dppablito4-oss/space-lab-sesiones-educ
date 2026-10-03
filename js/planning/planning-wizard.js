@@ -442,7 +442,7 @@ const PlanningWizard = (() => {
                     <div class="planning-field planning-competency-select">
                         <label for="planning-competency"><span>Competencia curricular</span></label>
                         <select id="planning-competency" data-planning-action="competency" aria-label="Competencia curricular">
-                            ${['mathematics', 'communication'].map(areaId => {
+                            ${[...new Set(['mathematics', 'communication', 'science-technology', 'social-sciences', 'dpcc', ...availableCurricula.map(p => p.scope.area.id)])].map(areaId => {
                                 const areaCurricula = availableCurricula.filter(p => p.scope.area.id === areaId);
                                 if (!areaCurricula.length) return '';
                                 const areaName = areaCurricula[0].scope.area.officialName;

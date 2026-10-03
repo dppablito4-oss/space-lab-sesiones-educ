@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-social-sciences-history-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" }
+  },
+  "competency": { "id": "constructs-historical-interpretations", "officialName": "Construye interpretaciones históricas", "alias": "history" },
+  "capacities": [
+    { "id": "critically-interprets-sources", "officialName": "Interpreta críticamente fuentes diversas" },
+    { "id": "understands-historical-time", "officialName": "Comprende el tiempo histórico" },
+    { "id": "elaborates-historical-explanations", "officialName": "Elabora explicaciones sobre procesos históricos" }
+  ],
+  "standard": {
+    "description": "Construye interpretaciones históricas sobre la base de los problemas históricos del Perú y el mundo en relación a los grandes cambios, permanencias y simultaneidades a lo largo de la historia, empleando conceptos sociales, políticos y económicos abstractos y complejos. Jerarquiza múltiples causas y consecuencias de los hechos o procesos históricos. Establece relaciones entre esos procesos históricos y situaciones o procesos actuales. Explica cómo las acciones humanas, individuales o grupales van configurando el pasado y el presente y pueden configurar el futuro. Explica la perspectiva de los protagonistas, relacionando sus acciones con sus motivaciones. Contrasta diversas interpretaciones del pasado, a partir de distintas fuentes evaluadas en su contexto y perspectiva. Reconoce la validez de las fuentes para comprender puntos de vista.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-interpret-sources-history", "description": "Contrasta las interpretaciones que se presentan en diversas fuentes históricas sobre las reformas borbónicas, las rebeliones indígenas y los inicios de la República peruana." },
+      { "id": "grade-3-historical-time-history", "description": "Explica los cambios, las permanencias y las relaciones de simultaneidad entre la Ilustración, las revoluciones liberales atlánticas y las guerras de independencia hispanoamericanas." },
+      { "id": "grade-3-explain-causes-history", "description": "Jerarquiza múltiples causas y consecuencias de la crisis del orden colonial y la independencia del Perú, distinguiendo causas estructurales de coyunturales." },
+      { "id": "grade-3-perspective-history", "description": "Explica la perspectiva de los actores sociales (criollos, indígenas, afrodescendientes y mujeres) y sus motivaciones en el proceso emancipador." }
+    ],
+    "4": [
+      { "id": "grade-4-interpret-sources-history", "description": "Analiza críticamente fuentes historiográficas primarias y secundarias sobre la era del guano, la Guerra del Pacífico y el proceso de reconstrucción nacional peruana." },
+      { "id": "grade-4-historical-time-history", "description": "Relaciona procesos históricos globales (la Revolución Industrial, el imperialismo del siglo XIX) con la inserción económica y política del Perú en el mercado mundial." },
+      { "id": "grade-4-explain-causes-history", "description": "Explica cómo las crisis políticas y las decisiones de las élites republicanas configuraron las consecuencias territoriales, sociales y financieras de los conflictos bélicos." },
+      { "id": "grade-4-perspective-history", "description": "Evalúa el papel de los diversos sectores sociales en la formación de la identidad nacional y los debates sobre ciudadanía durante la República Aristocrática." }
+    ],
+    "5": [
+      { "id": "grade-5-interpret-sources-history", "description": "Evalúa la fiabilidad, intencionalidad y contexto de producción de fuentes sobre las guerras mundiales, la Guerra Fría, las dictaduras latinoamericanas y el conflicto armado interno en el Perú." },
+      { "id": "grade-5-historical-time-history", "description": "Analiza las continuidades y rupturas entre los procesos sociopolíticos del siglo XX y los desafíos democráticos, económicos y de derechos humanos del Perú y el mundo contemporáneo." },
+      { "id": "grade-5-explain-causes-history", "description": "Formula explicaciones históricas rigurosas sobre las causas multidimensionales de las crisis de gobernabilidad, migraciones internas y transformaciones culturales del Perú contemporáneo." },
+      { "id": "grade-5-perspective-history", "description": "Sustenta una postura crítica informada sobre la memoria histórica, la justicia transicional y la construcción de una ciudadanía intercultural y democrática hacia el futuro." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencias Sociales Ciclo VII, pp. 119-126); sujeto a revisión pedagógica."
+  }
+}

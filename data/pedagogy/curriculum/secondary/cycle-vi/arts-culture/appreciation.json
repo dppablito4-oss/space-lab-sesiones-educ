@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-arts-culture-appreciation-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "arts-culture", "officialName": "Arte y Cultura" }
+  },
+  "competency": { "id": "appreciates-artistic-manifestations", "officialName": "Aprecia de manera crítica manifestaciones artístico-culturales", "alias": "arts-appreciation" },
+  "capacities": [
+    { "id": "perceives-artistic-manifestations", "officialName": "Percibe manifestaciones artístico-culturales" },
+    { "id": "contextualizes-artistic-manifestations", "officialName": "Contextualiza manifestaciones artístico-culturales" },
+    { "id": "reflects-creatively-critically-arts", "officialName": "Reflexiona creativa y críticamente sobre manifestaciones artístico-culturales" }
+  ],
+  "standard": {
+    "description": "Aprecia de manera crítica manifestaciones artístico-culturales cuando describe las características fundamentales de los diversos lenguajes del arte y las culturas que los producen, y las asocia a experiencias, mensajes, emociones e ideas, siendo consciente de que generan diferentes reacciones e interpretaciones en las personas. Investiga las creencias, cosmovisiones, tradiciones y la función social de manifestaciones artístico-culturales de diversos tiempos y lugares y distingue las diferentes maneras en que se usa el arte para representar y reflejar la identidad de un grupo de personas. Integra la información recogida para describir la complejidad y la riqueza de la obra, así como para generar hipótesis sobre el significado y la intención del artista y emite una opinión valorativa sobre ella.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-perceive-arts", "description": "Describe las cualidades estéticas (líneas, colores, texturas, armonías, ritmos, movimientos) en obras de arte visual, música, teatro y danza de su comunidad y región." },
+      { "id": "grade-1-context-arts", "description": "Explora el contexto cultural y social en el que se originaron manifestaciones artísticas tradicionales peruanas reconociendo su función social." },
+      { "id": "grade-1-reflect-arts", "description": "Emite opiniones fundamentadas sobre los mensajes y emociones que transmiten las obras artísticas analizadas, reconociendo diversas interpretaciones." }
+    ],
+    "2": [
+      { "id": "grade-2-perceive-arts", "description": "Compara las formas en que diferentes lenguajes artísticos utilizan elementos visuales, sonoros o corporales para comunicar ideas y sensaciones complejas." },
+      { "id": "grade-2-context-arts", "description": "Investiga los cambios y permanencias en las expresiones artísticas tradicionales y contemporáneas a partir de testimonios orales y fuentes documentales." },
+      { "id": "grade-2-reflect-arts", "description": "Sustenta una postura estética personal frente al significado de manifestaciones artístico-culturales de su entorno evaluando su impacto en la identidad comunal." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Arte y Cultura Ciclo VI, pp. 57-64); sujeto a revisión pedagógica."
+  }
+}

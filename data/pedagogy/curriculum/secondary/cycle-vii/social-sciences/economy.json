@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-social-sciences-economy-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" }
+  },
+  "competency": { "id": "manages-economic-resources", "officialName": "Gestiona responsablemente los recursos económicos", "alias": "economy" },
+  "capacities": [
+    { "id": "understands-economic-financial-system", "officialName": "Comprende el funcionamiento del sistema económico y financiero" },
+    { "id": "takes-economic-financial-decisions", "officialName": "Toma decisiones económicas y financieras" }
+  ],
+  "standard": {
+    "description": "Gestiona responsablemente los recursos económicos al promover el ahorro y la inversión de los recursos considerando sus objetivos, riesgos y oportunidades. Asume una posición crítica frente a las actividades económicas y financieras ilícitas e informales, prácticas de producción y consumo que deterioran el ambiente y afectan los derechos humanos, el incumplimiento de las responsabilidades tributarias y de las decisiones financieras que no consideran un fin previsional. Analiza las interrelaciones entre los agentes del sistema económico y financiero global teniendo en cuenta el mercado y el comercio mundial. Explica el rol del Estado como agente regulador del mercado y el impacto de las políticas económicas en la vida de las personas.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-financial-system-economy", "description": "Explica el rol del Banco Central de Reserva (BCRP), la Superintendencia de Banca y Seguros (SBS) y el sistema tributario (SUNAT) en la estabilidad macroeconómica del Perú." },
+      { "id": "grade-3-investment-risk-economy", "description": "Analiza las opciones de ahorro previsional y planes de inversión formal, calculando rentabilidades nominales y reales frente a la inflación." },
+      { "id": "grade-3-critical-consumption-economy", "description": "Asume una postura crítica frente a la publicidad engañosa, los monopolios u oligopolios y promueve el cumplimiento de los deberes tributarios para financiar servicios públicos." },
+      { "id": "grade-3-informality-risks-economy", "description": "Explica los riesgos de la economía informal y las finanzas ilegales en la seguridad ciudadana y el crecimiento económico del país." }
+    ],
+    "4": [
+      { "id": "grade-4-financial-system-economy", "description": "Analiza cómo la balanza comercial, los tipos de cambio y los tratados de libre comercio (TLC) impactan en el empleo, la producción y el consumo nacional." },
+      { "id": "grade-4-investment-risk-economy", "description": "Diseña un portafolio de inversión diversificado considerando perfiles de riesgo, horizontes temporales y fondos mutuos o previsionales de retiro." },
+      { "id": "grade-4-critical-consumption-economy", "description": "Denuncia prácticas empresariales abusivas que vulneran los derechos laborales o ambientales amparándose en los organismos reguladores (INDECOPI, OEFA)." },
+      { "id": "grade-4-informality-risks-economy", "description": "Argumenta sobre el impacto de la evasión tributaria y el contrabando en la brecha de infraestructura y desigualdad social en el Perú." }
+    ],
+    "5": [
+      { "id": "grade-5-financial-system-economy", "description": "Evalúa críticamente las políticas monetarias y fiscales del Estado, la deuda externa y la influencia de organismos multilaterales (FMI, Banco Mundial, OMC) en las economías emergentes." },
+      { "id": "grade-5-investment-risk-economy", "description": "Formula planes financieros estratégicos a largo plazo considerando proyecciones macroeconómicas globales, riesgos de mercado y fondos previsionales para la vejez." },
+      { "id": "grade-5-critical-consumption-economy", "description": "Sustenta decisiones éticas de producción y consumo bajo principios de economía circular, finanzas verdes y responsabilidad social empresarial." },
+      { "id": "grade-5-informality-risks-economy", "description": "Propone soluciones de política pública para incentivar la formalización laboral y empresarial, la inclusión financiera y la equidad redistributiva." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencias Sociales Ciclo VII, pp. 135-142); sujeto a revisión pedagógica."
+  }
+}

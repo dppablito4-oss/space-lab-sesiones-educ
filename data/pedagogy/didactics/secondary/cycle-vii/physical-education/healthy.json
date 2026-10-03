@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-physical-education-healthy",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "physical-education", "officialName": "Educación Física" },
+    "competency": { "id": "assumes-healthy-life", "officialName": "Asume una vida saludable", "alias": "physical-healthy" },
+    "capacities": [
+      { "id": "understands-relations-activity-health", "officialName": "Comprende las relaciones entre la actividad física, alimentación, postura e higiene personal y del ambiente, y la salud" },
+      { "id": "incorporates-quality-of-life-practices", "officialName": "Incorpora prácticas que mejoran su calidad de vida" }
+    ]
+  },
+  "approach": "Estilo de vida activo sostenible, fisiología del ejercicio y salud comunitaria",
+  "recommendedStrategies": [
+    "cálculo de gasto energético basal y total con tablas nutricionales y aplicaciones móviles",
+    "planes de entrenamiento individualizados orientados a la salud cardiovascular y muscular",
+    "campañas de sensibilización juvenil sobre riesgos del dopaje, vigorexia y alcoholismo",
+    "talleres de primeros auxilios deportivos y protocolos de reanimación básica (RCP)",
+    "organización de caminatas ecológicas y actividades físicas en contacto con la naturaleza"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el diseño y seguimiento coherente de un plan personal de actividad física y alimentación.",
+    "Valorar el compromiso activo en la promoción de entornos saludables en la escuela y comunidad."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "comprensión científica de los procesos metabólicos y fisiológicos del ejercicio",
+      "visión preventiva de enfermedades crónicas no transmisibles (obesidad, diabetes, hipertensión)",
+      "promoción de dietas balanceadas basadas en la biodiversidad alimentaria peruana",
+      "autonomía para gestionar el entrenamiento personal a lo largo de toda la vida",
+      "respeto y preservación de los entornos naturales para la práctica del ejercicio"
+    ],
+    "avoid": [
+      "promover suplementos dietéticos o quemadores de grasa sin prescripción médica",
+      "ejercicios desmedidos sin la debida hidratación o en horas de alta radiación solar",
+      "culpabilizar a los estudiantes por condiciones de salud asociadas a factores genéticos o socioeconómicos",
+      "desvincular la salud física de la salud mental y el bienestar emocional"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Vida Saludable en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

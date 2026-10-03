@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-social-sciences-geography-environment-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" }
+  },
+  "competency": { "id": "manages-space-environment", "officialName": "Gestiona responsablemente el espacio y el ambiente", "alias": "geography-environment" },
+  "capacities": [
+    { "id": "understands-relations-natural-social", "officialName": "Comprende las relaciones entre los elementos naturales y sociales" },
+    { "id": "manages-information-sources-geography", "officialName": "Maneja fuentes de información para comprender el espacio geográfico y el ambiente" },
+    { "id": "generates-actions-conserve-environment", "officialName": "Genera acciones para conservar el ambiente local y global" }
+  ],
+  "standard": {
+    "description": "Gestiona responsablemente el espacio y ambiente al realizar actividades orientadas al cuidado de su localidad, considerando el cuidado del planeta. Compara las causas y consecuencias de diversas situaciones a diversas escalas para proponer medidas de gestión del riesgo. Explica cambios y permanencias en el espacio geográfico a diferentes escalas. Explica conflictos socioambientales y territoriales reconociendo sus múltiples dimensiones. Utiliza información y herramientas cartográficas y digitales para representar e interpretar el espacio geográfico y el ambiente.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-natural-social-geography", "description": "Describe las características de los elementos naturales y sociales de su localidad y región, reconociendo cómo las actividades humanas transforman los paisajes geográficos." },
+      { "id": "grade-1-cartography-geography", "description": "Utiliza planos, mapas temáticos y herramientas digitales para ubicar elementos del espacio geográfico y calcular distancias y orientaciones a escala local." },
+      { "id": "grade-1-risk-management-geography", "description": "Identifica situaciones de vulnerabilidad y peligro ante fenómenos naturales en su escuela y comunidad; propone medidas básicas de prevención y mitigación de desastres." },
+      { "id": "grade-1-environmental-actions-geography", "description": "Propone actividades individuales y colectivas para la conservación del agua, el suelo y el manejo adecuado de residuos sólidos en su entorno escolar." }
+    ],
+    "2": [
+      { "id": "grade-2-natural-social-geography", "description": "Explica la influencia de los actores sociales en la configuración del espacio geográfico andino y amazónico, analizando las áreas naturales protegidas del Perú." },
+      { "id": "grade-2-cartography-geography", "description": "Interpreta cuadros estadísticos, imágenes satelitales y mapas de zonificación ecológica para analizar las transformaciones del territorio a escala regional y nacional." },
+      { "id": "grade-2-conflicts-geography", "description": "Explica las causas y dimensiones (ambientales, económicas y culturales) de los conflictos socioambientales en el uso de cuencas hidrográficas y recursos naturales." },
+      { "id": "grade-2-climate-change-geography", "description": "Diseña y promueve planes de acción escolar para la adaptación y mitigación del cambio climático y la conservación de la biodiversidad local." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencias Sociales Ciclo VI, pp. 107-112); sujeto a revisión pedagógica."
+  }
+}

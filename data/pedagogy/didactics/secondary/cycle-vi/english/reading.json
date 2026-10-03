@@ -1,0 +1,48 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-english-reading",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "area": { "id": "english", "officialName": "Inglés como Lengua Extranjera" },
+    "competency": { "id": "reads-texts-english", "officialName": "Lee diversos tipos de textos en inglés como lengua extranjera", "alias": "english-reading" },
+    "capacities": [
+      { "id": "obtains-info-written-english", "officialName": "Obtiene información del texto escrito" },
+      { "id": "infers-interprets-written-english", "officialName": "Infiere e interpreta información del texto" },
+      { "id": "reflects-evaluates-written-english", "officialName": "Reflexiona y evalúa la forma, el contenido y contexto del texto escrito" }
+    ]
+  },
+  "approach": "Enfoque comunicativo y lectura estratégica (Skimming & Scanning)",
+  "recommendedStrategies": [
+    "técnicas de lectura rápida (skimming para idea general, scanning para datos específicos)",
+    "uso de pistas contextuales y cognados verdaderos para deducir significados",
+    "organizadores visuales simples para registrar información del texto",
+    "preguntas de comprensión literal e inferencial guiadas",
+    "asociación de imágenes y glosarios ilustrados con el vocabulario clave"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar la comprensión global e inferencial sin exigir traducción literal palabra por palabra.",
+    "Valorar la habilidad para identificar datos concretos de forma autónoma en textos sencillos."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "textos continuos y discontinuos auténticos y motivadores (infografías, menús, folletos, comics)",
+      "estrategias antes, durante y después de la lectura adaptadas al nivel lingüístico",
+      "desarrollo de la autonomía lectora y deducción léxica por contexto",
+      "respeto a los diferentes ritmos de lectura de los estudiantes",
+      "conexión del contenido del texto con temas de la vida real"
+    ],
+    "avoid": [
+      "traducción mecánica sistemática de todo el texto al castellano",
+      "textos densos y sobrecargados de estructuras gramaticales no familiares",
+      "cuestionarios cerrados centrados en terminología gramatical abstracta",
+      "evaluar únicamente mediante preguntas de opción múltiple de memoria"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Lectura en Inglés Ciclo VI; sujeta a revisión pedagógica."
+  }
+}

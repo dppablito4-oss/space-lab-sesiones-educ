@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-science-technology-inquiry",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "science-technology", "officialName": "Ciencia y Tecnología" },
+    "competency": { "id": "inquires-scientific-methods", "officialName": "Indaga mediante métodos científicos para construir conocimientos", "alias": "inquiry" },
+    "capacities": [
+      { "id": "problematizes-situations", "officialName": "Problematiza situaciones para hacer indagación" },
+      { "id": "designs-strategies-inquiry", "officialName": "Diseña estrategias para hacer indagación" },
+      { "id": "generates-registers-data", "officialName": "Genera y registra datos e información" },
+      { "id": "analyzes-data-information", "officialName": "Analiza datos e información" },
+      { "id": "evaluates-communicates-inquiry", "officialName": "Evalúa y comunica el proceso y resultados de su indagación" }
+    ]
+  },
+  "approach": "Indagación científica y alfabetización científica y tecnológica",
+  "recommendedStrategies": [
+    "planteamiento de hipótesis científicas con múltiples variables e interacción de factores",
+    "diseño experimental con grupo de control y calibración de instrumentos de precisión",
+    "análisis estadístico de datos experimentales (tendencia central, dispersión, margen de error)",
+    "interpretación de gráficas de dispersión, regresión o curvas de respuesta",
+    "elaboración de artículos y ponencias de divulgación científica escolar con formato IMRyD"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el rigor en la definición del grupo de control y la minimización del margen de error experimental.",
+    "Valorar la sustentación de conclusiones basada en teorías científicas contemporáneas y análisis de incertidumbre."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "preguntas de investigación que involucren sistemas complejos y variables intervinientes",
+      "incorporación explícita de grupo de control y repeticiones sistemáticas para asegurar reproducibilidad",
+      "tratamiento cuantitativo con cálculo de incertidumbres y fuentes de error experimental",
+      "discusión crítica de los resultados contrastando con literatura científica especializada",
+      "comunicación rigurosa con terminología y convenciones científicas internacionales (SI)"
+    ],
+    "avoid": [
+      "indagaciones triviales sin sustento teórico o sin variables claramente delimitadas",
+      "ignorar la variabilidad experimental y el error en la toma de mediciones",
+      "conclusiones apresuradas no respaldadas por el análisis cuantitativo de los datos",
+      "experimentaciones que pongan en riesgo la integridad física o el ambiente escolar"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Indagación Científica en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

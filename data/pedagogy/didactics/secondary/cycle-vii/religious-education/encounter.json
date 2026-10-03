@@ -1,0 +1,47 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-religious-education-encounter",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" },
+    "competency": { "id": "experiences-encounter-god", "officialName": "Asume la experiencia del encuentro personal y comunitario con Dios en su proyecto de vida en coherencia con su creencia religiosa", "alias": "religious-encounter" },
+    "capacities": [
+      { "id": "transforms-environment-faith", "officialName": "Transforma su entorno desde el encuentro personal y comunitario con Dios y desde la fe que profesa" },
+      { "id": "acts-coherently-faith", "officialName": "Actúa coherentemente en razón de su fe según los principios de su conciencia moral en situaciones concretas de la vida" }
+    ]
+  },
+  "approach": "Liderazgo cristiano de servicio, voluntariado transformador y coherencia de vida",
+  "recommendedStrategies": [
+    "gestión de proyectos de pastoral social y voluntariado juvenil de alto impacto comunitario",
+    "diseño del proyecto de vida integrando fe, ética ciudadana y responsabilidad profesional",
+    "retiros espirituales y ejercicios de discernimiento personal ignaciano o franciscano",
+    "testimonios dialogados con profesionales y líderes sociales que viven su fe en el ámbito público",
+    "campañas de incidencia por la paz, el perdón y la reconciliación comunitaria"
+  ],
+  "assessmentRecommendations": [
+    "Evaluar el impacto concreto de las acciones de voluntariado y servicio comunitario desarrolladas.",
+    "Valorar la coherencia ética demostrada en el testimonio de vida y en la resolución de dilemas morales."
+  ],
+  "promptRules": {
+    "prioritize": [
+      "liderazgo juvenil basado en el servicio, la compasión y la misericordia activa",
+      "coherencia integral entre fe, profesión, ciudadanía y relaciones interpersonales",
+      "construcción comunitaria de espacios de paz y reconciliación en la sociedad",
+      "visión trascendente de la existencia que otorga sentido a los desafíos y dolores humanos",
+      "apertura generosa al servicio desinteresado hacia los más desfavorecidos"
+    ],
+    "avoid": [
+      "espiritualismo desencarnado que huya del compromiso con la realidad social e histórica",
+      "reducir la vivencia de la fe al cumplimiento burocrático de requisitos escolares",
+      "coacción de la libertad espiritual o manipulación de la conciencia de los jóvenes",
+      "fomentar la vanagloria o el protagonismo individual en obras de caridad"
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Orientación didáctica piloto para Encuentro con Dios en Ciclo VII; sujeta a revisión pedagógica."
+  }
+}

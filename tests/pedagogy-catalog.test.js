@@ -22,8 +22,8 @@ assert.equal(result.valid, true);
 assert.equal(catalog.schemaVersion, '2.0');
 assert.ok(catalog.pedagogicalProfiles.some(entry => entry.id === 'secondary-cycle-vi'));
 assert.ok(catalog.pedagogicalProfiles.some(entry => entry.id === 'secondary-cycle-vii'));
-assert.equal(catalog.curriculumProfiles.length, 14);
-assert.equal(catalog.didacticProfiles.length, 14);
+assert.equal(catalog.curriculumProfiles.length, 52);
+assert.equal(catalog.didacticProfiles.length, 52);
 for (const cycle of ['vi', 'vii']) {
     for (const comp of ['quantity', 'regularity', 'shape', 'data-uncertainty']) {
         assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-mathematics-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
@@ -32,6 +32,38 @@ for (const cycle of ['vi', 'vii']) {
     for (const comp of ['oral', 'reading', 'writing']) {
         assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-communication-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
         assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-communication-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['inquiry', 'physical-world', 'technological-solution']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-science-technology-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-science-technology-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['history', 'geography-environment', 'economy']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-social-sciences-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-social-sciences-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['identity', 'citizenship']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-dpcc-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-dpcc-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['entrepreneurship']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-work-education-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-work-education-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['oral', 'reading', 'writing']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-english-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-english-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['appreciation', 'creation']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-arts-culture-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-arts-culture-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['motor', 'healthy', 'sociomotor']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-physical-education-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-physical-education-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
+    }
+    for (const comp of ['identity', 'encounter']) {
+        assert.ok(catalog.curriculumProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-religious-education-${comp}-curriculum`), `Missing curriculum profile for ${cycle}/${comp}`);
+        assert.ok(catalog.didacticProfiles.some(entry => entry.id === `secondary-cycle-${cycle}-religious-education-${comp}`), `Missing didactic profile for ${cycle}/${comp}`);
     }
 }
 assert.equal(catalog.methodologyProfiles.length, 5);

@@ -1,0 +1,40 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vi-social-sciences-history-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VI",
+    "grades": ["1", "2"],
+    "area": { "id": "social-sciences", "officialName": "Ciencias Sociales" }
+  },
+  "competency": { "id": "constructs-historical-interpretations", "officialName": "Construye interpretaciones históricas", "alias": "history" },
+  "capacities": [
+    { "id": "critically-interprets-sources", "officialName": "Interpreta críticamente fuentes diversas" },
+    { "id": "understands-historical-time", "officialName": "Comprende el tiempo histórico" },
+    { "id": "elaborates-historical-explanations", "officialName": "Elabora explicaciones sobre procesos históricos" }
+  ],
+  "standard": {
+    "description": "Construye interpretaciones históricas sobre hechos o procesos del Perú y el mundo, en los que explica hechos o procesos históricos, a partir de la clasificación de las causas y consecuencias, reconociendo sus cambios y permanencias, y usando términos históricos. Explica su relevancia a partir de los cambios y permanencias que generan en el tiempo, identificando simultaneidades. Emplea distintos referentes y convenciones temporales, así como conceptos relacionados a las instituciones sociopolíticas y la economía. Compara e integra información de diversas fuentes, estableciendo diferencias entre las narraciones de los hechos y las interpretaciones de los autores de las fuentes.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "1": [
+      { "id": "grade-1-interpret-sources-history", "description": "Utiliza fuentes históricas primarias y secundarias (arqueológicas, escritas y orales) para obtener información sobre el poblamiento de América y el surgimiento de las primeras civilizaciones andinas." },
+      { "id": "grade-1-historical-time-history", "description": "Ordena cronológicamente hechos o etapas de la historia prehispánica peruana y mundial; identifica simultaneidades y utiliza convenciones temporales (años, siglos, a.C., d.C.)." },
+      { "id": "grade-1-explain-causes-history", "description": "Explica hechos o procesos históricos vinculados al surgimiento de la agricultura y los orígenes del Estado a partir de clasificar sus causas y consecuencias estructurales y coyunturales." },
+      { "id": "grade-1-changes-continuity-history", "description": "Distingue elementos que cambiaron y aquellos que permanecieron a lo largo del desarrollo de las civilizaciones originarias del Perú y el mundo antiguo." }
+    ],
+    "2": [
+      { "id": "grade-2-interpret-sources-history", "description": "Contrasta diversas interpretaciones sobre el Tawantinsuyo y el siglo XVI andino a partir de fuentes documentales, crónicas y testimonios materiales." },
+      { "id": "grade-2-historical-time-history", "description": "Establece periodificaciones históricas y ritmos de cambio en el tránsito del Horizonte Tardío a la consolidación del virreinato peruano y la Edad Media/Moderna europea." },
+      { "id": "grade-2-explain-causes-history", "description": "Explica las múltiples causas y consecuencias de la conquista del Tawantinsuyo y el impacto demográfico, cultural y sociopolítico de la colonización hispánica." },
+      { "id": "grade-2-changes-continuity-history", "description": "Analiza las continuidades en la organización comunal andina y las transformaciones impuestas por las reformas virreinales en la economía y la sociedad." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Ciencias Sociales Ciclo VI, pp. 101-106); sujeto a revisión pedagógica."
+  }
+}

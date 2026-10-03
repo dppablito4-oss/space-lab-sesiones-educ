@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "1.0",
+  "profileVersion": "2026.1",
+  "id": "secondary-cycle-vii-religious-education-identity-curriculum",
+  "status": "pilot",
+  "scope": {
+    "level": "secondary",
+    "cycle": "VII",
+    "grades": ["3", "4", "5"],
+    "area": { "id": "religious-education", "officialName": "Educación Religiosa" }
+  },
+  "competency": { "id": "builds-religious-identity", "officialName": "Construye su identidad como persona humana, amada por Dios, digna, libre y trascendente, comprendiendo la doctrina de su propia religión, abierto al diálogo con las que le son cercanas", "alias": "religious-identity" },
+  "capacities": [
+    { "id": "knows-god-assumes-identity", "officialName": "Conoce a Dios y asume su identidad religiosa y espiritual como persona digna, libre y trascendente" },
+    { "id": "cultivates-values-manifestations", "officialName": "Cultiva y valora las manifestaciones religiosas de su entorno argumentando su fe de manera comprensible y respetuosa" }
+  ],
+  "standard": {
+    "description": "Construye su identidad como persona humana, amada por Dios, digna, libre y trascendente, cuando fundamenta su fe a partir de la doctrina social de la Iglesia y el magisterio eclesial, en diálogo respetuoso con otras religiones y cosmovisiones. Argumenta la presencia de Dios en la historia humana y el valor sagrado de la vida en todas sus dimensiones. Promueve la fraternidad, la justicia y la dignidad de toda persona humana sin distinción.",
+    "sourceRef": "minedu-secondary-curriculum-2016"
+  },
+  "performancesByGrade": {
+    "3": [
+      { "id": "grade-3-doctrine-religion", "description": "Analiza los principios fundamentales de la Doctrina Social de la Iglesia (bien común, subsidiariedad, solidaridad) y su vigencia en el Perú." },
+      { "id": "grade-3-interfaith-religion", "description": "Argumenta la importancia de la libertad religiosa y la convivencia pacífica entre distintas confesiones en una sociedad plural." },
+      { "id": "grade-3-life-defense-religion", "description": "Defiende la dignidad intrínseca de la vida humana desde la concepción hasta la muerte natural frente a los desafíos éticos contemporáneos." }
+    ],
+    "4": [
+      { "id": "grade-4-doctrine-religion", "description": "Examina documentos del magisterio social eclesial contemporáneo (encíclicas papales) sobre el trabajo digno, la ecología integral y la justicia económica." },
+      { "id": "grade-4-interfaith-religion", "description": "Participa en espacios de diálogo reflexivo sobre la fe y la razón reconociendo la complementariedad entre ciencia, humanismo y trascendencia." },
+      { "id": "grade-4-life-defense-religion", "description": "Sustenta una postura ética comprometida con los derechos humanos, la erradicación de la pobreza y la acogida de migrantes y marginados." }
+    ],
+    "5": [
+      { "id": "grade-5-doctrine-religion", "description": "Fundamenta su proyecto de vida ético y espiritual en el compromiso activo por el Reino de Dios, la justicia social y la paz duradera." },
+      { "id": "grade-5-interfaith-religion", "description": "Lidera iniciativas ecuménicas y de cooperación humanitaria entre comunidades de fe frente a emergencias y crisis sociales del país." },
+      { "id": "grade-5-life-defense-religion", "description": "Ejerce un compromiso laical maduro defendiendo la dignidad inalienable de toda persona humana como imagen y semejanza de Dios." }
+    ]
+  },
+  "provenance": {
+    "sourceRefs": ["minedu-secondary-curriculum-2016"],
+    "reviewNote": "Perfil curricular transcrito y adaptado del Programa curricular de Educación Secundaria MINEDU 2016 (Educación Religiosa Ciclo VII, pp. 205-212); sujeto a revisión pedagógica."
+  }
+}
