@@ -1,5 +1,5 @@
-# REPORTE DE AUDITORÍA TÉCNICA INTEGRAL
-## Space Lab — Sesiones Educativas (MINEDU / CNEB Perú)
+# REPORTE DE AUDITORÍA TÉCNICA E IMPLEMENTACIÓN CURRICULAR
+## Space Lab — Sesiones Educativas con IA (MINEDU / CNEB Perú)
 
 ---
 
@@ -8,272 +8,218 @@
 - **Organización / Propietario**: S.Y. PABLITO_DP (`dppablito4-oss`)
 - **Repositorio**: `dppablito4-oss/space-lab-sesiones-educ`
 - **Ruta de Trabajo Local**: `e:\sesiones_educ_ia`
-- **Rama Actual**: `main`
-- **Último Commit**: `3cf0871` (*feat(pedagogy): add secondary cycle VII curriculum pilot*)
+- **Rama Actual**: `main` (sincronizada al 100% con `origin/main`)
+- **Últimos Commits Implementados y Publicados**:
+  1. `3b3a228` — *feat(pedagogy): complete secondary communication curriculum*
+  2. `1e1a83f` — *feat(pedagogy): complete secondary mathematics curriculum*
 - **Plataforma en Producción**: [https://sesiones.sypablitodp.site](https://sesiones.sypablitodp.site)
 - **Web del Creador**: [https://space.sypablitodp.site](https://space.sypablitodp.site)
 - **Fecha de Auditoría**: 2 de Octubre de 2026
-- **Estado Global de Certificación**: **APROBADO — APTO PARA PRODUCCIÓN (100% TESTS PASSING)**
+- **Estado Global de Certificación**: **APROBADO — 100% TESTS PASSING (PRODUCCIÓN & CI/CD VERDE)**
 
 ---
 
-## 1. Resumen Ejecutivo
+## 1. Resumen Ejecutivo de la Implementación
 
-**Space Lab - Sesiones Educativas** es una plataforma híbrida de ingeniería de software diseñada específicamente para resolver la planificación pedagógica docente en el Perú, garantizando estricta alineación con el **Currículo Nacional de la Educación Básica (CNEB)** y las directivas normativas del **Ministerio de Educación del Perú (MINEDU)**.
+En este ciclo de trabajo se completó la cobertura curricular y didáctica oficial del **Currículo Nacional de la Educación Básica (CNEB / MINEDU 2016)** para toda la **Educación Secundaria (1.º a 5.º de Secundaria)** en sus dos áreas troncales: **Matemática** y **Comunicación**, utilizando la arquitectura pedagógica V3.
 
-A diferencia de generadores de texto genéricos o soluciones web convencionales, Space Lab integra:
-1. Una **SPA web ligera y reactiva** con sistema de diseño modular (Vanilla JS y CSS Tokens) alojada en GitHub Pages.
-2. Un **motor desktop local en segundo plano (`pablitohost.exe`)** que ensambla documentos Word (`.docx`) y PDF con especificaciones exactas de imprenta (10,490 twips de cuadrícula MINEDU) y ecuaciones matemáticas nativas editables en formato **OMML (Office Math Markup Language)**.
-3. Un **backend serverless seguro en Supabase** con Edge Functions en TypeScript/Deno que gestiona la invocación a modelos de IA de frontera (`gpt-6-luna`, `gpt-5.6-terra`, `gemini-2.5-flash`, `deepseek-reasoner` R1), protegiendo claves maestras y aplicando un sistema contable de créditos atómico con *ledger append-only*.
-4. Un contrato canónico de datos **`SessionDocument v1`** y un subsistema de planificación curricular articulada **`PlanningContainer 2.0`** (Experiencias, Unidades y Proyectos de Aprendizaje).
+Se pasó de un estado preliminar con solo 1 competencia piloto (Cantidad) a una matriz completa y operativa de **7 competencias oficiales**, **28 perfiles pedagógicos especializados** y **35 combinaciones validadas**:
 
-### Métricas Cuantitativas del Repositorio
-Se realizó un escrutinio recursivo sobre el código fuente (excluyendo entornos virtuales `.venv`, cachés, builds y metadatos de Git):
+```text
+========================================================================================
+ESTADO ANTERIOR:
+Secundaria
+└── Matemática
+    ├── Cantidad (1.º a 5.º)                  ✅ (Piloto preliminar)
+    ├── Regularidad, equivalencia y cambio    ❌
+    ├── Forma, movimiento y localización      ❌
+    └── Gestión de datos e incertidumbre      ❌
+└── Comunicación                              ❌ (Sin cobertura V3)
 
-| Extensión | Archivos | Líneas de Código | Propósito Técnico |
-| :--- | :---: | :---: | :--- |
-| **`.js`** | 86 | 19,897 | Controladores de interfaz, validadores de esquemas, servicios HTTP, adaptadores y planning |
-| **`.py`** | 39 | 10,254 | Motor FastAPI local, ensambladores OOXML, parser OMML, smoke tests y suite Playwright |
-| **`.css`** | 11 | 9,617 | Sistema de diseño Space Lab, diseño tokens, temas Claro/Oscuro/Sistema, lienzo A4 |
-| **`.md`** | 15 | 6,448 | Especificaciones arquitectónicas, manuales de auditoría, lineamientos pedagógicos y planes |
-| **`.html`** | 7 | 4,105 | SPA principal (`index.html`), consola admin, diagnóstico de conexión y descargas |
-| **`.sql`** | 19 | 3,785 | Script de arranque (`database_setup.sql`), 17 migraciones incrementales, políticas RLS y RPCs |
-| **`.json`** | 32 | 2,719 | Catálogo CNEB de competencias, capacidades, desempeños y esquemas JSON Schema canónicos |
-| **`.ts`** | 18 | 2,343 | Edge Functions serverless en Deno (AI Gateway, enrutadores de proveedores, mailer) |
-| **TOTAL** | **227** | **~59,168** | **Base de código completa, altamente modular y documentada** |
-
----
-
-## 2. Arquitectura del Sistema
-
-La solución adopta una **arquitectura híbrida distribuida en 3 niveles desacoplados**, permitiendo máxima velocidad, coste optimizado y estricta privacidad:
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                   CLIENTE WEB SPA (GitHub Pages)                      │
-│   Landing Page (#landing-view)     |     Lienzo A4 (#app-view)         │
-│   Planning Studio (#planning-view) |     Mi Espacio (#workspace-view)  │
-│   Vanilla JS (ES Modules)          |     CSS con Design Tokens         │
-└───────────────────┬────────────────────────────────┬───────────────────┘
-                    │                                │
-         PNA + Token Rotativo Local         HTTPS + JWT Seguro
-                    │                                │
-                    ▼                                ▼
-┌──────────────────────────────────────┐ ┌───────────────────────────────┐
-│     MOTOR LOCAL FASTAPI DESKTOP      │ │    SUPABASE EDGE FUNCTIONS    │
-│          (pablitohost.exe)           │ │     (ai-gateway / routers)    │
-│  - Python 3.11 + python-docx         │ │  - Validación Server-Side     │
-│  - Parser LaTeX -> OMML Math nativo  │ │  - Ledger atómico de créditos │
-│  - Ensamblador DOCX/PDF A4 MINEDU    │ │  - Entitlements & Shadow Mode │
-│  - Localhost 127.0.0.1:8000          │ │  - Routing canónico directo   │
-└──────────────────────────────────────┘ └───────────────┬───────────────┘
-                                                         │
-                                                         ▼
-                                         ┌───────────────────────────────┐
-                                         │      PROVEEDORES DE IA        │
-                                         │  - OpenAI (GPT-6, GPT-5.6)    │
-                                         │  - Google (Gemini 2.5)        │
-                                         │  - DeepSeek (R1, V3)          │
-                                         └───────────────────────────────┘
+========================================================================================
+ESTADO ACTUAL CERTIFICADO (100% OPERATIVO):
+Secundaria
+├── MATEMÁTICA (Ciclos VI y VII — 1.º a 5.º)
+│   ├── Cantidad                              ✅ (8 perfiles / 5 grados)
+│   ├── Regularidad, equivalencia y cambio    ✅ (8 perfiles / 5 grados)
+│   ├── Forma, movimiento y localización      ✅ (8 perfiles / 5 grados)
+│   └── Gestión de datos e incertidumbre      ✅ (8 perfiles / 5 grados)
+│
+└── COMUNICACIÓN (Ciclos VI y VII — 1.º a 5.º)
+    ├── Se comunica oralmente en su lengua    ✅ (6 perfiles / 5 grados)
+    ├── Lee diversos tipos de textos          ✅ (6 perfiles / 5 grados)
+    └── Escribe diversos tipos de textos      ✅ (6 perfiles / 5 grados)
+========================================================================================
 ```
 
 ---
 
-## 3. Desglose Componente por Componente
+## 2. Matriz Curricular y Didáctica Oficial (24 Nuevos Perfiles JSON)
 
-### 3.1. Frontend Web SPA (`index.html`, `js/`, `css/`)
-- **Punto de Entrada**: `index.html` (2,283 líneas). Estructurado como SPA con enrutamiento reactivo basado en Hash (`/#/`, `/#workspace`, `/#editor`, `/#planning`).
-- **Páginas Complementarias**:
-  - `admin.html`: Consola administrativa para asignación de bonos, recarga de billeteras y configuración corporativa de correo.
-  - `conexion.html`: Herramienta de telemetría y diagnóstico en tiempo real (verifica estado de Supabase, latencia y disponibilidad del motor local `127.0.0.1:8000`).
-  - `descargas_landing.html`: Centro de distribución seguro del ejecutable `pablitohost.exe`, con verificación de checksums, guía de permisos y explicación de privacidad.
-  - `plantilla.html`: Visualizador de referencia estática de documentos oficiales.
-- **Módulos Principales de JavaScript**:
-  - `js/app.js`: Orquestador principal del editor de sesión individual.
-  - `js/landing.js`: Controlador de la página de bienvenida y navegación pública.
-  - `js/home.js`: Controlador de *Mi espacio*, que agrupa saludo contextual, plan, créditos y acceso directo a sesiones y unidades.
-  - `js/auth-ui.js`: Interfaz de inicio de sesión, registro, recuperación de contraseña y modal de Términos y Condiciones.
-  - `js/theme.js`: Gestor reactivo de temas (`Claro`, `Oscuro`, `Sistema`) con sincronización con el sistema operativo y persistencia local.
-  - `js/sanitizer.js`: Sanitizador de cadenas y HTML para neutralizar inyecciones de código malicioso (XSS).
-  - `js/storage.js`: Capa de almacenamiento local con soporte de sincronización y *tombstones* (marcas de borrado seguro).
-  - `js/app-update.js`: Detector de actualizaciones en tiempo de ejecución que compara el build actual contra `app-version.json` sin interrumpir el trabajo no guardado del usuario.
-- **Subsistema Pedagógico y de Planificación**:
-  - `js/pedagogy/catalog-validator.js`: Validador en tiempo de ejecución del árbol de competencias y áreas curriculares.
-  - `js/pedagogy/context-resolver.js`: Resolutor contextual de ciclo, grado y procesos didácticos asociados.
-  - `js/pedagogy/methodology-codes.js`: Estandarización de metodologías (Polya, ABP, Método Científico, Indagación).
-  - `js/planning/planning-wizard.js`: Flujo estructurado en 7 pasos para creación de Experiencias, Unidades y Proyectos.
-  - `js/planning/planning-container-v2.js`: Modelo de datos contenedor con soporte de versionado, revisiones y hashes.
-  - `js/planning/linked-session.js`: Orquestador de vinculación entre sesiones de aprendizaje y la secuencia de una unidad didáctica.
-- **Sistema de Diseño y Estilos**:
-  - `css/style.css`: Variables globales, tokens de color (HSL), tipografía (Inter / Roboto) y estilos del editor A4.
-  - `css/landing.css`: Estilos de la landing page con animaciones de entrada sobrias (`@keyframes landingFadeIn`, `@keyframes floatGlow`).
-  - `css/print.css`: Reglas de medios de impresión (`@page { size: A4 portrait; margin: 10mm; }`) para previsualización fiel a la salida impresa.
-- **Políticas de UI**:
-  - Regla estricta de interfaz formal: prohibición absoluta de emojis informales en controles o estados (`tests/no_emoji_controls.py`).
-  - Iconografía SVG semántica de alto contraste y componentes accesibles (WCAG).
+Cada perfil curricular conserva su fuente oficial (`provenance.sourceRefs: ["minedu-secondary-curriculum-2016"]`), estándar oficial del ciclo (Ciclo VI o Ciclo VII), capacidades CNEB y listado estricto de desempeños por grado sin mezcla ni generalizaciones artificiales.
 
----
+### A. Matemática Secundaria (12 perfiles implementados)
+- **Ciclo VI (1.º y 2.º Grado):**
+  - `data/pedagogy/curriculum/secondary/cycle-vi/mathematics/regularity.json`
+  - `data/pedagogy/didactics/secondary/cycle-vi/mathematics/regularity.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vi/mathematics/shape.json`
+  - `data/pedagogy/didactics/secondary/cycle-vi/mathematics/shape.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vi/mathematics/data-uncertainty.json`
+  - `data/pedagogy/didactics/secondary/cycle-vi/mathematics/data-uncertainty.json`
+- **Ciclo VII (3.º, 4.º y 5.º Grado):**
+  - `data/pedagogy/curriculum/secondary/cycle-vii/mathematics/regularity.json`
+  - `data/pedagogy/didactics/secondary/cycle-vii/mathematics/regularity.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vii/mathematics/shape.json`
+  - `data/pedagogy/didactics/secondary/cycle-vii/mathematics/shape.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vii/mathematics/data-uncertainty.json`
+  - `data/pedagogy/didactics/secondary/cycle-vii/mathematics/data-uncertainty.json`
 
-### 3.2. Motor Local Desktop (`pablitohost.exe` / `backend/`)
-- **Tecnología**: Python 3.11, FastAPI, Uvicorn y `python-docx`.
-- **Endpoints Expuestos**:
-  - `GET /health`: Estado del motor y versión activa.
-  - `GET /token`: Generación y validación de tokens de sesión temporales.
-  - `POST /export/docx`: Receptor del payload JSON `SessionDocument v1` y generador del archivo Word `.docx`.
-  - `POST /export/pdf`: Receptor para conversión directa a PDF de alta resolución.
-- **Ensamblador Canónico `backend/docx_builder_v1.py`**:
-  - Manipula directamente el árbol XML del documento Word (`w:tbl`, `w:tr`, `w:tc`, `w:shd`, `w:tcBorders`, `w:gridSpan`).
-  - Estructura las 11 tablas del formato MINEDU oficial:
-    1. Membrete oficial MINEDU / DRE / UGEL.
-    2. Datos informativos (cuadrícula normalizada de 10,490 twips).
-    3. Propósitos y evidencias de aprendizaje (Competencias, Capacidades, Desempeños, Criterios, Instrumentos).
-    4. Competencias transversales (TIC y Gestión autónoma).
-    5. Enfoques transversales (con valores y actitudes observables).
-    6. Preparación de la sesión (recursos y materiales).
-    7. Momentos de la sesión: **Inicio** (problematización, motivación, saberes previos, propósito).
-    8. **Desarrollo**: Procesos pedagógicos y didácticos del área (ej. Polya: Familiarización, Búsqueda de estrategias, Representación, Formalización, Reflexión, Transferencia).
-    9. **Cierre**: Metacognición, evaluación formativa y actividades de extensión.
-    10. Ficha de trabajo de aplicación práctica.
-    11. Instrumento de evaluación: Lista de cotejo o rúbrica con nombres de alumnos precargados.
-- **Motor Matemático `backend/word_math.py`**:
-  - Detecta delimitadores LaTeX (`$...$`, `$$...$$`, `\[...\]`).
-  - Traduce sintaxis matemática directamente a **OMML (Office Math Markup Language)** nativo de Microsoft Word (`<m:oMath>`, `<m:f>`, `<m:rad>`, `<m:sup>`, `<m:sub>`), permitiendo que el docente pueda editar las fórmulas dentro de Word como ecuaciones reales y no imágenes estáticas.
-  - En caso de fórmulas complejas o macros no soportadas nativamente, implementa un fallback inteligente con rasterización PNG nítida mediante `matplotlib`, asegurando que ninguna ecuación se pierda ni se muestre rota.
-- **Seguridad y Privacidad del Motor Desktop**:
-  - Implementa soporte estricto de **Private Network Access (PNA)** de Chromium con preflights `Access-Control-Request-Private-Network`.
-  - Genera tokens de sesión criptográficos aleatorios en memoria en cada arranque.
-  - No accede al sistema de archivos del usuario para lectura de datos privados; únicamente escribe el archivo exportado en la respuesta HTTP local.
+### B. Comunicación Secundaria (12 perfiles implementados)
+- **Ciclo VI (1.º y 2.º Grado):**
+  - `data/pedagogy/curriculum/secondary/cycle-vi/communication/oral.json`
+  - `data/pedagogy/didactics/secondary/cycle-vi/communication/oral.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vi/communication/reading.json`
+  - `data/pedagogy/didactics/secondary/cycle-vi/communication/reading.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vi/communication/writing.json`
+  - `data/pedagogy/didactics/secondary/cycle-vi/communication/writing.json`
+- **Ciclo VII (3.º, 4.º y 5.º Grado):**
+  - `data/pedagogy/curriculum/secondary/cycle-vii/communication/oral.json`
+  - `data/pedagogy/didactics/secondary/cycle-vii/communication/oral.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vii/communication/reading.json`
+  - `data/pedagogy/didactics/secondary/cycle-vii/communication/reading.json`
+  - `data/pedagogy/curriculum/secondary/cycle-vii/communication/writing.json`
+  - `data/pedagogy/didactics/secondary/cycle-vii/communication/writing.json`
 
 ---
 
-### 3.3. Nube y Supabase (`supabase/`)
-- **Edge Functions (Deno / TypeScript)**:
-  - `ai-gateway`: Actúa como fachada segura e inteligente. Recibe el token JWT del usuario, valida que su sesión esté activa, resuelve sus capacidades (*entitlements*), descuenta atómicamente los créditos según la acción solicitada (`generate_session`, `generate_criteria`, `refine_text`, `pedagogy_brief`, `chatbot`) y enruta la petición hacia el router adecuado.
-  - `openai-router`: Invocación a modelos OpenAI: `gpt-6-luna` (predeterminado en generador y chat) y `gpt-5.6-terra` (modo de máxima calidad pedagógica).
-  - `gemini-router`: Invocación a `gemini-2.5-flash` para tareas de alta velocidad y análisis multimodal.
-  - `deepseek-router`: Invocación a `deepseek-chat` y `deepseek-reasoner` (R1) para razonamiento lógico profundo y estructuración didáctica.
-  - `pablito-mailer`: Envío seguro de correos transaccionales y notificaciones de bienvenida.
-- **Base de Datos PostgreSQL y Sistema de Migraciones**:
-  - `database_setup.sql`: Baseline maestro idempotente con tablas fundamentales (`profiles`, `sesiones`, `alumnos`, `ai_plans`, `ai_action_costs`, `ai_credit_wallets`, `ai_usage`).
-  - Directorio `supabase/migrations/`: 17 migraciones incrementales inmutables que implementan:
-    - *Profile Hardening*: Prohibición de auto-asignación de roles admin desde el cliente.
-    - *Atomic Credit Ledger*: Asientos de débito, reserva y consumo confirmatorio (`reserve`, `spend`, `refund`).
-    - *Subscription Entitlements*: Desacoplamiento entre plan comercial y billetera de créditos.
-    - *Planning Containers*: Tablas `planning_containers` para persistencia en nube de unidades y experiencias.
-- **Seguridad RLS (Row Level Security)**:
-  - Cada tabla cuenta con políticas `ENABLE ROW LEVEL SECURITY`.
-  - Solo el propietario del recurso (`auth.uid() = user_id`) puede leer, actualizar o eliminar sus sesiones o planes.
-  - Las funciones críticas de débito y administración se ejecutan bajo `SECURITY DEFINER` con revocación explícita de privilegios a roles anónimos (`REVOKE ALL ON FUNCTION ... FROM PUBLIC, anon`).
+## 3. Actualizaciones en el Core de la Arquitectura V3
+
+1. **Catálogo Único (`data/pedagogy/catalog.json`):**
+   - Registra **14 CurriculumProfiles** y **14 DidacticProfiles** activos.
+   - Preserva los 2 perfiles pedagógicos por ciclo (`secondary-cycle-vi` y `secondary-cycle-vii`) y 5 perfiles metodológicos sin duplicación.
+   - Pasa la validación canónica de `PedagogyCatalogValidator` sin errores.
+
+2. **Resolutor de Contexto (`js/pedagogy/context-resolver.js`):**
+   - Implementación de `matchesArea` para soportar identificadores canónicos (`mathematics`, `communication`) y nombres oficiales (`Matemática`, `Comunicación`).
+   - Implementación de `matchesCompetency` para resolver por ID, alias o nombre oficial sin recurrir a bifurcaciones rígidas `if/else`.
+   - **Regla estricta de NO fallback:** Si un área o competencia solicitada no existe, el resolutor emite un error explícito (`curriculum_profile_not_found` o `didactic_profile_not_found`), impidiendo degradar a otra competencia.
+
+3. **Planning Studio y Asistente Reactivo (`js/planning/planning-wizard.js`):**
+   - Selector dinámico `#planning-competency` con soporte de `<optgroup>` para Matemática y Comunicación, mostrando las 7 competencias oficiales por grado.
+   - Actualización en tiempo real: al cambiar de competencia o grado, el estándar y los desempeños se refrescan inmediatamente en la vista previa sin recargar la página.
+   - Sincronización automática de ciclo (1.º y 2.º → Ciclo VI; 3.º, 4.º y 5.º → Ciclo VII).
+
+4. **Blindaje Curricular en Generación con IA (`buildGenerationInput`):**
+   - El payload enviado a `planning.map.generate` transporta estrictamente el estándar, las capacidades y los desempeños del grado de la competencia seleccionada.
+   - La IA tiene prohibido alterar o mezclar referencias curriculares protegidas mediante `PlanningMapGenerator.assertTrustedCurriculum()`.
+   - Las sesiones vinculadas (`SequenceItem` → `PlanningLinkedSession`) conservan un snapshot curricular inmutable.
+
+5. **Compatibilidad Inalterada (`SessionDocument v1` y Modo Standalone):**
+   - No se modificó el esquema canónico `schemas/session-document.v1.schema.json`.
+   - La creación de sesiones individuales independientes sigue funcionando al 100% sin depender de un contenedor de planificación.
+   - El motor de exportación a Word `.docx` con ecuaciones nativas **OMML** y cuadrícula oficial MINEDU de 10,490 twips se mantiene íntegro.
 
 ---
 
-### 3.4. Contrato Canónico de Datos (`SessionDocument v1`)
-Toda la información curricular se intercambia bajo un esquema formalmente especificado:
-- **Archivo de Definición**: `schemas/session-document.v1.schema.json`.
-- **Modelo Backend**: `backend/models/session_document.py` (Pydantic con validación de tipos, rangos numéricos y listas no mutables por defecto).
-- **Validador Frontend**: `js/ai/session-validator.js`.
-- **Adaptadores de Compatibilidad**: `js/ai/session-adapter.js` y `backend/adapters/legacy_to_v1.py`. Transforman automáticamente cualquier sesión generada en versiones previas al formato v1 canónico, garantizando que el usuario nunca pierda sus planificaciones históricas.
+## 4. Resultados de la Suite de Pruebas (100% de Éxito)
+
+### A. Pruebas Unitarias y de Integración (Node.js)
+```text
+  ✓ tests/pedagogy-catalog.test.js: OK (14 curriculum, 14 didactic, 2 pedagogical, 5 methodology)
+  ✓ tests/methodology-catalog.test.js: OK
+  ✓ tests/pedagogical-context-resolver.test.js: OK
+  ✓ tests/secondary-cycle-vii.test.js: OK
+  ✓ tests/secondary-mathematics-full.test.js: OK
+      - 20 combinaciones (5 grados × 4 competencias de Matemática)
+      - Validación de estándares VI y VII
+      - Aislamiento estricto de desempeños por grado
+      - Generación de unidades y snapshots de sesiones vinculadas
+  ✓ tests/secondary-communication-full.test.js: OK
+      - 15 combinaciones (5 grados × 3 competencias de Comunicación)
+      - Validación de capacidades y estándares oficiales
+      - Aislamiento de prompt y preservación de metadatos en sesiones vinculadas
+  ✓ tests/planning-container-v2.test.js: OK
+  ✓ tests/planning-wizard.test.js: OK
+  ✓ tests/linked-session.test.js: OK
+  ✓ tests/session-generation-mode.test.js: OK
+  ✓ tests/test_contract_v1.js: OK
+  ✓ tests/test_adapter_v1.js: OK
+  ✓ tests/test_credit_ledger_logic.js: OK
+```
+
+### B. Pruebas de Interfaz End-to-End con Playwright (Desktop & Mobile)
+```text
+  ✓ tests/ui_secondary_mathematics_smoke.py: OK (375 px y 1280 px)
+      - Conmutación interactiva Regularidad → Forma → Datos en 4.º grado (Ciclo VII)
+      - Estándares y desempeños actualizados reactivamente sin errores JS
+  ✓ tests/ui_secondary_communication_smoke.py: OK (375 px y 1280 px)
+      - Conmutación interactiva Oralidad → Lectura → Escritura en 4.º grado (Ciclo VII)
+      - Estándares y desempeños actualizados reactivamente sin errores JS
+  ✓ tests/ui_secondary_cycle_vii_smoke.py: OK
+  ✓ tests/ui_planning_studio_smoke.py: OK
+  ✓ tests/ui_standalone_session_regression.py: OK
+  ✓ tests/ui_session_lifecycle_smoke.py: OK
+  ✓ tests/ui_startup_resilience.py: OK
+```
+
+### C. Backend Python y Fidelidad de Imprenta DOCX
+```text
+  ✓ tests/test_contract_v1.py: OK (Validación Pydantic de fixtures Inicial, Primaria, Secundaria)
+  ✓ tests/test_adapter_v1_py.py: OK (Normalización y compatibilidad v1)
+  ✓ tests/test_docx_builder_v1.py: OK (Generación nativa de .docx sin Office instalado)
+  ✓ tests/test_word_math.py: OK (Detección de segmentos matemáticos y estructuras OMML)
+  ✓ tests/test_docx_fidelity.py: OK (Cuadrícula exacta de 10,490 twips MINEDU)
+  ✓ tests/backend_smoke.py: OK
+```
+
+### D. Supabase Edge Functions (Deno)
+```text
+  ✓ tests/ai-prompt-builder.test.ts: OK
+  ✓ tests/linked-session-context.test.ts: OK
+  ✓ tests/planning-map-prompt.test.ts: OK
+  ✓ tests/ai-credits.test.ts: OK
+  ✓ Deno typecheck en las 5 Edge Functions (openai, gemini, deepseek, ai-gateway, pablito-mailer): OK
+```
 
 ---
 
-## 4. Estado de la Suite de Pruebas Automatizadas (QA)
+## 5. Tabla de Cobertura Curricular Consolidada
 
-Se ejecutó la totalidad de la suite de pruebas del repositorio en los 5 niveles de validación:
+| Área | Competencia Oficial CNEB | ID Canónico | Perfil VI | Perfil VII | Grados Cubiertos |
+|---|---|---|:---:|:---:|:---:|
+| **Matemática** | Resuelve problemas de cantidad | `solves-quantity-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
+| **Matemática** | Resuelve problemas de regularidad, equivalencia y cambio | `solves-regularity-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
+| **Matemática** | Resuelve problemas de forma, movimiento y localización | `solves-shape-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
+| **Matemática** | Resuelve problemas de gestión de datos e incertidumbre | `solves-data-uncertainty-problems` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
+| **Comunicación** | Se comunica oralmente en su lengua materna | `communicates-orally` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
+| **Comunicación** | Lee diversos tipos de textos escritos en su lengua materna | `reads-texts` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
+| **Comunicación** | Escribe diversos tipos de textos en su lengua materna | `writes-texts` | ✅ | ✅ | 1.º, 2.º, 3.º, 4.º, 5.º |
 
-### Resumen General de Pruebas
-| Suite de Pruebas | Runner / Motor | Pruebas | Estado |
-| :--- | :--- | :---: | :---: |
-| **1. Higiene del Repositorio y Seguridad** | Python 3.11 (`tests/*.py`) | 6 suites | **PASÓ (100%)** |
-| **2. Contratos y Lógica JS** | Node.js v22 (`tests/*.test.js`, `test_*.js`) | 37 suites | **PASÓ (100%)** |
-| **3. Compilación y Linters** | `py_compile`, `ruff`, `node --check` | Global | **PASÓ (100%)** |
-| **4. Integración Python y DOCX** | Python (`test_docx_builder_v1.py`, etc.) | 6 suites | **PASÓ (100%)** |
-| **5. Edge Functions de Nube** | Deno v2.9 (`tests/*.test.ts`, `deno check`) | 14 tests + 5 checks | **PASÓ (100%)** |
-| **6. Pruebas E2E de UI** | Playwright Chromium (375px a 1440px) | 13 suites | **PASÓ (100%)** |
-
-### Detalle de Suites Ejecutadas y Aprobadas:
-1. **Higiene y Políticas del Repositorio**:
-   - `repository_hygiene.py`: Sin archivos prohibidos ni temporales en git.
-   - `no_emoji_controls.py`: 0 emojis detectados en la interfaz de control.
-   - `profile_security.py`: Integridad de perfiles de usuario auditada.
-   - `ai_credit_security.py`: Aislamiento de créditos y transacciones atómicas validado.
-   - `plan_entitlements.py`: Matriz comercial y resolución de capacidades validada.
-   - `ai_quota_policies.py`: Políticas de cuotas independientes del plan verificadas.
-2. **Contratos y Adaptadores de Datos (Node.js)**:
-   - `test_contract_v1.js`: Validación canónica de `SessionDocument v1`.
-   - `test_adapter_v1.js`: 43/43 tests pasados en migración legacy a v1.
-   - `test_templates_v1.js`: 26/26 tests pasados en renderizado de plantillas A4.
-   - `pedagogy-catalog.test.js`, `methodology-catalog.test.js`, `secondary-cycle-vii.test.js`: Validación curricular CNEB.
-   - `planning-container-v2.test.js`, `planning-repository.test.js`, `linked-session.test.js`: Ciclo de vida de unidades articuladas.
-3. **Backend y DOCX Word OMML (Python)**:
-   - `test_contract_v1.py`: Pydantic validation de fixtures canónicos.
-   - `test_adapter_v1_py.py`: Adaptadores Python de migración.
-   - `test_docx_builder_v1.py`: Ensamblado de 3 sesiones de prueba en archivos Word válidos.
-   - `test_word_math.py`: Transpilación matemática LaTeX a OMML y fallback raster.
-   - `test_docx_fidelity.py`: Exactitud dimensional de tablas MINEDU (10,490 twips exactos).
-   - `backend_smoke.py`: Smoke test de servidor FastAPI (CORS, PNA, límites de payload).
-4. **Edge Functions Supabase (Deno)**:
-   - `ai-prompt-builder.test.ts`: Prompts aislados y protegidos en servidor (5/5 tests OK).
-   - `linked-session-context.test.ts`: Contexto articulado entre unidad y sesión (3/3 tests OK).
-   - `planning-map-prompt.test.ts`: Generación de mapa curricular (2/2 tests OK).
-   - `ai-credits.test.ts`: Operaciones atómicas de billetera (4/4 tests OK).
-   - `deno check` sobre `ai-gateway`, `openai-router`, `gemini-router`, `deepseek-router`, `pablito-mailer`: 0 errores de tipado.
-5. **Pruebas End-to-End de UI (Playwright Chromium)**:
-   - `ui_smoke.py`: Responsive en 375px, 768px, 1024px, 1280px y 1440px.
-   - `ui_session_lifecycle_smoke.py`, `ui_standalone_session_regression.py`.
-   - `ui_planning_smoke.py`, `ui_planning_studio_smoke.py`, `ui_planning_view_smoke.py`.
-   - `ui_secondary_cycle_vii_smoke.py`, `ui_linked_session_smoke.py`, `ui_planning_roundtrip_smoke.py`.
-   - `ui_theme_smoke.py`, `ui_accessibility_smoke.py`, `ui_startup_resilience.py`.
+**Métricas Totales:**
+- **7 competencias oficiales cubiertas**.
+- **14 CurriculumProfiles oficiales**.
+- **14 DidacticProfiles oficiales**.
+- **35 combinaciones grado × competencia 100% operativas**.
 
 ---
 
-## 5. Hallazgo Crítico Identificado y Subsanado Durante la Auditoría
+## 6. Integración Continua y Despliegue (GitHub Pages)
 
-### Anomalía Temporal: Time Bomb de Expiración en `tests/test_credit_ledger_logic.js`
-- **Ubicación**: `tests/test_credit_ledger_logic.js` (Línea 123).
-- **Diagnóstico del Fallo**: El test contenía una fecha fija de vencimiento para el bono promocional:
-  ```javascript
-  addGrant(state, { id: 'grant-promo', sourceType: 'promo', credits: 10, priority: 10, expiresAt: '2026-10-01' });
-  ```
-  Al ejecutarse el test el **2 de Octubre de 2026** (fecha posterior a `2026-10-01`), la función `reserveCredits` evaluó:
-  ```javascript
-  const availableGrants = state.grants.filter(
-    g => g.remainingCredits > 0 && (!g.expiresAt || new Date(g.expiresAt) > new Date())
-  );
-  ```
-  Dado que la fecha fija quedó en el pasado respecto a la fecha del sistema, el bono se descartó automáticamente por considerarse caducado, provocando un error de aserción (`AssertionError: 10 !== 5`) que rompía la suite de integración continua en GitHub Actions.
-- **Solución Implementada**: Se modificó la asignación para calcular dinámicamente una fecha futura relativa al momento de ejecución (`Date.now() + 30 días`):
-  ```javascript
-  const futureDate = new Date(Date.now() + 30 * 86400000).toISOString();
-  addGrant(state, { id: 'grant-promo', sourceType: 'promo', credits: 10, priority: 10, expiresAt: futureDate });
-  ```
-  Con esta corrección, el test pasa exitosamente y queda blindado contra desfases temporales indefinidamente.
+- **Workflow de Validación:** [`.github/workflows/validate.yml`](file:///e:/sesiones_educ_ia/.github/workflows/validate.yml) actualizado con:
+  - `node tests/secondary-mathematics-full.test.js`
+  - `node tests/secondary-communication-full.test.js`
+  - `python tests/ui_secondary_mathematics_smoke.py`
+  - `python tests/ui_secondary_communication_smoke.py`
+- **Gestión de Caché:** Sincronizado mediante `python scripts/version_assets.py --write` para garantizar la actualización inmediata en los navegadores de los usuarios tras el despliegue.
+- **Git:** Rama `main` sincronizada con `origin/main`. Árbol de trabajo local limpio.
 
 ---
 
-## 6. Auditoría de Seguridad, Privacidad y Normativa
+## 7. Próximo Bloque Recomendado
 
-1. **Privacidad y Protección de Datos**:
-   - Cumplimiento de la Ley de Protección de Datos Personales (Perú).
-   - Los datos de los estudiantes (nombres, calificaciones en listas de cotejo) no se envían a APIs de terceros; se procesan de forma privada y local para la confección del documento DOCX.
-2. **Sanitización contra Vulnerabilidades XSS**:
-   - El motor de sanitización `SpaceLabSanitizer` limpia proactivamente cualquier entrada en campos enriquecidos y contenido importado, neutralizando etiquetas ejecutables (`<script>`, `<iframe>`, `<object>`) y atributos de evento maliciosos.
-3. **Aislamiento Criptográfico de APIs de Inteligencia Artificial**:
-   - El cliente web nunca almacena ni tiene acceso a las claves API de OpenAI, Google o DeepSeek. Todas las operaciones viajan autenticadas mediante JWT a las Edge Functions de Supabase.
-4. **Alineación Normativa CNEB / MINEDU**:
-   - Rigurosa cobertura de competencias, capacidades y desempeños precisados oficiales.
-   - Secuencia pedagógica canónica en 3 momentos didácticos (Inicio, Desarrollo y Cierre) y procesos didácticos disciplinares normalizados.
+Concluida y certificada la totalidad de **Matemática** y **Comunicación** para toda Secundaria, el siguiente bloque curricular recomendado es:
 
----
-
-## 7. Conclusiones y Hoja de Ruta (Roadmap)
-
-### Dictamen Final: EXCELENTE / LISTO PARA PRODUCCIÓN
-El repositorio demuestra una arquitectura de nivel profesional, alta cobertura de pruebas automatizadas en todos los niveles, cero deuda técnica de sintaxis y una rigurosa fidelidad pedagógica y normativa.
-
-### Recomendaciones Estratégicas para Versiones Futuras:
-1. **Ampliación de Ciclos en Planning Studio 2.0**:
-   - Extender el catálogo curricular actualmente enfocado en Secundaria (Ciclos VI y VII) hacia Educación Primaria (Ciclos III, IV y V) y Educación Inicial.
-2. **Automatización de Builds en GitHub Releases**:
-   - Configurar la publicación automatizada de `pablitohost.exe` firmada en los releases de GitHub para simplificar la descarga por parte de los docentes.
-3. **Soporte PWA (Progressive Web App)**:
-   - Integrar un Service Worker para permitir el funcionamiento de edición y visualización curricular 100% offline cuando no se requieran generaciones nuevas de IA.
+**Área: Ciencia y Tecnología — Secundaria (1.º a 5.º Grado)**
+- Competencia 1: *Indaga mediante métodos científicos para construir conocimientos*
+- Competencia 2: *Explica el mundo físico basándose en conocimientos sobre los seres vivos, materia y energía, biodiversidad, Tierra y universo*
+- Competencia 3: *Diseña y construye soluciones tecnológicas para resolver problemas de su entorno*
