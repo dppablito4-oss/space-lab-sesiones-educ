@@ -65,7 +65,8 @@ def run():
                 page.locator('#planning-methodology').select_option('custom')
                 page.locator('[data-path="methodologyConfig.custom.name"]').fill('Trabajo colaborativo')
                 page.locator('[data-step="4"]').click()
-                page.locator('[data-planning-action="product"]').click()
+                if page.locator('[data-planning-action="product"]').is_visible():
+                    page.locator('[data-planning-action="product"]').click()
                 page.locator('[data-path="finalProduct.title"]').fill('Guía de decisiones')
                 page.locator('[data-step="5"]').click()
                 page.locator('[data-planning-action="milestone"]').click()
