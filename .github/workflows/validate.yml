@@ -81,6 +81,7 @@ jobs:
           node tests/planning-container-v2.test.js
           node tests/planning-repository.test.js
           node tests/linked-session.test.js
+          node tests/test_secondary_linked_session_flow.js
           node tests/planning-wizard.test.js
           node tests/planning-wizard-ai.test.js
           node tests/planning-view.test.js
@@ -121,6 +122,7 @@ jobs:
           python tests/test_word_math.py
           python tests/test_docx_fidelity.py
           python tests/test_planning_docx_builder.py
+          python tests/test_planning_docx_geometry.py
 
       - name: Run backend DOCX smoke test
         run: python tests/backend_smoke.py

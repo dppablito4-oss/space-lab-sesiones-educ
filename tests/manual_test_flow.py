@@ -12,7 +12,6 @@ Runs Chromium using local .venv, performs the exact user flow:
 9. Triggers 'Descargar Word (.docx)'
 10. Verifies download event and docx file size (> 10 KB)
 """
-import os
 import sys
 import time
 from pathlib import Path
@@ -26,7 +25,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 TOKEN_FILE = ROOT / "connection_token.txt"
-TOKEN = TOKEN_FILE.read_text(encoding="utf-8").strip() if TOKEN_FILE.exists() else "cb8d34ce596b147e5d0110e0bc860dd1b0a1a9342031f9d4a137394a3570f6b5"
+TOKEN = TOKEN_FILE.read_text(encoding="utf-8").strip() if TOKEN_FILE.exists() else "0" * 64
 
 SCREENSHOTS_DIR = ROOT / "tests" / "screenshots"
 SCREENSHOTS_DIR.mkdir(exist_ok=True)

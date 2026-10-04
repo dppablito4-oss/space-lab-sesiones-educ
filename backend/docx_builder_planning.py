@@ -371,34 +371,41 @@ def build_docx_from_planning_v2(container: PlanningContainerV2) -> io.BytesIO:
     _hdr_cell(hdr_std.cells[1], "CAPACIDADES", bg=PEACH_HDR)
     _hdr_cell(hdr_std.cells[2], f"ESTÁNDARES DE APRENDIZAJE DE LAS COMPETENCIAS ({cycle_name.upper()})", bg=PEACH_HDR)
 
-    for entry_idx, entry in enumerate(container.curriculumMap, start=1):
-        row = tbl_std.rows[entry_idx]
+    if not container.curriculumMap:
+        row = tbl_std.rows[1]
         _keep_row_together(row)
+        _val_cell(row.cells[0], "No se registraron competencias en la unidad.")
+        _val_cell(row.cells[1], "—")
+        _val_cell(row.cells[2], "—")
+    else:
+        for entry_idx, entry in enumerate(container.curriculumMap, start=1):
+            row = tbl_std.rows[entry_idx]
+            _keep_row_together(row)
 
-        # Col 0: Competencia
-        c0 = row.cells[0]
-        set_cell_background(c0, GRAY_VAL)
-        set_cell_margins(c0, top=60, bottom=60, left=80, right=80)
-        p0 = c0.paragraphs[0]
-        r_comp = p0.add_run(entry.competency.officialName or entry.competency.id)
-        r_comp.bold = True
-        r_comp.font.size = Pt(9)
-        r_comp.font.color.rgb = PRIMARY_RGB
+            # Col 0: Competencia
+            c0 = row.cells[0]
+            set_cell_background(c0, GRAY_VAL)
+            set_cell_margins(c0, top=60, bottom=60, left=80, right=80)
+            p0 = c0.paragraphs[0]
+            r_comp = p0.add_run(entry.competency.officialName or entry.competency.id)
+            r_comp.bold = True
+            r_comp.font.size = Pt(9)
+            r_comp.font.color.rgb = PRIMARY_RGB
 
-        # Col 1: Capacidades
-        c1 = row.cells[1]
-        caps_list = [cap.officialName or cap.id for cap in entry.capacities]
-        _bullet_list_cell(c1, caps_list, bg=GRAY_VAL)
+            # Col 1: Capacidades
+            c1 = row.cells[1]
+            caps_list = [cap.officialName or cap.id for cap in entry.capacities]
+            _bullet_list_cell(c1, caps_list, bg=GRAY_VAL)
 
-        # Col 2: Estándar
-        c2 = row.cells[2]
-        set_cell_background(c2, GRAY_VAL)
-        set_cell_margins(c2, top=60, bottom=60, left=80, right=80)
-        p2 = c2.paragraphs[0]
-        p2.paragraph_format.line_spacing = 1.15
-        p2.paragraph_format.space_after = Pt(2)
-        std_desc = entry.standard.description if entry.standard else "Resuelve problemas y modela situaciones con autonomía y rigor metodológico."
-        append_html_to_cell_or_paragraph(p2, std_desc, default_font_size=8.5)
+            # Col 2: Estándar
+            c2 = row.cells[2]
+            set_cell_background(c2, GRAY_VAL)
+            set_cell_margins(c2, top=60, bottom=60, left=80, right=80)
+            p2 = c2.paragraphs[0]
+            p2.paragraph_format.line_spacing = 1.15
+            p2.paragraph_format.space_after = Pt(2)
+            std_desc = entry.standard.description if entry.standard else "Resuelve problemas y modela situaciones con autonomía y rigor metodológico."
+            append_html_to_cell_or_paragraph(p2, std_desc, default_font_size=8.5)
 
     # Espaciado sutil
     p_sp = doc.add_paragraph()
@@ -420,65 +427,71 @@ def build_docx_from_planning_v2(container: PlanningContainerV2) -> io.BytesIO:
     _hdr_cell(hdr_row.cells[3], "CRITERIOS DE\nEVALUACIÓN", bg=BLUE_HDR)
     _hdr_cell(hdr_row.cells[4], "EVIDENCIA E\nINSTRUMENTO", bg=BLUE_HDR)
 
-    for entry_idx, entry in enumerate(container.curriculumMap, start=1):
-        row = tbl_mat.rows[entry_idx]
+    if not container.curriculumMap:
+        row = tbl_mat.rows[1]
         _keep_row_together(row)
+        for c in row.cells:
+            _val_cell(c, "No se registró matriz curricular.")
+    else:
+        for entry_idx, entry in enumerate(container.curriculumMap, start=1):
+            row = tbl_mat.rows[entry_idx]
+            _keep_row_together(row)
 
-        # Col 0: Área, Competencia y Capacidades
-        c1 = row.cells[0]
-        set_cell_background(c1, GRAY_VAL)
-        set_cell_margins(c1, top=60, bottom=60, left=80, right=80)
-        p_c1 = c1.paragraphs[0]
-        p_c1.paragraph_format.space_after = Pt(2)
-        r_area = p_c1.add_run(f"ÁREA: {entry.area.officialName or 'Área Curricular'}\n")
-        r_area.bold = True
-        r_area.font.size = Pt(8)
-        r_area.font.color.rgb = ACCENT_RGB
+            # Col 0: Área, Competencia y Capacidades
+            c1 = row.cells[0]
+            set_cell_background(c1, GRAY_VAL)
+            set_cell_margins(c1, top=60, bottom=60, left=80, right=80)
+            p_c1 = c1.paragraphs[0]
+            p_c1.paragraph_format.space_after = Pt(2)
+            r_area = p_c1.add_run(f"ÁREA: {entry.area.officialName or 'Área Curricular'}\n")
+            r_area.bold = True
+            r_area.font.size = Pt(8)
+            r_area.font.color.rgb = ACCENT_RGB
 
-        r_comp = p_c1.add_run(f"{entry.competency.officialName or entry.competency.id}\n")
-        r_comp.bold = True
-        r_comp.font.size = Pt(9)
-        r_comp.font.color.rgb = PRIMARY_RGB
+            r_comp = p_c1.add_run(f"{entry.competency.officialName or entry.competency.id}\n")
+            r_comp.bold = True
+            r_comp.font.size = Pt(9)
+            r_comp.font.color.rgb = PRIMARY_RGB
 
-        p_caps_hdr = c1.add_paragraph()
-        p_caps_hdr.paragraph_format.space_before = Pt(4)
-        p_caps_hdr.paragraph_format.space_after = Pt(2)
-        r_cap_lbl = p_caps_hdr.add_run("Capacidades:")
-        r_cap_lbl.bold = True
-        r_cap_lbl.font.size = Pt(8.5)
+            p_caps_hdr = c1.add_paragraph()
+            p_caps_hdr.paragraph_format.space_before = Pt(4)
+            p_caps_hdr.paragraph_format.space_after = Pt(2)
+            r_cap_lbl = p_caps_hdr.add_run("Capacidades:")
+            r_cap_lbl.bold = True
+            r_cap_lbl.font.size = Pt(8.5)
 
-        for cap in entry.capacities:
-            p_cap = c1.add_paragraph()
-            p_cap.paragraph_format.space_after = Pt(1)
-            p_cap.paragraph_format.line_spacing = 1.1
-            append_html_to_cell_or_paragraph(p_cap, f"• {cap.officialName or cap.id}", default_font_size=8)
+            for cap in entry.capacities:
+                p_cap = c1.add_paragraph()
+                p_cap.paragraph_format.space_after = Pt(1)
+                p_cap.paragraph_format.line_spacing = 1.1
+                append_html_to_cell_or_paragraph(p_cap, f"• {cap.officialName or cap.id}", default_font_size=8)
 
-        # Col 1: Estándar
-        c2 = row.cells[1]
-        set_cell_background(c2, GRAY_VAL)
-        set_cell_margins(c2, top=60, bottom=60, left=80, right=80)
-        std_desc = entry.standard.description if entry.standard else ""
-        p_std = c2.paragraphs[0]
-        p_std.paragraph_format.space_after = Pt(2)
-        p_std.paragraph_format.line_spacing = 1.15
-        append_html_to_cell_or_paragraph(p_std, std_desc or "Estándar oficial del ciclo.", default_font_size=8.5)
+            # Col 1: Estándar
+            c2 = row.cells[1]
+            set_cell_background(c2, GRAY_VAL)
+            set_cell_margins(c2, top=60, bottom=60, left=80, right=80)
+            std_desc = entry.standard.description if entry.standard else ""
+            p_std = c2.paragraphs[0]
+            p_std.paragraph_format.space_after = Pt(2)
+            p_std.paragraph_format.line_spacing = 1.15
+            append_html_to_cell_or_paragraph(p_std, std_desc or "Estándar oficial del ciclo.", default_font_size=8.5)
 
-        # Col 2: Desempeños
-        c3 = row.cells[2]
-        perfs = [p.description for p in entry.performances]
-        _bullet_list_cell(c3, perfs, bg=GRAY_VAL)
+            # Col 2: Desempeños
+            c3 = row.cells[2]
+            perfs = [p.description for p in entry.performances]
+            _bullet_list_cell(c3, perfs, bg=GRAY_VAL)
 
-        # Col 3: Criterios
-        c4 = row.cells[3]
-        crits = [c.description for c in entry.criteria]
-        _bullet_list_cell(c4, crits, bg=GRAY_VAL)
+            # Col 3: Criterios
+            c4 = row.cells[3]
+            crits = [c.description for c in entry.criteria]
+            _bullet_list_cell(c4, crits, bg=GRAY_VAL)
 
-        # Col 4: Evidencias e Instrumentos
-        c5 = row.cells[4]
-        evids = [e.description for e in entry.expectedEvidence]
-        insts = [c.instrument for c in entry.criteria if c.instrument] or ["Lista de cotejo"]
-        combined = [f"Evidencia: {ev}" for ev in evids] + [f"Instrumento: {inst}" for inst in list(dict.fromkeys(insts))]
-        _bullet_list_cell(c5, combined, bg=GRAY_VAL)
+            # Col 4: Evidencias e Instrumentos
+            c5 = row.cells[4]
+            evids = [e.description for e in entry.expectedEvidence]
+            insts = [c.instrument for c in entry.criteria if c.instrument] or ["Lista de cotejo"]
+            combined = [f"Evidencia: {ev}" for ev in evids] + [f"Instrumento: {inst}" for inst in list(dict.fromkeys(insts))]
+            _bullet_list_cell(c5, combined, bg=GRAY_VAL)
 
     # ══════════════════════════════════════════════════════════════════════════
     # IV. COMPETENCIAS Y ENFOQUES TRANSVERSALES (Páginas 2, 3 y 4 del PDF)
@@ -638,6 +651,7 @@ def build_docx_from_planning_v2(container: PlanningContainerV2) -> io.BytesIO:
 
     if not sessions:
         row = tbl_seq.rows[1]
+        _keep_row_together(row)
         for c in row.cells:
             _val_cell(c, "No se registraron sesiones en la secuencia.")
     else:

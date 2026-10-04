@@ -10,6 +10,7 @@ backend/dist/
 backend/bin/
 /DESCARGAS.EXE/
 *.log
+*.token
 connection_token.txt
 backend/connection_token.txt
 artifacts/

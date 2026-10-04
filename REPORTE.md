@@ -279,5 +279,34 @@ Se implementó el ciclo de vida completo entre la **Unidad de Aprendizaje matriz
 1. **Herencia Automática de Metadatos:** La sesión individual hereda Institución, DRE, UGEL, Director, Coordinador Pedagógico, Docente, Grado, Sección y Ciclo.
 2. **Herencia Curricular y Didáctica:** La sesión individual precarga Competencia, Capacidades, Desempeño precisado, Criterios de Evaluación C1–C4, Campo temático, Tiempo, Evidencia e Instrumento definidos en la secuencia de la unidad.
 3. **Trazabilidad Inmutable:** Se asigna `planning.mode = 'linked'` a la sesión creada y la unidad matriz actualiza el estado de la actividad a `generated` con su puntero permanente `linkedDocumentRef`.
-4. **Certificación Automatizada:** Suite [`tests/test_secondary_linked_session_flow.js`](file:///e:/sesiones_educ_ia/tests/test_secondary_linked_session_flow.js) aprobada al 100%.
+4. **Certificación Automatizada:** Suite [`tests/test_secondary_linked_session_flow.js`](file:///e:/sesiones_educ_ia/tests/test_secondary_linked_session_flow.js) integrada formalmente en el CI de GitHub Actions (`validate.yml`).
+
+---
+
+## 9. Certificación Automatizada en CI y Regresiones
+
+Toda la funcionalidad del bloque `PlanningContainer 2.0 → PlanningView → DOCX Unidad → Linked Session` se encuentra respaldada por pruebas automáticas continuas en CI (`.github/workflows/validate.yml`):
+
+1. **Validación de Sintaxis e Higiene Python (Ruff):**
+   - Reglas estrictas `F401, F811, F821` sin imports huérfanos ni variables no utilizadas.
+   - Compilación byte-code de módulos backend (`py_compile`) con 0 advertencias.
+
+2. **Certificación Geométrica DOCX ([`tests/test_planning_docx_geometry.py`](file:///e:/sesiones_educ_ia/tests/test_planning_docx_geometry.py)):**
+   - Test autónomo in-memory sin dependencias de archivos locales en disco.
+   - Formato A4 (8.27 in × 11.69 in) y márgenes de 0.75 in en 4 lados.
+   - Exactamente 12/12 tablas con `sum(w:gridCol) == 10490` twips y `w:tblInd = -289` twips.
+   - Protección de renglones contra quiebre de página (`w:cantSplit`) en el 100% de las filas.
+   - Encabezados repetibles (`w:tblHeader`) en tablas extensas/multilínea.
+
+3. **Certificación Funcional de Contratos DOCX ([`tests/test_planning_docx_builder.py`](file:///e:/sesiones_educ_ia/tests/test_planning_docx_builder.py)):**
+   - Validación estricta de 12 tablas en fixtures, unidades multidisciplinarias y borradores mínimos.
+   - Fidelidad de datos administrativos nuevos (I.E., DRE, UGEL, Director, Coordinador, Docente, Ciclo, Grado, Secciones, Periodo).
+   - Verificación de Tabla Dual (Propósito vs Producto Final Integrador).
+   - Criterios de evaluación C1–C4 trazados estrictamente desde `curriculumMap` sin inventar criterios ficticios.
+   - Secuencia semanal de sesiones con tiempos, campos temáticos, evidencias e instrumentos.
+
+4. **Flujo E2E de Sesión Vinculada ([`tests/test_secondary_linked_session_flow.js`](file:///e:/sesiones_educ_ia/tests/test_secondary_linked_session_flow.js)):**
+   - Ejecutado en el paso `Run JS contract & adapter & template tests` del workflow `validate.yml`.
+   - Certifica preparación, herencia de metadatos, generación, estado `generated` y puntero `linkedDocumentRef`.
+
 
