@@ -1,0 +1,214 @@
+    <!-- ═══════════ MI ESPACIO ═══════════ -->
+    <div id="home-view" class="home-view hidden">
+        <header class="home-header">
+            <button type="button" class="home-brand" data-action="view-home" aria-label="Ir a Mi espacio">
+                <span class="home-brand-mark"><img src="assets/favicon.svg" alt="" aria-hidden="true"></span>
+                <span>
+                    <strong>Space Lab</strong>
+                    <small>Mi espacio docente</small>
+                </span>
+            </button>
+
+            <nav class="home-nav" aria-label="Navegación principal">
+                <a href="#/home" class="home-nav-link active">Mi espacio</a>
+                <a href="#/sessions" class="home-nav-link">Mis sesiones</a>
+            </nav>
+
+            <div class="home-account">
+                <div class="home-account-copy">
+                    <strong id="home-account-name">Docente</strong>
+                    <span id="home-account-plan">Plan docente</span>
+                </div>
+                <span id="home-account-avatar" class="home-account-avatar" aria-hidden="true">D</span>
+                <button type="button" id="home-logout" class="btn btn-ghost btn-sm" title="Cerrar sesión">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-logout"></use></svg>
+                    <span>Salir</span>
+                </button>
+            </div>
+        </header>
+
+        <main class="home-main" id="home-main">
+            <section class="home-welcome" aria-labelledby="home-welcome-title">
+                <div class="home-welcome-copy">
+                    <span class="home-eyebrow">Tu centro de planificación</span>
+                    <h1 id="home-welcome-title">Bienvenido a tu espacio docente</h1>
+                    <p>Continúa una planificación o crea una nueva sesión con una guía clara, paso a paso.</p>
+                    <div class="home-primary-actions">
+                        <button type="button" class="btn btn-primary home-primary-button" data-home-action="new-session">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>
+                            Crear nueva sesión
+                        </button>
+                        <button type="button" id="home-continue-session" class="btn btn-ghost home-secondary-button hidden" data-home-action="continue-session">
+                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
+                            Continuar último borrador
+                        </button>
+                    </div>
+                </div>
+
+                <aside class="home-guide" aria-label="Guía para comenzar">
+                    <div class="home-guide-heading">
+                        <span class="home-guide-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg></span>
+                        <div>
+                            <span>Primera sesión</span>
+                            <strong>Te acompañamos en cada paso</strong>
+                        </div>
+                    </div>
+                    <ol class="home-guide-steps">
+                        <li><span>1</span><p><strong>Completa los datos</strong>Indica nivel, área y propósito.</p></li>
+                        <li><span>2</span><p><strong>Genera con IA</strong>Obtén una propuesta alineada al CNEB.</p></li>
+                        <li><span>3</span><p><strong>Revisa y exporta</strong>Edita libremente y descarga tu documento.</p></li>
+                    </ol>
+                </aside>
+            </section>
+
+            <section class="home-summary" aria-label="Resumen de la cuenta">
+                <article class="home-summary-card">
+                    <span class="home-summary-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></span>
+                    <div><strong id="home-session-count">0</strong><span>Sesiones guardadas</span></div>
+                </article>
+                <article class="home-summary-card">
+                    <span class="home-summary-icon accent-purple"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg></span>
+                    <div><strong id="home-credit-count">--</strong><span>Créditos de IA</span></div>
+                </article>
+                <article class="home-summary-card home-plan-summary">
+                    <span class="home-summary-icon accent-green"><svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg></span>
+                    <div class="home-plan-summary-copy"><strong id="home-plan-name">Docente</strong><span>Plan actual</span></div>
+                    <button type="button" class="home-plan-link" data-home-action="view-plans">
+                        Ver planes
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                    </button>
+                </article>
+            </section>
+
+            <section class="home-section" aria-labelledby="home-tools-title">
+                <div class="home-section-heading">
+                    <div>
+                        <span class="home-eyebrow">Herramientas</span>
+                        <h2 id="home-tools-title">¿Qué deseas preparar?</h2>
+                    </div>
+                </div>
+                <div class="home-tool-grid">
+                    <article class="home-tool-card home-tool-card-active">
+                        <span class="home-tool-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></span>
+                        <div class="home-tool-copy">
+                            <span class="home-tool-status">Disponible</span>
+                            <h3>Sesión individual</h3>
+                            <p>Diseña, genera y exporta sesiones alineadas al CNEB para Inicial, Primaria y Secundaria.</p>
+                        </div>
+                        <button type="button" class="home-tool-action" data-home-action="new-session">
+                            Crear sesión <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                        </button>
+                    </article>
+                    <article class="home-tool-card home-tool-card-active" aria-label="Planificación articulada">
+                        <span class="home-tool-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg></span>
+                        <div class="home-tool-copy">
+                            <span class="home-tool-status">Beta</span>
+                            <h3>Planificación articulada</h3>
+                            <p>Experiencias, Unidades y Proyectos de aprendizaje. Construye y guarda tu mapa paso a paso.</p>
+                        </div>
+                        <button type="button" class="home-tool-action" data-open-planning>Abrir planificaciones</button>
+                    </article>
+                </div>
+            </section>
+
+            <section id="home-sessions-section" class="home-section home-sessions-section" aria-labelledby="home-sessions-title">
+                <div class="home-section-heading">
+                    <div>
+                        <span class="home-eyebrow">Biblioteca personal</span>
+                        <h2 id="home-sessions-title">Mis sesiones</h2>
+                    </div>
+                    <button type="button" id="home-toggle-all-sessions" class="btn btn-ghost btn-sm hidden">Ver todas</button>
+                </div>
+                <div id="home-session-list" class="home-session-list" aria-live="polite">
+                    <div class="home-empty-sessions">
+                        <span><svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg></span>
+                        <h3>Aún no tienes sesiones guardadas</h3>
+                        <p>Crea tu primera planificación y aparecerá aquí automáticamente.</p>
+                        <button type="button" class="btn btn-primary btn-sm" data-home-action="new-session">Crear mi primera sesión</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <dialog id="home-plans-dialog" class="home-plans-dialog" aria-labelledby="home-plans-title" aria-describedby="home-plans-description">
+            <div class="home-plans-shell">
+                <header class="home-plans-header">
+                    <div>
+                        <span class="home-eyebrow">Comparación de planes</span>
+                        <h2 id="home-plans-title">Conoce qué incluye cada plan</h2>
+                        <p id="home-plans-description">Conoce las diferencias antes de decidir. Los cambios de plan y los pagos todavía no están habilitados.</p>
+                    </div>
+                    <button type="button" class="home-plans-close" data-home-action="close-plans" aria-label="Cerrar comparación de planes">
+                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg>
+                    </button>
+                </header>
+
+                <div class="home-plans-grid">
+                    <article class="home-plan-card" data-plan-code="free">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Para comenzar</span><h3>Gratuito</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Lo esencial para crear y guardar tus primeras sesiones.</p>
+                        <p class="home-plan-credits"><strong>30</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Crear sesiones con IA</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Guardar tus planificaciones</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Exportar a Word y PDF</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+
+                    <article class="home-plan-card" data-plan-code="beta_teacher">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Acceso anticipado</span><h3>Docente Beta</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Para docentes que prueban y ayudan a mejorar Space Lab.</p>
+                        <p class="home-plan-credits"><strong>100</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Todo lo incluido en Gratuito</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Adjuntar fuentes al copiloto</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Acceso anticipado a novedades</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+
+                    <article class="home-plan-card home-plan-card-featured" data-plan-code="teacher">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Para el día a día</span><h3>Docente Plus</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Más capacidad y herramientas para una planificación frecuente.</p>
+                        <p class="home-plan-credits"><strong>150</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Todo lo incluido en Gratuito</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Archivos y calidad equilibrada</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Plantillas personalizadas</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+
+                    <article class="home-plan-card" data-plan-code="pro">
+                        <div class="home-plan-card-heading">
+                            <div><span class="home-plan-kicker">Máxima capacidad</span><h3>Docente Pro</h3></div>
+                            <span class="home-plan-current-badge" hidden>Tu plan actual</span>
+                        </div>
+                        <p class="home-plan-description">Para un uso intensivo y las capacidades más avanzadas.</p>
+                        <p class="home-plan-credits"><strong>400</strong><span>créditos de IA por ciclo</span></p>
+                        <ul class="home-plan-benefits">
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Todo lo incluido en Plus</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Calidad máxima de IA</li>
+                            <li><svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>Acceso previsto a planificación avanzada</li>
+                        </ul>
+                        <span class="home-plan-status">En desarrollo</span>
+                    </article>
+                </div>
+
+                <footer class="home-plans-footer">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                    <p><strong>Vista informativa.</strong> No se realizará ningún cobro ni cambio de plan desde esta pantalla.</p>
+                </footer>
+            </div>
+        </dialog>
+    </div>

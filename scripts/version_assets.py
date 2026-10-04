@@ -18,7 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 HTML_FILES = sorted(ROOT.glob("*.html"))
 VERSION_FILE = ROOT / "app-version.json"
 ASSET_PATTERN = re.compile(
-    r'(?P<prefix>\b(?:src|href)=["\'])(?P<path>(?!https?:|//|data:|#)[^"\'?]+\.(?:js|css))'
+    r'(?P<prefix>\b(?:src|href)\s*=\s*["\'])(?P<path>(?!https?:|//|data:|#)[^"\'?]+\.(?:js|css))'
     r'(?:\?[^"\']*)?(?P<suffix>["\'])',
     re.IGNORECASE,
 )
@@ -55,7 +55,11 @@ def normalize_build_meta(source: str) -> str:
 
 def calculate_build_id(versioned_pages: dict[Path, str]) -> str:
     digest = hashlib.sha256()
-    for path, source in sorted(versioned_pages.items()):
+    ordered_pages = sorted(
+        versioned_pages.items(),
+        key=lambda item: item[0].relative_to(ROOT).as_posix(),
+    )
+    for path, source in ordered_pages:
         digest.update(path.relative_to(ROOT).as_posix().encode("utf-8"))
         digest.update(b"\0")
         digest.update(normalize_build_meta(source).encode("utf-8"))
@@ -78,6 +82,20 @@ def manifest_source(build_id: str) -> str:
     ) + "\n"
 
 
+def expected_outputs(original_pages: dict[Path, str]) -> tuple[dict[Path, str], str]:
+    """Return fully versioned HTML pages and the matching build manifest."""
+    versioned_pages = {
+        path: version_html(source)
+        for path, source in original_pages.items()
+    }
+    build_id = calculate_build_id(versioned_pages)
+    expected_pages = {
+        path: set_build_meta(source, build_id)
+        for path, source in versioned_pages.items()
+    }
+    return expected_pages, manifest_source(build_id)
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     mode = parser.add_mutually_exclusive_group(required=True)
@@ -89,16 +107,7 @@ def main() -> int:
         path: path.read_text(encoding="utf-8")
         for path in HTML_FILES
     }
-    versioned_pages = {
-        path: version_html(source)
-        for path, source in original_pages.items()
-    }
-    build_id = calculate_build_id(versioned_pages)
-    expected_pages = {
-        path: set_build_meta(source, build_id)
-        for path, source in versioned_pages.items()
-    }
-    expected_manifest = manifest_source(build_id)
+    expected_pages, expected_manifest = expected_outputs(original_pages)
 
     stale: list[str] = []
     for html_path, expected in expected_pages.items():

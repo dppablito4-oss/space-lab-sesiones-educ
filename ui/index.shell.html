@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<!-- include:ui/fragments/shell/head.html -->
+
+<body>
+    <a class="skip-link" href="#session-form">Ir al formulario de sesión</a>
+
+<!-- include:ui/fragments/shell/icons.html -->
+
+<!-- include:ui/fragments/shell/global-overlays.html -->
+
+<!-- include:ui/fragments/landing.html -->
+
+<!-- include:ui/fragments/home.html -->
+
+<!-- include:ui/fragments/planning-host.html -->
+
+    <!-- include:ui/fragments/session-editor.html -->
+
+    <!-- include:ui/fragments/shell/editor-overlays.html -->
+
+    <!-- Scripts -->
+    <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8"></script>
+    <script defer src="js/core/profile-fields.js"></script>
+    <script defer src="js/core/validation-errors.js"></script>
+    <script defer src="js/pedagogy/methodology-codes.js"></script>
+    <script defer src="js/supabase-client.js"></script>
+    <script defer src="js/ai-credit-ui.js"></script>
+    <script defer src="js/components/toast.js"></script>
+    <script defer src="js/components/confirm-dialog.js"></script>
+    <script defer src="js/components/loader.js"></script>
+    <script defer src="js/sanitizer.js"></script>
+    <script defer src="js/auth-ui.js"></script>
+    <script defer src="js/storage.js"></script>
+    <script defer src="js/planning/planning-container.js"></script>
+    <script defer src="js/planning/planning-container-v2.js"></script>
+    <script defer src="js/planning/planning-repository.js"></script>
+    <script defer src="js/planning/linked-session.js"></script>
+    <script defer src="js/planning/planning-view.js"></script>
+    <script defer src="js/pedagogy/context-resolver.js"></script>
+    <script defer src="js/planning/planning-map-generator.js"></script>
+    <script defer src="js/planning/planning-wizard.js"></script>
+    <!-- Shell visible e interactivo antes de descargar el editor completo. -->
+    <script defer src="js/home.js"></script>
+    <script defer src="js/landing.js"></script>
+    <script defer src="js/templates.js"></script>
+    <script defer src="js/ai-copilot.js"></script>
+    <script defer src="js/document-presentation.js"></script>
+    <script defer src="js/core/app-utils.js"></script>
+    <script defer src="js/services/local-export-client.js"></script>
+    <script defer src="js/services/document-source-processor.js"></script>
+    <script defer src="js/controllers/export-controller.js"></script>
+    <script defer src="js/controllers/ai-controller.js"></script>
+    <script defer src="js/controllers/workflow-controller.js"></script>
+    <script defer src="js/controllers/students-controller.js"></script>
+    <script defer src="js/controllers/session-controller.js"></script>
+    <script defer src="js/controllers/design-controller.js"></script>
+    <script defer src="js/ai/session-validator.js"></script>
+    <script defer src="js/ai/session-adapter.js"></script>
+    <script defer src="js/ai/session-export.js"></script>
+    <script defer src="js/chatbot.js"></script>
+    <script defer src="js/pedagogy-brief.js"></script>
+    <!-- KaTeX — renderizado matemático (debe cargarse antes de app.js) -->
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+    <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
+    <script defer src="js/paginador.js"></script>
+    <script defer src="js/ui-shell.js"></script>
+    <script defer src="js/app.js"></script>
+    <script defer src="js/ficha-external-prompt.js"></script>
+</body>
+
+</html>

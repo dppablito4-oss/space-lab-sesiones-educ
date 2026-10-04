@@ -1,0 +1,119 @@
+    <!-- ═══════════ FLOATING CHATBOT WIDGET ═══════════ -->
+    <div id="chatbot-container" class="chatbot-container no-print">
+        <!-- Chat Bubble Button -->
+        <button id="chatbot-bubble" class="chatbot-bubble" title="Preguntar al copiloto" aria-label="Preguntar al copiloto">
+            <svg class="ui-icon" aria-hidden="true"><use href="#icon-chat"></use></svg>
+            <span class="pulse-ring"></span>
+        </button>
+
+        <!-- Chat Window -->
+        <div id="chatbot-window" class="chatbot-window glass-card hidden">
+            <div class="chatbot-header">
+                <div class="chatbot-header-info">
+                    <span class="chatbot-dot"></span>
+                    <div>
+                        <h4 class="chatbot-title">Space Assistant</h4>
+                        <span class="chatbot-subtitle">GPT-6 Luna Copilot</span>
+                    </div>
+                </div>
+                <button id="btn-close-chatbot" class="btn-close-chat" aria-label="Cerrar copiloto"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+            </div>
+
+            <div id="chatbot-messages" class="chatbot-messages">
+                <div class="chat-message bot">
+                    <div class="message-bubble">
+                        ¡Hola! Soy tu asistente pedagógico de Space Lab. ¿En qué puedo ayudarte hoy con tus sesiones o
+                        el Currículo Nacional?
+                    </div>
+                </div>
+            </div>
+
+            <div class="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Pregunta algo sobre tu sesión..." autocomplete="off">
+                <button id="btn-send-chat" class="btn btn-accent btn-icon-only" aria-label="Enviar mensaje al copiloto">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- include:ui/fragments/modals/terms.html -->
+
+    <!-- include:ui/fragments/modals/auth.html -->
+
+    <!-- ═══════════ LOGO EDITOR POPOVER ═══════════ -->
+    <div id="logo-editor-popover" class="logo-editor-popover hidden no-print" style="position: absolute; display: none;">
+        <div class="popover-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 8px;">
+            <h4 style="margin: 0; font-size: 0.9rem; color: #fff; font-weight: 600;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg> Ajustes de Logo</h4>
+            <button type="button" id="logo-editor-close" class="popover-close-btn" aria-label="Cerrar" style="background: none; border: none; color: #a1a1aa; cursor: pointer; padding: 0; line-height: 1;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+        </div>
+        <div class="popover-body" style="padding: 12px 0 0 0; display: flex; flex-direction: column; gap: 12px;">
+            <!-- Actions -->
+            <div class="popover-action-row" style="display: flex; gap: 6px; flex-wrap: wrap;">
+                <button type="button" id="logo-editor-gallery-trigger" class="btn btn-ghost btn-sm" style="flex: 1.5; font-size: 0.75rem; padding: 4px 8px !important; min-width: 100px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg> Galería / Subir</button>
+                <button type="button" id="logo-editor-swap" class="btn btn-ghost btn-sm" style="flex: 1; font-size: 0.75rem; padding: 4px 8px !important;" title="Mover la posición del logo en la lista"><svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg> Mover</button>
+                <button type="button" id="logo-editor-delete" class="btn btn-danger-ghost btn-sm" style="flex: 1; font-size: 0.75rem; padding: 4px 8px !important; color: #ef4444; border-color: rgba(239, 68, 68, 0.2);"><svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Quitar</button>
+            </div>
+            
+            <!-- Width Slider -->
+            <div class="popover-control-group" style="display: flex; flex-direction: column; gap: 4px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #a1a1aa;">
+                    <span>Ancho:</span>
+                    <span id="logo-editor-width-val" style="font-weight: 600; color: #00d2ff;">65px</span>
+                </div>
+                <input type="range" id="logo-editor-width-slider" min="30" max="200" value="65" style="width: 100%; height: 4px; border-radius: 2px; accent-color: #00d2ff; cursor: pointer;">
+            </div>
+
+            <!-- Proportions checkbox -->
+            <div style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                <input type="checkbox" id="logo-editor-aspect-ratio" checked style="width: 14px; height: 14px; cursor: pointer; accent-color: #00d2ff;">
+                <label for="logo-editor-aspect-ratio" style="font-size: 0.75rem; color: #a1a1aa; cursor: pointer; user-select: none;">Mantener proporción (alto auto)</label>
+            </div>
+
+            <!-- Height Slider -->
+            <div id="logo-editor-height-container" class="popover-control-group hidden" style="display: none; flex-direction: column; gap: 4px;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: #a1a1aa;">
+                    <span>Alto:</span>
+                    <span id="logo-editor-height-val" style="font-weight: 600; color: #00d2ff;">65px</span>
+                </div>
+                <input type="range" id="logo-editor-height-slider" min="30" max="200" value="65" style="width: 100%; height: 4px; border-radius: 2px; accent-color: #00d2ff; cursor: pointer;">
+            </div>
+
+            <!-- Object-fit Mode -->
+            <div id="logo-editor-fit-container" class="popover-control-group hidden" style="display: none; flex-direction: column; gap: 4px;">
+                <span style="font-size: 0.75rem; color: #a1a1aa;">Ajuste de imagen:</span>
+                <div class="fit-btn-group" style="display: flex; gap: 4px;">
+                    <button type="button" class="btn btn-ghost btn-xs btn-fit active" data-fit="contain" style="flex: 1; font-size: 0.65rem; padding: 2px 4px !important;">Ajustar</button>
+                    <button type="button" class="btn btn-ghost btn-xs btn-fit" data-fit="cover" style="flex: 1; font-size: 0.65rem; padding: 2px 4px !important;">Recortar</button>
+                    <button type="button" class="btn btn-ghost btn-xs btn-fit" data-fit="fill" style="flex: 1; font-size: 0.65rem; padding: 2px 4px !important;">Estirar</button>
+                </div>
+            </div>
+
+            <!-- Reset -->
+            <div style="border-top: 1px solid rgba(255,255,255,0.06); padding-top: 10px; margin-top: 2px;">
+                <button type="button" id="logo-editor-reset" class="btn btn-accent btn-full" style="font-size: 0.75rem; padding: 6px 12px; height: auto;">Restablecer valores</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- include:ui/fragments/modals/refine-text.html -->
+
+    <!-- include:ui/fragments/modals/logos-gallery.html -->
+
+    <!-- ═══════════ EDITOR CONTEXT MENU ═══════════ -->
+    <div id="editor-context-menu" class="editor-context-menu hidden no-print" style="position: absolute; display: none; z-index: 10000;">
+        <ul class="context-menu-list">
+            <li id="menu-item-bold" class="context-menu-item"><strong>Negrita</strong> <span class="shortcut">Ctrl+B</span></li>
+            <li id="menu-item-italic" class="context-menu-item"><em>Cursiva</em> <span class="shortcut">Ctrl+I</span></li>
+            <li id="menu-item-underline" class="context-menu-item"><span style="text-decoration: underline;">Subrayado</span> <span class="shortcut">Ctrl+U</span></li>
+            <li class="context-menu-divider"></li>
+            <li id="menu-item-cut" class="context-menu-item">Cortar <span class="shortcut">Ctrl+X</span></li>
+            <li id="menu-item-copy" class="context-menu-item">Copiar <span class="shortcut">Ctrl+C</span></li>
+            <li id="menu-item-paste" class="context-menu-item">Pegar <span class="shortcut">Ctrl+V</span></li>
+            <li class="context-menu-divider"></li>
+            <li id="menu-item-ai-improve" class="context-menu-item">Refinar con IA</li>
+            <li id="menu-item-ai-rubrica" class="context-menu-item">Rúbrica con IA</li>
+            <li id="menu-item-edit-logo" class="context-menu-item hidden">Ajustes de Logo</li>
+            <li id="menu-item-swap-logos" class="context-menu-item hidden">Intercambiar Lado</li>
+        </ul>
+    </div>

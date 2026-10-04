@@ -1,0 +1,59 @@
+    <!-- ═══════════ PDF EXPORT GUIDE MODAL ═══════════ -->
+    <div id="pdf-guide-modal" class="pdf-guide-overlay hidden">
+        <div class="pdf-guide-card glass-card">
+            <button id="pdf-guide-close" class="pdf-guide-close" title="Cerrar" aria-label="Cerrar">&times;</button>
+            <div class="pdf-guide-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></div>
+            <h3 class="pdf-guide-title">Exportar Sesión como PDF</h3>
+            
+            <!-- Warning badge for offline print -->
+            <div class="pdf-guide-warning-badge" style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.25); color: #eab308; padding: 8px 12px; border-radius: 8px; font-size: 0.82rem; font-weight: 600; margin-bottom: 12px; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg> Motor Local Desconectado: Se usará la impresión de Windows
+            </div>
+
+            <p class="pdf-guide-subtitle">Para obtener un PDF de calidad con el navegador, sigue estos pasos:</p>
+
+            <div class="pdf-guide-steps">
+                <div class="pdf-guide-step">
+                    <span class="step-number">1</span>
+                    <div class="step-content">
+                        <strong>Destino</strong>
+                        <span>Selecciona <em>"Guardar como PDF"</em></span>
+                    </div>
+                </div>
+                <div class="pdf-guide-step">
+                    <span class="step-number">2</span>
+                    <div class="step-content">
+                        <strong>Más opciones</strong>
+                        <span>Activa <em>"Gráficos de fondo"</em> (para conservar colores)</span>
+                    </div>
+                </div>
+                <div class="pdf-guide-step">
+                    <span class="step-number">3</span>
+                    <div class="step-content">
+                        <strong>Cabeceras</strong>
+                        <span>Desactiva <em>"Cabeceras y pies de página"</em> (para limpiar URLs)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Banner Motor Premium -->
+            <div class="pdf-premium-ad-box" style="background: var(--color-card-surface); border: 1px dashed rgba(6, 182, 212, 0.3); border-radius: 8px; padding: 15px; margin: 15px 0; text-align: left;">
+                <div style="display: flex; align-items: center; gap: 8px; color: #06b6d4; font-weight: 600; font-size: 0.9rem; margin-bottom: 6px;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> ¡Recomendado: Exportación Premium Directa!
+                </div>
+                <p style="font-size: 0.8rem; color: #94a3b8; line-height: 1.4; margin-bottom: 10px;">
+                    Para descargas automáticas inmediatas con paginado físico A4 perfecto y archivos Word (.docx) nativos editables de Office, descarga e inicia el motor.
+                </p>
+                <a href="https://descargas.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display: inline-flex; align-items: center; justify-content: center; width: 100%; font-size: 0.85rem; font-weight: 600; text-decoration: none; padding: 8px 14px;">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
+                </a>
+            </div>
+
+            <div class="pdf-guide-actions">
+                <button id="pdf-guide-cancel" class="btn btn-ghost">Cancelar</button>
+                <button id="pdf-guide-proceed" class="btn btn-primary pdf-guide-proceed-btn">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg> Abrir Impresora
+                </button>
+            </div>
+        </div>
+    </div>

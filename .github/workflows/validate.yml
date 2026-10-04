@@ -42,7 +42,7 @@ jobs:
       - name: Validate Python syntax
         run: |
           python -m py_compile backend/main.py backend/version.py backend/docx_builder.py backend/docx_builder_v1.py backend/docx_builder_planning.py backend/word_math.py backend/models/session_document.py backend/models/planning_document.py backend/adapters/legacy_to_v1.py
-          python -m ruff check backend tests --select F401,F811,F821 --exclude backend/build,backend/dist
+          python -m ruff check backend scripts tests --select F401,F811,F821 --exclude backend/build,backend/dist
 
       - name: Validate repository hygiene
         run: |
@@ -58,6 +58,11 @@ jobs:
 
       - name: Validate curriculum JSON
         run: python -m json.tool data/competencias.json > /dev/null
+
+      - name: Validate generated index composition
+        run: |
+          python scripts/build_index.py --check
+          python tests/test_index_composition.py
 
       - name: Validate browser cache versions
         run: |
@@ -151,6 +156,7 @@ jobs:
           python tests/ui_theme_smoke.py
           python tests/ui_accessibility_smoke.py
           python tests/ui_startup_resilience.py
+          python tests/ui_global_modals_smoke.py
 
       - name: Check Supabase Edge Functions
         run: |

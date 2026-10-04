@@ -172,15 +172,19 @@ El mismo documento garantiza paridad 1:1 entre lo previsualizado en el navegador
 │   └── theme.js             # Gestor reactivo de temas (Claro / Oscuro / Sistema)
 ├── schemas/                 # Contrato JSON Schema canónico v1
 ├── scripts/                 # Scripts de utilidad y compilación
+│   ├── build_index.py       # Compositor build-time del documento principal
 │   └── version_assets.py    # Generador de hashes para cache-busting en CI
 ├── SKILLs/                  # Reglas de diseño y guía de componentes Pablito Leans
 ├── supabase/                # Infraestructura de backend en la nube
 │   ├── functions/           # Edge Functions (Deno / TypeScript)
 │   └── migrations/          # Migraciones SQL incrementales
 ├── tests/                   # Suite completa de pruebas unitarias y de integración
+├── ui/                      # Fuentes HTML modulares del frontend
+│   ├── fragments/           # Landing, Home, editor, preview y modales
+│   └── index.shell.html     # Raíz de composición y orden de scripts
 ├── database_setup.sql       # Script SQL maestro e idempotente para Supabase
 ├── descargas_landing.html   # Página de descarga de pablitohost.exe
-└── index.html               # Punto de entrada principal de la aplicación web
+└── index.html               # Salida generada servida por GitHub Pages
 ```
 
 ---
@@ -280,10 +284,11 @@ python tests/ai_quota_policies.py         # Separación entre plan comercial y c
 Para evitar que los navegadores o CDNs utilicen versiones obsoletas de archivos `.js` o `.css` al desplegar en GitHub Pages, el proyecto utiliza un sistema de **cache-busting basado en el hash del contenido**:
 
 ```powershell
+python scripts/build_index.py --write
 python scripts/version_assets.py --write
 ```
 
-Este script calcula el hash SHA-256 del contenido de cada script o stylesheet local y actualiza automáticamente los parámetros `?v=<hash>`. También genera `app-version.json` y sincroniza el identificador de build incluido en las páginas interactivas.
+El primer comando compone `index.html` desde `ui/index.shell.html` y `ui/fragments/`; el segundo calcula el hash SHA-256 de cada script o stylesheet local y actualiza automáticamente los parámetros `?v=<hash>`. También genera `app-version.json` y sincroniza el identificador de build incluido en las páginas interactivas. Consulta [`docs/FRONTEND_COMPOSITION.md`](docs/FRONTEND_COMPOSITION.md) para editar y validar estas fuentes.
 
 Las páginas consultan el manifiesto con `cache: no-store`. Cuando detectan un despliegue nuevo muestran un aviso para actualizar mediante una URL versionada, sin recargar automáticamente ni interrumpir trabajo sin guardar. La integración continua verifica que hashes, HTML y manifiesto permanezcan sincronizados.
 

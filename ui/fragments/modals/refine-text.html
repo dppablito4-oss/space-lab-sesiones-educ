@@ -1,0 +1,36 @@
+    <!-- ═══════════ REFINE TEXT MODAL ═══════════ -->
+    <div id="refine-text-modal" class="load-modal hidden no-print" style="z-index: 9999;">
+        <div class="load-modal-content glass-card" style="max-width: 485px; padding: 2rem; position: relative;">
+            <button id="btn-close-refine-modal" class="btn btn-ghost btn-sm" aria-label="Cerrar" style="position: absolute; top: 1rem; right: 1rem; color: #71717a; cursor: pointer; background: none; border: none; padding: 0;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+            <h3 style="margin: 0 0 1rem 0; font-size: 1.2rem; color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Refinar Texto con IA</h3>
+            
+            <!-- Selected Text Preview -->
+            <div style="background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.06); padding: 12px; border-radius: 8px; margin-bottom: 1.25rem; max-height: 100px; overflow-y: auto;">
+                <label style="display: block; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; font-weight: 600;">Texto seleccionado:</label>
+                <p id="refine-text-preview" style="font-size: 0.8rem; color: #e4e4e7; margin: 0; font-style: italic; white-space: pre-wrap;"></p>
+            </div>
+
+            <!-- Quick Options -->
+            <div class="form-group" style="margin-bottom: 1.25rem;">
+                <label class="form-label" style="font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; display: block;">¿Cómo deseas refinarlo?</label>
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-bottom: 12px;">
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn active" data-instruction="Hazlo más formal, claro y profesional. Mantén un tono pedagógico adecuado.">Más Formal</button>
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Hazlo mucho más sencillo, explicativo y fácil de entender para niños.">Más Sencillo</button>
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Reescríbelo con un tono lúdico, divertido, entusiasta y chistoso para enganchar a los estudiantes.">Más Divertido</button>
+                    <button type="button" class="btn btn-ghost btn-sm refine-opt-btn" data-instruction="Corrige estrictamente cualquier error de ortografía, puntuación o gramática sin alterar su sentido.">Corregir Ortografía</button>
+                </div>
+            </div>
+
+            <!-- Custom Instruction Input -->
+            <div class="form-group" style="margin-bottom: 1.5rem;">
+                <label for="input-refine-custom" class="form-label" style="font-size: 0.8rem; font-weight: 600; margin-bottom: 6px;">O escribe una orden personalizada:</label>
+                <textarea id="input-refine-custom" class="form-textarea" rows="2" style="font-size: 0.8rem; background: rgba(0,0,0,0.25); border: 1px solid rgba(255,255,255,0.08); width: 100%; border-radius: 6px; padding: 8px; color: #fff;" placeholder="Ej. Escríbelo en forma de rima, tradúcelo a quechua, agrega preguntas..."></textarea>
+            </div>
+
+            <!-- Action Buttons -->
+            <div style="display: flex; justify-content: flex-end; gap: 8px;">
+                <button type="button" id="btn-refine-cancel" class="btn btn-ghost btn-sm" style="font-size: 0.8rem; padding: 6px 16px;">Cancelar</button>
+                <button type="button" id="btn-refine-submit" class="btn btn-primary btn-sm" style="font-size: 0.8rem; padding: 6px 16px; font-weight: 600;"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Refinar</button>
+            </div>
+        </div>
+    </div>
