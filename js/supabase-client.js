@@ -618,8 +618,17 @@ window.SupabaseClient = (() => {
         }
     }
 
+    /**
+     * Suscribe un callback a cambios de estado de sesión (login, token refresh, logout).
+     */
+    function onAuthStateChange(callback) {
+        if (!supabase?.auth?.onAuthStateChange) return { data: { subscription: null } };
+        return supabase.auth.onAuthStateChange(callback);
+    }
+
     return {
         get client() { return supabase; },
+        onAuthStateChange,
         signUp,
         signIn,
         sendOtp,

@@ -134,6 +134,10 @@ window.AuthUi = (() => {
                 if (e.target === termsModal) termsModal.classList.add('hidden');
             });
         }
+
+        window.SupabaseClient?.onAuthStateChange?.(() => {
+            checkSessionState();
+        });
     }
 
     function setMode(isLogin) {

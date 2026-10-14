@@ -6,7 +6,7 @@ window.SpaceLabHome = (() => {
     let currentPlanCode = null;
     let refreshRequest = 0;
     const REMOTE_SUMMARY_TIMEOUT_MS = 6000;
-    const SESSION_USER_TIMEOUT_MS = 1500;
+    const SESSION_USER_TIMEOUT_MS = 3500;
 
     function withDeadline(promise, fallback = null, timeoutMs = REMOTE_SUMMARY_TIMEOUT_MS) {
         return Promise.race([
@@ -308,6 +308,22 @@ window.SpaceLabHome = (() => {
         window.addEventListener('spacelab:session-loaded', () => {
             renderSessions(getSessions());
             renderCurrentSession();
+        });
+        window.SupabaseClient?.onAuthStateChange?.((event, session) => {
+            const homeView = byId('home-view');
+            if (session?.user) {
+                if (homeView && !homeView.classList.contains('hidden')) {
+                    refresh({ user: session.user });
+                }
+            } else if (event === 'SIGNED_OUT') {
+                byId('home-welcome-title').textContent = 'Bienvenido a tu espacio docente';
+                byId('home-account-name').textContent = 'Docente';
+                byId('home-account-name').title = '';
+                byId('home-account-avatar').textContent = 'D';
+                const accountPlan = byId('home-account-plan');
+                if (accountPlan) accountPlan.textContent = 'Plan docente';
+                renderWallet(null);
+            }
         });
     }
 

@@ -85,6 +85,20 @@ window.LandingRouter = (() => {
         });
 
         window.addEventListener('hashchange', checkRoute);
+
+        window.SupabaseClient?.onAuthStateChange?.((event, session) => {
+            const currentHash = window.location.hash;
+            if (session?.user) {
+                if (currentHash === '#/home' || currentHash === '#/sessions') {
+                    showHome(false, { scrollToSessions: currentHash === '#/sessions', user: session.user });
+                }
+            } else if (event === 'SIGNED_OUT') {
+                if (currentHash === '#/home' || currentHash === '#/sessions') {
+                    showLanding(false);
+                    window.AuthUi?.openModal?.();
+                }
+            }
+        });
     }
 
     async function checkRoute() {
