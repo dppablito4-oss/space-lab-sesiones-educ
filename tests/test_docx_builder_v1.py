@@ -24,11 +24,18 @@ sys.path.insert(0, os.path.join(ROOT_DIR, 'backend'))
 from docx import Document
 from models.session_document import SessionDocumentV1
 from docx_builder_v1 import build_docx_from_v1
-import pytest
+try:
+    import pytest
+    _mark_parametrize = pytest.mark.parametrize
+except ImportError:
+    def _mark_parametrize(*_args, **_kwargs):
+        def _decorator(fn):
+            return fn
+        return _decorator
 from docx.oxml.ns import qn
 
 
-@pytest.mark.parametrize('fixture_filename', [
+@_mark_parametrize('fixture_filename', [
     'secundaria-matematica-polya.v1.json',
     'inicial.v1.json',
     'primaria-con-ficha.v1.json',
@@ -57,7 +64,6 @@ def test_fixture_docx(fixture_filename: str):
     )
 
     print(f"  ✓ {fixture_filename}: DOCX generado exitosamente ({size} bytes, {len(reloaded_doc.tables)} tablas)")
-    return size
 
 
 def test_custom_presentation_tokens():
@@ -201,9 +207,9 @@ if __name__ == '__main__':
     print("TEST DOCX BUILDER V1 — SessionDocument v1 → .docx")
     print("=" * 60)
 
-    size1 = test_fixture_docx('secundaria-matematica-polya.v1.json')
-    size2 = test_fixture_docx('inicial.v1.json')
-    size3 = test_fixture_docx('primaria-con-ficha.v1.json')
+    test_fixture_docx('secundaria-matematica-polya.v1.json')
+    test_fixture_docx('inicial.v1.json')
+    test_fixture_docx('primaria-con-ficha.v1.json')
     test_custom_presentation_tokens()
     test_template_fidelity_and_content_coverage()
 

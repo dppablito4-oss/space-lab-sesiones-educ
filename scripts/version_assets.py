@@ -50,7 +50,8 @@ def version_html(source: str) -> str:
 
 
 def normalize_build_meta(source: str) -> str:
-    return BUILD_META_PATTERN.sub(r"\g<prefix>BUILD_ID\g<suffix>", source)
+    normalized = source.replace("\r\n", "\n").replace("\r", "\n")
+    return BUILD_META_PATTERN.sub(r"\g<prefix>BUILD_ID\g<suffix>", normalized)
 
 
 def calculate_build_id(versioned_pages: dict[Path, str]) -> str:
