@@ -20,25 +20,27 @@ fn(evalContext);
 
 const { resolveApiModel, calculateProviderCostUsd, MODEL_CATALOG, MODEL_ALIAS_MAP } = evalContext;
 
-console.log('=== TEST MODEL CATALOG & 5 ACTIVE MODELS ===');
+console.log('=== TEST MODEL CATALOG & ACTIVE MODELS ===');
 
-// 1. Test resolución de los 5 modelos canónicos (invocación directa sin degradar a 4o)
+// 1. Test resolución de los modelos canónicos
 assert.equal(resolveApiModel('gpt-6-luna'), 'gpt-6-luna');
-assert.equal(resolveApiModel('gpt-5.6-terra'), 'gpt-5.6-terra');
+assert.equal(resolveApiModel('gpt-6.1-sol'), 'gpt-6.1-sol');
+assert.equal(resolveApiModel('gpt-6-sol'), 'gpt-6.1-sol');
 assert.equal(resolveApiModel('gemini-2.5-flash'), 'gemini-2.5-flash');
 assert.equal(resolveApiModel('deepseek-chat'), 'deepseek-chat');
 assert.equal(resolveApiModel('deepseek-v3'), 'deepseek-chat');
 assert.equal(resolveApiModel('deepseek-reasoner'), 'deepseek-reasoner');
 assert.equal(resolveApiModel('deepseek-r1'), 'deepseek-reasoner');
-console.log('  ✓ Invocación directa de los 5 modelos canónicos OK');
+console.log('  ✓ Invocación directa de los modelos canónicos OK');
 
 // 2. Test aliases legacy y modos de calidad
-assert.equal(resolveApiModel('gpt-6-astra'), 'gpt-5.6-terra');
-assert.equal(resolveApiModel('gpt-6-sol'), 'gpt-5.6-terra');
-assert.equal(resolveApiModel('gpt-5.6-luna'), 'gpt-5.6-terra');
+assert.equal(resolveApiModel('gpt-6-astra'), 'gpt-6.1-sol');
+assert.equal(resolveApiModel('gpt-5.6-terra'), 'gpt-6.1-sol');
+assert.equal(resolveApiModel('gpt-5.6-luna'), 'gpt-6.1-sol');
 assert.equal(resolveApiModel('gpt-5.4-mini'), 'gpt-6-luna');
 assert.equal(resolveApiModel('fast'), 'gpt-6-luna');
-assert.equal(resolveApiModel('max_quality'), 'gpt-5.6-terra');
+assert.equal(resolveApiModel('max_quality'), 'gpt-6.1-sol');
+assert.equal(resolveApiModel('automatic'), 'gpt-6-luna');
 console.log('  ✓ Preservación de aliases y modos comerciales OK');
 
 // 3. Test cálculo de costo en USD
@@ -46,14 +48,14 @@ console.log('  ✓ Preservación de aliases y modos comerciales OK');
 const costLuna = calculateProviderCostUsd('gpt-6-luna', 10000, 2000);
 assert.equal(costLuna, 0.0027);
 
-// gpt-5.6-terra: input 2.50/M, output 10.00/M
-const costTerra = calculateProviderCostUsd('gpt-5.6-terra', 10000, 2000);
-assert.equal(costTerra, 0.045);
+// gpt-6.1-sol: input 2.00/M, output 10.00/M
+const costSol = calculateProviderCostUsd('gpt-6.1-sol', 10000, 2000);
+assert.equal(costSol, 0.04);
 
 // deepseek-reasoner (DeepSeek R1): input 0.55/M, output 2.19/M
 // 10,000 input = 0.0055, 2,000 output = 0.00438, total = 0.00988
 const costR1 = calculateProviderCostUsd('deepseek-reasoner', 10000, 2000);
 assert.equal(costR1, 0.00988);
 
-console.log('  ✓ Cálculo de costo exacto en USD para los 5 modelos OK');
+console.log('  ✓ Cálculo de costo exacto en USD para los modelos OK');
 console.log('>>> TODOS LOS TESTS DE MODEL CATALOG PASARON EXITOSAMENTE <<<');

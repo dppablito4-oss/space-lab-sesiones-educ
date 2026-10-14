@@ -24,9 +24,15 @@ sys.path.insert(0, os.path.join(ROOT_DIR, 'backend'))
 from docx import Document
 from models.session_document import SessionDocumentV1
 from docx_builder_v1 import build_docx_from_v1
+import pytest
 from docx.oxml.ns import qn
 
 
+@pytest.mark.parametrize('fixture_filename', [
+    'secundaria-matematica-polya.v1.json',
+    'inicial.v1.json',
+    'primaria-con-ficha.v1.json',
+])
 def test_fixture_docx(fixture_filename: str):
     """Carga un fixture v1 y genera un documento DOCX válido."""
     print(f"\nGenerando DOCX para: {fixture_filename}...")

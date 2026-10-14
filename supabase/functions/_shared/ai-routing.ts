@@ -26,11 +26,14 @@ const LEGACY_QUALITY: Record<string, AiQuality> = {
   "gemini-2.5-flash": "fast",
   "deepseek-chat": "balanced",
   "deepseek-v3": "balanced",
+  "openai-gpt-6.1-sol": "max_quality",
+  "gpt-6.1-sol": "max_quality",
+  "openai-gpt-6-sol": "max_quality",
+  "gpt-6-sol": "max_quality",
   "openai-gpt-5.6-terra": "max_quality",
   "gpt-5.6-terra": "max_quality",
   "openai-gpt-5.6-luna": "max_quality",
   "openai-gpt-6-astra": "max_quality",
-  "openai-gpt-6-sol": "max_quality",
   "deepseek-reasoner": "max_quality",
   "deepseek-r1": "max_quality",
 };
@@ -101,7 +104,7 @@ export function decideAiRoute(payload: AiRoutingInput): AiRouteDecision {
       quality,
       provider: "openai",
       functionName: "openai-router",
-      model: "gpt-5.6-terra",
+      model: "gpt-6.1-sol",
       reason: hasAttachment ? "attachment_max_quality" : "quality_max",
     };
   }
@@ -121,7 +124,7 @@ export function fallbackRoute(disabledProvider: AiProvider, quality: AiQuality):
       quality,
       provider: "openai",
       functionName: "openai-router",
-      model: quality === "max_quality" ? "gpt-5.6-terra" : "gpt-6-luna",
+      model: quality === "max_quality" ? "gpt-6.1-sol" : "gpt-6-luna",
       reason: `provider_${disabledProvider}_disabled`,
     };
   }

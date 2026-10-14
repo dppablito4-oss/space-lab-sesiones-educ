@@ -7,7 +7,7 @@ import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.
 import { calculateProviderCostUsd, resolveApiModel, MODEL_CATALOG } from "../_shared/model-catalog.ts";
 import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
 
-const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-5.6-terra", "gpt-6-astra", "gpt-6-sol", "gpt-5.6-luna", "gpt-5.4-mini", "fast", "balanced", "max_quality", "automatic"]);
+const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-6.1-sol", "gpt-6-sol", "gpt-5.6-terra", "gpt-6-astra", "gpt-5.6-luna", "gpt-5.4-mini", "fast", "balanced", "max_quality", "automatic"]);
 const MAX_SOURCE_CHARS = 30_000;
 const MAX_IMAGE_BASE64_CHARS = 4 * 1024 * 1024;
 

@@ -39,7 +39,7 @@ assert.deepEqual(
 );
 assert.equal(decideAiRoute({ action: 'generate_session', quality: 'fast', input: {} }).provider, 'gemini');
 assert.equal(decideAiRoute({ action: 'generate_session', quality: 'balanced', input: {} }).provider, 'deepseek');
-assert.equal(decideAiRoute({ action: 'generate_session', quality: 'max_quality', input: {} }).model, 'gpt-5.6-terra');
+assert.equal(decideAiRoute({ action: 'generate_session', quality: 'max_quality', input: {} }).model, 'gpt-6.1-sol');
 
 const attachmentRoute = decideAiRoute({
     action: 'generate_session',

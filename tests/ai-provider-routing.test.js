@@ -57,6 +57,7 @@ async function expectQuality(provider, expectedQuality) {
     await expectQuality('balanced', 'balanced');
     await expectQuality('max_quality', 'max_quality');
     await expectQuality('openai-gpt-6-luna', 'automatic');
+    await expectQuality('openai-gpt-6.1-sol', 'max_quality');
     await expectQuality('openai-gpt-5.6-terra', 'max_quality');
     await expectQuality('gemini-2.5-flash', 'fast');
     await expectQuality('deepseek-v3', 'balanced');
@@ -82,7 +83,7 @@ async function expectQuality(provider, expectedQuality) {
         area: 'Matemática',
         titulo: 'Prueba canónica',
         methodology: 'polya',
-        ai_provider: 'openai-gpt-5.6-luna'
+        ai_provider: 'openai-gpt-6.1-sol'
     });
     assert.ok(Array.isArray(generated.momentos.desarrollo.procesos));
     assert.equal(generated.momentos.desarrollo.procesos.length, 1);
@@ -99,7 +100,7 @@ async function expectQuality(provider, expectedQuality) {
     await ai.generateSession({
         area: 'Matemática',
         titulo: 'Situación seleccionada',
-        ai_provider: 'openai-gpt-5.6-luna',
+        ai_provider: 'openai-gpt-6.1-sol',
         sourceFile: {
             name: 'casos.pdf',
             type: 'application/pdf',

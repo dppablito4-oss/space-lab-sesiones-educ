@@ -41,7 +41,7 @@ REGLAS:
 2. La respuesta debe cumplir SessionDocument v1 y declarar "schemaVersion": "1.0".
 3. Usa HTML básico seguro en contenido: p, br, strong, em, ul, ol, li y tablas simples. No uses script, iframe, eventos, URLs javascript: ni CSS externo.
 4. Incluye acciones concretas del docente y estudiantes, preguntas mediadoras, organización, recursos y evidencias parciales.
-5. Incluye como mínimo 3 capacidades, entre 3 y 5 criterios observables, 4 procesos de inicio, los procesos metodológicos pertinentes al propósito de la sesión y 3 procesos de cierre.
+5. Incluye como mínimo 3 capacidades, entre 3 y 5 criterios observables, exactamente 4 procesos desarrollados en inicio, al menos 3 a 4 procesos metodológicos en desarrollo y al menos 3 procesos en cierre. Cada proceso debe ser extenso, detallado y descriptivo (mínimo 100 palabras de acciones del docente y estudiantes), superando 2000 caracteres de texto en total en toda la sesión.
 6. momentos.inicio, momentos.desarrollo y momentos.cierre deben contener tiempoMinutos y un array procesos. Cada proceso contiene id, orden, titulo y contenido {"format":"html","value":"..."}.
 7. Incluye proposito, competenciasTransversales, enfoquesTransversales, recursos, evaluacion, fichaTrabajo, juegoLibreSectores y listaCotejo.
 8. En Matemática escribe expresiones con LaTeX: $...$ en línea y $$...$$ en bloque.

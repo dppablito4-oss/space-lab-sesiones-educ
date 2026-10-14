@@ -21,11 +21,14 @@ const AiCopilot = (() => {
         'gemini-2.5-flash': 'fast',
         'deepseek-chat': 'balanced',
         'deepseek-v3': 'balanced',
+        'openai-gpt-6.1-sol': 'max_quality',
+        'gpt-6.1-sol': 'max_quality',
         'openai-gpt-5.6-terra': 'max_quality',
         'gpt-5.6-terra': 'max_quality',
         'openai-gpt-5.6-luna': 'max_quality',
         'openai-gpt-6-astra': 'max_quality',
         'openai-gpt-6-sol': 'max_quality',
+        'gpt-6-sol': 'max_quality',
         'deepseek-reasoner': 'max_quality',
         'deepseek-r1': 'max_quality'
     };

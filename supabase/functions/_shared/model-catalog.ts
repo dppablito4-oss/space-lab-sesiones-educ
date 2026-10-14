@@ -29,12 +29,19 @@ export const MODEL_CATALOG: Record<string, ModelMetadata> = {
     qualityTier: "fast",
     pricing: { inputPerMillion: 0.15, outputPerMillion: 0.60 },
   },
+  "gpt-6.1-sol": {
+    provider: "openai",
+    apiModel: "gpt-6.1-sol",
+    displayName: "GPT-6.1 Sol (Avanzado y Curricular)",
+    qualityTier: "max_quality",
+    pricing: { inputPerMillion: 2.00, outputPerMillion: 10.00 },
+  },
   "gpt-5.6-terra": {
     provider: "openai",
-    apiModel: "gpt-5.6-terra",
-    displayName: "GPT-5.6 Terra (Avanzado y Curricular)",
+    apiModel: "gpt-6.1-sol",
+    displayName: "GPT-5.6 Terra (Alias legacy a GPT-6.1 Sol)",
     qualityTier: "max_quality",
-    pricing: { inputPerMillion: 2.50, outputPerMillion: 10.00 },
+    pricing: { inputPerMillion: 2.00, outputPerMillion: 10.00 },
   },
   "gemini-2.5-flash": {
     provider: "gemini",
@@ -60,13 +67,14 @@ export const MODEL_CATALOG: Record<string, ModelMetadata> = {
 };
 
 /**
- * Mapeo de identificadores recibidos del cliente (5 modelos activos + alias de compatibilidad)
+ * Mapeo de identificadores recibidos del cliente (modelos activos + alias de compatibilidad)
  * hacia el modelo canónico real invocado en la API.
  */
 export const MODEL_ALIAS_MAP: Record<string, string> = {
-  // 5 Modelos canónicos activos (invocación directa sin degradar)
+  // Modelos canónicos activos (invocación directa sin degradar)
   "gpt-6-luna": "gpt-6-luna",
-  "gpt-5.6-terra": "gpt-5.6-terra",
+  "gpt-6.1-sol": "gpt-6.1-sol",
+  "gpt-6-sol": "gpt-6.1-sol",
   "gemini-2.5-flash": "gemini-2.5-flash",
   "deepseek-chat": "deepseek-chat",
   "deepseek-reasoner": "deepseek-reasoner",
@@ -78,16 +86,16 @@ export const MODEL_ALIAS_MAP: Record<string, string> = {
   // Modos comerciales de calidad
   "fast": "gpt-6-luna",
   "balanced": "deepseek-chat",
-  "max_quality": "gpt-5.6-terra",
+  "max_quality": "gpt-6.1-sol",
   "automatic": "gpt-6-luna",
 
   // Compatibilidad hacia atrás / redirección a los modelos nuevos
+  "gpt-5.6-terra": "gpt-6.1-sol",
   "gpt-4o-mini": "gpt-6-luna",
-  "gpt-4o": "gpt-5.6-terra",
+  "gpt-4o": "gpt-6.1-sol",
   "gpt-5.4-mini": "gpt-6-luna",
-  "gpt-5.6-luna": "gpt-5.6-terra",
-  "gpt-6-astra": "gpt-5.6-terra",
-  "gpt-6-sol": "gpt-5.6-terra",
+  "gpt-5.6-luna": "gpt-6.1-sol",
+  "gpt-6-astra": "gpt-6.1-sol",
   "gemini-2.0-flash": "gemini-2.5-flash",
 };
 
