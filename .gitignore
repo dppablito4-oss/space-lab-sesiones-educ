@@ -30,3 +30,4 @@ Thumbs.db
 ~$*
 tests/screenshots/
 tests/fixtures/unidad_3sec_ept_manual_*.docx
+tests/fixtures/test_compiled_exe_output.docx

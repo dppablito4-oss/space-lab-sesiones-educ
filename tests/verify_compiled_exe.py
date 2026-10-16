@@ -47,7 +47,7 @@ def main():
 
         assert online, "El ejecutable no respondió en http://127.0.0.1:8000 en 15 segundos"
         print(f"  [OK] Servidor local en línea: {server_data}")
-        assert server_data.get("version") == "1.3.0"
+        assert server_data.get("version") == "1.4.0"
 
         print("\n[3/5] Leyendo token criptográfico generado por el ejecutable...")
         assert TOKEN_PATH.exists(), f"No se generó {TOKEN_PATH}"

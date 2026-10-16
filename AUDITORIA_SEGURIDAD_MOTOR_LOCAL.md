@@ -1,12 +1,12 @@
 # Reporte Oficial de Auditoría Técnica y Certificado de Seguridad
 
 **Software Evaluado:** Motor Local de Exportación Space Lab (`pablitopyhost.exe` / `pablitohost.exe`)  
-**Versión Auditada:** `v1.3.0`  
-**Fecha de Publicación / Compilación:** 2026-09-21 04:54:41 UTC  
+**Versión Auditada:** `v1.4.0`  
+**Fecha de Publicación / Compilación:** 2026-10-15 19:06:44 UTC  
 **Tipo de Aplicación:** Microservicio local en segundo plano (FastAPI / Python) para renderizado de documentos Word `.docx` (OMML) y PDF A4  
 **Repositorio Oficial de Código Fuente:** [https://github.com/dppablito4-oss/space-lab-sesiones-educ](https://github.com/dppablito4-oss/space-lab-sesiones-educ)  
 **Código Fuente del Backend:** [https://github.com/dppablito4-oss/space-lab-sesiones-educ/tree/main/backend](https://github.com/dppablito4-oss/space-lab-sesiones-educ/tree/main/backend)  
-**Release Oficial:** [https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/tag/v1.3.0](https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/tag/v1.3.0)  
+**Release Oficial:** [https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/tag/v1.4.0](https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/tag/v1.4.0)  
 
 ---
 
@@ -15,13 +15,13 @@
 | Parámetro | Valor de Verificación |
 | :--- | :--- |
 | **Nombre de archivo** | `pablitopyhost.exe` |
-| **Versión canónica** | `1.3.0` (definida en `backend/version.py`) |
-| **Etiqueta Git (Tag)** | `v1.3.0` (commit reproducible en GitHub) |
-| **Hash Criptográfico SHA-256** | `98BFBCD7FA8D431E44B64EA9F892A1537C9D94EEF4E1B269D83D420FEB429105` |
-| **Tamaño exacto del archivo** | `96,189,779 bytes` (~91.7 MB) |
-| **Fecha y hora de compilación** | `2026-09-21 04:54:41 UTC` |
+| **Versión canónica** | `1.4.0` (definida en `backend/version.py`) |
+| **Etiqueta Git (Tag)** | `v1.4.0` (commit reproducible en GitHub) |
+| **Hash Criptográfico SHA-256** | `E186AB16B4E234B0B82DB5B03C43EA13C366BF4E432EDB8701459A2E0451027B` |
+| **Tamaño exacto del archivo** | `93,573,045 bytes` (~89.2 MB) |
+| **Fecha y hora de compilación** | `2026-10-15 19:06:44 UTC` |
 | **Entorno de compilación** | Servidor limpio automatizado en **GitHub Actions** (`windows-latest`, Python 3.11.x, PyInstaller) |
-| **Enlace de descarga directa** | [Descargar pablitopyhost.exe (v1.3.0)](https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/download/v1.3.0/pablitopyhost.exe) |
+| **Enlace de descarga directa** | [Descargar pablitopyhost.exe (v1.4.0)](https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/download/v1.4.0/pablitopyhost.exe) |
 
 ---
 
@@ -46,7 +46,7 @@ El resultado debe coincidir exactamente con:
 ```text
 Algorithm       Hash                                                               Path
 ---------       ----                                                               ----
-SHA256          98BFBCD7FA8D431E44B64EA9F892A1537C9D94EEF4E1B269D83D420FEB429105   ...\pablitopyhost.exe
+SHA256          E186AB16B4E234B0B82DB5B03C43EA13C366BF4E432EDB8701459A2E0451027B   ...\pablitopyhost.exe
 ```
 
 ---
