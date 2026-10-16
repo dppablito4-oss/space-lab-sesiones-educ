@@ -89,6 +89,7 @@ window.LandingRouter = (() => {
         window.SupabaseClient?.onAuthStateChange?.((event, session) => {
             const currentHash = window.location.hash;
             if (session?.user) {
+                window.AuthUi?.closeModal?.();
                 if (currentHash === '#/home' || currentHash === '#/sessions') {
                     showHome(false, { scrollToSessions: currentHash === '#/sessions', user: session.user });
                 }
@@ -118,11 +119,15 @@ window.LandingRouter = (() => {
             return;
         }
 
+        const syncUser = typeof window.SupabaseClient?.getSessionUserSync === 'function'
+            ? window.SupabaseClient.getSessionUserSync()
+            : null;
+
         // Nunca dejar las tres vistas ocultas mientras se resuelve la sesión.
         // Las rutas privadas muestran una vista provisional; el resto abre la
         // portada inmediatamente y se corrige al terminar la lectura local.
         if (hash === '#/home' || hash === '#/sessions') {
-            showHome(false, { scrollToSessions: hash === '#/sessions', persist: false });
+            showHome(false, { scrollToSessions: hash === '#/sessions', persist: false, user: syncUser });
         } else {
             showLanding(false, { persist: false });
         }
@@ -130,16 +135,22 @@ window.LandingRouter = (() => {
         // 2. Mi espacio y la biblioteca requieren una cuenta autenticada.
         if (window.SupabaseClient && typeof window.SupabaseClient.getCurrentUser === 'function') {
             try {
-                const readUser = typeof window.SupabaseClient.getSessionUser === 'function'
-                    ? window.SupabaseClient.getSessionUser
-                    : window.SupabaseClient.getCurrentUser;
-                const user = await sessionCheckWithDeadline(readUser());
+                const syncUser = typeof window.SupabaseClient.getSessionUserSync === 'function'
+                    ? window.SupabaseClient.getSessionUserSync()
+                    : null;
+                const readUser = syncUser
+                    ? () => Promise.resolve(syncUser)
+                    : (typeof window.SupabaseClient.getSessionUser === 'function'
+                        ? window.SupabaseClient.getSessionUser
+                        : window.SupabaseClient.getCurrentUser);
+                const user = syncUser || await sessionCheckWithDeadline(readUser());
                 if (requestId !== routeRequest) return;
                 if (user === SESSION_CHECK_TIMEOUT) {
                     console.warn('[LandingRouter] La verificación local tardó demasiado; se mantiene la vista disponible.');
                     return;
                 }
                 if (user) {
+                    window.AuthUi?.closeModal?.();
                     showHome(false, { scrollToSessions: hash === '#/sessions', user });
                     return;
                 }
@@ -149,6 +160,12 @@ window.LandingRouter = (() => {
         }
 
         if (hash === '#/home' || hash === '#/sessions') {
+            const fallbackUser = window.SupabaseClient?.getSessionUserSync?.();
+            if (fallbackUser) {
+                window.AuthUi?.closeModal?.();
+                showHome(false, { scrollToSessions: hash === '#/sessions', user: fallbackUser });
+                return;
+            }
             showLanding(false);
             window.AuthUi?.openModal?.();
             return;

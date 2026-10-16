@@ -97,6 +97,42 @@ Deno.test("canonical and legacy project methodology codes are compatible", () =>
   assert(!problem.systemPrompt.includes("Aprendizaje Basado en Proyectos"), "problem-based learning must not be confused with legacy abp");
 });
 
+Deno.test("resolveSessionMethodology infers methodology from area and snapshot", () => {
+  const scienceResult = buildPromptRequest({
+    action: "generate_session", requestId: REQUEST_ID,
+    input: { metadata: { nivel: "SECUNDARIA", grado: "3", area: "Ciencia y Tecnología", titulo: "Fotosíntesis" } },
+  });
+  assert(scienceResult.systemPrompt.includes("Indagación Científica"), "Ciencia y Tecnología must infer indagación");
+  assert(scienceResult.systemPrompt.includes("Problematización de situaciones"), "must contain inquiry steps");
+
+  const mathResult = buildPromptRequest({
+    action: "generate_session", requestId: REQUEST_ID,
+    input: { metadata: { nivel: "PRIMARIA", grado: "4", area: "Matemática", titulo: "Patrones" } },
+  });
+  assert(mathResult.systemPrompt.includes("Polya"), "Matemática must infer Polya");
+  assert(mathResult.systemPrompt.includes("Familiarización con el problema"), "must contain Polya steps");
+
+  const unitWithMethodology = {
+    schemaVersion: "2.0", planningContainerId: "plan-steam", planningRevision: 1,
+    sequenceItemId: "session-01", sequenceIndex: 1, capturedAt: "2026-10-15T20:00:00.000Z",
+    identity: { title: "Unidad STEAM" },
+    sequenceItem: { id: "session-01", index: 1, title: "Prototipo de filtro" },
+    curriculumMap: [{ area: { officialName: "Ciencia y Tecnología" } }],
+    methodologyConfig: { primaryMethodology: "steam" },
+    situation: { significantSituation: "Agua contaminada en la comunidad", challengeOrQuestion: "¿Cómo purificarla?" },
+    precedingSequence: [],
+    followingSequence: [],
+  };
+  const unitResult = buildPromptRequest({
+    action: "generate_session", requestId: REQUEST_ID,
+    input: { metadata: { nivel: "SECUNDARIA", titulo: "Prototipo de filtro", inheritedContextSnapshot: unitWithMethodology } },
+  });
+  assert(unitResult.systemPrompt.includes("STEAM") && unitResult.systemPrompt.includes("Indagación Científica"), "must inherit steam from unit methodologyConfig");
+  assert(unitResult.userPrompt.includes("Agua contaminada en la comunidad"), "user prompt must include unit significantSituation");
+  assert(unitResult.userPrompt.includes("¿Cómo purificarla?"), "user prompt must include unit challengeOrQuestion");
+});
+
+
 Deno.test("generate_session preserves a validated inherited planning snapshot", () => {
   const snapshot = {
     schemaVersion: "2.0", planningContainerId: "plan-reviewed", planningRevision: 4,

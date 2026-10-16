@@ -12,14 +12,60 @@ window.SupabaseClient = (() => {
     const SUPABASE_KEY = 'sb_publishable_erAiat0Q6VFXk5gveRnj4A_3WKFzBzI';
 
     let supabase = null;
+    let _cachedUser = null;
+    let _cachedSession = null;
+
+    /**
+     * Lee inmediatamente el usuario persistido en localStorage de forma síncrona
+     * sin esperar promesas ni peticiones de red.
+     */
+    function getSessionUserSync() {
+        if (_cachedUser) return _cachedUser;
+        try {
+            const exactKey = 'sb-koptglmifwpzrfzvipnm-auth-token';
+            let item = window.localStorage ? window.localStorage.getItem(exactKey) : null;
+            if (!item && window.localStorage) {
+                for (let i = 0; i < window.localStorage.length; i++) {
+                    const k = window.localStorage.key(i);
+                    if (k && k.startsWith('sb-') && k.endsWith('-auth-token')) {
+                        item = window.localStorage.getItem(k);
+                        break;
+                    }
+                }
+            }
+            if (item) {
+                const parsed = JSON.parse(item);
+                if (parsed && (parsed.user || parsed.currentSession?.user)) {
+                    const u = parsed.user || parsed.currentSession?.user;
+                    _cachedUser = u;
+                    _cachedSession = parsed;
+                    return u;
+                }
+            }
+        } catch (e) {
+            console.warn('[SupabaseClient] Error leyendo sesión síncrona:', e);
+        }
+        return null;
+    }
 
     // Inicializar cliente de Supabase
     try {
         if (window.supabase) {
             supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
                 auth: {
+                    storage: window.localStorage,
                     persistSession: true,
-                    autoRefreshToken: true
+                    autoRefreshToken: true,
+                    detectSessionInUrl: true
+                }
+            });
+            _cachedUser = getSessionUserSync();
+            supabase.auth.onAuthStateChange((event, session) => {
+                _cachedSession = session || null;
+                _cachedUser = session?.user || null;
+                if (!session && event === 'SIGNED_OUT') {
+                    _cachedUser = null;
+                    _cachedSession = null;
                 }
             });
             console.log('Supabase Client initialized successfully');
@@ -155,6 +201,8 @@ window.SupabaseClient = (() => {
         if (user) {
             await logAction('LOGOUT', `Usuario cerró sesión: ${user.email}`);
         }
+        _cachedUser = null;
+        _cachedSession = null;
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
         return true;
@@ -164,14 +212,27 @@ window.SupabaseClient = (() => {
      * Obtiene el usuario actual autenticado
      */
     async function getCurrentUser() {
+        if (_cachedUser) return _cachedUser;
+        const syncUser = getSessionUserSync();
+        if (syncUser) return syncUser;
         if (!supabase) return null;
         try {
+            const { data: sessionData } = await supabase.auth.getSession();
+            if (sessionData?.session?.user) {
+                _cachedUser = sessionData.session.user;
+                _cachedSession = sessionData.session;
+                return _cachedUser;
+            }
             const { data, error } = await supabase.auth.getUser();
-            if (error || !data) return null;
-            return data.user || null;
+            if (error || !data) return getSessionUserSync();
+            if (data.user) {
+                _cachedUser = data.user;
+                return _cachedUser;
+            }
+            return getSessionUserSync();
         } catch (err) {
             console.warn('[SupabaseClient] Error verificando sesión:', err);
-            return null;
+            return getSessionUserSync();
         }
     }
 
@@ -444,14 +505,21 @@ window.SupabaseClient = (() => {
      * en las consultas y funciones posteriores.
      */
     async function getSessionUser() {
+        const syncUser = getSessionUserSync();
+        if (syncUser) return syncUser;
         if (!supabase) return null;
         try {
             const { data, error } = await supabase.auth.getSession();
-            if (error) return null;
-            return data?.session?.user || null;
+            if (error) return getSessionUserSync();
+            if (data?.session?.user) {
+                _cachedUser = data.session.user;
+                _cachedSession = data.session;
+                return _cachedUser;
+            }
+            return getSessionUserSync();
         } catch (err) {
             console.warn('[SupabaseClient] No se pudo leer la sesión local:', err);
-            return null;
+            return getSessionUserSync();
         }
     }
 
@@ -636,6 +704,7 @@ window.SupabaseClient = (() => {
         logout,
         getCurrentUser,
         getSessionUser,
+        getSessionUserSync,
         invokeFunction,
         getUserRole,
         getSessionsCloud,

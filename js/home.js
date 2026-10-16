@@ -36,11 +36,18 @@ window.SpaceLabHome = (() => {
     }
 
     function displayName(user, profile) {
-        const preferred = profile?.docente || user?.user_metadata?.docente ||
-            user?.user_metadata?.full_name || user?.user_metadata?.username;
+        if (profile?.docente && String(profile.docente).trim()) {
+            return String(profile.docente).trim();
+        }
+        const preferred = user?.user_metadata?.docente ||
+            user?.user_metadata?.full_name || user?.user_metadata?.username || profile?.username;
         if (preferred && String(preferred).trim()) {
-            return String(preferred).trim().split(/[._-]/).filter(Boolean)
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+            const raw = String(preferred).trim();
+            if (raw.includes(' ') && !raw.includes('.') && !raw.includes('_')) {
+                return raw;
+            }
+            return raw.split(/[\s._-]+/).filter(Boolean)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()).join(' ');
         }
         const emailPrefix = user?.email?.split('@')[0] || '';
         return emailPrefix ? emailPrefix.charAt(0).toUpperCase() + emailPrefix.slice(1) : 'Docente';
@@ -219,7 +226,7 @@ window.SpaceLabHome = (() => {
 
         try {
             const client = window.SupabaseClient;
-            let user = options.user || await withDeadline(
+            let user = options.user || client?.getSessionUserSync?.() || await withDeadline(
                 client?.getSessionUser?.(),
                 null,
                 SESSION_USER_TIMEOUT_MS

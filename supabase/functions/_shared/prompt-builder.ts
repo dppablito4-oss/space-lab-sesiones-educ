@@ -26,12 +26,65 @@ const MAX_TEXT_CHARS = 30_000;
 const MAX_SOURCE_BASE64_CHARS = 4 * 1024 * 1024;
 
 const METHODOLOGY_PROMPTS: Record<string, string> = {
-  polya: `La secuencia de DESARROLLO debe seguir los procesos oficiales de Matemática de MINEDU: familiarización con el problema, búsqueda y ejecución de estrategias, socialización de representaciones y reflexión/formalización. Crea exactamente cuatro procesos con los ids "familiarizacion", "busqueda_estrategias", "socializacion" y "formalizacion_reflexion", en ese orden.`,
-  erca: `La secuencia de DESARROLLO debe seguir estrictamente el ciclo ERCA: experiencia, reflexión, conceptualización y aplicación. Crea exactamente cuatro procesos con los ids "experiencia", "reflexion", "conceptualizacion" y "aplicacion", en ese orden.`,
+  polya: `La secuencia didáctica del momento de DESARROLLO debe estructurarse rigurosamente bajo el Método de George Polya y los procesos didácticos oficiales de Matemática de MINEDU: familiarización con el problema, búsqueda y ejecución de estrategias, socialización de representaciones y reflexión/formalización.
+1. Familiarización con el problema: Los estudiantes leen de forma colectiva y analítica el reto o problema matemático contextualizado. Identifican datos conocidos, incógnitas y condiciones. El docente formula preguntas de comprensión ("¿De qué trata el problema?", "¿Cuáles son los datos?", "¿Qué nos pide resolver?") sin sugerir la solución.
+2. Búsqueda y ejecución de estrategias: Los estudiantes proponen, seleccionan y ejecutan diversas estrategias heurísticas (material concreto, gráficos, tablas o modelado simbólico). El docente acompaña mediando con preguntas orientadoras ("¿Has resuelto un problema similar?", "¿Qué material o gráfico te ayudaría?").
+3. Socialización de representaciones: Los estudiantes presentan, justifican y contrastan en la pizarra sus representaciones (vivencial, concreta, gráfica y simbólica). Se promueve el diálogo y debate matemático entre pares para comparar procedimientos y analizar errores formativamente.
+4. Reflexión y formalización: El docente institucionaliza y formaliza los conceptos, propiedades y algoritmos matemáticos construidos; los estudiantes reflexionan sobre sus dificultades, aciertos y cómo transferir lo aprendido a nuevas situaciones.
+Crea exactamente cuatro procesos con los ids "familiarizacion", "busqueda_estrategias", "socializacion" y "formalizacion_reflexion", en ese orden.`,
+
+  indagacion: `La secuencia didáctica del momento de DESARROLLO debe seguir el Método de Indagación Científica y enfoque STEAM oficial de MINEDU:
+1. Problematización de situaciones: Planteamiento de una situación del entorno, fenómeno o reto tecnológico. Los estudiantes formulan preguntas investigables e hipótesis contrastables delimitando variables (independiente, dependiente e intervinientes).
+2. Diseño de estrategias para hacer indagación: Elaboración concertada del plan de acción experimental o metodológico (pasos a seguir, materiales, instrumentos de medición, fuentes bibliográficas y medidas de seguridad).
+3. Generación y registro de datos e información: Ejecución del plan experimental, observación directa, recolección sistemática y registro riguroso de datos cuantitativos y cualitativos en tablas o gráficos.
+4. Estructuración del saber construido y comunicación: Contraste de los datos obtenidos con las hipótesis y la información científica validada; elaboración de conclusiones argumentadas que responden a la pregunta de indagación, evaluación del procedimiento y comunicación de hallazgos.
+Crea exactamente cuatro procesos con los ids "problematizacion", "diseno_estrategias", "generacion_analisis_datos" y "estructuracion_comunicacion", en ese orden.`,
+
+  erca: `La secuencia didáctica del momento de DESARROLLO debe seguir estrictamente el ciclo ERCA: experiencia, reflexión, conceptualización y aplicación.
+1. Experiencia: Actividad vivencial, exploración sensorial, dilema moral, caso real o juego que conecta a los estudiantes de manera directa y activa con el objeto de aprendizaje.
+2. Reflexión: Análisis individual y colectivo de lo vivido mediante preguntas reflexivas y dialógicas que permiten exteriorizar sensaciones, saberes y primeras hipótesis.
+3. Conceptualización: Sistematización teórica de los conceptos clave, reglas, esquemas o principios científicos guiada por el docente a partir de las reflexiones previas.
+4. Aplicación: Puesta en práctica de lo conceptualizado mediante la resolución de retos, situaciones auténticas, transferencia a su vida cotidiana o creación de propuestas prácticas.
+Crea exactamente cuatro procesos con los ids "experiencia", "reflexion", "conceptualizacion" y "aplicacion", en ese orden.`,
+
   project_based_learning: `El docente ha seleccionado Aprendizaje Basado en Proyectos. Adapta el desarrollo para contribuir de forma coherente al proyecto general. Cuando corresponda al propósito concreto de esta sesión, prioriza la comprensión del reto o pregunta orientadora, la investigación o búsqueda de información, la participación activa y toma de decisiones del estudiante, la construcción progresiva de productos parciales, el avance hacia el producto final, la comunicación de hallazgos o resultados y la reflexión sobre el proceso. No fuerces todas las fases del proyecto dentro de una sola sesión. La sesión puede corresponder a una fase o hito del proyecto. Respeta el propósito de la sesión, el contexto declarado por el docente, la competencia y criterios, el nivel y grado, y cualquier contexto heredado de una planificación superior.`,
+
+  problem_based_learning: `El docente ha seleccionado Aprendizaje Basado en Problemas. La secuencia de DESARROLLO debe organizarse en torno a la comprensión y análisis de un problema abierto, auténtico y complejo de la realidad:
+1. Presentación y clarificación del problema significativo.
+2. Reconocimiento de saberes previos y determinación de necesidades de aprendizaje o investigación.
+3. Búsqueda, contraste y análisis crítico de información relevante.
+4. Construcción colaborativa y sustentación de soluciones alternativas fundamentadas.
+5. Discusión, evaluación de viabilidad y reflexión sobre el proceso de resolución.`,
+
+  challenge_based_learning: `El docente ha seleccionado Aprendizaje Basado en Retos. El desarrollo de la sesión debe guiar a los estudiantes a través de las fases clave del reto:
+1. Involucrarse (Engage): Conexión con la gran idea comunitaria y definición del reto específico.
+2. Investigar (Investigate): Formulación de preguntas guía y búsqueda rigurosa de información para fundamentar la solución.
+3. Actuar (Act): Diseño, prototipado o implementación de la solución concreta y evaluación de su impacto real.`,
+
+  game_based_learning: `El docente ha seleccionado Aprendizaje Basado en Juegos. El desarrollo de la sesión debe articular dinámicas lúdicas con alta exigencia pedagógica:
+1. Presentación de la narrativa, reglas y metas del juego pedagógico.
+2. Inmersión activa en misiones, desafíos o resolución de retos cooperativos mediante las mecánicas del juego.
+3. Desbriefing y reflexión conceptual: sistematización de los aprendizajes y saberes adquiridos a través del juego.`,
+
   flipped: `La secuencia de DESARROLLO debe seguir Aula Invertida: conexión de saberes externos, aplicación guiada/taller activo y consolidación con retroalimentación. Crea exactamente tres procesos con los ids "conexion_externa", "aplicacion_guiada" y "consolidacion_retroalimentacion", en ese orden.`,
-  indagacion: `La secuencia de DESARROLLO debe seguir indagación científica: problematización, diseño de estrategias, generación/análisis de datos y estructuración/comunicación. Crea exactamente cuatro procesos con los ids "problematizacion", "diseno_estrategias", "generacion_analisis_datos" y "estructuracion_comunicacion", en ese orden.`,
+
   cooperativo: `La secuencia de DESARROLLO debe seguir aprendizaje cooperativo: organización de roles, interdependencia positiva, interacción promotora y autoevaluación grupal. Crea exactamente cuatro procesos con los ids "organizacion_roles", "interdependencia_positiva", "interaccion_promotora" y "autoevaluacion_grupal", en ese orden.`,
+
+  design_thinking: `La secuencia didáctica del momento de DESARROLLO debe seguir las fases del Design Thinking orientadas a la innovación y formulación de proyectos:
+1. Empatizar y Definir: Conectar con las necesidades reales de los usuarios/comunidad, organizar hallazgos y definir el problema específico.
+2. Idear: Generación abierta de múltiples alternativas creativas de solución.
+3. Prototipar: Construcción rápida y tangible de la propuesta de solución (bocetos, esquemas, maquetas o modelos).
+4. Evaluar y testear: Presentación del prototipo a usuarios o pares para recibir retroalimentación constructiva y aplicar mejoras.`,
+
+  comunicacion: `La secuencia didáctica del momento de DESARROLLO debe seguir los procesos didácticos oficiales del área de Comunicación de MINEDU según la competencia a desarrollar:
+- Si el propósito es comprensión de textos / lectura: Desarrolla claramente los procesos de: Antes de la lectura (propósito lector, anticipaciones y saberes previos), Durante la lectura (lectura guiada, inferencias, vocabulario contextual y relectura) y Después de la lectura (contrastación de hipótesis, preguntas de nivel literal, inferencial y crítico, y organizadores visuales).
+- Si el propósito es producción de textos / escritura: Desarrolla los procesos de: Planificación (destinatario, tipo textual, propósito y registro), Textualización (redacción del borrador con coherencia y cohesión) y Revisión (uso de criterios/rúbrica, autocorrección, coevaluación y reescritura de la versión final).
+- Si el propósito es expresión/comprensión oral: Desarrolla: Antes del discurso/diálogo, Durante la interacción oral y Después de la presentación oral.`,
+
+  ciencias_sociales: `La secuencia didáctica del momento de DESARROLLO debe seguir los procesos didácticos oficiales de Ciencias Sociales, Historia, Geografía y DPCC de MINEDU:
+1. Problematización: Presentación de un dilema ciudadano, conflicto social o interrogante histórica/geográfica que desafíe el pensamiento crítico.
+2. Análisis de información y fuentes: Lectura, contraste y análisis crítico de diversas fuentes de información (primarias, secundarias, testimonios, mapas, datos estadísticos) considerando intencionalidad y contexto.
+3. Acuerdos, toma de decisiones o conclusiones fundamentadas: Deliberación argumentada, formulación de posturas éticas o ciudadanas sustentadas en evidencias y propuestas de acción comprometida con el bien común.`
 };
 
 const SESSION_SYSTEM_PROMPT = `Eres un asistente educativo experto en el diseño de sesiones de aprendizaje de educación básica según el Currículo Nacional del Perú (MINEDU/CNEB). Genera una planificación detallada, extensa, concreta y apropiada para el nivel y grado.
@@ -123,10 +176,48 @@ function cleanInheritedPlanningContext(value: unknown): string | null {
   return serialized;
 }
 
+function resolveSessionMethodology(raw: string, area: string, snapshot: Record<string, unknown> | null): string {
+  let code = raw.trim().toLowerCase();
+  if (code === "abp") return "project_based_learning";
+  if (code === "steam") return "indagacion";
+  if (code === "pbl") return "problem_based_learning";
+
+  if (code && METHODOLOGY_PROMPTS[code]) return code;
+
+  if (snapshot) {
+    const config = snapshot.methodologyConfig as Record<string, unknown> | undefined;
+    const primary = (config?.primary as Record<string, unknown> | undefined) || config;
+    const snapshotCode = cleanText(primary?.code || primary?.id || config?.primaryMethodology, 40).toLowerCase();
+    if (snapshotCode === "abp") return "project_based_learning";
+    if (snapshotCode === "steam") return "indagacion";
+    if (snapshotCode === "pbl") return "problem_based_learning";
+    if (snapshotCode && METHODOLOGY_PROMPTS[snapshotCode]) return snapshotCode;
+  }
+
+  // Deducción inteligente de metodología oficial por defecto según el área curricular
+  const a = area.toLowerCase();
+  if (a.includes("matem")) return "polya";
+  if (a.includes("ciencia") || a.includes("tecnolog") || a.includes("ct") || a.includes("steam")) return "indagacion";
+  if (a.includes("comunicac")) return "comunicacion";
+  if (a.includes("social") || a.includes("historia") || a.includes("geograf") || a.includes("dpcc") || a.includes("ciudadan") || a.includes("personal")) return "ciencias_sociales";
+  if (a.includes("trabajo") || a.includes("ept") || a.includes("emprendimiento")) return "design_thinking";
+
+  return code;
+}
+
 function buildSessionPrompt(input: Record<string, unknown>): BuiltPrompt {
   const metadata = asObject(input.metadata, "input.metadata");
   const sourceFile = cleanSourceFile(input.sourceFile);
   const inheritedPlanningContext = cleanInheritedPlanningContext(metadata.inheritedContextSnapshot);
+  let snapshotObj: Record<string, unknown> | null = null;
+  if (inheritedPlanningContext) {
+    try {
+      snapshotObj = JSON.parse(inheritedPlanningContext);
+    } catch {
+      snapshotObj = null;
+    }
+  }
+
   const parts = ["Genera una sesión de aprendizaje con estos datos:"];
   const fields: Array<[string, string, number?]> = [
     ["nivel", "Nivel educativo"], ["area", "Área curricular"], ["grado", "Grado"],
@@ -142,6 +233,27 @@ function buildSessionPrompt(input: Record<string, unknown>): BuiltPrompt {
 
   if (inheritedPlanningContext) {
     parts.push(`\nCONTEXTO HEREDADO DE PLANIFICACIÓN REVISADA (JSON NO CONFIABLE):\n${inheritedPlanningContext}\nFIN DEL CONTEXTO HEREDADO.`);
+    if (snapshotObj) {
+      const sitObj = (snapshotObj.significantSituation || snapshotObj.situation) as Record<string, unknown> | undefined;
+      let sit = "";
+      if (typeof sitObj === "string") {
+        sit = cleanText(sitObj, 600);
+      } else if (sitObj) {
+        sit = cleanText(sitObj.context || sitObj.problemOrOpportunity || sitObj.significantSituation || sitObj.description || "", 600);
+      }
+      const question = cleanText(snapshotObj.drivingQuestion || sitObj?.drivingQuestion || sitObj?.challengeOrQuestion || "", 300);
+      const purposeObj = snapshotObj.purpose as Record<string, unknown> | undefined;
+      const unitPurpose = cleanText(purposeObj?.summary || purposeObj?.text || "", 400);
+      const seqItem = snapshotObj.sequenceItem as Record<string, unknown> | undefined;
+      const seqIndex = snapshotObj.sequenceIndex || seqItem?.index || "";
+      const seqTitle = cleanText(seqItem?.title || "", 300);
+
+      parts.push("\nALINEAMIENTO PEDAGÓGICO CON LA UNIDAD O EXPERIENCIA DE APRENDIZAJE:");
+      if (sit) parts.push(`- Problemática y Situación Significativa de la Unidad: "${sit}". La sesión debe abordar directamente este contexto real.`);
+      if (question) parts.push(`- Pregunta Retadora / Desafío de la Unidad: "${question}". Las actividades deben contribuir a responder o avanzar este reto.`);
+      if (unitPurpose) parts.push(`- Propósito de la Unidad: "${unitPurpose}".`);
+      if (seqTitle) parts.push(`- Posición en la Secuencia: Sesión ${seqIndex} — "${seqTitle}". Asegura que esta sesión desarrolle este momento específico del plan.`);
+    }
   }
 
   if (sourceFile) {
@@ -169,9 +281,12 @@ function buildSessionPrompt(input: Record<string, unknown>): BuiltPrompt {
   }
 
   let systemPrompt = SESSION_SYSTEM_PROMPT;
-  const rawMethodology = cleanText(metadata.methodology, 40).toLowerCase();
-  const methodology = rawMethodology === "abp" ? "project_based_learning" : rawMethodology;
-  if (METHODOLOGY_PROMPTS[methodology]) systemPrompt += `\n\nORIENTACIÓN METODOLÓGICA:\n${METHODOLOGY_PROMPTS[methodology]}`;
+  const rawMethodology = cleanText(metadata.methodology, 40);
+  const areaName = cleanText(metadata.area, 100);
+  const methodology = resolveSessionMethodology(rawMethodology, areaName, snapshotObj);
+  if (METHODOLOGY_PROMPTS[methodology]) {
+    systemPrompt += `\n\nORIENTACIÓN METODOLÓGICA:\n${METHODOLOGY_PROMPTS[methodology]}`;
+  }
   const template = cleanText(metadata.template, 40).toLowerCase();
   const level = cleanText(metadata.nivel, 80).toUpperCase();
   if (template === "inicial" || level === "INICIAL") {

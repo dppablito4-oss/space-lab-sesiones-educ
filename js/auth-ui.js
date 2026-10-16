@@ -135,8 +135,8 @@ window.AuthUi = (() => {
             });
         }
 
-        window.SupabaseClient?.onAuthStateChange?.(() => {
-            checkSessionState();
+        window.SupabaseClient?.onAuthStateChange?.((event, session) => {
+            checkSessionState(session?.user);
         });
     }
 
@@ -344,6 +344,13 @@ window.AuthUi = (() => {
                 .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
                 .join(' ');
         }
+        if (profile && profile.username && profile.username.trim()) {
+            const raw = String(profile.username).trim();
+            return raw.split(/[._-]/)
+                .filter(Boolean)
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
         if (user.email) {
             const prefix = user.email.split('@')[0];
             return prefix.charAt(0).toUpperCase() + prefix.slice(1);
@@ -361,23 +368,41 @@ window.AuthUi = (() => {
         return clean.slice(0, 2).toUpperCase();
     }
 
-    async function checkSessionState() {
-        const user = await SupabaseClient.getCurrentUser();
+    async function checkSessionState(existingUser = null) {
+        const user = existingUser || window.SupabaseClient?.getSessionUserSync?.() || await SupabaseClient.getCurrentUser();
         
         if (user) {
-            const role = await SupabaseClient.getUserRole(user.id);
-            const profile = (SupabaseClient.getUserProfile ? await SupabaseClient.getUserProfile().catch(() => null) : null);
-            const isAdmin = role === 'superadmin' || role === 'admin';
-            const formattedName = formatDisplayName(user, profile);
-            const displayName = escapeHTML(formattedName);
-            const initials = getInitials(formattedName);
+            // Renderizar inmediatamente la identidad con la información local sin esperar la red
+            const earlyFormattedName = formatDisplayName(user, null);
+            const earlyDisplayName = escapeHTML(earlyFormattedName);
+            const earlyInitials = getInitials(earlyFormattedName);
             const safeEmail = escapeHTML(user.email || '');
 
-            // Actualizar Badge en la parte superior izquierda
             const headerBadge = document.getElementById('header-user-badge');
             const headerAvatar = document.getElementById('header-user-avatar');
             const headerName = document.getElementById('header-user-name');
             const homeNavButton = document.getElementById('btn-home-nav');
+            if (headerBadge) {
+                headerBadge.hidden = false;
+                if (headerAvatar) headerAvatar.textContent = earlyInitials;
+                if (headerName) {
+                    headerName.textContent = earlyDisplayName;
+                    headerName.title = safeEmail;
+                }
+            }
+            if (homeNavButton) homeNavButton.hidden = false;
+
+            // Hidratar rol y perfil en segundo plano
+            const [role, profile] = await Promise.all([
+                SupabaseClient.getUserRole(user.id).catch(() => 'user'),
+                (SupabaseClient.getUserProfile ? SupabaseClient.getUserProfile(user).catch(() => null) : null)
+            ]);
+            const isAdmin = role === 'superadmin' || role === 'admin';
+            const formattedName = formatDisplayName(user, profile);
+            const displayName = escapeHTML(formattedName);
+            const initials = getInitials(formattedName);
+
+            // Actualizar Badge en la parte superior izquierda con el perfil final
             if (headerBadge) {
                 headerBadge.hidden = false;
                 if (headerAvatar) headerAvatar.textContent = initials;

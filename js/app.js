@@ -963,6 +963,9 @@
         DOM.inputDre.value = m.dre || '';
         DOM.inputUgel.value = m.ugel || '';
         DOM.inputDocente.value = m.docente || '';
+        if (!DOM.inputDocente.value) {
+            loadProfileDefaults();
+        }
         DOM.inputDirector.value = m.director || '';
         DOM.inputFecha.value = m.fecha || '';
         DOM.inputNivel.value = m.nivel || 'SECUNDARIA';
@@ -1716,15 +1719,24 @@
 
     async function loadProfileDefaults() {
         try {
-            const profile = await SupabaseClient.getUserProfile();
+            const user = window.SupabaseClient?.getSessionUserSync?.() || await window.SupabaseClient?.getCurrentUser?.();
+            const profile = await SupabaseClient.getUserProfile(user);
             if (profile) {
                 if (profile.institucion) DOM.inputInstitucion.value = profile.institucion;
                 if (profile.dre) DOM.inputDre.value = profile.dre;
                 if (profile.ugel) DOM.inputUgel.value = profile.ugel;
-                if (profile.docente) DOM.inputDocente.value = profile.docente;
                 if (profile.director) DOM.inputDirector.value = profile.director;
                 if (profile.nivel) DOM.inputNivel.value = profile.nivel;
+                if (profile.docente) {
+                    DOM.inputDocente.value = profile.docente;
+                } else if (user && !DOM.inputDocente.value) {
+                    const fallback = user.user_metadata?.docente || user.user_metadata?.full_name || user.user_metadata?.username || profile.username || (user.email ? user.email.split('@')[0] : '');
+                    if (fallback) DOM.inputDocente.value = fallback;
+                }
                 console.log('Predeterminados de perfil cargados');
+            } else if (user && !DOM.inputDocente.value) {
+                const fallback = user.user_metadata?.docente || user.user_metadata?.full_name || user.user_metadata?.username || (user.email ? user.email.split('@')[0] : '');
+                if (fallback) DOM.inputDocente.value = fallback;
             }
         } catch (e) {
             console.warn('[Profile] Error al cargar predeterminados:', e);

@@ -390,3 +390,73 @@ python tests/backend_smoke.py
 
 Para entregar el cambio en Windows también debe recompilarse el motor local,
 porque tanto `word_math.py` como Matplotlib deben quedar incluidos en el `.exe`.
+## RESTAURACIÓN DE METODOLOGÍAS DIDÁCTICAS, ALINEAMIENTO DE UNIDADES Y CORRECCIÓN DE AUTENTICACIÓN MULTIPESTAÑA
+
+### 1. Diagnóstico y Causa Raíz
+
+#### A. Generación de sesiones genéricas sin metodologías
+1. En la migración hacia prompts server-side protegidos (`supabase/functions/_shared/prompt-builder.ts`), las directivas didácticas detalladas de MINEDU que existían anteriormente en el generador cliente (`js/ai-copilot.js` de versiones previas) habían sido reducidas a resúmenes breves.
+2. Si el docente dejaba el selector de metodología en su valor por defecto (`""`), el generador de prompts del servidor omitía completamente el bloque `ORIENTACIÓN METODOLÓGICA`, produciendo sesiones genéricas sin los procesos didácticos del área.
+3. En las sesiones vinculadas a unidades o experiencias de aprendizaje (`inheritedContextSnapshot`), el contexto de la unidad se volcaba como un bloque JSON crudo sin extraer explícitamente la problemática, la situación significativa, el reto y el propósito de la unidad para guiar a la IA.
+
+#### B. Fallo de autenticación en refresco ("Docente" hardcodeado) y apertura en nueva pestaña
+1. **Multi-pestaña**: Al abrir la aplicación en una pestaña nueva o refrescar la página, el cliente de Supabase deserializa el token de autenticación de forma asíncrona. La función `LandingRouter.checkRoute()` evaluaba `readUser()` de forma casi inmediata: si la deserialización tardaba una fracción de segundo, la ruta privada `#/home` o `#/sessions` asumía que no había usuario, cambiaba a la portada y ejecutaba `window.AuthUi?.openModal?.()`. Además, cuando Supabase emitía el evento `INITIAL_SESSION` milisegundos después, `landing.js` no cerraba el modal, dejando el formulario de login sobre la pantalla.
+2. **"Docente" en cabecera**: `AuthUi.checkSessionState()` invocaba `SupabaseClient.getCurrentUser()`, el cual ejecutaba `supabase.auth.getUser()` (petición de red HTTP). Ante latencia de red o respuesta pendiente, la interfaz ocultaba el badge de usuario o lo dejaba en el texto estático inicial (`Docente`). Asimismo, si el perfil no tenía explícitamente rellenado el campo `docente`, se recurría de forma tardía o incompleta a los metadatos del usuario (`user_metadata.full_name`, `user_metadata.username`, email).
+
+---
+
+### 2. Cambios Implementados
+
+#### A. Prompts Didácticos Enriquecidos y Alineamiento con Unidades (`supabase/functions/_shared/prompt-builder.ts`)
+- **Metodologías oficiales restauradas y enriquecidas**:
+  - `polya`: Método de George Polya con los 4 procesos oficiales MINEDU para Matemática (Familiarización con el problema, Búsqueda y ejecución de estrategias, Socialización de representaciones, Reflexión y formalización).
+  - `indagacion` / `steam`: Enfoque de Indagación Científica y STEAM con los 4 procesos de Ciencia y Tecnología (Problematización de situaciones, Diseño de estrategias, Generación y análisis de datos, Estructuración del saber y comunicación).
+  - `erca`: Ciclo ERCA completo (Experiencia, Reflexión, Conceptualización y Aplicación).
+  - `project_based_learning` / `abp`: Aprendizaje Basado en Proyectos con fases distribuidas y adaptables a la sesión.
+  - `problem_based_learning` / `pbl`: Aprendizaje Basado en Problemas con sus 5 momentos.
+  - `challenge_based_learning`: Aprendizaje Basado en Retos (Involucrarse, Investigar, Actuar).
+  - `game_based_learning`: Aprendizaje Basado en Juegos (Narrativa, Inmersión en misiones, Debriefing).
+  - `design_thinking`: Fases de Empatizar, Definir, Idear, Prototipar y Evaluar (EPT y proyectos).
+  - `comunicacion`: Procesos didácticos según la competencia de Comunicación (Comprensión de lectura: Antes, Durante y Después; Producción escrita: Planificación, Textualización y Revisión; Oralidad: Antes, Durante y Después).
+  - `ciencias_sociales`: Procesos para CC.SS., Historia, Geografía y DPCC (Problematización, Análisis de información y fuentes, Acuerdos/deliberación ciudadana).
+- **Inferencia inteligente de metodología por área (`resolveSessionMethodology`)**:
+  - Si el docente no seleccionó una metodología específica, el sistema deduce la metodología oficial correspondiente al área curricular indicada (p. ej. Matemática -> Polya, Ciencia y Tecnología -> Indagación/STEAM, Comunicación -> Comunicación, CC.SS./DPCC -> Ciencias Sociales, EPT -> Design Thinking).
+  - Si la sesión pertenece a una Unidad o Experiencia de Aprendizaje, hereda prioritariamente la metodología configurada en la unidad (`snapshot.methodologyConfig.primary`).
+- **Alineamiento explícito con la Unidad o Experiencia de Aprendizaje**:
+  - Se extrae del snapshot pedagógico: Situación Significativa / Problemática central, Pregunta Retadora / Desafío, Propósito general de la unidad y el hito/sesión exacto en la secuencia.
+  - Se instruye a la IA a abordar directamente la situación real del contexto escolar en las actividades de la sesión.
+
+#### B. Motor de Autenticación Rápido y Sincrónico (`js/supabase-client.js`, `js/landing.js`, `js/auth-ui.js`, `js/home.js`, `js/app.js`)
+- **`js/supabase-client.js`**:
+  - Implementado `getSessionUserSync()`: lee de inmediato y de forma síncrona el token de sesión almacenado en `localStorage` (`sb-koptglmifwpzrfzvipnm-auth-token`).
+  - Implementada caché interna de usuario y sesión (`_cachedUser`, `_cachedSession`) alimentada en el arranque y en `onAuthStateChange`.
+  - Optimizadas `getCurrentUser()` y `getSessionUser()` para devolver de forma instantánea el usuario de la caché o de `localStorage`, evitando bloqueos por peticiones de red remotas.
+- **`js/landing.js`**:
+  - En `checkRoute()`: usa `getSessionUserSync()` para validar al usuario inmediatamente sin latencia, evitando falsos positivos de no-autenticación al abrir pestañas nuevas.
+  - Si por alguna razón el modal de login se hubiese abierto en una verificación temprana, el listener `onAuthStateChange` ejecuta `window.AuthUi?.closeModal?.()` al confirmar la sesión activa.
+- **`js/auth-ui.js`**:
+  - `checkSessionState()` acepta usuario existente o lo obtiene con `getSessionUserSync()`, renderizando de forma inmediata el avatar, iniciales, nombre y correo en la cabecera antes de disparar la consulta asíncrona de rol y perfil.
+  - Enriquecida la cadena de nombres de usuario (`formatDisplayName`): `profile.docente` -> `user_metadata.docente` -> `user_metadata.full_name` -> `user_metadata.username` -> `profile.username` -> prefijo de email.
+- **`js/home.js`**:
+  - En `refresh()`, la identidad del docente (`home-account-name`, `home-account-avatar`, `home-welcome-title`) se dibuja de inmediato con `getSessionUserSync()`, eliminando el destello del texto predeterminado "Docente".
+- **`js/app.js`**:
+  - En `loadProfileDefaults()`: si el campo `docente` en la tabla `profiles` está vacío, se rellena automáticamente `DOM.inputDocente` a partir de los metadatos del usuario autenticado (`full_name`, `username` o correo), garantizando que las sesiones generadas siempre incluyan el nombre del docente.
+- **`conexion.html`**:
+  - Corregida la redirección tras el enlace exitoso con el motor Python local (`pablitopyhost.exe`) para enviar al usuario directamente a `./#/app` (el editor de sesiones).
+
+---
+
+### 3. Validación y Pruebas Ejecutadas
+
+- **Deno Test Suite (`tests/ai-prompt-builder.test.ts`, `tests/ai-credits.test.ts`, `tests/linked-session-context.test.ts`, `tests/planning-map-prompt.test.ts`)**:
+  - 15 pruebas pasadas (100% OK), incluyendo pruebas específicas de deducción automática de metodologías (Polya, STEAM) y preservación de situación significativa en unidades.
+- **Node Test Suite (`tests/home-workspace.test.js`, `tests/profile-fields.test.js`, `tests/methodology-catalog.test.js`, `tests/methodology-codes.test.js`, etc.)**:
+  - 13 suites pasadas (100% OK).
+- **Scripts de Composición y Versionado**:
+  - `python scripts/build_index.py --check` y `python scripts/version_assets.py --check` validados y sincronizados.
+- **Pruebas End-to-End en Navegador**:
+  - Servidor local activo en http://localhost:8080/.
+  - Se ejecutó el flujo completo de usuario real: registro de docente temporal, autenticación automática, persistencia en refresco (F5) en #/home y navegación multi-pestaña (#/app).
+  - Se validó que el nombre del docente aparece inmediatamente en el encabezado y en el perfil sin mostrar el fallback 'Docente'.
+  - Se verificó que el selector de metodologías didácticas incluye Polya, STEAM / Indagación, ERCA, ABP, Aula Invertida y Aprendizaje Cooperativo.
+  - Se inició el navegador Comet (C:\Program Files\Perplexity\Comet\Application\comet.exe) apuntando a http://localhost:8080/#/home.
