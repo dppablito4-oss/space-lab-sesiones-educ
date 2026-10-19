@@ -50,6 +50,7 @@ function validContainer(id = 'plan-prueba-001') {
     const uploads = [];
     let cloudRecords = [];
     const cloud = {
+        getSessionUserSync() { return { id: 'user-1' }; },
         async getCurrentUser() { return { id: 'user-1' }; },
         async getPlanningRecordsCloud() { return structuredClone(cloudRecords); },
         async savePlanningRecordCloud(record) { uploads.push(structuredClone(record)); }
@@ -131,6 +132,27 @@ function validContainer(id = 'plan-prueba-001') {
         () => v2Repository.save({ ...v2Fixture, identity: { ...v2Fixture.identity, level: 'unknown' } }),
         error => error instanceof TypeError && !error.message.includes('[object Object]') && error.message.includes('identity.level')
     );
+
+    let account = { id: 'user-1' };
+    cloud.getSessionUserSync = () => account;
+    cloud.getCurrentUser = async () => account;
+    repository.save(validContainer('account-one-plan'));
+    account = { id: 'user-2' };
+    assert.equal(repository.get('account-one-plan'), null);
+    assert.equal((await repository.sync()).uploaded, 0);
+    account = null;
+    assert.equal(repository.get('account-one-plan'), null);
+    account = { id: 'user-1' };
+    assert.ok(repository.get('account-one-plan'));
+
+    let releaseRead;
+    cloud.getPlanningRecordsCloud = () => new Promise(resolve => { releaseRead = resolve; });
+    const pending = repository.sync();
+    await new Promise(resolve => setImmediate(resolve));
+    account = { id: 'user-2' };
+    releaseRead([]);
+    await assert.rejects(pending, /cuenta cambió/);
+    assert.equal(repository.get('account-one-plan'), null);
 
     const migration = fs.readFileSync(
         path.join(__dirname, '..', 'supabase', 'migrations', '202609260012_planning_containers.sql'),

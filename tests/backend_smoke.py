@@ -17,7 +17,7 @@ def run() -> None:
     status = client.get("/")
     assert status.status_code == 200
     assert status.json()["status"] == "Online"
-    assert status.json()["version"] == main.ENGINE_VERSION == "1.4.0"
+    assert status.json()["version"] == main.ENGINE_VERSION
 
     unauthorized = client.post("/exportar-docx-json", json={"token": "incorrecto"})
     assert unauthorized.status_code == 401
@@ -118,6 +118,9 @@ def run() -> None:
 
     canonical = main.SessionDocumentV1(**v1_payload)
     pdf_compat = main.v1_to_legacy_pdf_payload(canonical, main.CONNECTION_TOKEN)
+    normalized_pdf = main.SesionAprendizajeRequest(**main.normalize_sesion_data(pdf_compat))
+    assert all(isinstance(item, str) for item in normalized_pdf.momentos.inicio.actividades)
+    assert normalized_pdf.momentos.desarrollo.procesos
     cierre = pdf_compat['momentos']['cierre']
     assert cierre['metacognicion'], 'El cierre v1 debe llegar al PDF'
     assert cierre['evaluacion'], 'La evaluación formativa v1 debe llegar al PDF'

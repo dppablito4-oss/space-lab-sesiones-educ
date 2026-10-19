@@ -4,6 +4,9 @@
    ═══════════════════════════════════════════════════ */
 
 const Storage = (() => {
+    const accounts = window.AccountStorage || (typeof require === 'function' ? require('./core/account-storage.js') : null);
+    const currentOwner = () => accounts.userId(window.SupabaseClient);
+    const scopedKey = base => accounts.key(base, currentOwner());
     const STORAGE_KEY = 'spacelab_sessions';
     const CURRENT_KEY = 'spacelab_current';
     const SETTINGS_KEY = 'spacelab_settings';
@@ -22,27 +25,33 @@ const Storage = (() => {
 
     function queueCloudSave(session) {
         if (!window.SupabaseClient || typeof SupabaseClient.saveSessionCloud !== 'function') return;
+        const ownerId = currentOwner();
+        if (!ownerId) return;
 
         // Each request owns an immutable snapshot and waits for the preceding save.
         // This prevents a slow, older autosave from overwriting a newer version.
         const snapshot = JSON.parse(JSON.stringify(session));
-        const previous = cloudSaveQueues.get(snapshot.id) || Promise.resolve();
+        const queueKey = accounts.key(snapshot.id, ownerId);
+        const previous = cloudSaveQueues.get(queueKey) || Promise.resolve();
         const next = previous.catch(() => undefined).then(async () => {
+            if (currentOwner() !== ownerId) return;
             incrementSync();
             try {
                 const user = await SupabaseClient.getCurrentUser();
-                if (user) await SupabaseClient.saveSessionCloud(snapshot);
+                if (user?.id === ownerId && currentOwner() === ownerId) {
+                    await SupabaseClient.saveSessionCloud(snapshot, ownerId);
+                }
             } finally {
                 decrementSync();
             }
         });
 
-        cloudSaveQueues.set(snapshot.id, next);
+        cloudSaveQueues.set(queueKey, next);
         next.catch(err => console.warn('[Storage] Error al subir a la nube:', err));
         next.then(() => {
-            if (cloudSaveQueues.get(snapshot.id) === next) cloudSaveQueues.delete(snapshot.id);
+            if (cloudSaveQueues.get(queueKey) === next) cloudSaveQueues.delete(queueKey);
         }, () => {
-            if (cloudSaveQueues.get(snapshot.id) === next) cloudSaveQueues.delete(snapshot.id);
+            if (cloudSaveQueues.get(queueKey) === next) cloudSaveQueues.delete(queueKey);
         });
     }
 
@@ -74,8 +83,9 @@ const Storage = (() => {
 
     function getAllSessions(includeDeleted = false) {
         try {
-            const data = localStorage.getItem(STORAGE_KEY);
+            const data = localStorage.getItem(scopedKey(STORAGE_KEY));
             const sessions = data ? JSON.parse(data) : [];
+            if (!Array.isArray(sessions)) return [];
             if (includeDeleted) return sessions;
             return sessions.filter(s => !s.deleted_at);
         } catch (e) {
@@ -110,7 +120,7 @@ const Storage = (() => {
                 sessions.unshift(session);
             }
 
-            safeSetItem(STORAGE_KEY, JSON.stringify(sessions));
+            if (!safeSetItem(scopedKey(STORAGE_KEY), JSON.stringify(sessions))) return false;
 
             // Sincronización asíncrona con Supabase en background si está logueado
             queueCloudSave(session);
@@ -130,7 +140,7 @@ const Storage = (() => {
             if (session) {
                 session.deleted_at = new Date().toISOString();
                 session.lastSaved = new Date().toISOString();
-                safeSetItem(STORAGE_KEY, JSON.stringify(sessions));
+                if (!safeSetItem(scopedKey(STORAGE_KEY), JSON.stringify(sessions))) return false;
 
                 // Sincronización asíncrona con Supabase en background
                 queueCloudSave(session);
@@ -147,19 +157,19 @@ const Storage = (() => {
 
     function getCurrentSession() {
         try {
-            const data = localStorage.getItem(CURRENT_KEY);
+            const data = localStorage.getItem(scopedKey(CURRENT_KEY));
             return data ? JSON.parse(data) : null;
         } catch {
             return null;
         }
     }
 
-    function setCurrentSession(session) {
-        safeSetItem(CURRENT_KEY, JSON.stringify(session));
+    function setCurrentSession(session, ownerId = currentOwner()) {
+        return safeSetItem(accounts.key(CURRENT_KEY, ownerId), JSON.stringify(session));
     }
 
     function clearCurrentSession() {
-        localStorage.removeItem(CURRENT_KEY);
+        localStorage.removeItem(scopedKey(CURRENT_KEY));
     }
 
     // ─── SETTINGS ───
@@ -185,6 +195,19 @@ const Storage = (() => {
 
     let _autoSaveTimer = null;
     let _autoSaveCallback = null;
+    let _unsavedChanges = false;
+    let _indicatorTimer = null;
+
+    function cancelAutoSave() {
+        clearTimeout(_autoSaveTimer);
+        clearTimeout(_indicatorTimer);
+        _unsavedChanges = false;
+    }
+
+    window.addEventListener('spacelab:account-changed', cancelAutoSave);
+    window.addEventListener('beforeunload', e => {
+        if (_unsavedChanges) { e.preventDefault(); e.returnValue = ''; }
+    });
 
     function setupAutoSave(callback, delay = 3000) {
         _autoSaveCallback = callback;
@@ -199,21 +222,34 @@ const Storage = (() => {
 
     function triggerAutoSave(delay = 3000) {
         clearTimeout(_autoSaveTimer);
+        const ownerId = currentOwner();
+        _unsavedChanges = true;
         
         // Update save indicator to "saving..."
         updateSaveIndicator('saving');
         
-        _autoSaveTimer = setTimeout(() => {
+        _autoSaveTimer = setTimeout(async () => {
+            if (ownerId !== currentOwner()) return;
             if (_autoSaveCallback) {
-                _autoSaveCallback();
-                updateSaveIndicator('saved');
+                try {
+                    const result = await _autoSaveCallback();
+                    if (ownerId !== currentOwner()) return;
+                    _unsavedChanges = result !== true;
+                    updateSaveIndicator(result === true ? 'saved' : 'error');
+                } catch (error) {
+                    console.error('[Storage] Falló el autoguardado:', error);
+                    if (ownerId === currentOwner()) updateSaveIndicator('error');
+                }
             }
         }, delay);
     }
 
     function updateSaveIndicator(state) {
+        clearTimeout(_indicatorTimer);
         const indicator = document.getElementById('save-indicator');
+        if (!indicator) return;
         const text = indicator.querySelector('.save-text');
+        if (!text) return;
         
         indicator.classList.remove('saved', 'saving');
 
@@ -223,13 +259,18 @@ const Storage = (() => {
                 text.textContent = 'Guardando...';
                 break;
             case 'saved':
+                _unsavedChanges = false;
                 indicator.classList.add('saved');
-                text.textContent = 'Guardado';
+                text.textContent = 'Guardado local';
                 // Reset after 5 seconds
-                setTimeout(() => {
+                _indicatorTimer = setTimeout(() => {
                     indicator.classList.remove('saved');
                     text.textContent = 'Sin cambios';
                 }, 5000);
+                break;
+            case 'error':
+                _unsavedChanges = true;
+                text.textContent = 'Sin guardar · reintenta';
                 break;
             default:
                 text.textContent = 'Sin cambios';
@@ -293,17 +334,20 @@ const Storage = (() => {
     }
 
     async function syncSessions() {
-        if (!window.SupabaseClient) return;
+        if (!window.SupabaseClient) return false;
+        const ownerId = currentOwner();
         const user = await SupabaseClient.getCurrentUser();
-        if (!user) return;
+        if (!ownerId || user?.id !== ownerId || currentOwner() !== ownerId) return false;
 
         incrementSync();
         try {
             // 1. Obtener todas las sesiones locales (incluidas las soft-deleted)
             const localSessions = getAllSessions(true);
+            const original = new Map(localSessions.map(session => [session.id, JSON.stringify(session)]));
             
             // 2. Obtener sesiones de la nube (que incluyen deleted_at)
-            const cloudSessions = await SupabaseClient.getSessionsCloud();
+            const cloudSessions = await SupabaseClient.getSessionsCloud(ownerId);
+            accounts.assertCurrent(window.SupabaseClient, ownerId);
 
             // 3. Fusionar local y nube
             const mergedMap = new Map();
@@ -341,7 +385,7 @@ const Storage = (() => {
                     }
                     // Si está en la nube pero no marcada como eliminada en la nube, actualizamos la nube
                     if (!cloudVersion.deleted_at) {
-                        savePromises.push(SupabaseClient.saveSessionCloud(session));
+                        savePromises.push(SupabaseClient.saveSessionCloud(session, ownerId));
                     }
                     session.synced = true;
                     finalSessions.push(session);
@@ -358,7 +402,7 @@ const Storage = (() => {
                         } else {
                             // Nueva sesión local nunca subida. La subimos.
                             session.synced = true;
-                            savePromises.push(SupabaseClient.saveSessionCloud(session));
+                            savePromises.push(SupabaseClient.saveSessionCloud(session, ownerId));
                             finalSessions.push(session);
                         }
                     } else {
@@ -367,7 +411,7 @@ const Storage = (() => {
                         const localTime = new Date(session.lastSaved || 0);
                         const cloudTime = new Date(cloudVersion.lastSaved || 0);
                         if (localTime > cloudTime) {
-                            savePromises.push(SupabaseClient.saveSessionCloud(session));
+                            savePromises.push(SupabaseClient.saveSessionCloud(session, ownerId));
                         }
                         session.synced = true;
                         finalSessions.push(session);
@@ -378,18 +422,31 @@ const Storage = (() => {
             // Ejecutar subidas/sincronizaciones en la nube en paralelo
             if (savePromises.length > 0) {
                 console.log(`[Sync] Sincronizando ${savePromises.length} sesiones en la nube en paralelo...`);
-                await Promise.all(savePromises);
+                const results = await Promise.all(savePromises);
+                if (results.some(result => result === false)) throw new Error('No se completó la sincronización.');
             }
+            accounts.assertCurrent(window.SupabaseClient, ownerId);
 
             // Ordenar por fecha
             finalSessions.sort((a, b) => new Date(b.lastSaved || 0) - new Date(a.lastSaved || 0));
 
             // Guardar el resultado consolidado en LocalStorage
-            safeSetItem(STORAGE_KEY, JSON.stringify(finalSessions));
+            // Merge saves made while the network was in flight instead of losing them.
+            const latest = new Map(getAllSessions(true).map(session => [session.id, session]));
+            for (const [id, session] of latest) {
+                if (JSON.stringify(session) !== original.get(id)) {
+                    const index = finalSessions.findIndex(item => item.id === id);
+                    if (index >= 0) finalSessions[index] = session;
+                    else finalSessions.push(session);
+                }
+            }
+            if (!safeSetItem(accounts.key(STORAGE_KEY, ownerId), JSON.stringify(finalSessions))) return false;
 
             console.log('Sesiones sincronizadas con Supabase con éxito');
+            return true;
         } catch (e) {
             console.error('[Storage] Error al sincronizar sesiones:', e);
+            return false;
         } finally {
             decrementSync();
         }
@@ -407,6 +464,7 @@ const Storage = (() => {
         saveSettings,
         setupAutoSave,
         triggerAutoSave,
+        cancelAutoSave,
         updateSaveIndicator,
         generateId,
         exportAsJSON,

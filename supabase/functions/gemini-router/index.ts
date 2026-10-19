@@ -6,6 +6,7 @@ import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, rese
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
 import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
+import { aiAvailabilityResponse, fetchWithTimeout, providerTimeoutMs } from "../_shared/ai-runtime.ts";
 
 const MODEL_NAME = "gemini-2.5-flash";
 const API_MODEL = "gemini-2.5-flash";
@@ -15,6 +16,8 @@ serve(async (req) => {
   const preflight = preflightResponse(req);
   if (preflight) return preflight;
   if (req.method !== "POST") return jsonResponse(req, { error: "Método no permitido.", code: "METHOD_NOT_ALLOWED" }, 405);
+  const unavailable = aiAvailabilityResponse(req, "gemini");
+  if (unavailable) return unavailable;
 
   const auth = await getAuthenticatedContext(req);
   if (auth instanceof Response) return auth;
@@ -85,11 +88,11 @@ serve(async (req) => {
 
       const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${API_MODEL}:generateContent?key=${apiKey}`;
       const startTime = Date.now();
-      const response = await fetch(endpoint, {
+      const response = await fetchWithTimeout(endpoint, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestBody),
-      });
+      }, providerTimeoutMs());
       const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {

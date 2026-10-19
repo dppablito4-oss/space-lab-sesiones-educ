@@ -14,25 +14,33 @@ window.SupabaseClient = (() => {
     let supabase = null;
     let _cachedUser = null;
     let _cachedSession = null;
+    let _storageOwnerId = null;
+    let _sessionResolved = false;
+    let _passwordRecoveryPending = false;
+
+    function setSessionContext(session) {
+        const previousUserId = _storageOwnerId;
+        _cachedSession = session || null;
+        _cachedUser = session?.user || null;
+        _sessionResolved = true;
+        _storageOwnerId = _cachedUser?.id || null;
+        if (previousUserId !== _storageOwnerId) {
+            window.dispatchEvent(new CustomEvent('spacelab:account-changed', {
+                detail: { previousUserId, userId: _storageOwnerId }
+            }));
+        }
+    }
 
     /**
      * Lee inmediatamente el usuario persistido en localStorage de forma síncrona
      * sin esperar promesas ni peticiones de red.
      */
     function getSessionUserSync() {
+        if (_sessionResolved) return _cachedUser;
         if (_cachedUser) return _cachedUser;
         try {
             const exactKey = 'sb-koptglmifwpzrfzvipnm-auth-token';
             let item = window.localStorage ? window.localStorage.getItem(exactKey) : null;
-            if (!item && window.localStorage) {
-                for (let i = 0; i < window.localStorage.length; i++) {
-                    const k = window.localStorage.key(i);
-                    if (k && k.startsWith('sb-') && k.endsWith('-auth-token')) {
-                        item = window.localStorage.getItem(k);
-                        break;
-                    }
-                }
-            }
             if (item) {
                 const parsed = JSON.parse(item);
                 if (parsed && (parsed.user || parsed.currentSession?.user)) {
@@ -60,13 +68,11 @@ window.SupabaseClient = (() => {
                 }
             });
             _cachedUser = getSessionUserSync();
+            _storageOwnerId = _cachedUser?.id || null;
             supabase.auth.onAuthStateChange((event, session) => {
-                _cachedSession = session || null;
-                _cachedUser = session?.user || null;
-                if (!session && event === 'SIGNED_OUT') {
-                    _cachedUser = null;
-                    _cachedSession = null;
-                }
+                if (event === 'PASSWORD_RECOVERY') _passwordRecoveryPending = true;
+                if (event === 'SIGNED_OUT') _passwordRecoveryPending = false;
+                setSessionContext(session);
             });
             console.log('Supabase Client initialized successfully');
         } else {
@@ -201,10 +207,27 @@ window.SupabaseClient = (() => {
         if (user) {
             await logAction('LOGOUT', `Usuario cerró sesión: ${user.email}`);
         }
-        _cachedUser = null;
-        _cachedSession = null;
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
+        setSessionContext(null);
+        return true;
+    }
+
+    async function requestPasswordReset(email) {
+        if (!supabase) throw new Error('Supabase no inicializado');
+        const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+            redirectTo: `${window.location.origin}${window.location.pathname}`
+        });
+        if (error) throw error;
+        return true;
+    }
+
+    async function updateRecoveredPassword(password) {
+        if (!supabase || !_passwordRecoveryPending) throw new Error('Abre un enlace de recuperación válido para cambiar la contraseña.');
+        if (password.length < 8) throw new Error('La nueva contraseña debe tener al menos 8 caracteres.');
+        const { error } = await supabase.auth.updateUser({ password });
+        if (error) throw error;
+        _passwordRecoveryPending = false;
         return true;
     }
 
@@ -257,13 +280,16 @@ window.SupabaseClient = (() => {
      */
     async function invokeFunction(functionName, body) {
         if (!supabase) throw new Error('No se pudo conectar con Supabase.');
+        const ownerId = getSessionUserSync()?.id || null;
 
         const { data: { session }, error: sessionError } = await supabase.auth.getSession();
         if (sessionError) throw sessionError;
         if (!session) throw new Error('Debes iniciar sesión para usar las funciones de IA.');
+        if (!ownerId || session.user?.id !== ownerId) throw new Error('La cuenta cambió. Inténtalo nuevamente.');
 
         try {
             const { data, error } = await supabase.functions.invoke(functionName, { body });
+            if (getSessionUserSync()?.id !== ownerId) throw new Error('La cuenta cambió. Se descartó la respuesta anterior.');
             if (error) {
                 throw new Error(await readFunctionError(error, `La función ${functionName} no está disponible.`));
             }
@@ -300,11 +326,13 @@ window.SupabaseClient = (() => {
     /**
      * Obtiene todas las sesiones guardadas en la nube para el usuario
      */
-    async function getSessionsCloud() {
+    async function getSessionsCloud(expectedUserId = getSessionUserSync()?.id) {
         if (!supabase) return [];
+        if (!expectedUserId || getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
         const { data, error } = await supabase
             .from('sesiones')
             .select('*')
+            .eq('user_id', expectedUserId)
             .order('last_saved', { ascending: false });
         
         if (error) {
@@ -323,10 +351,11 @@ window.SupabaseClient = (() => {
     /**
      * Guarda una sesión en la nube
      */
-    async function saveSessionCloud(session) {
+    async function saveSessionCloud(session, expectedUserId = getSessionUserSync()?.id) {
         if (!supabase) return false;
         const user = await getCurrentUser();
         if (!user) return false;
+        if (!expectedUserId || user.id !== expectedUserId || getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
 
         const { error } = await supabase
             .from('sesiones')
@@ -368,11 +397,13 @@ window.SupabaseClient = (() => {
     }
 
     /** Obtiene los registros de planificación, incluidos sus tombstones. */
-    async function getPlanningRecordsCloud() {
+    async function getPlanningRecordsCloud(expectedUserId = getSessionUserSync()?.id) {
         if (!supabase) return [];
+        if (!expectedUserId || getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
         const { data, error } = await supabase
             .from('planning_containers')
             .select('*')
+            .eq('user_id', expectedUserId)
             .order('last_saved', { ascending: false });
         if (error) throw error;
         return (data || []).map(row => ({
@@ -391,10 +422,11 @@ window.SupabaseClient = (() => {
     }
 
     /** Inserta o actualiza un registro validado de PlanningContainer. */
-    async function savePlanningRecordCloud(record) {
+    async function savePlanningRecordCloud(record, expectedUserId = getSessionUserSync()?.id) {
         if (!supabase) return false;
         const user = await getCurrentUser();
         if (!user) return false;
+        if (!expectedUserId || user.id !== expectedUserId || getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
         const { error } = await supabase
             .from('planning_containers')
             .upsert({
@@ -445,6 +477,7 @@ window.SupabaseClient = (() => {
                 .eq('id', user.id)
                 .single();
             if (error) throw error;
+            if (getSessionUserSync()?.id !== user.id) return null;
             return data;
         } catch (e) {
             console.error('[Supabase] Error al obtener el perfil del usuario:', e);
@@ -487,6 +520,7 @@ window.SupabaseClient = (() => {
         try {
             const { data, error } = await supabase.rpc('get_user_entitlements');
             if (error) throw error;
+            if (getSessionUserSync()?.id !== user?.id) return { ok: false, plan: 'unknown', features: {} };
             if (data && typeof data === 'object') {
                 cachedEntitlements = data;
                 cachedEntitlementsUserId = user ? user.id : null;
@@ -544,6 +578,7 @@ window.SupabaseClient = (() => {
             .eq('user_id', user.id)
             .maybeSingle();
         if (error) throw error;
+        if (getSessionUserSync()?.id !== user.id) return null;
         return data ? {
             balance: Number(data.balance) || 0,
             updatedAt: data.updated_at
@@ -623,6 +658,7 @@ window.SupabaseClient = (() => {
                 });
 
             if (error) throw error;
+            if (getSessionUserSync()?.id !== user.id) return [];
 
             return (data || []).map(file => {
                 const { data: { publicUrl } } = supabase.storage
@@ -656,6 +692,7 @@ window.SupabaseClient = (() => {
                 .eq('seccion', seccion)
                 .order('nombre_completo', { ascending: true });
             if (error) throw error;
+            if (getSessionUserSync()?.id !== user.id) return [];
             return (data || []).map(r => r.nombre_completo);
         } catch (e) {
             console.error('[Supabase] Error al obtener alumnos:', e);
@@ -702,6 +739,9 @@ window.SupabaseClient = (() => {
         sendOtp,
         verifyOtp,
         logout,
+        requestPasswordReset,
+        updateRecoveredPassword,
+        isPasswordRecoveryPending: () => _passwordRecoveryPending,
         getCurrentUser,
         getSessionUser,
         getSessionUserSync,

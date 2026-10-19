@@ -13,6 +13,7 @@ const localStorage = {
 const window = {
   addEventListener() {},
   localStorage,
+  AccountStorage: require('../js/core/account-storage.js'),
 };
 
 const context = vm.createContext({
@@ -59,3 +60,63 @@ assert.deepEqual(
 );
 
 console.log('storage.test.js: OK');
+
+(async () => {
+  let user = { id: 'account-a' };
+  const uploads = [];
+  const cloud = {
+    getSessionUserSync: () => user,
+    getCurrentUser: async () => user,
+    getSessionsCloud: async () => [],
+    saveSessionCloud: async (session, ownerId) => { uploads.push({ id: session.id, ownerId }); return true; }
+  };
+  window.SupabaseClient = cloud;
+  context.SupabaseClient = cloud;
+  assert.equal(Storage.getAllSessions().length, 0, 'No adjudicar datos antiguos al iniciar sesión.');
+  assert.equal(Storage.saveSession({ id: 'private-a' }), true);
+  Storage.setCurrentSession({ id: 'draft-a' });
+  await new Promise(resolve => setImmediate(resolve));
+  user = { id: 'account-b' };
+  assert.equal(Storage.getSession('private-a'), null);
+  assert.equal(Storage.getCurrentSession(), null);
+  assert.equal(await Storage.syncSessions(), true);
+  assert.ok(!uploads.some(item => item.ownerId === 'account-b'), 'B no debe subir datos de A ni del invitado.');
+  Storage.saveSession({ id: 'private-b' });
+  user = null;
+  await new Promise(resolve => setImmediate(resolve));
+  assert.ok(!uploads.some(item => item.id === 'private-b'), 'Cancelar subidas en cola al cambiar de cuenta.');
+  assert.equal(Storage.getSession('private-a'), null);
+  assert.ok(Storage.getSession('ses_new'), 'Conservar datos anteriores en invitado.');
+  user = { id: 'account-a' };
+  assert.equal(Storage.getCurrentSession().id, 'draft-a');
+  assert.ok(Storage.getSession('private-a'));
+
+  let releaseRead;
+  cloud.getSessionsCloud = () => new Promise(resolve => { releaseRead = resolve; });
+  const syncing = Storage.syncSessions();
+  await new Promise(resolve => setImmediate(resolve));
+  user = { id: 'account-b' };
+  releaseRead([{ id: 'remote-a' }]);
+  assert.equal(await syncing, false);
+  assert.equal(Storage.getSession('remote-a'), null, 'Una respuesta de A no debe escribirse en B.');
+
+  user = { id: 'account-a' };
+  const inFlight = Storage.syncSessions();
+  await new Promise(resolve => setImmediate(resolve));
+  Storage.saveSession({ id: 'private-a', metadata: { titulo: 'Edición durante sincronización' } });
+  releaseRead([]);
+  await inFlight;
+  assert.equal(Storage.getSession('private-a').metadata.titulo, 'Edición durante sincronización');
+
+  const originalSet = localStorage.setItem;
+  localStorage.setItem = () => { const error = new Error('full'); error.name = 'QuotaExceededError'; throw error; };
+  const before = uploads.length;
+  assert.equal(Storage.saveSession({ id: 'not-persisted' }), false);
+  assert.equal(Storage.setCurrentSession({ id: 'not-persisted' }), false);
+  assert.equal(Storage.deleteSession('private-a'), false);
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(uploads.length, before, 'No subir cambios que no pudieron persistirse localmente.');
+  assert.ok(Storage.getSession('private-a'));
+  localStorage.setItem = originalSet;
+  console.log('storage account boundaries, concurrent sync and quota errors: OK');
+})().catch(error => { console.error(error); process.exitCode = 1; });

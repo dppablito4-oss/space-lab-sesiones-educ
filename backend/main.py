@@ -1813,15 +1813,18 @@ def v1_to_legacy_pdf_payload(doc: SessionDocumentV1, token: str) -> dict:
     def process_text(process):
         return process.contenido.value if process and process.contenido else ""
 
-    def moment(moment):
-        return {
-            "tiempo_total": f"{moment.tiempoMinutos} min",
-            "actividades": [process_text(p) for p in moment.procesos],
-            "procesos": [
+    def moment(moment, *, as_processes=False):
+        result = {"tiempo_total": f"{moment.tiempoMinutos} min"}
+        if as_processes:
+            result["procesos"] = [
                 {"clave": p.id, "titulo": p.titulo, "contenido": [process_text(p)]}
                 for p in moment.procesos
             ]
-        }
+        else:
+            # The legacy normalizer aliases 'procesos' to 'actividades' for
+            # inicio. Sending both lets process dictionaries overwrite strings.
+            result["actividades"] = [process_text(p) for p in moment.procesos]
+        return result
 
     def cierre(moment):
         grouped = {"metacognicion": [], "evaluacion": [], "extension": []}
@@ -1861,7 +1864,7 @@ def v1_to_legacy_pdf_payload(doc: SessionDocumentV1, token: str) -> dict:
         },
         "momentos": {
             "inicio": moment(doc.momentos.inicio),
-            "desarrollo": moment(doc.momentos.desarrollo),
+            "desarrollo": moment(doc.momentos.desarrollo, as_processes=True),
             "cierre": cierre(doc.momentos.cierre),
         },
         "ficha_trabajo": doc.fichaTrabajo.model_dump() if doc.fichaTrabajo else None,

@@ -6,6 +6,7 @@ window.SpaceLabStudentsController = (() => {
         const { state: AppState, dom: DOM, renderSession } = dependencies;
 
         async function loadRosterForCurrentClass() {
+            const ownerId = window.SupabaseClient?.getSessionUserSync?.()?.id || null;
             const nivel = DOM.inputNivel.value;
             const grado = DOM.inputGrado.value;
             const seccion = DOM.inputSeccion.value.trim().toUpperCase();
@@ -20,6 +21,8 @@ window.SpaceLabStudentsController = (() => {
             if (window.SupabaseClient) {
                 try {
                     const alumnos = await SupabaseClient.getAlumnos(nivel, grado, seccion);
+                    if ((window.SupabaseClient?.getSessionUserSync?.()?.id || null) !== ownerId) return;
+                    if (nivel !== DOM.inputNivel.value || grado !== DOM.inputGrado.value || seccion !== DOM.inputSeccion.value.trim().toUpperCase()) return;
                     if (alumnos.length > 0) {
                         textareaAlumnos.value = alumnos.join('\n');
                     } else {
@@ -61,6 +64,7 @@ window.SpaceLabStudentsController = (() => {
                     }
         
                     await SupabaseClient.saveAlumnos(nivel, grado, seccion, nombresArray);
+                    if (window.SupabaseClient?.getSessionUserSync?.()?.id !== user.id) return;
                     Toast.success(`Lista de alumnos guardada con éxito para ${grado} "${seccion}" (${nivel})`);
         
                     // Actualizar la sesión activa con los nuevos alumnos y re-renderizar

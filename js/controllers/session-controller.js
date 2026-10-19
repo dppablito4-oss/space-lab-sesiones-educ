@@ -45,7 +45,8 @@ window.SpaceLabSessionController = (() => {
                         Toast.warning('La sesión se guardó, pero la planificación cambió y no pudo actualizarse.');
                     }
                 }
-                Toast.success('Sesión guardada correctamente');
+                Storage.updateSaveIndicator('saved');
+                Toast.success('Sesión guardada en este dispositivo');
                 renderSavedList();
                 window.dispatchEvent(new CustomEvent('spacelab:session-saved', { detail: { session } }));
                 return true;
@@ -133,8 +134,8 @@ window.SpaceLabSessionController = (() => {
         let isUndoingOrRedoing = false;
         
         function saveCurrentState() {
-            if (!AppState.currentSession) return;
-            if (isUndoingOrRedoing) return;
+            if (!AppState.currentSession) return false;
+            if (isUndoingOrRedoing) return false;
         
             const currentHtml = window.SpaceLabSanitizer
                 ? SpaceLabSanitizer.sanitizeSessionHTML(DOM.sessionSheet.innerHTML)
@@ -156,12 +157,14 @@ window.SpaceLabSessionController = (() => {
             AppState.currentSession.htmlContent = currentHtml;
             AppState.currentSession.lastSaved = new Date().toISOString();
         
-            Storage.setCurrentSession(AppState.currentSession);
+            const draftSaved = Storage.setCurrentSession(AppState.currentSession);
         
             if (Storage.getSession(AppState.currentSession.id)) {
-                Storage.saveSession(AppState.currentSession);
+                const sessionSaved = Storage.saveSession(AppState.currentSession);
                 renderSavedList();
+                return draftSaved && sessionSaved;
             }
+            return draftSaved;
         }
         
         function undo() {

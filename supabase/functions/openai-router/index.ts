@@ -6,6 +6,7 @@ import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, rese
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd, resolveApiModel, MODEL_CATALOG } from "../_shared/model-catalog.ts";
 import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
+import { aiAvailabilityResponse, fetchWithTimeout, providerTimeoutMs } from "../_shared/ai-runtime.ts";
 
 const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-6.1-sol", "gpt-6-sol", "gpt-5.6-terra", "gpt-6-astra", "gpt-5.6-luna", "gpt-5.4-mini", "fast", "balanced", "max_quality", "automatic"]);
 const MAX_SOURCE_CHARS = 30_000;
@@ -15,6 +16,8 @@ serve(async (req) => {
   const preflight = preflightResponse(req);
   if (preflight) return preflight;
   if (req.method !== "POST") return jsonResponse(req, { error: "Método no permitido.", code: "METHOD_NOT_ALLOWED" }, 405);
+  const unavailable = aiAvailabilityResponse(req, "openai");
+  if (unavailable) return unavailable;
 
   const auth = await getAuthenticatedContext(req);
   if (auth instanceof Response) return auth;
@@ -103,11 +106,11 @@ serve(async (req) => {
       }
 
       const startTime = Date.now();
-      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+      const response = await fetchWithTimeout("https://api.openai.com/v1/chat/completions", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
         body: JSON.stringify(requestBody),
-      });
+      }, providerTimeoutMs());
       const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {

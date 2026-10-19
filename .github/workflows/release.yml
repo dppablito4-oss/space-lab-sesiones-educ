@@ -39,6 +39,9 @@ jobs:
         working-directory: backend
         run: pyinstaller pablitopyhost.spec --clean --noconfirm
 
+      - name: Verify compiled DOCX and canonical PDF export
+        run: python tests/verify_compiled_exe.py
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:

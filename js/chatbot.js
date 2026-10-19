@@ -37,6 +37,12 @@ window.Chatbot = (() => {
         if (!container) return;
 
         bindEvents();
+        window.addEventListener('spacelab:account-changed', () => {
+            chatHistory = [];
+            messagesContainer.replaceChildren();
+            inputField.value = '';
+            windowChat.classList.add('hidden');
+        });
     }
 
     function bindEvents() {

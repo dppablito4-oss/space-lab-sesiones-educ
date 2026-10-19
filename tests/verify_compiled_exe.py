@@ -11,6 +11,8 @@ if hasattr(sys.stderr, "reconfigure"):
 
 import docx
 import httpx
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from backend.version import ENGINE_VERSION  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 EXE_PATH = ROOT / "backend" / "dist" / "pablitopyhost.exe"
@@ -25,17 +27,23 @@ def main():
     print(f"  [OK] Binario encontrado ({EXE_PATH.stat().st_size:,} bytes)")
 
     print("\n[2/5] Levantando proceso ejecutable pablitopyhost.exe...")
+    startup = subprocess.STARTUPINFO() if sys.platform == 'win32' else None
+    if startup:
+        startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
+        startup.wShowWindow = 0
     process = subprocess.Popen(
         [str(EXE_PATH)],
         cwd=str(EXE_PATH.parent),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
+        startupinfo=startup,
+        creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0,
     )
 
     try:
         online = False
         start_time = time.time()
-        while time.time() - start_time < 15:
+        while time.time() - start_time < 45:
             try:
                 res = httpx.get("http://127.0.0.1:8000/", timeout=1.0)
                 if res.status_code == 200 and res.json().get("status") == "Online":
@@ -45,15 +53,15 @@ def main():
             except Exception:
                 time.sleep(0.5)
 
-        assert online, "El ejecutable no respondió en http://127.0.0.1:8000 en 15 segundos"
+        assert online, "El ejecutable no respondió en http://127.0.0.1:8000 en 45 segundos"
         print(f"  [OK] Servidor local en línea: {server_data}")
-        assert server_data.get("version") == "1.4.0"
+        assert server_data.get("version") == ENGINE_VERSION
 
         print("\n[3/5] Leyendo token criptográfico generado por el ejecutable...")
         assert TOKEN_PATH.exists(), f"No se generó {TOKEN_PATH}"
         token = TOKEN_PATH.read_text(encoding="utf-8").strip()
-        assert len(token) == 64, f"Token no tiene 64 hex: {token}"
-        print(f"  [OK] Token detectado: {token[:12]}...")
+        assert len(token) == 64, "El token debe tener 64 caracteres hexadecimales"
+        print("  [OK] Token de conexión presente (valor oculto)")
 
         print("\n[4/5] Enviando petición de exportación de Unidad de Secundaria (12 tablas)...")
         unit_payload = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
@@ -88,13 +96,28 @@ def main():
             # twips a emus: 10490 twips = 6,661,150 emus (aprox)
             print(f"    * Tabla {i+1:02d}: {len(table.rows)} filas x {len(table.columns)} cols")
 
+        print("\nVerificando PDF real desde SessionDocument v1...")
+        pdf_payload = json.loads((ROOT / 'tests/fixtures/secundaria-matematica-polya.v1.json').read_text(encoding='utf-8'))
+        pdf_payload['token'] = token
+        pdf_response = httpx.post(
+            'http://127.0.0.1:8000/exportar-pdf-json', json=pdf_payload,
+            headers={'Origin': 'https://sesiones.sypablitodp.site'}, timeout=90,
+        )
+        assert pdf_response.status_code == 200, f'Exportación PDF devolvió HTTP {pdf_response.status_code}'
+        assert pdf_response.content.startswith(b'%PDF'), 'La respuesta debe ser un PDF válido'
+        print(f'  [OK] PDF canónico generado ({len(pdf_response.content):,} bytes)')
+
         print("\n============================================================")
         print(">>> CERTIFICACIÓN DEL EJECUTABLE PABLITOPYHOST.EXE EXITOSA <<<")
         print("============================================================")
 
     finally:
         print("\nCerrando proceso pablitopyhost.exe...")
-        process.terminate()
+        if sys.platform == 'win32':
+            subprocess.run(['taskkill.exe', '/PID', str(process.pid), '/T', '/F'],
+                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        else:
+            process.terminate()
         try:
             process.wait(timeout=3)
         except subprocess.TimeoutExpired:

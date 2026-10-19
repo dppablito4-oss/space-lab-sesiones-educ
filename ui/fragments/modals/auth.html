@@ -36,6 +36,7 @@
             <p id="auth-subtitle" style="display: none;"></p>
 
             <form id="auth-form" autocomplete="off">
+                <p id="auth-recovery-description" class="hidden" role="status"></p>
                 <!-- Apodo / Username (Solo Registro) -->
                 <div id="auth-group-username" class="form-group hidden" style="text-align: left; margin-bottom: 1rem;">
                     <input type="text" id="auth-username" class="auth-field" placeholder="Apodo único (sin espacios)">
@@ -75,6 +76,7 @@
                 <button type="submit" id="btn-submit-auth" class="auth-submit-btn">
                     Iniciar Sesión
                 </button>
+                <button type="button" id="btn-forgot-password" class="btn btn-ghost">Olvidé mi contraseña</button>
             </form>
 
             <!-- Hidden Toggle elements to prevent script crashes -->

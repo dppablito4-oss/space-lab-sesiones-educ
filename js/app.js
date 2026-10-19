@@ -186,7 +186,7 @@
 
         // Setup auto-save
         Storage.setupAutoSave(() => {
-            saveCurrentState();
+            return saveCurrentState();
         });
 
         // Listen for form inputs to auto-save metadata changes
@@ -264,6 +264,35 @@
             loadLogosGallery();
             window.SpaceLabHome?.refresh?.();
         };
+        window.addEventListener('spacelab:account-changed', event => {
+            if (AppState.currentSession) {
+                const snapshot = { ...AppState.currentSession, htmlContent: window.SpaceLabSanitizer
+                    ? SpaceLabSanitizer.sanitizeSessionHTML(DOM.sessionSheet.innerHTML)
+                    : DOM.sessionSheet.textContent };
+                if (!Storage.setCurrentSession(snapshot, event.detail.previousUserId)) {
+                    Toast.warning('No se pudo guardar el último borrador de la cuenta anterior.');
+                }
+            }
+            Storage.cancelAutoSave();
+            AppState.currentSession = null;
+            AppState.sessionDirty = false;
+            AppState.pendingPlanningLink = null;
+            AppState.sourceFileData = null;
+            AppState.undoStack = [];
+            AppState.redoStack = [];
+            DOM.form.reset();
+            const roster = document.getElementById('textarea-alumnos');
+            if (roster) roster.value = '';
+            DOM.sessionSheet.innerHTML = '';
+            DOM.printPreview.classList.add('hidden');
+            DOM.emptyState.classList.remove('hidden');
+            DOM.loadModal?.classList.add('hidden');
+            DOM.inputSourceInstruction && (DOM.inputSourceInstruction.value = '');
+            window.Loader?.hide?.();
+            renderSavedList();
+            loadLastSession();
+            window.dispatchEvent(new CustomEvent('spacelab:session-cleared'));
+        });
 
         // Load last session if exists
         loadLastSession();
@@ -284,7 +313,7 @@
         setupDragAndDrop();
 
         // Sync local and cloud sessions in the background
-        if (window.Storage && typeof Storage.syncSessions === 'function') {
+        if (window.StorageManager && typeof Storage.syncSessions === 'function') {
             Storage.syncSessions().then(() => {
                 renderSavedList();
                 window.SpaceLabHome?.refresh?.();
@@ -1721,6 +1750,7 @@
         try {
             const user = window.SupabaseClient?.getSessionUserSync?.() || await window.SupabaseClient?.getCurrentUser?.();
             const profile = await SupabaseClient.getUserProfile(user);
+            if (window.SupabaseClient?.getSessionUserSync?.()?.id !== user?.id) return;
             if (profile) {
                 if (profile.institucion) DOM.inputInstitucion.value = profile.institucion;
                 if (profile.dre) DOM.inputDre.value = profile.dre;

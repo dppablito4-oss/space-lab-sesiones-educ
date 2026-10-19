@@ -43,10 +43,15 @@ const PedagogyBrief = (() => {
 
     // ─── PUBLIC: CLEAR ───
     function clear() {
+        _formData = null;
         _summary = null;
         _messages = [];
         _isFinished = false;
     }
+    window.addEventListener('spacelab:account-changed', () => {
+        clear();
+        document.getElementById('pedagogy-brief-modal')?.remove();
+    });
 
     // ─────────────────────────────────────────────────────────────
     // UI BUILDING

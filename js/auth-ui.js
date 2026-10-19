@@ -33,6 +33,8 @@ window.AuthUi = (() => {
     let toggleText = null;
 
     let isLoginMode = true;
+    let recoveryMode = null;
+    let sessionStateRequest = 0;
 
     function init() {
         if (initialized) return;
@@ -69,6 +71,7 @@ window.AuthUi = (() => {
         initialized = true;
         bindEvents();
         checkSessionState();
+        if (window.SupabaseClient?.isPasswordRecoveryPending?.()) showRecovery(true);
     }
 
     function bindEvents() {
@@ -97,6 +100,7 @@ window.AuthUi = (() => {
 
         // Enviar formulario
         authForm.addEventListener('submit', handleAuthSubmit);
+        document.getElementById('btn-forgot-password')?.addEventListener('click', () => showRecovery(false));
 
         // Cerrar modal
         btnClose.addEventListener('click', closeModal);
@@ -137,11 +141,20 @@ window.AuthUi = (() => {
 
         window.SupabaseClient?.onAuthStateChange?.((event, session) => {
             checkSessionState(session?.user);
+            if (event === 'PASSWORD_RECOVERY') setTimeout(() => showRecovery(true), 0);
         });
     }
 
     function setMode(isLogin) {
+        recoveryMode = null;
         isLoginMode = isLogin;
+        inputEmail.closest('.form-group').classList.remove('hidden');
+        inputPassword.closest('.form-group').classList.remove('hidden');
+        inputEmail.required = true;
+        inputPassword.required = true;
+        inputPassword.autocomplete = isLogin ? 'current-password' : 'new-password';
+        document.getElementById('auth-recovery-description')?.classList.add('hidden');
+        document.getElementById('btn-forgot-password')?.classList.toggle('hidden', !isLogin);
         
         // Limpiar inputs
         inputEmail.value = '';
@@ -205,11 +218,65 @@ window.AuthUi = (() => {
     }
 
     function closeModal() {
+        inputPassword.value = '';
+        inputConfirmPassword.value = '';
         modal.classList.add('hidden');
+    }
+
+    function showRecovery(updating) {
+        setMode(true);
+        recoveryMode = updating ? 'update' : 'request';
+        const description = document.getElementById('auth-recovery-description');
+        description.classList.remove('hidden');
+        description.textContent = updating
+            ? 'Elige una nueva contraseña de al menos 8 caracteres.'
+            : 'Ingresa tu correo para recibir un enlace de recuperación.';
+        inputEmail.closest('.form-group').classList.toggle('hidden', updating);
+        inputEmail.required = !updating;
+        inputPassword.closest('.form-group').classList.toggle('hidden', !updating);
+        inputPassword.required = updating;
+        inputPassword.autocomplete = 'new-password';
+        groupConfirmPassword.classList.toggle('hidden', !updating);
+        inputConfirmPassword.required = updating;
+        inputConfirmPassword.autocomplete = 'new-password';
+        document.getElementById('btn-forgot-password').classList.add('hidden');
+        btnSubmit.textContent = updating ? 'Guardar nueva contraseña' : 'Enviar enlace';
+        modal.classList.remove('hidden');
+        (updating ? inputPassword : inputEmail).focus();
+    }
+
+    async function submitRecovery() {
+        const updating = recoveryMode === 'update';
+        if (updating && (inputPassword.value.length < 8 || inputPassword.value !== inputConfirmPassword.value)) {
+            Toast.warning('Escribe la misma contraseña de al menos 8 caracteres en ambos campos.');
+            return;
+        }
+        if (!updating && !validateEmail(inputEmail.value.trim())) {
+            Toast.warning('Ingresa un correo electrónico válido.');
+            return;
+        }
+        btnSubmit.disabled = true;
+        try {
+            if (updating) {
+                await SupabaseClient.updateRecoveredPassword(inputPassword.value);
+                Toast.success('Contraseña actualizada.');
+                closeModal();
+                setMode(true);
+            } else {
+                await SupabaseClient.requestPasswordReset(inputEmail.value.trim());
+                document.getElementById('auth-recovery-description').textContent =
+                    'Si el correo está registrado, recibirás un enlace. Revisa también la carpeta de spam.';
+            }
+        } catch (error) {
+            Toast.error(error.message || 'No se pudo completar la recuperación. Inténtalo nuevamente.');
+        } finally {
+            btnSubmit.disabled = false;
+        }
     }
 
     async function handleAuthSubmit(e) {
         e.preventDefault();
+        if (recoveryMode) { await submitRecovery(); return; }
         
         const email = inputEmail.value.trim();
         const password = inputPassword.value;
@@ -369,7 +436,9 @@ window.AuthUi = (() => {
     }
 
     async function checkSessionState(existingUser = null) {
+        const requestId = ++sessionStateRequest;
         const user = existingUser || window.SupabaseClient?.getSessionUserSync?.() || await SupabaseClient.getCurrentUser();
+        if (requestId !== sessionStateRequest) return;
         
         if (user) {
             // Renderizar inmediatamente la identidad con la información local sin esperar la red
@@ -397,6 +466,7 @@ window.AuthUi = (() => {
                 SupabaseClient.getUserRole(user.id).catch(() => 'user'),
                 (SupabaseClient.getUserProfile ? SupabaseClient.getUserProfile(user).catch(() => null) : null)
             ]);
+            if (requestId !== sessionStateRequest) return;
             const isAdmin = role === 'superadmin' || role === 'admin';
             const formattedName = formatDisplayName(user, profile);
             const displayName = escapeHTML(formattedName);

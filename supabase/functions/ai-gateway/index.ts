@@ -10,6 +10,7 @@ import {
   type AiRoutingInput,
 } from "../_shared/ai-routing.ts";
 import { createTrustedLinkedSnapshot, replaceLinkedSnapshot, requestedLinkedSnapshot } from "../_shared/linked-session-context.ts";
+import { fetchWithTimeout, providerTimeoutMs } from "../_shared/ai-runtime.ts";
 
 interface GatewayAttempt {
   requestId: string;
@@ -178,7 +179,7 @@ serve(async (req) => {
     finalAttemptId = attemptRequestId;
 
     try {
-      const upstream = await fetch(`${supabaseUrl}/functions/v1/${decision.functionName}`, {
+      const upstream = await fetchWithTimeout(`${supabaseUrl}/functions/v1/${decision.functionName}`, {
         method: "POST",
         headers: {
           "Authorization": authorization,
@@ -193,7 +194,7 @@ serve(async (req) => {
           quality: decision.quality,
           model: decision.model,
         }),
-      });
+      }, providerTimeoutMs() + 10000);
 
       attempts.push({
         requestId: attemptRequestId,

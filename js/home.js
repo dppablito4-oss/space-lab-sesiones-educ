@@ -312,6 +312,13 @@ window.SpaceLabHome = (() => {
         });
         byId('home-logout')?.addEventListener('click', handleLogout);
         window.addEventListener('spacelab:aicredits', event => renderWallet(event.detail));
+        window.addEventListener('spacelab:account-changed', () => {
+            refreshRequest += 1;
+            renderWallet(null);
+            renderCommercialPlan(null);
+            renderSessions(getSessions());
+            closePlansDialog();
+        });
         window.addEventListener('spacelab:session-loaded', () => {
             renderSessions(getSessions());
             renderCurrentSession();

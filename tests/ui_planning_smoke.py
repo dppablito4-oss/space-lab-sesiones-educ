@@ -8,6 +8,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 MOCK_CLOUD = """() => {
+    window.SupabaseClient.getSessionUserSync = () => ({ id: 'test-teacher' });
     window.SupabaseClient.getCurrentUser = async () => ({ id: 'test-teacher' });
     window.SupabaseClient.getPlanningRecordsCloud = async () =>
         JSON.parse(sessionStorage.getItem('planning-test-cloud') || '[]');
@@ -89,13 +90,13 @@ def run():
                 page.locator('#planning-notice').filter(has_text='Planificación revisada').wait_for()
                 assert page.locator('[data-planning-action="review"]').is_disabled()
                 assert page.locator('[data-planning-action="review"]').inner_text() == 'Planificación revisada'
-                saved_review = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
+                saved_review = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers:user:test-teacher'))[0].containerData")
                 assert saved_review['revision'] == 2 and saved_review['status'] == 'reviewed'
                 assert page.locator('[data-planning-action="save"]').is_disabled()
-                unchanged_review = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
+                unchanged_review = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers:user:test-teacher'))[0].containerData")
                 assert unchanged_review['revision'] == 2 and unchanged_review['status'] == 'reviewed'
                 page.locator('[data-planning-action="close"]').click()
-                page.evaluate("localStorage.removeItem('spacelab_planning_containers')")
+                page.evaluate("localStorage.removeItem('spacelab_planning_containers:user:test-teacher')")
                 page.reload(wait_until='domcontentloaded')
                 page.evaluate("window.LandingRouter.showHome(false)")
                 page.evaluate(MOCK_CLOUD)
@@ -115,7 +116,7 @@ def run():
                 page.locator('[data-planning-action="save"]').click()
                 page.locator('.planning-view-shell').wait_for()
                 assert page.locator('#planning-title').inner_text() == 'Unidad revisada'
-                saved = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
+                saved = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers:user:test-teacher'))[0].containerData")
                 assert saved['schemaVersion'] == '2.0' and saved['revision'] == 3
                 assert saved['status'] == 'draft'
                 assert saved['sequence'][1]['title'] == 'Primera sesión'
@@ -128,7 +129,7 @@ def run():
                 assert page.locator('[data-planning-action="review"]').is_enabled()
                 page.locator('[data-planning-action="review"]').click()
                 page.locator('.planning-status-reviewed').wait_for()
-                reviewed_again = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers'))[0].containerData")
+                reviewed_again = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers:user:test-teacher'))[0].containerData")
                 assert reviewed_again['status'] == 'reviewed' and reviewed_again['revision'] == 4
                 assert page.locator('#planning-dialog').evaluate('el => el.scrollWidth <= el.clientWidth')
                 page.locator('[data-planning-view-action="close"]').click()

@@ -618,12 +618,14 @@ const PlanningWizard = (() => {
             return window.confirm(`${options.title}\n\n${options.message}`);
         }
         async function requestAiProposal(regenerating = false) {
+            const ownerId = window.AccountStorage.userId(window.SupabaseClient);
             const readiness = generationReadiness(draft, profiles);
             if (!readiness.ready) {
                 notice(`Completa antes de generar: ${readiness.missing.join(', ')}.`, true);
                 return;
             }
             if (!await confirmAiReplacement(regenerating)) return;
+            window.AccountStorage.assertCurrent(window.SupabaseClient, ownerId);
             busy = true; generating = true;
             render();
             notice('Generando propuesta pedagógica…');
@@ -633,11 +635,13 @@ const PlanningWizard = (() => {
                 }
                 const result = await generateProposal(draft, profiles,
                     (functionName, body) => window.SupabaseClient.invokeFunction(functionName, body));
+                window.AccountStorage.assertCurrent(window.SupabaseClient, ownerId);
                 aiProposal = result.container;
                 generating = false;
                 render();
                 dialog.querySelector('#planning-proposal-title')?.focus();
             } catch (error) {
+                if (ownerId !== window.AccountStorage.userId(window.SupabaseClient)) return;
                 console.error('[PlanningWizard] Falló planning.map.generate:', error);
                 generating = false;
                 render();
@@ -821,6 +825,10 @@ const PlanningWizard = (() => {
                 (dialog.querySelector('#planning-mode-title') || dialog.querySelector('#planning-step-title'))?.focus();
             } catch (error) { notice(error.message, true); }
             finally { busy = false; target.disabled = false; }
+        });
+        window.addEventListener('spacelab:account-changed', () => {
+            library();
+            if (dialog.open) dialog.close();
         });
         dialog.addEventListener('cancel', event => { if (busy || !mayLeave()) event.preventDefault(); else dirty = false; });
         window.addEventListener('beforeunload', event => { if (dirty) { event.preventDefault(); event.returnValue = ''; } });

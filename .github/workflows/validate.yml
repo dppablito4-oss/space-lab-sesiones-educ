@@ -103,6 +103,7 @@ jobs:
       - name: Run storage smoke test
         run: |
           node tests/storage.test.js
+          node tests/auth-session-boundaries.test.js
           node tests/ai-provider-routing.test.js
           node tests/theme.test.js
           node tests/app-utils.test.js
@@ -140,6 +141,7 @@ jobs:
           python tests/frontend_security.py
           python tests/ui_smoke.py
           python tests/ui_session_lifecycle_smoke.py
+          python tests/ui_account_recovery_smoke.py
           python tests/ui_standalone_session_regression.py
           python tests/ui_planning_smoke.py
           python tests/ui_planning_studio_smoke.py
@@ -164,6 +166,7 @@ jobs:
           deno test tests/linked-session-context.test.ts
           deno test tests/planning-map-prompt.test.ts
           deno test tests/ai-credits.test.ts
+          deno test tests/ai-runtime.test.ts
           deno check supabase/functions/openai-router/index.ts
           deno check supabase/functions/gemini-router/index.ts
           deno check supabase/functions/deepseek-router/index.ts
@@ -195,6 +198,9 @@ jobs:
       - name: Build EXE with PyInstaller
         working-directory: source/backend
         run: pyinstaller pablitopyhost.spec --clean --noconfirm
+
+      - name: Verify compiled DOCX and canonical PDF export
+        run: python tests/verify_compiled_exe.py
 
       - name: Upload EXE artifact
         uses: actions/upload-artifact@v4

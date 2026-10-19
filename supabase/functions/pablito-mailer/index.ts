@@ -23,17 +23,14 @@ serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response("ok", { headers: corsHeaders });
   }
+  if (req.method !== "POST") {
+    return new Response(
+      JSON.stringify({ error: "Método no permitido.", code: "METHOD_NOT_ALLOWED" }),
+      { headers: { ...corsHeaders, "Content-Type": "application/json", "Allow": "POST, OPTIONS" }, status: 405 }
+    );
+  }
 
   try {
-    const { action, payload } = await req.json();
-
-    if (!payload || !["MANUAL_BLAST", "GET_SMTP_CONFIG", "UPDATE_SMTP_CONFIG"].includes(action)) {
-      return new Response(
-        JSON.stringify({ error: "Acción no soportada o payload vacío." }),
-        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
-      );
-    }
-
     // 1. Validar autenticación y permisos de Administrador
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
@@ -70,6 +67,23 @@ serve(async (req) => {
       return new Response(
         JSON.stringify({ error: "Acceso denegado: Se requiere rol de administrador." }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 403 }
+      );
+    }
+
+    let input;
+    try {
+      input = await req.json();
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "Solicitud JSON inválida.", code: "INVALID_JSON" }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
+      );
+    }
+    const { action, payload } = input || {};
+    if (!payload || !["MANUAL_BLAST", "GET_SMTP_CONFIG", "UPDATE_SMTP_CONFIG"].includes(action)) {
+      return new Response(
+        JSON.stringify({ error: "Acción no soportada o payload vacío." }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 400 }
       );
     }
 

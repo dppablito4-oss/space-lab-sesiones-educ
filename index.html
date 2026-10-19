@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="3a14e3d07d7fa1be">
+    <meta name="app-build" content="4d9ad066a44ed221">
     <script defer src="js/app-update.js?v=7eef37cfd0a2"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
@@ -203,6 +203,7 @@
             <p id="auth-subtitle" style="display: none;"></p>
 
             <form id="auth-form" autocomplete="off">
+                <p id="auth-recovery-description" class="hidden" role="status"></p>
                 <!-- Apodo / Username (Solo Registro) -->
                 <div id="auth-group-username" class="form-group hidden" style="text-align: left; margin-bottom: 1rem;">
                     <input type="text" id="auth-username" class="auth-field" placeholder="Apodo único (sin espacios)">
@@ -242,6 +243,7 @@
                 <button type="submit" id="btn-submit-auth" class="auth-submit-btn">
                     Iniciar Sesión
                 </button>
+                <button type="button" id="btn-forgot-password" class="btn btn-ghost">Olvidé mi contraseña</button>
             </form>
 
             <!-- Hidden Toggle elements to prevent script crashes -->
@@ -304,9 +306,9 @@
 
                     <p><strong>Garantía de Privacidad y Aislamiento (No intrusión en tu sistema):</strong></p>
                     <ul style="margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 0.4rem;">
-                        <li><strong>Cero inspección de archivos:</strong> El motor <code>pablitohost.exe</code> <strong>NO</strong> escanea, lee, recopila ni tiene acceso a tus documentos personales, fotos, descargas, escritorio ni archivos de tu computadora.</li>
+                        <li><strong>Sin exploración de documentos personales:</strong> El motor no busca ni recopila tus fotos, documentos o archivos personales. Utiliza sus recursos de aplicación y el contenido que el navegador le envía para exportar.</li>
                         <li><strong>Cero telemetría invasiva:</strong> No monitorea la actividad de tu PC, no registra pulsaciones de teclado, ni accede a periféricos, micrófonos o cámaras.</li>
-                        <li><strong>Procesamiento en memoria RAM:</strong> Solo recibe el JSON de la sesión educativa que estás editando en ese instante en la pantalla, construye el archivo Word (.docx) en la memoria RAM y lo envía directamente de vuelta al navegador para su descarga.</li>
+                        <li><strong>Exportación local:</strong> Recibe el contenido de la sesión o planificación desde el navegador y devuelve el archivo Word o PDF. Según el formato, puede utilizar archivos temporales durante la conversión.</li>
                     </ul>
                 </div>
 
@@ -314,7 +316,7 @@
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
                     3. ASISTENCIA PEDAGÓGICA CON INTELIGENCIA ARTIFICIAL Y CRÉDITOS
                 </h4>
-                <p>Space Lab integra modelos avanzados de Inteligencia Artificial (OpenAI GPT, Google DeepMind Gemini y DeepSeek) para asistir en la redacción de secuencias didácticas, criterios de evaluación, situaciones significativas y fichas de trabajo. Las credenciales y claves de API se almacenan con cifrado de extremo a extremo en Supabase Secrets del servidor y nunca se exponen al navegador. El uso del copiloto se gestiona mediante un <strong>sistema automatizado de créditos de IA</strong> que garantiza la sostenibilidad técnica y la disponibilidad equitativa del servicio para toda la comunidad docente.</p>
+                <p>Space Lab utiliza OpenAI, Google Gemini y DeepSeek para asistir en la redacción pedagógica. Al solicitar una función de IA, el contenido necesario de tu solicitud y, si los adjuntas, textos o imágenes, se envía mediante las funciones de Supabase al proveedor seleccionado. Estos proveedores procesan ese contenido según sus propias condiciones. Los nombres de alumnos no son necesarios para generar una sesión: evita incluir datos personales de estudiantes en instrucciones y adjuntos. Las claves de los proveedores permanecen en los secretos del servidor y no se entregan al navegador. El uso de IA se registra mediante un <strong>sistema de créditos</strong>.</p>
 
                 <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
@@ -332,7 +334,7 @@
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
                     6. PROTECCIÓN DE DATOS PERSONALES (LEY N° 29733) Y DERECHOS ARCO
                 </h4>
-                <p>En estricto cumplimiento de la <strong>Ley N° 29733 (Ley de Protección de Datos Personales de la República del Perú)</strong> y su Reglamento, los datos personales suministrados (correo electrónico, nombre de usuario y registros de uso) son resguardados con total confidencialidad. <strong>No vendemos, alquilamos ni transferimos tu información a terceros bajo ningún concepto</strong>. En cualquier momento puedes ejercer tus derechos ARCO (Acceso, Rectificación, Cancelación y Oposición) comunicándote con nuestro canal oficial de soporte.</p>
+                <p>Supabase gestiona la autenticación y el almacenamiento de perfiles, sesiones, planificaciones y listas de alumnos que guardas en tu cuenta. El navegador conserva copias y borradores locales; en equipos compartidos, cada cuenta dispone de un espacio local separado. La información necesaria para las funciones de IA se procesa como se describe en la sección anterior. No vendemos ni alquilamos tus datos. Para solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos, o la eliminación de tu cuenta y contenido, utiliza el canal oficial de soporte indicado a continuación. El alcance y los plazos de conservación y eliminación deben confirmarse con soporte durante la beta.</p>
 
                 <h4 style="color: var(--accent); font-weight: 700; margin-top: 0.5rem; display: flex; align-items: center; gap: 0.4rem;">
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
@@ -2233,25 +2235,26 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8"></script>
     <script defer src="js/core/profile-fields.js?v=11c2bee60ff0"></script>
     <script defer src="js/core/validation-errors.js?v=68784095d1d7"></script>
+    <script defer src="js/core/account-storage.js?v=72371df1ff72"></script>
     <script defer src="js/pedagogy/methodology-codes.js?v=bf062db3fa95"></script>
-    <script defer src="js/supabase-client.js?v=5e8e983fee8f"></script>
+    <script defer src="js/supabase-client.js?v=1ad9ad9f4a49"></script>
     <script defer src="js/ai-credit-ui.js?v=008e205c31a6"></script>
     <script defer src="js/components/toast.js?v=333b8e1e59d3"></script>
     <script defer src="js/components/confirm-dialog.js?v=5953ad86674f"></script>
     <script defer src="js/components/loader.js?v=5c00aa0a6108"></script>
     <script defer src="js/sanitizer.js?v=c42f2c209aab"></script>
-    <script defer src="js/auth-ui.js?v=190cd358f7c7"></script>
-    <script defer src="js/storage.js?v=56793733a365"></script>
+    <script defer src="js/auth-ui.js?v=7335e4e4099c"></script>
+    <script defer src="js/storage.js?v=acefaadfb366"></script>
     <script defer src="js/planning/planning-container.js?v=0f4ac6e970bb"></script>
     <script defer src="js/planning/planning-container-v2.js?v=e679bdf5b667"></script>
-    <script defer src="js/planning/planning-repository.js?v=c9e2f0531532"></script>
+    <script defer src="js/planning/planning-repository.js?v=d1f5dcec8441"></script>
     <script defer src="js/planning/linked-session.js?v=7bdf8c6549f2"></script>
-    <script defer src="js/planning/planning-view.js?v=26fae4617b00"></script>
+    <script defer src="js/planning/planning-view.js?v=867d0e0757ed"></script>
     <script defer src="js/pedagogy/context-resolver.js?v=1128a201d8bf"></script>
     <script defer src="js/planning/planning-map-generator.js?v=6b7b78aa5e3c"></script>
-    <script defer src="js/planning/planning-wizard.js?v=91112cdba843"></script>
+    <script defer src="js/planning/planning-wizard.js?v=047c2790a715"></script>
     <!-- Shell visible e interactivo antes de descargar el editor completo. -->
-    <script defer src="js/home.js?v=342b32987eae"></script>
+    <script defer src="js/home.js?v=91cb5b59fcc2"></script>
     <script defer src="js/landing.js?v=af5e9761ae1f"></script>
     <script defer src="js/templates.js?v=e21c8e558241"></script>
     <script defer src="js/ai-copilot.js?v=cc662878b56d"></script>
@@ -2262,21 +2265,21 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="js/controllers/export-controller.js?v=fe63cb0a4fb4"></script>
     <script defer src="js/controllers/ai-controller.js?v=ac6a5ffd9089"></script>
     <script defer src="js/controllers/workflow-controller.js?v=41a361cce2f9"></script>
-    <script defer src="js/controllers/students-controller.js?v=eab84a81fb46"></script>
-    <script defer src="js/controllers/session-controller.js?v=bb4008e5f942"></script>
+    <script defer src="js/controllers/students-controller.js?v=1ee69d204c6a"></script>
+    <script defer src="js/controllers/session-controller.js?v=7c12c150955e"></script>
     <script defer src="js/controllers/design-controller.js?v=8a8f8e479610"></script>
     <script defer src="js/ai/session-validator.js?v=78a19190eff0"></script>
     <script defer src="js/ai/session-adapter.js?v=2536137777ca"></script>
     <script defer src="js/ai/session-export.js?v=c8e3395fa3dc"></script>
-    <script defer src="js/chatbot.js?v=f343615d8cac"></script>
-    <script defer src="js/pedagogy-brief.js?v=64c492af2bf1"></script>
+    <script defer src="js/chatbot.js?v=df033deb6513"></script>
+    <script defer src="js/pedagogy-brief.js?v=0dc5a339d681"></script>
     <!-- KaTeX — renderizado matemático (debe cargarse antes de app.js) -->
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script defer src="js/paginador.js?v=d765e6e6e46d"></script>
     <script defer src="js/ui-shell.js?v=2ecdd9416d68"></script>
-    <script defer src="js/app.js?v=8491c914ee94"></script>
+    <script defer src="js/app.js?v=fb5f353ff6cb"></script>
     <script defer src="js/ficha-external-prompt.js?v=37839d226210"></script>
 </body>
 

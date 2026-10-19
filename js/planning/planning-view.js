@@ -210,6 +210,7 @@ const PlanningView = (() => {
     }
 
     async function open(containerId, options = {}) {
+        const ownerId = window.AccountStorage?.userId(window.SupabaseClient) || null;
         const dialog = document.getElementById('planning-dialog');
         if (!dialog) throw new Error('No se encontró la vista de planificación.');
         window.LandingRouter?.showHome?.(false);
@@ -220,6 +221,7 @@ const PlanningView = (() => {
         dialog.innerHTML = '<div class="planning-shell"><p role="status">Cargando planificación…</p></div>';
         if (!dialog.open) dialog.showModal();
         const methodologyProfile = await loadMethodologyProfile(container);
+        if (currentId !== containerId || ownerId !== (window.AccountStorage?.userId(window.SupabaseClient) || null)) return null;
         const sessionExists = id => Boolean(window.StorageManager?.getSession?.(id));
         dialog.innerHTML = render(container, { methodologyProfile, sessionExists });
         (container.sequence || []).forEach(item => {
@@ -280,6 +282,7 @@ const PlanningView = (() => {
     function mount() {
         const dialog = document.getElementById('planning-dialog');
         if (!dialog) return;
+        window.addEventListener('spacelab:account-changed', () => { currentId = null; close(); });
         dialog.addEventListener('click', async event => {
             const target = event.target.closest('[data-planning-view-action]');
             if (!target) return;
