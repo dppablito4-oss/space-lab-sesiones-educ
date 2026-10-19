@@ -64,8 +64,10 @@ contraseña se envía con `updateUser`. Referencias oficiales:
 [recuperación](https://supabase.com/docs/reference/javascript/auth-resetpasswordforemail),
 [redirecciones](https://supabase.com/docs/guides/auth/redirect-urls).
 
-Configurar en Auth la URL oficial del sitio y las redirecciones exactas
-necesarias. Probar con una cuenta de prueba el correo real, enlace válido,
+Auth ya utiliza `https://sesiones.sypablitodp.site` y admite las redirecciones
+exactas `/` e `/index.html`, declaradas en `supabase/config.toml`. Se corrigió
+el destino anterior `localhost:3000` y se verificó el enlace generado. Probar
+con una cuenta de prueba el correo real, enlace válido,
 enlace vencido/usado, contraseña rechazada y acceso con la nueva contraseña.
 Verificar entrega de correo y límites antes de invitar docentes.
 
@@ -73,6 +75,12 @@ El protocolo ya se verificó contra Auth real con un enlace generado por la API
 administrativa sin enviar correo: token válido, cambio de contraseña e ingreso.
 La entrega al buzón sigue pendiente. La beta mantiene registro público con
 confirmación automática, según decisión del usuario.
+
+Para cambios posteriores, ejecutar `config diff --project-ref` antes de
+`config push`. CLI 2.121.0 aplica solo propiedades declaradas; conservar los
+ajustes remotos no gestionados. El `--yes` de `npx` no responde a las preguntas
+de Supabase: si automatizas un cambio ya revisado, la CLI necesita su propio
+`--yes` después de `supabase config push`.
 
 ## 5. Datos locales y actualización
 
@@ -143,9 +151,9 @@ presupuesto y asignar una persona que las reciba. Configuración real pendiente.
 - [x] Registro público e ingreso comprobados; confirmación automática conservada.
 - [x] Recuperación por token y contraseña nueva comprobadas sin envío de correo.
 - [ ] Entrega de correo de recuperación comprobada desde un buzón.
-- [ ] Generación, edición, cierre y reapertura conservan el documento.
-- [ ] A → B → invitado no mezcla editor, historial, alumnos ni documentos.
-- [ ] Falta de red y cuota local agotada no anuncian guardado inexistente.
+- [x] Guardado, sincronización y recarga conservan el documento en el sitio publicado.
+- [x] A → B → invitado: aislamiento probado con cuentas reales en el sitio publicado.
+- [x] Cuota local agotada devuelve fallo en el sitio publicado; red/sincronización con regresiones locales.
 - [x] Créditos correctos ante éxito, fallo, duplicado y reintento (contabilidad SQL y generación HTTP).
 - [x] DOCX y PDF reales verificados con la descarga publicada 1.4.1.
 - [x] Respaldo manual y restauración aislada ensayados; reversión documentada.

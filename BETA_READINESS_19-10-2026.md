@@ -26,6 +26,11 @@ Proyecto `koptglmifwpzrfzvipnm`, acceso CLI confirmado.
   cruzada, cambio de propietario, escalada de rol y acceso a SMTP.
 - Recuperación sin correo: enlace administrativo, verificación de token,
   cambio de contraseña e ingreso con ella. Falta la llegada al buzón.
+- Corregida la configuración remota de Auth: `site_url` apuntaba a
+  `http://localhost:3000` y no había redirecciones permitidas. Ahora utiliza el
+  dominio público y permite las rutas exactas raíz e `index.html`. Se revisó
+  `config diff`, se aplicaron solo esos dos campos y se comprobó un enlace real
+  que vuelve a la beta. Los otros ajustes remotos se conservaron.
 - Generación corta real: HTTP 200, OpenAI `gpt-6-luna`, un crédito, cero fallbacks.
   Repetir el identificador devuelve 409 sin otro descuento. Se reutilizó la clave
   remota existente; no se imprimieron ni guardaron claves o tokens de API.
@@ -102,5 +107,26 @@ por Git en `artifacts/beta-readiness/`.
 
 ## Publicación web
 
-Pendiente de contrastar el commit final desplegado en
-[sesiones.sypablitodp.site](https://sesiones.sypablitodp.site).
+[sesiones.sypablitodp.site](https://sesiones.sypablitodp.site) despliega el código
+`defe39c`, build `587a595f23ac0753`. [GitHub Pages](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39336913209)
+terminó correctamente. Se contrastaron nueve archivos con el código local,
+incluidos Auth, almacenamiento, editor e indicador de créditos.
+
+Chromium contra el sitio real, sin reemplazar SDK ni archivos: cero errores no
+capturados, formulario de recuperación visible, persistencia de invitado tras
+recarga y descarga 1.4.1 con hash correcto. Con otras dos cuentas temporales:
+ingreso A, guardado y sincronización a Supabase, recarga y borrador conservado,
+cierre A, ingreso B sin documentos/editor de A y regreso a invitado vacío.
+Una cuota local simulada en esa página devolvió fallo de guardado. Ambas cuentas
+se eliminaron después de cerrar sesión.
+
+Este recorrido detectó y permitió corregir un bloqueo real al cerrar sesión
+después de recargar: el callback de Auth devolvía la promesa de actualización de
+créditos. Ahora difiere las consultas hasta salir del callback y rechaza respuestas
+atrasadas de otro refresco. La regresión prueba ambos comportamientos. El patrón
+está documentado por [Supabase](https://supabase.com/docs/guides/troubleshooting/why-is-my-supabase-api-call-not-returning-PGzXw0).
+
+Resultados locales: `published-site.json` y `published-accounts.json`, dentro de
+la carpeta de artefactos ignorada. La suite completa del commit `defe39c` pasó en
+Linux y Windows, incluida la regresión final de Auth:
+[validación](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39336914596).

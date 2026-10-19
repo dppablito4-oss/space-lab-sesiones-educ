@@ -1,5 +1,12 @@
 project_id = "koptglmifwpzrfzvipnm"
 
+[auth]
+site_url = "https://sesiones.sypablitodp.site"
+additional_redirect_urls = [
+  "https://sesiones.sypablitodp.site/",
+  "https://sesiones.sypablitodp.site/index.html"
+]
+
 [functions.ai-gateway]
 verify_jwt = false
 

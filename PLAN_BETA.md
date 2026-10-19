@@ -13,6 +13,8 @@ consumo de IA controlado y exportación Word/PDF comprobada.
 2. **Acceso e IA — terminado, salvo entrega de correo.** Recuperación, límites de
    tiempo e interruptores de IA implementados. El protocolo real de recuperación
    y el ingreso con nueva contraseña pasaron sin enviar mensajes.
+   La URL remota de Auth y sus redirecciones, antes en localhost, ya apuntan al
+   sitio público y el enlace generado se comprobó después de aplicar el cambio.
 3. **Supabase — desplegado y verificado.** CLI con acceso al proyecto correcto
    `koptglmifwpzrfzvipnm`. Aplicada `20261019221350_beta_privilege_hardening.sql`:
    81 permisos sobrantes y cuatro funciones privilegiadas accesibles a anónimos
@@ -29,8 +31,12 @@ consumo de IA controlado y exportación Word/PDF comprobada.
 6. **Respaldo — restauración manual verificada.** Esquema, datos y roles copiados
    con ACL local restringida. En Docker aislado coincidieron 44 tablas y 734 filas;
    también pasaron las pruebas de seguridad. Contenedor eliminado al terminar.
-7. **Frontend — publicación en curso.** Publicar el commit validado en Pages y
-   contrastar el sitio con `app-version.json`. Resultado en el informe de entrega.
+7. **Frontend — publicado y comprobado.** GitHub Pages despliega `defe39c`, build
+   `587a595f23ac0753`. Nueve archivos coinciden con el código local. En navegador
+   real pasan guardado/sincronización/recarga, A → B → invitado y fallo de cuota,
+   sin errores no capturados. Se corrigió además el bloqueo del cierre de sesión
+   al consultar créditos desde el callback de Auth; la regresión protege ese caso
+   y descarta saldos atrasados de otra cuenta.
 
 ## Comprobaciones
 

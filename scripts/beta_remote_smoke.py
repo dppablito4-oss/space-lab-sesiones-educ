@@ -12,6 +12,7 @@ import re
 import secrets
 import subprocess
 from urllib.error import HTTPError
+from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 import uuid
 
@@ -106,11 +107,12 @@ def main():
         a, b = users
         # Generate a recovery link without sending a message, then consume its
         # token and change only this temporary account's password.
-        status, recovery, _ = call("POST", "/auth/v1/admin/generate_link", {
+        recovery_target = "https://sesiones.sypablitodp.site/"
+        status, recovery, _ = call("POST", "/auth/v1/admin/generate_link?" + urlencode({"redirect_to": recovery_target}), {
             "type": "recovery", "email": a["email"],
-            "redirect_to": "https://sesiones.sypablitodp.site/",
         }, admin=True)
         check("recovery link generated without sending email", status == 200 and bool(recovery.get("hashed_token")))
+        check("recovery redirects to the public beta", recovery.get("redirect_to") == recovery_target)
         status, recovered, _ = call("POST", "/auth/v1/verify", {
             "type": "recovery", "token_hash": recovery["hashed_token"],
         })
