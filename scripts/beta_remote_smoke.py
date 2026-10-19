@@ -35,6 +35,7 @@ def service_key():
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--with-ai", action="store_true", help="Make one short real generation, consuming provider credits")
+    parser.add_argument("--public-signup", action="store_true", help="Test public signup only when email autoconfirm is enabled (no emails)")
     args = parser.parse_args()
     source = (ROOT / "js/supabase-client.js").read_text(encoding="utf-8")
     public_key = re.search(r"const SUPABASE_KEY = '([^']+)'", source).group(1)
@@ -79,19 +80,47 @@ def main():
         status, _, _ = call("GET", "/functions/v1/pablito-mailer")
         check("mailer rejects GET instead of server error", status in (401, 405))
 
+        if args.public_signup:
+            status, settings, _ = call("GET", "/auth/v1/settings")
+            check("public email signup is open and does not send confirmation emails",
+                  status == 200 and settings.get("mailer_autoconfirm") is True
+                  and settings.get("disable_signup") is False
+                  and settings.get("external", {}).get("email") is True)
+
         for _ in range(2):
             password = secrets.token_urlsafe(32)
             email = f"beta-smoke-{uuid.uuid4()}@example.invalid"
-            status, user, _ = call("POST", "/auth/v1/admin/users",
-                                   {"email": email, "password": password, "email_confirm": True}, admin=True)
+            if args.public_signup:
+                status, signup, _ = call("POST", "/auth/v1/signup", {"email": email, "password": password})
+                user = (signup or {}).get("user") or {}
+            else:
+                status, user, _ = call("POST", "/auth/v1/admin/users",
+                                       {"email": email, "password": password, "email_confirm": True}, admin=True)
             check("temporary account created without confirmation email", status in (200, 201) and bool(user.get("id")))
-            fixture = {"id": user["id"], "token": None}
+            fixture = {"id": user["id"], "token": None, "email": email}
             users.append(fixture)
             status, session, _ = call("POST", "/auth/v1/token?grant_type=password", {"email": email, "password": password})
             check("password sign-in works", status == 200 and bool(session.get("access_token")))
             fixture["token"] = session["access_token"]
 
         a, b = users
+        # Generate a recovery link without sending a message, then consume its
+        # token and change only this temporary account's password.
+        status, recovery, _ = call("POST", "/auth/v1/admin/generate_link", {
+            "type": "recovery", "email": a["email"],
+            "redirect_to": "https://sesiones.sypablitodp.site/",
+        }, admin=True)
+        check("recovery link generated without sending email", status == 200 and bool(recovery.get("hashed_token")))
+        status, recovered, _ = call("POST", "/auth/v1/verify", {
+            "type": "recovery", "token_hash": recovery["hashed_token"],
+        })
+        check("recovery token is valid", status == 200 and bool(recovered.get("access_token")))
+        new_password = secrets.token_urlsafe(32)
+        status, _, _ = call("PUT", "/auth/v1/user", {"password": new_password}, token=recovered["access_token"])
+        check("password can be updated after recovery", status == 200)
+        status, new_session, _ = call("POST", "/auth/v1/token?grant_type=password", {"email": a["email"], "password": new_password})
+        check("new password signs in after recovery", status == 200 and new_session.get("user", {}).get("id") == a["id"])
+        a["token"] = new_session["access_token"]
         session_id = "beta-smoke-" + str(uuid.uuid4())
         status, _, _ = call("POST", "/rest/v1/sesiones",
                             {"id": session_id, "user_id": a["id"], "titulo": "Synthetic beta smoke"}, token=a["token"])
@@ -138,9 +167,15 @@ def main():
             report["ai"]["charged_credits"] = before - after
     finally:
         for user in users:
-            if user["token"]:
-                call("POST", "/auth/v1/logout?scope=global", token=user["token"])
-            status, _, _ = call("DELETE", "/auth/v1/admin/users/" + user["id"], admin=True)
+            try:
+                if user["token"]:
+                    call("POST", "/auth/v1/logout?scope=global", token=user["token"])
+            except (OSError, TimeoutError):
+                pass
+            try:
+                status, _, _ = call("DELETE", "/auth/v1/admin/users/" + user["id"], admin=True)
+            except (OSError, TimeoutError):
+                status = 0
             report["cleanup"].append({"id": user["id"], "deleted": status in (200, 204)})
             print("Temporary account cleanup:", "OK" if status in (200, 204) else "FAILED", flush=True)
         path = ROOT / "artifacts/beta-readiness/remote-smoke.json"

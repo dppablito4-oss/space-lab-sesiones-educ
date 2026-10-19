@@ -1,7 +1,8 @@
 # Operación y aceptación de la beta
 
-Estado: preparación local. Este documento no acredita un despliegue ni una
-restauración real. La apertura requiere completar y registrar los puntos siguientes.
+Procedimiento de operación de la beta abierta. La evidencia de despliegue y
+restauración está en `BETA_READINESS_19-10-2026.md`; este documento describe cómo
+repetir las comprobaciones y distingue los pasos todavía pendientes.
 
 ## 1. Identidad del proyecto y acceso
 
@@ -68,6 +69,11 @@ necesarias. Probar con una cuenta de prueba el correo real, enlace válido,
 enlace vencido/usado, contraseña rechazada y acceso con la nueva contraseña.
 Verificar entrega de correo y límites antes de invitar docentes.
 
+El protocolo ya se verificó contra Auth real con un enlace generado por la API
+administrativa sin enviar correo: token válido, cambio de contraseña e ingreso.
+La entrega al buzón sigue pendiente. La beta mantiene registro público con
+confirmación automática, según decisión del usuario.
+
 ## 5. Datos locales y actualización
 
 Las claves sin sufijo conservan el espacio invitado y los datos de versiones
@@ -93,6 +99,30 @@ Realizar una restauración en un entorno separado y verificar acceso, sesiones,
 alumnos y créditos antes de considerar probado el respaldo. No probar restauración
 sobre los datos de producción. Registrar duración y resultado.
 
+El 19/10 se completó una copia manual de `public` y `auth` y una restauración
+aislada: 44 tablas, 734 filas y prueba de seguridad aprobadas. Copias bajo
+`artifacts/beta-readiness/backups/2026-10-19` con ACL local restringida. El esquema
+y los datos pueden incluir credenciales de correo y autenticación: no versionar
+ni enviar estos archivos. El manifiesto contiene tamaños y SHA-256.
+
+Para repetir el dump con Docker activo, preparar primero una carpeta protegida,
+fuera de Git, y usar rutas dentro de ella. En PowerShell entrecomillar la lista
+de esquemas para conservarla como un argumento:
+
+```powershell
+npx --yes supabase db dump --linked --project-ref koptglmifwpzrfzvipnm --schema 'public,auth' --file '<carpeta-protegida>/schema.sql'
+npx --yes supabase db dump --linked --project-ref koptglmifwpzrfzvipnm --schema 'public,auth' --data-only --use-copy --file '<carpeta-protegida>/data.sql'
+npx --yes supabase db dump --linked --project-ref koptglmifwpzrfzvipnm --role-only --file '<carpeta-protegida>/roles.sql'
+```
+
+El ensayo utilizó `public.ecr.aws/supabase/postgres:17.6.1.155` en un contenedor
+sin red ni puertos, una base nueva desde `template0` y el rol `supabase_admin`.
+Se restauró esquema y después datos con triggers desactivados solo en esa copia;
+se compararon las cantidades con el dump y se ejecutó el SQL de seguridad.
+El contenedor se eliminó al terminar. Los secretos de la copia no se imprimieron.
+Faltan respaldo programado, copia externa y cobertura de objetos Storage y
+configuración del proyecto. No hay respaldo físico disponible informado ni PITR.
+
 Ante errores tras publicar:
 
 1. Detener nuevas invitaciones. Si falla IA, deshabilitarla en la configuración
@@ -110,15 +140,18 @@ presupuesto y asignar una persona que las reciba. Configuración real pendiente.
 ## 7. Criterio de apertura
 
 - [x] RLS y privilegios remotos comprobados con cuentas de prueba.
-- [ ] Registro, confirmación y recuperación reales funcionando.
+- [x] Registro público e ingreso comprobados; confirmación automática conservada.
+- [x] Recuperación por token y contraseña nueva comprobadas sin envío de correo.
+- [ ] Entrega de correo de recuperación comprobada desde un buzón.
 - [ ] Generación, edición, cierre y reapertura conservan el documento.
 - [ ] A → B → invitado no mezcla editor, historial, alumnos ni documentos.
 - [ ] Falta de red y cuota local agotada no anuncian guardado inexistente.
 - [x] Créditos correctos ante éxito, fallo, duplicado y reintento (contabilidad SQL y generación HTTP).
-- [ ] DOCX y PDF reales verificados con el ejecutable descargado publicado.
-- [ ] Respaldo y restauración ensayados; reversión documentada.
+- [x] DOCX y PDF reales verificados con la descarga publicada 1.4.1.
+- [x] Respaldo manual y restauración aislada ensayados; reversión documentada.
+- [ ] Respaldo automático y copia externa protegida activos.
 - [ ] Alertas y responsable de soporte activos.
-- [ ] Alcance y participantes definidos; limitaciones comunicadas.
+- [x] Alcance definido: beta abierta con registro público; limitaciones en el informe.
 
 Registrar por cada casilla fecha, versión y evidencia. La suite local no marca
 automáticamente ninguna de las comprobaciones remotas.

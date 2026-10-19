@@ -1,83 +1,93 @@
 # Preparación de beta — evidencia al 19 de octubre de 2026
 
-## Estado
+## Estado de entrega
 
-Backend de Supabase actualizado y comprobado en el proyecto
-`koptglmifwpzrfzvipnm`. Frontend corregido y probado localmente; su publicación
-se registra por separado. No se declara abierta la beta hasta resolver los
-pendientes operativos indicados abajo.
+Modalidad elegida: **beta abierta con registro público**. Supabase y motor 1.4.1
+publicados y verificados. El frontend corregido se entrega con este informe;
+la comprobación de GitHub Pages queda al final. Quedan tareas operativas de
+correo, respaldo automático y alertas, detalladas abajo.
 
-## Cambios remotos realizados
+## Supabase y recorrido real
 
-- Las 17 migraciones previas coincidían con el repositorio.
-- Aplicada `20261019221350_beta_privilege_hardening.sql`: eliminación de permisos
-  de tabla completos innecesarios para los roles de navegador y cierre de RPCs
-  internos/anónimos. No se eliminaron datos de docentes.
-- Los permisos sobrantes bajaron de 81 a 0. La ejecución anónima de funciones
-  SECURITY DEFINER pasó de cuatro funciones a cero.
-- Edge Functions activas después de actualizar: gateway 5, OpenAI 19, Gemini 16,
-  DeepSeek 23 y mailer 8. JWT se conserva desactivado en routers/gateway y
-  activado en mailer; cada endpoint verifica permisos en su implementación.
-- Se conservó el código previo a la actualización en un artefacto local ignorado.
+Proyecto `koptglmifwpzrfzvipnm`, acceso CLI confirmado.
 
-## Comprobaciones reales aprobadas
+- Las 17 migraciones previas coincidían. Se aplicó
+  `20261019221350_beta_privilege_hardening.sql`: permisos sobrantes de 81 a cero
+  y funciones SECURITY DEFINER accesibles a anónimos de cuatro a cero.
+- Funciones publicadas: gateway v5, OpenAI v19, Gemini v16, DeepSeek v23 y mailer
+  v8. JWT conserva la configuración previa; cada función aplica sus controles.
+  Todas rechazan POST sin autenticar; mailer GET ya no provoca error 500.
+  Se conservó copia local del código previo.
+- SQL real con docentes y administrador: aislamiento, propietario inmutable,
+  perfil protegido y créditos/reservas/reembolsos idempotentes. Los datos de
+  prueba se revierten con ROLLBACK. No se borraron documentos existentes.
+- HTTP real con dos cuentas temporales: registro por el endpoint público,
+  ingreso y guardado de sesión/planificación canónica; bloqueados lectura
+  cruzada, cambio de propietario, escalada de rol y acceso a SMTP.
+- Recuperación sin correo: enlace administrativo, verificación de token,
+  cambio de contraseña e ingreso con ella. Falta la llegada al buzón.
+- Generación corta real: HTTP 200, OpenAI `gpt-6-luna`, un crédito, cero fallbacks.
+  Repetir el identificador devuelve 409 sin otro descuento. Se reutilizó la clave
+  remota existente; no se imprimieron ni guardaron claves o tokens de API.
+- Ambas cuentas temporales se cerraron y eliminaron en cada ejecución.
 
-- Pruebas SQL con roles de dos docentes y un administrador: aislamiento de
-  sesiones, cambios de propietario rechazados, perfil protegido y acceso
-  administrativo válido. Incluyen consumo, duplicados y reembolsos de créditos.
-  Todo dato creado por esas pruebas se revierte al terminar la transacción.
-- Pruebas HTTP con dos cuentas temporales: creación administrativa, ingreso,
-  guardado de sesión y planificación 2.0, lectura cruzada denegada y bloqueo de
-  escalada de rol y acceso a SMTP. Las cuentas temporales se cerraron y borraron.
-- Las cinco funciones rechazan POST sin autenticación. El mailer ya no responde
-  con error 500 ante un método GET.
-- Generación real corta: HTTP 200, OpenAI `gpt-6-luna`, un crédito, cero fallbacks.
-  La repetición del identificador recibe 409 y no descuenta créditos adicionales.
-- No se enviaron correos. Las credenciales se manejaron en memoria sin imprimirlas
-  ni guardarlas en el repositorio. No se cambiaron claves de proveedor.
+## Frontend y regresiones
 
-## Comprobaciones locales
+Separación de cuentas para sesiones/borrador/planificaciones; limpieza de editor,
+alumnos y chat al cambiar de cuenta; protección frente a respuestas antiguas.
+Guardado honesto ante cuota agotada y conservación de ediciones concurrentes.
+Recuperación y privacidad corregidas. Los documentos antiguos quedan en invitado
+hasta importación explícita.
 
-- 46 archivos de pruebas JavaScript y 17 pruebas Deno aprobadas.
-- 38 comprobaciones Python aprobadas, incluidas 20 de navegador.
-- Composición del HTML, versiones de assets, Ruff y tipos de Edge Functions
-  comprobados. El frontend distingue guardado local de sincronización.
-- Regresiones nuevas para espacios por cuenta, sincronizaciones en vuelo,
-  almacenamiento lleno y recuperación de contraseña.
+46 archivos JavaScript, 17 pruebas Deno y 38 comprobaciones Python aprobados
+localmente, incluidos 20 de navegador. Composición, versiones, Ruff y tipos
+comprobados. Suite completa Linux y prueba del EXE Windows aprobadas en
+[GitHub Actions](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39334966722).
 
-## Pendientes para abrir la beta
+## Motor publicado
 
-1. Publicar y verificar el frontend actualizado. El código local tiene las
-   correcciones de aislamiento, guardado y recuperación; no basta con desplegar
-   las Edge Functions para que los navegadores las reciban.
-2. Decisión confirmada: beta abierta con registro público. Auth conserva las
-   altas abiertas y la confirmación automática; revisar medidas contra abuso
-   y entrega de correo antes de cambiar ese comportamiento.
-3. Verificar entrega y uso de un enlace real de recuperación. La interfaz y el
-   protocolo se probaron; no se enviaron mensajes de prueba al usuario.
-4. Preparar respaldo y ensayar restauración. El proyecto no informa respaldos
-   físicos disponibles ni PITR. Una copia de código no sustituye un respaldo de
-   datos. Docker está instalado pero su daemon no estaba iniciado.
-5. Publicar motor 1.4.1. La descarga oficial 1.4.0 pasó integridad y Word, pero
-   falló PDF canónico con 422. El adaptador ya está corregido y la exportación
-   real desde el código devuelve PDF válido; falta comprobar el nuevo binario.
-6. Configurar observación/alertas, responsable de soporte y alcance de la beta.
+[Motor 1.4.1](https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/tag/v1.4.1),
+commit `f5a069cd647caa609e679adc44dc9956a1d4af86`, publicado 19/10, 22:31 UTC.
 
-## Avisos de seguridad y configuración restantes
+- SHA-256: `BB224881BA5B595507BDBF137A67F301B00F3E4FA8233153383D3B5BDD97B0CB`.
+- Tamaño: 95 950 603 bytes. Descarga cotejada con el digest del asset de GitHub.
+- Ejecutable descargado iniciado en carpeta separada, reporta 1.4.1 y devuelve
+  DOCX de 66 168 bytes y PDF canónico de 118 456 bytes, ambos HTTP 200.
+- CI prueba DOCX/PDF del binario antes de crear la release.
+- 1.4.0 tenía un error 422 en PDF canónico; la página mostraba el hash de otra
+  compilación. Corregidos ambos para 1.4.1.
 
-El asesor de Supabase conserva once avisos de funciones SECURITY DEFINER
-ejecutables por usuarios autenticados. Son RPCs usados por la aplicación con
-controles internos; las pruebas cubrieron aislamiento, perfil, créditos y acceso
-administrativo. Esto no equivale a una demostración de ausencia de cualquier
-vulnerabilidad en todas las rutas. La protección de contraseñas filtradas está
-desactivada y requiere revisión según el plan del proyecto.
+Ver `AUDITORIA_SEGURIDAD_MOTOR_LOCAL.md` para integridad y límites de las pruebas.
 
-Los permisos comerciales operan en observación mientras
-`BILLING_ENFORCEMENT` no esté configurado. Los créditos y sus límites sí se
-validan en base de datos. Antes de cobrar planes, comprobar toda la matriz y
-activar su aplicación en servidor.
+## Respaldo y restauración
 
-## Repetición de comprobaciones
+Copiados esquema/datos de `public` y `auth`, y roles, mediante CLI. Archivos en
+`artifacts/beta-readiness/backups/2026-10-19`, excluidos de Git, con ACL restringida
+al usuario local y manifiesto SHA-256. Contienen datos privados: no compartirlos.
+
+Restauración completada en PostgreSQL Supabase 17.6.1.155, Docker sin red ni
+puertos publicados, base separada de producción. Coincidieron 44 tablas y 734
+filas del dump. `tests/beta_database_security.sql` pasó también en la copia.
+Se eliminó el contenedor de ensayo; no se restauró nada sobre producción.
+
+Copia manual local: excluye objetos de Storage, secretos Edge y configuración
+Auth/proyecto. Falta automatización y copia externa. Inventario remoto de
+respaldos físicos vacío; PITR desactivado.
+
+## Trabajo operativo pendiente
+
+1. Comprobar entrega de recuperación y capacidad SMTP para altas públicas.
+   Auth mantiene registro abierto y confirmación automática por decisión del usuario.
+2. Automatizar respaldos, copia externa protegida, retención y cobertura de Storage.
+3. Activar alertas de caída/gasto y asignar responsable de soporte.
+4. Revisar protección de contraseñas filtradas y once avisos de RPCs privilegiados
+   accesibles a autenticados. Los casos cubiertos pasan; no es una demostración
+   de ausencia de vulnerabilidades en todas las rutas.
+5. Antes de vender planes, validar y aplicar la matriz comercial. Hoy
+   `BILLING_ENFORCEMENT` ausente opera en observación; créditos aplicados en
+   servidor. No se cambió plan ni facturación de Supabase.
+
+## Repetir comprobaciones
 
 ```powershell
 npx --yes supabase db query --linked --project-ref koptglmifwpzrfzvipnm --file tests/beta_database_security.sql
@@ -85,6 +95,12 @@ npx --yes supabase db query --linked --project-ref koptglmifwpzrfzvipnm --file s
 python scripts/beta_remote_smoke.py
 ```
 
-La opción manual `--with-ai` hace una generación real y consume créditos del
-proveedor. Los informes locales de esta ejecución están en
-`artifacts/beta-readiness/` y no se versionan.
+`--public-signup` prueba altas solo si Auth declara confirmación automática,
+sin correo. `--with-ai` consume proveedor en una generación corta. Son pruebas
+manuales de producción; no automatizarlas en CI. Resultados locales ignorados
+por Git en `artifacts/beta-readiness/`.
+
+## Publicación web
+
+Pendiente de contrastar el commit final desplegado en
+[sesiones.sypablitodp.site](https://sesiones.sypablitodp.site).
