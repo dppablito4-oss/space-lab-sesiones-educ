@@ -291,6 +291,16 @@ window.SupabaseClient = (() => {
             const { data, error } = await supabase.functions.invoke(functionName, { body });
             if (getSessionUserSync()?.id !== ownerId) throw new Error('La cuenta cambió. Se descartó la respuesta anterior.');
             if (error) {
+                if (error.name === 'FunctionsFetchError') {
+                    console.warn('[Supabase] No se recibió respuesta de la función.', {
+                        functionName,
+                        origin: window.location?.origin,
+                        requestId: body?.requestId
+                    });
+                    const connectionError = new Error('No se pudo conectar con la IA. Revisa tu conexión y la dirección desde la que abriste la aplicación.');
+                    connectionError.code = 'AI_CONNECTION_ERROR';
+                    throw connectionError;
+                }
                 throw new Error(await readFunctionError(error, `La función ${functionName} no está disponible.`));
             }
             if (data && typeof data === 'object' && data.error) {

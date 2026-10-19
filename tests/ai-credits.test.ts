@@ -6,7 +6,7 @@ import {
   reserveAiCredits,
   type RpcClient,
 } from "../supabase/functions/_shared/ai-credits.ts";
-import { corsHeaders } from "../supabase/functions/_shared/cors.ts";
+import { corsHeaders, preflightResponse } from "../supabase/functions/_shared/cors.ts";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
@@ -70,4 +70,34 @@ Deno.test("CORS permits production and local development without wildcard", () =
   assert(prod["Access-Control-Allow-Origin"] === "https://sesiones.sypablitodp.site", "production CORS failed");
   assert(local["Access-Control-Allow-Origin"] === "http://localhost:5173", "localhost CORS failed");
   assert(unknown["Access-Control-Allow-Origin"] !== "*" && unknown["Access-Control-Allow-Origin"] !== "https://evil.example", "unknown origin allowed");
+});
+
+Deno.test("preflight supports SDK trace headers and records blocked origins without credentials", () => {
+  const response = preflightResponse(new Request("https://edge.test/functions/v1/ai-gateway", {
+    method: "OPTIONS", headers: {
+      Origin: "https://sesiones.sypablitodp.site",
+      "Access-Control-Request-Headers": "authorization, content-type, traceparent, tracestate, baggage, x-retry-count",
+    },
+  }));
+  assert(response?.status === 200, "preflight response required");
+  for (const header of ["traceparent", "tracestate", "baggage", "x-retry-count"]) {
+    assert(response.headers.get("Access-Control-Allow-Headers")?.includes(header), "browser must be able to send SDK headers");
+  }
+  const previousWarn = console.warn;
+  const logged: unknown[][] = [];
+  console.warn = (...args: unknown[]) => { logged.push(args); };
+  try {
+    const blocked = preflightResponse(new Request("https://edge.test/functions/v1/ai-gateway?private=query", {
+      method: "OPTIONS", headers: {
+        Origin: "https://unconfigured.example", Authorization: "Bearer PRIVATE-TEST-TOKEN",
+        "Access-Control-Request-Headers": "authorization, x-unsupported",
+      },
+    }));
+    assert(blocked?.headers.get("Access-Control-Allow-Origin") !== "https://unconfigured.example", "unknown origin remains blocked");
+    const diagnostic = JSON.stringify(logged);
+    assert(diagnostic.includes("unconfigured.example") && diagnostic.includes("x-unsupported"), "support needs the origin and rejected header names");
+    assert(!diagnostic.includes("PRIVATE-TEST-TOKEN") && !diagnostic.includes("private=query"), "diagnostic must not contain tokens or URL queries");
+  } finally {
+    console.warn = previousWarn;
+  }
 });

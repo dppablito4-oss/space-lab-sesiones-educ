@@ -25,6 +25,11 @@ consumo de IA controlado y exportación Word/PDF comprobada.
    por HTTP con dos cuentas temporales; ambas eliminadas. Generación OpenAI
    `gpt-6-luna`: HTTP 200, un crédito, cero fallbacks; duplicado 409 sin otro cargo.
    Se reutilizó la clave remota existente autorizada.
+   Revisión posterior del fallo de IA: una sesión completa agotaba 45 s por
+   proveedor. Con plazo de documento de 90 s, respaldo con presupuesto compartido
+   y esfuerzo bajo para Luna, se obtuvo SessionDocument válido en 75,06 s desde
+   el sitio publicado. Sigue pendiente confirmar el origen del navegador del
+   usuario para cerrar el error de conexión/CORS de su captura.
 5. **Motor 1.4.1 — publicado y probado.** Corregido el PDF canónico que fallaba en
    1.4.0. CI probó el EXE; además se descargó la release y se comprobaron hash,
    versión y exportaciones reales. Página e informe de integridad actualizados.
@@ -53,7 +58,11 @@ Los respaldos y resultados en `artifacts/beta-readiness/` no se versionan.
 
 - **Beta abierta con registro público**, según decisión del usuario. Auth mantiene
   confirmación automática; no se añadió lista de invitados.
-- Comprobar llegada de recuperación y capacidad SMTP para una beta pública.
+- **Correo: envío bloqueado por credenciales SMTP.** Prueba autorizada del 19/10
+  a las 18:01 (Bogotá): el formulario publicado devolvió 500 y Auth registró
+  respuesta Gmail `535 5.7.8 Username and Password not accepted`. Host, puerto,
+  usuario y remitente coinciden con lo esperado. Actualizar la contraseña de
+  aplicación de Gmail en Auth SMTP y repetir el envío antes de comprobar buzón.
 - Automatizar respaldo y copia externa protegida. La copia manual cubre `public`
   y `auth`; excluye objetos de Storage, secretos y ajustes del proyecto. No hay
   respaldos físicos disponibles informados y PITR está desactivado.

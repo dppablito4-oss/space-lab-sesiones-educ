@@ -49,12 +49,24 @@ la configuración de JWT correspondiente de `supabase/config.toml`.
 | `PROVIDER_OPENAI_ENABLED=false` | Impide llamadas directas a OpenAI y su selección en gateway | Comprobar tras desplegar |
 | `PROVIDER_GEMINI_ENABLED=false` | Equivalente para Gemini | Comprobar tras desplegar |
 | `PROVIDER_DEEPSEEK_ENABLED=false` | Equivalente para DeepSeek | Comprobar tras desplegar |
-| `AI_PROVIDER_TIMEOUT_MS` | 45 s por defecto; configurable entre 1 y 60 s | Medir generación real; gateway concede 10 s adicionales por intento |
+| `AI_PROVIDER_TIMEOUT_MS` | 45 s por defecto para acciones cortas; configurable entre 1 y 60 s | Comprobar latencia y errores |
+| `AI_DOCUMENT_TIMEOUT_MS` | 90 s por defecto para sesión/mapa; configurable entre 1 y 100 s | Sesión real válida comprobada en 75,06 s |
 | `BILLING_ENFORCEMENT=true` | Bloquea capacidades comerciales denegadas o no verificables | Registrar decisión de la beta; no activarlo sin comprobar matriz de planes |
 
 Los créditos, límites y reembolsos se verifican en base de datos. Los permisos
 comerciales son un control adicional; el modo de observación no equivale a
 consumo ilimitado. Probar errores, solicitudes duplicadas y reservas abandonadas.
+
+El gateway comparte 125 s entre intentos y reserva margen para contabilidad y
+respuesta antes del límite alojado de 150 s. El segundo proveedor recibe un
+límite reducido según el tiempo restante. Los errores de plazo devuelven 504,
+`AI_PROVIDER_TIMEOUT` y CORS. Luna usa esfuerzo bajo en las solicitudes rápidas.
+Referencia: [OpenAI](https://developers.openai.com/api/docs/guides/latest-model#gpt-6-astra-update-api-and-model-parameters).
+
+«Failed to send a request to the Edge Function» es un fallo de transporte visible
+en el navegador, no una prueba de credencial SMTP incorrecta. Revisar origen,
+preflight, encabezados y POST de la función concreta. Si solo llegan OPTIONS,
+confirmar dominio/puerto antes de atribuir el problema al proveedor de IA.
 
 ## 4. Recuperación de contraseña
 
@@ -75,6 +87,15 @@ El protocolo ya se verificó contra Auth real con un enlace generado por la API
 administrativa sin enviar correo: token válido, cambio de contraseña e ingreso.
 La entrega al buzón sigue pendiente. La beta mantiene registro público con
 confirmación automática, según decisión del usuario.
+
+La prueba de envío autorizada del 19/10 a las 18:01 (Bogotá) falló: HTTP 500 y
+respuesta SMTP de Gmail `535 5.7.8 Username and Password not accepted`. El host,
+puerto, usuario y remitente se comprobaron; la renovación de la credencial
+requiere acceso del propietario de Google. Crear una contraseña de aplicación
+para SMTP y guardarla directamente en Supabase Auth SMTP, sin pegarla en chat,
+scripts o archivos versionados. Después repetir una sola solicitud y comprobar
+la llegada al buzón. Ver [Google](https://support.google.com/accounts/answer/185833?hl=es)
+y [Supabase SMTP](https://supabase.com/docs/guides/auth/auth-smtp).
 
 Para cambios posteriores, ejecutar `config diff --project-ref` antes de
 `config push`. CLI 2.121.0 aplica solo propiedades declaradas; conservar los

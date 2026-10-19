@@ -8,6 +8,14 @@ export function providerErrorResponse(req: Request, requestId: string): Response
   }, 502);
 }
 
+export function providerTimeoutResponse(req: Request, requestId: string): Response {
+  return jsonResponse(req, {
+    error: "La generación de IA excedió el tiempo de espera. Inténtalo nuevamente.",
+    code: "AI_PROVIDER_TIMEOUT",
+    requestId,
+  }, 504);
+}
+
 export function internalErrorResponse(req: Request, requestId?: string): Response {
   return jsonResponse(req, {
     error: "El servicio de IA no pudo procesar la solicitud.",

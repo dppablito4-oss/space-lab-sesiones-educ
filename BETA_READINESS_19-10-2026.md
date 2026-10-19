@@ -36,6 +36,33 @@ Proyecto `koptglmifwpzrfzvipnm`, acceso CLI confirmado.
   remota existente; no se imprimieron ni guardaron claves o tokens de API.
 - Ambas cuentas temporales se cerraron y eliminaron en cada ejecución.
 
+### Diagnóstico posterior del error de IA
+
+La captura «Failed to send a request to the Edge Function» corresponde a IA,
+según aclaración del usuario. No es el error de Auth SMTP documentado por separado.
+Los logs de las 18:02 (Bogotá) muestran dos OPTIONS 200 a `ai-gateway` sin POST;
+se pidió el dominio/puerto del navegador para confirmar el origen que bloquea CORS.
+Se actualizaron los encabezados permitidos del SDK (incluidos trazas y reintentos)
+y el diagnóstico de preflight registra origen y nombres de encabezados rechazados,
+sin tokens, claves ni cuerpo de solicitud. El origen sigue restringido al sitio
+oficial y localhost. El preflight desplegado se comprobó después del cambio.
+
+Una prueba adicional desde el sitio público detectó un fallo distinto: generar
+la sesión completa agotaba los 45 s en cada proveedor. Se desplegó el ajuste de
+plazos y después el diagnóstico CORS (gateway v7, OpenAI v21, Gemini v18 y
+DeepSeek v25). Documentos tienen 90 s por defecto (máximo
+100 s configurable), dentro de un presupuesto compartido de 125 s con margen
+para contabilidad y respuesta. El respaldo recibe solo el tiempo restante.
+Luna usa `reasoning_effort=low`; se conserva el modelo existente. Los errores de
+plazo ahora devuelven 504 y `AI_PROVIDER_TIMEOUT`, con CORS y requestId.
+
+La repetición real en Chromium contra el sitio publicado produjo SessionDocument
+v1 válido en 75,06 s. La cuenta temporal se cerró y eliminó. Hay regresiones para
+límites, respaldo acotado, errores de plazo, conexión y mensajes de créditos.
+El mensaje de transporte del cliente se preparó en español, con diagnóstico
+sin credenciales y sin reintentos automáticos de generación. El origen concreto
+del usuario sigue pendiente; esta prueba no acredita que su bloqueo CORS esté resuelto.
+
 ## Frontend y regresiones
 
 Separación de cuentas para sesiones/borrador/planificaciones; limpieza de editor,
@@ -81,7 +108,12 @@ respaldos físicos vacío; PITR desactivado.
 
 ## Trabajo operativo pendiente
 
-1. Comprobar entrega de recuperación y capacidad SMTP para altas públicas.
+1. **Corregir credenciales SMTP y repetir la entrega de recuperación.** La prueba
+   autorizada del 19/10, 18:01 (Bogotá), desde el formulario publicado devolvió
+   HTTP 500. Los logs de Auth confirman Gmail `535 5.7.8 Username and Password
+   not accepted`. Host `smtp.gmail.com`, puerto 465, usuario y remitente son los
+   esperados; falta renovar/corregir la contraseña de aplicación en Auth SMTP.
+   Se hizo un solo intento; no se ha confirmado ningún correo entregado.
    Auth mantiene registro abierto y confirmación automática por decisión del usuario.
 2. Automatizar respaldos, copia externa protegida, retención y cobertura de Storage.
 3. Activar alertas de caída/gasto y asignar responsable de soporte.

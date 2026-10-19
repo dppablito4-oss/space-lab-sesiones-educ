@@ -1,12 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { getAuthenticatedContext } from "../_shared/auth.ts";
 import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
-import { providerErrorResponse, configurationErrorResponse, internalErrorResponse, entitlementErrorResponse } from "../_shared/ai-errors.ts";
+import { providerErrorResponse, providerTimeoutResponse, configurationErrorResponse, internalErrorResponse, entitlementErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd } from "../_shared/model-catalog.ts";
 import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
-import { aiAvailabilityResponse, fetchWithTimeout, providerTimeoutMs } from "../_shared/ai-runtime.ts";
+import { aiAvailabilityResponse, fetchWithTimeout, isAiTimeout, providerRequestTimeoutMs } from "../_shared/ai-runtime.ts";
 
 serve(async (req) => {
   const preflight = preflightResponse(req);
@@ -94,7 +94,7 @@ serve(async (req) => {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
         body: JSON.stringify(requestPayload),
-      }, providerTimeoutMs());
+      }, providerRequestTimeoutMs(req, aiRequest.action));
       const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
@@ -139,6 +139,7 @@ serve(async (req) => {
     } catch (error) {
       console.error("DeepSeek provider invocation failed:", error);
       await refundAiUsage(auth.client, aiRequest.requestId);
+      if (isAiTimeout(error)) return providerTimeoutResponse(req, aiRequest.requestId);
       return providerErrorResponse(req, aiRequest.requestId);
     }
   } catch (error) {

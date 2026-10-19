@@ -59,6 +59,24 @@ const client = window.SupabaseClient;
     await assert.rejects(pending, /cuenta cambió/);
     assert.equal(events.findLast(event => event.type === 'spacelab:account-changed').detail.previousUserId, 'a');
 
+    let networkCalls = 0;
+    sdk.functions.invoke = async () => {
+        networkCalls += 1;
+        return { data: null, error: { name: 'FunctionsFetchError', message: 'Failed to send a request to the Edge Function' } };
+    };
+    await assert.rejects(client.invokeFunction('ai-gateway', { requestId: 'diagnostic-request' }), error => {
+        assert.equal(error.code, 'AI_CONNECTION_ERROR');
+        assert.match(error.message, /No se pudo conectar con la IA/);
+        assert.doesNotMatch(error.message, /Failed to send/);
+        return true;
+    });
+    assert.equal(networkCalls, 1, 'A failed connection must not retry a generation automatically.');
+    sdk.functions.invoke = async () => ({ data: null, error: {
+        name: 'FunctionsHttpError', message: 'non-2xx',
+        context: { clone: () => ({ json: async () => ({ error: 'No tienes créditos suficientes.' }) }) }
+    } });
+    await assert.rejects(client.invokeFunction('ai-gateway', {}), /No tienes créditos suficientes/);
+
     await client.requestPasswordReset(' teacher@example.test ');
     assert.equal(resetRequest.email, 'teacher@example.test');
     assert.equal(resetRequest.options.redirectTo, 'https://sesiones.sypablitodp.site/');

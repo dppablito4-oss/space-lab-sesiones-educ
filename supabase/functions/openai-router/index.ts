@@ -1,12 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { getAuthenticatedContext } from "../_shared/auth.ts";
 import { preflightResponse, jsonResponse } from "../_shared/cors.ts";
-import { providerErrorResponse, configurationErrorResponse, internalErrorResponse, entitlementErrorResponse } from "../_shared/ai-errors.ts";
+import { providerErrorResponse, providerTimeoutResponse, configurationErrorResponse, internalErrorResponse, entitlementErrorResponse } from "../_shared/ai-errors.ts";
 import { AiCreditError, completeAiUsage, creditErrorPayload, refundAiUsage, reserveAiCredits } from "../_shared/ai-credits.ts";
 import { buildPromptRequest, type BuiltPrompt } from "../_shared/prompt-builder.ts";
 import { calculateProviderCostUsd, resolveApiModel, MODEL_CATALOG } from "../_shared/model-catalog.ts";
 import { checkFeatureEntitlements, getRequiredFeatureKeys } from "../_shared/entitlements.ts";
-import { aiAvailabilityResponse, fetchWithTimeout, providerTimeoutMs } from "../_shared/ai-runtime.ts";
+import { aiAvailabilityResponse, fetchWithTimeout, isAiTimeout, providerRequestTimeoutMs } from "../_shared/ai-runtime.ts";
 
 const ALLOWED_MODELS = new Set(["gpt-6-luna", "gpt-6.1-sol", "gpt-6-sol", "gpt-5.6-terra", "gpt-6-astra", "gpt-5.6-luna", "gpt-5.4-mini", "fast", "balanced", "max_quality", "automatic"]);
 const MAX_SOURCE_CHARS = 30_000;
@@ -101,6 +101,7 @@ serve(async (req) => {
         ],
         max_completion_tokens: aiRequest.maxOutputTokens,
       };
+      if (apiModel === "gpt-6-luna") requestBody.reasoning_effort = "low";
       if (aiRequest.expectsJson) {
         requestBody.response_format = { type: "json_object" };
       }
@@ -110,7 +111,7 @@ serve(async (req) => {
         method: "POST",
         headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
         body: JSON.stringify(requestBody),
-      }, providerTimeoutMs());
+      }, providerRequestTimeoutMs(req, aiRequest.action));
       const latencyMs = Date.now() - startTime;
 
       if (!response.ok) {
@@ -159,6 +160,7 @@ serve(async (req) => {
     } catch (error) {
       console.error("OpenAI provider invocation failed:", error);
       await refundAiUsage(auth.client, aiRequest.requestId);
+      if (isAiTimeout(error)) return providerTimeoutResponse(req, aiRequest.requestId);
       return providerErrorResponse(req, aiRequest.requestId);
     }
   } catch (error) {

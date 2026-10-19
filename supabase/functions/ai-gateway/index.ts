@@ -10,7 +10,7 @@ import {
   type AiRoutingInput,
 } from "../_shared/ai-routing.ts";
 import { createTrustedLinkedSnapshot, replaceLinkedSnapshot, requestedLinkedSnapshot } from "../_shared/linked-session-context.ts";
-import { fetchWithTimeout, providerTimeoutMs } from "../_shared/ai-runtime.ts";
+import { fetchWithTimeout, gatewayAttemptTimeoutMs } from "../_shared/ai-runtime.ts";
 
 interface GatewayAttempt {
   requestId: string;
@@ -77,7 +77,8 @@ function publicResponseBody(
   }
 }
 
-serve(async (req) => {
+async function handleRequest(req: Request): Promise<Response> {
+  const requestStartedAt = Date.now();
   const preflight = preflightResponse(req);
   if (preflight) return preflight;
   if (req.method !== "POST") {
@@ -172,6 +173,8 @@ serve(async (req) => {
   let finalAttemptId = "";
 
   for (let index = 0; index < candidates.length; index += 1) {
+    const attemptTimeout = gatewayAttemptTimeoutMs(action, Date.now() - requestStartedAt);
+    if (attemptTimeout === null) break;
     const decision = candidates[index];
     const attemptRequestId = crypto.randomUUID();
     const startedAt = Date.now();
@@ -187,6 +190,7 @@ serve(async (req) => {
           "Content-Type": "application/json",
           "X-AI-Gateway": "v1",
           "X-AI-Parent-Request-Id": requestId,
+          "X-AI-Timeout-Ms": String(attemptTimeout),
         },
         body: JSON.stringify({
           ...payload,
@@ -194,7 +198,7 @@ serve(async (req) => {
           quality: decision.quality,
           model: decision.model,
         }),
-      }, providerTimeoutMs() + 10000);
+      }, attemptTimeout + 5000);
 
       attempts.push({
         requestId: attemptRequestId,
@@ -216,7 +220,8 @@ serve(async (req) => {
       const canRetry = shouldFallbackStatus(upstream.status) && index < candidates.length - 1;
       if (!canRetry) break;
 
-      await upstream.arrayBuffer();
+      // Keep the last error readable if the request budget prevents another attempt.
+      await upstream.clone().arrayBuffer();
       console.warn(`[AI Gateway] Fallback ${decision.provider} -> ${candidates[index + 1].provider}`);
     } catch (error) {
       attempts.push({
@@ -276,4 +281,15 @@ serve(async (req) => {
   }
 
   return new Response(responseBody, { status: responseStatus, headers: responseHeaders });
+}
+
+serve(async (req) => {
+  try {
+    return await handleRequest(req);
+  } catch (error) {
+    console.error("[AI Gateway] Fallo interno:", error);
+    return jsonResponse(req, {
+      error: "El servicio de IA no pudo procesar la solicitud.", code: "GATEWAY_INTERNAL_ERROR",
+    }, 500);
+  }
 });
