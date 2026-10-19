@@ -46,12 +46,14 @@ const documentMock = {
   addEventListener() {},
   getElementById(id) { return elements.get(id) || null; },
 };
+const scheduled = [];
 
 vm.runInNewContext(creditUiSource, {
   console,
   document: documentMock,
   window: windowMock,
   Promise,
+  setTimeout: callback => scheduled.push(callback),
 });
 
 const wallet = { balance: 42, updatedAt: '2026-09-26T00:00:00Z' };
@@ -70,4 +72,46 @@ assert.equal(
   'El plan del wallet no debe modificar el plan comercial mostrado',
 );
 
-console.log('commercial-plan-ui.test.js: OK');
+(async () => {
+  let callback;
+  let authLocked = false;
+  let queries = 0;
+  let nextWallet = () => Promise.resolve({ balance: 42 });
+  windowMock.SupabaseClient = {
+    client: { auth: { onAuthStateChange(fn) { callback = fn; } } },
+    getAiCreditBalance() {
+      assert.equal(authLocked, false, 'Credit queries must run outside the auth notification lock');
+      queries += 1;
+      return nextWallet();
+    },
+    getCommercialPlan: async () => 'pro',
+  };
+  const ui = windowMock.SpaceLabAiCreditUi;
+  ui.init();
+  await new Promise(resolve => setImmediate(resolve));
+  const before = queries;
+  authLocked = true;
+  const result = callback('INITIAL_SESSION', { user: { id: 'account-a' } });
+  authLocked = false;
+  assert.equal(result, undefined, 'Auth must not wait for another Supabase API call');
+  assert.equal(queries, before, 'No credit query starts during the callback');
+  assert.equal(scheduled.length, 1);
+  scheduled.shift()();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(queries, before + 1);
+
+  let releaseOldWallet;
+  nextWallet = () => new Promise(resolve => { releaseOldWallet = resolve; });
+  const oldRefresh = ui.refresh();
+  callback('SIGNED_IN', { user: { id: 'account-b' } });
+  assert.equal(elements.get('header-user-credits').innerHTML, '-- créditos IA');
+  nextWallet = () => Promise.resolve({ balance: 200 });
+  scheduled.shift()();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.match(elements.get('header-user-credits').innerHTML, /200/);
+  releaseOldWallet({ balance: 42 });
+  await oldRefresh;
+  assert.match(elements.get('header-user-credits').innerHTML, /200/,
+    'An old account refresh must not overwrite the current balance');
+  console.log('commercial-plan-ui.test.js: OK (auth lock and stale balance)');
+})().catch(error => { console.error(error); process.exitCode = 1; });

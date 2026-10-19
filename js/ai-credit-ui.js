@@ -4,6 +4,7 @@ window.SpaceLabAiCreditUi = (() => {
 
     let initialized = false;
     let currentPlanCode = null;
+    let refreshVersion = 0;
 
     const PLAN_LABELS = {
         free: 'Gratuito',
@@ -48,6 +49,7 @@ window.SpaceLabAiCreditUi = (() => {
     }
 
     async function refresh() {
+        const version = ++refreshVersion;
         if (!window.SupabaseClient?.getAiCreditBalance) return render(null, null);
         try {
             const [wallet, commercialPlan] = await Promise.all([
@@ -60,8 +62,10 @@ window.SpaceLabAiCreditUi = (() => {
                     return null;
                 })
             ]);
+            if (version !== refreshVersion) return;
             render(wallet, commercialPlan);
         } catch (error) {
+            if (version !== refreshVersion) return;
             console.warn('[AI Credits] No se pudo actualizar el resumen:', error);
             render(null, null);
         }
@@ -71,7 +75,13 @@ window.SpaceLabAiCreditUi = (() => {
         if (initialized) return;
         initialized = true;
         window.addEventListener('spacelab:aicredits', event => render(event.detail));
-        window.SupabaseClient?.client?.auth?.onAuthStateChange?.(() => refresh());
+        window.SupabaseClient?.client?.auth?.onAuthStateChange?.(() => {
+            // Auth holds its session lock while notifying listeners. Defer API
+            // calls and return synchronously so reload/sign-out cannot deadlock.
+            refreshVersion += 1;
+            render(null, null);
+            setTimeout(() => { void refresh(); }, 0);
+        });
         refresh();
     }
 
