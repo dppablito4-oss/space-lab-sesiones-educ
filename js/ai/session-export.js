@@ -72,6 +72,57 @@ const SessionExport = (() => {
         payload.schemaVersion = '1.0';
         payload.metadata = { ...(payload.metadata || {}), ...(updates.metadata || {}) };
         payload.metadata.logos = normalizeLogos(payload.metadata.logos);
+
+        // Normalizar competencias transversales si la IA usó 'competencia' en vez de 'titulo'
+        if (Array.isArray(payload.competenciasTransversales)) {
+            payload.competenciasTransversales = payload.competenciasTransversales.map(ct => {
+                if (!ct || typeof ct !== 'object') return ct;
+                return {
+                    titulo: String(ct.titulo || ct.competencia || ct.nombre || 'Competencia Transversal').trim(),
+                    desempenos: Array.isArray(ct.desempenos || ct.desempeños || ct.criterios)
+                        ? (ct.desempenos || ct.desempeños || ct.criterios).map(x => String(x).trim()).filter(Boolean)
+                        : (typeof ct.desempenos === 'string' ? ct.desempenos.split('\n').map(x => x.trim()).filter(Boolean) : [])
+                };
+            });
+        }
+
+        // Normalizar enfoques transversales si la IA usó 'enfoque' en vez de 'nombre'
+        if (Array.isArray(payload.enfoquesTransversales)) {
+            payload.enfoquesTransversales = payload.enfoquesTransversales.map(et => {
+                if (!et || typeof et !== 'object') return et;
+                return {
+                    nombre: String(et.nombre || et.enfoque || et.titulo || 'Enfoque Transversal').trim(),
+                    valor: String(et.valor || et.valores || '').trim(),
+                    actitudes: String(et.actitudes || et.actitud || et.acciones_observables || '').trim()
+                };
+            });
+        }
+
+        // Normalizar ficha de trabajo si 'actividades' es array de objetos en vez de string
+        if (payload.fichaTrabajo && typeof payload.fichaTrabajo === 'object') {
+            const ft = payload.fichaTrabajo;
+            let act = ft.actividades;
+            if (Array.isArray(act)) {
+                act = act.map(item => {
+                    if (item && typeof item === 'object') {
+                        const num = item.numero || item.id || item.paso;
+                        const consigna = item.consigna || item.texto || item.descripcion || item.pregunta || item.actividad || '';
+                        return num && consigna ? `<p><strong>${num}.</strong> ${consigna}</p>` : `<p>${consigna || JSON.stringify(item)}</p>`;
+                    }
+                    return `<p>${item}</p>`;
+                }).join('\n');
+            } else if (act === null || act === undefined) {
+                act = '';
+            } else {
+                act = String(act);
+            }
+            payload.fichaTrabajo = {
+                titulo: String(ft.titulo || ft.actividad || ft.nombre || '').trim(),
+                indicaciones: String(ft.indicaciones || ft.instrucciones || '').trim(),
+                actividades: act
+            };
+        }
+
         payload.listaCotejo = {
             ...(payload.listaCotejo || {}),
             alumnos: Array.isArray(updates.alumnos)

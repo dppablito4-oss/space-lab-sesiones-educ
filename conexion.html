@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="3dee025a2ec690ab">
+    <meta name="app-build" content="f87b46ff82aa6b93">
     <script defer src="js/app-update.js?v=7eef37cfd0a2"></script>
     <title>Enlace de Motor de Exportación - Space Lab</title>
     <script src="js/theme.js?v=506a9fb17f0c"></script>
@@ -355,13 +355,19 @@
         <div id="card" class="glass-card">
             <div id="link-box" class="link-animation-box">
                 <div class="node node-left" title="Navegador web">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"></path></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18"></path>
+                    </svg>
                 </div>
                 <div class="connection-beam">
                     <div class="connection-pulse"></div>
                 </div>
                 <div class="node node-right" title="Motor local">
-                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="14" rx="2"></rect><path d="M8 9h8M8 13h5M8 17h3"></path></svg>
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="4" y="5" width="16" height="14" rx="2"></rect>
+                        <path d="M8 9h8M8 13h5M8 17h3"></path>
+                    </svg>
                 </div>
             </div>
 
@@ -469,13 +475,13 @@
                     statusMessage.style.textAlign = 'left';
                     statusMessage.style.fontSize = '14px';
                     statusMessage.style.lineHeight = '1.5';
-                    
+
                     if (error.message === 'TOKEN_EXPIRED') {
                         statusMessage.textContent = 'El token de enlace está vencido. Haz clic en "[ CLIC AQUÍ PARA VINCULAR ]" en la ventana de pablitopyhost.exe para abrir la pestaña correcta.';
                     } else {
                         statusMessage.innerHTML = `
                             <strong>No se pudo establecer la conexión segura.</strong><br>
-                            Por favor, verifica los siguientes puntos en la PC de tu hermano:<br>
+                            Por favor, verifica los siguientes puntos en TU COMPUTADORA:<br>
                             <ol style="margin-left: 20px; margin-top: 5px; padding-left: 0;">
                                 <li>Asegúrate de que la ventana negra de <b>pablitopyhost.exe</b> siga abierta.</li>
                                 <li>Cierra el programa, haz clic derecho en <b>pablitopyhost.exe</b> y selecciona <b>"Ejecutar como administrador"</b> para desbloquear el puerto en el firewall de Windows.</li>

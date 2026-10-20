@@ -66,3 +66,21 @@ const descriptorOnlyPayload = SessionExport.buildCanonicalPayload({
 assert.deepEqual(descriptorOnlyPayload.metadata.logos, { institucional: null, regional: null });
 
 console.log('✓ SessionExport normaliza metadata.logos legado antes de exportar');
+
+const legacyAliasesPayload = SessionExport.buildCanonicalPayload({
+    ...source,
+    competenciasTransversales: [{ competencia: 'Gestiona su aprendizaje' }],
+    enfoquesTransversales: [{ enfoque: 'Enfoque de derechos', valores: 'Libertad' }],
+    fichaTrabajo: {
+        titulo: 'Ficha 1',
+        actividades: [{ numero: 1, consigna: 'Resuelve el problema' }]
+    }
+});
+
+assert.equal(legacyAliasesPayload.competenciasTransversales[0].titulo, 'Gestiona su aprendizaje');
+assert.equal(legacyAliasesPayload.enfoquesTransversales[0].nombre, 'Enfoque de derechos');
+assert.equal(legacyAliasesPayload.enfoquesTransversales[0].valor, 'Libertad');
+assert.ok(typeof legacyAliasesPayload.fichaTrabajo.actividades === 'string');
+assert.ok(legacyAliasesPayload.fichaTrabajo.actividades.includes('Resuelve el problema'));
+
+console.log('✓ SessionExport normaliza competencias, enfoques y actividades de fichaTrabajo antes de exportar');

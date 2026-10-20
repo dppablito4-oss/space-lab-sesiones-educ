@@ -11,7 +11,7 @@ REGLA: No eliminar campos silenciosamente. Si un campo llega, se conserva.
 """
 from __future__ import annotations
 from typing import Any, List, Optional, Literal
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 
 # ── Bloques fundamentales ──
@@ -133,11 +133,42 @@ class CompetenciaTransversalV1(BaseModel):
     titulo: str
     desempenos: List[str] = Field(default_factory=list)
 
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_aliases(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "titulo" not in data or not data["titulo"]:
+                title = data.get("competencia") or data.get("nombre") or data.get("titulo") or "Competencia Transversal"
+                data = dict(data)
+                data["titulo"] = str(title).strip()
+            if "desempenos" not in data:
+                des = data.get("desempeños") or data.get("criterios") or []
+                data = dict(data)
+                data["desempenos"] = des
+        return data
+
 
 class EnfoqueTransversalV1(BaseModel):
     nombre: str
     valor: str = ""
     actitudes: str = ""
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_aliases(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if "nombre" not in data or not data["nombre"]:
+                name = data.get("enfoque") or data.get("titulo") or data.get("nombre") or "Enfoque Transversal"
+                data = dict(data)
+                data["nombre"] = str(name).strip()
+            if "valor" not in data and "valores" in data:
+                data = dict(data)
+                data["valor"] = str(data["valores"]).strip()
+            if "actitudes" not in data:
+                act = data.get("actitud") or data.get("acciones_observables") or ""
+                data = dict(data)
+                data["actitudes"] = str(act).strip()
+        return data
 
 
 class RecursosV1(BaseModel):
@@ -168,6 +199,30 @@ class FichaTrabajoV1(BaseModel):
     titulo: str = ""
     indicaciones: str = ""
     actividades: str = ""
+
+    @field_validator("actividades", mode="before")
+    @classmethod
+    def normalize_actividades(cls, value: Any) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, str):
+            return value
+        if isinstance(value, list):
+            lines = []
+            for item in value:
+                if isinstance(item, dict):
+                    num = item.get("numero") or item.get("id") or item.get("paso")
+                    consigna = item.get("consigna") or item.get("texto") or item.get("descripcion") or item.get("pregunta") or item.get("actividad") or ""
+                    if num and consigna:
+                        lines.append(f"<p><strong>{num}.</strong> {consigna}</p>")
+                    elif consigna:
+                        lines.append(f"<p>{consigna}</p>")
+                    else:
+                        lines.append(f"<p>{item}</p>")
+                else:
+                    lines.append(f"<p>{item}</p>")
+            return "\n".join(lines)
+        return str(value)
 
 
 class JuegoLibreSectoresV1(BaseModel):

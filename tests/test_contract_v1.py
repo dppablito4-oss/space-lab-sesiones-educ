@@ -171,6 +171,30 @@ def test_legacy_logo_list_is_normalized():
     print("  OK metadata.logos legado normalizado correctamente")
 
 
+def test_legacy_aliases_are_normalized():
+    """Verificar que alias comunes de IA para competencias, enfoques y fichas se normalicen."""
+    doc = SessionDocumentV1(**{
+        "schemaVersion": "1.0",
+        "competenciasTransversales": [
+            {"competencia": "Gestiona su aprendizaje de manera autónoma"}
+        ],
+        "enfoquesTransversales": [
+            {"enfoque": "Enfoque de derechos", "valores": "Conciencia de derechos"}
+        ],
+        "fichaTrabajo": {
+            "titulo": "Ficha 1",
+            "actividades": [
+                {"numero": 1, "consigna": "Resuelve el problema paso a paso."}
+            ]
+        }
+    })
+    assert doc.competenciasTransversales[0].titulo == "Gestiona su aprendizaje de manera autónoma"
+    assert doc.enfoquesTransversales[0].nombre == "Enfoque de derechos"
+    assert doc.enfoquesTransversales[0].valor == "Conciencia de derechos"
+    assert "Resuelve el problema paso a paso" in doc.fichaTrabajo.actividades
+    print("  OK alias de competencias, enfoques y actividades normalizados correctamente")
+
+
 if __name__ == '__main__':
     print("=" * 60)
     print("TEST DE CONTRATO — SessionDocument v1")
@@ -188,8 +212,11 @@ if __name__ == '__main__':
     print("\n[4/4] Evaluación no se elimina...")
     test_evaluacion_not_dropped()
 
-    print("\n[5/5] Compatibilidad con logos guardados como lista...")
+    print("\n[5/6] Compatibilidad con logos guardados como lista...")
     test_legacy_logo_list_is_normalized()
+
+    print("\n[6/6] Compatibilidad con alias comunes de IA (competencia/enfoque/actividades)...")
+    test_legacy_aliases_are_normalized()
 
     print("\n" + "=" * 60)
     print(">>> TODOS LOS TESTS DE CONTRATO PASARON <<<")

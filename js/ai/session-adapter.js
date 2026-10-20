@@ -102,6 +102,30 @@ const SessionAdapter = (() => {
         // Solo aceptar passthrough cuando la estructura v1 realmente está completa.
         // Algunos modelos etiquetan como v1 una respuesta que todavía mezcla llaves legacy.
         if (raw.schemaVersion === '1.0' && _hasCanonicalMoments(raw)) {
+            if (Array.isArray(raw.competenciasTransversales)) {
+                raw.competenciasTransversales.forEach(ct => {
+                    if (ct && typeof ct === 'object' && !ct.titulo && (ct.competencia || ct.nombre)) {
+                        ct.titulo = _str(ct.competencia || ct.nombre);
+                    }
+                });
+            }
+            if (Array.isArray(raw.enfoquesTransversales)) {
+                raw.enfoquesTransversales.forEach(et => {
+                    if (et && typeof et === 'object' && !et.nombre && (et.enfoque || et.titulo)) {
+                        et.nombre = _str(et.enfoque || et.titulo);
+                    }
+                });
+            }
+            if (raw.fichaTrabajo && typeof raw.fichaTrabajo === 'object' && Array.isArray(raw.fichaTrabajo.actividades)) {
+                raw.fichaTrabajo.actividades = raw.fichaTrabajo.actividades.map(item => {
+                    if (item && typeof item === 'object') {
+                        const num = item.numero || item.id || item.paso;
+                        const consigna = item.consigna || item.texto || item.descripcion || item.pregunta || item.actividad || '';
+                        return num && consigna ? `<p><strong>${num}.</strong> ${consigna}</p>` : `<p>${consigna || JSON.stringify(item)}</p>`;
+                    }
+                    return `<p>${item}</p>`;
+                }).join('\n');
+            }
             return { document: raw, warnings: [] };
         }
         if (raw.schemaVersion === '1.0') {
