@@ -1,4 +1,5 @@
 import json
+import socket
 import subprocess
 import sys
 import time
@@ -25,6 +26,11 @@ def main():
     print(f"[1/5] Verificando existencia de {EXE_PATH.name}...")
     assert EXE_PATH.exists(), f"No se encontró el ejecutable en {EXE_PATH}"
     print(f"  [OK] Binario encontrado ({EXE_PATH.stat().st_size:,} bytes)")
+
+    with socket.socket() as probe:
+        probe.settimeout(0.5)
+        if probe.connect_ex(('127.0.0.1', 8000)) == 0:
+            raise RuntimeError('El puerto 8000 está ocupado; cierra el motor antes de verificar el ejecutable nuevo.')
 
     print("\n[2/5] Levantando proceso ejecutable pablitopyhost.exe...")
     startup = subprocess.STARTUPINFO() if sys.platform == 'win32' else None

@@ -115,6 +115,7 @@ else:
 # single-instance mutex and that port 8000 is free.  Rotating it at import time
 # made a second launch invalidate the token of the instance already running.
 CONNECTION_TOKEN = secrets.token_hex(32)
+_CONNECTION_TOKEN_INITIALIZED = False
 CLIENT_CONNECTED = False
 LOCAL_ENGINE_URL = "http://127.0.0.1:8000"
 PAIRING_PAGE_URL = "https://sesiones.sypablitodp.site/conexion.html"
@@ -127,10 +128,13 @@ def pairing_url(token: Optional[str] = None) -> str:
     return f"{PAIRING_PAGE_URL}?token={urllib.parse.quote(active_token)}"
 
 
-def rotate_and_store_connection_token() -> str:
-    """Create the token for a new server instance and persist it when possible."""
-    global CONNECTION_TOKEN
+def initialize_connection_token() -> str:
+    """Create one token per process, shared by the GUI and FastAPI startup."""
+    global CONNECTION_TOKEN, _CONNECTION_TOKEN_INITIALIZED
+    if _CONNECTION_TOKEN_INITIALIZED:
+        return CONNECTION_TOKEN
     CONNECTION_TOKEN = secrets.token_hex(32)
+    _CONNECTION_TOKEN_INITIALIZED = True
     try:
         TOKEN_FILE.write_text(CONNECTION_TOKEN, encoding="utf-8")
     except Exception:
@@ -2223,7 +2227,7 @@ def descargar_chromium_nativo():
 @app.on_event("startup")
 async def startup_event():
     """Evento que se dispara al iniciar FastAPI para mostrar la URL de conexión segura en los logs."""
-    rotate_and_store_connection_token()
+    initialize_connection_token()
     target_url = pairing_url()
     print(f"🌐 [MOTOR ONLINE] Servidor de exportación corriendo en http://localhost:8000")
     print(f"🔗 [ENLACE SEGURO] URL de vinculación segura:\n{target_url}\n")
@@ -2445,7 +2449,7 @@ def run_desktop_application() -> None:
         )
         return
 
-    rotate_and_store_connection_token()
+    initialize_connection_token()
     start_gui()
 
 
