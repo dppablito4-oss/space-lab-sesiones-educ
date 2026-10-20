@@ -83,6 +83,27 @@ const SessionAdapter = (() => {
         );
     }
 
+    function _applySelectedCurriculum(doc, formMeta) {
+        // Selected curriculum belongs to the teacher, not to the generated prose.
+        if (formMeta.competencia || formMeta.capacidad || formMeta.desempeno || doc.proposito?.desempeño) {
+            const purpose = { ...(doc.proposito || {}) };
+            if (formMeta.competencia) purpose.competencia = _str(formMeta.competencia);
+            if (formMeta.capacidad) purpose.capacidades = Array.isArray(formMeta.capacidad)
+                ? _arr(formMeta.capacidad) : _arr(String(formMeta.capacidad).split(/[;\n]/));
+            purpose.desempeno = _str(formMeta.desempeno || purpose.desempeno || purpose.desempeño);
+            delete purpose.desempeño;
+            doc.proposito = purpose;
+        }
+        if (formMeta.methodology) doc.metadata = { ...doc.metadata, methodology: _str(formMeta.methodology) };
+        if (Array.isArray(doc.listaCotejo?.criterios)) {
+            doc.listaCotejo = { ...doc.listaCotejo, criterios: doc.listaCotejo.criterios.map(item =>
+                item && typeof item === 'object'
+                    ? _str(item.descripcion || item.criterio || item.texto || JSON.stringify(item)) : _str(item)
+            ) };
+        }
+        return doc;
+    }
+
     // ── Adapter principal ──
 
     /**
@@ -126,7 +147,7 @@ const SessionAdapter = (() => {
                     return `<p>${item}</p>`;
                 }).join('\n');
             }
-            return { document: raw, warnings: [] };
+            return { document: _applySelectedCurriculum(raw, formMeta), warnings: [] };
         }
         if (raw.schemaVersion === '1.0') {
             warnings.push('[V1 REPAIR] La respuesta estaba etiquetada como v1 pero tenía momentos incompletos; se normalizó automáticamente.');
@@ -157,6 +178,7 @@ const SessionAdapter = (() => {
             duracionMinutos: _int(formMeta.duracion || rawMeta.duracion || rawMeta.duracionMinutos, 90),
             unidad:         _str(formMeta.unidad || rawMeta.unidad),
             titulo:         _str(formMeta.titulo || rawMeta.titulo || raw.titulo_sesion_retador || raw.titulo_sesion),
+            methodology:    _str(formMeta.methodology || rawMeta.methodology),
             logos: {
                 institucional: rawMeta.logo_left_url || rawMeta.logo_institucional || null,
                 regional:      rawMeta.logo_regional_url || rawMeta.logo_regional || null
@@ -301,7 +323,7 @@ const SessionAdapter = (() => {
             }
         });
 
-        return { document: doc, warnings };
+        return { document: _applySelectedCurriculum(doc, formMeta), warnings };
     }
 
     // ── Adaptadores de Momentos ──

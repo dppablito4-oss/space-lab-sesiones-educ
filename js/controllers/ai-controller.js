@@ -103,6 +103,7 @@ window.SpaceLabAiController = (() => {
                 // exactly one SessionDocument v1 contract.
                 const formMeta = {
                     ...formData.metadata,
+                    ...formData.proposito,
                     numeroSesion: formData.metadata.numero_sesion,
                     duracionMinutos: parseMinutes(formData.metadata.duracion) || 90
                 };
@@ -136,13 +137,14 @@ window.SpaceLabAiController = (() => {
                             duracionMinutos: parseMinutes(formData.metadata.duracion) || generatedMetadata.duracionMinutos || 90,
                             unidad: formData.metadata.unidad || generatedMetadata.unidad || '',
                             titulo: formData.metadata.titulo || generatedMetadata.titulo || '',
+                            methodology: formData.metadata.methodology || generatedMetadata.methodology || '',
                             logos: {
                                 institucional: formData.metadata.logo_left_url || generatedMetadata.logos?.institucional || null,
                                 regional: formData.metadata.logo_regional_url || generatedMetadata.logos?.regional || null
                             }
                         };
                         canonical.listaCotejo = { ...canonical.listaCotejo, alumnos: formData.alumnos };
-                        const quality = SessionValidator.validateGeneratedContent(canonical);
+                        const quality = SessionValidator.validateGeneratedContent(canonical, generationRequest);
                         qualityErrors = quality.errors;
                         if (quality.valid) break;
                     }

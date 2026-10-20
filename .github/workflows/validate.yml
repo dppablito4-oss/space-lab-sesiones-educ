@@ -72,6 +72,7 @@ jobs:
       - name: Run JS contract & adapter & template tests
         run: |
           node tests/test_contract_v1.js
+          node tests/session-structure.test.js
           node tests/pedagogy-catalog.test.js
           node tests/methodology-catalog.test.js
           node tests/methodology-codes.test.js
@@ -131,7 +132,9 @@ jobs:
           python tests/test_planning_docx_geometry.py
 
       - name: Run backend DOCX smoke test
-        run: python tests/backend_smoke.py
+        run: |
+          python tests/test_engine_pairing.py
+          python tests/backend_smoke.py
 
       - name: Install Playwright Chromium
         run: python -m playwright install --with-deps chromium
@@ -143,6 +146,7 @@ jobs:
           python tests/ui_session_lifecycle_smoke.py
           python tests/ui_account_recovery_smoke.py
           python tests/ui_standalone_session_regression.py
+          python tests/ui_session_structure_smoke.py
           python tests/ui_planning_smoke.py
           python tests/ui_planning_studio_smoke.py
           python tests/ui_secondary_cycle_vii_smoke.py

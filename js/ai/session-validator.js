@@ -274,7 +274,7 @@ const SessionValidator = (() => {
      * El validador estructural sigue aceptando borradores/importaciones parciales;
      * este control evita presentar y exportar una sesión pobre como terminada.
      */
-    function validateGeneratedContent(doc) {
+    function validateGeneratedContent(doc, context = {}) {
         const structural = validate(doc);
         const errors = [...structural.errors];
         const warnings = [...structural.warnings];
@@ -283,9 +283,12 @@ const SessionValidator = (() => {
 
         const requiredText = [
             ['metadata.titulo', doc.metadata?.titulo],
+            ['proposito.texto', doc.proposito?.texto],
             ['proposito.competencia', doc.proposito?.competencia],
+            ['proposito.conocimientos', doc.proposito?.conocimientos],
             ['proposito.desempeno', doc.proposito?.desempeno],
-            ['proposito.evidencia', doc.proposito?.evidencia]
+            ['proposito.evidencia', doc.proposito?.evidencia],
+            ['proposito.instrumento', doc.proposito?.instrumento]
         ];
         requiredText.forEach(([path, value]) => {
             if (!String(value || '').trim()) errors.push(`${path} no puede quedar vacío en una sesión generada.`);
@@ -319,6 +322,50 @@ const SessionValidator = (() => {
         });
         if (totalChars < 1800) {
             errors.push('La sesión generada es demasiado breve; debe desarrollar acciones, preguntas y dinámicas concretas.');
+        }
+
+        // Counting blocks alone allowed generic outlines to replace the teaching sequence.
+        const sequences = {
+            inicio: ['motivacion', 'saberes_previos', 'problematizacion', 'proposito_organizacion'],
+            cierre: ['metacognicion', 'evaluacion', 'extension']
+        };
+        let methodology = context.methodology || doc.metadata?.methodology || '';
+        const area = String(context.area || doc.metadata?.area || '').toLowerCase();
+        const projectMethod = ['abp', 'project_based_learning', 'problem_based_learning', 'challenge_based_learning', 'game_based_learning'].includes(methodology);
+        if (!methodology || (context.inheritedContextSnapshot && projectMethod)) {
+            if (area.includes('matem')) methodology = 'polya';
+            else if ((area.includes('ciencia') || area.includes('tecnolog')) && !area.includes('social')) methodology = 'indagacion';
+        }
+        const developmentSequences = {
+            polya: ['familiarizacion', 'busqueda_estrategias', 'socializacion', 'formalizacion_reflexion'],
+            indagacion: ['problematizacion', 'diseno_estrategias', 'generacion_analisis_datos', 'estructuracion_comunicacion'],
+            steam: ['problematizacion', 'diseno_estrategias', 'generacion_analisis_datos', 'estructuracion_comunicacion'],
+            erca: ['experiencia', 'reflexion', 'conceptualizacion', 'aplicacion'],
+            flipped: ['conexion_externa', 'aplicacion_guiada', 'consolidacion_retroalimentacion'],
+            cooperativo: ['organizacion_roles', 'interdependencia_positiva', 'interaccion_promotora', 'autoevaluacion_grupal']
+        };
+        if (developmentSequences[methodology]) sequences.desarrollo = developmentSequences[methodology];
+        Object.entries(sequences).forEach(([moment, expected]) => {
+            const ordered = (doc.momentos[moment].procesos || [])
+                .map((process, index) => ({ process, order: Number.isInteger(process.orden) ? process.orden : index + 1 }))
+                .sort((a, b) => a.order - b.order)
+                .map(({ process }) => ({ evaluacion_formativa: 'evaluacion', formalizacion: 'formalizacion_reflexion' }[process.id] || process.id));
+            let previous = -1;
+            for (const id of expected) {
+                const index = ordered.indexOf(id);
+                if (index < 0 || index <= previous || ordered.lastIndexOf(id) !== index) {
+                    errors.push(`momentos.${moment} debe desarrollar una vez y en este orden: ${expected.join(', ')}.`);
+                    break;
+                }
+                previous = index;
+            }
+        });
+
+        const totalMinutes = ['inicio', 'desarrollo', 'cierre']
+            .reduce((sum, key) => sum + (doc.momentos[key].tiempoMinutos || 0), 0);
+        const requestedMinutes = doc.metadata?.duracionMinutos;
+        if (requestedMinutes > 0 && totalMinutes !== requestedMinutes) {
+            errors.push(`Los tiempos de inicio, desarrollo y cierre suman ${totalMinutes} min; deben sumar los ${requestedMinutes} min solicitados.`);
         }
 
         return { valid: errors.length === 0, errors, warnings };

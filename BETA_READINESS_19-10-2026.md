@@ -1,4 +1,4 @@
-# Preparación de beta — evidencia al 19 de octubre de 2026
+# Preparación de beta — evidencia del 19 y 20 de octubre de 2026
 
 ## Estado de entrega
 
@@ -6,6 +6,34 @@ Modalidad elegida: **beta abierta con registro público**. Supabase y motor 1.4.
 publicados y verificados. El frontend corregido se entrega con este informe;
 la comprobación de GitHub Pages queda al final. Quedan tareas operativas de
 correo, respaldo automático y alertas, detalladas abajo.
+
+## Comprobación del 20 de octubre, 16:22 (Bogotá)
+
+- El acceso de la CLI al proyecto sigue vigente. Management API confirma activos
+  `ai-gateway` v7, OpenAI v21, Gemini v18 y DeepSeek v25.
+- La versión publicada es `1e98594`, build `f87b46ff82aa6b93`.
+  [Publicación](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39353284895)
+  y [validación](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39353284820)
+  terminaron correctamente. El arreglo previo `045d8da` también pasó Linux y Windows.
+- Se cotejaron contra el commit publicado el cliente Supabase, ambos adaptadores
+  de sesión y el manifiesto. Los cuatro archivos coinciden. Esto no incluye los
+  cambios locales de diseño aún sin publicar.
+- OPTIONS real acepta el origen público y `http://127.0.0.1:3000`, junto con todos
+  los encabezados declarados del SDK. Chromium desde el sitio real obtiene 401
+  HTTP al invocar IA sin sesión: la respuesta llega al navegador y Auth impide
+  generar sin autenticación. Esta comprobación no consumió una generación de IA.
+- La ventana de registros de las últimas 24 horas contiene tres POST HTTP 200
+  del gateway v7; el último es del 20/10 a las 00:46 (Bogotá). No hay diagnósticos
+  `[AI CORS]` registrados en esa ventana. Los errores 502 observados pertenecen
+  a versiones anteriores; no se atribuyen estas solicitudes a una persona.
+- El usuario confirmó **«Ya funciona»** después de recargar el sitio. Se cierra
+  la incidencia de conexión/generación de IA con esa verificación y las pruebas
+  anteriores. No se identificó el origen del preflight que falló inicialmente;
+  no se atribuye una causa única a aquella captura.
+
+Evidencia local sin secretos: `ai-status-2026-10-20.json` y
+`ai-transport-2026-10-20.json`, en `artifacts/beta-readiness/` (ignorada por Git).
+Se conservan debajo las comprobaciones históricas del 19/10.
 
 ## Supabase y recorrido real
 
@@ -40,8 +68,8 @@ Proyecto `koptglmifwpzrfzvipnm`, acceso CLI confirmado.
 
 La captura «Failed to send a request to the Edge Function» corresponde a IA,
 según aclaración del usuario. No es el error de Auth SMTP documentado por separado.
-Los logs de las 18:02 (Bogotá) muestran dos OPTIONS 200 a `ai-gateway` sin POST;
-se pidió el dominio/puerto del navegador para confirmar el origen que bloquea CORS.
+Los logs de las 18:02 (Bogotá) mostraron dos OPTIONS 200 a `ai-gateway` sin POST;
+se pidió el dominio/puerto del navegador para investigar un posible bloqueo CORS.
 Se actualizaron los encabezados permitidos del SDK (incluidos trazas y reintentos)
 y el diagnóstico de preflight registra origen y nombres de encabezados rechazados,
 sin tokens, claves ni cuerpo de solicitud. El origen sigue restringido al sitio
@@ -60,10 +88,21 @@ La repetición real en Chromium contra el sitio publicado produjo SessionDocumen
 v1 válido en 75,06 s. La cuenta temporal se cerró y eliminó. Hay regresiones para
 límites, respaldo acotado, errores de plazo, conexión y mensajes de créditos.
 El mensaje de transporte del cliente se preparó en español, con diagnóstico
-sin credenciales y sin reintentos automáticos de generación. El origen concreto
-del usuario sigue pendiente; esta prueba no acredita que su bloqueo CORS esté resuelto.
+sin credenciales y sin reintentos automáticos de generación. Esa prueba aislada
+no acreditaba resolver el fallo del usuario. El 20/10 el usuario confirmó que
+la IA ya funciona tras recargar, como consta en la actualización de este informe.
 
 ## Frontend y regresiones
+
+Actualización pedagógica del 20/10: recuperada la secuencia explícita de inicio,
+procesos metodológicos y cierre del Word de referencia, tanto para sesiones
+individuales como para las vinculadas a unidades y experiencias. El método y
+el currículo seleccionado se conservan al guardar/reabrir/exportar. Pasaron 46
+archivos de pruebas JS y 23 pruebas Deno; Chromium comprobó los tres recorridos
+con el validador real. Dos generaciones sintéticas produjeron Word con títulos
+y orden verificados y PDF generado por Microsoft Word. Detalles y límites en
+`docs/SESSION_STRUCTURE_20-10-2026.md`. Generador remoto actualizado a gateway v8,
+OpenAI v23, Gemini v20 y DeepSeek v27; prompt `2026-10-v4-secuencia`.
 
 Separación de cuentas para sesiones/borrador/planificaciones; limpieza de editor,
 alumnos y chat al cambiar de cuenta; protección frente a respuestas antiguas.
@@ -77,6 +116,14 @@ comprobados. Suite completa Linux y prueba del EXE Windows aprobadas en
 [GitHub Actions](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39334966722).
 
 ## Motor publicado
+
+Corrección local del 20/10: el enlace clicable de la ventana quedaba vencido
+porque el arranque de FastAPI cambiaba el token que ya había mostrado la GUI.
+Ahora ambos comparten una inicialización por proceso. La regresión reproduce
+el recorrido escritorio → servidor y comprueba que el enlace mostrado devuelve
+200; antes del arreglo devolvía 401. También se verificó el arranque directo y
+el rechazo de tokens incorrectos. Esta corrección requiere abrir el ejecutable
+local recompilado; la release pública 1.4.1 descrita debajo sigue siendo histórica.
 
 [Motor 1.4.1](https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/tag/v1.4.1),
 commit `f5a069cd647caa609e679adc44dc9956a1d4af86`, publicado 19/10, 22:31 UTC.

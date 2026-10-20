@@ -50,9 +50,21 @@ const Templates = (() => {
      * @param {boolean} editable - Enable contenteditable
      * @returns {string} HTML string
      */
-    /**
-     * Normaliza los datos de entrada soportando tanto SessionDocument v1 como formatos legacy.
-     */
+    function orderedProcesses(moment) {
+        return (Array.isArray(moment?.procesos) ? moment.procesos : [])
+            .map((process, index) => ({ process, order: Number.isInteger(process.orden) ? process.orden : index + 1 }))
+            .sort((a, b) => a.order - b.order)
+            .map(({ process }) => process);
+    }
+
+    function processSections(moment) {
+        return orderedProcesses(moment).map(process => ({
+            title: process.titulo || process.id || 'Actividad',
+            content: typeof process.contenido === 'object' ? (process.contenido?.value || '') : String(process.contenido || '')
+        }));
+    }
+
+    /** Normaliza tanto SessionDocument v1 como formatos legacy sin aplanar sus títulos. */
     function _normalizeForTemplate(data) {
         if (!data || typeof data !== 'object') return { m: {}, p: {}, momentos: {}, evalData: {}, ct: {}, enfoques: [], recursos: {}, fichaTrabajo: null, juegoLibre: null, alumnos: [] };
 
@@ -110,7 +122,7 @@ const Templates = (() => {
         // Normalizar momentos.inicio v1 procesos
         if (Array.isArray(rawMom.inicio?.procesos) && rawMom.inicio.procesos.length > 0) {
             momentos.inicio.tiempo_total = momentos.inicio.tiempo_total || `${rawMom.inicio.tiempoMinutos || 15} min`;
-            rawMom.inicio.procesos.forEach(proc => {
+            orderedProcesses(rawMom.inicio).forEach(proc => {
                 const id = (proc.id || '').toLowerCase();
                 const content = typeof proc.contenido === 'object' ? (proc.contenido?.value || '') : String(proc.contenido || '');
                 if (id === 'motivacion') momentos.inicio.motivacion = content;
@@ -122,15 +134,22 @@ const Templates = (() => {
                     else momentos.inicio.actividades += '\n' + content;
                 }
             });
+            momentos.inicio.actividades = processSections(rawMom.inicio)
+                .map(section => `<strong>${esc(section.title)}:</strong><br>${escHtml(section.content)}`).join('<br><br>');
         }
 
         // Normalizar momentos.desarrollo v1 procesos
         if (Array.isArray(rawMom.desarrollo?.procesos) && rawMom.desarrollo.procesos.length > 0) {
             momentos.desarrollo.tiempo_total = momentos.desarrollo.tiempo_total || `${rawMom.desarrollo.tiempoMinutos || 65} min`;
-            rawMom.desarrollo.procesos.forEach((proc, idx) => {
+            // Canonical processes take precedence over any stale legacy projection.
+            Object.keys(momentos.desarrollo).filter(key => /^(proceso|paso)_/.test(key))
+                .forEach(key => delete momentos.desarrollo[key]);
+            momentos.desarrollo.processTitles = {};
+            orderedProcesses(rawMom.desarrollo).forEach((proc, idx) => {
                 const key = `proceso_${idx + 1}_${proc.id || 'proceso'}`;
                 const content = typeof proc.contenido === 'object' ? (proc.contenido?.value || '') : String(proc.contenido || '');
                 momentos.desarrollo[key] = content;
+                momentos.desarrollo.processTitles[key] = proc.titulo;
             });
         }
 
@@ -138,10 +157,10 @@ const Templates = (() => {
         if (Array.isArray(rawMom.cierre?.procesos) && rawMom.cierre.procesos.length > 0) {
             momentos.cierre.tiempo_total = momentos.cierre.tiempo_total || `${rawMom.cierre.tiempoMinutos || 10} min`;
             const cierreParts = [];
-            rawMom.cierre.procesos.forEach(proc => {
+            orderedProcesses(rawMom.cierre).forEach(proc => {
                 const title = proc.titulo || 'Cierre';
                 const content = typeof proc.contenido === 'object' ? (proc.contenido?.value || '') : String(proc.contenido || '');
-                cierreParts.push(`• <strong>${title}:</strong> ${content}`);
+                cierreParts.push(`• <strong>${esc(title)}:</strong> ${escHtml(content)}`);
             });
             momentos.cierre.actividades = cierreParts.join('<br>');
         }
@@ -354,29 +373,29 @@ const Templates = (() => {
         // ── MOMENTOS: Build dynamic rows for PDF paging ──
         let inicioRowsHtml = '';
         const inicio = momentos.inicio || {};
-        const subMomentsInicio = [];
+        const subMomentsInicio = processSections(inicio);
 
-        if (inicio.motivacion) {
+        if (!inicio.procesos?.length && inicio.motivacion) {
             subMomentsInicio.push({
-                title: 'Motivación (5 min)',
+                title: 'Motivación',
                 content: inicio.motivacion
             });
         }
-        if (inicio.saberes_previos) {
+        if (!inicio.procesos?.length && inicio.saberes_previos) {
             subMomentsInicio.push({
-                title: `Saberes previos (${inicio.saberes_tiempo || '8 min'})`,
+                title: `Saberes previos${inicio.saberes_tiempo ? ` (${inicio.saberes_tiempo})` : ''}`,
                 content: inicio.saberes_previos
             });
         }
-        if (inicio.problematizacion) {
+        if (!inicio.procesos?.length && inicio.problematizacion) {
             subMomentsInicio.push({
-                title: `Problematización (${inicio.problematizacion_tiempo || '5 min'})`,
+                title: `Problematización${inicio.problematizacion_tiempo ? ` (${inicio.problematizacion_tiempo})` : ''}`,
                 content: inicio.problematizacion
             });
         }
-        if (inicio.proposito_organizacion) {
+        if (!inicio.procesos?.length && inicio.proposito_organizacion) {
             subMomentsInicio.push({
-                title: `Propósito y organización (${inicio.proposito_tiempo || '5 min'})`,
+                title: `Propósito y organización${inicio.proposito_tiempo ? ` (${inicio.proposito_tiempo})` : ''}`,
                 content: inicio.proposito_organizacion
             });
         }
@@ -483,7 +502,7 @@ const Templates = (() => {
                 const value = desarrollo[key];
                 if (!value) return '';
                 const cleanKey = key.replace(/^(proceso|paso)_\d+_/, '');
-                let title = mappings[cleanKey] || cleanKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                let title = desarrollo.processTitles?.[key] || mappings[cleanKey] || cleanKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                 
                 const isFirst = index === 0;
 
@@ -934,7 +953,7 @@ const Templates = (() => {
                 <tbody>
                     <tr>
                         <td class="moment-label" style="background:#ecfdf5;">HIPÓTESIS</td>
-                        <td ${ce}>${esc(momentos.inicio?.actividades || '• Planteamiento del problema.\n• Formulación de hipótesis.')}</td>
+                        <td ${ce}>${escHtml(momentos.inicio?.actividades || '• Planteamiento del problema.\n• Formulación de hipótesis.')}</td>
                         <td class="time-cell" ${ce}>${esc(momentos.inicio?.tiempo || momentos.inicio?.tiempo_total || '15 min')}</td>
                     </tr>
                     <tr>
@@ -944,7 +963,7 @@ const Templates = (() => {
                     </tr>
                     <tr>
                         <td class="moment-label" style="background:#ecfdf5;">RESULTADOS</td>
-                        <td ${ce}>${esc(momentos.cierre?.actividades || '• Análisis de resultados.\n• Conclusiones y validación de hipótesis.')}</td>
+                        <td ${ce}>${escHtml(momentos.cierre?.actividades || '• Análisis de resultados.\n• Conclusiones y validación de hipótesis.')}</td>
                         <td class="time-cell" ${ce}>${esc(momentos.cierre?.tiempo || momentos.cierre?.tiempo_total || '25 min')}</td>
                     </tr>
                 </tbody>
@@ -1049,7 +1068,7 @@ const Templates = (() => {
                 <tbody>
                     <tr>
                         <td class="moment-label" style="background:#fef3c7;">REPASO</td>
-                        <td ${ce}>${esc(momentos.inicio?.actividades || '• Retroalimentación del tema anterior.\n• Aclarar dudas previas.')}</td>
+                        <td ${ce}>${escHtml(momentos.inicio?.actividades || '• Retroalimentación del tema anterior.\n• Aclarar dudas previas.')}</td>
                         <td class="time-cell" ${ce}>${esc(momentos.inicio?.tiempo || momentos.inicio?.tiempo_total || '10 min')}</td>
                         <td class="resources-cell" ${ce}>${esc(momentos.inicio?.recursos || '')}</td>
                     </tr>
@@ -1061,7 +1080,7 @@ const Templates = (() => {
                     </tr>
                     <tr>
                         <td class="moment-label" style="background:#fef3c7;">AVANCE</td>
-                        <td ${ce}>${esc(momentos.cierre?.actividades || '• Verificar avance respecto al diagnóstico.\n• Compromiso para la siguiente sesión.')}</td>
+                        <td ${ce}>${escHtml(momentos.cierre?.actividades || '• Verificar avance respecto al diagnóstico.\n• Compromiso para la siguiente sesión.')}</td>
                         <td class="time-cell" ${ce}>${esc(momentos.cierre?.tiempo || momentos.cierre?.tiempo_total || '10 min')}</td>
                         <td class="resources-cell" ${ce}>${esc(momentos.cierre?.recursos || '')}</td>
                     </tr>
@@ -1129,7 +1148,7 @@ const Templates = (() => {
     function escHtml(str) {
         if (!str) return '';
         // Only allow rendering if it contains real HTML tag elements we use
-        const containsRealHtml = /<\/?(strong|b|em|i|u|ul|ol|li|p|br)\b/i.test(str);
+        const containsRealHtml = /<\/?(strong|b|em|i|u|ul|ol|li|p|br|table|thead|tbody|tr|th|td)\b/i.test(str);
         if (containsRealHtml) {
             return str;
         }
@@ -1180,8 +1199,8 @@ const Templates = (() => {
 
         return keys.map(key => {
             const cleanKey = key.replace(/^(proceso|paso)_\d+_/, '');
-            let title = mappings[cleanKey] || cleanKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-            return `<strong>${title}:</strong><br>${desarrollo[key]}`;
+            let title = desarrollo.processTitles?.[key] || mappings[cleanKey] || cleanKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+            return `<strong>${esc(title)}:</strong><br>${escHtml(desarrollo[key])}`;
         }).join('<br><br>');
     }
 
@@ -1222,11 +1241,13 @@ const Templates = (() => {
         // 4. Build Inicio Moments (stacked in single row)
         let inicioRowsHtml = '';
         const inicio = momentos.inicio || {};
-        const subMomentsInicio = [];
-        if (inicio.motivacion) subMomentsInicio.push({ title: 'Motivación', content: inicio.motivacion });
-        if (inicio.saberes_previos) subMomentsInicio.push({ title: 'Saberes Previos', content: inicio.saberes_previos });
-        if (inicio.problematizacion) subMomentsInicio.push({ title: 'Problematización', content: inicio.problematizacion });
-        if (inicio.proposito_organizacion) subMomentsInicio.push({ title: 'Propósito y Organización', content: inicio.proposito_organizacion });
+        const subMomentsInicio = processSections(inicio);
+        if (!inicio.procesos?.length) {
+            if (inicio.motivacion) subMomentsInicio.push({ title: 'Motivación', content: inicio.motivacion });
+            if (inicio.saberes_previos) subMomentsInicio.push({ title: 'Saberes previos', content: inicio.saberes_previos });
+            if (inicio.problematizacion) subMomentsInicio.push({ title: 'Problematización', content: inicio.problematizacion });
+            if (inicio.proposito_organizacion) subMomentsInicio.push({ title: 'Propósito y organización', content: inicio.proposito_organizacion });
+        }
 
         if (subMomentsInicio.length > 0) {
             const contentHtml = subMomentsInicio.map(sm => `
@@ -1324,7 +1345,7 @@ const Templates = (() => {
                 const value = desarrollo[key];
                 if (!value) return '';
                 const cleanKey = key.replace(/^(proceso|paso)_\d+_/, '');
-                let title = mappings[cleanKey] || cleanKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                let title = desarrollo.processTitles?.[key] || mappings[cleanKey] || cleanKey.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
                 return `
                     <div class="momento-subsection" style="margin-bottom: 12px; page-break-inside: avoid; break-inside: avoid;">
                         <div class="momento-subsection-title">${esc(title)}</div>

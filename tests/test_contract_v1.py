@@ -203,6 +203,11 @@ if __name__ == '__main__':
     print("\n[1/4] Validación Pydantic de fixtures...")
     test_pydantic_validates_all_fixtures()
 
+    method_doc = SessionDocumentV1(metadata={"methodology": "polya"})
+    assert SessionDocumentV1(**method_doc.model_dump()).metadata.methodology == "polya"
+    checklist_doc = SessionDocumentV1(listaCotejo={"criterios": [{"descripcion": "Explica y verifica"}]})
+    assert checklist_doc.listaCotejo.criterios == ["Explica y verifica"]
+
     print("\n[2/4] Roundtrip serialización...")
     test_pydantic_roundtrip()
 

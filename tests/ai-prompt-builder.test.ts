@@ -46,6 +46,52 @@ Deno.test("generate_session builds the protected server prompt", () => {
   assert(!result.userPrompt.includes("CONTEXTO HEREDADO DE PLANIFICACIÓN"), "standalone sessions must not receive planning context");
 });
 
+Deno.test("session prompt restores the explicit opening and closing sequence", () => {
+  const result = buildPromptRequest({
+    action: 'generate_session', requestId: REQUEST_ID,
+    input: { metadata: { nivel: 'SECUNDARIA', area: 'Matemática', grado: '2', titulo: 'Inecuaciones', duracion: '90 minutos', methodology: 'polya' } },
+  });
+  const structure = JSON.parse(result.systemPrompt.split('ESTRUCTURA MÍNIMA:\n')[1].split('\n\n')[0]);
+  assert(structure.momentos.inicio.procesos.map((process: { id: string }) => process.id).join(',') ===
+    'motivacion,saberes_previos,problematizacion,proposito_organizacion', 'opening must name all four teaching steps');
+  assert(structure.momentos.cierre.procesos.map((process: { id: string }) => process.id).join(',') ===
+    'metacognicion,evaluacion,extension', 'closing must name all three teaching steps');
+  assert(result.systemPrompt.includes('resolución paso a paso'), 'request worked examples, not just headings');
+  assert(result.systemPrompt.includes('suma de tiempoMinutos'), 'moment durations must match the requested duration');
+  assert(result.systemPrompt.includes('recursos') && result.systemPrompt.includes('preguntas mediadoras'), 'keep actionable teaching content');
+});
+
+Deno.test("units and learning experiences keep a full session and area didactics", () => {
+  for (const planningType of ['unit', 'learning_experience']) {
+    const snapshot = {
+      schemaVersion: '2.0', planningContainerId: 'plan-reviewed', planningRevision: 1,
+      sequenceItemId: 'session-01', sequenceIndex: 1, capturedAt: '2026-10-20T22:00:00.000Z',
+      identity: { title: 'Feria de la comunidad', planningType },
+      sequenceItem: { id: 'session-01', index: 1, title: 'Comparamos presupuestos' },
+      curriculumMap: [{ area: { officialName: 'Matemática' } }],
+      methodologyConfig: { primary: { code: 'project_based_learning' } },
+      precedingSequence: [], followingSequence: [],
+    };
+    const result = buildPromptRequest({
+      action: 'generate_session', requestId: REQUEST_ID,
+      input: { metadata: { nivel: 'SECUNDARIA', grado: '2', titulo: 'Comparamos presupuestos', methodology: 'project_based_learning', inheritedContextSnapshot: snapshot } },
+    });
+    assert(result.systemPrompt.includes('Familiarización con el problema'), `${planningType} keeps mathematics didactics within its project`);
+    assert(result.systemPrompt.includes('No fuerces todas las fases del proyecto dentro de una sola sesión'), 'a lesson need not complete the entire project');
+    assert(result.systemPrompt.includes('sesión completa'), 'linked sessions cannot become summaries or sequence cards');
+    assert(result.userPrompt.includes(planningType) && result.userPrompt.includes('Comparamos presupuestos'), 'selected parent and lesson stay linked');
+  }
+});
+
+Deno.test("social sciences must not inherit the experimental science method", () => {
+  const result = buildPromptRequest({
+    action: 'generate_session', requestId: REQUEST_ID,
+    input: { metadata: { nivel: 'SECUNDARIA', area: 'Ciencias Sociales', titulo: 'Participación ciudadana' } },
+  });
+  assert(result.systemPrompt.includes('Análisis de información y fuentes'), 'social sciences must use its own didactic processes');
+  assert(!result.systemPrompt.includes('Generación y registro de datos e información'), 'do not route social sciences to experimental inquiry');
+});
+
 Deno.test("actions receive different server-owned prompts and budgets", () => {
   const criteria = buildPromptRequest({
     action: "generate_criteria", requestId: REQUEST_ID,

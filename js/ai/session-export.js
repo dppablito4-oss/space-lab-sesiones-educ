@@ -125,6 +125,10 @@ const SessionExport = (() => {
 
         payload.listaCotejo = {
             ...(payload.listaCotejo || {}),
+            criterios: (payload.listaCotejo?.criterios || []).map(item =>
+                item && typeof item === 'object'
+                    ? String(item.descripcion || item.criterio || item.texto || JSON.stringify(item)) : String(item)
+            ),
             alumnos: Array.isArray(updates.alumnos)
                 ? clone(updates.alumnos)
                 : clone(payload.listaCotejo?.alumnos || [])

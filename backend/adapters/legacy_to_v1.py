@@ -126,6 +126,7 @@ def adapt_legacy_to_v1(data: dict, form_meta: dict | None = None) -> Tuple[Sessi
         duracionMinutos=_int(fm.get("duracion") or rm.get("duracion") or rm.get("duracionMinutos"), 90),
         unidad=_str(fm.get("unidad") or rm.get("unidad")),
         titulo=_str(fm.get("titulo") or rm.get("titulo") or data.get("_titulo_sesion_retador")),
+        methodology=_str(fm.get("methodology") or rm.get("methodology")),
         logos=LogosData(
             institucional=rm.get("logo_left_url") or rm.get("logo_institucional"),
             regional=rm.get("logo_regional_url") or rm.get("logo_regional"),

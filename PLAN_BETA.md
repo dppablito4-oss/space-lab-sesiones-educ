@@ -3,6 +3,27 @@
 Objetivo: beta con registro público, cuentas aisladas, guardado recuperable,
 consumo de IA controlado y exportación Word/PDF comprobada.
 
+Actualización 20/10, 16:22 (Bogotá): publicación y CI de `1e98594` aprobados.
+Gateway v7 activo, con solicitudes HTTP 200 posteriores al arreglo. Se comprobaron
+CORS del sitio público/localhost y respuesta HTTP en navegador sin gastar IA.
+El usuario confirmó «Ya funciona» después de recargar: incidencia IA cerrada.
+Detalle y límites de la evidencia en el informe de preparación.
+
+## Restauración de la estructura de sesiones — 20/10
+
+- [x] Comparar el Word de referencia y el historial `HEAD~100` (`8fb4de1`).
+- [x] Recuperar los cuatro apartados de inicio, los procesos del método y los
+  tres apartados del cierre, con desarrollo secuencial y duración coherente.
+- [x] Aplicar la misma estructura a sesiones individuales y vinculadas a unidades
+  y experiencias. La metodología de proyecto conserva los procesos del área.
+- [x] Conservar títulos, orden, método seleccionado y currículo al guardar,
+  reabrir y exportar. Corregida la normalización de criterios de lista de cotejo.
+- [x] Pruebas reales de IA y Word para una sesión individual y una vinculada;
+  prueba de navegador de los tres recorridos con el control de calidad activo.
+- [x] Generador remoto desplegado: gateway v8, OpenAI v23, Gemini v20 y DeepSeek v27.
+
+Evidencia, alcance y ejemplos locales en `docs/SESSION_STRUCTURE_20-10-2026.md`.
+
 ## Pasos y estado
 
 1. **Aislamiento y guardado — terminado.** Sesiones, borradores y planificaciones
@@ -19,7 +40,7 @@ consumo de IA controlado y exportación Word/PDF comprobada.
    `koptglmifwpzrfzvipnm`. Aplicada `20261019221350_beta_privilege_hardening.sql`:
    81 permisos sobrantes y cuatro funciones privilegiadas accesibles a anónimos
    quedaron en cero. RLS, perfiles y créditos probados con SQL real y ROLLBACK.
-   Gateway v5, OpenAI v19, Gemini v16, DeepSeek v23 y mailer v8 publicados.
+   Gateway v8, OpenAI v23, Gemini v20, DeepSeek v27 y mailer v8 publicados.
 4. **Recorrido real — aprobado.** Registro público, ingreso, recuperación sin
    correo, sesión/planificación guardadas y acceso cruzado bloqueado probados
    por HTTP con dos cuentas temporales; ambas eliminadas. Generación OpenAI
@@ -28,17 +49,19 @@ consumo de IA controlado y exportación Word/PDF comprobada.
    Revisión posterior del fallo de IA: una sesión completa agotaba 45 s por
    proveedor. Con plazo de documento de 90 s, respaldo con presupuesto compartido
    y esfuerzo bajo para Luna, se obtuvo SessionDocument válido en 75,06 s desde
-   el sitio publicado. Sigue pendiente confirmar el origen del navegador del
-   usuario para cerrar el error de conexión/CORS de su captura.
+   el sitio publicado. El 20/10 el usuario confirmó que ya funciona tras recargar;
+   se cierra la incidencia sin atribuir una causa única a la captura inicial.
 5. **Motor 1.4.1 — publicado y probado.** Corregido el PDF canónico que fallaba en
    1.4.0. CI probó el EXE; además se descargó la release y se comprobaron hash,
    versión y exportaciones reales. Página e informe de integridad actualizados.
 6. **Respaldo — restauración manual verificada.** Esquema, datos y roles copiados
    con ACL local restringida. En Docker aislado coincidieron 44 tablas y 734 filas;
    también pasaron las pruebas de seguridad. Contenedor eliminado al terminar.
-7. **Frontend — publicado y comprobado.** GitHub Pages despliega `defe39c`, build
-   `587a595f23ac0753`. Nueve archivos coinciden con el código local. En navegador
-   real pasan guardado/sincronización/recarga, A → B → invitado y fallo de cuota,
+7. **Frontend — publicado y comprobado.** GitHub Pages despliega ahora `1e98594`,
+   build `f87b46ff82aa6b93`, con CI aprobado. El recorrido completo previo se
+   verificó en `defe39c`; el 20/10 se cotejaron cuatro archivos del despliegue
+   actual y se comprobó el transporte de IA en Chromium. En el recorrido previo
+   de navegador real pasan guardado/sincronización/recarga, A → B → invitado y fallo de cuota,
    sin errores no capturados. Se corrigió además el bloqueo del cierre de sesión
    al consultar créditos desde el callback de Auth; la regresión protege ese caso
    y descarta saldos atrasados de otra cuenta.

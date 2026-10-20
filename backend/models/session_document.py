@@ -53,6 +53,7 @@ class MetadataV1(BaseModel):
     duracionMinutos: int = 90
     unidad: str = ""
     titulo: str = ""
+    methodology: str = ""
     logos: LogosData = Field(default_factory=LogosData)
 
     @field_validator("logos", mode="before")
@@ -237,6 +238,17 @@ class JuegoLibreSectoresV1(BaseModel):
 class ListaCotejoV1(BaseModel):
     alumnos: List[str] = Field(default_factory=list)
     criterios: List[str] = Field(default_factory=list)
+
+    @field_validator("criterios", mode="before")
+    @classmethod
+    def normalize_described_criteria(cls, value: Any) -> Any:
+        if isinstance(value, list):
+            return [
+                item.get("descripcion") or item.get("criterio") or item.get("texto") or item
+                if isinstance(item, dict) else item
+                for item in value
+            ]
+        return value
 
 
 class PresentationV1(BaseModel):

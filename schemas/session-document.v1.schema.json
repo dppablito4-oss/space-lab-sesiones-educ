@@ -44,6 +44,7 @@
         "duracionMinutos": { "type": "integer", "default": 90, "minimum": 1 },
         "unidad":         { "type": "string", "default": "" },
         "titulo":         { "type": "string", "default": "" },
+        "methodology":    { "type": "string", "default": "" },
         "logos": {
           "type": "object",
           "properties": {

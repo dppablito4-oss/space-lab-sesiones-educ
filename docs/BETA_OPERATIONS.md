@@ -184,3 +184,22 @@ presupuesto y asignar una persona que las reciba. Configuración real pendiente.
 
 Registrar por cada casilla fecha, versión y evidencia. La suite local no marca
 automáticamente ninguna de las comprobaciones remotas.
+
+## 8. Seguimiento del fallo de conexión de IA
+
+Comprobación 20/10/2026, 16:22 (Bogotá): gateway v7 y routers OpenAI v21,
+Gemini v18, DeepSeek v25 activos. La web publicada `1e98594` tiene CI aprobado.
+OPTIONS permite el sitio público y localhost; Chromium recibe la respuesta 401
+de una invocación sin sesión, sin iniciar una generación. Hay tres POST HTTP 200
+del gateway v7 en las últimas 24 horas y ningún diagnóstico `[AI CORS]`.
+
+El usuario confirmó «Ya funciona» después de recargar la web; incidencia cerrada.
+Si reaparece, recoger solo esquema, dominio y puerto del navegador; nunca parámetros
+de consulta o fragmentos de una URL de autenticación. Contrastar ese origen con
+los diagnósticos de preflight antes de cambiar CORS. No abrir a cualquier origen
+ni repetir automáticamente una generación que podría descontar créditos.
+
+Conservar separados el fallo de transporte IA y la entrega SMTP: Gmail devolvió
+535 en la prueba histórica de recuperación. El transporte IA correcto no verifica
+la entrega de correo. Evidencia local: `ai-status-2026-10-20.json` y
+`ai-transport-2026-10-20.json`, dentro de la carpeta de artefactos ignorada.
