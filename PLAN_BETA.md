@@ -21,10 +21,19 @@ Detalle y límites de la evidencia en el informe de preparación.
 - [x] Pruebas reales de IA y Word para una sesión individual y una vinculada;
   prueba de navegador de los tres recorridos con el control de calidad activo.
 - [x] Generador remoto desplegado: gateway v8, OpenAI v23, Gemini v20 y DeepSeek v27.
+- [x] Web publicada en `7b23bdb`, build `9e0caddcfc755b3b`. Seis archivos
+  contrastados con el despliegue y recorridos de estructura comprobados en el sitio real.
+- [x] Validación Linux y compilación/pruebas del EXE Windows aprobadas en
+  [GitHub Actions](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39507295482).
 
 Evidencia, alcance y ejemplos locales en `docs/SESSION_STRUCTURE_20-10-2026.md`.
 
 ## Pasos y estado
+
+Interfaz revisada y aprobada: landing actualizado, editor redondeado y formulario
+continuo con menú lateral, casillas de aprendizajes y resumen. Se retiraron los
+archivos de referencia y el prototipo; detalles en `docs/UI_20-10-2026.md`.
+Esta actualización está validada localmente; su publicación se gestiona por separado.
 
 1. **Aislamiento y guardado — terminado.** Sesiones, borradores y planificaciones
    separados por cuenta. Los documentos antiguos quedan en invitado; no se suben
@@ -57,8 +66,8 @@ Evidencia, alcance y ejemplos locales en `docs/SESSION_STRUCTURE_20-10-2026.md`.
 6. **Respaldo — restauración manual verificada.** Esquema, datos y roles copiados
    con ACL local restringida. En Docker aislado coincidieron 44 tablas y 734 filas;
    también pasaron las pruebas de seguridad. Contenedor eliminado al terminar.
-7. **Frontend — publicado y comprobado.** GitHub Pages despliega ahora `1e98594`,
-   build `f87b46ff82aa6b93`, con CI aprobado. El recorrido completo previo se
+7. **Frontend — publicado y comprobado.** GitHub Pages despliega ahora `7b23bdb`,
+   build `9e0caddcfc755b3b`. El recorrido completo previo se
    verificó en `defe39c`; el 20/10 se cotejaron cuatro archivos del despliegue
    actual y se comprobó el transporte de IA en Chromium. En el recorrido previo
    de navegador real pasan guardado/sincronización/recarga, A → B → invitado y fallo de cuota,

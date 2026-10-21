@@ -39,6 +39,11 @@ la selección por defecto de Ciencias Sociales, que podía confundirse con Cienc
 
 ## Comprobaciones
 
+- Publicación web `7b23bdb`, build `9e0caddcfc755b3b`, comprobada en el dominio
+  público: seis archivos coinciden y los tres recorridos de estructura pasan en
+  Chromium. El ejecutable recompilado también devolvió Word y PDF reales.
+- [CI Linux y Windows aprobados](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39507295482)
+  para `7b23bdb`, incluida la verificación de exportaciones del ejecutable.
 - Regresiones de esquema de prompt para inicio/cierre, unidad y experiencia,
   proyectos con didáctica matemática y selección de Ciencias Sociales.
 - Pruebas de títulos, orden y contenido en estándar, inicial, laboratorio y

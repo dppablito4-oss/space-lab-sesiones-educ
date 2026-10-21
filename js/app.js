@@ -32,7 +32,7 @@
         zoomScale: 1.0, // Custom zoom level for the sheet (1.0 = 100%)
         undoStack: [],
         redoStack: [],
-        completedWorkflowTabs: new Set(),
+        visitedWorkflowSections: new Set(),
         pendingPlanningLink: null,
         sessionDirty: false,
         backendOnline: false,
@@ -1001,7 +1001,15 @@
         DOM.inputNumeroSesion.value = m.numeroSesion || m.numero_sesion || '';
         DOM.inputGrado.value = m.grado || '';
         DOM.inputSeccion.value = m.seccion || '';
-        DOM.inputArea.value = m.area || '';
+        const savedArea = String(m.area || '').trim();
+        const matchingArea = [...DOM.inputArea.options].find(option =>
+            option.value.localeCompare(savedArea, 'es', {sensitivity:'base'}) === 0);
+        DOM.inputArea.value = matchingArea?.value || '';
+        // Preserve imported/custom areas that do not exist in the built-in catalog.
+        if (savedArea && !matchingArea) {
+            DOM.inputArea.add(new Option(savedArea, savedArea));
+            DOM.inputArea.value = savedArea;
+        }
         DOM.inputDuracion.value = m.duracionMinutos || m.duracion || '';
         DOM.inputUnidad.value = m.unidad || '';
         DOM.inputTitulo.value = m.titulo || '';
@@ -1060,6 +1068,7 @@
         if (textareaAlumnos) {
             textareaAlumnos.value = (session.alumnos || session.listaCotejo?.alumnos || []).join('\n');
         }
+        syncSessionContextTitle();
     }
 
     // ═══════════════════════════════════════
@@ -1393,12 +1402,17 @@
     // PLANNING DRAWER
     // ═══════════════════════════════════════
 
-    function openSidebar() {
+    function openSidebar({focusClose = true} = {}) {
+        const wasOpen = AppState.sidebarOpen;
         AppState.sidebarOpen = true;
         DOM.sidebar.classList.add('open');
         document.body.classList.add('sidebar-open');
         DOM.btnMenuMobile.setAttribute('aria-expanded', 'true');
-        window.setTimeout(() => DOM.btnCloseSidebar.focus(), 180);
+        if (!wasOpen && focusClose) {
+            window.setTimeout(() => {
+                if (AppState.sidebarOpen) DOM.btnCloseSidebar.focus();
+            }, 180);
+        }
     }
 
     function toggleSidebar() {
@@ -1617,6 +1631,7 @@
         try {
             const response = await fetch('data/competencias.json');
             curriculumData = await response.json();
+            window.SpaceLabCurriculumPicker?.setCatalog(curriculumData);
 
             populateEnfoques();
 
@@ -1627,6 +1642,7 @@
 
             console.log('CNEB curriculum database loaded');
         } catch (e) {
+            window.SpaceLabCurriculumPicker?.setCatalog(null);
             console.warn('Could not load CNEB curriculum json:', e);
         }
     }
@@ -1647,6 +1663,7 @@
         if (!curriculumData || !curriculumData.areas || !curriculumData.areas[area]) {
             DOM.selectCnebCompetencia.classList.add('hidden');
             DOM.selectCnebCapacidad.classList.add('hidden');
+            window.SpaceLabCurriculumPicker?.refresh();
             return;
         }
 
@@ -1657,6 +1674,7 @@
 
         DOM.selectCnebCompetencia.classList.remove('hidden');
         DOM.selectCnebCapacidad.classList.add('hidden');
+        window.SpaceLabCurriculumPicker?.refresh();
     }
 
     function handleCompetenciaChange() {

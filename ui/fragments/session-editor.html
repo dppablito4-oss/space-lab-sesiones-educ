@@ -100,33 +100,33 @@
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
                     <span>Etapas</span>
                 </button>
-                <div id="workflow-tabs" class="sidebar-tabs" role="tablist" aria-label="Etapas de configuración" aria-orientation="vertical">
-                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" role="tab" aria-label="Copiloto, en curso" aria-selected="true" aria-controls="tab-ai">
+                <div id="workflow-tabs" class="sidebar-tabs" role="group" aria-label="Secciones de la sesión">
+                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" aria-label="Copiloto, en curso" aria-current="step" aria-controls="tab-ai">
                         <span class="tab-step">01</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Copiloto</span><span class="tab-state">En curso</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-general" role="tab" aria-label="Datos, pendiente" aria-selected="false" aria-controls="tab-general">
+                    <button type="button" class="sidebar-tab" data-tab="tab-general" aria-label="Datos, pendiente" aria-controls="tab-general">
                         <span class="tab-step">02</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Datos</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" role="tab" aria-label="Propósitos, pendiente" aria-selected="false" aria-controls="tab-propositos">
+                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" aria-label="Propósitos, pendiente" aria-controls="tab-propositos">
                         <span class="tab-step">03</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Propósitos</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-design" role="tab" aria-label="Diseño, pendiente" aria-selected="false" aria-controls="tab-design">
+                    <button type="button" class="sidebar-tab" data-tab="tab-design" aria-label="Diseño, pendiente" aria-controls="tab-design">
                         <span class="tab-step">04</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Diseño</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" role="tab" aria-label="Alumnos, pendiente" aria-selected="false" aria-controls="tab-alumnos">
+                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" aria-label="Alumnos, pendiente" aria-controls="tab-alumnos">
                         <span class="tab-step">05</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-fichas" role="tab" aria-label="Fichas, pendiente" aria-selected="false" aria-controls="tab-fichas">
+                    <button type="button" class="sidebar-tab" data-tab="tab-fichas" aria-label="Fichas, pendiente" aria-controls="tab-fichas">
                         <span class="tab-step">06</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Fichas</span><span class="tab-state">Pendiente</span></span>
@@ -141,19 +141,20 @@
                         <span class="sidebar-eyebrow">Planificador docente</span>
                         <h2 class="sidebar-title">Diseña tu sesión</h2>
                     </div>
-                    <button id="btn-close-sidebar" class="btn btn-ghost btn-sm mobile-only" aria-label="Cerrar configuración"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+                    <button id="btn-close-sidebar" type="button" class="btn btn-ghost btn-sm" aria-label="Volver al documento"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg><span>Volver al documento</span></button>
                 </div>
 
                 <div class="sidebar-workflow">
                 <form id="session-form" class="session-form" autocomplete="off">
-                    <div class="inspector-heading">
+                    <!-- PANE 1: COPILOTO IA -->
+                    <div id="tab-ai" class="tab-pane active" role="region" aria-labelledby="inspector-title">
+                    <div class="inspector-heading planner-section-heading">
                         <span id="inspector-step" class="inspector-step">Paso 01 de 06</span>
                         <h3 id="inspector-title">Configura el copiloto</h3>
                         <p id="inspector-description">Elige el modelo, la plantilla y las referencias para preparar tu sesión.</p>
+                        <p class="planner-scroll-help">Baja para continuar. El menú te lleva directo a cada sección.</p>
                     </div>
 
-                    <!-- PANE 1: COPILOTO IA -->
-                    <div id="tab-ai" class="tab-pane active" role="tabpanel">
                         <!-- Motor de IA para Generación -->
                         <div class="form-group ai-model-card">
                             <div class="ai-model-header">
@@ -249,7 +250,8 @@
                     </div>
 
                     <!-- PANE 2: DATOS GENERALES -->
-                    <div id="tab-general" class="tab-pane" role="tabpanel">
+                    <div id="tab-general" class="tab-pane" role="region" aria-labelledby="planner-title-general">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 02 de 06</span><h3 id="planner-title-general">Completa los datos</h3><p>Define la institución, el grado, el área y la identidad de tu sesión.</p></header>
                         <!-- Centro Educativo & Jurisdicción -->
                         <div class="form-card">
                             <div class="form-card-title">
@@ -391,13 +393,18 @@
                     </div>
 
                     <!-- PANE 3: PROPÓSITOS Y ACCIONES -->
-                    <div id="tab-propositos" class="tab-pane" role="tabpanel">
+                    <div id="tab-propositos" class="tab-pane" role="region" aria-labelledby="planner-title-propositos">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 03 de 06</span><h3 id="planner-title-propositos">Elige los aprendizajes</h3><p>Marca competencias y capacidades. Después, precisa los desempeños y enfoques que trabajarás.</p></header>
                         <!-- Competencias y Capacidades -->
                         <div class="form-card">
                             <div class="form-card-title">
                                 <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                                 Competencias y Capacidades
                             </div>
+                            <div id="curriculum-picker" class="curriculum-picker" aria-label="Seleccionar competencias y capacidades"></div>
+                            <details id="curriculum-manual" class="form-disclosure" open>
+                            <summary>Editar aprendizajes manualmente</summary>
+                            <div class="form-disclosure-content">
                             <div class="form-group">
                                 <label for="input-competencia" class="form-label">Competencia Curricular</label>
                                 <select id="select-cneb-competencia" class="form-select hidden"
@@ -412,6 +419,8 @@
                                 <textarea id="input-capacidad" class="form-textarea" rows="2"
                                     placeholder="Capacidades a desarrollar..."></textarea>
                             </div>
+                            </div>
+                            </details>
                         </div>
 
                         <!-- Desempeños -->
@@ -451,7 +460,8 @@
                     </div> <!-- End tab-propositos -->
 
                     <!-- PANE 4: DISEÑO Y ESTILOS -->
-                    <div id="tab-design" class="tab-pane" role="tabpanel">
+                    <div id="tab-design" class="tab-pane" role="region" aria-labelledby="planner-title-design">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 04 de 06</span><h3 id="planner-title-design">Dale tu estilo</h3><p>Ajusta cómo se verá tu documento en el editor y al exportarlo.</p></header>
                         <!-- Presets de Estilo -->
                         <div class="form-card">
                             <div class="form-card-title">
@@ -576,7 +586,8 @@
                     </div>
 
                     <!-- PANE 5: REGISTRO DE ALUMNOS -->
-                    <div id="tab-alumnos" class="tab-pane" role="tabpanel">
+                    <div id="tab-alumnos" class="tab-pane" role="region" aria-labelledby="planner-title-alumnos">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 05 de 06</span><h3 id="planner-title-alumnos">Añade a tus estudiantes</h3><p>Prepara la lista de cotejo para tu grado y sección.</p></header>
                         <div class="form-card">
                             <div class="form-card-title" style="justify-content: space-between;">
                                 <div style="display:flex; align-items:center; gap:8px;">
@@ -597,7 +608,8 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
                     </div>
 
                     <!-- PANE 6: FICHAS DE TRABAJO (PROMPT IA) -->
-                    <div id="tab-fichas" class="tab-pane" role="tabpanel">
+                    <div id="tab-fichas" class="tab-pane" role="region" aria-labelledby="planner-title-fichas">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 06 de 06</span><h3 id="planner-title-fichas">Prepara tus fichas</h3><p>Una vez generada tu sesión, prepara el material de aplicación que acompañará a tus estudiantes.</p></header>
                         <!-- Apartado de Fichas Didácticas -->
                         <div id="apartado-fichas" class="form-card ficha-prompt-apartado">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
@@ -687,6 +699,15 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
                         </div>
                     </details>
                 </form>
+
+                <aside class="session-planning-summary" aria-labelledby="planning-summary-heading">
+                    <span class="sidebar-eyebrow" id="planning-summary-heading">Tu sesión, de un vistazo</span>
+                    <svg class="ui-icon planning-summary-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                    <h3 id="planning-summary-title">Tu próxima clase</h3>
+                    <p id="planning-summary-context">Completa los datos de tu sesión.</p>
+                    <dl id="planning-summary-facts"></dl>
+                    <div class="planning-summary-note"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg><p>Inicio, desarrollo y cierre. Una estructura para acompañarte en el aula.</p></div>
+                </aside>
 
                 <!-- BOTÓN PRINCIPAL DE ACCIÓN PINNED -->
                 <div class="sidebar-primary-action">

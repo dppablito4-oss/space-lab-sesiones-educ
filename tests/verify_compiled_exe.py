@@ -16,8 +16,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from backend.version import ENGINE_VERSION  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-EXE_PATH = ROOT / "backend" / "dist" / "pablitopyhost.exe"
-TOKEN_PATH = ROOT / "backend" / "dist" / "connection_token.txt"
+# CI keeps the generic release filename; a local versioned build can be supplied.
+EXE_PATH = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else ROOT / "backend" / "dist" / "pablitopyhost.exe"
+TOKEN_PATH = EXE_PATH.parent / "connection_token.txt"
 FIXTURE_PATH = ROOT / "data" / "pedagogy" / "fixtures" / "secondary_math_project_unit.v2.json"
 OUTPUT_DOCX = ROOT / "tests" / "fixtures" / "test_compiled_exe_output.docx"
 
@@ -32,7 +33,7 @@ def main():
         if probe.connect_ex(('127.0.0.1', 8000)) == 0:
             raise RuntimeError('El puerto 8000 está ocupado; cierra el motor antes de verificar el ejecutable nuevo.')
 
-    print("\n[2/5] Levantando proceso ejecutable pablitopyhost.exe...")
+    print(f"\n[2/5] Levantando proceso ejecutable {EXE_PATH.name}...")
     startup = subprocess.STARTUPINFO() if sys.platform == 'win32' else None
     if startup:
         startup.dwFlags |= subprocess.STARTF_USESHOWWINDOW
@@ -118,7 +119,7 @@ def main():
         print("============================================================")
 
     finally:
-        print("\nCerrando proceso pablitopyhost.exe...")
+        print(f"\nCerrando proceso {EXE_PATH.name}...")
         if sys.platform == 'win32':
             subprocess.run(['taskkill.exe', '/PID', str(process.pid), '/T', '/F'],
                            stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)

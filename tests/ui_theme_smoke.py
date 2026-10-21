@@ -1,6 +1,7 @@
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+import json
 import re
 from threading import Thread
 
@@ -166,11 +167,40 @@ def run() -> None:
 
             page.locator('[data-tab="tab-design"]').click()
             advanced = page.locator("#tab-design .form-disclosure")
+            advanced.wait_for(state='visible')
             assert advanced.is_visible()
             assert advanced.get_attribute("open") is None
             advanced.locator("summary").click()
             assert advanced.get_attribute("open") is not None
             assert page.locator("#select-design-font-family").is_visible()
+
+            # Imported sessions use upper-case area names and punctuated capacities.
+            # Their existing values must remain selectable and survive checkbox edits.
+            fixture = json.loads((ROOT / 'tests/fixtures/secundaria-matematica-polya.v1.json').read_text(encoding='utf-8'))
+            fixture['id'] = 'fluent-ui-curriculum-smoke'
+            page.evaluate('''session => {
+                StorageManager.saveSession(session);
+                window.appOpenSession(session.id);
+            }''', fixture)
+            page.locator('[data-tab="tab-propositos"]').click()
+            assert page.locator('#input-area').input_value() == 'Matemática'
+            assert page.locator('[data-curriculum-competency="1"]').is_checked()
+            assert page.locator('[data-curriculum-capacity="1:0"]').is_checked()
+            page.locator('[data-curriculum-capacity="1:0"]').uncheck()
+            page.wait_for_function('''() => !window.getCurrentSession().proposito.capacidades.some(
+                value => value.startsWith('Traduce datos y condiciones'))''')
+            page.locator('[data-curriculum-capacity="1:0"]').check()
+            page.wait_for_function('''() => window.getCurrentSession().proposito.capacidades.some(
+                value => value.startsWith('Traduce datos y condiciones'))''')
+            for theme, expected in [('light','rgb(255, 255, 255)'),('dark','rgb(0, 0, 0)')]:
+                page.evaluate('theme => window.SpaceLabTheme.setPreference(theme)', theme)
+                page.wait_for_function('expected => getComputedStyle(document.body).backgroundColor === expected', arg=expected)
+                assert page.locator('#sidebar').bounding_box()['width'] > 1000
+            page.set_viewport_size({'width':390,'height':844})
+            assert page.locator('#sidebar').evaluate('el => el.scrollWidth <= el.clientWidth')
+            assert page.locator('[data-curriculum-capacity="1:0"]').is_checked()
+            page.set_viewport_size({'width':1440,'height':900})
+            page.keyboard.press('Escape')
 
             for secondary_page in ("conexion.html", "descargas_landing.html"):
                 page.evaluate("localStorage.setItem('spacelab_theme_preference', 'dark')")

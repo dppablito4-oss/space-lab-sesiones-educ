@@ -65,6 +65,7 @@ CRITICAL_SCRIPT_ORDER = [
     "js/controllers/students-controller.js",
     "js/controllers/session-controller.js",
     "js/controllers/design-controller.js",
+    "js/components/curriculum-picker.js",
     "js/app.js",
 ]
 LOCAL_VERSION_PATTERN = re.compile(
@@ -197,8 +198,8 @@ def test_repository_composition() -> None:
 
     duplicate_ids = sorted({element_id for element_id in parser.ids if parser.ids.count(element_id) > 1})
     assert not duplicate_ids, f"Duplicate HTML IDs: {duplicate_ids}"
-    assert len(parser.script_sources) == 48, len(parser.script_sources)
-    assert parser.stylesheet_count == 11, parser.stylesheet_count
+    assert len(parser.script_sources) == 49, len(parser.script_sources)
+    assert parser.stylesheet_count == 12, parser.stylesheet_count
 
     positions = [parser.script_sources.index(source) for source in CRITICAL_SCRIPT_ORDER]
     assert positions == sorted(positions), list(zip(CRITICAL_SCRIPT_ORDER, positions))

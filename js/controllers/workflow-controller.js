@@ -1,42 +1,14 @@
-/** Workflow navigation controller. */
+/** Continuous planner navigation: normal scrolling plus persistent section shortcuts. */
 window.SpaceLabWorkflowController = (() => {
     'use strict';
 
     function create(dependencies) {
         const { state: AppState, dom: DOM, query: $, queryAll: $$, openSidebar } = dependencies;
 
-        const WORKFLOW_STEPS = {
-            'tab-ai': {
-                step: 'Paso 01 de 06',
-                title: 'Configura el copiloto',
-                description: 'Elige el modelo, la plantilla y las referencias para preparar tu sesión.'
-            },
-            'tab-general': {
-                step: 'Paso 02 de 06',
-                title: 'Completa los datos',
-                description: 'Define la institución, el grado, el área y la identidad de la sesión.'
-            },
-            'tab-propositos': {
-                step: 'Paso 03 de 06',
-                title: 'Define los propósitos',
-                description: 'Alinea competencias, desempeños, evidencias y criterios de evaluación.'
-            },
-            'tab-design': {
-                step: 'Paso 04 de 06',
-                title: 'Personaliza el diseño',
-                description: 'Ajusta la presentación que compartirán el editor web y la exportación Word.'
-            },
-            'tab-alumnos': {
-                step: 'Paso 05 de 06',
-                title: 'Añade a tus estudiantes',
-                description: 'Prepara la lista de cotejo con los nombres del grado y la sección actual.'
-            },
-            'tab-fichas': {
-                step: 'Paso 06 de 06',
-                title: 'Fichas didácticas con IA',
-                description: 'Genera el prompt especializado para crear la ficha de trabajo para imprimir.'
-            }
-        };
+        const buttons = Array.from($$('.sidebar-tab'));
+        const sections = Array.from(DOM.form.querySelectorAll('.tab-pane'));
+        const visited = AppState.visitedWorkflowSections;
+        let scrollFrame = null;
         
         function syncSessionContextTitle() {
             const contextTitle = $('#session-context-title');
@@ -44,53 +16,66 @@ window.SpaceLabWorkflowController = (() => {
             contextTitle.textContent = DOM.inputTitulo?.value.trim() || 'Nueva sesión';
         }
         
-        function updateWorkflowUi(activeTabId) {
-            $$('.sidebar-tab').forEach(tab => {
-                const stateLabel = tab.querySelector('.tab-state');
-                const tabName = tab.querySelector('.tab-text')?.textContent || 'Etapa';
-                const isActive = tab.dataset.tab === activeTabId;
-                const isCompleted = AppState.completedWorkflowTabs.has(tab.dataset.tab) && !isActive;
-                const state = isActive ? 'En curso' : (isCompleted ? 'Completado' : 'Pendiente');
-                tab.classList.toggle('completed', isCompleted);
-                tab.setAttribute('tabindex', isActive ? '0' : '-1');
-                tab.setAttribute('aria-label', `${tabName}, ${state.toLowerCase()}`);
-                if (stateLabel) stateLabel.textContent = state;
+        function updateWorkflowUi(activeSectionId) {
+            if (!sections.some(section => section.id === activeSectionId)) return;
+            visited.add(activeSectionId);
+            buttons.forEach(button => {
+                const active = button.dataset.tab === activeSectionId;
+                const seen = visited.has(button.dataset.tab) && !active;
+                const name = button.querySelector('.tab-text')?.textContent || 'Sección';
+                const state = active ? 'En curso' : seen ? 'Visitado' : 'Pendiente';
+                button.classList.toggle('active',active);
+                button.classList.toggle('visited',seen);
+                button.classList.remove('completed');
+                button.setAttribute('tabindex','0');
+                button.setAttribute('aria-label',`${name}, ${state.toLowerCase()}`);
+                if (active) button.setAttribute('aria-current','step');
+                else button.removeAttribute('aria-current');
+                const label = button.querySelector('.tab-state');
+                if (label) label.textContent = state;
             });
-        
-            const step = WORKFLOW_STEPS[activeTabId];
-            if (!step) return;
-            DOM.sidebar.dataset.activeTab = activeTabId;
-            const stepLabel = $('#inspector-step');
-            const title = $('#inspector-title');
-            const description = $('#inspector-description');
-            if (stepLabel) stepLabel.textContent = step.step;
-            if (title) title.textContent = step.title;
-            if (description) description.textContent = step.description;
+            sections.forEach(section => section.classList.toggle('active',section.id === activeSectionId));
+            DOM.sidebar.dataset.activeTab = activeSectionId;
         }
-        
-        function activateWorkflowTab(tab, markPreviousComplete = true) {
-            if (!tab) return;
-            const currentTab = $('.sidebar-tab.active');
-            if (markPreviousComplete && currentTab && currentTab !== tab) {
-                AppState.completedWorkflowTabs.add(currentTab.dataset.tab);
+
+        function syncFromScroll() {
+            if (!DOM.sidebar.classList.contains('open') || !DOM.form.clientHeight) return;
+            const marker = DOM.form.getBoundingClientRect().top + Math.min(120,DOM.form.clientHeight * .25);
+            let current = sections[0];
+            for (const section of sections) {
+                if (section.getBoundingClientRect().top <= marker) current = section;
+                else break;
             }
-        
-            const targetTabId = tab.dataset.tab;
-            $$('.sidebar-tab').forEach(item => {
-                const isTarget = item === tab;
-                item.classList.toggle('active', isTarget);
-                item.setAttribute('aria-selected', String(isTarget));
-            });
-            $$('.tab-pane').forEach(pane => pane.classList.toggle('active', pane.id === targetTabId));
-            updateWorkflowUi(targetTabId);
-            openSidebar();
+            if (DOM.form.scrollTop > 0 && DOM.form.scrollHeight - DOM.form.scrollTop - DOM.form.clientHeight < 4) {
+                current = sections[sections.length - 1];
+            }
+            if (current) updateWorkflowUi(current.id);
         }
-        
-        // ═══════════════════════════════════════
-        // INITIALIZATION
-        // ═══════════════════════════════════════
-        
-        
+
+        function scheduleScrollSync() {
+            if (scrollFrame !== null) return;
+            scrollFrame = window.requestAnimationFrame(() => {
+                scrollFrame = null;
+                syncFromScroll();
+            });
+        }
+
+        function activateWorkflowTab(button) {
+            const section = sections.find(item => item.id === button?.dataset.tab);
+            if (!section) return;
+            openSidebar({focusClose:false});
+            const top = DOM.form.scrollTop + section.getBoundingClientRect().top - DOM.form.getBoundingClientRect().top - 28;
+            DOM.form.scrollTo({top:Math.max(0,top),behavior:'instant'});
+            updateWorkflowUi(section.id);
+        }
+
+        DOM.form.addEventListener('scroll',scheduleScrollSync,{passive:true});
+        window.addEventListener('resize',scheduleScrollSync);
+        window.addEventListener('spacelab:session-cleared',() => {
+            visited.clear();
+            DOM.form.scrollTop = 0;
+            updateWorkflowUi(sections[0]?.id);
+        });
         return { syncSessionContextTitle, updateWorkflowUi, activateWorkflowTab };
     }
 

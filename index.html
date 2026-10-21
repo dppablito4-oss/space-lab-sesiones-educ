@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-build" content="9e0caddcfc755b3b">
+    <meta name="app-build" content="2b5cbb5ce914d0f5">
     <script defer src="js/app-update.js?v=7eef37cfd0a2"></script>
     <title>Space Lab — Generador de Sesiones de Aprendizaje MINEDU con IA | CNEB Perú</title>
     <meta name="description"
@@ -98,6 +98,7 @@
     <link rel="stylesheet" href="css/landing.css?v=7358dc7672f4">
     <link rel="stylesheet" href="css/home.css?v=8c103ed38555">
     <link rel="stylesheet" href="css/planning.css?v=1873fe7aa6e9">
+    <link rel="stylesheet" href="css/fluent-ui.css?v=c3f17d258a7b">
     <link rel="stylesheet" href="css/print.css?v=45bfd665f39e" media="print">
     <!-- KaTeX — renderizado matemático profesional (LaTeX) asíncrono -->
     <link rel="preload" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -520,15 +521,15 @@
                     <span>Plataforma Inteligente MINEDU 2026 · CNEB Perú</span>
                 </div>
                 <h1 class="landing-hero-title">
-                    Diseña Sesiones de Aprendizaje Oficiales MINEDU con <span class="highlight">Inteligencia Artificial</span>
+                    Menos tiempo planificando.<br><span class="highlight">Más tiempo enseñando.</span>
                 </h1>
                 <p class="landing-hero-subtitle">
-                    Planificación curricular integral para <strong>Inicial, Primaria y Secundaria</strong> alineada 100% al CNEB. Genera situaciones significativas, momentos didácticos (Inicio, Desarrollo, Cierre), competencias, desempeños y rúbricas. Exporta a <strong>Word (.docx)</strong> con nuestro motor nativo o a <strong>PDF</strong> oficial.
+                    Prepara tu próxima clase para <strong>Inicial, Primaria o Secundaria</strong>. Elige los aprendizajes, construye tu sesión con ayuda de la IA y dale tu toque antes de exportarla a <strong>Word o PDF</strong>.
                 </p>
                 <div class="landing-hero-actions">
                     <button type="button" class="landing-btn-lg landing-btn-primary" data-action="enter-app" aria-label="Comenzar a planificar sesión de aprendizaje gratis">
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
-                        <span>Comenzar a Planificar Gratis</span>
+                        <span>Crear mi sesión</span>
                         <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
                     </button>
                     <a href="#como-funciona" class="landing-btn-lg landing-btn-ghost" aria-label="Ver cómo funciona la plataforma">
@@ -556,45 +557,25 @@
             </div>
 
             <!-- Hero Visual Mockup Card -->
-            <div class="landing-hero-preview">
-                <div class="landing-preview-card">
-                    <div class="preview-card-header">
-                        <div class="preview-card-status">
-                            <span class="preview-card-dot"></span>
-                            <span>Estructura Oficial CNEB</span>
-                        </div>
-                        <span class="preview-card-type">Documento A4</span>
-                    </div>
-                    <div class="preview-session-sheet">
-                        <div class="preview-sheet-title">SESIÓN DE APRENDIZAJE N° 01</div>
-                        <div class="preview-sheet-meta">
-                            <div><strong>Área:</strong> Matemática</div>
-                            <div><strong>Nivel:</strong> Secundaria (2° Grado)</div>
-                            <div><strong>Tiempo:</strong> 90 minutos</div>
-                            <div><strong>Fecha:</strong> Año Lectivo 2026</div>
-                        </div>
-                        <div class="preview-sheet-box">
-                            <strong>Propósito de Aprendizaje:</strong>
-                            <span>Resuelve problemas de cantidad empleando estrategias de cálculo y estimación contextualizadas.</span>
-                        </div>
-                        <div class="preview-sheet-box" style="border-left-color: #10b981;">
-                            <strong>Momentos Pedagógicos:</strong>
-                            <span>Inicio (15 min) · Desarrollo (60 min) · Cierre y Metacognición (15 min)</span>
-                        </div>
-                        <div class="preview-sheet-box" style="border-left-color: #f59e0b; margin-bottom: 0;">
-                            <strong>Evaluación Formativa:</strong>
-                            <span>Lista de cotejo analítica con criterios e indicadores observables.</span>
+            <div class="landing-hero-preview landing-lesson-visual" role="img" aria-label="Ejemplo de planificación: elegir competencias y capacidades, revisar la sesión y llevarla a Word o PDF.">
+                <div class="lesson-scene" aria-hidden="true">
+                    <div class="lesson-dot-grid"></div>
+                    <div class="lesson-mini-app">
+                        <div class="lesson-mini-top"><span><svg class="ui-icon"><use href="#icon-folder"></use></svg> Tu próxima clase</span><span class="lesson-mini-saved"><i></i> Guardado</span></div>
+                        <div class="lesson-mini-body">
+                            <div class="lesson-mini-steps"><span><svg class="ui-icon"><use href="#icon-check"></use></svg> Datos</span><strong>2 Aprendizajes</strong><span>3 Revisión</span></div>
+                            <span class="lesson-mini-context">MATEMÁTICA · 2.° DE SECUNDARIA</span>
+                            <h2>Aprender también<br>empieza con elegir.</h2>
+                            <p>¿Qué trabajarán tus estudiantes?</p>
+                            <div class="lesson-mini-option selected"><span class="lesson-mini-check"><svg class="ui-icon"><use href="#icon-check"></use></svg></span><span>Resuelve problemas de cantidad<small>4 capacidades disponibles</small></span></div>
+                            <div class="lesson-mini-option"><span class="lesson-mini-box"></span><span>Resuelve problemas de regularidad,<br>equivalencia y cambio</span></div>
+                            <div class="lesson-mini-capacity"><svg class="ui-icon"><use href="#icon-check"></use></svg> Traduce cantidades a expresiones numéricas</div>
+                            <div class="lesson-mini-capacity"><svg class="ui-icon"><use href="#icon-check"></use></svg> Argumenta sus procedimientos</div>
+                            <div class="lesson-mini-bottom">Tu sesión va tomando forma</div>
                         </div>
                     </div>
-                    <div class="preview-card-footer">
-                        <div class="preview-card-export">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                            <span>Listo para Word (.docx) &amp; PDF</span>
-                        </div>
-                        <button type="button" class="btn btn-primary btn-xs" data-action="enter-app" aria-label="Abrir esta plantilla en el editor">
-                            <span>Abrir Editor</span>
-                        </button>
-                    </div>
+                    <div class="lesson-floating-paper"><span class="lesson-paper-label"><svg class="ui-icon"><use href="#icon-file"></use></svg> TU SESIÓN, LISTA PARA EL AULA</span><div class="lesson-paper-lines"><i></i><i></i><i></i></div><div class="lesson-paper-table"><span>Inicio</span><i></i><span>Desarrollo</span><i></i><span>Cierre</span><i></i></div><div class="lesson-paper-formats">WORD <span>·</span> PDF <svg class="ui-icon"><use href="#icon-check"></use></svg></div></div>
+                    <div class="lesson-teacher-note"><svg class="ui-icon"><use href="#icon-sparkles"></use></svg><span>La IA propone.<br><strong>Tú le das tu toque.</strong></span></div>
                 </div>
             </div>
         </section>
@@ -841,6 +822,15 @@
             </nav>
 
             <div class="home-account">
+                <label class="theme-picker" title="Tema de la aplicación">
+                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-theme"></use></svg>
+                    <span class="sr-only">Tema de la aplicación</span>
+                    <select data-theme-selector aria-label="Tema de la aplicación">
+                        <option value="system">Sistema</option>
+                        <option value="light">Claro</option>
+                        <option value="dark">Oscuro</option>
+                    </select>
+                </label>
                 <div class="home-account-copy">
                     <strong id="home-account-name">Docente</strong>
                     <span id="home-account-plan">Plan docente</span>
@@ -1143,33 +1133,33 @@
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
                     <span>Etapas</span>
                 </button>
-                <div id="workflow-tabs" class="sidebar-tabs" role="tablist" aria-label="Etapas de configuración" aria-orientation="vertical">
-                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" role="tab" aria-label="Copiloto, en curso" aria-selected="true" aria-controls="tab-ai">
+                <div id="workflow-tabs" class="sidebar-tabs" role="group" aria-label="Secciones de la sesión">
+                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" aria-label="Copiloto, en curso" aria-current="step" aria-controls="tab-ai">
                         <span class="tab-step">01</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Copiloto</span><span class="tab-state">En curso</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-general" role="tab" aria-label="Datos, pendiente" aria-selected="false" aria-controls="tab-general">
+                    <button type="button" class="sidebar-tab" data-tab="tab-general" aria-label="Datos, pendiente" aria-controls="tab-general">
                         <span class="tab-step">02</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Datos</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" role="tab" aria-label="Propósitos, pendiente" aria-selected="false" aria-controls="tab-propositos">
+                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" aria-label="Propósitos, pendiente" aria-controls="tab-propositos">
                         <span class="tab-step">03</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Propósitos</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-design" role="tab" aria-label="Diseño, pendiente" aria-selected="false" aria-controls="tab-design">
+                    <button type="button" class="sidebar-tab" data-tab="tab-design" aria-label="Diseño, pendiente" aria-controls="tab-design">
                         <span class="tab-step">04</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Diseño</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" role="tab" aria-label="Alumnos, pendiente" aria-selected="false" aria-controls="tab-alumnos">
+                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" aria-label="Alumnos, pendiente" aria-controls="tab-alumnos">
                         <span class="tab-step">05</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
                     </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-fichas" role="tab" aria-label="Fichas, pendiente" aria-selected="false" aria-controls="tab-fichas">
+                    <button type="button" class="sidebar-tab" data-tab="tab-fichas" aria-label="Fichas, pendiente" aria-controls="tab-fichas">
                         <span class="tab-step">06</span>
                         <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                         <span class="tab-copy"><span class="tab-text">Fichas</span><span class="tab-state">Pendiente</span></span>
@@ -1184,19 +1174,20 @@
                         <span class="sidebar-eyebrow">Planificador docente</span>
                         <h2 class="sidebar-title">Diseña tu sesión</h2>
                     </div>
-                    <button id="btn-close-sidebar" class="btn btn-ghost btn-sm mobile-only" aria-label="Cerrar configuración"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+                    <button id="btn-close-sidebar" type="button" class="btn btn-ghost btn-sm" aria-label="Volver al documento"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg><span>Volver al documento</span></button>
                 </div>
 
                 <div class="sidebar-workflow">
                 <form id="session-form" class="session-form" autocomplete="off">
-                    <div class="inspector-heading">
+                    <!-- PANE 1: COPILOTO IA -->
+                    <div id="tab-ai" class="tab-pane active" role="region" aria-labelledby="inspector-title">
+                    <div class="inspector-heading planner-section-heading">
                         <span id="inspector-step" class="inspector-step">Paso 01 de 06</span>
                         <h3 id="inspector-title">Configura el copiloto</h3>
                         <p id="inspector-description">Elige el modelo, la plantilla y las referencias para preparar tu sesión.</p>
+                        <p class="planner-scroll-help">Baja para continuar. El menú te lleva directo a cada sección.</p>
                     </div>
 
-                    <!-- PANE 1: COPILOTO IA -->
-                    <div id="tab-ai" class="tab-pane active" role="tabpanel">
                         <!-- Motor de IA para Generación -->
                         <div class="form-group ai-model-card">
                             <div class="ai-model-header">
@@ -1292,7 +1283,8 @@
                     </div>
 
                     <!-- PANE 2: DATOS GENERALES -->
-                    <div id="tab-general" class="tab-pane" role="tabpanel">
+                    <div id="tab-general" class="tab-pane" role="region" aria-labelledby="planner-title-general">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 02 de 06</span><h3 id="planner-title-general">Completa los datos</h3><p>Define la institución, el grado, el área y la identidad de tu sesión.</p></header>
                         <!-- Centro Educativo & Jurisdicción -->
                         <div class="form-card">
                             <div class="form-card-title">
@@ -1434,13 +1426,18 @@
                     </div>
 
                     <!-- PANE 3: PROPÓSITOS Y ACCIONES -->
-                    <div id="tab-propositos" class="tab-pane" role="tabpanel">
+                    <div id="tab-propositos" class="tab-pane" role="region" aria-labelledby="planner-title-propositos">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 03 de 06</span><h3 id="planner-title-propositos">Elige los aprendizajes</h3><p>Marca competencias y capacidades. Después, precisa los desempeños y enfoques que trabajarás.</p></header>
                         <!-- Competencias y Capacidades -->
                         <div class="form-card">
                             <div class="form-card-title">
                                 <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                                 Competencias y Capacidades
                             </div>
+                            <div id="curriculum-picker" class="curriculum-picker" aria-label="Seleccionar competencias y capacidades"></div>
+                            <details id="curriculum-manual" class="form-disclosure" open>
+                            <summary>Editar aprendizajes manualmente</summary>
+                            <div class="form-disclosure-content">
                             <div class="form-group">
                                 <label for="input-competencia" class="form-label">Competencia Curricular</label>
                                 <select id="select-cneb-competencia" class="form-select hidden"
@@ -1455,6 +1452,8 @@
                                 <textarea id="input-capacidad" class="form-textarea" rows="2"
                                     placeholder="Capacidades a desarrollar..."></textarea>
                             </div>
+                            </div>
+                            </details>
                         </div>
 
                         <!-- Desempeños -->
@@ -1494,7 +1493,8 @@
                     </div> <!-- End tab-propositos -->
 
                     <!-- PANE 4: DISEÑO Y ESTILOS -->
-                    <div id="tab-design" class="tab-pane" role="tabpanel">
+                    <div id="tab-design" class="tab-pane" role="region" aria-labelledby="planner-title-design">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 04 de 06</span><h3 id="planner-title-design">Dale tu estilo</h3><p>Ajusta cómo se verá tu documento en el editor y al exportarlo.</p></header>
                         <!-- Presets de Estilo -->
                         <div class="form-card">
                             <div class="form-card-title">
@@ -1619,7 +1619,8 @@
                     </div>
 
                     <!-- PANE 5: REGISTRO DE ALUMNOS -->
-                    <div id="tab-alumnos" class="tab-pane" role="tabpanel">
+                    <div id="tab-alumnos" class="tab-pane" role="region" aria-labelledby="planner-title-alumnos">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 05 de 06</span><h3 id="planner-title-alumnos">Añade a tus estudiantes</h3><p>Prepara la lista de cotejo para tu grado y sección.</p></header>
                         <div class="form-card">
                             <div class="form-card-title" style="justify-content: space-between;">
                                 <div style="display:flex; align-items:center; gap:8px;">
@@ -1640,7 +1641,8 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
                     </div>
 
                     <!-- PANE 6: FICHAS DE TRABAJO (PROMPT IA) -->
-                    <div id="tab-fichas" class="tab-pane" role="tabpanel">
+                    <div id="tab-fichas" class="tab-pane" role="region" aria-labelledby="planner-title-fichas">
+                        <header class="planner-section-heading"><span class="planner-section-step">Paso 06 de 06</span><h3 id="planner-title-fichas">Prepara tus fichas</h3><p>Una vez generada tu sesión, prepara el material de aplicación que acompañará a tus estudiantes.</p></header>
                         <!-- Apartado de Fichas Didácticas -->
                         <div id="apartado-fichas" class="form-card ficha-prompt-apartado">
                             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
@@ -1730,6 +1732,15 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
                         </div>
                     </details>
                 </form>
+
+                <aside class="session-planning-summary" aria-labelledby="planning-summary-heading">
+                    <span class="sidebar-eyebrow" id="planning-summary-heading">Tu sesión, de un vistazo</span>
+                    <svg class="ui-icon planning-summary-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                    <h3 id="planning-summary-title">Tu próxima clase</h3>
+                    <p id="planning-summary-context">Completa los datos de tu sesión.</p>
+                    <dl id="planning-summary-facts"></dl>
+                    <div class="planning-summary-note"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg><p>Inicio, desarrollo y cierre. Una estructura para acompañarte en el aula.</p></div>
+                </aside>
 
                 <!-- BOTÓN PRINCIPAL DE ACCIÓN PINNED -->
                 <div class="sidebar-primary-action">
@@ -2264,7 +2275,7 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <script defer src="js/services/document-source-processor.js?v=528ade7ddaed"></script>
     <script defer src="js/controllers/export-controller.js?v=fe63cb0a4fb4"></script>
     <script defer src="js/controllers/ai-controller.js?v=02a040d28750"></script>
-    <script defer src="js/controllers/workflow-controller.js?v=41a361cce2f9"></script>
+    <script defer src="js/controllers/workflow-controller.js?v=439675d6c651"></script>
     <script defer src="js/controllers/students-controller.js?v=1ee69d204c6a"></script>
     <script defer src="js/controllers/session-controller.js?v=7c12c150955e"></script>
     <script defer src="js/controllers/design-controller.js?v=8a8f8e479610"></script>
@@ -2279,7 +2290,8 @@ AGUILAR JAVIER, FARID OMAR"></textarea>
     <!-- Paginador A4 — Motor de paginación frontend (debe cargarse antes de app.js) -->
     <script defer src="js/paginador.js?v=d765e6e6e46d"></script>
     <script defer src="js/ui-shell.js?v=2ecdd9416d68"></script>
-    <script defer src="js/app.js?v=fb5f353ff6cb"></script>
+    <script defer src="js/components/curriculum-picker.js?v=3f9135793815"></script>
+    <script defer src="js/app.js?v=de8a497204c2"></script>
     <script defer src="js/ficha-external-prompt.js?v=37839d226210"></script>
 </body>
 

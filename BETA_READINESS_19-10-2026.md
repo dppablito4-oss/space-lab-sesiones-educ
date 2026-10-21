@@ -186,6 +186,18 @@ por Git en `artifacts/beta-readiness/`.
 
 ## Publicación web
 
+Actualización 20/10: se publicó `7b23bdb`, build `9e0caddcfc755b3b`.
+[GitHub Pages](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39507294998)
+terminó correctamente. Se contrastaron seis archivos modificados y Chromium
+comprobó generación, guardado y reapertura con la nueva estructura para sesión
+individual, unidad y experiencia. En esa regresión se sustituye la respuesta de
+IA; el generador y los Word se comprobaron por separado con las llamadas reales
+descritas arriba. Evidencia: `restored-sequence/published-verification.json`.
+La [validación Linux y Windows](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39507295482)
+del mismo código terminó correctamente, incluida la exportación Word/PDF del EXE.
+
+La comprobación histórica del 19/10 que sigue corresponde al despliegue previo:
+
 [sesiones.sypablitodp.site](https://sesiones.sypablitodp.site) despliega el código
 `defe39c`, build `587a595f23ac0753`. [GitHub Pages](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/runs/39336913209)
 terminó correctamente. Se contrastaron nueve archivos con el código local,
