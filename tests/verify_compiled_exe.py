@@ -1,4 +1,6 @@
 import json
+import copy
+import io
 import socket
 import subprocess
 import sys
@@ -113,6 +115,26 @@ def main():
         assert pdf_response.status_code == 200, f'Exportación PDF devolvió HTTP {pdf_response.status_code}'
         assert pdf_response.content.startswith(b'%PDF'), 'La respuesta debe ser un PDF válido'
         print(f'  [OK] PDF canónico generado ({len(pdf_response.content):,} bytes)')
+
+        print('\nVerificando planificación y sesiones en un único Word...')
+        linked_sessions = []
+        for item in unit_payload['sequence']:
+            if item['type'] != 'session':
+                continue
+            session = copy.deepcopy(pdf_payload)
+            session.pop('token', None)
+            session['id'] = 'compiled-' + item['id']
+            session['planning'] = {'planningContainerId': unit_payload['id'], 'sequenceItemId': item['id']}
+            item['linkedDocumentRef'] = {'id': session['id']}
+            session['metadata']['numeroSesion'] = str(item['index'])
+            linked_sessions.append(session)
+        unit_payload['linkedSessions'] = linked_sessions
+        bundled = httpx.post('http://127.0.0.1:8000/exportar-docx-json', json=unit_payload,
+                             headers={'Origin': 'https://sesiones.sypablitodp.site'}, timeout=90)
+        assert bundled.status_code == 200, f'Bundle devolvió HTTP {bundled.status_code}'
+        bundled_doc = docx.Document(io.BytesIO(bundled.content))
+        assert sum(p.text.startswith('SESIÓN DE APRENDIZAJE') for p in bundled_doc.paragraphs) == len(linked_sessions)
+        print(f'  [OK] Word completo generado ({len(bundled.content):,} bytes)')
 
         print("\n============================================================")
         print(">>> CERTIFICACIÓN DEL EJECUTABLE PABLITOPYHOST.EXE EXITOSA <<<")

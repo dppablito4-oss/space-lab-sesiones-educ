@@ -42,7 +42,7 @@ jobs:
       - name: Validate Python syntax
         run: |
           python -m py_compile backend/main.py backend/version.py backend/docx_builder.py backend/docx_builder_v1.py backend/docx_builder_planning.py backend/word_math.py backend/models/session_document.py backend/models/planning_document.py backend/adapters/legacy_to_v1.py
-          python -m ruff check backend scripts tests --select F401,F811,F821 --exclude backend/build,backend/dist
+          python -m ruff check backend scripts tests tools --select F401,F811,F821 --exclude backend/build,backend/dist
 
       - name: Validate repository hygiene
         run: |
@@ -110,6 +110,8 @@ jobs:
           node tests/app-utils.test.js
           node tests/local-export-client.test.js
           node tests/document-source-processor.test.js
+          node tests/ficha-external-prompt.test.js
+          node tests/worksheet-normalization.test.js
           node tests/profile-fields.test.js
           node tests/app-update.test.js
           node tests/home-workspace.test.js
@@ -129,6 +131,7 @@ jobs:
           python tests/test_word_math.py
           python tests/test_docx_fidelity.py
           python tests/test_planning_docx_builder.py
+          python tests/test_docx_bundle.py
           python tests/test_planning_docx_geometry.py
 
       - name: Run backend DOCX smoke test

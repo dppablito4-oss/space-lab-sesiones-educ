@@ -49,6 +49,7 @@ from bs4 import BeautifulSoup
 from docx_builder import build_docx_from_json, build_docx_from_html
 from docx_builder_v1 import build_docx_from_v1
 from docx_builder_planning import build_docx_from_planning_v2
+from docx_bundle import build_planning_bundle
 from adapters.legacy_to_v1 import adapt_legacy_to_v1
 from models.session_document import SessionDocumentV1
 from models.planning_document import PlanningContainerV2
@@ -2097,7 +2098,8 @@ async def exportar_docx_json(raw: dict = Body(...)):
             titulo = container_v2.identity.title or "Unidad_de_Aprendizaje"
             filename = re.sub(r'[^a-zA-Z0-9-_\s]', '', titulo).replace(' ', '_')
             nombre_archivo = f"{filename}.docx"
-            docx_stream = build_docx_from_planning_v2(container_v2)
+            docx_stream = (build_planning_bundle(container_v2, raw['linkedSessions'])
+                           if 'linkedSessions' in raw else build_docx_from_planning_v2(container_v2))
             if console:
                 console.print(f"[blue]✓ [UNIDAD EXPORTADA] Generada con éxito: {nombre_archivo}[/blue]")
             return StreamingResponse(

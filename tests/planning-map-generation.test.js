@@ -33,6 +33,20 @@ const parsed = Generator.parseResponse(JSON.stringify(fixture), input);
 assert.equal(parsed.schemaVersion, '2.0');
 assert.equal(parsed.status, 'draft', 'AI output must always start as draft');
 assert.equal(parsed.revision, 1);
+const reordered = structuredClone(fixture);
+reordered.curriculumMap[0].capacities = reordered.curriculumMap[0].capacities.map(capacity =>
+    Object.fromEntries(Object.entries(capacity).reverse()));
+assert.equal(Generator.parseResponse(reordered, input).status, 'draft', 'JSON key order must not change official curriculum');
+const omittedInverseLinks = structuredClone(fixture);
+omittedInverseLinks.milestones.forEach(milestone => { delete milestone.sequenceItemIds; });
+const recoveredLinks = Generator.parseResponse(omittedInverseLinks, input);
+for (const milestone of recoveredLinks.milestones) {
+    assert.deepEqual(milestone.sequenceItemIds,
+        fixture.sequence.filter(item => item.milestoneId === milestone.id).map(item => item.id));
+}
+const invalidInverseLinks = structuredClone(fixture);
+invalidInverseLinks.milestones[0].sequenceItemIds = ['missing-session'];
+assert.throws(() => Generator.parseResponse(invalidInverseLinks, input), error => error.code === 'INVALID_PLANNING_MAP');
 
 assert.throws(() => Generator.createRequest({ ...input, profiles: { ...input.profiles, didactic: null } }), error => error.code === 'INVALID_INPUT');
 assert.throws(() => Generator.createRequest({ ...input, methodology: { code: 'missing' } }), error => error.code === 'METHODOLOGY_NOT_FOUND');

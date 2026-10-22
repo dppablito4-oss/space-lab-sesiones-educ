@@ -83,6 +83,8 @@ const PlanningWizard = (() => {
         const methodologyProfile = methodologyProfileFor(draft, profiles);
         const input = {
             planningType: draft.identity.planningType,
+            title: draft.identity.title,
+            sessionCount: draft.sequence.filter(item => item.type === 'session').length || undefined,
             level: draft.identity.level,
             cycle: draft.identity.cycle,
             grade: draft.identity.grade,

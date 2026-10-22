@@ -1,11 +1,15 @@
 from html.parser import HTMLParser
 from pathlib import Path
 import subprocess
-from urllib.parse import urlsplit
+import re
+from urllib.parse import unquote, urlsplit
 
 
 ROOT = Path(__file__).resolve().parents[1]
 FORBIDDEN_TRACKED_PREFIXES = (
+    ".venv/",
+    ".pytest_cache/",
+    ".ruff_cache/",
     ".agents/",
     "artifacts/",
     "backend/build/",
@@ -28,9 +32,9 @@ class AssetParser(HTMLParser):
 
 def tracked_files() -> list[str]:
     output = subprocess.check_output(
-        ["git", "ls-files"], cwd=ROOT, text=True, encoding="utf-8"
+        ["git", "ls-files", "-z"], cwd=ROOT, text=True, encoding="utf-8"
     )
-    return [line.replace("\\", "/") for line in output.splitlines() if line]
+    return [line.replace("\\", "/") for line in output.split("\0") if line]
 
 
 def check_tracked_files() -> None:
@@ -56,7 +60,24 @@ def check_html_assets() -> None:
     assert not missing, "Missing local HTML assets:\n" + "\n".join(missing)
 
 
+def check_document_links() -> None:
+    """Keep moved documentation and design references navigable."""
+    documents = list(ROOT.glob("*.md"))
+    for directory in ("docs", "SKILLs", "design-system"):
+        documents.extend((ROOT / directory).rglob("*.md"))
+    missing: list[str] = []
+    for document in documents:
+        for target in re.findall(r"\]\(([^\s)]+)\)", document.read_text(encoding="utf-8")):
+            url = urlsplit(target)
+            if url.scheme or url.netloc or not url.path:
+                continue
+            if not (document.parent / unquote(url.path)).exists():
+                missing.append(f"{document.relative_to(ROOT)}: {target}")
+    assert not missing, "Missing documentation targets:\n" + "\n".join(missing)
+
+
 if __name__ == "__main__":
     check_tracked_files()
     check_html_assets()
+    check_document_links()
     print("repository_hygiene.py: OK")

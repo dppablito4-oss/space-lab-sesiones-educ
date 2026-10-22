@@ -18,6 +18,7 @@ window.SpaceLabAiController = (() => {
             getBinaryMimeFallback,
             getFormData,
             renderSession,
+            saveGeneratedSession,
             saveCurrentState,
             checkTimeBalance
         } = dependencies;
@@ -175,6 +176,9 @@ window.SpaceLabAiController = (() => {
                 DOM.inputEnfoque2.value = canonical.enfoquesTransversales?.[1]?.nombre || '';
         
                 renderSession(session);
+                // Persist before reporting success so a later reload can recover it.
+                saveCurrentState();
+                if (typeof saveGeneratedSession === 'function') saveGeneratedSession();
                 Loader.hide();
                 Toast.success('¡Sesión generada con IA exitosamente!');
                 window.dispatchEvent(new CustomEvent('spacelab:session-generated', { detail: { session } }));

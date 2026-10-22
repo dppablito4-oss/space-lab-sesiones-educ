@@ -109,7 +109,7 @@ Cada perfil curricular conserva rigurosamente:
 
 1. **Catálogo Unificado (`data/pedagogy/catalog.json` - versión 2026.6):**
    - Registra **52 CurriculumProfiles** y **52 DidacticProfiles** oficiales.
-   - Pasa la validación canónica de [PedagogyCatalogValidator](file:///e:/sesiones_educ_ia/js/pedagogy/catalog-validator.js) con 0 errores y 0 advertencias de unicidad.
+   - Pasa la validación canónica de [PedagogyCatalogValidator](../../js/pedagogy/catalog-validator.js) con 0 errores y 0 advertencias de unicidad.
 
 2. **Resolutor de Contexto (`js/pedagogy/context-resolver.js`):**
    - Resuelve dinámicamente las 10 áreas secundarias por ID canónico (`work-education`, `english`, `arts-culture`, `physical-education`, `religious-education`, etc.) y por sus nombres oficiales en español.
@@ -222,14 +222,14 @@ Cada perfil curricular conserva rigurosamente:
 
 ## 6. Motor de Python DOCX para Unidades y Proyectos de Aprendizaje (Completado y Certificado)
 
-Se ha implementado e integrado con éxito el **Motor de Exportación DOCX en Python para Unidades, Proyectos y Experiencias de Aprendizaje** ([`PlanningContainer 2.0`](file:///e:/sesiones_educ_ia/backend/models/planning_document.py)):
+Se ha implementado e integrado con éxito el **Motor de Exportación DOCX en Python para Unidades, Proyectos y Experiencias de Aprendizaje** ([`PlanningContainer 2.0`](../../backend/models/planning_document.py)):
 
 ### Componentes Técnicos Implementados:
-1. **Modelo Pydantic Canónico ([`backend/models/planning_document.py`](file:///e:/sesiones_educ_ia/backend/models/planning_document.py)):**
+1. **Modelo Pydantic Canónico ([`backend/models/planning_document.py`](../../backend/models/planning_document.py)):**
    - Modela fielmente `PlanningContainerV2` según el esquema oficial `schemas/planning-container.v2.schema.json`.
    - Soporte para metadatos de identidad, contexto administrativo, situación significativa, pregunta retadora, propósitos curriculares, matriz CNEB, enfoques transversales, hitos, secuencia didáctica de sesiones y evaluación formativa.
 
-2. **Builder DOCX de Alta Fidelidad ([`backend/docx_builder_planning.py`](file:///e:/sesiones_educ_ia/backend/docx_builder_planning.py)):**
+2. **Builder DOCX de Alta Fidelidad ([`backend/docx_builder_planning.py`](../../backend/docx_builder_planning.py)):**
    - Formato A4 con márgenes oficiales (0.75 in).
    - Cuadrícula de imprenta estricta de **10,490 twips** en todas las tablas (`sum(gridCols) == 10490`).
    - I. Datos Informativos (tabla de 4 columnas, 10,490 twips).
@@ -242,18 +242,18 @@ Se ha implementado e integrado con éxito el **Motor de Exportación DOCX en Pyt
    - VIII. Orientaciones para la Evaluación Formativa (Diagnóstica, Formativa y Sumativa).
    - IX. Firmas de Responsabilidad Pedagógica.
 
-3. **Integración en el Backend FastAPI ([`backend/main.py`](file:///e:/sesiones_educ_ia/backend/main.py)):**
+3. **Integración en el Backend FastAPI ([`backend/main.py`](../../backend/main.py)):**
    - Endpoint universal `/exportar-docx-json` procesa documentos `schemaVersion: "2.0"` generando el archivo Word oficial en streaming con headers de descarga.
    - Protección de token de conexión y límites de payload.
 
-4. **Integración en Interfaz de Usuario ([`js/planning/planning-view.js`](file:///e:/sesiones_educ_ia/js/planning/planning-view.js)):**
+4. **Integración en Interfaz de Usuario ([`js/planning/planning-view.js`](../../js/planning/planning-view.js)):**
    - Acción directa **"Descargar Word (.docx)"** en la barra superior de la vista de planificación.
    - Descarga interactiva automática con sanitización del nombre de archivo.
 
 5. **Pruebas Automatizadas (100% de Aprobación):**
-   - [`tests/test_planning_docx_builder.py`](file:///e:/sesiones_educ_ia/tests/test_planning_docx_builder.py): Validación de fixtures, unidades multidisciplinarias y resiliencia.
-   - [`tests/backend_smoke.py`](file:///e:/sesiones_educ_ia/tests/backend_smoke.py): Verificación del endpoint `/exportar-docx-json` con payload v2 (>64,500 bytes generados).
-   - [`tests/planning-view.test.js`](file:///e:/sesiones_educ_ia/tests/planning-view.test.js): Verificación del botón de descarga en la UI.
+   - [`tests/test_planning_docx_builder.py`](../../tests/test_planning_docx_builder.py): Validación de fixtures, unidades multidisciplinarias y resiliencia.
+   - [`tests/backend_smoke.py`](../../tests/backend_smoke.py): Verificación del endpoint `/exportar-docx-json` con payload v2 (>64,500 bytes generados).
+   - [`tests/planning-view.test.js`](../../tests/planning-view.test.js): Verificación del botón de descarga en la UI.
 
 ---
 
@@ -279,7 +279,7 @@ Se implementó el ciclo de vida completo entre la **Unidad de Aprendizaje matriz
 1. **Herencia Automática de Metadatos:** La sesión individual hereda Institución, DRE, UGEL, Director, Coordinador Pedagógico, Docente, Grado, Sección y Ciclo.
 2. **Herencia Curricular y Didáctica:** La sesión individual precarga Competencia, Capacidades, Desempeño precisado, Criterios de Evaluación C1–C4, Campo temático, Tiempo, Evidencia e Instrumento definidos en la secuencia de la unidad.
 3. **Trazabilidad Inmutable:** Se asigna `planning.mode = 'linked'` a la sesión creada y la unidad matriz actualiza el estado de la actividad a `generated` con su puntero permanente `linkedDocumentRef`.
-4. **Certificación Automatizada:** Suite [`tests/test_secondary_linked_session_flow.js`](file:///e:/sesiones_educ_ia/tests/test_secondary_linked_session_flow.js) integrada formalmente en el CI de GitHub Actions (`validate.yml`).
+4. **Certificación Automatizada:** Suite [`tests/test_secondary_linked_session_flow.js`](../../tests/test_secondary_linked_session_flow.js) integrada formalmente en el CI de GitHub Actions (`validate.yml`).
 
 ---
 
@@ -291,21 +291,21 @@ Toda la funcionalidad del bloque `PlanningContainer 2.0 → PlanningView → DOC
    - Reglas estrictas `F401, F811, F821` sin imports huérfanos ni variables no utilizadas.
    - Compilación byte-code de módulos backend (`py_compile`) con 0 advertencias.
 
-2. **Certificación Geométrica DOCX ([`tests/test_planning_docx_geometry.py`](file:///e:/sesiones_educ_ia/tests/test_planning_docx_geometry.py)):**
+2. **Certificación Geométrica DOCX ([`tests/test_planning_docx_geometry.py`](../../tests/test_planning_docx_geometry.py)):**
    - Test autónomo in-memory sin dependencias de archivos locales en disco.
    - Formato A4 (8.27 in × 11.69 in) y márgenes de 0.75 in en 4 lados.
    - Exactamente 12/12 tablas con `sum(w:gridCol) == 10490` twips y `w:tblInd = -289` twips.
    - Protección de renglones contra quiebre de página (`w:cantSplit`) en el 100% de las filas.
    - Encabezados repetibles (`w:tblHeader`) en tablas extensas/multilínea.
 
-3. **Certificación Funcional de Contratos DOCX ([`tests/test_planning_docx_builder.py`](file:///e:/sesiones_educ_ia/tests/test_planning_docx_builder.py)):**
+3. **Certificación Funcional de Contratos DOCX ([`tests/test_planning_docx_builder.py`](../../tests/test_planning_docx_builder.py)):**
    - Validación estricta de 12 tablas en fixtures, unidades multidisciplinarias y borradores mínimos.
    - Fidelidad de datos administrativos nuevos (I.E., DRE, UGEL, Director, Coordinador, Docente, Ciclo, Grado, Secciones, Periodo).
    - Verificación de Tabla Dual (Propósito vs Producto Final Integrador).
    - Criterios de evaluación C1–C4 trazados estrictamente desde `curriculumMap` sin inventar criterios ficticios.
    - Secuencia semanal de sesiones con tiempos, campos temáticos, evidencias e instrumentos.
 
-4. **Flujo E2E de Sesión Vinculada ([`tests/test_secondary_linked_session_flow.js`](file:///e:/sesiones_educ_ia/tests/test_secondary_linked_session_flow.js)):**
+4. **Flujo E2E de Sesión Vinculada ([`tests/test_secondary_linked_session_flow.js`](../../tests/test_secondary_linked_session_flow.js)):**
    - Ejecutado en el paso `Run JS contract & adapter & template tests` del workflow `validate.yml`.
    - Certifica preparación, herencia de metadatos, generación, estado `generated` y puntero `linkedDocumentRef`.
 

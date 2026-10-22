@@ -195,7 +195,7 @@ const PlanningView = (() => {
             + renderMilestones(container)
             + renderSequence(container, options)
             + renderAssessment(container);
-        return `<div class="planning-shell planning-view-shell">${renderHeader(container)}<div class="planning-view-actions"><button type="button" class="btn btn-ghost" data-planning-view-action="back">← Mis planificaciones</button><button type="button" class="btn btn-secondary" data-planning-view-action="export-docx">Descargar Word (.docx)</button><button type="button" class="btn btn-primary" data-planning-view-action="edit">Editar planificación</button><button type="button" class="btn btn-ghost" data-planning-view-action="close">Cerrar</button></div><div class="planning-view-layout"><aside class="planning-view-summary" aria-label="Resumen de la planificación"><h3>Resumen</h3><p><strong>${esc(TYPES[container.identity.planningType] || 'Planificación')}</strong></p><p>${esc(STATUSES[container.status] || container.status)}</p><p>Revisión ${container.revision}</p></aside><div class="planning-view-content">${main}</div></div></div>`;
+        return `<div class="planning-shell planning-view-shell">${renderHeader(container)}<div class="planning-view-actions"><button type="button" class="btn btn-ghost" data-planning-view-action="back">← Mis planificaciones</button><button type="button" class="btn btn-secondary" data-planning-view-action="export-docx">Descargar Word (.docx)</button><button type="button" class="btn btn-primary" data-planning-view-action="edit">Editar planificación</button><button type="button" class="btn btn-ghost" data-planning-view-action="close">Cerrar</button><button type="button" class="btn btn-secondary" data-planning-view-action="export-bundle-docx">Descargar documento completo con sesiones</button></div><div class="planning-view-layout"><aside class="planning-view-summary" aria-label="Resumen de la planificación"><h3>Resumen</h3><p><strong>${esc(TYPES[container.identity.planningType] || 'Planificación')}</strong></p><p>${esc(STATUSES[container.status] || container.status)}</p><p>Revisión ${container.revision}</p></aside><div class="planning-view-content">${main}</div></div></div>`;
     }
 
     async function loadMethodologyProfile(container) {
@@ -247,7 +247,7 @@ const PlanningView = (() => {
         if (dialog?.open) dialog.close();
     }
 
-    async function exportPlanningDocx(containerId) {
+    async function exportPlanningDocx(containerId, includeSessions = false) {
         repository ||= repositoryModule.create({ validator: core });
         const container = repository.get(containerId);
         if (!container) throw new Error('No se encontró la planificación solicitada.');
@@ -258,18 +258,27 @@ const PlanningView = (() => {
 
         if (window.Loader?.show) window.Loader.show('Generando Unidad en Word (.docx)...');
         try {
+            if (includeSessions) {
+                payload.linkedSessions = container.sequence.filter(item => item.type === 'session')
+                    .sort((a, b) => a.index - b.index).map(item => {
+                        const session = window.StorageManager?.getSession?.(item.linkedDocumentRef?.id);
+                        if (!session) throw new Error(`Primero genera y guarda la sesión ${item.index}: ${item.title}`);
+                        return session;
+                    });
+            }
             const client = window.LocalExportClient || (typeof require !== 'undefined' ? require('../services/local-export-client.js') : null);
             if (!client) throw new Error('Cliente de exportación no disponible.');
             const blob = await client.exportDocument('docx', payload);
+            if (!blob.size) throw new Error('El motor devolvió un documento vacío. Vuelve a intentar la exportación.');
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            const cleanTitle = (titulo || 'Unidad').replace(/[^a-zA-Z0-9-_\s]/g, '').trim().replace(/\s+/g, '_') || 'Unidad_de_Aprendizaje';
+            const cleanTitle = (titulo || 'Unidad').replace(/[^\p{L}\p{N}_\s-]/gu, '').trim().replace(/\s+/g, '_') || 'Unidad_de_Aprendizaje';
             a.download = `${cleanTitle}.docx`;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            setTimeout(() => URL.revokeObjectURL(url), 60_000);
             window.Toast?.success?.('¡Unidad exportada exitosamente a Word (.docx)!');
         } catch (error) {
             console.error('[PlanningView Export DOCX] Error:', error);
@@ -290,17 +299,25 @@ const PlanningView = (() => {
             if (action === 'close') close();
             if (action === 'back') window.dispatchEvent(new CustomEvent('planning:view-library'));
             if (action === 'edit' && currentId) window.dispatchEvent(new CustomEvent('planning:view-edit', { detail: { id: currentId } }));
+            if (action === 'export-bundle-docx' && currentId) {
+                await exportPlanningDocx(currentId, true);
+            }
             if (action === 'export-docx' && currentId) {
                 await exportPlanningDocx(currentId);
             }
             if (action === 'generate-session' && currentId) {
+                const planningId = currentId;
+                close();
                 try {
-                    const prepared = await window.appStartLinkedSession?.(currentId, target.dataset.sequenceItemId);
+                    const prepared = await window.appStartLinkedSession?.(planningId, target.dataset.sequenceItemId);
                     if (prepared) {
                         close();
                         window.LandingRouter?.showApp?.(false);
+                    } else {
+                        await open(planningId);
                     }
                 } catch (error) {
+                    await open(planningId);
                     console.warn('[PlanningView] No se pudo iniciar la sesión vinculada:', error);
                     window.Toast?.error?.(error.message || 'No se pudo iniciar la sesión.');
                 }

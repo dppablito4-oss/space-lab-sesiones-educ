@@ -18,11 +18,9 @@ Genera un documento Word (.docx) nativo con formato oficial MINEDU de alta fidel
 """
 from __future__ import annotations
 import io
-import sys
-from pathlib import Path
 from typing import List, Optional
 
-from docx import Document
+from document_template import new_document_from_template
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
@@ -36,30 +34,6 @@ from docx_builder import (
     set_table_col_widths_and_indent,
     append_html_to_cell_or_paragraph
 )
-
-
-def _resource_root() -> Path:
-    frozen_root = getattr(sys, "_MEIPASS", None)
-    return Path(frozen_root) if frozen_root else Path(__file__).resolve().parent.parent
-
-
-def _reference_template_path() -> Optional[Path]:
-    assets_dir = _resource_root() / "assets"
-    candidates = (
-        assets_dir / "templates" / "session_template_v1.docx",
-        assets_dir / "sesion plantilla.docx",
-    )
-    return next((path for path in candidates if path.exists()), None)
-
-
-def _new_document_from_template() -> Document:
-    template_path = _reference_template_path()
-    doc = Document(template_path) if template_path else Document()
-    body = doc._element.body
-    for child in list(body):
-        if child.tag != qn("w:sectPr"):
-            body.remove(child)
-    return doc
 
 
 def _set_repeat_table_header(row) -> None:
@@ -83,7 +57,7 @@ def _clean_text(val: Optional[str]) -> str:
 
 def build_docx_from_planning_v2(container: PlanningContainerV2) -> io.BytesIO:
     """Construye un documento .docx nativo oficial a partir de PlanningContainerV2."""
-    doc = _new_document_from_template()
+    doc = new_document_from_template()
 
     # Configuración de página A4 con márgenes de 0.75 in
     for s in doc.sections:

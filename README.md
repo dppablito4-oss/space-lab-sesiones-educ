@@ -1,6 +1,6 @@
 # Space Lab - Sesiones Educativas
 
-[![CI Tests](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/workflows/ci.yml/badge.svg)](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/workflows/ci.yml)
+[![CI Tests](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/workflows/validate.yml/badge.svg)](https://github.com/dppablito4-oss/space-lab-sesiones-educ/actions/workflows/validate.yml)
 [![Node.js Tests](https://img.shields.io/badge/Node.js-22+-green.svg)](https://nodejs.org)
 [![Python Engine](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://python.org)
 [![License](https://img.shields.io/badge/License-Proprietary-orange.svg)]()
@@ -340,7 +340,7 @@ Proyecto separada). No se cambian planes, créditos ni políticas de Supabase.
 La edición de borradores locales existentes sigue disponible sin conexión.
 
 Este bloque implementa el alcance de las secciones 40–41 de
-[PLAN_EXPERIENCIAS_UNIDADES_V1.md](PLAN_EXPERIENCIAS_UNIDADES_V1.md).
+[PLAN_EXPERIENCIAS_UNIDADES_V1.md](docs/plans/PLAN_EXPERIENCIAS_UNIDADES_V1.md).
 La revisión informa campos pendientes y recomendaciones; el documento permanece
 como borrador. La generación IA del mapa y las sesiones vinculadas corresponden
 a fases posteriores. Sesión individual conserva su flujo actual.

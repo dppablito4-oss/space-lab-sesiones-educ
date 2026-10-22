@@ -5,6 +5,11 @@ const PlanningMapGenerator = (() => {
         ? require('./planning-container-v2.js') : window.PlanningContainerV2;
     const TYPES = new Set(['unit', 'project', 'learning_experience']);
     const clone = value => JSON.parse(JSON.stringify(value));
+    // JSON object key order is irrelevant; array order and official text are not.
+    const stable = value => JSON.stringify(value, function (_key, entry) {
+        return entry && typeof entry === 'object' && !Array.isArray(entry)
+            ? Object.fromEntries(Object.keys(entry).sort().map(key => [key, entry[key]])) : entry;
+    });
 
     class PlanningMapError extends Error {
         constructor(code, message, details = []) {
@@ -66,6 +71,9 @@ const PlanningMapGenerator = (() => {
     }
 
     function assertTrustedCurriculum(container, references) {
+        if (!Array.isArray(container.curriculumMap)) {
+            throw new PlanningMapError('INVALID_PLANNING_MAP', 'curriculumMap debe ser una lista de referencias curriculares.');
+        }
         if (container.curriculumMap.length !== references.length) {
             throw new PlanningMapError('INVALID_CURRICULUM_REFERENCES', 'La IA alteró la cantidad de referencias curriculares.');
         }
@@ -76,10 +84,10 @@ const PlanningMapGenerator = (() => {
                 && generated.area?.officialName === trusted.area?.officialName
                 && generated.competency?.id === trusted.competency?.id
                 && generated.competency?.officialName === trusted.competency?.officialName
-                && JSON.stringify(generated.capacities) === JSON.stringify(trusted.capacities)
-                && JSON.stringify(generated.standard) === JSON.stringify(trusted.standard)
-                && JSON.stringify(generated.performances) === JSON.stringify(trusted.performances)
-                && JSON.stringify(generated.curricularSourceRefs) === JSON.stringify(trusted.curricularSourceRefs);
+                && stable(generated.capacities) === stable(trusted.capacities)
+                && stable(generated.standard) === stable(trusted.standard)
+                && stable(generated.performances) === stable(trusted.performances)
+                && stable(generated.curricularSourceRefs) === stable(trusted.curricularSourceRefs);
             if (!same) throw new PlanningMapError('INVALID_CURRICULUM_REFERENCES', `La IA alteró la referencia curricular ${index + 1}.`);
         });
     }
@@ -89,6 +97,16 @@ const PlanningMapGenerator = (() => {
         const container = parseJson(payload);
         container.status = 'draft';
         container.revision = 1;
+        // Recover an omitted inverse link only from explicit sequence links.
+        // Never replace an existing invalid reference or alter curriculum.
+        if (Array.isArray(container.milestones) && Array.isArray(container.sequence)) {
+            for (const milestone of container.milestones) {
+                if (milestone.sequenceItemIds === undefined) {
+                    milestone.sequenceItemIds = container.sequence
+                        .filter(item => item.milestoneId === milestone.id).map(item => item.id);
+                }
+            }
+        }
         assertTrustedCurriculum(container, input.curriculumReferences);
         const result = core.validate(container, {
             forReview: true,

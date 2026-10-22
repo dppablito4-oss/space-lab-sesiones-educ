@@ -1,7 +1,7 @@
 # Operación y aceptación de la beta
 
 Procedimiento de operación de la beta abierta. La evidencia de despliegue y
-restauración está en `BETA_READINESS_19-10-2026.md`; este documento describe cómo
+restauración está en [informe de preparación](reports/BETA_READINESS_19-10-2026.md); este documento describe cómo
 repetir las comprobaciones y distingue los pasos todavía pendientes.
 
 ## 1. Identidad del proyecto y acceso

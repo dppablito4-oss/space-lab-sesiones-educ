@@ -76,13 +76,13 @@ graph TD
      * **Paso 4 (Producto y Evaluación)**: Descripción del producto final y orientaciones para evaluación formativa.
      * **Paso 5 (Secuencia Didáctica Semanal)**: Secuencia de sesiones organizadas por semanas, hitos, duración, conocimientos (campo temático), evidencias esperadas e instrumentos.
      * **Paso 6 (Revisión y Lifecycle)**: Motor de validación suave y estricta que guía al docente para completar campos requeridos antes de transicionar a estado `reviewed`.
-2. **Visualizador Web de Alta Fidelidad ([`js/planning/planning-view.js`](file:///e:/sesiones_educ_ia/js/planning/planning-view.js))**:
+2. **Visualizador Web de Alta Fidelidad ([`js/planning/planning-view.js`](../../js/planning/planning-view.js))**:
    * Acordeones dinámicos para explorar situación significativa, propósitos, producto integrador, matriz curricular y secuencia de sesiones.
    * Botón directo de **"Descargar Word (.docx)"** con renderizado nativo.
 
 ---
 
-### MÓDULO B: Motor Nativo DOCX en Python ([`backend/docx_builder_planning.py`](file:///e:/sesiones_educ_ia/backend/docx_builder_planning.py))
+### MÓDULO B: Motor Nativo DOCX en Python ([`backend/docx_builder_planning.py`](../../backend/docx_builder_planning.py))
 Genera documentos oficiales con calidad tipográfica y de imprenta:
 * **Formato de Hoja A4**: Medidas oficiales de `210.1 mm × 296.9 mm` con márgenes de `0.75 in` (1,080 twips / 1.91 cm).
 * **Cuadrícula Institucional de 10,490 twips**:
@@ -110,7 +110,7 @@ Genera documentos oficiales con calidad tipográfica y de imprenta:
 
 ---
 
-### MÓDULO C: Vinculación Bidireccional Unidad -> Sesión ([`js/planning/linked-session.js`](file:///e:/sesiones_educ_ia/js/planning/linked-session.js))
+### MÓDULO C: Vinculación Bidireccional Unidad -> Sesión ([`js/planning/linked-session.js`](../../js/planning/linked-session.js))
 Cierra la brecha operativa entre la planificación de mediano plazo y la sesión de clase diaria:
 * **Generación en Cascada con un Clic**: Al presionar *"Generar Sesión"* en una fila de la secuencia didáctica, el editor individual se abre precargando:
   * Ficha administrativa completa (I.E., DRE, UGEL, Director, Coordinador Pedagógico, Docente, Grado, Sección y Ciclo).

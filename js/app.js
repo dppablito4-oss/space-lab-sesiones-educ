@@ -1323,6 +1323,7 @@
         getBinaryMimeFallback,
         getFormData,
         renderSession,
+        saveGeneratedSession: handleSave,
         saveCurrentState,
         checkTimeBalance
     });

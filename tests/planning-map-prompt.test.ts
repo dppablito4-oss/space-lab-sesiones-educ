@@ -51,6 +51,8 @@ Deno.test('planning.map.generate uses a versioned protected JSON prompt', () => 
   assert(result.expectsJson && result.maxOutputTokens === 16_000, 'map output contract missing');
   assert(result.systemPrompt.includes('PlanningContainer 2.0'), 'container contract missing');
   assert(result.systemPrompt.includes('No inventes'), 'official-reference protection missing');
+  assert(result.systemPrompt.includes('curriculumMap es un ARRAY directo'), 'explicit map shape missing');
+  assert(result.systemPrompt.includes('sessionCount'), 'requested session count missing');
   assert(result.userPrompt.includes('solves-quantity-problems'), 'resolved curriculum missing');
   assert(!result.systemPrompt.includes('IE piloto'), 'teacher data leaked into system rules');
 });

@@ -143,9 +143,9 @@ class CompetenciaTransversalV1(BaseModel):
                 data = dict(data)
                 data["titulo"] = str(title).strip()
             if "desempenos" not in data:
-                des = data.get("desempeños") or data.get("criterios") or []
+                des = data.get("desempeños") or data.get("criterios") or data.get('descripcion') or []
                 data = dict(data)
-                data["desempenos"] = des
+                data["desempenos"] = [des] if isinstance(des, str) else des
         return data
 
 
@@ -164,9 +164,10 @@ class EnfoqueTransversalV1(BaseModel):
                 data["nombre"] = str(name).strip()
             if "valor" not in data and "valores" in data:
                 data = dict(data)
-                data["valor"] = str(data["valores"]).strip()
+                values = data['valores']
+                data["valor"] = '\n'.join(str(value) for value in values) if isinstance(values, list) else str(values).strip()
             if "actitudes" not in data:
-                act = data.get("actitud") or data.get("acciones_observables") or ""
+                act = data.get("actitud") or data.get("acciones_observables") or data.get('actitudesObservables') or ""
                 data = dict(data)
                 data["actitudes"] = str(act).strip()
         return data
@@ -200,6 +201,36 @@ class FichaTrabajoV1(BaseModel):
     titulo: str = ""
     indicaciones: str = ""
     actividades: str = ""
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_sections(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        from html import escape
+        data = dict(data)
+        data.setdefault('indicaciones', data.get('instrucciones', ''))
+        if not data.get('actividades') and isinstance(data.get('secciones'), list):
+            parts = []
+            for section in data['secciones']:
+                if not isinstance(section, dict):
+                    continue
+                parts.append('<h3>' + escape(str(section.get('nombre', ''))) + '</h3>')
+                for field in section.get('campos', []):
+                    parts.append('<p>' + escape(str(field)) + '</p>')
+            data['actividades'] = ''.join(parts)
+        activities = data.get('actividades') or ''
+        if isinstance(activities, str):
+            for key in ('tablaHTML', 'tablaSugerida'):
+                table = data.get(key)
+                if isinstance(table, str) and table not in activities:
+                    activities += table
+            for question in data.get('preguntasCierre') or []:
+                content = '<p>' + escape(str(question)) + '</p>'
+                if content not in activities:
+                    activities += content
+            data['actividades'] = activities
+        return data
 
     @field_validator("actividades", mode="before")
     @classmethod

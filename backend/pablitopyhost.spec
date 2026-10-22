@@ -7,7 +7,7 @@
 # - Chromium NO se bundlea: main.py lo descarga en runtime en EXE_DIR/bin/
 # - tkinter debe estar instalado en el Python del build (incluido por defecto en CPython oficial)
 
-from PyInstaller.utils.hooks import collect_submodules
+from PyInstaller.utils.hooks import collect_data_files, collect_submodules
 
 block_cipher = None
 
@@ -19,13 +19,16 @@ a = Analysis(
         ('../assets/logo.ico', 'assets'),
         ('../assets/logo.png', 'assets'),
         ('../assets/templates/session_template_v1.docx', 'assets/templates'),
-    ],
+    ] + collect_data_files('docxcompose'),
     hiddenimports=[
         'playwright.async_api',
         'playwright._impl._browser_context',
         'docx_builder',
         'docx_builder_v1',
         'docx_builder_planning',
+        'document_template',
+        'docx_bundle',
+        'docxcompose.composer',
         'word_math',
         'matplotlib',
         'matplotlib.mathtext',

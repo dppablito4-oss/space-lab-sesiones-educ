@@ -83,7 +83,7 @@ del EXE Windows aprobadas también en GitHub Actions para `v1.4.1`. Composición
 versiones de assets, Ruff y tipos comprobados. El guardado diferencia persistencia
 local y error; la privacidad describe proveedores y archivos temporales.
 
-Evidencia: `BETA_READINESS_19-10-2026.md`. Procedimiento: `docs/BETA_OPERATIONS.md`.
+Evidencia: [informe de preparación](docs/reports/BETA_READINESS_19-10-2026.md). Procedimiento: `docs/BETA_OPERATIONS.md`.
 Los respaldos y resultados en `artifacts/beta-readiness/` no se versionan.
 
 ## Decisiones y trabajo operativo pendiente

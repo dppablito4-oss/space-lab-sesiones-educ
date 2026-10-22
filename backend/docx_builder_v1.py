@@ -11,17 +11,16 @@ Genera un documento .docx nativo oficial MINEDU con:
 from __future__ import annotations
 import io
 import re
-import sys
-from pathlib import Path
 
 from bs4 import BeautifulSoup, Tag
-from docx import Document
+from docx.document import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.section import WD_SECTION
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from word_math import append_mixed_text
+from document_template import new_document_from_template, resource_root
 
 from models.session_document import SessionDocumentV1
 from docx_builder import (
@@ -34,32 +33,6 @@ from docx_builder import (
     format_latex_to_unicode,
     append_html_to_cell_or_paragraph
 )
-
-
-def _resource_root() -> Path:
-    frozen_root = getattr(sys, "_MEIPASS", None)
-    return Path(frozen_root) if frozen_root else Path(__file__).resolve().parent.parent
-
-
-def _reference_template_path() -> Path | None:
-    """Locate the sanitized template in the source tree or PyInstaller bundle."""
-    assets_dir = _resource_root() / "assets"
-    candidates = (
-        assets_dir / "templates" / "session_template_v1.docx",
-        assets_dir / "sesion plantilla.docx",
-    )
-    return next((path for path in candidates if path.exists()), None)
-
-
-def _new_document_from_template():
-    """Create a clean body while retaining the official page/header system."""
-    template_path = _reference_template_path()
-    doc = Document(template_path) if template_path else Document()
-    body = doc._element.body
-    for child in list(body):
-        if child.tag != qn("w:sectPr"):
-            body.remove(child)
-    return doc
 
 
 def _set_cell_text_direction(cell, value: str = "btLr") -> None:
@@ -92,6 +65,18 @@ def _compact_empty_paragraphs(doc) -> None:
             paragraph.paragraph_format.space_before = Pt(0)
             paragraph.paragraph_format.space_after = Pt(0)
             paragraph.paragraph_format.line_spacing = 1.0
+    # HTML headings often leave an empty paragraph before the following block.
+    # Compact those spacers, retaining the single writing line in empty cells.
+    for table in doc.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                if len(cell.paragraphs) < 2:
+                    continue
+                for paragraph in cell.paragraphs:
+                    if not paragraph.text.strip() and not paragraph._p.xpath('.//w:drawing|.//m:oMath|.//w:br'):
+                        paragraph.paragraph_format.space_before = Pt(0)
+                        paragraph.paragraph_format.space_after = Pt(0)
+                        paragraph.paragraph_format.line_spacing = Pt(1)
 
 
 def _ordered_processes(moment):
@@ -199,7 +184,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     """
     _preprocess_v1_latex(doc_v1)
 
-    doc = _new_document_from_template()
+    doc = new_document_from_template()
 
     # Márgenes exactos A4
     for s in doc.sections:
@@ -315,7 +300,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     if not header_has_artwork:
         logo_stream = None
         try:
-            logo_path = _resource_root() / "assets" / "logo.png"
+            logo_path = resource_root() / "assets" / "logo.png"
             if logo_path.exists():
                 with open(logo_path, "rb") as f:
                     logo_stream = io.BytesIO(f.read())
@@ -1036,6 +1021,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
 
     # ── LISTA DE COTEJO ──
     alumnos = doc_v1.listaCotejo.alumnos if doc_v1.listaCotejo else []
+    checklist_tables = []
     criterios = doc_v1.listaCotejo.criterios if (doc_v1.listaCotejo and doc_v1.listaCotejo.criterios) else criterios_documento
     # The reference template keeps its four-criterion checklist in portrait,
     # with a stable 10-column grid. It is much more legible than the previous
@@ -1050,6 +1036,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         title_run.font.size = Pt(12)
         roster_size = max(30, len(alumnos))
         lct = doc.add_table(rows=2 + roster_size, cols=10)
+        checklist_tables.append(lct)
         lct.autofit = False
         add_table_borders_black(lct)
 
@@ -1150,6 +1137,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         num_cols = 2 + len(criterios) * 2
         roster_size = max(30, len(alumnos))
         lct = doc.add_table(rows=2 + roster_size, cols=num_cols)
+        checklist_tables.append(lct)
         lct.autofit = False
         add_table_borders_black(lct)
 
@@ -1216,6 +1204,15 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         set_table_col_widths_and_indent(lct, checklist_widths, indent_twip=0)
 
     _apply_presentation(doc, doc_v1)
+    # Evaluation grids need writing rows, not the narrative's paragraph leading.
+    for checklist in checklist_tables:
+        for row in checklist.rows:
+            for cell in row.cells:
+                set_cell_margins(cell, top=30, bottom=30, left=60, right=60)
+                for paragraph in cell.paragraphs:
+                    paragraph.paragraph_format.space_before = Pt(0)
+                    paragraph.paragraph_format.space_after = Pt(0)
+                    paragraph.paragraph_format.line_spacing = 1.0
     _compact_empty_paragraphs(doc)
     stream = io.BytesIO()
     doc.save(stream)

@@ -123,8 +123,29 @@ const SessionAdapter = (() => {
         // Solo aceptar passthrough cuando la estructura v1 realmente está completa.
         // Algunos modelos etiquetan como v1 una respuesta que todavía mezcla llaves legacy.
         if (raw.schemaVersion === '1.0' && _hasCanonicalMoments(raw)) {
+            const worksheet = raw.fichaTrabajo;
+            if (worksheet && typeof worksheet === 'object') {
+                worksheet.indicaciones ||= _str(worksheet.instrucciones);
+                if (!worksheet.actividades && Array.isArray(worksheet.secciones)) {
+                    const escape = value => _str(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    worksheet.actividades = worksheet.secciones.map(section =>
+                        `<h3>${escape(section.nombre)}</h3>` + (section.campos || []).map(field => `<p>${escape(field)}</p>`).join('')).join('');
+                }
+                if (!worksheet.actividades || typeof worksheet.actividades === 'string') {
+                    let activities = worksheet.actividades || '';
+                    for (const key of ['tablaHTML', 'tablaSugerida']) {
+                        if (typeof worksheet[key] === 'string' && !activities.includes(worksheet[key])) activities += worksheet[key];
+                    }
+                    for (const question of worksheet.preguntasCierre || []) {
+                        const content = `<p>${_str(question).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>`;
+                        if (!activities.includes(content)) activities += content;
+                    }
+                    worksheet.actividades = activities;
+                }
+            }
             if (Array.isArray(raw.competenciasTransversales)) {
                 raw.competenciasTransversales.forEach(ct => {
+                    if (ct && !ct.desempenos && ct.descripcion) ct.desempenos = [_str(ct.descripcion)];
                     if (ct && typeof ct === 'object' && !ct.titulo && (ct.competencia || ct.nombre)) {
                         ct.titulo = _str(ct.competencia || ct.nombre);
                     }
@@ -132,6 +153,10 @@ const SessionAdapter = (() => {
             }
             if (Array.isArray(raw.enfoquesTransversales)) {
                 raw.enfoquesTransversales.forEach(et => {
+                    if (et && typeof et === 'object') {
+                        if (!et.valor && et.valores) et.valor = _str(et.valores);
+                        if (!et.actitudes && et.actitudesObservables) et.actitudes = _str(et.actitudesObservables);
+                    }
                     if (et && typeof et === 'object' && !et.nombre && (et.enfoque || et.titulo)) {
                         et.nombre = _str(et.enfoque || et.titulo);
                     }

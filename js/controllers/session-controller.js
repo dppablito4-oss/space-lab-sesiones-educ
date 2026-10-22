@@ -426,7 +426,7 @@ window.SpaceLabSessionController = (() => {
         }
         
         async function handleNew() {
-            if (AppState.currentSession) {
+            if (AppState.currentSession && (AppState.sessionDirty || !Storage.getSession(AppState.currentSession.id))) {
                 const confirmed = await ConfirmDialog.show({
                     title: '¿Nueva sesión?',
                     message: 'Los cambios no guardados se perderán.',

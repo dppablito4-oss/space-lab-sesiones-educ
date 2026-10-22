@@ -516,7 +516,7 @@
         if (session) {
             _lastSession = session;
             updateApartado(session);
-            showSuggestion(session);
+            if (session.planning?.mode !== 'linked') showSuggestion(session);
         }
     });
 
