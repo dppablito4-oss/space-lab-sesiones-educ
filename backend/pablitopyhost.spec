@@ -19,6 +19,7 @@ a = Analysis(
         ('../assets/logo.ico', 'assets'),
         ('../assets/logo.png', 'assets'),
         ('../assets/templates/session_template_v1.docx', 'assets/templates'),
+        ('../assets/templates/planning_template_v1.docx', 'assets/templates'),
     ] + collect_data_files('docxcompose'),
     hiddenimports=[
         'playwright.async_api',

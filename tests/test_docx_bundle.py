@@ -42,6 +42,9 @@ def main():
     assert 'Measurement record' in text and 'Record the litres measured.' in text
     assert len(doc._element.findall('.//' + qn('m:oMath'))) >= 7
     assert len(doc._element.findall('.//' + qn('m:f'))) >= 7
+    assert doc.sections[0].page_width > doc.sections[0].page_height
+    assert all(section.page_width < section.page_height for section in doc.sections[1:])
+    assert all(section.header._element.xpath('.//w:drawing') for section in doc.sections)
     for invalid in [sessions[:-1], sessions + [sessions[0]]]:
         try:
             build_planning_bundle(container, invalid)

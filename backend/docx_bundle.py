@@ -3,6 +3,8 @@ from io import BytesIO
 
 from docx import Document
 from docxcompose.composer import Composer
+from docx.enum.section import WD_SECTION
+from document_template import copy_story
 
 from docx_builder_planning import build_docx_from_planning_v2
 from docx_builder_v1 import build_docx_from_v1
@@ -30,9 +32,22 @@ def build_planning_bundle(container, sessions: list[dict]) -> BytesIO:
     master = Document(build_docx_from_planning_v2(container))
     composer = Composer(master, preserve_styles=True)
     for session in ordered:
-        # One explicit page boundary, without spacer paragraphs or blank pages.
-        master.add_page_break()
-        composer.append(Document(build_docx_from_v1(session)))
+        # Units are landscape; each session must retain its portrait geometry.
+        child = Document(build_docx_from_v1(session))
+        first_section = len(master.sections)
+        master.add_section(WD_SECTION.NEW_PAGE)
+        composer.append(child)
+        for offset, source in enumerate(child.sections):
+            target = master.sections[first_section + offset]
+            for name in ('orientation', 'page_width', 'page_height', 'top_margin',
+                         'bottom_margin', 'left_margin', 'right_margin',
+                         'header_distance', 'footer_distance'):
+                setattr(target, name, getattr(source, name))
+            target.start_type = WD_SECTION.NEW_PAGE if offset == 0 else source.start_type
+            target.header.is_linked_to_previous = False
+            copy_story(source.header, target.header)
+            target.footer.is_linked_to_previous = False
+            copy_story(source.footer, target.footer)
     output = BytesIO()
     composer.save(output)
     output.seek(0)

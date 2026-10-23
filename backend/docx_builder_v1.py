@@ -190,8 +190,10 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
     for s in doc.sections:
         s.page_width = Inches(8.27)
         s.page_height = Inches(11.69)
-        s.top_margin = Inches(0.1)
-        s.bottom_margin = Inches(0.1)
+        s.top_margin = Inches(0.75)
+        s.bottom_margin = Inches(0.5)
+        s.header_distance = Inches(0.1)
+        s.footer_distance = Inches(0.2)
         s.left_margin = Inches(0.75)
         s.right_margin = Inches(0.75)
 

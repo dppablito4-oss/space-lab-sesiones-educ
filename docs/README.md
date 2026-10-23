@@ -23,6 +23,7 @@ El [plan de beta](../PLAN_BETA.md) conserva el seguimiento operativo en la raíz
 Estos documentos conservan el estado y las fechas de sus revisiones originales.
 
 - [Experiencia real de siete sesiones, Word y guardado](reports/REVISION_EXPERIENCIA_7_SESIONES_22-10-2026.md).
+- [Ajuste de unidad Word según referencia Monte Alegre](reports/AJUSTE_UNIDAD_WORD_22-10-2026.md).
 
 - [Preparación de beta](reports/BETA_READINESS_19-10-2026.md).
 - [Verificación del motor local](reports/AUDITORIA_SEGURIDAD_MOTOR_LOCAL.md).
@@ -34,7 +35,8 @@ Estos documentos conservan el estado y las fechas de sus revisiones originales.
 ## Archivos de apoyo
 
 Los ejemplos Word y PDF se conservan en `assets/references/`. La plantilla de
-producción está en `assets/templates/session_template_v1.docx`; el motor también
+producción de sesiones está en `assets/templates/session_template_v1.docx`; las
+unidades usan `assets/templates/planning_template_v1.docx`. El motor también
 conserva su plantilla de respaldo `assets/sesion plantilla.docx`.
 
 `index.html` y `app-version.json` son salidas generadas que deben versionarse.

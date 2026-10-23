@@ -72,7 +72,7 @@ def main():
         assert len(token) == 64, "El token debe tener 64 caracteres hexadecimales"
         print("  [OK] Token de conexión presente (valor oculto)")
 
-        print("\n[4/5] Enviando petición de exportación de Unidad de Secundaria (12 tablas)...")
+        print("\n[4/5] Exportando unidad horizontal según referencia (8 tablas)...")
         unit_payload = json.loads(FIXTURE_PATH.read_text(encoding="utf-8"))
         unit_payload["token"] = token
 
@@ -96,13 +96,14 @@ def main():
         print("\n[5/5] Auditando estructura interna del DOCX generado por el EXE...")
         doc = docx.Document(str(OUTPUT_DOCX))
         print(f"  - Total de tablas en el documento: {len(doc.tables)}")
-        assert len(doc.tables) == 12, f"Se esperaban 12 tablas, encontradas: {len(doc.tables)}"
+        assert len(doc.tables) == 8, f"Se esperaban 8 tablas, encontradas: {len(doc.tables)}"
+        assert doc.sections[0].page_width > doc.sections[0].page_height
 
         # Verificar anchos de tabla
         for i, table in enumerate(doc.tables):
             col_widths = [cell.width for cell in table.rows[0].cells]
             total_width = sum(col_widths)
-            # twips a emus: 10490 twips = 6,661,150 emus (aprox)
+            assert total_width > 0
             print(f"    * Tabla {i+1:02d}: {len(table.rows)} filas x {len(table.columns)} cols")
 
         print("\nVerificando PDF real desde SessionDocument v1...")

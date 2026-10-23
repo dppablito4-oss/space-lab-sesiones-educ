@@ -96,6 +96,7 @@ class TransversalElement(BaseModel):
     id: str = ""
     name: str = ""
     valuesOrAttitudes: List[str] = Field(default_factory=list)
+    practices: List[str] = Field(default_factory=list)
 
 
 class FinalProduct(BaseModel):
