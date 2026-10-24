@@ -194,7 +194,7 @@ jobs:
           deno check supabase/functions/gemini-router/index.ts
           deno check supabase/functions/deepseek-router/index.ts
           deno check supabase/functions/ai-gateway/index.ts
-          deno check supabase/functions/pablito-mailer/index.ts
+          deno check --node-modules-dir=none supabase/functions/pablito-mailer/index.ts
 
   # ─── 2. Build Windows .exe (solo en push a main/master) ───────────────────
   build-exe:
