@@ -1,9 +1,9 @@
-# Prototipo React del generador
+# Interfaz React del generador y entrada pública
 
-El generador tiene una vista alternativa con React, TypeScript, Vite, Radix UI
-y Lucide. Está en `feature/beta-quick-session-ux`, junto al modo rápido existente.
-La incorporación de React es una evolución del alcance inicial de esa rama;
-el prototipo no sustituye todavía toda la aplicación ni se despliega a producción.
+La creación de sesiones, unidades y experiencias usa React, TypeScript, Vite,
+Radix UI y Lucide tanto en localhost como en la entrada pública de GitHub Pages.
+El landing, Mi espacio y la biblioteca conservan su interfaz. El motor de
+documentos y el modo avanzado siguen usando los controladores existentes.
 
 ## Abrir y comparar
 
@@ -12,14 +12,15 @@ las pruebas. Versiones fijadas en `package.json` y `package-lock.json`.
 
 ```powershell
 npm ci --ignore-scripts
-python scripts/build_index.py --write
-python scripts/version_assets.py --write
+npm run build:public
 npm run dev:react
 ```
 
 - Generador de sesiones: http://localhost:5173/#/app
 - Landing conservado: http://localhost:5173/#/landing
 - Interfaz anterior en el mismo origen: http://localhost:5173/legacy.html#/app
+- Entrada pública: `index.html#/sessions/new`; `?ui=legacy#/app` permite
+  comprobar el editor anterior como respaldo explícito.
 - «Modo avanzado» y «Volver al nuevo generador» permiten comparar en la misma
   pestaña, conservando estado y adjuntos. Es el recorrido recomendado.
 
@@ -63,8 +64,9 @@ un iframe. React solo administra su presentación y el paso visible.
 `js/components/react-session-bridge.js` ofrece un almacén externo consumido con
 `useSyncExternalStore`. Lee los campos canónicos del formulario existente y
 escribe a través de eventos `input`/`change`. Observa cargas, generación, cambios
-de cuenta, predeterminados, adjuntos y disponibilidad. El puente solo se crea
-cuando existe el host React; el editor tradicional no incorpora React a su carga.
+de cuenta, predeterminados, adjuntos y disponibilidad. El puente se activa cuando
+el host está listo; `?ui=legacy` evita crearlo. Si el módulo React no carga, las
+rutas y los controles originales permanecen disponibles.
 
 Los checkboxes curriculares reutilizan las acciones del selector existente.
 Los adjuntos pasan por el procesador actual. Generar llama a
@@ -85,7 +87,9 @@ ocultos. No deben coexistir dos implementaciones de contabilidad o persistencia.
 ## Construcción y validación
 
 ```powershell
+npm run build:public
 npm run build:react
+python tests/ui_public_entry_smoke.py
 python tests/ui_react_session_smoke.py
 python tests/ui_planning_ai_smoke.py --react
 python tests/ui_quick_session_smoke.py
@@ -93,6 +97,20 @@ python tests/ui_quick_session_layout_smoke.py
 python scripts/build_index.py --check
 python scripts/version_assets.py --check
 ```
+
+`react-ui/vite.public.config.mts` genera `assets/react-ui/app.js` y `app.css`.
+Esos dos archivos se distribuyen con la raíz servida por Pages. Los fragmentos
+fuente cargan su módulo y hoja de estilos; el generador de versiones calcula sus
+hashes. No basta con compilar el servidor de previsualización. Después de cambiar
+React, ejecutar `npm run build:public` y conservar el bundle generado junto con
+los fragmentos y el índice actualizado. CI vuelve a construir los assets y
+comprueba que coincidan con los distribuidos.
+
+La prueba de entrada pública sirve la raíz real y el build de previsualización:
+compara sus colores/degradados, comprueba rutas, formularios, guardado de unidades,
+retorno desde Mi espacio, reinicio del paso al crear una sesión nueva y la salida
+de respaldo cuando se bloquea el bundle. Las pruebas de regresión tradicionales
+usan `?ui=legacy`; las del nuevo generador prueban la entrada predeterminada.
 
 El build queda en `artifacts/react-preview-dist`, fuera de Git, y copia únicamente
 `js`, `css`, `assets`, `data` y los hosts/manifiesto públicos. `npm run preview:react`

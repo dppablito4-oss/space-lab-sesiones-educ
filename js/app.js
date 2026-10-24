@@ -271,11 +271,16 @@
             openSidebar({focusClose: false});
             // Reveal the form and drawer together before focusing the new screen.
             await new Promise(resolve => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
-            quickSession.focusStep();
+            if (window.SpaceLabReactBridge?.isReady()) window.SpaceLabReactBridge.prepare();
+            else quickSession.focusStep();
             return true;
         };
-        window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);
-        if (document.getElementById('react-preview-root')) {
+        window.appStartLinkedSession = async (planningContainerId, sequenceItemId) => {
+            const result = await startLinkedSession(planningContainerId, sequenceItemId);
+            if (result && window.SpaceLabReactBridge?.isReady()) window.SpaceLabReactBridge.prepare();
+            return result;
+        };
+        if (document.getElementById('react-preview-root') && new URLSearchParams(location.search).get('ui') !== 'legacy') {
             window.SpaceLabReactBridge = window.SpaceLabReactSessionBridge.create({
                 form:DOM.form, quickSession, getSession:() => AppState.currentSession,
                 getSourceFile:() => AppState.sourceFileData,

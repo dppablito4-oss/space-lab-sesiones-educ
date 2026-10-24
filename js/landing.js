@@ -108,7 +108,7 @@ window.LandingRouter = (() => {
         const isAutomation = Boolean(navigator.webdriver);
 
         // 1. Si es test automatizado o la URL pide explícitamente el editor
-        if ((isAutomation && !document.getElementById('react-preview-root')) || hash === '#/app' || hash === '#/editor' || hash === '#/sessions/new' || /^#\/sessions\/[^/]+\/edit$/.test(hash)) {
+        if ((isAutomation && (!document.getElementById('react-preview-root') || new URLSearchParams(location.search).get('ui') === 'legacy')) || hash === '#/app' || hash === '#/editor' || hash === '#/sessions/new' || /^#\/sessions\/[^/]+\/edit$/.test(hash)) {
             showApp(false);
             activateEditorRoute(hash);
             return;
@@ -186,6 +186,7 @@ window.LandingRouter = (() => {
         document.documentElement.classList.toggle('landing-active', view === 'landing');
         document.body.classList.toggle('home-active', view === 'home');
         document.documentElement.classList.toggle('home-active', view === 'home');
+        window.dispatchEvent(new CustomEvent('spacelab:view-changed', {detail:{view}}));
     }
 
     function showLanding(updateHash = true, options = {}) {

@@ -41,7 +41,7 @@ assert.match(router, /DOMContentLoaded['"],\s*startLandingRouter/);
 const startupScripts = html.slice(html.indexOf('<!-- Scripts -->'));
 assert.doesNotMatch(startupScripts, /html-docx-js/);
 assert.equal(
-    (startupScripts.match(/<script defer/g) || []).length,
+    (startupScripts.match(/<script (?:defer|type="module")/g) || []).length,
     (startupScripts.match(/<script /g) || []).length,
     'Los scripts de arranque deben descargarse sin bloquear el primer render',
 );

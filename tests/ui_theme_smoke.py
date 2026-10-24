@@ -51,7 +51,7 @@ def run() -> None:
                 "if (!localStorage.getItem('spacelab_theme_preference')) localStorage.setItem('spacelab_theme_preference', 'light')"
             )
             page.goto(
-                f"http://127.0.0.1:{server.server_port}/index.html",
+                f"http://127.0.0.1:{server.server_port}/index.html?ui=legacy",
                 wait_until="domcontentloaded",
             )
 

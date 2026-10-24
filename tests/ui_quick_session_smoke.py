@@ -23,7 +23,7 @@ def run():
             page = browser.new_page(viewport={'width':1440, 'height':1000}, reduced_motion='reduce')
             errors = []
             page.on('pageerror', lambda error: errors.append(str(error)))
-            page.goto(f'http://127.0.0.1:{server.server_port}/index.html', wait_until='domcontentloaded')
+            page.goto(f'http://127.0.0.1:{server.server_port}/index.html?ui=legacy', wait_until='domcontentloaded')
             page.evaluate('''async () => {
                 window.__user = {id:'quick-teacher'};
                 SupabaseClient.getCurrentUser = async () => window.__user;

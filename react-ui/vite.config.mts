@@ -1,6 +1,6 @@
 import {defineConfig, type Plugin} from 'vite';
 import react from '@vitejs/plugin-react';
-import {readFileSync, existsSync, statSync, cpSync} from 'node:fs';
+import {readFileSync, writeFileSync, existsSync, statSync, cpSync} from 'node:fs';
 import {resolve, dirname, extname, sep} from 'node:path';
 import {fileURLToPath} from 'node:url';
 
@@ -9,6 +9,12 @@ const workspace = resolve(root, '..');
 const output = resolve(workspace, 'artifacts/react-preview-dist');
 const publicFolders = ['js', 'css', 'assets', 'data'];
 const contentTypes: Record<string,string> = {'.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.html':'text/html; charset=utf-8'};
+function legacyHtml() {
+    return readFileSync(resolve(workspace,'index.html'),'utf8')
+        .replace(/<div id="react-preview-root"><\/div>/, '')
+        .replace(/<script\b[^>]*src="assets\/react-ui\/app\.js[^\"]*"[^>]*><\/script>/, '')
+        .replace(/<link\b[^>]*href="assets\/react-ui\/app\.css[^\"]*"[^>]*>/, '');
+}
 
 function legacyHost(): Plugin {
     let building=false;
@@ -21,9 +27,9 @@ function legacyHost(): Plugin {
                 const modules=html.match(/<script\b[^>]*\btype=["']module["'][^>]*>[\s\S]*?<\/script>/gi) || [];
                 const styles=html.match(/<link\b[^>]*\brel=["'](?:stylesheet|modulepreload)["'][^>]*>/gi) || [];
                 // Derive the host from the existing fragment build, never copy a second form.
-                return readFileSync(resolve(workspace, 'index.html'), 'utf8')
+                return legacyHtml()
                     .replace(/<title>[\s\S]*?<\/title>/, '<title>Space Lab · Nuevo generador</title>')
-                    .replace('<body>', '<body data-react-preview="wizard"><div id="react-preview-root"></div>')
+                    .replace('<body>', '<body data-react-preview="legacy"><div id="react-preview-root"></div>')
                     .replace('</head>', styles.join('\n') + '</head>')
                     .replace('</body>', modules.join('\n') + '</body>');
             }
@@ -45,7 +51,7 @@ function legacyHost(): Plugin {
                 if ((!isLegacy && !isManifest && !file.startsWith(base)) || !existsSync(file) || !statSync(file).isFile()) { res.statusCode=404; res.end(); return; }
                 res.setHeader('Content-Type', contentTypes[extname(file)] || 'application/octet-stream');
                 res.setHeader('Cache-Control', 'no-store');
-                res.end(readFileSync(file));
+                res.end(isLegacy ? legacyHtml() : readFileSync(file));
             });
         },
         closeBundle() {
@@ -53,7 +59,7 @@ function legacyHost(): Plugin {
             if (!output.startsWith(workspace + sep)) throw new Error('Unsafe preview output');
             // Explicit public allowlist: credentials, Python, tests and artifacts stay outside the build.
             for (const directory of publicFolders) cpSync(resolve(workspace,directory), resolve(output,directory), {recursive:true});
-            cpSync(resolve(workspace,'index.html'), resolve(output,'legacy.html'));
+            writeFileSync(resolve(output,'legacy.html'), legacyHtml());
             cpSync(resolve(workspace,'app-version.json'), resolve(output,'app-version.json'));
         }
     };

@@ -845,7 +845,7 @@ const PlanningWizard = (() => {
         function openLibrary() {
             if (busy || generating || !mayLeave()) return false;
             library();
-            if (window.SpaceLabReactBridge) {
+            if (window.SpaceLabReactBridge?.isReady()) {
                 window.SpaceLabReactBridge.showPlanning();
                 if (!dialog.open) dialog.show();
             } else if (!dialog.open) dialog.showModal();

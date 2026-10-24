@@ -24,7 +24,7 @@ def run():
             page.on('dialog', lambda dialog: dialog.accept())
             errors = []
             page.on('pageerror', lambda error: errors.append(str(error)))
-            page.goto(f'http://127.0.0.1:{server.server_port}/', wait_until='domcontentloaded')
+            page.goto(f'http://127.0.0.1:{server.server_port}/?ui=legacy', wait_until='domcontentloaded')
             page.evaluate('''async () => {
                 SupabaseClient.getCurrentUser = async () => ({id:'structure-teacher'});
                 SupabaseClient.getUserProfile = async () => null;

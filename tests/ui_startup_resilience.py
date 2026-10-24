@@ -52,7 +52,7 @@ def run() -> None:
                 else None,
             )
             response = page.goto(
-                f"http://127.0.0.1:{server.server_port}/index.html?app_version=stale",
+                f"http://127.0.0.1:{server.server_port}/index.html?ui=legacy&app_version=stale",
                 wait_until="domcontentloaded",
             )
 

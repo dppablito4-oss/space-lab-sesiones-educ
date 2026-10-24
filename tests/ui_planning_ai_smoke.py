@@ -102,9 +102,9 @@ def prepare_minimum_context(page):
 
 def run():
     parser = argparse.ArgumentParser(__doc__)
-    parser.add_argument('--react', action='store_true', help='Exercise the compiled React planning integration')
+    parser.add_argument('--react', action='store_true', help='Exercise the shipped public React planning integration')
     args = parser.parse_args()
-    directory = ROOT / 'artifacts/react-preview-dist' if args.react else ROOT
+    directory = ROOT
     assert (directory / 'index.html').exists(), 'Build the React preview first'
     server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(directory)))
     Thread(target=server.serve_forever, daemon=True).start()
@@ -115,7 +115,8 @@ def run():
                 page = browser.new_page(viewport={"width": width, "height": 900})
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
-                page.goto(f"http://127.0.0.1:{server.server_port}/index.html#/app", wait_until="domcontentloaded")
+                legacy = '' if args.react else '?ui=legacy'
+                page.goto(f"http://127.0.0.1:{server.server_port}/index.html{legacy}#/app", wait_until="domcontentloaded")
                 page.evaluate(AI_MOCK, FIXTURE)
                 if args.react:
                     page.locator('.sl-app').wait_for()
