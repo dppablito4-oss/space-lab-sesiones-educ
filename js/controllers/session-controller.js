@@ -443,6 +443,8 @@ window.SpaceLabSessionController = (() => {
             AppState.currentSession = null;
             AppState.sessionDirty = false;
             AppState.pendingPlanningLink = null;
+            AppState.sourceFileData = null;
+            DOM.sourceFileInfo?.classList.add('hidden');
             DOM.form.querySelectorAll('input, textarea, select').forEach(el => {
                 if (el.type === 'date') {
                     el.valueAsDate = new Date();

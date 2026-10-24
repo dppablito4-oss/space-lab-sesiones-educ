@@ -23,7 +23,7 @@ window.SpaceLabQuickSession = (() => {
             node.before(anchor);
             placements.push({node, anchor, target});
         }
-        ['input-nivel', 'input-grado', 'input-area', 'input-titulo', 'input-duracion'].forEach(id => mount(byId(id).closest('.form-group'), 'quick-data-fields'));
+        ['input-nivel', 'input-grado', 'input-titulo', 'input-area', 'input-duracion'].forEach(id => mount(byId(id).closest('.form-group'), 'quick-data-fields'));
         // Capture parents only after recording the child anchors. Restore parents first.
         Array.from(byId('tab-general').children).filter(el => !el.matches('header')).forEach(node => mount(node, 'quick-institution-fields'));
         Array.from(byId('tab-propositos').children).filter(el => !el.matches('header')).forEach(node => mount(node, node.id === 'session-proposals' ? 'quick-proposal-fields' : 'quick-learning-fields'));
@@ -54,7 +54,10 @@ window.SpaceLabQuickSession = (() => {
             byId('quick-step-status').textContent = `Paso ${step} de 3 · ${['Datos','Aprendizajes','Revisar y generar'][step - 1]}`;
             document.body.classList.toggle('session-quick-review', mode === 'quick' && step === 3);
             review();
-            if (focus) byId(`quick-title-${step}`).focus();
+            if (mode === 'quick' && focus) {
+                form.scrollTo({top: 0, behavior: 'instant'});
+                byId(`quick-title-${step}`).focus({preventScroll: true});
+            }
         }
         function validate() {
             if (mode !== 'quick') return true;
@@ -119,6 +122,7 @@ window.SpaceLabQuickSession = (() => {
                 ++request;
                 Array.from(byId('input-grado').options).forEach(option => { option.disabled = false; option.hidden = false; });
                 window.SpaceLabCurriculumPicker?.setScope(null);
+                form.querySelector('label[for="input-grado"]').textContent = 'Grado';
                 document.body.classList.remove('session-quick-review');
                 if (focus) byId('session-mode-advanced').focus();
             }

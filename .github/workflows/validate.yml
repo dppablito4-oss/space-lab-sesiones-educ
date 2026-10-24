@@ -95,6 +95,7 @@ jobs:
           node tests/planning-navigation.test.js
           node tests/session-generation-mode.test.js
           node tests/quick-session.test.js
+          node tests/ai-availability.test.js
           node tests/planning-map-generation.test.js
           node tests/planning-map-ai-action.test.js
           node tests/validation-errors.test.js
@@ -150,6 +151,7 @@ jobs:
           python tests/frontend_security.py
           python tests/ui_smoke.py
           python tests/ui_quick_session_smoke.py
+          python tests/ui_quick_session_layout_smoke.py
           python tests/ui_session_lifecycle_smoke.py
           python tests/ui_account_recovery_smoke.py
           python tests/ui_standalone_session_regression.py

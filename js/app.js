@@ -259,7 +259,12 @@
         window.getCurrentSession = () => AppState.currentSession;
         window.getPendingPlanningLink = () => AppState.pendingPlanningLink;
         window.appOpenSession = (sessionId) => loadSession(sessionId);
-        window.appStartNewSession = () => forceNewSession();
+        window.appStartNewSession = async () => {
+            if (!await handleNew()) return false;
+            quickSession.setMode('quick');
+            openSidebar({focusClose: false});
+            return true;
+        };
         window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);
         window.appOpenPlanning = (planningContainerId, options) => window.PlanningView?.open(planningContainerId, options);
         window.appReloadSessions = () => {
@@ -545,6 +550,7 @@
         DOM.btnCloseSidebar.addEventListener('click', () => closeSidebar());
         document.addEventListener('click', (event) => {
             if (!AppState.sidebarOpen) return;
+            if (event.target.closest('[role="dialog"], [aria-modal="true"], .modal-overlay, .confirm-overlay')) return;
             if (DOM.sidebar.contains(event.target) || DOM.workflowRail.contains(event.target) || DOM.btnMenuMobile.contains(event.target)) return;
             event.preventDefault();
             event.stopPropagation();

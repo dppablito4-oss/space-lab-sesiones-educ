@@ -47,8 +47,8 @@ def run():
                 LandingRouter.showHome(false);
                 document.querySelector('[data-home-action="new-session"]').click();
             }''')
-            page.locator('.sidebar-tab[data-tab="tab-general"]').click()
-            page.locator('#session-mode-quick').click()
+            page.wait_for_function("document.body.classList.contains('session-quick-mode')")
+            assert page.locator('#quick-title-1').is_visible()
             page.locator('#quick-next').click()
             assert page.locator('#quick-errors').is_visible()
             page.locator('#input-nivel').select_option('INICIAL')
@@ -76,6 +76,7 @@ def run():
             assert page.locator('#input-session-activities').input_value() == 'Clasifican y cuentan semillas'
             # Repeated toggles retain DOM identity, proposals, files and configuration.
             page.locator('#session-mode-advanced').click()
+            assert page.locator('label[for="input-grado"]').inner_text() == 'Grado'
             page.locator('.sidebar-tab[data-tab="tab-ai"]').click()
             page.locator('#input-source-file').set_input_files({'name':'referencia.txt','mimeType':'text/plain','buffer':b'Contar semillas del aula'})
             page.wait_for_function("document.querySelector('#source-file-info').textContent.includes('referencia.txt')")

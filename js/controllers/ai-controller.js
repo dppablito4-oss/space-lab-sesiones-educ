@@ -55,7 +55,7 @@ window.SpaceLabAiController = (() => {
                 }
 
                 if (!user) {
-                    Toast.warning('Crea o ingresa a tu cuenta para generar sesiones oficiales con IA');
+                    Toast.warning('Crea o ingresa a tu cuenta para generar sesiones con IA');
                     if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                         window.AuthUi.openRegister();
                     }

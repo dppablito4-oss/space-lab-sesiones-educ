@@ -87,7 +87,8 @@ def run() -> None:
 
             assert result == "resolved", result
             assert page.evaluate("window.getCurrentSession() === null")
-            assert page.locator("#empty-state").is_visible()
+            assert page.locator("#empty-state").evaluate("el => !el.classList.contains('hidden')")
+            assert page.locator("#quick-title-1").is_visible()
             assert not page.locator("#loader-overlay").is_visible()
             assert not page.locator("#load-modal").is_visible()
             assert not errors, errors

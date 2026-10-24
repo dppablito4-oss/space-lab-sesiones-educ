@@ -29,11 +29,32 @@ body.session-quick-mode #session-form > .tab-pane,
 body.session-quick-mode .workflow-rail .sidebar-tabs,
 body.session-quick-mode .session-planning-summary { display: none !important; }
 body.session-quick-mode:not(.session-quick-review) .sidebar-primary-action { display: none; }
-body.session-quick-mode #sidebar { --sidebar-w: 640px; }
+/* The advanced layout reserves a summary column. Quick mode owns the full row. */
+body.session-quick-mode { --rail-w: 76px; }
+body.session-quick-mode .sidebar-workflow { grid-template-columns: minmax(0, 1fr); }
+body.session-quick-mode .workflow-rail-brand { display: none; }
+body.session-quick-mode .session-form { padding: 24px clamp(16px, 4vw, 48px); }
+body.session-quick-mode .session-mode-switch,
+body.session-quick-mode #quick-session,
+body.session-quick-mode .session-management-disclosure { width: 100%; max-width: 880px; margin-inline: auto; }
+body.session-quick-mode .session-mode-switch { margin-bottom: 24px; }
+body.session-quick-mode .sidebar-primary-action { width: 100%; max-width: 976px; margin-inline: auto; }
+body.session-quick-mode .sidebar-primary-hint { color: var(--color-muted-foreground); }
+body.session-quick-mode #quick-title-1,
+body.session-quick-mode #quick-title-2,
+body.session-quick-mode #quick-title-3 { font-size: clamp(1.25rem, 2vw, 1.6rem); line-height: 1.3; }
 #quick-session :focus-visible, .session-mode-switch :focus-visible { outline: 3px solid var(--color-primary); outline-offset: 3px; }
 #quick-session .form-disclosure { margin-block: 12px; }
 #quick-session .form-disclosure > summary { min-height: 44px; align-content: center; }
 @media (max-width: 600px) {
+    body.session-quick-mode.sidebar-open .workflow-rail { display: none; }
+    body.session-quick-mode.sidebar-open .sidebar { left: 6px; right: 6px; }
+    body.session-quick-mode .session-form { padding: 16px; }
+    body.session-quick-mode .sidebar-header { padding: 14px 16px 10px; }
+    body.session-quick-mode .session-mode-switch { margin-bottom: 18px; }
+    body.session-quick-mode .sidebar-primary-action { flex-wrap: wrap; }
+    body.session-quick-mode .sidebar-primary-hint { flex-basis: 100%; }
+    body.session-quick-mode #btn-generate { width: 100%; min-height: 44px; }
     .quick-field-grid { grid-template-columns: minmax(0, 1fr); }
     .quick-navigation .btn { min-height: 44px; }
     #quick-session { min-width: 0; }

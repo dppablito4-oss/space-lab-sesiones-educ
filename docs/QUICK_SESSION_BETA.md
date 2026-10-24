@@ -2,7 +2,7 @@
 
 ## Alcance y entrada
 
-En el planificador, **Modo rápido · 3 pasos** abre Datos, Aprendizajes y Revisar y generar. **Modo avanzado** conserva las seis secciones. El modo avanzado sigue siendo la entrada inicial de esta beta para conservar los recorridos existentes; el modo rápido se activa explícitamente y permanece activo mientras se usa el editor. **Editar sesión**, en el menú lateral, permite reabrir el asistente después de cargar o generar un documento.
+**Nueva sesión** abre directamente el planificador en **Modo rápido · 3 pasos**: Datos, Aprendizajes y Revisar y generar. **Modo avanzado** conserva las seis secciones y se puede activar sin perder campos, adjuntos ni configuración. Abrir directamente el editor o recuperar un documento conserva el recorrido compatible existente; el modo elegido permanece activo mientras se usa el editor. **Editar sesión**, en el menú lateral, permite reabrir el asistente después de cargar o generar un documento.
 
 No hay framework nuevo, migraciones de base de datos ni cambios en los constructores Word/PDF. Este cambio no despliega servicios ni publica producción.
 
@@ -48,25 +48,52 @@ La revisión del PR debe considerar ambos cambios del gateway antes de habilitar
 
 Botones nativos, paneles inactivos ocultos, orden DOM compartido, foco en el título de cada paso, errores anunciados y opciones desplegables nativas. Los estilos usan los tokens de Space Lab y están aislados en `css/quick-session.css`. Se comprobaron anchos de 390 y 768 px y escritorio. Se corrigió la retirada de avisos cuando movimiento reducido desactiva el evento `animationend`.
 
+### Revisión local del 24/10/2026 contra el plan de beta
+
+- La creación desde Mi espacio abre el asistente rápido y usa `handleNew` para
+  proteger cambios sin guardar. Cancelar conserva el documento y su adjunto.
+- Se retiró la columna de resumen vacía y se compactó el menú lateral del modo
+  rápido. En móvil el formulario utiliza el ancho disponible y se conserva el
+  acceso al documento y al modo avanzado.
+- Cambiar de paso restablece el desplazamiento y enfoca su título; el seguimiento
+  de las seis secciones avanzadas no procesa paneles ocultos en modo rápido.
+- Los diálogos quedan excluidos del cierre por clic exterior del planificador:
+  Cancelar/Continuar responden al primer clic, sin dejar una promesa pendiente.
+- Alternar modos mantiene el adjunto; crear otra sesión limpia tanto el archivo
+  del formulario como su contenido procesado, evitando reutilizar una referencia
+  anterior sin querer. Al volver a avanzado se restaura el rótulo «Grado».
+- La consulta de disponibilidad descarta resultados de cuentas o consultas
+  anteriores y cancela una validación sustituida por otra. No cambia en silencio
+  una calidad guardada ni ofrece opciones premium sin verificar. No se modifica
+  la contabilidad, Auth, el contrato v1 ni el motor de exportación.
+
+El catálogo de perfiles por edad/grado sigue sin cubrir Inicial y Primaria.
+Se informa la falta de cobertura y se permite aporte manual; esta revisión no
+añade competencias ni desempeños inventados. Las propuestas pueden completarse
+al generar y editarse; no existe una llamada adicional de IA para sugerirlas
+antes de generar la sesión.
+
 ## Validación ejecutada
 
-- 49 suites JavaScript: contratos, adaptadores, catálogo, selección curricular, almacenamiento, planificación, rutas de IA, permisos y créditos, incluida `quick-session.test.js`.
+- 50 suites JavaScript: contratos, adaptadores, catálogo, selección curricular, almacenamiento, planificación, rutas de IA, permisos y créditos, incluidas `quick-session.test.js` y `ai-availability.test.js` (respuestas tardías, cambio de cuenta y validación sustituida).
 - 27 pruebas Deno: prompt protegido, propuestas del asistente, disponibilidad por cuenta/configuración/fallback, créditos, identidad contable, límites/tiempos y planificación vinculada.
-- Contrato y adaptador Python, constructores y fidelidad DOCX, matemáticas Word, geometría, unidades, composición de bundles, backend DOCX, emparejamiento del motor, higiene, seguridad de perfil, créditos y cuotas.
+- 45 scripts Python: contrato y adaptador, constructores y fidelidad DOCX, matemáticas Word, geometría, unidades, composición de bundles, backend DOCX, emparejamiento del motor, higiene, seguridad de perfil, créditos, cuotas y recorridos de navegador.
 - Navegador: `ui_quick_session_smoke.py`, recorridos individual y vinculado, guardado/recuperación, estructura, presentación, recuperación de cuenta, planificación/IA, Matemática de Secundaria, ida y vuelta de fórmulas, temas, overlays, arranque y accesibilidad.
 - PDF: `pdf_fallback_math_smoke.py`, con paginación de contenido extenso y delimitadores matemáticos.
 - Composición, hashes de assets, sintaxis JavaScript y `git diff --check`.
 
-El test del asistente comprueba Inicial de 5 años/Matemática, Primaria de 2.º, grados incompatibles, navegación atrás, alternancia repetida sin perder identidad DOM, adjunto/configuración, generación sin alumnos, rechazo de autenticación y créditos, propuestas enviadas al controlador, guardado/recuperación, exportación canónica sin preferencias, doble clic, catálogo de Secundaria, móvil y teclado.
+El test del asistente comprueba Inicial de 5 años/Matemática, Primaria de 2.º, grados incompatibles, navegación atrás, alternancia repetida sin perder identidad DOM, adjunto/configuración, generación sin alumnos, rechazo de autenticación y créditos, propuestas enviadas al controlador, guardado/recuperación, exportación canónica sin preferencias, doble clic, catálogo de Secundaria, móvil y teclado. La regresión adicional `ui_quick_session_layout_smoke.py` cubre 360, 390, 768 y 1440 px, recuperación real tras recargar, posición de los botones, cambio de paso desde el final del formulario y Cancelar/Continuar con el panel abierto.
 
-**Límites de la verificación:** las respuestas de IA y de cuenta del test UI son simuladas: no se gastaron créditos reales ni se consultaron cuentas de producción. Se generaron DOCX y PDF mediante la alternativa Chromium; la conversión nativa de Microsoft Word en Windows requiere validación en ese entorno. El chequeo completo del entrypoint remoto del gateway quedó bloqueado por acceso a `deno.land`/`esm.sh` en este entorno; los módulos locales modificados se comprobaron mediante las pruebas Deno. CI conserva el chequeo completo.
+**Límites de la verificación:** las respuestas de IA y de cuenta del test UI son simuladas: no se gastaron créditos reales ni se consultaron cuentas de producción. Las regresiones DOCX/PDF aprobaron; no se valida aquí una nueva compilación del motor porque esta rama no cambia su código. El 24/10 también pasó `deno check` de los cinco entrypoints completos. No se desplegaron cambios de esta rama en servicios ni en la web pública.
 
 ## Reproducir las pruebas nuevas
 
 ```bash
 node tests/quick-session.test.js
+node tests/ai-availability.test.js
 deno test tests/ai-capabilities.test.ts tests/ai-prompt-builder.test.ts
 python tests/ui_quick_session_smoke.py
+python tests/ui_quick_session_layout_smoke.py
 python scripts/build_index.py --check
 python scripts/version_assets.py --check
 ```
