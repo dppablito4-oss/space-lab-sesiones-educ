@@ -7,9 +7,11 @@ window.SpaceLabCurriculumPicker = (() => {
     const count = (n, noun, plural = `${noun}s`) => `${n} ${n === 1 ? noun : plural}`;
     const key = value => String(value).trim().replace(/[.。]+$/u,'').replace(/\s+/g,' ').toLocaleLowerCase('es');
     const has = (values, name) => values.some(value => key(value) === key(name));
+    let scopedProfiles = null;
     let catalog = null, loaded = false, lastMarkup = '', initialized = false;
 
     function areaCompetencies() {
+        if (scopedProfiles !== null) return scopedProfiles.map(p => ({nombre:p.competency.officialName, capacidades:p.capacities.map(c => c.officialName)}));
         return catalog?.areas?.[byId('input-area')?.value]?.competencias || [];
     }
 
@@ -39,7 +41,7 @@ window.SpaceLabCurriculumPicker = (() => {
         let markup;
         if (!loaded) markup = '<p class="curriculum-help" role="status">Cargando el catálogo de aprendizajes…</p>';
         else if (!competencies.length) {
-            markup = '<p class="curriculum-help">Elige un área en Datos para ver sus competencias. También puedes escribir los aprendizajes manualmente.</p>';
+            markup = '<p class="curriculum-help">No hay competencias verificadas para esta selección. Puedes aportar aprendizajes manualmente; verifica su correspondencia con tu programa curricular.</p>';
             byId('curriculum-manual').open = true;
         } else markup = '<p class="curriculum-help">Marca las competencias y luego las capacidades que trabajarás en esta sesión.</p>' + competencies.map((c,i) => {
             const checked = has(selected,c.nombre);
@@ -120,5 +122,5 @@ window.SpaceLabCurriculumPicker = (() => {
     }
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded',init,{once:true});
     else init();
-    return Object.freeze({refresh,setCatalog});
+    return Object.freeze({refresh,setCatalog,setScope(profiles) { scopedProfiles = profiles; lastMarkup = ''; refresh(); }});
 })();

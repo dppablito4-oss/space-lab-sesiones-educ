@@ -100,6 +100,7 @@
                     <svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
                     <span>Etapas</span>
                 </button>
+                <button type="button" id="quick-open-planner" class="btn btn-ghost" aria-controls="sidebar">Editar sesión</button>
                 <div id="workflow-tabs" class="sidebar-tabs" role="group" aria-label="Secciones de la sesión">
                     <button type="button" class="sidebar-tab active" data-tab="tab-ai" aria-label="Copiloto, en curso" aria-current="step" aria-controls="tab-ai">
                         <span class="tab-step">01</span>
@@ -146,6 +147,7 @@
 
                 <div class="sidebar-workflow">
                 <form id="session-form" class="session-form" autocomplete="off">
+<!-- include:ui/fragments/quick-session.html -->
                     <!-- PANE 1: COPILOTO IA -->
                     <div id="tab-ai" class="tab-pane active" role="region" aria-labelledby="inspector-title">
                     <div class="inspector-heading planner-section-heading">
@@ -162,17 +164,18 @@
                                     <span class="ai-model-eyebrow">Copiloto Space AI</span>
                                     <strong>Enrutamiento inteligente</strong>
                                 </div>
-                                <span class="ai-model-status"><span></span> Disponible</span>
+                                <span class="ai-model-status" id="ai-availability-status">Disponibilidad por verificar</span>
                             </div>
                             <label for="select-ai-provider" class="form-label">
                                 Modo de calidad
                             </label>
                             <select id="select-ai-provider" class="form-select">
                                 <option value="automatic" selected>Automático — Recomendado</option>
-                                <option value="fast">Rápido — Menor latencia</option>
-                                <option value="balanced">Equilibrado — Calidad y eficiencia</option>
-                                <option value="max_quality">Máxima calidad — Trabajo curricular complejo</option>
+                                <option value="fast" disabled hidden>Rápido — Menor latencia</option>
+                                <option value="balanced" disabled hidden>Equilibrado — Calidad y eficiencia</option>
+                                <option value="max_quality" disabled hidden>Máxima calidad — Trabajo curricular complejo</option>
                             </select>
+                            <p id="ai-availability-help" class="curriculum-help">Automático delega la selección al gateway. Las demás opciones requieren verificar tu cuenta y el backend.</p>
                             <div id="model-capabilities-badge" class="model-capabilities-badge">
                                 <svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                                 <span class="badge-text"><strong>Automático:</strong> El gateway elige la ruta más adecuada según la tarea y los archivos.</span>
@@ -430,7 +433,7 @@
                                 Desempeños Esperados
                             </div>
                             <div class="form-group">
-                                <label for="input-desempeno" class="form-label">Criterio / Desempeño</label>
+                                <label for="input-desempeno" class="form-label">Desempeño de la sesión (por verificar)</label>
                                 <textarea id="input-desempeno" class="form-textarea" rows="3"
                                     placeholder="Desempeños esperados..."></textarea>
                             </div>
@@ -457,6 +460,13 @@
                                     placeholder="Ej: Enfoque ambiental">
                             </div>
                         </div>
+                        <section id="session-proposals" class="quick-suggestions" aria-labelledby="session-proposals-title">
+                            <h4 id="session-proposals-title">Propuestas para tu sesión</h4>
+                            <p>Actividades, criterios y evidencias son propuestas editables del docente o de la IA; no son textos curriculares oficiales. La IA las completará al generar.</p>
+                            <div class="form-group"><label class="form-label" for="input-session-activities">Actividades sugeridas</label><textarea id="input-session-activities" class="form-textarea" rows="3" maxlength="2000" placeholder="Propón una actividad o revisa la propuesta después de generar."></textarea></div>
+                            <div class="form-group"><label class="form-label" for="input-session-criteria">Criterios de evaluación sugeridos (uno por línea)</label><textarea id="input-session-criteria" class="form-textarea" rows="3" maxlength="2000"></textarea></div>
+                            <div class="form-group"><label class="form-label" for="input-session-evidence">Evidencia sugerida</label><textarea id="input-session-evidence" class="form-textarea" rows="2" maxlength="2000"></textarea></div>
+                        </section>
                     </div> <!-- End tab-propositos -->
 
                     <!-- PANE 4: DISEÑO Y ESTILOS -->
