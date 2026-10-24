@@ -36,6 +36,9 @@ Navegación lateral, cabecera, progresión de tres pasos, tarjetas de nivel,
 campos amplios, resumen en vivo, propuestas editables y opciones desplegables.
 La navegación móvil y la ayuda usan diálogos Radix con manejo de foco y teclado.
 Se respeta el tema claro/oscuro y la preferencia de movimiento reducido.
+La navegación lateral conserva el azul oscuro en ambos temas. El espacio de
+trabajo usa fondo casi negro y capas de degradados oscuros en el tema oscuro;
+en el claro usa azul, menta y lavanda pastel, con texto oscuro en las acciones.
 
 «Unidades y experiencias» abre el estudio de planificación dentro de la misma
 navegación: selección de unidad, experiencia o proyecto, siete pasos, vista previa,
