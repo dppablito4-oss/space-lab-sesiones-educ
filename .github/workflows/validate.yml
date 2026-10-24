@@ -161,6 +161,7 @@ jobs:
           python tests/ui_quick_session_layout_smoke.py
           python tests/ui_react_session_smoke.py
           python tests/ui_public_entry_smoke.py
+          python tests/ui_auth_editor_navigation_smoke.py
           python tests/ui_planning_ai_smoke.py --react
           python tests/ui_session_lifecycle_smoke.py
           python tests/ui_account_recovery_smoke.py

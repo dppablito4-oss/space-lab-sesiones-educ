@@ -288,10 +288,12 @@
             });
         }
         window.appOpenPlanning = (planningContainerId, options) => window.PlanningView?.open(planningContainerId, options);
-        window.appReloadSessions = () => {
+        window.appReloadSessions = ({preserveEditor = false} = {}) => {
             renderSavedList();
-            loadLastSession();
-            loadProfileDefaults();
+            if (!preserveEditor) {
+                loadLastSession();
+                loadProfileDefaults();
+            }
             loadLogosGallery();
             window.SpaceLabHome?.refresh?.();
         };

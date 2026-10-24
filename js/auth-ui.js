@@ -280,6 +280,7 @@ window.AuthUi = (() => {
     async function handleAuthSubmit(e) {
         e.preventDefault();
         if (recoveryMode) { await submitRecovery(); return; }
+        const entryRoute = window.location.hash;
         
         const email = inputEmail.value.trim();
         const password = inputPassword.value;
@@ -303,7 +304,7 @@ window.AuthUi = (() => {
                 if (result.user) {
                     Toast.success('¡Sesión iniciada correctamente en la nube!');
                     closeModal();
-                    await afterSuccessAuth();
+                    await afterSuccessAuth(entryRoute, result.user.id);
                 } else {
                     Toast.error('Credenciales incorrectas');
                 }
@@ -355,7 +356,7 @@ window.AuthUi = (() => {
                         if (loginResult.user) {
                             Toast.success('¡Sesión iniciada automáticamente!');
                             closeModal();
-                            await afterSuccessAuth();
+                            await afterSuccessAuth(entryRoute, loginResult.user.id);
                         } else {
                             setMode(true);
                         }
@@ -375,22 +376,26 @@ window.AuthUi = (() => {
         }
     }
 
-    async function afterSuccessAuth() {
+    async function afterSuccessAuth(entryRoute, userId) {
         // Ejecutar sincronización de sesiones locales a la nube
         if (window.StorageManager && typeof window.StorageManager.syncSessions === 'function') {
             await window.StorageManager.syncSessions();
         }
+        if (window.SupabaseClient.getSessionUserSync()?.id !== userId) return;
         
         // Recargar cabecera y lista
         await checkSessionState();
+        if (window.SupabaseClient.getSessionUserSync()?.id !== userId) return;
+        const currentRoute = window.location.hash;
+        const editorActive = /^#\/(?:app|editor|sessions\/new|sessions\/[^/]+\/edit)$/.test(currentRoute);
         
         // Disparar recarga de sesiones en la UI principal
         if (window.appReloadSessions) {
-            window.appReloadSessions();
+            window.appReloadSessions({preserveEditor:editorActive});
         }
 
         // Después del acceso, presentar el centro de trabajo antes del editor.
-        if (window.LandingRouter && typeof window.LandingRouter.showHome === 'function') {
+        if (!editorActive && currentRoute === entryRoute && window.LandingRouter && typeof window.LandingRouter.showHome === 'function') {
             window.LandingRouter.showHome(true);
         }
     }
