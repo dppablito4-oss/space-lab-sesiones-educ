@@ -24,7 +24,7 @@ export function ReviewStep({state,bridge}:{state:Snapshot;bridge:Bridge}) {
             </Disclosure>
             <Disclosure icon={Paperclip} title="Material de referencia" note={state.sourceFile || 'Un archivo para dar contexto a la IA'}>
                 {state.sourceFile ? <div className="sl-attached-file"><FileText size={22}/><span>{state.sourceFile}</span><button type="button" className="sl-icon-button" aria-label="Quitar archivo" onClick={()=>bridge.removeAttachment()}><Trash2 size={18}/></button></div>
-                    : <label className="sl-upload"><Paperclip size={25}/><strong>Añade una referencia para tu clase</strong><span>Usa el mismo procesador de archivos del editor.</span><input aria-label="Adjuntar referencia" type="file" onChange={event=>{const file=event.target.files?.[0];if(file) bridge.setAttachment(file);}}/></label>}
+                    : <label className="sl-upload"><Paperclip size={25}/><strong>Añade una referencia para tu clase</strong><span>Un material que ayude a contextualizar el aprendizaje.</span><input aria-label="Adjuntar referencia" type="file" onChange={event=>{const file=event.target.files?.[0];if(file) bridge.setAttachment(file);}}/></label>}
                 <FormField name="sourceInstruction" label="¿Cómo usamos esta referencia?" state={state} bridge={bridge} rows={2} placeholder="Ej. Toma la situación de la primera página como punto de partida"/>
             </Disclosure>
             <Disclosure icon={Palette} title="Documento y presentación" note="Plantilla y estilo de exportación">
@@ -32,7 +32,7 @@ export function ReviewStep({state,bridge}:{state:Snapshot;bridge:Bridge}) {
                 <button type="button" className="sl-text-button" onClick={()=>bridge.showLegacy('advanced')}>Abrir todas las opciones del editor</button>
             </Disclosure>
             <Disclosure icon={Users} title="Estudiantes" note={entries(f.alumnos).length ? `${entries(f.alumnos).length} registrados` : 'Opcional · puedes generar sin una lista'}>
-                <FormField name="alumnos" label="Lista de estudiantes" state={state} bridge={bridge} rows={5} hint="Un nombre por línea. Se conserva el guardado por cuenta del editor."/>
+                <FormField name="alumnos" label="Lista de estudiantes" state={state} bridge={bridge} rows={5} hint="Un nombre por línea. Puedes añadir la lista después de generar."/>
             </Disclosure>
             <div className="sl-generation-note"><Sparkles size={20}/><p>La IA elaborará una propuesta para tu revisión. Mantén esta pestaña abierta durante la generación y comprueba el resultado antes de usarlo en clase.</p></div>
             {state.hasDocument && <p className="sl-small-note">Las propuestas que ajustes aquí se aplican al generar de nuevo. Para editar directamente la sesión guardada, abre el editor avanzado.</p>}
