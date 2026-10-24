@@ -4,6 +4,13 @@ Procedimiento de operación de la beta abierta. La evidencia de despliegue y
 restauración está en [informe de preparación](reports/BETA_READINESS_19-10-2026.md); este documento describe cómo
 repetir las comprobaciones y distingue los pasos todavía pendientes.
 
+**Estado vigente del 23/10:** ver [cierre operativo y recuperación](reports/APERTURA_BETA_23-10-2026.md).
+Ya están activos el respaldo diario externo cifrado (04:23 Bogotá, retención
+14 días), la restauración automática de prueba, el monitor cada 30 minutos y
+los límites globales de IA/registro. El texto de las secciones siguientes
+conserva el procedimiento y los diagnósticos históricos; las menciones a correo,
+respaldo automático y monitor pendientes quedan sustituidas por ese informe.
+
 Actualización del 23/10: los RPC de contabilidad de IA requieren la ruta de
 servidor `run_ai_accounting`. Las pruebas de roles son
 `tests/beta_database_security.sql` y `tests/beta_server_accounting.sql`; ambas
@@ -95,7 +102,7 @@ Verificar entrega de correo y límites antes de invitar docentes.
 
 El protocolo ya se verificó contra Auth real con un enlace generado por la API
 administrativa sin enviar correo: token válido, cambio de contraseña e ingreso.
-La entrega al buzón sigue pendiente. La beta mantiene registro público con
+La entrega al buzón quedó confirmada el 23/10. La beta mantiene registro público con
 confirmación automática, según decisión del usuario.
 
 La prueba de envío autorizada del 19/10 a las 18:01 (Bogotá) falló: HTTP 500 y
@@ -159,8 +166,9 @@ sin red ni puertos, una base nueva desde `template0` y el rol `supabase_admin`.
 Se restauró esquema y después datos con triggers desactivados solo en esa copia;
 se compararon las cantidades con el dump y se ejecutó el SQL de seguridad.
 El contenedor se eliminó al terminar. Los secretos de la copia no se imprimieron.
-Faltan respaldo programado, copia externa y cobertura de objetos Storage y
-configuración del proyecto. No hay respaldo físico disponible informado ni PITR.
+El respaldo programado, la copia externa y los objetos Storage quedaron cubiertos
+el 23/10; ver el informe vigente para evidencia, alcance y recuperación.
+La configuración completa del servicio no se incluye. No hay PITR configurado.
 
 Ante errores tras publicar:
 
@@ -174,7 +182,9 @@ Ante errores tras publicar:
 
 Vigilar errores y latencia de Edge Functions, solicitudes fallidas, créditos
 reservados sin cerrar y gasto por proveedor. Definir alertas externas de caída y
-presupuesto y asignar una persona que las reciba. Configuración real pendiente.
+presupuesto. El monitor programado ya está activo; las notificaciones de fallos
+dependen de la configuración GitHub del propietario. No hay destino personalizado
+de correo/SMS. El propietario es el responsable operativo inicial.
 
 ## 7. Criterio de apertura
 
@@ -186,10 +196,11 @@ presupuesto y asignar una persona que las reciba. Configuración real pendiente.
 - [x] A → B → invitado: aislamiento probado con cuentas reales en el sitio publicado.
 - [x] Cuota local agotada devuelve fallo en el sitio publicado; red/sincronización con regresiones locales.
 - [x] Créditos correctos ante éxito, fallo, duplicado y reintento (contabilidad SQL y generación HTTP).
-- [x] DOCX y PDF reales verificados con la descarga publicada 1.4.1.
+- [x] DOCX y PDF reales verificados con la descarga publicada 1.4.5, incluido Word conjunto de unidad y sesiones.
 - [x] Respaldo manual y restauración aislada ensayados; reversión documentada.
-- [ ] Respaldo automático y copia externa protegida activos.
-- [ ] Alertas y responsable de soporte activos.
+- [x] Respaldo automático y copia externa protegida activos; primera restauración aprobada de 56 tablas y 20 objetos.
+- [x] Monitor de disponibilidad/consumo y responsable operativo inicial: propietario del proyecto.
+- [ ] Segundo destinatario de alertas y canal visible de soporte.
 - [x] Alcance definido: beta abierta con registro público; limitaciones en el informe.
 
 Registrar por cada casilla fecha, versión y evidencia. La suite local no marca

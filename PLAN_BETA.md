@@ -1,5 +1,11 @@
 # Plan de beta abierta — 19 de octubre de 2026
 
+**Estado vigente, cierre del 23/10:** web actualizada y publicada; correo recibido;
+contabilidad protegida; límites de IA y registro aplicados; respaldo externo
+cifrado diario con restauración aprobada; monitor periódico activo. Motor 1.4.5
+publicado y su descarga real probada en Word/PDF. [Evidencia y operación](docs/reports/APERTURA_BETA_23-10-2026.md).
+Las revisiones siguientes conservan la evolución histórica de los pendientes.
+
 Revisión de apertura del **23/10**: motor 1.4.5 validado localmente; la última
 release pública consultada sigue en 1.4.1 y el build del sitio difiere del local.
 Faltan publicación y comprobación final, cierre de correo, respaldo automático,

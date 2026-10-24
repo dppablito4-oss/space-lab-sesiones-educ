@@ -1,5 +1,10 @@
 # Decisión de apertura de beta — 23 de octubre de 2026
 
+**Actualización posterior:** los pendientes de correo, automatización de respaldo,
+monitor y límites ya se cerraron. Ver el [informe operativo vigente](APERTURA_BETA_23-10-2026.md)
+para evidencia de producción y publicación del motor. La revisión de abajo
+describe el estado inicial de esta auditoría.
+
 La base funcional está preparada para continuar las pruebas con docentes. Todavía no se considera cerrada la preparación operativa para abrir el registro público sin cupos.
 
 ## Evidencia actual
