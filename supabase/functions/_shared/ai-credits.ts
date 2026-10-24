@@ -19,6 +19,8 @@ interface CreditRpcResult {
 }
 
 const PUBLIC_ERRORS: Record<string, { message: string; status: number }> = {
+  ACCOUNT_RESTRICTED: { message: "Tu cuenta tiene restringido el uso de IA. Contacta con soporte.", status: 403 },
+  AI_DISABLED: { message: "La generación de IA está temporalmente pausada. Inténtalo más tarde.", status: 503 },
   AUTH_REQUIRED: { message: "Debes iniciar sesión para usar el servicio de IA.", status: 401 },
   INVALID_REQUEST_ID: { message: "El identificador de la solicitud no es válido.", status: 400 },
   DUPLICATE_REQUEST: { message: "Esta solicitud de IA ya fue procesada.", status: 409 },

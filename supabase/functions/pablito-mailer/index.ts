@@ -87,6 +87,20 @@ serve(async (req) => {
       );
     }
 
+    // Legacy mail endpoints must respect current account controls and step-up
+    // authentication too. The service key is never used to authorize the actor.
+    const actorClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY") ?? "", {
+      global: { headers: { Authorization: authHeader } },
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { error: permissionError } = await actorClient.rpc("admin_cc_authorize", {
+      p_permission: "operators.manage", p_step_up: action !== "GET_SMTP_CONFIG",
+    });
+    if (permissionError) {
+      return new Response(JSON.stringify({ error: "Se requiere propietario activo y segundo factor para modificar correo." }),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" }, status: 403 });
+    }
+
     if (action === "GET_SMTP_CONFIG") {
       const { data, error } = await supabaseClient
         .from("corporate_email_settings")

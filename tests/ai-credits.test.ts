@@ -36,7 +36,7 @@ Deno.test("reserveAiCredits uses only action/request/provider/model and returns 
 });
 
 Deno.test("credit errors normalize insufficient balance and duplicate request", async () => {
-  for (const [code, status] of [["INSUFFICIENT_CREDITS", 402], ["DUPLICATE_REQUEST", 409]] as const) {
+  for (const [code, status] of [["INSUFFICIENT_CREDITS", 402], ["DUPLICATE_REQUEST", 409], ["ACCOUNT_RESTRICTED", 403], ["AI_DISABLED", 503]] as const) {
     const client = clientWith([{ data: { ok: false, code, balance: 0 }, error: null }], []);
     try {
       await reserveAiCredits(client, { requestId: crypto.randomUUID(), action: "chatbot", provider: "openai", model: "x" });
