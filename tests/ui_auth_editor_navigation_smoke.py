@@ -1,5 +1,4 @@
 """A delayed login completion must not replace a session the teacher has started."""
-import json
 from functools import partial
 from http.server import SimpleHTTPRequestHandler,ThreadingHTTPServer
 from pathlib import Path
