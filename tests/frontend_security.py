@@ -62,12 +62,13 @@ def run() -> None:
     assert result["criteria"].count("<li>") == 2
     assert all(token not in result["criteria"].lower() for token in forbidden)
 
-    admin_source = (ROOT / "js" / "admin.js").read_text(encoding="utf-8")
+    admin_source = (ROOT / "react-ui/src/admin/main.tsx").read_text(encoding="utf-8")
     admin_html = (ROOT / "admin.html").read_text(encoding="utf-8")
-    assert 'sandbox="allow-same-origin"' in admin_source
-    assert "sessionData.htmlContent" in admin_source
-    assert "SpaceLabSanitizer.sanitizeSessionHTML" in admin_source
-    assert "js/sanitizer.js" in admin_html
+    assert "dangerouslySetInnerHTML" not in admin_source
+    assert "sessionData.htmlContent" not in admin_source
+    assert "js/admin.js" not in admin_html
+    assert "assets/react-admin/admin.js" in admin_html
+    assert "getClient" in admin_source
 
     print("frontend_security.py: OK")
 

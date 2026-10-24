@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "build:public:assets": "tsc -p react-ui/tsconfig.json --noEmit && vite build --config react-ui/vite.public.config.mts",
-    "build:public": "npm run build:public:assets && python scripts/build_index.py --write && python scripts/version_assets.py --write",
+    "build:public": "npm run build:public:assets && npm run build:admin && python scripts/build_index.py --write && python scripts/build_admin.py --write && python scripts/version_assets.py --write",
+    "build:admin": "tsc -p react-ui/tsconfig.json --noEmit && vite build --config react-ui/vite.admin.config.mts",
     "test:admin:db": "node tests/admin_database.test.mjs",
     "dev:react": "vite --config react-ui/vite.config.mts",
     "build:react": "tsc -p react-ui/tsconfig.json --noEmit && vite build --config react-ui/vite.config.mts",

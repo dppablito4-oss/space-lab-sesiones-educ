@@ -63,6 +63,7 @@ jobs:
       - name: Validate generated index composition
         run: |
           python scripts/build_index.py --check
+          python scripts/build_admin.py --check
           python tests/test_index_composition.py
 
       - name: Validate browser cache versions
@@ -151,11 +152,15 @@ jobs:
           npm ci --ignore-scripts
           npm run build:public:assets
           git diff --exit-code -- assets/react-ui
+          npm run build:admin
+          git diff --exit-code -- assets/react-admin
+          npm run test:admin:db
           npm run build:react
 
       - name: Run frontend security test
         run: |
           python tests/frontend_security.py
+          python tests/ui_admin_smoke.py
           python tests/ui_smoke.py
           python tests/ui_quick_session_smoke.py
           python tests/ui_quick_session_layout_smoke.py

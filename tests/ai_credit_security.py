@@ -75,10 +75,10 @@ def main() -> None:
     assert "AND status = 'processing'" in gateway_idempotency_sql
     assert "WHERE user_id = v_user_id" in gateway_idempotency_sql
 
-    admin_frontend = (ROOT / "js/admin.js").read_text(encoding="utf-8")
-    assert ".rpc('admin_list_ai_credit_accounts'" in admin_frontend
-    assert ".rpc('admin_set_ai_credits'" in admin_frontend
-    assert ".from('ai_credit_wallets').update" not in admin_frontend.replace("\n", "")
+    admin_frontend = (ROOT / "react-ui/src/admin/api.ts").read_text(encoding="utf-8")
+    assert "admin_cc_write" in admin_frontend
+    assert "p_request_id" in admin_frontend
+    assert "admin_set_ai_credits" not in admin_frontend
 
     for router in ROUTERS:
         source = router.read_text(encoding="utf-8")
