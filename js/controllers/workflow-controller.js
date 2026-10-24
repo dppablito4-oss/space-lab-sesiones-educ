@@ -39,6 +39,7 @@ window.SpaceLabWorkflowController = (() => {
         }
 
         function syncFromScroll() {
+            if (document.body.classList.contains('session-quick-mode')) return;
             if (!DOM.sidebar.classList.contains('open') || !DOM.form.clientHeight) return;
             const marker = DOM.form.getBoundingClientRect().top + Math.min(120,DOM.form.clientHeight * .25);
             let current = sections[0];

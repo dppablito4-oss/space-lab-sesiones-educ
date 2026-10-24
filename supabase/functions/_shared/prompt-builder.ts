@@ -1,5 +1,5 @@
 import { PLANNING_OUTPUT_EXAMPLE } from "./planning-output-example.ts";
-export const PROMPT_VERSION = "2026-10-v4-secuencia";
+export const PROMPT_VERSION = "2026-10-v5-quick-session";
 
 export type AIAction = "generate_session" | "generate_criteria" | "refine_text" | "pedagogy_brief" | "summarize_brief" | "chatbot" | "planning.map.generate";
 
@@ -258,11 +258,16 @@ function buildSessionPrompt(input: Record<string, unknown>): BuiltPrompt {
     ["desempeno", "Desempeño sugerido"], ["enfoque", "Enfoque transversal 1"],
     ["enfoque2", "Enfoque transversal 2"],
     ["criterio", "Criterios de evaluación seleccionados"], ["producto_evidencia", "Producto o evidencia"],
+    ["actividades_sugeridas", "Actividades propuestas por el docente"],
     ["instrumento", "Instrumento de evaluación"], ["conocimientos", "Conocimientos a desarrollar"],
   ];
   for (const [key, label, max = 2_000] of fields) {
     const value = cleanText(metadata[key], max);
     if (value) parts.push(`- ${label}: ${value}`);
+  }
+
+  if (metadata.quickCurriculumReview === true) {
+    parts.push("REVISIÓN CURRICULAR: Los aprendizajes y desempeños aportados requieren cotejo docente. No inventes competencias, capacidades ni desempeños atribuyéndolos al currículo oficial. Si falta respaldo para el nivel y grado, presenta lo no verificado como propuesta pedagógica para revisión, sin afirmar que es texto oficial. Respeta las selecciones aportadas y diferencia las actividades, criterios y evidencias propuestos de las referencias curriculares.");
   }
 
   if (inheritedPlanningContext) {

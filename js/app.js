@@ -169,12 +169,16 @@
         openSidebar
     });
 
+    let quickSession = null;
+
     function init() {
         // Set today's date as default
         DOM.inputFecha.valueAsDate = new Date();
 
         // Bind all events
         bindEvents();
+        quickSession = window.SpaceLabQuickSession.create({form: DOM.form, getSession: () => AppState.currentSession, openSidebar});
+        window.SpaceLabAiAvailability.init();
         updateWorkflowUi('tab-ai');
         syncSessionContextTitle();
 
@@ -216,6 +220,7 @@
                         regional: data.metadata.logo_regional_url || null
                     }
                 };
+                AppState.currentSession.authoringPreferences = data.authoringPreferences;
                 AppState.currentSession.proposito = {
                     ...AppState.currentSession.proposito,
                     competencia: data.proposito.competencia || '',
@@ -254,8 +259,29 @@
         window.getCurrentSession = () => AppState.currentSession;
         window.getPendingPlanningLink = () => AppState.pendingPlanningLink;
         window.appOpenSession = (sessionId) => loadSession(sessionId);
-        window.appStartNewSession = () => forceNewSession();
+        window.appStartNewSession = async () => {
+            if (!await handleNew()) {
+                if (window.location.hash === '#/sessions/new') {
+                    const id = AppState.currentSession?.id;
+                    window.history.replaceState(null, '', id ? `#/sessions/${encodeURIComponent(id)}/edit` : '#/app');
+                }
+                return false;
+            }
+            quickSession.setMode('quick', false);
+            openSidebar({focusClose: false});
+            // Reveal the form and drawer together before focusing the new screen.
+            await new Promise(resolve => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
+            quickSession.focusStep();
+            return true;
+        };
         window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);
+        if (document.getElementById('react-preview-root')) {
+            window.SpaceLabReactBridge = window.SpaceLabReactSessionBridge.create({
+                form:DOM.form, quickSession, getSession:() => AppState.currentSession,
+                getSourceFile:() => AppState.sourceFileData,
+                generate:handleGenerateAI, openSidebar, closeSidebar
+            });
+        }
         window.appOpenPlanning = (planningContainerId, options) => window.PlanningView?.open(planningContainerId, options);
         window.appReloadSessions = () => {
             renderSavedList();
@@ -540,6 +566,8 @@
         DOM.btnCloseSidebar.addEventListener('click', () => closeSidebar());
         document.addEventListener('click', (event) => {
             if (!AppState.sidebarOpen) return;
+            if (event.target.closest('#react-preview-root')) return;
+            if (event.target.closest('[role="dialog"], [aria-modal="true"], .modal-overlay, .confirm-overlay')) return;
             if (DOM.sidebar.contains(event.target) || DOM.workflowRail.contains(event.target) || DOM.btnMenuMobile.contains(event.target)) return;
             event.preventDefault();
             event.stopPropagation();
@@ -949,6 +977,11 @@
                 logo_regional_style: secondLogo.style || '',
                 logos: logos
             },
+            authoringPreferences: {
+                activities: $('#input-session-activities').value,
+                criteria: $('#input-session-criteria').value,
+                evidence: $('#input-session-evidence').value
+            },
             proposito: {
                 competencia: DOM.inputCompetencia.value,
                 capacidad: DOM.inputCapacidad.value,
@@ -1016,6 +1049,10 @@
         DOM.inputCompetencia.value = p.competencia || '';
         DOM.inputCapacidad.value = p.capacidad || (p.capacidades || []).join('; ');
         DOM.inputDesempeno.value = p.desempeno || '';
+        const preferences = session.authoringPreferences || {};
+        $('#input-session-activities').value = preferences.activities || '';
+        $('#input-session-criteria').value = preferences.criteria ?? (p.criterios || []).join('\n');
+        $('#input-session-evidence').value = preferences.evidence ?? p.evidencia ?? '';
         DOM.inputEnfoque.value = p.enfoque || '';
         DOM.inputEnfoque2.value = p.enfoque2 || '';
 
@@ -1069,6 +1106,7 @@
             textareaAlumnos.value = (session.alumnos || session.listaCotejo?.alumnos || []).join('\n');
         }
         syncSessionContextTitle();
+        quickSession?.refresh();
     }
 
     // ═══════════════════════════════════════
@@ -1325,7 +1363,9 @@
         renderSession,
         saveGeneratedSession: handleSave,
         saveCurrentState,
-        checkTimeBalance
+        checkTimeBalance,
+        validateGeneration: () => !quickSession || quickSession.validate(),
+        getQuickCurriculumReview: () => quickSession?.isQuick() === true
     });
 
     function handleCleanPaste(e) {
@@ -1775,17 +1815,18 @@
             const profile = await SupabaseClient.getUserProfile(user);
             if (window.SupabaseClient?.getSessionUserSync?.()?.id !== user?.id) return;
             if (profile) {
-                if (profile.institucion) DOM.inputInstitucion.value = profile.institucion;
-                if (profile.dre) DOM.inputDre.value = profile.dre;
-                if (profile.ugel) DOM.inputUgel.value = profile.ugel;
-                if (profile.director) DOM.inputDirector.value = profile.director;
-                if (profile.nivel) DOM.inputNivel.value = profile.nivel;
-                if (profile.docente) {
+                if (profile.institucion && !DOM.inputInstitucion.value) DOM.inputInstitucion.value = profile.institucion;
+                if (profile.dre && !DOM.inputDre.value) DOM.inputDre.value = profile.dre;
+                if (profile.ugel && !DOM.inputUgel.value) DOM.inputUgel.value = profile.ugel;
+                if (profile.director && !DOM.inputDirector.value) DOM.inputDirector.value = profile.director;
+                if (profile.nivel && !DOM.inputGrado.value && !DOM.inputTitulo.value) DOM.inputNivel.value = profile.nivel;
+                if (profile.docente && !DOM.inputDocente.value) {
                     DOM.inputDocente.value = profile.docente;
                 } else if (user && !DOM.inputDocente.value) {
                     const fallback = user.user_metadata?.docente || user.user_metadata?.full_name || user.user_metadata?.username || profile.username || (user.email ? user.email.split('@')[0] : '');
                     if (fallback) DOM.inputDocente.value = fallback;
                 }
+                window.dispatchEvent(new CustomEvent('spacelab:profile-defaults-loaded'));
                 console.log('Predeterminados de perfil cargados');
             } else if (user && !DOM.inputDocente.value) {
                 const fallback = user.user_metadata?.docente || user.user_metadata?.full_name || user.user_metadata?.username || (user.email ? user.email.split('@')[0] : '');

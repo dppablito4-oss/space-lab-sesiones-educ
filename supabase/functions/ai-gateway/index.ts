@@ -11,6 +11,7 @@ import {
 } from "../_shared/ai-routing.ts";
 import { createTrustedLinkedSnapshot, replaceLinkedSnapshot, requestedLinkedSnapshot } from "../_shared/linked-session-context.ts";
 import { fetchWithTimeout, gatewayAttemptTimeoutMs } from "../_shared/ai-runtime.ts";
+import { availableSessionQualities } from "../_shared/ai-capabilities.ts";
 
 interface GatewayAttempt {
   requestId: string;
@@ -102,6 +103,18 @@ async function handleRequest(req: Request): Promise<Response> {
   const action = typeof payload.action === "string" ? payload.action.trim() : "";
   if (!UUID_PATTERN.test(requestId) || !action) {
     return jsonResponse(req, { error: "Solicitud de IA inválida.", code: "INVALID_AI_REQUEST" }, 400);
+  }
+
+  // Read-only discovery uses the same authenticated context, before any credit ledger write.
+  if (action === "capabilities") {
+    const { data, error } = await auth.client.rpc("get_user_entitlements");
+    const configured = (provider: AiProvider): boolean => {
+      if (!providerEnabled(provider)) return false;
+      const keys = provider === "openai" ? ["OPENAI_API_KEY", "API_KEY_OPENAI"]
+        : provider === "gemini" ? ["API-KEY-GEMINI", "GEMINI_API_KEY"] : ["API-KEY-DEEPSEEK", "DEEPSEEK_API_KEY"];
+      return keys.some(key => Boolean(Deno.env.get(key)?.trim()));
+    };
+    return jsonResponse(req, { qualities: error ? [] : availableSessionQualities(data, configured) });
   }
 
   const requestedSnapshot = requestedLinkedSnapshot(payload);

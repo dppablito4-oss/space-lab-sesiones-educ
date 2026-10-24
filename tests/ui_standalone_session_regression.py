@@ -21,6 +21,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 def fill_and_generate(page, unit, title):
     page.evaluate("""() => {
         document.querySelector('#external-ficha-prompt-modal')?.classList.add('hidden');
+        document.querySelector('#session-mode-advanced').click();
         document.querySelector('.sidebar-tab[data-tab="tab-general"]')?.click();
     }""")
     page.locator("#input-unidad").fill(unit)

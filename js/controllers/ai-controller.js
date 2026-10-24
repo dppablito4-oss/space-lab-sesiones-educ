@@ -41,7 +41,10 @@ window.SpaceLabAiController = (() => {
             });
         }
         
+        let generationPending = false;
         async function handleGenerateAI() {
+            if (generationPending) return;
+            generationPending = true;
             try {
                 // Intercept: Check user authentication safely
                 let user = null;
@@ -52,13 +55,15 @@ window.SpaceLabAiController = (() => {
                 }
 
                 if (!user) {
-                    Toast.warning('Crea o ingresa a tu cuenta para generar sesiones oficiales con IA');
+                    Toast.warning('Crea o ingresa a tu cuenta para generar sesiones con IA');
                     if (window.AuthUi && typeof window.AuthUi.openRegister === 'function') {
                         window.AuthUi.openRegister();
                     }
                     return;
                 }
 
+                if (dependencies.validateGeneration && !dependencies.validateGeneration()) return;
+                if (window.SpaceLabAiAvailability && !await window.SpaceLabAiAvailability.validate()) return;
                 const formData = getFormData();
 
                 // Validate minimum data
@@ -93,6 +98,10 @@ window.SpaceLabAiController = (() => {
                 const generationRequest = {
                     ...formData.metadata,
                     ...formData.proposito,
+                    criterio: formData.authoringPreferences?.criteria || '',
+                    producto_evidencia: formData.authoringPreferences?.evidence || '',
+                    actividades_sugeridas: formData.authoringPreferences?.activities || '',
+                    quickCurriculumReview: dependencies.getQuickCurriculumReview?.() === true,
                     template: DOM.selectTemplate.value,
                     sourceFile: AppState.sourceFileData,
                     sourceInstruction: DOM.inputSourceInstruction ? DOM.inputSourceInstruction.value.trim() : '',
@@ -160,6 +169,7 @@ window.SpaceLabAiController = (() => {
                     template: DOM.selectTemplate.value,
                     ...canonical,
                     presentation: formData.presentation,
+                    authoringPreferences: formData.authoringPreferences,
                     createdAt: AppState.currentSession?.createdAt || new Date().toISOString()
                 };
                 if (planningLink) session = PlanningLinkedSession.attachGeneratedSession(session, planningLink);
@@ -172,6 +182,15 @@ window.SpaceLabAiController = (() => {
                 DOM.inputCapacidad.value = (canonical.proposito.capacidades || []).join('; ');
                 DOM.inputDesempeno.value = canonical.proposito.desempeno || '';
         
+                const preferences = session.authoringPreferences || {};
+                preferences.criteria ||= (canonical.proposito.criterios || []).join('\n');
+                preferences.evidence ||= canonical.proposito.evidencia || '';
+                preferences.activities ||= (canonical.momentos?.desarrollo?.procesos || []).map(p => p.titulo).join('\n');
+                session.authoringPreferences = preferences;
+                const field = (id, text) => { const node = document.getElementById(id); if (node) node.value = text; };
+                field('input-session-activities', preferences.activities);
+                field('input-session-criteria', preferences.criteria);
+                field('input-session-evidence', preferences.evidence);
                 DOM.inputEnfoque.value = canonical.enfoquesTransversales?.[0]?.nombre || '';
                 DOM.inputEnfoque2.value = canonical.enfoquesTransversales?.[1]?.nombre || '';
         
@@ -186,6 +205,8 @@ window.SpaceLabAiController = (() => {
                 Loader.hide();
         
                 Toast.error(`Error: ${error.message}`);
+            } finally {
+                generationPending = false;
             }
         }
         

@@ -842,7 +842,25 @@ const PlanningWizard = (() => {
             catch (error) { library(); notice(error.message, true); }
             finally { busy = false; }
         });
-        document.querySelectorAll('[data-open-planning]').forEach(button => button.addEventListener('click', () => { library(); dialog.showModal(); }));
+        function openLibrary() {
+            if (busy || generating || !mayLeave()) return false;
+            library();
+            if (window.SpaceLabReactBridge) {
+                window.SpaceLabReactBridge.showPlanning();
+                if (!dialog.open) dialog.show();
+            } else if (!dialog.open) dialog.showModal();
+            return true;
+        }
+        window.SpaceLabPlanningStudio = {
+            open: openLibrary,
+            leave() {
+                if (busy || generating || !mayLeave()) return false;
+                dirty = false;
+                if (dialog.open) dialog.close();
+                return true;
+            }
+        };
+        document.querySelectorAll('[data-open-planning]').forEach(button => button.addEventListener('click', openLibrary));
     }
     if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
     return { create, canCreate, addCurriculum, setCurriculumCompetency, addSession, reorder, removeSession, prepareSave, prepareReview, requiredCompletion,

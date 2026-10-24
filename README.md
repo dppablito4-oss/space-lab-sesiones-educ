@@ -220,17 +220,28 @@ python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
 
 ### 3. Servir el Frontend Web
 
-Cualquier servidor HTTP estático puede servir la aplicación:
+El servidor local incluido sirve la interfaz existente en loopback:
 
 ```powershell
-# Usando Python
-python -m http.server 5173
-
-# O usando npx
-npx serve .
+python scripts/preview_ui.py
 ```
 
-Abre tu navegador en `http://localhost:5173`.
+Abre tu navegador en `http://localhost:3000`.
+
+### 4. Prototipo del generador con React
+
+Esta rama incluye una vista alternativa del generador con React, TypeScript y
+Radix UI. Reutiliza el formulario y el flujo de IA existentes; el resto del
+editor conserva su implementación actual.
+
+```powershell
+npm ci --ignore-scripts
+npm run dev:react
+```
+
+Abre `http://localhost:5173` y usa «Modo avanzado» para comparar sin perder datos.
+La [guía del prototipo](docs/REACT_UI_PREVIEW.md) describe la arquitectura, el
+build y las pruebas. El comando no publica la web.
 
 ---
 

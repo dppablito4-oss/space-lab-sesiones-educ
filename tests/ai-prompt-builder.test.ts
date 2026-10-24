@@ -210,3 +210,15 @@ Deno.test("invalid actions and request ids are rejected", () => {
   assertThrows(() => buildPromptRequest({ action: "raw_prompt", requestId: REQUEST_ID, input: {} }), /no permitida/i);
   assertThrows(() => buildPromptRequest({ action: "generate_criteria", requestId: "duplicate-me", input: {} }), /UUID válido/i);
 });
+
+Deno.test("quick assistant keeps teacher proposals separate from official curriculum", () => {
+  const result = buildPromptRequest({action:"generate_session", requestId:REQUEST_ID, input:{metadata:{
+    nivel:"INICIAL", grado:"5 años", area:"Matemática", titulo:"Contamos semillas",
+    actividades_sugeridas:"Clasifican y cuentan semillas", criterio:"Explica su conteo",
+    producto_evidencia:"Agrupación y explicación oral", quickCurriculumReview:true,
+  }}});
+  assert(result.userPrompt.includes("Actividades propuestas por el docente: Clasifican y cuentan semillas"), "activities must reach the protected prompt");
+  assert(result.userPrompt.includes("Explica su conteo"), "edited criteria must be included");
+  assert(result.userPrompt.includes("Agrupación y explicación oral"), "edited evidence must be included");
+  assert(result.userPrompt.includes("No inventes competencias, capacidades ni desempeños"), "unverified curriculum must not be attributed to official sources");
+});

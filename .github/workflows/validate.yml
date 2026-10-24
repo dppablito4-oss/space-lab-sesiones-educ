@@ -94,6 +94,8 @@ jobs:
           node tests/planning-view.test.js
           node tests/planning-navigation.test.js
           node tests/session-generation-mode.test.js
+          node tests/quick-session.test.js
+          node tests/ai-availability.test.js
           node tests/planning-map-generation.test.js
           node tests/planning-map-ai-action.test.js
           node tests/validation-errors.test.js
@@ -144,10 +146,19 @@ jobs:
       - name: Install Playwright Chromium
         run: python -m playwright install --with-deps chromium
 
+      - name: Build isolated React preview
+        run: |
+          npm ci --ignore-scripts
+          npm run build:react
+
       - name: Run frontend security test
         run: |
           python tests/frontend_security.py
           python tests/ui_smoke.py
+          python tests/ui_quick_session_smoke.py
+          python tests/ui_quick_session_layout_smoke.py
+          python tests/ui_react_session_smoke.py
+          python tests/ui_planning_ai_smoke.py --react
           python tests/ui_session_lifecycle_smoke.py
           python tests/ui_account_recovery_smoke.py
           python tests/ui_standalone_session_regression.py
@@ -179,11 +190,12 @@ jobs:
           deno test tests/ai-credits.test.ts
           deno test tests/server-accounting.test.ts
           deno test tests/ai-runtime.test.ts
+          deno test tests/ai-capabilities.test.ts
           deno check supabase/functions/openai-router/index.ts
           deno check supabase/functions/gemini-router/index.ts
           deno check supabase/functions/deepseek-router/index.ts
           deno check supabase/functions/ai-gateway/index.ts
-          deno check supabase/functions/pablito-mailer/index.ts
+          deno check --node-modules-dir=none supabase/functions/pablito-mailer/index.ts
 
   # ─── 2. Build Windows .exe (solo en push a main/master) ───────────────────
   build-exe:

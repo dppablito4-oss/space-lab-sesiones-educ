@@ -2,6 +2,7 @@
 import json
 from pathlib import Path
 import sys
+from tempfile import NamedTemporaryFile
 
 import pymupdf
 from playwright.sync_api import sync_playwright
@@ -39,9 +40,11 @@ def run():
         text = ''.join(page.get_text() for page in document)
         assert 'FALLBACK-END-145' in text, 'Long lesson body was clipped'
         assert len(document) >= 3
-    output = ROOT / 'artifacts/math-review/fallback-long-session.pdf'
-    output.parent.mkdir(parents=True, exist_ok=True)
-    output.write_bytes(pdf)
+    output_dir = ROOT / 'artifacts/math-review'
+    output_dir.mkdir(parents=True, exist_ok=True)
+    # A previous QA PDF may still be open in a Windows viewer. Preserve it.
+    with NamedTemporaryFile(prefix='fallback-long-session-', suffix='.pdf', dir=output_dir, delete=False) as output:
+        output.write(pdf)
     print('pdf_fallback_math_smoke.py: full long body retained; TeX delimiters correct')
 
 

@@ -55,6 +55,7 @@ def run():
             for index, kind in enumerate(['individual', 'unit', 'learning_experience'], 1):
                 if kind == 'individual':
                     page.evaluate('window.appStartNewSession()')
+                    page.locator('#session-mode-advanced').click()
                     page.locator('#input-area').select_option('Matemática', force=True)
                     page.locator('#select-methodology').select_option('polya', force=True)
                 else:
