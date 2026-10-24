@@ -219,7 +219,12 @@ const PlanningView = (() => {
         if (!container) throw new Error('No se encontró la planificación solicitada.');
         currentId = containerId;
         dialog.innerHTML = '<div class="planning-shell"><p role="status">Cargando planificación…</p></div>';
-        if (!dialog.open) dialog.showModal();
+        if (!dialog.open) {
+            if (window.SpaceLabReactBridge?.isReady()) {
+                window.SpaceLabReactBridge.showPlanning();
+                dialog.show();
+            } else dialog.showModal();
+        }
         const methodologyProfile = await loadMethodologyProfile(container);
         if (currentId !== containerId || ownerId !== (window.AccountStorage?.userId(window.SupabaseClient) || null)) return null;
         const sessionExists = id => Boolean(window.StorageManager?.getSession?.(id));

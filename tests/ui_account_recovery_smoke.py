@@ -52,7 +52,7 @@ def run():
             page.on("pageerror", lambda error: errors.append(str(error)))
             page.route("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@*",
                        lambda route: route.fulfill(status=200, content_type="application/javascript", body=SDK))
-            page.goto(f"http://127.0.0.1:{server.server_port}/index.html", wait_until="domcontentloaded")
+            page.goto(f"http://127.0.0.1:{server.server_port}/index.html?ui=legacy", wait_until="domcontentloaded")
             page.wait_for_function("() => typeof window.appOpenSession === 'function'")
 
             page.evaluate("window.AuthUi.openRegister()")

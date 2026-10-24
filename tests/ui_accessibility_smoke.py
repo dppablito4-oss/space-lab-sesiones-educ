@@ -26,7 +26,7 @@ def run() -> None:
             browser = playwright.chromium.launch(headless=True)
             page = browser.new_page(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
 
-            for path in ("index.html", "conexion.html", "descargas_landing.html"):
+            for path in ("index.html?ui=legacy", "conexion.html", "descargas_landing.html"):
                 errors: list[str] = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
                 page.goto(

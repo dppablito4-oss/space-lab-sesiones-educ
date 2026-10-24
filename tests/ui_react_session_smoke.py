@@ -1,4 +1,4 @@
-"""React/legacy integration in a real browser. Account and AI calls are mocked."""
+"""Shipped public React entry in a real browser. Account and AI calls are mocked."""
 import argparse
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -123,10 +123,11 @@ def verify_exports(payload, browser):
 def run():
     parser = argparse.ArgumentParser(__doc__)
     parser.add_argument('--base-url')
+    parser.add_argument('--preview', action='store_true', help='Use the isolated preview instead of the shipped public entry')
     args = parser.parse_args()
     server = None
     if not args.base_url:
-        build = ROOT / 'artifacts/react-preview-dist'
+        build = ROOT / 'artifacts/react-preview-dist' if args.preview else ROOT
         assert (build / 'index.html').exists(), 'Run npm run build:react first'
         server = ThreadingHTTPServer(('127.0.0.1', 0), partial(QuietHandler, directory=str(build)))
         Thread(target=server.serve_forever, daemon=True).start()

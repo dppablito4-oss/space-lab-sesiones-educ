@@ -36,7 +36,7 @@ def run() -> None:
                 page_errors: list[str] = []
                 page.on("pageerror", lambda error: page_errors.append(str(error)))
                 response = page.goto(
-                    f"http://127.0.0.1:{server.server_port}/index.html",
+                    f"http://127.0.0.1:{server.server_port}/index.html?ui=legacy",
                     wait_until="domcontentloaded",
                 )
                 page.wait_for_function("window.AuthUi && window.SpaceLabExportController")

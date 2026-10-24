@@ -3,6 +3,8 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
+    "build:public:assets": "tsc -p react-ui/tsconfig.json --noEmit && vite build --config react-ui/vite.public.config.mts",
+    "build:public": "npm run build:public:assets && python scripts/build_index.py --write && python scripts/version_assets.py --write",
     "dev:react": "vite --config react-ui/vite.config.mts",
     "build:react": "tsc -p react-ui/tsconfig.json --noEmit && vite build --config react-ui/vite.config.mts",
     "preview:react": "vite preview --config react-ui/vite.config.mts"

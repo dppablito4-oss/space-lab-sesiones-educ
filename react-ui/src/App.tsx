@@ -18,11 +18,16 @@ export function App({bridge}:{bridge:Bridge}) {
     const scroll=useRef<HTMLElement>(null);
 
     useEffect(()=>{
-        if (["#/landing","#/home","#/sessions"].includes(window.location.hash)) return;
+        if (!['#/app','#/editor','#/sessions/new'].includes(window.location.hash)) return;
         bridge.prepare();
         const initial=bridge.getSnapshot();
         if (!initial.hasDocument && !initial.fields.duracion) bridge.setField('duracion','90 min');
     },[bridge]);
+    useEffect(()=>{
+        const reset=()=>{setStep(0);setErrors({});setNotice('');};
+        window.addEventListener('spacelab:session-cleared',reset);
+        return ()=>window.removeEventListener('spacelab:session-cleared',reset);
+    },[]);
     useLayoutEffect(()=>{
         if (state.view !== 'wizard') return;
         scroll.current?.scrollTo({top:0,behavior:'instant'});
@@ -68,7 +73,7 @@ export function App({bridge}:{bridge:Bridge}) {
         </nav>
         <div className="sl-nav-bottom"><div className="sl-nav-tip"><span className="sl-tip-symbol"><Sparkles size={20}/></span><strong>Más tiempo para enseñar.</strong><p>Dale forma a tus ideas y crea experiencias para tu aula.</p><span className="sl-tip-line"/></div><span className="sl-sidebar-footer"><span className="sl-status-dot"/>Hecho para docentes</span></div>
     </>;
-    if (state.view === 'legacy' && (['home','library'].includes(state.legacyDestination) || ['#/landing','#/home','#/sessions'].includes(window.location.hash))) return null;
+    if (state.view === 'legacy' && ['home','library','landing'].includes(state.legacyDestination)) return null;
     if (state.view === 'legacy') return <div className="sl-return-bar"><span><Orbit size={19}/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al nuevo generador</button></div>;
 
     return <div className="sl-app">

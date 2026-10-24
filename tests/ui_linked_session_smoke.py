@@ -47,7 +47,7 @@ def run_width(browser, port, width):
     page = context.new_page()
     errors = []
     page.on('pageerror', lambda error: errors.append(str(error)))
-    page.goto(f"http://127.0.0.1:{port}/index.html", wait_until='domcontentloaded')
+    page.goto(f"http://127.0.0.1:{port}/index.html?ui=legacy", wait_until='domcontentloaded')
     page.evaluate("""() => {
         window.SupabaseClient.getCurrentUser = async () => ({ id: 'linked-teacher' });
         window.SupabaseClient.getUserProfile = async () => null;

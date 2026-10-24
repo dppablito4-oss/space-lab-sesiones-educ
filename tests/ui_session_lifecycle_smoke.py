@@ -64,7 +64,7 @@ def run() -> None:
             page = browser.new_page(viewport={"width": 1280, "height": 800})
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
-            page.goto(f"http://127.0.0.1:{server.server_port}/index.html#/app", wait_until="domcontentloaded")
+            page.goto(f"http://127.0.0.1:{server.server_port}/index.html?ui=legacy#/app", wait_until="domcontentloaded")
             page.wait_for_function("() => typeof window.appStartNewSession === 'function'")
 
             page.evaluate(

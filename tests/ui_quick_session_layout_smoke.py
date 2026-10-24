@@ -27,7 +27,7 @@ def run():
                 page = context.new_page()
                 errors = []
                 page.on('pageerror', lambda error: errors.append(str(error)))
-                url = f'http://127.0.0.1:{server.server_port}/index.html#/app'
+                url = f'http://127.0.0.1:{server.server_port}/index.html?ui=legacy#/app'
                 page.goto(url, wait_until='domcontentloaded')
                 page.wait_for_function('typeof window.appStartNewSession === "function"')
                 page.evaluate('window.appStartNewSession()')

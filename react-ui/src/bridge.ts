@@ -12,6 +12,7 @@ export interface Snapshot {
     account:{signedIn:boolean; name:string; credits:string}; theme:string; view:string; legacyDestination:string;
 }
 export interface Bridge {
+    isReady:()=>boolean;
     getSnapshot:() => Snapshot;
     subscribe:(listener:()=>void) => () => void;
     setField:(field:Field,value:string) => void;

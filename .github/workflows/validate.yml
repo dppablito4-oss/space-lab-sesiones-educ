@@ -149,6 +149,8 @@ jobs:
       - name: Build isolated React preview
         run: |
           npm ci --ignore-scripts
+          npm run build:public:assets
+          git diff --exit-code -- assets/react-ui
           npm run build:react
 
       - name: Run frontend security test
@@ -158,6 +160,7 @@ jobs:
           python tests/ui_quick_session_smoke.py
           python tests/ui_quick_session_layout_smoke.py
           python tests/ui_react_session_smoke.py
+          python tests/ui_public_entry_smoke.py
           python tests/ui_planning_ai_smoke.py --react
           python tests/ui_session_lifecycle_smoke.py
           python tests/ui_account_recovery_smoke.py
