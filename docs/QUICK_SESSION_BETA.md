@@ -4,7 +4,10 @@
 
 **Nueva sesión** abre directamente el planificador en **Modo rápido · 3 pasos**: Datos, Aprendizajes y Revisar y generar. **Modo avanzado** conserva las seis secciones y se puede activar sin perder campos, adjuntos ni configuración. Abrir directamente el editor o recuperar un documento conserva el recorrido compatible existente; el modo elegido permanece activo mientras se usa el editor. **Editar sesión**, en el menú lateral, permite reabrir el asistente después de cargar o generar un documento.
 
-No hay framework nuevo, migraciones de base de datos ni cambios en los constructores Word/PDF. Este cambio no despliega servicios ni publica producción.
+El asistente base conserva la arquitectura JavaScript existente. La rama incluye
+además un [prototipo alternativo con React](REACT_UI_PREVIEW.md) para comparar
+el rediseño, con integración gradual y estado compartido. No hay migraciones de
+base de datos ni cambios en los constructores Word/PDF. No se despliega producción.
 
 ## Dependencias inspeccionadas antes de implementar
 
@@ -81,7 +84,7 @@ antes de generar la sesión.
 
 - 50 suites JavaScript: contratos, adaptadores, catálogo, selección curricular, almacenamiento, planificación, rutas de IA, permisos y créditos, incluidas `quick-session.test.js` y `ai-availability.test.js` (respuestas tardías, cambio de cuenta y validación sustituida).
 - 27 pruebas Deno: prompt protegido, propuestas del asistente, disponibilidad por cuenta/configuración/fallback, créditos, identidad contable, límites/tiempos y planificación vinculada.
-- 45 scripts Python: contrato y adaptador, constructores y fidelidad DOCX, matemáticas Word, geometría, unidades, composición de bundles, backend DOCX, emparejamiento del motor, higiene, seguridad de perfil, créditos, cuotas y recorridos de navegador.
+- 46 scripts Python: contrato y adaptador, constructores y fidelidad DOCX, matemáticas Word, geometría, unidades, composición de bundles, backend DOCX, emparejamiento del motor, higiene, seguridad de perfil, créditos, cuotas y recorridos de navegador, incluido el prototipo React.
 - Navegador: `ui_quick_session_smoke.py`, recorridos individual y vinculado, guardado/recuperación, estructura, presentación, recuperación de cuenta, planificación/IA, Matemática de Secundaria, ida y vuelta de fórmulas, temas, overlays, arranque y accesibilidad.
 - PDF: `pdf_fallback_math_smoke.py`, con paginación de contenido extenso y delimitadores matemáticos.
 - Composición, hashes de assets, sintaxis JavaScript y `git diff --check`.

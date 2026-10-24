@@ -275,6 +275,13 @@
             return true;
         };
         window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);
+        if (document.getElementById('react-preview-root')) {
+            window.SpaceLabReactBridge = window.SpaceLabReactSessionBridge.create({
+                form:DOM.form, quickSession, getSession:() => AppState.currentSession,
+                getSourceFile:() => AppState.sourceFileData,
+                generate:handleGenerateAI, openSidebar, closeSidebar
+            });
+        }
         window.appOpenPlanning = (planningContainerId, options) => window.PlanningView?.open(planningContainerId, options);
         window.appReloadSessions = () => {
             renderSavedList();
@@ -559,6 +566,7 @@
         DOM.btnCloseSidebar.addEventListener('click', () => closeSidebar());
         document.addEventListener('click', (event) => {
             if (!AppState.sidebarOpen) return;
+            if (event.target.closest('#react-preview-root')) return;
             if (event.target.closest('[role="dialog"], [aria-modal="true"], .modal-overlay, .confirm-overlay')) return;
             if (DOM.sidebar.contains(event.target) || DOM.workflowRail.contains(event.target) || DOM.btnMenuMobile.contains(event.target)) return;
             event.preventDefault();

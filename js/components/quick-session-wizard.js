@@ -106,6 +106,7 @@ window.SpaceLabQuickSession = (() => {
             }
             window.SpaceLabCurriculumPicker?.setScope(profiles);
             review();
+            window.dispatchEvent(new CustomEvent('spacelab:quick-curriculum-updated'));
         }
         function setMode(next, focus = true) {
             mode = next;
@@ -146,7 +147,7 @@ window.SpaceLabQuickSession = (() => {
         window.addEventListener('spacelab:session-generated', refresh);
         window.addEventListener('spacelab:profile-defaults-loaded', refresh);
         window.addEventListener('spacelab:session-cleared', () => { scopeKey = ''; showStep(1, false); refresh(); });
-        return {validate, refresh, setMode, focusStep: () => showStep(step), isQuick: () => mode === 'quick'};
+        return {validate, refresh, setMode, getCurriculum: () => profiles, focusStep: () => showStep(step), isQuick: () => mode === 'quick'};
     }
     return {create};
 })();
