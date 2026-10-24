@@ -142,7 +142,7 @@ async function handleRequest(req: Request): Promise<Response> {
     return jsonResponse(req, { error: "El gateway de IA no está configurado.", code: "GATEWAY_UNAVAILABLE" }, 500);
   }
 
-  const { data: beginData, error: beginError } = await auth.client.rpc("begin_ai_gateway_request", {
+  const { data: beginData, error: beginError } = await auth.accounting.rpc("begin_ai_gateway_request", {
     p_request_id: requestId,
     p_action: action,
     p_requested_quality: primary.quality,
@@ -209,7 +209,7 @@ async function handleRequest(req: Request): Promise<Response> {
         latencyMs: Date.now() - startedAt,
       });
 
-      const { error } = await auth.client.rpc("record_ai_route", {
+      const { error } = await auth.accounting.rpc("record_ai_route", {
         p_request_id: attemptRequestId,
         p_requested_quality: decision.quality,
         p_route_reason: decision.reason,
@@ -253,7 +253,7 @@ async function handleRequest(req: Request): Promise<Response> {
     ? "success"
     : (responseStatus >= 500 ? "failed" : "rejected");
 
-  const { error: finishError } = await auth.client.rpc("finish_ai_gateway_request", {
+  const { error: finishError } = await auth.accounting.rpc("finish_ai_gateway_request", {
     p_request_id: requestId,
     p_status: gatewayStatus,
     p_final_provider: finalDecision.provider,

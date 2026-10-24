@@ -4,6 +4,16 @@ Procedimiento de operación de la beta abierta. La evidencia de despliegue y
 restauración está en [informe de preparación](reports/BETA_READINESS_19-10-2026.md); este documento describe cómo
 repetir las comprobaciones y distingue los pasos todavía pendientes.
 
+Actualización del 23/10: los RPC de contabilidad de IA requieren la ruta de
+servidor `run_ai_accounting`. Las pruebas de roles son
+`tests/beta_database_security.sql` y `tests/beta_server_accounting.sql`; ambas
+revierten sus datos sintéticos. La credencial SMTP nueva autenticó con Gmail (235);
+la solicitud pública devolvió 200 y el usuario confirmó llegada a Recibidos.
+La API no devuelve el secreto guardado para
+compararlo o reutilizarlo en una prueba SMTP.
+El [informe actual](reports/SUPABASE_BETA_23-10-2026.md) distingue configuración
+remota, publicación local pendiente y tareas operativas sin cerrar.
+
 ## 1. Identidad del proyecto y acceso
 
 Referencia esperada: `koptglmifwpzrfzvipnm`.
@@ -171,7 +181,7 @@ presupuesto y asignar una persona que las reciba. Configuración real pendiente.
 - [x] RLS y privilegios remotos comprobados con cuentas de prueba.
 - [x] Registro público e ingreso comprobados; confirmación automática conservada.
 - [x] Recuperación por token y contraseña nueva comprobadas sin envío de correo.
-- [ ] Entrega de correo de recuperación comprobada desde un buzón.
+- [x] Entrega de correo de recuperación: formulario público HTTP 200 y recepción en Recibidos confirmada el 23/10; [evidencia](reports/VERIFICACION_FINAL_BETA_23-10-2026.md).
 - [x] Guardado, sincronización y recarga conservan el documento en el sitio publicado.
 - [x] A → B → invitado: aislamiento probado con cuentas reales en el sitio publicado.
 - [x] Cuota local agotada devuelve fallo en el sitio publicado; red/sincronización con regresiones locales.

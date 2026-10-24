@@ -54,6 +54,15 @@
         if (node.nodeType !== Node.ELEMENT_NODE) return null;
         const tag = node.tagName;
         if (DROP_WITH_CONTENT.has(tag)) return null;
+        // KaTeX contains both accessible MathML and a visual HTML copy. Store
+        // its original TeX once, so editing/reopening never flattens or doubles it.
+        if (node.classList?.contains('katex') || node.classList?.contains('katex-display')) {
+            const source = node.querySelector('annotation[encoding="application/x-tex"]');
+            if (source) {
+                const delimiter = node.classList.contains('katex-display') ? '$$' : '$';
+                return document.createTextNode(delimiter + source.textContent + delimiter);
+            }
+        }
         if (!allowedTags.has(tag)) {
             const fragment = document.createDocumentFragment();
             Array.from(node.childNodes).forEach(child => {
@@ -91,7 +100,12 @@
 
     function sanitize(html, allowedTags) {
         const template = document.createElement('template');
-        template.innerHTML = String(html || '');
+        // A comparison inside delimited TeX is text, even in rich HTML.
+        const source = String(html || '').replace(
+            /(?<!\\)(\$\$[\s\S]+?(?<!\\)\$\$|\$(?!\$)(?:\\.|[^$\\])+?\$|\\\[[\s\S]+?\\\]|\\\([\s\S]+?\\\))/g,
+            formula => formula.replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        );
+        template.innerHTML = source;
         const output = document.createElement('div');
         Array.from(template.content.childNodes).forEach(node => {
             const clean = cleanNode(node, allowedTags);

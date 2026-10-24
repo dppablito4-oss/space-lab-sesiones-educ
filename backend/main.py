@@ -54,6 +54,8 @@ from adapters.legacy_to_v1 import adapt_legacy_to_v1
 from models.session_document import SessionDocumentV1
 from models.planning_document import PlanningContainerV2
 from version import ENGINE_VERSION
+from word_pdf import convert_docx_to_pdf
+from word_math import protect_math_html
 
 # Librerías para estilizar consola
 try:
@@ -1097,7 +1099,7 @@ def sanitize_rich_html(value: str) -> str:
     """Conserva el HTML pedagógico básico sin permitir contenido ejecutable."""
     if not value:
         return ""
-    soup = BeautifulSoup(str(value), "html.parser")
+    soup = BeautifulSoup(protect_math_html(str(value)), "html.parser")
     for unsafe in soup.find_all(["script", "style", "iframe", "object", "embed", "link", "meta"]):
         unsafe.decompose()
     for tag in list(soup.find_all(True)):
@@ -1329,8 +1331,8 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
         <script>
             window.MathJax = {{
                 tex: {{
-                    inlineMath: [['$', '$'], ['\\(', '\\)']],
-                    displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                    inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
+                    displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
                     processEscapes: true
                 }},
                 options: {{
@@ -1364,16 +1366,16 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
 
             .hoja-a4 {{
                 width: 210mm;
-                height: 297mm;
+                height: auto;
                 min-height: 297mm;
-                max-height: 297mm;
+                max-height: none;
                 padding: 18mm 12mm;
                 box-sizing: border-box;
                 background: #ffffff;
                 position: relative;
                 page-break-after: always;
                 break-after: page;
-                overflow: hidden;
+                overflow: visible;
             }}
 
             /* Cabecera */
@@ -1448,8 +1450,8 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
                 page-break-inside: auto;
             }}
             table.content-table tr {{
-                page-break-inside: avoid !important;
-                break-inside: avoid !important;
+                page-break-inside: auto;
+                break-inside: auto;
             }}
             table.content-table th, table.content-table td {{
                 border: 1px solid {primary};
@@ -1885,7 +1887,7 @@ async def exportar_pdf_json(raw: dict = Body(...)):
     """
     Genera un archivo PDF a partir del JSON estructurado de la sesión de aprendizaje.
     Normaliza cualquier variante de llaves del JSON antes de validar con Pydantic.
-    Intenta utilizar la conversión nativa de Word (docx2pdf) si está disponible en Windows,
+    Intenta utilizar la conversión nativa de Word si está disponible en Windows,
     y si falla o no está disponible, cae de vuelta al renderizado con Playwright.
     """
     # v1 is the canonical source. The legacy shape below is only needed by
@@ -1923,8 +1925,6 @@ async def exportar_pdf_json(raw: dict = Body(...)):
             temp_docx = None
             temp_pdf = None
             try:
-                from docx2pdf import convert
-                
                 # Generamos primero el Word perfecto usando la función premium
                 docx_stream = (build_docx_from_v1(canonical_doc_v1)
                                if canonical_doc_v1 else build_docx_from_json(payload))
@@ -1941,7 +1941,7 @@ async def exportar_pdf_json(raw: dict = Body(...)):
                     console.print(f"[yellow]⚡ Intentando conversión nativa Word-to-PDF para {nombre_archivo}...[/yellow]")
                 
                 # Ejecutar la conversión de Word en un hilo separado
-                await asyncio.to_thread(convert, str(temp_docx), str(temp_pdf))
+                await asyncio.to_thread(convert_docx_to_pdf, temp_docx, temp_pdf)
                 
                 # Leer los bytes del PDF resultante
                 with open(temp_pdf, "rb") as f:

@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.8";
 import { jsonResponse } from "./cors.ts";
+import { serverAccounting } from "./server-accounting.ts";
 
 export async function getAuthenticatedContext(req: Request) {
   const authHeader = req.headers.get("Authorization");
@@ -24,7 +25,14 @@ export async function getAuthenticatedContext(req: Request) {
     return jsonResponse(req, { error: "Sesión inválida o vencida.", code: "INVALID_SESSION" }, 401);
   }
 
-  return { user, client };
+  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+  if (!serviceKey) {
+    return jsonResponse(req, { error: "La contabilidad de IA no está disponible.", code: "ACCOUNTING_UNAVAILABLE" }, 503);
+  }
+  const backendClient = createClient(supabaseUrl, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  });
+  return { user, client, accounting: serverAccounting(backendClient, user.id) };
 }
 
 export async function requireAuthenticatedUser(req: Request): Promise<Response | null> {

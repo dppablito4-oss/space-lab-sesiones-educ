@@ -167,6 +167,7 @@ window.AuthUi = (() => {
         const tabRegister = document.getElementById('auth-tab-register');
 
         if (isLogin) {
+            inputPassword.minLength = 1;
             if (tabLogin) tabLogin.classList.add('active');
             if (tabRegister) tabRegister.classList.remove('active');
 
@@ -183,6 +184,7 @@ window.AuthUi = (() => {
             inputUsername.removeAttribute('required');
             inputConfirmPassword.removeAttribute('required');
         } else {
+            inputPassword.minLength = 8;
             if (tabLogin) tabLogin.classList.remove('active');
             if (tabRegister) tabRegister.classList.add('active');
 
@@ -236,6 +238,7 @@ window.AuthUi = (() => {
         inputPassword.closest('.form-group').classList.toggle('hidden', !updating);
         inputPassword.required = updating;
         inputPassword.autocomplete = 'new-password';
+        inputPassword.minLength = updating ? 8 : 1;
         groupConfirmPassword.classList.toggle('hidden', !updating);
         inputConfirmPassword.required = updating;
         inputConfirmPassword.autocomplete = 'new-password';
@@ -286,8 +289,8 @@ window.AuthUi = (() => {
             return;
         }
 
-        if (password.length < 6) {
-            Toast.warning('La contraseña debe tener al menos 6 caracteres');
+        if (!isLoginMode && password.length < 8) {
+            Toast.warning('La contraseña debe tener al menos 8 caracteres');
             return;
         }
 

@@ -1344,7 +1344,10 @@
         editables.forEach(el => {
             // Utilizar el DOMParser del navegador para limpiar de manera robusta
             const parser = new DOMParser();
-            const doc = parser.parseFromString(el.innerHTML, 'text/html');
+            const sourceHtml = window.SpaceLabSanitizer
+                ? SpaceLabSanitizer.sanitizeFragment(el.innerHTML)
+                : el.innerHTML;
+            const doc = parser.parseFromString(sourceHtml, 'text/html');
 
             // Lista de etiquetas permitidas
             const allowedTags = ['STRONG', 'B', 'EM', 'I', 'U', 'UL', 'OL', 'LI', 'P', 'BR'];
@@ -1396,6 +1399,7 @@
             el.innerHTML = el.innerHTML.trim();
         });
 
+        renderMatematica();
         Toast.success('Formato limpiado (conservando negritas y listas)');
     }
 

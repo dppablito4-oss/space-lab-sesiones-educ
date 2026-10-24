@@ -10,7 +10,7 @@ from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from word_math import append_mixed_text, contains_latex
+from word_math import append_mixed_text, contains_latex, protect_math_html, split_math_lines
 
 if TYPE_CHECKING:
     from main import SesionAprendizajeRequest
@@ -515,7 +515,7 @@ def append_html_to_cell_or_paragraph(container, html_text: str, default_font_siz
     
     # Si no contiene HTML, procesar como texto plano respetando saltos de línea
     if not re.search(r'</?(strong|b|em|i|u|ul|ol|li|p|br)\b', html_text, re.IGNORECASE):
-        lines = html_text.split('\n')
+        lines = split_math_lines(html_text)
         is_first_line = True
         for line in lines:
             line_str = line.strip()
@@ -532,7 +532,7 @@ def append_html_to_cell_or_paragraph(container, html_text: str, default_font_siz
         return
 
     # Parsear HTML real
-    soup = BeautifulSoup(html_text, 'html.parser')
+    soup = BeautifulSoup(protect_math_html(html_text), 'html.parser')
     
     def process_node(node, current_p, bold=False, italic=False, underline=False):
         if isinstance(node, NavigableString):

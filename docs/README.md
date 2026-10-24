@@ -24,6 +24,9 @@ Estos documentos conservan el estado y las fechas de sus revisiones originales.
 
 - [Experiencia real de siete sesiones, Word y guardado](reports/REVISION_EXPERIENCIA_7_SESIONES_22-10-2026.md).
 - [Ajuste de unidad Word según referencia Monte Alegre](reports/AJUSTE_UNIDAD_WORD_22-10-2026.md).
+- [Fórmulas OMML y conservación de contenido en PDF](reports/REVISION_OMML_23-10-2026.md).
+- [Revisión y correcciones reales de Supabase para la beta](reports/SUPABASE_BETA_23-10-2026.md).
+- [Verificación completa y correo recibido](reports/VERIFICACION_FINAL_BETA_23-10-2026.md).
 
 - [Preparación de beta](reports/BETA_READINESS_19-10-2026.md).
 - [Verificación del motor local](reports/AUDITORIA_SEGURIDAD_MOTOR_LOCAL.md).

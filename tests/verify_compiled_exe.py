@@ -14,6 +14,7 @@ if hasattr(sys.stderr, "reconfigure"):
 
 import docx
 import httpx
+import pymupdf
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from backend.version import ENGINE_VERSION  # noqa: E402
 
@@ -108,6 +109,9 @@ def main():
 
         print("\nVerificando PDF real desde SessionDocument v1...")
         pdf_payload = json.loads((ROOT / 'tests/fixtures/secundaria-matematica-polya.v1.json').read_text(encoding='utf-8'))
+        pdf_payload['momentos']['desarrollo']['procesos'][0]['contenido']['value'] += (
+            r'<p>MATH-AUDIT-145: calculamos \(\sqrt[3]{8}\), $\sin(\theta)$ y $\int_0^1 x^2 dx$.</p>'
+        )
         pdf_payload['token'] = token
         pdf_response = httpx.post(
             'http://127.0.0.1:8000/exportar-pdf-json', json=pdf_payload,
@@ -115,6 +119,11 @@ def main():
         )
         assert pdf_response.status_code == 200, f'Exportación PDF devolvió HTTP {pdf_response.status_code}'
         assert pdf_response.content.startswith(b'%PDF'), 'La respuesta debe ser un PDF válido'
+        pdf_artifact = ROOT / 'artifacts/math-review/compiled-session.pdf'
+        pdf_artifact.parent.mkdir(parents=True, exist_ok=True)
+        pdf_artifact.write_bytes(pdf_response.content)
+        with pymupdf.open(stream=pdf_response.content, filetype='pdf') as exported_pdf:
+            assert 'MATH-AUDIT-145' in ''.join(page.get_text() for page in exported_pdf), 'El PDF omitió el proceso con fórmulas'
         print(f'  [OK] PDF canónico generado ({len(pdf_response.content):,} bytes)')
 
         print('\nVerificando planificación y sesiones en un único Word...')
@@ -135,6 +144,8 @@ def main():
         assert bundled.status_code == 200, f'Bundle devolvió HTTP {bundled.status_code}'
         bundled_doc = docx.Document(io.BytesIO(bundled.content))
         assert sum(p.text.startswith('SESIÓN DE APRENDIZAJE') for p in bundled_doc.paragraphs) == len(linked_sessions)
+        assert len(bundled_doc._element.xpath('.//m:rad/m:deg')) >= len(linked_sessions)
+        assert len(bundled_doc._element.xpath('.//m:nary')) >= len(linked_sessions)
         print(f'  [OK] Word completo generado ({len(bundled.content):,} bytes)')
 
         print("\n============================================================")

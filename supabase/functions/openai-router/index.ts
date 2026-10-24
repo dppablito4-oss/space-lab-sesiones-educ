@@ -66,7 +66,7 @@ serve(async (req) => {
 
     let reservation;
     try {
-      reservation = await reserveAiCredits(auth.client, {
+      reservation = await reserveAiCredits(auth.accounting, {
         requestId: aiRequest.requestId,
         action: aiRequest.action,
         provider: "openai",
@@ -139,7 +139,7 @@ serve(async (req) => {
       const costUsd = calculateProviderCostUsd(apiModel, inputTokens, outputTokens);
 
       const balance = await completeAiUsage(
-        auth.client,
+        auth.accounting,
         aiRequest.requestId,
         {
           input: inputTokens,
@@ -159,7 +159,7 @@ serve(async (req) => {
       });
     } catch (error) {
       console.error("OpenAI provider invocation failed:", error);
-      await refundAiUsage(auth.client, aiRequest.requestId);
+      await refundAiUsage(auth.accounting, aiRequest.requestId);
       if (isAiTimeout(error)) return providerTimeoutResponse(req, aiRequest.requestId);
       return providerErrorResponse(req, aiRequest.requestId);
     }

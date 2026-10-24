@@ -11,15 +11,16 @@ Genera un documento .docx nativo oficial MINEDU con:
 from __future__ import annotations
 import io
 import re
+from html import escape
 
-from bs4 import BeautifulSoup, Tag
+from bs4 import BeautifulSoup, Tag, NavigableString
 from docx.document import Document
 from docx.shared import Inches, Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.section import WD_SECTION
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
-from word_math import append_mixed_text
+from word_math import append_mixed_text, uppercase_prose, protect_math_html
 from document_template import new_document_from_template, resource_root
 
 from models.session_document import SessionDocumentV1
@@ -231,7 +232,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         set_cell_margins(cell, top=60, bottom=60, left=100, right=100)
         p = cell.paragraphs[0]
         p.paragraph_format.line_spacing = 1.1
-        p.add_run(text or "").font.size = Pt(9)
+        append_mixed_text(p, text or "", font_size=9)
 
     def _hdr(cell, text, bg=BLUE_HDR, sz=9):
         set_cell_background(cell, bg)
@@ -746,10 +747,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             ppt = cell_ini.add_paragraph()
             ppt.paragraph_format.space_before = Pt(2)
             ppt.paragraph_format.space_after = Pt(2)
-            rpt = ppt.add_run(proc.titulo.upper() + ":")
-            rpt.bold = True
-            rpt.font.size = Pt(9.5)
-            rpt.font.color.rgb = PRIMARY_RGB
+            append_mixed_text(ppt, uppercase_prose(proc.titulo) + ":", bold=True, font_size=9.5, font_color=PRIMARY_RGB)
         append_html_to_cell_or_paragraph(cell_ini, proc.contenido.value, default_font_size=9.5)
 
     # Fila 2: DESARROLLO (the template reserves one expandable content row).
@@ -768,10 +766,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             ppt = cell_des.add_paragraph()
             ppt.paragraph_format.space_before = Pt(2)
             ppt.paragraph_format.space_after = Pt(4)
-            rpt = ppt.add_run(proc.titulo.upper())
-            rpt.bold = True
-            rpt.font.size = Pt(9.5)
-            rpt.font.color.rgb = ACCENT_RGB
+            append_mixed_text(ppt, uppercase_prose(proc.titulo), bold=True, font_size=9.5, font_color=ACCENT_RGB)
             append_html_to_cell_or_paragraph(cell_des, proc.contenido.value, default_font_size=9.5)
     else:
         append_html_to_cell_or_paragraph(cell_des, "Gestión y Acompañamiento del Desarrollo de Competencias...", default_font_size=9.5)
@@ -945,10 +940,8 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
 
         p_ft_t = doc.add_paragraph()
         p_ft_t.paragraph_format.space_after = Pt(4)
-        rf_t = p_ft_t.add_run("Actividad: " + doc_v1.fichaTrabajo.titulo.upper())
-        rf_t.bold = True
-        rf_t.font.size = Pt(12)
-        rf_t.font.color.rgb = ACCENT_RGB
+        append_mixed_text(p_ft_t, "Actividad: " + uppercase_prose(doc_v1.fichaTrabajo.titulo),
+                          bold=True, font_size=12, font_color=ACCENT_RGB)
 
         if doc_v1.fichaTrabajo.indicaciones:
             p_ft_ind = doc.add_paragraph()
@@ -956,21 +949,23 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
             p_ft_ind.paragraph_format.line_spacing = 1.15
             p_ft_ind.add_run("Indicaciones: ").bold = True
             p_ft_ind.runs[0].font.size = Pt(9.5)
-            p_ft_ind.add_run(doc_v1.fichaTrabajo.indicaciones).font.size = Pt(9.5)
-            p_ft_ind.runs[1].font.italic = True
+            append_mixed_text(p_ft_ind, doc_v1.fichaTrabajo.indicaciones, font_size=9.5, italic=True)
 
         act_html = doc_v1.fichaTrabajo.actividades or ""
-        soup_act = BeautifulSoup(act_html, 'html.parser')
+        if not re.search(r'</?(?:p|div|span|h[1-6]|ul|ol|li|table|tr|td|th|strong|em|b|i|br)\b', act_html, re.IGNORECASE):
+            act_html = '<p>' + escape(act_html) + '</p>'
+        soup_act = BeautifulSoup(protect_math_html(act_html), 'html.parser')
 
         def add_act_element(element, is_bold=False, is_italic=False, list_style=None):
+            if isinstance(element, NavigableString) and str(element).strip():
+                p = doc.add_paragraph()
+                append_mixed_text(p, str(element), font_size=9.5)
             if isinstance(element, Tag):
                 if element.name in ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']:
                     p = doc.add_paragraph()
                     p.paragraph_format.space_before = Pt(10)
                     p.paragraph_format.space_after = Pt(4)
-                    r = p.add_run(element.get_text().strip())
-                    r.bold = True
-                    r.font.size = Pt(11)
+                    append_mixed_text(p, element.get_text().strip(), bold=True, font_size=11)
                 elif element.name == 'p':
                     p = doc.add_paragraph()
                     p.paragraph_format.space_after = Pt(6)
@@ -1051,7 +1046,8 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         for criterion_index, criterion in enumerate(checklist_criteria):
             column = 2 + criterion_index * 2
             lct.cell(0, column).merge(lct.cell(0, column + 1))
-            lct.cell(0, column).text = criterion or ""
+            lct.cell(0, column).text = ""
+            append_mixed_text(lct.cell(0, column).paragraphs[0], criterion or "", font_size=7.5, bold=True)
             lct.cell(1, column).text = "SÍ" if criterion else ""
             lct.cell(1, column + 1).text = "NO" if criterion else ""
 
@@ -1149,7 +1145,7 @@ def build_docx_from_v1(doc_v1: SessionDocumentV1) -> io.BytesIO:
         for ci, crit in enumerate(criterios):
             sc = 2 + ci * 2
             lct.cell(0, sc).merge(lct.cell(0, sc + 1))
-            lct.cell(0, sc).paragraphs[0].text = f"Criterio {ci + 1}: {crit}"
+            append_mixed_text(lct.cell(0, sc).paragraphs[0], f"Criterio {ci + 1}: {crit}", font_size=7.5, bold=True)
             lct.cell(1, sc).paragraphs[0].text = "SI"
             lct.cell(1, sc + 1).paragraphs[0].text = "NO"
 

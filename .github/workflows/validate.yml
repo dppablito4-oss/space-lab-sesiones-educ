@@ -37,6 +37,7 @@ jobs:
       - name: Install backend dependencies
         run: |
           pip install -r backend/requirements.txt
+          pip install -r scripts/requirements-validation.txt -r scripts/requirements-ops.txt
           pip install ruff==0.16.5
 
       - name: Validate Python syntax
@@ -132,6 +133,7 @@ jobs:
           python tests/test_docx_fidelity.py
           python tests/test_planning_docx_builder.py
           python tests/test_docx_bundle.py
+          python tests/test_beta_backup.py
           python tests/test_planning_docx_geometry.py
 
       - name: Run backend DOCX smoke test
@@ -166,6 +168,8 @@ jobs:
           python tests/ui_accessibility_smoke.py
           python tests/ui_startup_resilience.py
           python tests/ui_global_modals_smoke.py
+          python tests/ui_math_roundtrip_smoke.py
+          python tests/pdf_fallback_math_smoke.py
 
       - name: Check Supabase Edge Functions
         run: |
@@ -173,6 +177,7 @@ jobs:
           deno test tests/linked-session-context.test.ts
           deno test tests/planning-map-prompt.test.ts
           deno test tests/ai-credits.test.ts
+          deno test tests/server-accounting.test.ts
           deno test tests/ai-runtime.test.ts
           deno check supabase/functions/openai-router/index.ts
           deno check supabase/functions/gemini-router/index.ts
@@ -200,6 +205,7 @@ jobs:
       - name: Install build dependencies
         run: |
           pip install -r backend/requirements.txt
+          pip install -r scripts/requirements-validation.txt
           pip install pyinstaller
 
       - name: Build EXE with PyInstaller

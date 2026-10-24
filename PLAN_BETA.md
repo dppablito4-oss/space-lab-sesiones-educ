@@ -1,5 +1,19 @@
 # Plan de beta abierta — 19 de octubre de 2026
 
+Revisión de apertura del **23/10**: motor 1.4.5 validado localmente; la última
+release pública consultada sigue en 1.4.1 y el build del sitio difiere del local.
+Faltan publicación y comprobación final, cierre de correo, respaldo automático,
+alertas y controles de acceso/consumo para la apertura. Evidencia y prioridades:
+[decisión de apertura actualizada](docs/reports/BETA_READINESS_23-10-2026.md).
+
+Comprobación remota posterior del **23/10**: contabilidad de IA restringida al
+servidor y cuatro Edge Functions actualizadas; contraseña mínima de ocho
+caracteres. Pasaron pruebas SQL y HTTP reales. La credencial SMTP nueva quedó
+configurada y autenticó con código 235. El formulario público devolvió 200 y
+el usuario confirmó recepción en Recibidos. La [verificación completa](docs/reports/VERIFICACION_FINAL_BETA_23-10-2026.md)
+pasó 43 comprobaciones Python, 48 archivos JavaScript y 24 pruebas Deno.
+[Detalle y límites](docs/reports/SUPABASE_BETA_23-10-2026.md).
+
 Objetivo: beta con registro público, cuentas aisladas, guardado recuperable,
 consumo de IA controlado y exportación Word/PDF comprobada.
 

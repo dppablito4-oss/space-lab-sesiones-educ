@@ -13,7 +13,7 @@ from docx_builder import (add_table_borders_black, append_html_to_cell_or_paragr
                           set_cell_background, set_cell_margins,
                           set_table_col_widths_and_indent)
 from models.planning_document import PlanningContainerV2
-from word_math import append_mixed_text
+from word_math import append_mixed_text, split_math_lines
 
 PAGE_WIDTH, PAGE_HEIGHT, TABLE_WIDTH = 16839, 11907, 15167
 COLORS = ('0070C0', 'FF0000', '00A000', '7030A0')
@@ -50,8 +50,7 @@ def build_docx_from_planning_v2(container: PlanningContainerV2) -> BytesIO:
         p.paragraph_format.space_after = Pt(3)
         if center:
             p.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        r = p.add_run(text)
-        r.bold, r.font.size, r.font.color.rgb = bold, Pt(size), RGBColor.from_string(color)
+        append_mixed_text(p, text, font_size=size, bold=bold, font_color=RGBColor.from_string(color))
         return p
 
     def heading(number, title, new_page=False):
@@ -69,7 +68,7 @@ def build_docx_from_planning_v2(container: PlanningContainerV2) -> BytesIO:
         if '<' in content and '>' in content:
             append_html_to_cell_or_paragraph(cell, content, default_font_size=9)
             return
-        for i, line in enumerate(content.split('\n') or ['']):
+        for i, line in enumerate(split_math_lines(content)):
             p = cell.paragraphs[0] if i == 0 else cell.add_paragraph()
             p.paragraph_format.space_after = Pt(0)
             p.paragraph_format.line_spacing = 1.0
@@ -109,7 +108,8 @@ def build_docx_from_planning_v2(container: PlanningContainerV2) -> BytesIO:
     p = paragraph(types[ident.planningType], bold=True, size=12, center=True)
     p.paragraph_format.keep_with_next = True
     p = paragraph(ident.title or 'Título por completar', bold=True, color='0070C0', size=12, center=True)
-    p.runs[0].italic = True
+    for run in p.runs:
+        run.italic = True
     p.paragraph_format.keep_with_next = True
     p.paragraph_format.space_after = Pt(7)
     shade = OxmlElement('w:shd')

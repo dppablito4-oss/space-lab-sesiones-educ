@@ -1,11 +1,16 @@
 project_id = "koptglmifwpzrfzvipnm"
 
 [auth]
+minimum_password_length = 8
 site_url = "https://sesiones.sypablitodp.site"
 additional_redirect_urls = [
   "https://sesiones.sypablitodp.site/",
   "https://sesiones.sypablitodp.site/index.html"
 ]
+
+[auth.hook.before_user_created]
+enabled = true
+uri = "pg-functions://postgres/public/beta_before_user_created"
 
 [functions.ai-gateway]
 verify_jwt = false

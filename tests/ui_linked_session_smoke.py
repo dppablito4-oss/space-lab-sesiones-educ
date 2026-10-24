@@ -63,11 +63,18 @@ def run_width(browser, port, width):
     }""")
     assert 'revisada' in blocked
 
+    # La sesión guardada no requiere confirmación. El aviso protege cambios
+    # reales posteriores a la carga, como los que introduce el docente.
+    page.locator('#input-titulo').evaluate("""input => {
+        input.value = 'Sesión con cambios pendientes';
+        input.dispatchEvent(new Event('input', {bubbles:true}));
+    }""")
     # Cancelar la confirmación conserva la sesión activa y no filtra un link.
     active_before = page.evaluate('structuredClone(window.getCurrentSession())')
-    page.evaluate('ConfirmDialog.show = async () => false')
+    page.evaluate('() => { window.__linkedConfirmCount = 0; ConfirmDialog.show = async () => { window.__linkedConfirmCount++; return false; }; }')
     cancelled = page.evaluate(f"window.appStartLinkedSession('{PLAN_ID}', 'session-02')")
     assert cancelled is None
+    assert page.evaluate('window.__linkedConfirmCount') == 1
     assert page.evaluate('window.getCurrentSession()') == active_before
     assert_pending(page, False)
     untouched = page.evaluate(f"window.PlanningRepository.create({{validator: window.PlanningContainerV2}}).get('{PLAN_ID}')")

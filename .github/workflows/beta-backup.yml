@@ -1,0 +1,37 @@
+name: Encrypted beta backup
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '23 9 * * *'
+permissions:
+  contents: read
+concurrency:
+  group: beta-encrypted-backup
+  cancel-in-progress: false
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PGHOST: ${{ vars.BETA_BACKUP_HOST }}
+      PGPORT: ${{ vars.BETA_BACKUP_PORT }}
+      PGUSER: ${{ vars.BETA_BACKUP_USER }}
+      PGPASSWORD: ${{ secrets.BETA_BACKUP_PASSWORD }}
+      BETA_BACKUP_RECIPIENT: ${{ vars.BETA_BACKUP_RECIPIENT }}
+      BETA_BACKUP_PRIVATE_KEY: ${{ secrets.BETA_BACKUP_PRIVATE_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install -r scripts/requirements-ops.txt
+      - name: Export, verify isolated restoration and encrypt
+        run: python scripts/beta_backup.py --verify-restore
+      - name: Store encrypted backup only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: encrypted-beta-backup-${{ github.run_id }}
+          path: backup-output/*.sealed
+          retention-days: 14
+          if-no-files-found: error

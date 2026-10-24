@@ -23,10 +23,6 @@ FROM beta_security_users WHERE kind = 'a';
 DO $$
 DECLARE
     other_user UUID := (SELECT id FROM beta_security_users WHERE kind = 'b');
-    request_id UUID := gen_random_uuid();
-    refund_id UUID := gen_random_uuid();
-    before_balance INTEGER;
-    result JSONB;
     denied BOOLEAN;
 BEGIN
     ASSERT NOT public.is_admin(), 'Normal account must not be admin';
@@ -55,23 +51,11 @@ BEGIN
     ASSERT denied AND NOT public.is_admin(), 'User must not promote their own profile';
     ASSERT (SELECT count(*) FROM public.corporate_email_settings) = 0, 'SMTP settings must not be readable';
 
-    SELECT balance INTO before_balance FROM public.ai_credit_wallets WHERE user_id = auth.uid();
-    result := public.reserve_ai_credits(request_id, 'refine_text', 'openai', 'gpt-6-luna');
-    ASSERT result->>'ok' = 'true', 'Synthetic accounting reservation must succeed';
-    result := public.reserve_ai_credits(request_id, 'refine_text', 'openai', 'gpt-6-luna');
-    ASSERT result->>'ok' = 'false' AND result->>'code' = 'DUPLICATE_REQUEST', 'Reservation must be idempotent';
-    result := public.complete_ai_usage(request_id, 1, 1, 'synthetic-test', 0::numeric, 1);
-    ASSERT result->>'ok' = 'true', 'Accounting completion must succeed';
-    result := public.refund_ai_usage(request_id);
-    ASSERT result->>'ok' = 'false', 'Successful usage must not be refunded';
-    result := public.reserve_ai_credits(refund_id, 'refine_text', 'openai', 'gpt-6-luna');
-    ASSERT result->>'ok' = 'true', 'Second accounting reservation must succeed';
-    result := public.refund_ai_usage(refund_id);
-    ASSERT result->>'ok' = 'true', 'Failed usage reservation must be refundable';
-    result := public.refund_ai_usage(refund_id);
-    ASSERT result->>'ok' = 'true', 'Duplicate refund must be harmless';
-    ASSERT (SELECT balance FROM public.ai_credit_wallets WHERE user_id = auth.uid()) < before_balance,
-        'Only the completed request must consume credits';
+    ASSERT NOT has_function_privilege('authenticated', 'public.refund_ai_usage(uuid)', 'EXECUTE'),
+        'Credit refunds must only run in the backend';
+    ASSERT NOT has_function_privilege('authenticated', 'public.reserve_ai_credits(uuid,text,text,text)', 'EXECUTE'),
+        'Credit reservations must only run in the backend';
+    -- Atomic charging/refunds are covered by beta_server_accounting.sql.
 END;
 $$;
 

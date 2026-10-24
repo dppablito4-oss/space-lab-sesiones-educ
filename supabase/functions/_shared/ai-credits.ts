@@ -25,6 +25,9 @@ const PUBLIC_ERRORS: Record<string, { message: string; status: number }> = {
   UNKNOWN_ACTION: { message: "La acción de IA solicitada no está permitida.", status: 400 },
   RATE_LIMITED: { message: "Has realizado demasiadas solicitudes. Inténtalo nuevamente en un minuto.", status: 429 },
   DAILY_LIMIT_REACHED: { message: "Alcanzaste el límite diario de créditos de IA.", status: 429 },
+  CONCURRENT_LIMIT_REACHED: { message: "Ya tienes una generación en curso. Espera a que termine.", status: 429 },
+  BETA_BUDGET_REACHED: { message: "La beta alcanzó su límite diario de IA. Vuelve a intentarlo mañana.", status: 429 },
+  BETA_BUSY: { message: "Hay varias generaciones en curso. Inténtalo dentro de unos minutos.", status: 429 },
   INSUFFICIENT_CREDITS: { message: "No tienes créditos suficientes para esta operación.", status: 402 },
   PLAN_DISABLED: { message: "Tu plan de IA no está disponible temporalmente.", status: 403 },
 };

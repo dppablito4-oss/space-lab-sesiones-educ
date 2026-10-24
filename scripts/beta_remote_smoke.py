@@ -87,6 +87,12 @@ def main():
                   status == 200 and settings.get("mailer_autoconfirm") is True
                   and settings.get("disable_signup") is False
                   and settings.get("external", {}).get("email") is True)
+            short_email = f'beta-password-{uuid.uuid4()}@example.invalid'
+            status, rejected, _ = call('POST', '/auth/v1/signup', {'email': short_email, 'password': 'short6'})
+            unexpected = (rejected or {}).get('user') or {}
+            if unexpected.get('id'):
+                users.append({'id': unexpected['id'], 'token': None, 'email': short_email})
+            check('server rejects passwords shorter than eight characters', status == 422)
 
         for _ in range(2):
             password = secrets.token_urlsafe(32)
@@ -105,6 +111,13 @@ def main():
             fixture["token"] = session["access_token"]
 
         a, b = users
+        for operation, arguments in [
+            ('refund_ai_usage', {'p_request_id': str(uuid.uuid4())}),
+            ('run_ai_accounting', {'p_user_id': b['id'], 'p_operation': 'refund_ai_usage',
+                                   'p_payload': {'p_request_id': str(uuid.uuid4())}}),
+        ]:
+            status, _, _ = call('POST', '/rest/v1/rpc/' + operation, arguments, token=a['token'])
+            check('browser cannot invoke ' + operation, status in (401, 403, 404))
         # Generate a recovery link without sending a message, then consume its
         # token and change only this temporary account's password.
         recovery_target = "https://sesiones.sypablitodp.site/"

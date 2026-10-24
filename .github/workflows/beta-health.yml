@@ -1,0 +1,33 @@
+name: Beta public availability
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17,47 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: beta-public-health
+  cancel-in-progress: true
+
+jobs:
+  availability:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Check website, Auth and unauthenticated AI boundary
+        run: python scripts/beta_health_check.py
+      - run: pip install -r scripts/requirements-ops.txt
+      - name: Check global beta usage and error thresholds
+        env:
+          PGHOST: ${{ vars.BETA_BACKUP_HOST }}
+          PGPORT: ${{ vars.BETA_BACKUP_PORT }}
+          PGUSER: ${{ vars.BETA_BACKUP_USER }}
+          PGPASSWORD: ${{ secrets.BETA_BACKUP_PASSWORD }}
+        run: python scripts/beta_ops_monitor.py

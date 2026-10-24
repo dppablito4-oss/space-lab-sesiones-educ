@@ -55,7 +55,12 @@ def run():
             page.goto(f"http://127.0.0.1:{server.server_port}/index.html", wait_until="domcontentloaded")
             page.wait_for_function("() => typeof window.appOpenSession === 'function'")
 
+            page.evaluate("window.AuthUi.openRegister()")
+            assert page.locator('#auth-password').get_attribute('minlength') == '8'
+            page.locator('#btn-close-auth').click()
+
             page.evaluate("window.AuthUi.openModal()")
+            assert page.locator('#auth-password').get_attribute('minlength') == '1'
             page.locator("#btn-forgot-password").click()
             page.locator("#auth-email").fill("teacher@example.test")
             page.locator("#btn-submit-auth").click()
