@@ -68,6 +68,30 @@ def run():
             dialog.get_by_role('button', name='Confirmar cambio').click()
             expect(dialog).not_to_be_visible()
             expect(credit_form.get_by_text('5', exact=True)).to_be_visible()
+            future = page.evaluate('new Date(Date.now()+86400000).toISOString()')
+            page.evaluate("""async ({id,expiresAt})=>{
+                const result=await SupabaseClient.client.rpc('admin_cc_write',{
+                    p_request_id:crypto.randomUUID(),p_action:'users.restrict',p_target:id,
+                    p_payload:{reason:'Restricción temporal de prueba',state:'active',restrictAi:true,
+                        freezeCredits:false,expiresAt,version:0}});
+                if(result.error)throw Error(result.error.message);
+            }""", {'id': info['ids']['user'], 'expiresAt': future})
+            page.get_by_role('button', name='Actualizar', exact=True).click()
+            restriction_form = page.locator('form').filter(has=page.get_by_role('heading', name='Acceso y restricciones'))
+            expect(restriction_form.get_by_label('Restringir IA', exact=True)).to_be_checked()
+            expiration = restriction_form.get_by_label('Caducidad (opcional)', exact=True)
+            expect(expiration).not_to_have_value('')
+            expected_expiration = expiration.evaluate('(input)=>new Date(input.value).toISOString()')
+            restriction_form.get_by_label('Congelar uso de créditos', exact=True).check()
+            restriction_form.get_by_label('Motivo del cambio (8 a 300 caracteres)').fill('Conservar caducidad al editar')
+            restriction_form.get_by_role('button', name='Revisar cambio').click()
+            dialog.get_by_role('textbox').fill('user@example.test')
+            dialog.get_by_role('button', name='Confirmar cambio').click()
+            expect(dialog).not_to_be_visible()
+            stored = page.evaluate("""async(id)=>(await SupabaseClient.client.rpc('admin_cc_read',{
+                p_resource:'user',p_query:{id}})).data.controls.expires_at""", info['ids']['user'])
+            assert page.evaluate('(values)=>new Date(values[0]).getTime()===new Date(values[1]).getTime()',
+                                 [stored, expected_expiration])
             page.get_by_role('link', name='Auditoría', exact=True).click()
             expect(page.get_by_role('cell', name='Créditos de validación GUI', exact=True)).to_be_visible()
             page.get_by_role('link', name='Operación de la beta', exact=True).click()

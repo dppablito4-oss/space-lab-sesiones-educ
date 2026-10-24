@@ -9580,15 +9580,21 @@ var Le = (e) => Ie(e, "admin_cc_context"), Re = (e, t, n = {}) => Ie(e, "admin_c
 	"Comunicaciones",
 	"Analítica de producto",
 	"Infraestructura"
-], Ue = (e) => e == null ? "Sin datos" : String(e), We = (e) => e ? new Date(String(e)).toLocaleString("es-PE") : "—", Ge = (e) => e == null ? "Sin datos" : Number(e).toLocaleString("es-PE"), Ke = () => window.SpaceLabTheme?.getPreference() || "system";
-function qe(e) {
+], Ue = (e) => e == null ? "Sin datos" : String(e), We = (e) => e ? new Date(String(e)).toLocaleString("es-PE") : "—", Ge = (e) => e == null ? "Sin datos" : Number(e).toLocaleString("es-PE");
+function Ke(e) {
+	if (!e) return "";
+	let t = new Date(String(e));
+	return (/* @__PURE__ */ new Date(t.getTime() - t.getTimezoneOffset() * 6e4)).toISOString().slice(0, 16);
+}
+var qe = () => window.SpaceLabTheme?.getPreference() || "system";
+function Je(e) {
 	try {
 		return decodeURIComponent(e);
 	} catch {
 		return e;
 	}
 }
-function Je({ rows: e, columns: t }) {
+function Ye({ rows: e, columns: t }) {
 	return /* @__PURE__ */ (0, A.jsx)("div", {
 		className: "ac-table",
 		tabIndex: 0,
@@ -9599,7 +9605,7 @@ function Je({ rows: e, columns: t }) {
 		}) })] })] })
 	});
 }
-function Ye({ name: e, label: t, value: n, type: r = "text", min: i, max: a, required: o = !0 }) {
+function Xe({ name: e, label: t, value: n, type: r = "text", min: i, max: a, required: o = !0 }) {
 	return /* @__PURE__ */ (0, A.jsxs)("label", { children: [t, /* @__PURE__ */ (0, A.jsx)("input", {
 		name: e,
 		type: r,
@@ -9612,7 +9618,7 @@ function Ye({ name: e, label: t, value: n, type: r = "text", min: i, max: a, req
 		step: r === "number" && e !== "dailyEstimatedUsd" ? "1" : r === "number" ? "0.01" : void 0
 	})] });
 }
-function Xe({ name: e, label: t, value: n }) {
+function Ze({ name: e, label: t, value: n }) {
 	return /* @__PURE__ */ (0, A.jsxs)("label", {
 		className: "ac-check",
 		children: [/* @__PURE__ */ (0, A.jsx)("input", {
@@ -9622,7 +9628,7 @@ function Xe({ name: e, label: t, value: n }) {
 		}), t]
 	});
 }
-function Ze() {
+function Qe() {
 	let e = Ne(), [t, n] = (0, C.useState)(null), [r, i] = (0, C.useState)("Comprobando acceso…"), [a, o] = (0, C.useState)(location.hash.slice(1) || "overview"), [s, c] = (0, C.useState)(!1), [l, u] = (0, C.useState)(null), [d, f] = (0, C.useState)(null), [p, m] = (0, C.useState)([]), [h, g] = (0, C.useState)(""), [_, v] = (0, C.useState)(""), [y, b] = (0, C.useState)(!1), [ee, x] = (0, C.useState)(0), [te, ne] = (0, C.useState)(""), [S, re] = (0, C.useState)(0), [ie, ae] = (0, C.useState)("30"), [oe, w] = (0, C.useState)(null), [se, le] = (0, C.useState)(!1), [de, pe] = (0, C.useState)(""), me = (0, C.useRef)(""), T = (0, C.useRef)(0), he = (0, C.useRef)(0), ge = (0, C.useRef)(null), ve = (e) => t?.permissions.includes(e) === !0, be = () => {
 		T.current++, he.current++;
 	};
@@ -9737,11 +9743,11 @@ function Ze() {
 		disabled: Oe,
 		title: Oe ? "Verifica MFA antes de cambiar datos" : void 0,
 		children: e
-	}), k = /* @__PURE__ */ (0, A.jsx)(Ye, {
+	}), k = /* @__PURE__ */ (0, A.jsx)(Xe, {
 		name: "reason",
 		label: "Motivo del cambio (8 a 300 caracteres)",
 		value: ""
-	}), Ae = d?.controls || {}, je = d?.subscription || {};
+	}), Ae = d?.controls || {}, je = d?.subscription || {}, Me = !!Ae.expires_at && new Date(String(Ae.expires_at)).getTime() <= Date.now();
 	return /* @__PURE__ */ (0, A.jsxs)("div", {
 		className: "ac-layout",
 		children: [
@@ -9826,7 +9832,7 @@ function Ze() {
 									children: [/* @__PURE__ */ (0, A.jsx)(ke, { size: 17 }), /* @__PURE__ */ (0, A.jsxs)("select", {
 										"aria-label": "Tema",
 										"data-theme-selector": !0,
-										defaultValue: Ke(),
+										defaultValue: qe(),
 										onChange: (e) => window.SpaceLabTheme?.setPreference(e.target.value),
 										children: [
 											/* @__PURE__ */ (0, A.jsx)("option", {
@@ -9879,7 +9885,7 @@ function Ze() {
 								children: [/* @__PURE__ */ (0, A.jsx)(xe, { size: 16 }), "Actualizar"]
 							})]
 						}), t ? /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [
-							/* @__PURE__ */ (0, A.jsx)($e, {
+							/* @__PURE__ */ (0, A.jsx)(et, {
 								client: e,
 								active: t.mfa,
 								onVerified: async () => {
@@ -10008,7 +10014,7 @@ function Ze() {
 									}),
 									l && /* @__PURE__ */ (0, A.jsx)("section", {
 										className: "ac-card ac-flush",
-										children: /* @__PURE__ */ (0, A.jsx)(Je, {
+										children: /* @__PURE__ */ (0, A.jsx)(Ye, {
 											rows: Te,
 											columns: a === "credits" ? [[
 												"email",
@@ -10071,7 +10077,7 @@ function Ze() {
 																/* @__PURE__ */ (0, A.jsx)("strong", { children: Ge(d.balance) }),
 																". Un valor negativo retira créditos disponibles."
 															] }),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "delta",
 																label: "Cantidad a añadir o retirar",
 																value: "",
@@ -10089,7 +10095,7 @@ function Ze() {
 															/* @__PURE__ */ (0, A.jsx)("h3", { children: "Acceso y restricciones" }),
 															/* @__PURE__ */ (0, A.jsxs)("label", { children: ["Estado", /* @__PURE__ */ (0, A.jsxs)("select", {
 																name: "state",
-																defaultValue: String(Ae.state || "active"),
+																defaultValue: String(Me ? "active" : Ae.state || "active"),
 																children: [
 																	/* @__PURE__ */ (0, A.jsx)("option", {
 																		value: "active",
@@ -10105,21 +10111,21 @@ function Ze() {
 																	})
 																]
 															})] }),
-															/* @__PURE__ */ (0, A.jsx)(Xe, {
+															/* @__PURE__ */ (0, A.jsx)(Ze, {
 																name: "restrictAi",
 																label: "Restringir IA",
-																value: Ae.restrict_ai
+																value: !Me && Ae.restrict_ai
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Xe, {
+															/* @__PURE__ */ (0, A.jsx)(Ze, {
 																name: "freezeCredits",
 																label: "Congelar uso de créditos",
-																value: Ae.freeze_credits
+																value: !Me && Ae.freeze_credits
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "expiresAt",
 																label: "Caducidad (opcional)",
 																type: "datetime-local",
-																value: "",
+																value: Me ? "" : Ke(Ae.expires_at),
 																required: !1
 															}),
 															k,
@@ -10139,11 +10145,11 @@ function Ze() {
 																	children: Ue(e.name)
 																}, String(e.code)))
 															})] }),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "expiresAt",
 																label: "Fin del período (opcional)",
 																type: "datetime-local",
-																value: "",
+																value: Ke(je.current_period_end),
 																required: !1
 															}),
 															k,
@@ -10154,7 +10160,7 @@ function Ze() {
 												]
 											}),
 											/* @__PURE__ */ (0, A.jsx)("h3", { children: "Últimos movimientos de créditos" }),
-											/* @__PURE__ */ (0, A.jsx)(Je, {
+											/* @__PURE__ */ (0, A.jsx)(Ye, {
 												rows: d.ledger || [],
 												columns: [
 													[
@@ -10173,7 +10179,7 @@ function Ze() {
 								] }),
 								l && a === "plans" && /* @__PURE__ */ (0, A.jsxs)(A.Fragment, { children: [/* @__PURE__ */ (0, A.jsx)("section", {
 									className: "ac-card ac-flush",
-									children: /* @__PURE__ */ (0, A.jsx)(Je, {
+									children: /* @__PURE__ */ (0, A.jsx)(Ye, {
 										rows: Te,
 										columns: [
 											["name", "Plan"],
@@ -10195,7 +10201,7 @@ function Ze() {
 											]
 										]
 									})
-								}), /* @__PURE__ */ (0, A.jsx)(et, {
+								}), /* @__PURE__ */ (0, A.jsx)(tt, {
 									client: e,
 									canWrite: ve("quotas.write") && !Oe,
 									refresh: ee,
@@ -10203,7 +10209,7 @@ function Ze() {
 								})] }),
 								l && a === "generations" && /* @__PURE__ */ (0, A.jsxs)("section", {
 									className: "ac-card ac-flush",
-									children: [/* @__PURE__ */ (0, A.jsx)(Je, {
+									children: [/* @__PURE__ */ (0, A.jsx)(Ye, {
 										rows: Te,
 										columns: [
 											[
@@ -10227,7 +10233,7 @@ function Ze() {
 								}),
 								l && a === "audit" && /* @__PURE__ */ (0, A.jsx)("section", {
 									className: "ac-card ac-flush",
-									children: /* @__PURE__ */ (0, A.jsx)(Je, {
+									children: /* @__PURE__ */ (0, A.jsx)(Ye, {
 										rows: Te,
 										columns: [
 											[
@@ -10263,17 +10269,17 @@ function Ze() {
 													children: [
 														/* @__PURE__ */ (0, A.jsxs)("div", { children: [
 															/* @__PURE__ */ (0, A.jsx)("h3", { children: "Disponibilidad" }),
-															/* @__PURE__ */ (0, A.jsx)(Xe, {
+															/* @__PURE__ */ (0, A.jsx)(Ze, {
 																name: "aiEnabled",
 																label: "Permitir nuevas generaciones de IA",
 																value: l.aiEnabled
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Xe, {
+															/* @__PURE__ */ (0, A.jsx)(Ze, {
 																name: "signupsEnabled",
 																label: "Permitir nuevos registros",
 																value: l.signupsEnabled
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "message",
 																label: "Nota operativa interna",
 																value: l.message,
@@ -10282,7 +10288,7 @@ function Ze() {
 														] }),
 														/* @__PURE__ */ (0, A.jsxs)("div", { children: [
 															/* @__PURE__ */ (0, A.jsx)("h3", { children: "Presupuesto y concurrencia" }),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "dailyCredits",
 																label: "Créditos globales por día",
 																type: "number",
@@ -10290,7 +10296,7 @@ function Ze() {
 																min: 1,
 																max: 1e5
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "dailyEstimatedUsd",
 																label: "Presupuesto diario estimado (USD)",
 																type: "number",
@@ -10298,7 +10304,7 @@ function Ze() {
 																min: .01,
 																max: 1e3
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "maxConcurrent",
 																label: "Generaciones simultáneas",
 																type: "number",
@@ -10309,7 +10315,7 @@ function Ze() {
 														] }),
 														/* @__PURE__ */ (0, A.jsxs)("div", { children: [
 															/* @__PURE__ */ (0, A.jsx)("h3", { children: "Registros de beta" }),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "signupsPerHour",
 																label: "Por hora",
 																type: "number",
@@ -10317,7 +10323,7 @@ function Ze() {
 																min: 1,
 																max: 1e4
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "signupsPerDay",
 																label: "Por día",
 																type: "number",
@@ -10325,7 +10331,7 @@ function Ze() {
 																min: 1,
 																max: 1e5
 															}),
-															/* @__PURE__ */ (0, A.jsx)(Ye, {
+															/* @__PURE__ */ (0, A.jsx)(Xe, {
 																name: "signupsPerIpHour",
 																label: "Por IP y hora",
 																type: "number",
@@ -10347,7 +10353,7 @@ function Ze() {
 									children: [
 										/* @__PURE__ */ (0, A.jsx)("h2", { children: "Operadores delegados" }),
 										/* @__PURE__ */ (0, A.jsx)("p", { children: "Estos roles son de consulta. El propietario se configura por un procedimiento privilegiado y no se promueve desde el perfil." }),
-										/* @__PURE__ */ (0, A.jsx)(Je, {
+										/* @__PURE__ */ (0, A.jsx)(Ye, {
 											rows: Te,
 											columns: [
 												["user_id", "Usuario"],
@@ -10376,7 +10382,7 @@ function Ze() {
 												});
 											},
 											children: [
-												/* @__PURE__ */ (0, A.jsx)(Ye, {
+												/* @__PURE__ */ (0, A.jsx)(Xe, {
 													name: "target",
 													label: "UUID del usuario",
 													value: ""
@@ -10402,14 +10408,14 @@ function Ze() {
 														})
 													]
 												})] }),
-												/* @__PURE__ */ (0, A.jsx)(Ye, {
+												/* @__PURE__ */ (0, A.jsx)(Xe, {
 													name: "expiresAt",
 													label: "Caducidad opcional",
 													value: "",
 													type: "datetime-local",
 													required: !1
 												}),
-												/* @__PURE__ */ (0, A.jsx)(Xe, {
+												/* @__PURE__ */ (0, A.jsx)(Ze, {
 													name: "remove",
 													label: "Retirar este rol",
 													value: !1
@@ -10452,7 +10458,7 @@ function Ze() {
 										className: "ac-eyebrow",
 										children: "NO DISPONIBLE"
 									}),
-									/* @__PURE__ */ (0, A.jsx)("h2", { children: qe(a) }),
+									/* @__PURE__ */ (0, A.jsx)("h2", { children: Je(a) }),
 									/* @__PURE__ */ (0, A.jsx)("p", { children: "Este módulo está pendiente o no está disponible para tu rol. Las operaciones disponibles están en el menú de operación, según tus permisos." })
 								]
 							})
@@ -10479,7 +10485,7 @@ function Ze() {
 					})
 				]
 			}),
-			oe && /* @__PURE__ */ (0, A.jsx)(Qe, {
+			oe && /* @__PURE__ */ (0, A.jsx)($e, {
 				proposal: oe,
 				busy: se,
 				error: de,
@@ -10491,7 +10497,7 @@ function Ze() {
 		]
 	});
 }
-function Qe({ proposal: e, busy: t, error: n, submit: r, cancel: i }) {
+function $e({ proposal: e, busy: t, error: n, submit: r, cancel: i }) {
 	let a = (0, C.useRef)(null), [o, s] = (0, C.useState)("");
 	return (0, C.useEffect)(() => {
 		let e = a.current;
@@ -10549,7 +10555,7 @@ function Qe({ proposal: e, busy: t, error: n, submit: r, cancel: i }) {
 		})
 	});
 }
-function $e({ client: e, active: t, onVerified: n }) {
+function et({ client: e, active: t, onVerified: n }) {
 	let [r, i] = (0, C.useState)(""), [a, o] = (0, C.useState)(""), [s, c] = (0, C.useState)(""), [l, u] = (0, C.useState)(!1), [d, f] = (0, C.useState)(!1), p = (0, C.useRef)(!0);
 	(0, C.useEffect)(() => () => {
 		p.current = !1;
@@ -10638,7 +10644,7 @@ function $e({ client: e, active: t, onVerified: n }) {
 		]
 	});
 }
-function et({ client: e, canWrite: t, refresh: n, propose: r }) {
+function tt({ client: e, canWrite: t, refresh: n, propose: r }) {
 	let [i, a] = (0, C.useState)([]), [o, s] = (0, C.useState)("");
 	return (0, C.useEffect)(() => {
 		let t = !0;
@@ -10667,7 +10673,7 @@ function et({ client: e, canWrite: t, refresh: n, propose: r }) {
 					}),
 					children: [
 						/* @__PURE__ */ (0, A.jsx)("h3", { children: Ue(e.plan_code) }),
-						/* @__PURE__ */ (0, A.jsx)(Ye, {
+						/* @__PURE__ */ (0, A.jsx)(Xe, {
 							name: "requestsPerMinute",
 							label: "Solicitudes por minuto",
 							value: e.requests_per_minute,
@@ -10675,7 +10681,7 @@ function et({ client: e, canWrite: t, refresh: n, propose: r }) {
 							min: 1,
 							max: 1e3
 						}),
-						/* @__PURE__ */ (0, A.jsx)(Ye, {
+						/* @__PURE__ */ (0, A.jsx)(Xe, {
 							name: "dailyCredits",
 							label: "Créditos diarios",
 							value: e.daily_credit_limit,
@@ -10683,7 +10689,7 @@ function et({ client: e, canWrite: t, refresh: n, propose: r }) {
 							min: 1,
 							max: 1e4
 						}),
-						/* @__PURE__ */ (0, A.jsx)(Ye, {
+						/* @__PURE__ */ (0, A.jsx)(Xe, {
 							name: "maxConcurrent",
 							label: "Generaciones simultáneas",
 							value: e.max_concurrent_requests,
@@ -10691,7 +10697,7 @@ function et({ client: e, canWrite: t, refresh: n, propose: r }) {
 							min: 1,
 							max: 20
 						}),
-						/* @__PURE__ */ (0, A.jsx)(Ye, {
+						/* @__PURE__ */ (0, A.jsx)(Xe, {
 							name: "reason",
 							label: "Motivo del cambio",
 							value: ""
@@ -10707,4 +10713,4 @@ function et({ client: e, canWrite: t, refresh: n, propose: r }) {
 		]
 	});
 }
-(0, Me.createRoot)(document.getElementById("admin-root")).render(/* @__PURE__ */ (0, A.jsx)(Ze, {}));
+(0, Me.createRoot)(document.getElementById("admin-root")).render(/* @__PURE__ */ (0, A.jsx)(Qe, {}));
