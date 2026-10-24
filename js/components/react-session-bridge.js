@@ -12,7 +12,7 @@ window.SpaceLabReactSessionBridge = (() => {
     function create({form, quickSession, getSession, getSourceFile, generate, openSidebar, closeSidebar}) {
         const byId = id => document.getElementById(id);
         const listeners = new Set();
-        let busy = false, generated = 0, snapshot;
+        let busy = false, generated = 0, snapshot, legacyDestination = 'document', planningRoute = '';
         const options = id => Array.from(byId(id)?.options || []).filter(option => !option.hidden || option.selected)
             .map(option => ({value:option.value, label:option.textContent.trim(), disabled:option.disabled}));
         function read() {
@@ -23,7 +23,7 @@ window.SpaceLabReactSessionBridge = (() => {
             const {warnings} = window.QuickSessionModel.coherence(data, profiles);
             if (getSession()?.planning?.mode === 'linked' || window.getPendingPlanningLink?.()) warnings.push('Esta sesión conserva el contexto y la secuencia de su unidad o experiencia.');
             return {
-                fields:values, profiles, warnings, busy, generated,
+                fields:values, profiles, warnings, busy, generated, legacyDestination,
                 view:document.body.dataset.reactPreview || 'wizard',
                 curriculumStatus:byId('quick-curriculum-status')?.textContent || '',
                 qualities:options('select-ai-provider'), methodologies:options('select-methodology'), templates:options('select-template'),
@@ -47,10 +47,13 @@ window.SpaceLabReactSessionBridge = (() => {
             emit();
         }
         function showLegacy(destination = 'document') {
+            if (document.body.dataset.reactPreview === 'planning' && !window.SpaceLabPlanningStudio.leave()) return;
+            legacyDestination = destination;
             document.body.dataset.reactPreview = 'legacy';
             if (destination === 'home' || destination === 'library') {
                 closeSidebar(false);
                 window.LandingRouter.showHome(false, {scrollToSessions:destination === 'library'});
+                history.replaceState(null, '', destination === 'library' ? '#/sessions' : '#/home');
             } else {
                 window.LandingRouter.showApp(false);
                 if (destination === 'advanced') { quickSession.setMode('advanced', false); openSidebar({focusClose:true}); }
@@ -59,11 +62,32 @@ window.SpaceLabReactSessionBridge = (() => {
             emit();
         }
         function prepare() {
+            if (document.body.dataset.reactPreview === 'planning' && !window.SpaceLabPlanningStudio.leave()) return;
             document.body.dataset.reactPreview = 'wizard';
             quickSession.setMode('quick', false);
             closeSidebar(false);
             emit();
         }
+        function showPlanning() {
+            planningRoute = window.location.hash;
+            document.body.dataset.reactPreview = 'planning';
+            closeSidebar(false);
+            emit();
+        }
+        function route() {
+            if (document.body.dataset.reactPreview === 'planning' && !window.SpaceLabPlanningStudio.leave()) {
+                history.replaceState(null, '', planningRoute || '#/app');
+                return;
+            }
+            if (['#/landing','#/home','#/sessions'].includes(window.location.hash)) {
+                document.body.dataset.reactPreview = 'legacy';
+                emit();
+            } else if (['#/sessions/new','#/app','#/editor'].includes(window.location.hash)) prepare();
+        }
+        window.addEventListener('hashchange', route);
+        byId('planning-dialog')?.addEventListener('close', () => {
+            if (document.body.dataset.reactPreview === 'planning') showLegacy('home');
+        });
         form.addEventListener('input', emit);
         form.addEventListener('change', emit);
         const events = ['spacelab:session-loaded','spacelab:session-cleared','spacelab:profile-defaults-loaded',
@@ -75,12 +99,15 @@ window.SpaceLabReactSessionBridge = (() => {
         ['header-user-badge','source-file-info'].forEach(id => {
             if (byId(id)) observer.observe(byId(id), {subtree:true,childList:true,attributes:true});
         });
+        if (['#/landing','#/home','#/sessions'].includes(window.location.hash)) document.body.dataset.reactPreview = 'legacy';
         snapshot=read();
         return Object.freeze({
             getSnapshot:() => snapshot,
             subscribe(listener) { listeners.add(listener); return () => listeners.delete(listener); },
-            setField, prepare, showLegacy,
+            setField, prepare, showLegacy, showPlanning,
+            openPlanning:() => window.SpaceLabPlanningStudio.open(),
             async newSession() {
+                if (document.body.dataset.reactPreview === 'planning' && !window.SpaceLabPlanningStudio.leave()) return false;
                 const result = await window.appStartNewSession();
                 if (result) prepare();
                 return result;

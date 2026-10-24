@@ -108,7 +108,7 @@ window.LandingRouter = (() => {
         const isAutomation = Boolean(navigator.webdriver);
 
         // 1. Si es test automatizado o la URL pide explícitamente el editor
-        if (isAutomation || hash === '#/app' || hash === '#/editor' || hash === '#/sessions/new' || /^#\/sessions\/[^/]+\/edit$/.test(hash)) {
+        if ((isAutomation && !document.getElementById('react-preview-root')) || hash === '#/app' || hash === '#/editor' || hash === '#/sessions/new' || /^#\/sessions\/[^/]+\/edit$/.test(hash)) {
             showApp(false);
             activateEditorRoute(hash);
             return;

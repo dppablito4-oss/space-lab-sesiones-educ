@@ -17,7 +17,8 @@ python scripts/version_assets.py --write
 npm run dev:react
 ```
 
-- Prototipo: http://localhost:5173/
+- Generador de sesiones: http://localhost:5173/#/app
+- Landing conservado: http://localhost:5173/#/landing
 - Interfaz anterior en el mismo origen: http://localhost:5173/legacy.html#/app
 - «Modo avanzado» y «Volver al nuevo generador» permiten comparar en la misma
   pestaña, conservando estado y adjuntos. Es el recorrido recomendado.
@@ -36,9 +37,18 @@ campos amplios, resumen en vivo, propuestas editables y opciones desplegables.
 La navegación móvil y la ayuda usan diálogos Radix con manejo de foco y teclado.
 Se respeta el tema claro/oscuro y la preferencia de movimiento reducido.
 
-El resto de vistas —biblioteca, planificación, edición del documento y
-exportación— siguen usando la interfaz existente. Los accesos del menú abren
-esas vistas y ofrecen volver al prototipo.
+«Unidades y experiencias» abre el estudio de planificación dentro de la misma
+navegación: selección de unidad, experiencia o proyecto, siete pasos, vista previa,
+secuencia y guardado. En móvil, los pasos muestran su nombre y no se superponen
+al formulario. Biblioteca, landing y Mi espacio conservan su interfaz y sus rutas;
+el enlace para volver al prototipo solo aparece al abrir el editor de documentos
+o el modo avanzado.
+
+La planificación reutiliza el mismo nodo del editor existente y sus controladores,
+integrados en `PlanningSurface`. No es una reescritura completa de sus campos en
+React. Se conservan `PlanningContainer v2`, los permisos por cuenta, la revisión,
+la sincronización y el flujo de propuestas IA. Cambiar de sección pide confirmar
+si hay cambios pendientes; cancelar mantiene el borrador.
 
 ## Estado e integración
 
@@ -92,6 +102,11 @@ IA son simuladas; no se consumen créditos ni se escriben datos de producción.
 También comprueba cancelar una nueva sesión con cambios pendientes desde la
 navegación móvil: se libera el foco del menú antes de abrir la confirmación
 existente, que permanece por encima del prototipo y conserva los datos al cancelar.
+
+En 390 y 1440 px comprueba además las rutas conservadas, el rechazo por permisos
+de planificación, la creación de siete sesiones, su reordenación, el guardado local
+y la sincronización simulada, la reapertura y edición, y la cancelación al salir
+con cambios. No acredita sincronización con una cuenta real de producción.
 
 Además toma el payload v1 producido por el flujo React y genera DOCX y PDF reales.
 Comprueba la fórmula como OMML en el Word y la presencia del contenido en el PDF.

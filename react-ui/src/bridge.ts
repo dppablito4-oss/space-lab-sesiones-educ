@@ -9,13 +9,15 @@ export interface Snapshot {
     fields:Record<Field,string>; profiles:Profile[]; warnings:string[]; grades:string[];
     qualities:Choice[]; methodologies:Choice[]; templates:Choice[]; areas:Choice[]; presets:Choice[];
     curriculumStatus:string; sourceFile:string; busy:boolean; generated:number; hasDocument:boolean; linked:boolean;
-    account:{signedIn:boolean; name:string; credits:string}; theme:string; view:string;
+    account:{signedIn:boolean; name:string; credits:string}; theme:string; view:string; legacyDestination:string;
 }
 export interface Bridge {
     getSnapshot:() => Snapshot;
     subscribe:(listener:()=>void) => () => void;
     setField:(field:Field,value:string) => void;
     prepare:()=>void;
+    showPlanning:()=>void;
+    openPlanning:()=>boolean;
     showLegacy:(destination?:'document'|'advanced'|'home'|'library')=>void;
     newSession:()=>Promise<boolean>;
     validate:()=>{id:string;message:string}[];

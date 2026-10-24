@@ -10,11 +10,12 @@ html[data-theme="dark"] #react-preview-root {
     --sl-border:#2a3b55; --sl-primary:#83a6ff; --sl-soft:#203657; --sl-idea:#292a28;
     --sl-idea-border:#4b4635; --sl-warning:#ead5a0; --sl-warning-bg:#302b21;
 }
-body[data-react-preview="wizard"] > #app-view,
-body[data-react-preview="wizard"] > #landing-view,
-body[data-react-preview="wizard"] > #home-view {display:none !important;}
+body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #app-view,
+body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #landing-view,
+body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #home-view {display:none !important;}
 body[data-react-preview] #confirm-dialog {z-index:12000;}
 body[data-react-preview] #loader-overlay {z-index:11900;}
+body[data-react-preview="legacy"] #toast-container {bottom:100px;}
 #react-preview-root *, #react-preview-root *::before, #react-preview-root *::after {box-sizing:border-box;}
 #react-preview-root h1,#react-preview-root h2,#react-preview-root h3,#react-preview-root h4,#react-preview-root p {margin:0;}
 #react-preview-root button,#react-preview-root input,#react-preview-root select,#react-preview-root textarea {font:inherit;}
@@ -26,6 +27,54 @@ body[data-react-preview] #loader-overlay {z-index:11900;}
 }
 #react-preview-root button svg {flex-shrink:0;}
 .sl-app {position:fixed;inset:0;display:flex;background:var(--sl-bg);color:var(--sl-text);text-align:left;}
+.sl-planning-surface {flex:1;min-height:0;overflow:auto;padding:28px;}
+.sl-planning-surface .planning-dialog {
+    --border:var(--sl-border);--text-primary:var(--sl-text);--text-secondary:var(--sl-muted);
+    --color-background:var(--sl-bg);--color-card:var(--sl-card);--color-card-surface:var(--sl-card);
+    --color-primary:var(--sl-primary);--color-primary-dim:var(--sl-soft);
+    position:relative;inset:auto;width:100%;max-width:1440px;max-height:none;margin:0 auto;
+    border:1px solid var(--sl-border);border-radius:18px;background:var(--sl-card);color:var(--sl-text);overflow:visible;
+}
+.sl-planning-surface .planning-shell {max-height:none;overflow:visible;}
+.sl-planning-surface .planning-header {position:relative;background:var(--sl-card);border-radius:18px 18px 0 0;}
+.sl-planning-surface .planning-studio-layout {grid-template-columns:210px minmax(0,1fr);min-height:0;}
+.sl-planning-surface .planning-form-pane {padding:28px;}
+.sl-planning-surface .planning-preview {display:none;}
+.sl-planning-surface .planning-preview.is-open {display:block;grid-column:1 / -1;border-top:1px solid var(--sl-border);position:static;width:auto;max-height:none;}
+.sl-planning-surface .planning-studio-actions {position:sticky;bottom:0;z-index:2;background:var(--sl-card);border-radius:0 0 18px 18px;}
+.sl-planning-surface .planning-ai-choice,.sl-planning-surface .planning-proposal,.sl-planning-surface .planning-shell > h3,
+.sl-planning-surface .planning-shell > p,.sl-planning-surface .planning-shell > .planning-actions,
+.sl-planning-surface .planning-library {margin:24px;}
+.sl-planning-surface .planning-library {display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px;}
+.sl-planning-surface .planning-card {margin:0;padding:22px;background:var(--sl-bg);}
+.sl-planning-surface .planning-ai-choice {padding:32px;border:1px solid var(--sl-border);border-radius:16px;background:var(--sl-bg);}
+.sl-planning-surface .planning-shell > .planning-actions {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));}
+.sl-planning-surface .planning-shell > .planning-actions button {min-height:96px;background:var(--sl-soft);border:1px solid var(--sl-border);border-radius:14px;color:var(--sl-primary);font-weight:650;}
+.sl-planning-surface .planning-field > span {font-size:13px;font-weight:600;}
+.sl-planning-surface .planning-field input,.sl-planning-surface .planning-field select,.sl-planning-surface .planning-field textarea {border:1px solid var(--sl-border);border-radius:10px;min-height:44px;background:var(--sl-card);color:var(--sl-text);}
+.sl-planning-surface .planning-form-card {box-shadow:none;}
+.sl-planning-surface .planning-step[aria-current="step"] {color:var(--sl-primary);}
+@media(max-width:1000px) {
+    .sl-planning-surface {padding:16px;}
+    .sl-planning-surface .planning-studio-layout {display:flex;flex-direction:column;}
+    .sl-planning-surface .planning-stepper {position:static;border-right:0;border-bottom:1px solid var(--sl-border);padding:16px;}
+    .sl-planning-surface .planning-steps {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));}
+    .sl-planning-surface .planning-step {grid-template-columns:22px minmax(0,1fr);}
+    .sl-planning-surface .planning-step-label {display:block;font-size:12px;overflow-wrap:normal;}
+    .sl-planning-surface .planning-step-state {display:none;}
+    .sl-planning-surface .planning-stepper-heading,.sl-planning-surface .planning-progress {display:none;}
+    .sl-planning-surface .planning-form-pane {padding:18px;}
+}
+@media(max-width:550px) {
+    .sl-planning-surface {padding:10px;}
+    .sl-planning-surface .planning-grid {grid-template-columns:1fr;}
+    .sl-planning-surface .planning-header {padding:16px;}
+    .sl-planning-surface .planning-shell > .planning-actions {grid-template-columns:1fr;}
+    .sl-planning-surface .planning-shell > .planning-actions button {min-height:64px;}
+    .sl-planning-surface .planning-ai-choice {margin:16px;padding:18px;}
+    .sl-planning-surface .planning-studio-actions {position:relative;}
+    .sl-planning-surface .planning-field input,.sl-planning-surface .planning-field select,.sl-planning-surface .planning-field textarea {font-size:16px;}
+}
 .sl-sidebar {width:228px;flex-shrink:0;background:#11213c;color:#a5b4d0;padding:30px 18px 20px;display:flex;flex-direction:column;}
 .sl-brand {display:flex;align-items:center;gap:10px;color:#fff;font-size:24px;font-weight:750;letter-spacing:-1px;padding:0 9px;white-space:nowrap;}
 .sl-brand-symbol {display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border-radius:13px;background:linear-gradient(145deg,#5b80ff,#3260dc);color:#e8f3ff;box-shadow:0 4px 20px #3860db38;}

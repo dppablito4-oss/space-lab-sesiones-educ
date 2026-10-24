@@ -20,6 +20,77 @@ class QuietHandler(SimpleHTTPRequestHandler):
         pass
 
 
+def verify_planning_and_routes(browser, base_url):
+    from ui_planning_smoke import MOCK_CLOUD
+    for width in (390, 1440):
+        page = browser.new_page(viewport={'width': width, 'height': 900}, reduced_motion='reduce')
+        errors = []
+        page.on('pageerror', lambda error: errors.append(str(error)))
+        page.goto(base_url + '#/landing', wait_until='domcontentloaded')
+        page.wait_for_function('Boolean(window.SpaceLabReactBridge)')
+        assert page.locator('#landing-view').is_visible()
+        assert not page.locator('.sl-app').count()
+        page.evaluate(MOCK_CLOUD)
+        page.locator('#landing-view [data-action="enter-app"]').first.click()
+        page.locator('.sl-app').wait_for()
+        if width < 800:
+            page.get_by_role('button', name='Abrir navegación').click()
+        page.get_by_role('button', name='Unidades y experiencias', exact=True).click()
+        page.locator('.sl-planning-surface #planning-dialog[open]').wait_for()
+        assert page.locator('#planning-dialog').count() == 1
+        # Entitlement checks remain in the original controller.
+        page.evaluate("window.SupabaseClient.getUserEntitlements = async () => ({ok:false,features:{}})")
+        page.locator('[data-type="unit"]').click()
+        page.locator('#planning-notice').filter(has_text='permisos de tu cuenta').wait_for()
+        page.evaluate("window.SupabaseClient.getUserEntitlements = async () => ({ok:true,features:{'planning.unit':true,'planning.experience':true}})")
+        page.locator('[data-type="unit"]').click()
+        page.locator('[data-planning-action="mode-manual"]').click()
+        page.locator('[data-path="identity.title"]').fill('Proyecto del agua: siete sesiones')
+        page.locator('[data-path="identity.duration.value"]').fill('7')
+        page.locator('[data-step="5"]').click()
+        for index in range(7):
+            page.locator('[data-planning-action="session"]').click()
+            page.locator(f'[data-path="sequence.{index}.title"]').fill(f'Sesión {index + 1}: investigamos el agua')
+        page.locator('[data-planning-action="up"][data-index="6"]').click()
+        assert page.locator('[data-path="sequence.5.title"]').input_value().startswith('Sesión 7:')
+        page.locator('[data-step="0"]').click()
+        assert page.locator('[data-path="identity.title"]').input_value() == 'Proyecto del agua: siete sesiones'
+        if width < 800:
+            assert page.locator('.planning-step-label').first.is_visible()
+            assert page.locator('.planning-stepper').evaluate("e => getComputedStyle(e).position") == 'static'
+        # Cancel navigation must keep the same live editor and its unsaved draft.
+        page.on('dialog', lambda dialog: dialog.dismiss())
+        if width < 800:
+            page.get_by_role('button', name='Abrir navegación').click()
+        page.get_by_role('button', name='Crear sesión', exact=True).click()
+        assert page.locator('.sl-planning-surface').is_visible()
+        page.evaluate("window.location.hash='#/home'")
+        page.wait_for_function("window.location.hash !== '#/home'")
+        assert page.locator('.sl-planning-surface').is_visible()
+        page.locator('[data-planning-action="save"]').click()
+        page.locator('#planning-notice').filter(has_text='Borrador guardado').wait_for()
+        saved = page.evaluate("JSON.parse(localStorage.getItem('spacelab_planning_containers:user:test-teacher'))[0].containerData")
+        assert len(saved['sequence']) == 7 and saved['schemaVersion'] == '2.0'
+        assert page.locator('.sl-planning-surface').evaluate('e => e.scrollWidth <= e.clientWidth')
+        output = ROOT / 'tests/screenshots'
+        page.screenshot(path=str(output / f'react-planning-{width}.png'))
+        page.locator('[data-planning-action="library"]').click()
+        page.locator('[data-planning-action="open"]').click()
+        page.locator('.planning-view-shell').wait_for()
+        page.locator('[data-planning-view-action="edit"]').click()
+        page.locator('[data-path="identity.title"]').wait_for()
+        assert page.locator('[data-path="identity.title"]').input_value() == saved['identity']['title']
+        page.locator('[data-planning-action="close"]').click()
+        page.locator('.sl-planning-surface').wait_for(state='detached')
+        # Hash routes preserve the original home and library views.
+        for route in ('#/home', '#/sessions'):
+            page.evaluate('(hash) => {window.location.hash=hash}', route)
+            page.locator('#home-view').wait_for(state='visible')
+            assert not page.locator('.sl-app').count()
+        assert not errors, errors
+        page.close()
+
+
 def verify_exports(payload, browser):
     sys.path.insert(0, str(ROOT / 'backend'))
     import main
@@ -70,7 +141,7 @@ def run():
                 page = context.new_page()
                 errors = []
                 page.on('pageerror', lambda error: errors.append(str(error)))
-                page.goto(args.base_url, wait_until='domcontentloaded')
+                page.goto(args.base_url + '#/app', wait_until='domcontentloaded')
                 page.locator('.sl-app').wait_for()
                 assert page.locator('#session-form').count() == 1
                 assert page.locator('.sl-main').evaluate('e => e.scrollWidth <= e.clientWidth')
@@ -184,6 +255,7 @@ def run():
                 page.screenshot(path=str(output / f'react-session-{width}.png'))
                 assert not errors, errors
                 context.close()
+            verify_planning_and_routes(browser, args.base_url)
             browser.close()
     finally:
         if server:
