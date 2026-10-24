@@ -37,11 +37,16 @@ def run():
                     page.locator('.sl-app').wait_for()
                     assert page.locator('#react-preview-root').count()==1
                     assert page.locator('#session-form').count()==1
+                    logo=page.locator('.sl-mobile-brand .sl-brand-logo' if width<800 else '.sl-sidebar .sl-brand-logo')
+                    assert logo.is_visible()
+                    assert logo.get_attribute('src')=='assets/favicon.svg'
+                    assert logo.evaluate('image=>image.complete && image.naturalWidth>0')
                     assert page.locator('.sl-main').evaluate('e=>e.scrollWidth<=e.clientWidth')
                     page.locator('#react-titulo').fill('La misma interfaz publicada y local')
                     assert page.locator('#input-titulo').input_value()=='La misma interfaz publicada y local'
                     page.locator('#react-grado').select_option('2°')
                     page.locator('#react-area').select_option('Matemática')
+                    page.evaluate("Toast.success('Acceso de prueba confirmado')")
                     page.get_by_role('button',name='Continuar',exact=True).click()
                     assert page.locator('#react-step-heading').inner_text()=='Define los aprendizajes'
                     page.evaluate("SpaceLabTheme.setPreference('dark')")

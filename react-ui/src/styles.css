@@ -33,7 +33,7 @@ body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #landin
 body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #home-view {display:none !important;}
 body[data-react-preview] #confirm-dialog {z-index:12000;}
 body[data-react-preview] #loader-overlay {z-index:11900;}
-body[data-react-preview="legacy"] #toast-container {bottom:100px;}
+body[data-react-preview] #toast-container {bottom:calc(112px + env(safe-area-inset-bottom,0px));}
 #react-preview-root *, #react-preview-root *::before, #react-preview-root *::after {box-sizing:border-box;}
 #react-preview-root h1,#react-preview-root h2,#react-preview-root h3,#react-preview-root h4,#react-preview-root p {margin:0;}
 #react-preview-root button,#react-preview-root input,#react-preview-root select,#react-preview-root textarea {font:inherit;}
@@ -95,7 +95,10 @@ body[data-react-preview="legacy"] #toast-container {bottom:100px;}
 }
 .sl-sidebar {width:228px;flex-shrink:0;background:#11213c;color:#a5b4d0;padding:30px 18px 20px;display:flex;flex-direction:column;}
 .sl-brand {display:flex;align-items:center;gap:10px;color:#fff;font-size:24px;font-weight:750;letter-spacing:-1px;padding:0 9px;white-space:nowrap;}
-.sl-brand-symbol {display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;border-radius:13px;background:linear-gradient(145deg,#5b80ff,#3260dc);color:#e8f3ff;box-shadow:0 4px 20px #3860db38;}
+.sl-brand-symbol {display:grid;place-items:center;width:40px;height:40px;flex-shrink:0;}
+.sl-brand-logo {display:block;width:40px;height:40px;object-fit:contain;flex-shrink:0;}
+.sl-mobile-brand .sl-brand-logo {width:23px;height:23px;}
+.sl-return-bar .sl-brand-logo {width:21px;height:21px;}
 .sl-brand-light {font-weight:400;color:#b8cbf5;}
 .sl-brand small {display:block;font-size:6.4px;letter-spacing:1.35px;font-weight:600;color:#8ca3ca;margin-top:1px;}
 .sl-create-button {display:flex;align-items:center;justify-content:center;gap:10px;border:1px solid #6686fc;background:#5276ef;color:#fff;border-radius:11px;min-height:45px;margin:34px 0 30px;font-weight:650 !important;box-shadow:0 5px 18px #00000015;}
