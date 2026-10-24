@@ -12,6 +12,7 @@ import {
 import { createTrustedLinkedSnapshot, replaceLinkedSnapshot, requestedLinkedSnapshot } from "../_shared/linked-session-context.ts";
 import { fetchWithTimeout, gatewayAttemptTimeoutMs } from "../_shared/ai-runtime.ts";
 import { availableSessionQualities } from "../_shared/ai-capabilities.ts";
+import { AiCreditError, creditErrorPayload } from "../_shared/ai-credits.ts";
 
 interface GatewayAttempt {
   requestId: string;
@@ -169,6 +170,10 @@ async function handleRequest(req: Request): Promise<Response> {
     return jsonResponse(req, { error: "No se pudo iniciar la solicitud de IA.", code: "GATEWAY_STATE_UNAVAILABLE" }, 500);
   }
   if (!beginResult.ok) {
+    if (beginResult.code === "ACCOUNT_RESTRICTED" || beginResult.code === "AI_DISABLED") {
+      const restriction = new AiCreditError(beginResult.code);
+      return jsonResponse(req, creditErrorPayload(restriction, requestId), restriction.status);
+    }
     const duplicate = beginResult.code === "DUPLICATE_REQUEST";
     return jsonResponse(req, {
       error: duplicate ? "Esta solicitud ya fue recibida." : "La solicitud de IA no es válida.",
