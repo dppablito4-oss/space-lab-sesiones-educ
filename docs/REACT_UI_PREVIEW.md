@@ -87,6 +87,7 @@ ocultos. No deben coexistir dos implementaciones de contabilidad o persistencia.
 ```powershell
 npm run build:react
 python tests/ui_react_session_smoke.py
+python tests/ui_planning_ai_smoke.py --react
 python tests/ui_quick_session_smoke.py
 python tests/ui_quick_session_layout_smoke.py
 python scripts/build_index.py --check
@@ -110,6 +111,12 @@ En 390 y 1440 px comprueba además las rutas conservadas, el rechazo por permiso
 de planificación, la creación de siete sesiones, su reordenación, el guardado local
 y la sincronización simulada, la reapertura y edición, y la cancelación al salir
 con cambios. No acredita sincronización con una cuenta real de producción.
+
+La prueba de IA de planificación también recorre el host React en móvil y
+escritorio: error del proveedor, reintento, solicitud pendiente, cambio de tema,
+intento de navegación durante la espera, descarte, regeneración, aceptación y
+guardado. El cierre del menú móvil respeta el foco si el resultado o un diálogo
+ya lo recibió; cerrar el menú con Escape mantiene la devolución de foco habitual.
 
 Además toma el payload v1 producido por el flujo React y genera DOCX y PDF reales.
 Comprueba la fórmula como OMML en el Word y la presencia del contenido en el PDF.

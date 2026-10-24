@@ -77,7 +77,10 @@ export function App({bridge}:{bridge:Bridge}) {
         <div className="sl-workspace">
             <header className="sl-topbar">
                 <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}><Dialog.Trigger asChild><button className="sl-icon-button sl-mobile-menu" type="button" aria-label="Abrir navegación"><Menu size={22}/></button></Dialog.Trigger>
-                    <Dialog.Portal container={document.getElementById('react-preview-root')}><Dialog.Overlay className="sl-dialog-overlay"/><Dialog.Content className="sl-mobile-drawer"><Dialog.Title className="sl-sr-only">Navegación de Space Lab</Dialog.Title><Dialog.Description className="sl-sr-only">Accede a tus sesiones, unidades y biblioteca.</Dialog.Description><Dialog.Close className="sl-drawer-close" aria-label="Cerrar navegación"><X size={22}/></Dialog.Close>{nav}</Dialog.Content></Dialog.Portal>
+                    <Dialog.Portal container={document.getElementById('react-preview-root')}><Dialog.Overlay className="sl-dialog-overlay"/><Dialog.Content className="sl-mobile-drawer" onCloseAutoFocus={event=>{
+                        // A completed request or another dialog may already own the focus.
+                        if (document.activeElement?.closest('#planning-dialog,#confirm-dialog,#auth-modal')) event.preventDefault();
+                    }}><Dialog.Title className="sl-sr-only">Navegación de Space Lab</Dialog.Title><Dialog.Description className="sl-sr-only">Accede a tus sesiones, unidades y biblioteca.</Dialog.Description><Dialog.Close className="sl-drawer-close" aria-label="Cerrar navegación"><X size={22}/></Dialog.Close>{nav}</Dialog.Content></Dialog.Portal>
                 </Dialog.Root>
                 <span className="sl-mobile-brand"><Orbit size={21}/>Space<span>Lab</span></span>
                 <div className="sl-breadcrumb"><span>Planificador</span><ChevronRight size={14}/><strong>{planning ? 'Unidades y experiencias' : state.linked ? 'Sesión vinculada' : 'Nueva sesión'}</strong></div>

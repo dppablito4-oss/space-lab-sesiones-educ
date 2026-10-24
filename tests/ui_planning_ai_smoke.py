@@ -1,5 +1,7 @@
 """AI planning proposal flow at mobile and desktop sizes."""
 import json
+import argparse
+import re
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -99,7 +101,12 @@ def prepare_minimum_context(page):
 
 
 def run():
-    server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(ROOT)))
+    parser = argparse.ArgumentParser(__doc__)
+    parser.add_argument('--react', action='store_true', help='Exercise the compiled React planning integration')
+    args = parser.parse_args()
+    directory = ROOT / 'artifacts/react-preview-dist' if args.react else ROOT
+    assert (directory / 'index.html').exists(), 'Build the React preview first'
+    server = ThreadingHTTPServer(("127.0.0.1", 0), partial(QuietHandler, directory=str(directory)))
     Thread(target=server.serve_forever, daemon=True).start()
     try:
         with sync_playwright() as playwright:
@@ -108,10 +115,17 @@ def run():
                 page = browser.new_page(viewport={"width": width, "height": 900})
                 errors = []
                 page.on("pageerror", lambda error: errors.append(str(error)))
-                page.goto(f"http://127.0.0.1:{server.server_port}/index.html", wait_until="domcontentloaded")
-                page.evaluate("window.LandingRouter.showHome(false)")
+                page.goto(f"http://127.0.0.1:{server.server_port}/index.html#/app", wait_until="domcontentloaded")
                 page.evaluate(AI_MOCK, FIXTURE)
-                page.locator('[data-open-planning]').click()
+                if args.react:
+                    page.locator('.sl-app').wait_for()
+                    if width < 800:
+                        page.get_by_role('button', name='Abrir navegación').click()
+                    page.get_by_role('button', name='Unidades y experiencias', exact=True).click()
+                    page.locator('.sl-planning-surface #planning-dialog[open]').wait_for()
+                else:
+                    page.evaluate("window.LandingRouter.showHome(false)")
+                    page.locator('[data-open-planning]').click()
                 page.locator('[data-type="project"]').click()
 
                 page.locator('[data-planning-action="mode-manual"]').wait_for()
@@ -143,9 +157,18 @@ def run():
                 assert loading.is_disabled()
                 assert 'Generando propuesta pedagógica' in loading.inner_text()
                 assert page.evaluate("window.__planningAiCalls.length") == 2
+                if args.react:
+                    # Theme changes and navigation attempts must keep the in-flight request.
+                    page.get_by_role('button', name=re.compile('Usar tema')).click()
+                    if width < 800:
+                        page.get_by_role('button', name='Abrir navegación').click()
+                    page.get_by_role('button', name='Mi espacio', exact=True).click()
+                    assert page.locator('.sl-planning-surface').is_visible()
+                    assert page.locator('[data-planning-action="generate-ai"]').is_disabled()
+                    assert page.evaluate("window.__planningAiCalls.length") == 2
                 page.evaluate("window.__planningAiResolve()")
                 page.locator('#planning-proposal-title').wait_for()
-                assert page.locator('#planning-proposal-title').evaluate('el => el === document.activeElement')
+                assert page.locator('#planning-proposal-title').evaluate('el => el === document.activeElement'), (width, page.evaluate('document.activeElement.outerHTML'))
                 proposal_text = page.locator('.planning-proposal').text_content()
                 assert 'Propuesta generada' in proposal_text
                 assert 'Borrador' in proposal_text
