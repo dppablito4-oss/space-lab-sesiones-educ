@@ -56,6 +56,10 @@ LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public,private A
   SELECT 1 FROM private.admin_account_controls WHERE user_id=auth.uid() AND state<>'active'
   AND (expires_at IS NULL OR expires_at>now()));
 $$;
+CREATE OR REPLACE FUNCTION public.is_admin() RETURNS boolean
+LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public AS $$
+ SELECT public.account_is_active() AND EXISTS(SELECT 1 FROM public.profiles WHERE id=auth.uid() AND role IN('admin','superadmin'));
+$$;
 CREATE FUNCTION public.admin_cc_has_permission(p_permission text) RETURNS boolean
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,public,private AS $$
  SELECT public.account_is_active() AND EXISTS(SELECT 1 FROM private.admin_permissions WHERE key=p_permission)
@@ -83,8 +87,8 @@ END $$;
 
 -- Existing JWTs cannot bypass a suspension through the data API.
 DO $$ DECLARE t text; BEGIN
- FOREACH t IN ARRAY ARRAY['profiles','sesiones','planning_containers','alumnos'] LOOP
-  EXECUTE format('CREATE POLICY admin_account_active ON public.%I AS RESTRICTIVE FOR ALL TO authenticated USING (public.account_is_active()) WITH CHECK (public.account_is_active())',t);
+ FOREACH t IN ARRAY ARRAY['profiles','sesiones','planning_containers','alumnos','security_logs','ai_credit_wallets','ai_usage','credit_grants','credit_ledger','subscriptions','ai_gateway_requests'] LOOP
+  EXECUTE format('CREATE POLICY admin_account_active ON public.%I AS RESTRICTIVE FOR ALL TO authenticated USING ((SELECT public.account_is_active())) WITH CHECK ((SELECT public.account_is_active()))',t);
  END LOOP;
 END $$;
 

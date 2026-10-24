@@ -12,6 +12,8 @@ Se eliminó el panel antiguo que descargaba contenido y purgaba documentos al co
 
 Las restricciones de cuentas se comprueban en acceso de datos, reemplazo de roster y contabilidad del servidor. También se comprueban al iniciar solicitudes del gateway; los reembolsos y finalizaciones en curso permanecen disponibles. Esto no equivale a revocar todos los JWT de Auth, borrar usuarios, bloquear archivos offline ni anular una solicitud ya iniciada.
 
+La suspensión también bloquea lecturas directas del historial financiero, uso, solicitudes y registros operativos. El helper heredado `is_admin` exige una cuenta activa: un administrador suspendido no conserva acceso a registros por las políticas antiguas. El test SQL verifica explícitamente ese caso.
+
 Los cambios usan locks de fila, claves de idempotencia y versiones/saldos esperados. Las pruebas PGlite verifican semántica transaccional y repetición de solicitudes, pero no sustituyen una prueba de contención con varias conexiones a Postgres nativo.
 
 Antes de habilitarlo en producción faltan las pruebas reales de Supabase Auth/MFA y concurrencia indicadas en PLAN_PRUEBAS. No hay autorización de cobros, emails masivos ni sanciones contra usuarios reales como parte de esta validación.
