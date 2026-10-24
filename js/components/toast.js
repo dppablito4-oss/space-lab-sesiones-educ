@@ -52,9 +52,9 @@ const Toast = (() => {
 
     function remove(toast) {
         toast.classList.add('toast-out');
-        toast.addEventListener('animationend', () => {
-            toast.remove();
-        });
+        toast.addEventListener('animationend', () => toast.remove(), {once:true});
+        // Reduced motion may disable animations and therefore animationend.
+        setTimeout(() => toast.remove(), 300);
     }
 
     function success(msg, duration) { show(msg, 'success', duration); }
