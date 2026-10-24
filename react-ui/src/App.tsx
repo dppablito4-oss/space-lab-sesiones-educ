@@ -1,6 +1,6 @@
 import {useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import {ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronRight, CircleHelp, FileText, FolderOpen, GraduationCap, Home, Layers3, LoaderCircle, LogIn, Menu, Moon, Orbit, Plus, SlidersHorizontal, Sparkles, Sun, X} from 'lucide-react';
+import {ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronRight, CircleHelp, FileText, FolderOpen, GraduationCap, Home, Layers3, LoaderCircle, LogIn, Menu, Moon, Plus, SlidersHorizontal, Sparkles, Sun, X} from 'lucide-react';
 import type {Bridge, Field} from './bridge';
 import {DataStep} from './DataStep';
 import {LearningStep} from './LearningStep';
@@ -62,7 +62,7 @@ export function App({bridge}:{bridge:Bridge}) {
     }
     const planning=state.view === 'planning';
     const nav=<>
-        <div className="sl-brand"><span className="sl-brand-symbol"><Orbit size={26}/></span><span>Space<span className="sl-brand-light">Lab</span><small>EL ESPACIO DE TUS IDEAS</small></span></div>
+        <div className="sl-brand"><span className="sl-brand-symbol"><BrandLogo/></span><span>Space<span className="sl-brand-light">Lab</span><small>EL ESPACIO DE TUS IDEAS</small></span></div>
         <button type="button" className="sl-create-button" onClick={()=>void newSession()}><Plus size={19}/>Nueva sesión</button>
         <span className="sl-nav-label">TU ESPACIO DOCENTE</span>
         <nav aria-label="Navegación principal" className="sl-nav">
@@ -74,7 +74,7 @@ export function App({bridge}:{bridge:Bridge}) {
         <div className="sl-nav-bottom"><div className="sl-nav-tip"><span className="sl-tip-symbol"><Sparkles size={20}/></span><strong>Más tiempo para enseñar.</strong><p>Dale forma a tus ideas y crea experiencias para tu aula.</p><span className="sl-tip-line"/></div><span className="sl-sidebar-footer"><span className="sl-status-dot"/>Hecho para docentes</span></div>
     </>;
     if (state.view === 'legacy' && ['home','library','landing'].includes(state.legacyDestination)) return null;
-    if (state.view === 'legacy') return <div className="sl-return-bar"><span><Orbit size={19}/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al nuevo generador</button></div>;
+    if (state.view === 'legacy') return <div className="sl-return-bar"><span><BrandLogo/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al nuevo generador</button></div>;
 
     return <div className="sl-app">
         <a className="sl-skip" href={planning ? '#planning-title' : '#react-step-heading'} onClick={event=>{event.preventDefault();document.getElementById(planning ? 'planning-title' : 'react-step-heading')?.focus();}}>Ir al generador</a>
@@ -87,7 +87,7 @@ export function App({bridge}:{bridge:Bridge}) {
                         if (document.activeElement?.closest('#planning-dialog,#confirm-dialog,#auth-modal')) event.preventDefault();
                     }}><Dialog.Title className="sl-sr-only">Navegación de Space Lab</Dialog.Title><Dialog.Description className="sl-sr-only">Accede a tus sesiones, unidades y biblioteca.</Dialog.Description><Dialog.Close className="sl-drawer-close" aria-label="Cerrar navegación"><X size={22}/></Dialog.Close>{nav}</Dialog.Content></Dialog.Portal>
                 </Dialog.Root>
-                <span className="sl-mobile-brand"><Orbit size={21}/>Space<span>Lab</span></span>
+                <span className="sl-mobile-brand"><BrandLogo/>Space<span>Lab</span></span>
                 <div className="sl-breadcrumb"><span>Planificador</span><ChevronRight size={14}/><strong>{planning ? 'Unidades y experiencias' : state.linked ? 'Sesión vinculada' : 'Nueva sesión'}</strong></div>
                 <div className="sl-topbar-actions"><span className="sl-beta-tag">VISTA PREVIA</span><button type="button" className="sl-icon-button" aria-label={state.theme==='dark' ? 'Usar tema claro' : 'Usar tema oscuro'} onClick={()=>bridge.toggleTheme()}>{state.theme==='dark' ? <Sun size={19}/> : <Moon size={19}/>}</button>
                     <Help/>
@@ -124,6 +124,10 @@ function PlanningSurface() {
         return ()=>{parent.insertBefore(dialog,next?.parentNode===parent ? next : null);};
     },[]);
     return <div className="sl-planning-surface" ref={host}/>;
+}
+
+function BrandLogo() {
+    return <img className="sl-brand-logo" src="assets/favicon.svg" alt="" width={40} height={40}/>;
 }
 
 function Help() {
