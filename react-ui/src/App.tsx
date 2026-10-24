@@ -73,7 +73,7 @@ export function App({bridge}:{bridge:Bridge}) {
         </nav>
         <div className="sl-nav-bottom"><div className="sl-nav-tip"><span className="sl-tip-symbol"><Sparkles size={20}/></span><strong>Más tiempo para enseñar.</strong><p>Dale forma a tus ideas y crea experiencias para tu aula.</p><span className="sl-tip-line"/></div><span className="sl-sidebar-footer"><span className="sl-status-dot"/>Hecho para docentes</span></div>
     </>;
-    if (state.view === 'legacy' && (['home','library','landing'].includes(state.legacyDestination) || ['#/landing','#/home','#/sessions'].includes(window.location.hash))) return null;
+    if (state.view === 'legacy' && ['home','library','landing'].includes(state.legacyDestination)) return null;
     if (state.view === 'legacy') return <div className="sl-return-bar"><span><Orbit size={19}/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al nuevo generador</button></div>;
 
     return <div className="sl-app">

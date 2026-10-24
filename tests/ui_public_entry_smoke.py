@@ -64,6 +64,12 @@ def run():
                     page.locator('[data-path="identity.duration.value"]').fill('3')
                     page.locator('[data-planning-action="save"]').click()
                     page.locator('#planning-notice').filter(has_text='Borrador guardado').wait_for()
+                    if width<800:page.get_by_role('button',name='Abrir navegación').click()
+                    page.get_by_role('button',name='Crear sesión',exact=True).click()
+                    page.locator('.sl-main').wait_for()
+                    page.get_by_role('button',name='Modo avanzado',exact=True).click()
+                    page.get_by_role('button',name='Volver al nuevo generador').click()
+                    page.locator('.sl-main').wait_for()
                     assert not errors,errors
                     page.close()
                 assert palettes[0]==palettes[1],(width,palettes)

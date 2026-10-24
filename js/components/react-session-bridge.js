@@ -82,6 +82,7 @@ window.SpaceLabReactSessionBridge = (() => {
                 return;
             }
             if (['#/landing','#/home','#/sessions'].includes(window.location.hash)) {
+                legacyDestination = window.location.hash === '#/landing' ? 'landing' : 'home';
                 document.body.dataset.reactPreview = 'legacy';
                 emit();
             } else if (['#/sessions/new','#/app','#/editor'].includes(window.location.hash)) prepare();

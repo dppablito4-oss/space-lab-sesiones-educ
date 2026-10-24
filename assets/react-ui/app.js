@@ -13003,15 +13003,11 @@ function Wo({ bridge: e }) {
 			})]
 		})
 	] });
-	return t.view === "legacy" && ([
+	return t.view === "legacy" && [
 		"home",
 		"library",
 		"landing"
-	].includes(t.legacyDestination) || [
-		"#/landing",
-		"#/home",
-		"#/sessions"
-	].includes(window.location.hash)) ? null : t.view === "legacy" ? /* @__PURE__ */ (0, T.jsxs)("div", {
+	].includes(t.legacyDestination) ? null : t.view === "legacy" ? /* @__PURE__ */ (0, T.jsxs)("div", {
 		className: "sl-return-bar",
 		children: [/* @__PURE__ */ (0, T.jsxs)("span", { children: [/* @__PURE__ */ (0, T.jsx)(Ji, { size: 19 }), "Space Lab"] }), /* @__PURE__ */ (0, T.jsxs)("button", {
 			type: "button",
