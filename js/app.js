@@ -260,9 +260,18 @@
         window.getPendingPlanningLink = () => AppState.pendingPlanningLink;
         window.appOpenSession = (sessionId) => loadSession(sessionId);
         window.appStartNewSession = async () => {
-            if (!await handleNew()) return false;
-            quickSession.setMode('quick');
+            if (!await handleNew()) {
+                if (window.location.hash === '#/sessions/new') {
+                    const id = AppState.currentSession?.id;
+                    window.history.replaceState(null, '', id ? `#/sessions/${encodeURIComponent(id)}/edit` : '#/app');
+                }
+                return false;
+            }
+            quickSession.setMode('quick', false);
             openSidebar({focusClose: false});
+            // Reveal the form and drawer together before focusing the new screen.
+            await new Promise(resolve => window.requestAnimationFrame(() => window.requestAnimationFrame(resolve)));
+            quickSession.focusStep();
             return true;
         };
         window.appStartLinkedSession = (planningContainerId, sequenceItemId) => startLinkedSession(planningContainerId, sequenceItemId);

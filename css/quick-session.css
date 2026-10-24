@@ -32,6 +32,11 @@ body.session-quick-mode:not(.session-quick-review) .sidebar-primary-action { dis
 /* The advanced layout reserves a summary column. Quick mode owns the full row. */
 body.session-quick-mode { --rail-w: 76px; }
 body.session-quick-mode .sidebar-workflow { grid-template-columns: minmax(0, 1fr); }
+/* Never animate inherited visibility while revealing a keyboard-focused step. */
+body.session-quick-mode .sidebar-workflow,
+body.session-quick-mode .sidebar-workflow * {
+    transition-property: color, background-color, border-color, box-shadow, opacity !important;
+}
 body.session-quick-mode .workflow-rail-brand { display: none; }
 body.session-quick-mode .session-form { padding: 24px clamp(16px, 4vw, 48px); }
 body.session-quick-mode .session-mode-switch,

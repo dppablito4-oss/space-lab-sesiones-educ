@@ -32,6 +32,7 @@ def run():
                 page.wait_for_function('typeof window.appStartNewSession === "function"')
                 page.evaluate('window.appStartNewSession()')
                 page.locator('#quick-title-1').wait_for(state='visible')
+                assert page.locator('#quick-title-1').evaluate('el => el === document.activeElement')
                 assert page.locator('#session-mode-quick').get_attribute('aria-pressed') == 'true'
                 if width < 600:
                     assert page.locator('#sidebar').bounding_box()['width'] >= width - 18
@@ -89,12 +90,17 @@ def run():
                 page.locator('.sidebar-tab[data-tab="tab-ai"]').click()
                 page.locator('#input-source-file').set_input_files({'name':'old.txt','mimeType':'text/plain','buffer':b'Old session'})
                 page.wait_for_function("document.querySelector('#source-file-info').textContent.includes('old.txt')")
-                page.evaluate('() => { window.__newSessionResult = null; window.appStartNewSession().then(r => window.__newSessionResult = r); }')
+                page.evaluate('''() => {
+                    history.replaceState(null, '', '#/sessions/new');
+                    window.__newSessionResult = null;
+                    window.appStartNewSession().then(r => window.__newSessionResult = r);
+                }''')
                 # Unsaved current documents must be protected by the existing confirmation.
                 page.locator('#confirm-dialog').wait_for(state='visible')
                 page.locator('#confirm-cancel').click()
                 page.wait_for_function('window.__newSessionResult === false')
                 assert page.evaluate('window.getCurrentSession().id') == 'quick-reload'
+                assert page.evaluate('location.hash') == '#/sessions/quick-reload/edit'
                 page.evaluate('() => { window.appStartNewSession(); }')
                 page.locator('#confirm-accept').click()
                 page.wait_for_function('window.getCurrentSession() === null')

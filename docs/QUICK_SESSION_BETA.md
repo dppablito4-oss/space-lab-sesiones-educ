@@ -51,12 +51,16 @@ Botones nativos, paneles inactivos ocultos, orden DOM compartido, foco en el tí
 ### Revisión local del 24/10/2026 contra el plan de beta
 
 - La creación desde Mi espacio abre el asistente rápido y usa `handleNew` para
-  proteger cambios sin guardar. Cancelar conserva el documento y su adjunto.
+  proteger cambios sin guardar. Cancelar conserva el documento y su adjunto y
+  restaura la ruta del documento, para que recargar no ejecute una creación nueva.
 - Se retiró la columna de resumen vacía y se compactó el menú lateral del modo
   rápido. En móvil el formulario utiliza el ancho disponible y se conserva el
   acceso al documento y al modo avanzado.
 - Cambiar de paso restablece el desplazamiento y enfoca su título; el seguimiento
   de las seis secciones avanzadas no procesa paneles ocultos en modo rápido.
+  La entrada espera al renderizado del panel antes de enfocar. Las transiciones
+  del asistente no animan visibilidad heredada, evitando focos sobre contenido
+  que todavía aparece oculto, también con movimiento reducido.
 - Los diálogos quedan excluidos del cierre por clic exterior del planificador:
   Cancelar/Continuar responden al primer clic, sin dejar una promesa pendiente.
 - Alternar modos mantiene el adjunto; crear otra sesión limpia tanto el archivo

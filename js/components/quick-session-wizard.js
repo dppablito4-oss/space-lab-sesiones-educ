@@ -146,7 +146,7 @@ window.SpaceLabQuickSession = (() => {
         window.addEventListener('spacelab:session-generated', refresh);
         window.addEventListener('spacelab:profile-defaults-loaded', refresh);
         window.addEventListener('spacelab:session-cleared', () => { scopeKey = ''; showStep(1, false); refresh(); });
-        return {validate, refresh, setMode, isQuick: () => mode === 'quick'};
+        return {validate, refresh, setMode, focusStep: () => showStep(step), isQuick: () => mode === 'quick'};
     }
     return {create};
 })();
