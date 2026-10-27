@@ -23,7 +23,7 @@ jobs:
           python-version: '3.11'
       - name: Check website, Auth and unauthenticated AI boundary
         run: python scripts/beta_health_check.py
-      - run: pip install -r scripts/requirements-ops.txt
+      - run: python -m pip install --require-hashes -r scripts/requirements-ops.lock.txt
       - name: Check global beta usage and error thresholds
         env:
           PGHOST: ${{ vars.BETA_BACKUP_HOST }}

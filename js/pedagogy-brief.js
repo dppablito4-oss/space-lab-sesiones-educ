@@ -12,6 +12,17 @@ const PedagogyBrief = (() => {
     let _summary = null;        // resumen compacto final (lo que se inyecta al prompt)
     let _isFinished = false;    // true cuando la IA ya pidió confirmación final
     let _isGenerating = false;  // evita doble submit
+    let _dialogVersion = 0;
+
+    function _captureDialog() {
+        return { version: _dialogVersion, ownerId: window.SupabaseClient?.getSessionUserSync?.()?.id || null };
+    }
+
+    function _isCurrent(operation) {
+        return operation.version === _dialogVersion
+            && operation.ownerId === (window.SupabaseClient?.getSessionUserSync?.()?.id || null)
+            && Boolean(document.getElementById('pedagogy-brief-modal'));
+    }
 
     function _createRequestId() {
         if (window.crypto && typeof window.crypto.randomUUID === 'function') {
@@ -25,6 +36,7 @@ const PedagogyBrief = (() => {
 
     // ─── PUBLIC: OPEN MODAL ───
     function open(formData) {
+        _dialogVersion += 1;
         _formData = formData;
         _messages = [];
         _summary = null;
@@ -33,7 +45,7 @@ const PedagogyBrief = (() => {
 
         _buildModal();
         _showModal();
-        _startConversation();
+        _startConversation(_captureDialog());
     }
 
     // ─── PUBLIC: GET SUMMARY ───
@@ -43,10 +55,12 @@ const PedagogyBrief = (() => {
 
     // ─── PUBLIC: CLEAR ───
     function clear() {
+        _dialogVersion += 1;
         _formData = null;
         _summary = null;
         _messages = [];
         _isFinished = false;
+        _isGenerating = false;
     }
     window.addEventListener('spacelab:account-changed', () => {
         clear();
@@ -135,6 +149,8 @@ const PedagogyBrief = (() => {
     }
 
     function _closeModal() {
+        _dialogVersion += 1;
+        _isGenerating = false;
         const modal = document.getElementById('pedagogy-brief-modal');
         if (modal) {
             modal.classList.remove('pb-visible');
@@ -148,7 +164,13 @@ const PedagogyBrief = (() => {
 
         const bubble = document.createElement('div');
         bubble.className = `pb-bubble pb-bubble-${role}`;
-        bubble.innerHTML = htmlText.replace(/\n/g, '<br>');
+        const content = String(htmlText || '').replace(/\n/g, '<br>');
+        if (window.SpaceLabSanitizer) {
+            bubble.innerHTML = window.SpaceLabSanitizer.sanitizeFragment(content);
+        } else {
+            bubble.textContent = String(htmlText || '');
+            bubble.style.whiteSpace = 'pre-wrap';
+        }
         container.appendChild(bubble);
         container.scrollTop = container.scrollHeight;
     }
@@ -165,7 +187,9 @@ const PedagogyBrief = (() => {
         const sendBtn = document.getElementById('pb-send-btn');
         if (input) {
             input.disabled = !enabled;
-            if (enabled) setTimeout(() => input.focus(), 50);
+            if (enabled) setTimeout(() => {
+                if (input.isConnected && !input.disabled) input.focus();
+            }, 50);
         }
         if (sendBtn) sendBtn.disabled = !enabled;
     }
@@ -183,7 +207,7 @@ const PedagogyBrief = (() => {
     // CONVERSATION FLOW
     // ─────────────────────────────────────────────────────────────
 
-    async function _startConversation() {
+    async function _startConversation(operation) {
         _showThinking(true);
         _setInputEnabled(false);
 
@@ -199,12 +223,14 @@ const PedagogyBrief = (() => {
 
         try {
             const aiResponse = await _callAI(userPrompt);
+            if (!_isCurrent(operation)) return;
             _showThinking(false);
             if (_checkIfReady(aiResponse)) return;
             _appendMessage('ai', aiResponse);
             _messages.push({ role: 'assistant', content: aiResponse });
             _setInputEnabled(true);
         } catch (err) {
+            if (!_isCurrent(operation)) return;
             _showThinking(false);
             _appendMessage('ai', 'No se pudo conectar con la IA en este momento. Puedes escribir tu enfoque aquí abajo y hacer clic en <strong>Generar Sesión</strong> directamente.');
             _setInputEnabled(true);
@@ -216,6 +242,7 @@ const PedagogyBrief = (() => {
 
     async function _handleSend() {
         if (_isGenerating) return;
+        const operation = _captureDialog();
         const input = document.getElementById('pb-input');
         if (!input) return;
         const text = input.value.trim();
@@ -238,12 +265,14 @@ const PedagogyBrief = (() => {
         try {
             const userPrompt = _buildHistoryPrompt();
             const aiResponse = await _callAI(userPrompt);
+            if (!_isCurrent(operation)) return;
             _showThinking(false);
             if (_checkIfReady(aiResponse)) return;
             _appendMessage('ai', aiResponse);
             _messages.push({ role: 'assistant', content: aiResponse });
             _setInputEnabled(true);
         } catch (err) {
+            if (!_isCurrent(operation)) return;
             _showThinking(false);
             _appendMessage('ai', 'Error de conexión. Intenta de nuevo o haz clic en <strong>Generar Sesión</strong>.');
             _setInputEnabled(true);
@@ -269,6 +298,7 @@ const PedagogyBrief = (() => {
 
     async function _handleFinish() {
         if (_isGenerating) return;
+        const operation = _captureDialog();
         _isGenerating = true;
         _setInputEnabled(false);
 
@@ -278,12 +308,17 @@ const PedagogyBrief = (() => {
         _appendMessage('ai', '⏳ Resumiendo tu enfoque pedagógico...');
         _showThinking(true);
 
+        let summary;
         try {
-            _summary = _messages.length > 0 ? await _generateSummary() : null;
+            summary = _messages.length > 0 ? await _generateSummary() : null;
         } catch (err) {
+            if (!_isCurrent(operation)) return;
             console.error('[PedagogyBrief] summary error:', err);
-            _summary = _buildFallbackSummary();
+            summary = _buildFallbackSummary();
         }
+
+        if (!_isCurrent(operation)) return;
+        _summary = summary;
 
         _showThinking(false);
         _closeModal();

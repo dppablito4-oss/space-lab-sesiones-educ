@@ -1,2 +1,5 @@
 assets/react-ui/*.js text eol=lf
 assets/react-ui/*.css text eol=lf
+assets/react-admin/*.js text eol=lf
+assets/react-admin/*.css text eol=lf
+assets/vendor/mathjax/tex-svg.js -text

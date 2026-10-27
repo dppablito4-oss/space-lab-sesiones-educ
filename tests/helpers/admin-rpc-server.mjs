@@ -11,7 +11,7 @@ let queue=Promise.resolve();
 const server=createServer(async(req,res)=>{
  try {
   const url=new URL(req.url,'http://localhost');
-  if(url.pathname==='/__rpc'&&req.method==='POST') {
+  if(['/__rpc','/__storage'].includes(url.pathname)&&req.method==='POST') {
    let body='';for await(const part of req)body+=part;if(body.length>16384)throw Error('Request too large');
    const input=JSON.parse(body);let response;
    await (queue=queue.then(async()=>{
@@ -20,6 +20,15 @@ const server=createServer(async(req,res)=>{
      const actor=ids[input.actor]||ids.admin;
      await db.query("SELECT set_config('request.jwt.claims',$1,false)",[JSON.stringify({role:'authenticated',sub:actor,aal:input.aal==='aal2'?'aal2':'aal1'})]);
      await db.exec('SET ROLE authenticated');
+     if(url.pathname==='/__storage') {
+      let rows;
+      if(input.action==='upload') {
+       rows=(await db.query("INSERT INTO storage.objects(id,bucket_id,name,owner) VALUES(gen_random_uuid(),'logos',$1,$2) RETURNING name",[input.path,actor])).rows;
+      } else if(input.action==='list') {
+       rows=(await db.query("SELECT split_part(name,'/',2) AS name FROM storage.objects WHERE bucket_id='logos' AND owner=$1 ORDER BY name",[actor])).rows;
+      } else {throw Error('Unknown storage action');}
+      response={data:input.action==='upload'?rows[0]:rows,error:null};return;
+     }
      const args=input.args||{};
      const signatures={admin_cc_context:[],admin_cc_read:['p_resource','p_query'],admin_cc_write:['p_request_id','p_action','p_target','p_payload']};
      const names=signatures[input.name];if(!names)throw Error('Unknown RPC');

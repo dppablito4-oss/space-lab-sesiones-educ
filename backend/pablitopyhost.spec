@@ -4,10 +4,15 @@
 #
 # Notas importantes:
 # - playwright se incluye como módulo Python (para sus APIs asyncio)
-# - Chromium NO se bundlea: main.py lo descarga en runtime en EXE_DIR/bin/
+# - Chromium NO se bundlea: se usa Chrome/Edge o el instalador oficial de Playwright.
 # - tkinter debe estar instalado en el Python del build (incluido por defecto en CPython oficial)
 
-from PyInstaller.utils.hooks import collect_data_files, collect_submodules
+from pathlib import Path
+import runpy
+from PyInstaller.utils.hooks import collect_data_files
+
+inventory = Path(SPECPATH) / 'build' / 'engine-dependencies.json'
+runpy.run_path(str(Path(SPECPATH).parent / 'scripts/build_engine_inventory.py'))['write_inventory'](inventory)
 
 block_cipher = None
 
@@ -20,6 +25,9 @@ a = Analysis(
         ('../assets/logo.png', 'assets'),
         ('../assets/templates/session_template_v1.docx', 'assets/templates'),
         ('../assets/templates/planning_template_v1.docx', 'assets/templates'),
+        ('../assets/vendor/mathjax/tex-svg.js', 'assets/vendor/mathjax'),
+        ('../assets/vendor/mathjax/LICENSE', 'assets/vendor/mathjax'),
+        (str(inventory), '.'),
     ] + collect_data_files('docxcompose'),
     hiddenimports=[
         'playwright.async_api',
@@ -32,6 +40,8 @@ a = Analysis(
         'docxcompose.composer',
         'word_math',
         'word_pdf',
+        'pdf_security',
+        'request_limits',
         'pythoncom',
         'win32com.client',
         'matplotlib',
@@ -52,7 +62,7 @@ a = Analysis(
         'uvicorn.protocols.websockets.auto',
         'uvicorn.lifespan',
         'uvicorn.lifespan.on',
-    ] + collect_submodules('pkg_resources._vendor'),
+    ],
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

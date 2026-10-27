@@ -5,6 +5,10 @@ import socket
 import subprocess
 import sys
 import time
+import hashlib
+from functools import partial
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from threading import Thread
 from pathlib import Path
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -15,6 +19,7 @@ if hasattr(sys.stderr, "reconfigure"):
 import docx
 import httpx
 import pymupdf
+from PyInstaller.archive.readers import CArchiveReader
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from backend.version import ENGINE_VERSION  # noqa: E402
 
@@ -30,6 +35,13 @@ def main():
     print(f"[1/5] Verificando existencia de {EXE_PATH.name}...")
     assert EXE_PATH.exists(), f"No se encontró el ejecutable en {EXE_PATH}"
     print(f"  [OK] Binario encontrado ({EXE_PATH.stat().st_size:,} bytes)")
+    archive = CArchiveReader(str(EXE_PATH))
+    inventory = json.loads(archive.extract('engine-dependencies.json'))
+    assert inventory['engineVersion'] == ENGINE_VERSION
+    assert inventory['lockSha256'] == hashlib.sha256((ROOT / 'backend/requirements.lock.txt').read_bytes()).hexdigest()
+    math_name = next(name for name in archive.toc if name.replace('\\','/') == 'assets/vendor/mathjax/tex-svg.js')
+    assert hashlib.sha256(archive.extract(math_name)).hexdigest() == 'd4295dc33744836935c1399feece5159577b34c5c8ffb9f1c6324cd82e03a882'
+    print(f"  [OK] Inventario de {len(inventory['packages'])} paquetes y MathJax verificado dentro del EXE")
 
     with socket.socket() as probe:
         probe.settimeout(0.5)
@@ -148,8 +160,36 @@ def main():
         assert len(bundled_doc._element.xpath('.//m:nary')) >= len(linked_sessions)
         print(f'  [OK] Word completo generado ({len(bundled.content):,} bytes)')
 
+        print('\nVerificando aislamiento del renderizador y límite real del EXE...')
+        hits = []
+        class TrapHandler(BaseHTTPRequestHandler):
+            def do_GET(self):
+                hits.append(self.path)
+                self.send_response(200)
+                self.end_headers()
+            def log_message(self, *_args):
+                pass
+        trap = ThreadingHTTPServer(('127.0.0.1',0), partial(TrapHandler))
+        Thread(target=trap.serve_forever,daemon=True).start()
+        try:
+            address = f'http://127.0.0.1:{trap.server_port}/must-not-be-requested'
+            isolated = httpx.post('http://127.0.0.1:8000/exportar-pdf',json={
+                'token':token,'titulo':'Seguridad EXE',
+                'html_content':f'<script>fetch("{address}")</script><img src="{address}"><p>OFFLINE-EXE-SECURITY</p>'},timeout=60)
+            assert isolated.status_code == 200, isolated.text[:100]
+            assert not hits, 'The renderer contacted a private network destination'
+        finally:
+            trap.shutdown()
+            trap.server_close()
+        chunks = (b'A'*(256*1024) for _ in range(101))
+        bounded = httpx.post('http://127.0.0.1:8000/exportar-docx',content=chunks,
+                            headers={'Content-Type':'application/json'},timeout=30)
+        assert bounded.status_code == 413
+        assert httpx.get('http://127.0.0.1:8000/').status_code == 200
+        print('  [OK] Scripts/red local bloqueados y cuerpo chunked rechazado con HTTP 413')
+
         print("\n============================================================")
-        print(">>> CERTIFICACIÓN DEL EJECUTABLE PABLITOPYHOST.EXE EXITOSA <<<")
+        print(">>> VERIFICACIÓN DEL EJECUTABLE PABLITOPYHOST.EXE EXITOSA <<<")
         print("============================================================")
 
     finally:

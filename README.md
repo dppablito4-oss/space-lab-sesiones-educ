@@ -212,11 +212,25 @@ python -m venv .venv
 .venv\Scripts\activate
 
 # Instalar dependencias del backend
-python -m pip install -r backend/requirements.txt
+python -m pip install --require-hashes -r backend/requirements.lock.txt
 
 # Ejecutar el motor local en desarrollo
-python -m uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload
+python -m uvicorn main:app --app-dir backend --host 127.0.0.1 --port 8000 --reload
 ```
+
+Para ejecutar las pruebas y compilar el EXE, instala el entorno completo con
+`python -m pip install --require-hashes -r scripts/requirements-dev.lock.txt`.
+Los archivos `requirements.txt` conservan las dependencias directas; los locks
+incluyen transitivas, condiciones de plataforma y hashes. Para actualizarlos,
+usa los comandos de `uv pip compile` incluidos en sus cabeceras y ejecuta
+`python -m pip_audit --strict` antes de reconstruir el motor.
+
+El PDF de Chromium usa MathJax local verificado y bloquea scripts del documento
+y conexiones de red del navegador. Los logos del bucket del proyecto se cargan
+antes del renderizado con límites de tamaño y sin redirecciones. El motor usa
+Chrome/Edge del sistema o la revisión administrada por Playwright; ya no utiliza
+el snapshot portable antiguo. Cada EXE nuevo incluye el inventario de su lock
+de ejecución y lo entrega también como `engine-dependencies.json`.
 
 ### 3. Servir el Frontend Web
 

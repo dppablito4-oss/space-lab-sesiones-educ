@@ -24,7 +24,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - run: pip install -r scripts/requirements-ops.txt
+      - run: python -m pip install --require-hashes -r scripts/requirements-ops.lock.txt
       - name: Export, verify isolated restoration and encrypt
         run: python scripts/beta_backup.py --verify-restore
       - name: Store encrypted backup only

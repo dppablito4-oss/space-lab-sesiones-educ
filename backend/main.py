@@ -11,7 +11,7 @@ import time
 import warnings
 import urllib.parse
 import urllib.request
-import zipfile
+import subprocess
 import tkinter as tk
 from tkinter import scrolledtext
 from pathlib import Path
@@ -26,8 +26,6 @@ else:
     BASE_DIR = EXE_DIR.parent
 
 LOCAL_BIN_DIR = EXE_DIR / "bin"
-CHROMIUM_DIR = LOCAL_BIN_DIR / "chrome-win"
-CHROMIUM_EXE = CHROMIUM_DIR / "chrome.exe"
 
 # Desactivar advertencias molestas en la consola (como DeprecationWarnings de FastAPI/Lifespan)
 warnings.filterwarnings("ignore")
@@ -56,6 +54,8 @@ from models.planning_document import PlanningContainerV2
 from version import ENGINE_VERSION
 from word_pdf import convert_docx_to_pdf
 from word_math import protect_math_html
+from pdf_security import render_pdf_html
+from request_limits import RequestSizeLimitMiddleware
 
 # Librerías para estilizar consola
 try:
@@ -83,25 +83,19 @@ LOCAL_ORIGIN_PATTERN = r"^https?://(?:localhost|127\.0\.0\.1)(?::\d+)?$"
 MAX_REQUEST_BYTES = 25 * 1024 * 1024
 
 # Configuración de CORS
+app.add_middleware(RequestSizeLimitMiddleware, max_bytes=lambda: MAX_REQUEST_BYTES)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=sorted(ALLOWED_ORIGINS),
     allow_origin_regex=LOCAL_ORIGIN_PATTERN,
     allow_credentials=False,
+    allow_private_network=True,
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["Content-Type"],
 )
 
 @app.middleware("http")
 async def protect_local_engine(request: Request, call_next):
-    content_length = request.headers.get("content-length")
-    if content_length:
-        try:
-            if int(content_length) > MAX_REQUEST_BYTES:
-                return Response("Solicitud demasiado grande.", status_code=413)
-        except ValueError:
-            return Response("Content-Length inválido.", status_code=400)
-
     response = await call_next(request)
     origin = request.headers.get("origin", "")
     if origin in ALLOWED_ORIGINS or re.fullmatch(LOCAL_ORIGIN_PATTERN, origin):
@@ -1046,20 +1040,10 @@ async def exportar_pdf(payload: ExportPDFRequest):
             if ruta_motor:
                 launch_args["executable_path"] = ruta_motor
             browser = await p.chromium.launch(**launch_args)
-            context = await browser.new_context()
-            page = await context.new_page()
-            
-            await page.set_content(documento_completo, wait_until="networkidle")
-            
-            # Usar prefer_css_page_size=True → Chromium respeta la medida exacta del div .hoja-a4
-            # Los márgenes van en cero porque el padding ya está definido en el div
-            pdf_bytes = await page.pdf(
-                print_background=True,
-                prefer_css_page_size=True,
-                margin={"top": "0", "bottom": "0", "left": "0", "right": "0"},
-                display_header_footer=False
-            )
-            await browser.close()
+            try:
+                pdf_bytes = await render_pdf_html(browser, documento_completo)
+            finally:
+                await browser.close()
 
         if console:
             console.print(f"[green]✓ [PDF EXPORTADO] Generado con éxito: {nombre_archivo}[/green]")
@@ -1149,11 +1133,11 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
     # 1. Cabecera con logos si existen
     logo_left_html = ""
     if session.metadata.logo_left_url:
-        logo_left_html = f'<img src="{session.metadata.logo_left_url}" class="header-logo-img" />'
+        logo_left_html = f'<img src="{escape_html(session.metadata.logo_left_url)}" class="header-logo-img" />'
 
     logo_right_html = ""
     if session.metadata.logo_regional_url:
-        logo_right_html = f'<img src="{session.metadata.logo_regional_url}" class="header-logo-img" />'
+        logo_right_html = f'<img src="{escape_html(session.metadata.logo_regional_url)}" class="header-logo-img" />'
 
     # 2. Listas de propósitos
     capacidades_html = "".join([f"<li>{escape_html(c)}</li>" for c in session.proposito.capacidades])
@@ -1327,26 +1311,7 @@ def build_pdf_html_from_json(session: SesionAprendizajeRequest) -> str:
     <html>
     <head>
         <meta charset="utf-8">
-        <!-- Cargar MathJax para renderizar ecuaciones matemáticas en el PDF -->
-        <script>
-            window.MathJax = {{
-                tex: {{
-                    inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-                    displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']],
-                    processEscapes: true
-                }},
-                options: {{
-                    ignoreHtmlClass: 'tex2jax_ignore',
-                    processHtmlClass: 'tex2jax_process'
-                }},
-                svg: {{
-                    fontCache: 'global'
-                }}
-            }};
-        </script>
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
             
             * {{ box-sizing: border-box; margin: 0; padding: 0; }}
             body {{
@@ -1980,25 +1945,10 @@ async def exportar_pdf_json(raw: dict = Body(...)):
             if ruta_motor:
                 launch_args["executable_path"] = ruta_motor
             browser = await p.chromium.launch(**launch_args)
-            context = await browser.new_context()
-            page = await context.new_page()
-            
-            await page.set_content(documento_html, wait_until="networkidle")
-            
-            # Esperar a que MathJax termine de procesar las fórmulas matemáticas (si está presente)
             try:
-                await page.evaluate("() => window.MathJax && window.MathJax.startup && window.MathJax.startup.promise")
-            except Exception as e:
-                print("[WARN MATHJAX WAIT]", str(e))
-            
-            # Captura a PDF con Playwright aplicando prefer_css_page_size y márgenes en cero (el diseño ya tiene padding)
-            pdf_bytes = await page.pdf(
-                print_background=True,
-                prefer_css_page_size=True,
-                margin={"top": "0", "bottom": "0", "left": "0", "right": "0"},
-                display_header_footer=False
-            )
-            await browser.close()
+                pdf_bytes = await render_pdf_html(browser, documento_html, typeset_math=True)
+            finally:
+                await browser.close()
 
         if console:
             console.print(f"[green]✓ [PDF PREMIUM EXPORTADO] Generado vía Chromium con éxito: {nombre_archivo}[/green]")
@@ -2167,11 +2117,7 @@ async def exportar_docx_json(raw: dict = Body(...)):
 
 def buscar_navegador_compatible():
     """Busca un ejecutable de Chromium en la carpeta local o en el sistema."""
-    # 1. Prioridad Máxima: Verificar si ya existe en nuestra carpeta portable './bin'
-    if CHROMIUM_EXE.exists():
-        return str(CHROMIUM_EXE)
-
-    # 2. Prioridad Secundaria: Buscar navegadores instalados en Windows
+    # Use evergreen system browsers, never legacy portable snapshots.
     if sys.platform.startswith('win'):
         rutas_sistema = [
             r"C:\Program Files\Google\Chrome\Application\chrome.exe",
@@ -2187,43 +2133,21 @@ def buscar_navegador_compatible():
 
 
 def descargar_chromium_nativo():
-    """Descarga Chromium usando urllib para no congelar el .exe y muestra barra de progreso."""
-    LOCAL_BIN_DIR.mkdir(exist_ok=True)
-    zip_path = LOCAL_BIN_DIR / "chromium.zip"
-    
-    # URL directa de Google APIs (Versión ligera y estable para Windows x64)
-    url_chromium = "https://storage.googleapis.com/chromium-browser-snapshots/Win_x64/1182249/chrome-win.zip"
-
-    print("\n⚠️  [MOTOR INCOMPLETO] No se detectó ningún navegador compatible (Chrome/Brave/Edge) ni motor local.")
-    print("Iniciando descarga de motor Chromium portable (aprox. 140MB)...")
-    
-    last_percent = -1
-    def progreso_download(block_num, block_size, total_size):
-        nonlocal last_percent
-        if total_size > 0:
-            completed = block_num * block_size
-            percent = int((completed / total_size) * 100)
-            if percent != last_percent and percent % 5 == 0:  # Cada 5%
-                last_percent = percent
-                completed_mb = completed / (1024 * 1024)
-                total_mb = total_size / (1024 * 1024)
-                print(f"Descargando Chromium: {percent}% completado ({completed_mb:.1f} MB de {total_mb:.1f} MB)")
-
-    # Extracción del ZIP de forma nativa
+    """Use the official installer for the browser revision pinned by Playwright."""
+    from playwright._impl._driver import compute_driver_executable, get_driver_env
+    driver, cli = compute_driver_executable()
+    print("Preparando Chromium con el instalador oficial de Playwright...")
     try:
-        urllib.request.urlretrieve(url_chromium, zip_path, reporthook=progreso_download)
-        print("✓ Descarga completada. Extrayendo motor portable...")
-        
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-            zip_ref.extractall(LOCAL_BIN_DIR)
-            
-        # Eliminar el ZIP basura para ahorrar espacio
-        if zip_path.exists():
-            os.remove(zip_path)
-            
-        print("✓ Motor Chromium extraído y listo para usar en ./bin/chrome-win/\n")
-    except Exception as e:
-        print(f"❌ Error al descargar o extraer Chromium: {str(e)}")
+        subprocess.run(
+            [str(driver), str(cli), "install", "chromium"],
+            env=get_driver_env(), check=True, timeout=300, capture_output=True,
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0,
+        )
+        print("Motor Chromium administrado por Playwright listo.")
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise RuntimeError(
+            "No se pudo preparar Chromium. Instala Chrome o Edge actualizado y reinicia el motor."
+        ) from exc
 
 
 @app.on_event("startup")

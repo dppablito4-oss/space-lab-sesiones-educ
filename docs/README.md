@@ -5,6 +5,8 @@ El [plan de beta](../PLAN_BETA.md) conserva el seguimiento operativo en la raíz
 
 ## Guías actuales
 
+- [Avance guardado y pasos para continuar el 26 de octubre](reports/CONTINUIDAD_25-10-2026.md).
+- [Correcciones de seguridad y pruebas del 25 de octubre](reports/CORRECCIONES_AUDITORIA_25-10-2026.md).
 - [Operación de la beta](BETA_OPERATIONS.md).
 - [Composición del frontend](FRONTEND_COMPOSITION.md).
 - [Estructura de sesiones](SESSION_STRUCTURE_20-10-2026.md).

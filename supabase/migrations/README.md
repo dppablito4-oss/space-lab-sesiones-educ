@@ -27,3 +27,4 @@ Reglas:
 - `202609210002_ai_credits.sql`: planes, billeteras, historial y operaciones atómicas de créditos IA.
 - `202609270001_planning_map_ai_action.sql`: registra el costo y el entitlement independientes de `planning.map.generate`.
 - `20261024224011_admin_control_center.sql`: centro administrativo con permisos, MFA, idempotencia, auditoría y restricciones. Requiere coordinar su instalación con el nuevo panel y Edge Functions. No está aplicada al proyecto público; ver [manual y validaciones pendientes](../../docs/admin/MANUAL_ADMINISTRADOR.md).
+- `20261026024247_account_storage_boundary.sql`: extiende el control de cuenta activa a las operaciones autenticadas de logos en Storage. Validada en PostgreSQL aislado y por GUI; pendiente de aplicación remota junto con el centro administrativo.

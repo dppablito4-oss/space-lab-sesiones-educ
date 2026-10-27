@@ -4,6 +4,12 @@
 
 Este incremento todavía no está instalado en Supabase. Primero debe revisarse y aplicarse la migración en un proyecto de pruebas, con respaldo y comprobación de dependencias. No se promueve al primer registro ni se confía en los metadatos editables del usuario.
 
+Incluye también la migración posterior `20261026024247_account_storage_boundary.sql`:
+las cuentas suspendidas o bloqueadas no pueden listar, subir, reemplazar ni
+borrar logos mediante acceso autenticado. Una restricción vencida permite
+operar de nuevo. Los archivos ya publicados en el bucket público conservan
+sus URLs públicas; suspender una cuenta no cambia la privacidad del bucket.
+
 Para una instalación nueva, un operador autorizado verifica el UUID y correo de una cuenta Auth existente. En SQL Editor, con contexto privilegiado, puede promover **esa cuenta concreta** a `superadmin`. Sustituye el UUID y correo antes de ejecutar:
 
 ```sql
