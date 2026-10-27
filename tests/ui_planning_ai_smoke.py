@@ -117,6 +117,7 @@ def run():
                 page.on("pageerror", lambda error: errors.append(str(error)))
                 legacy = '' if args.react else '?ui=legacy'
                 page.goto(f"http://127.0.0.1:{server.server_port}/index.html{legacy}#/app", wait_until="domcontentloaded")
+                page.wait_for_function("!document.getElementById('frontend-root') || window.SpaceLabFrontend?.ready")
                 page.evaluate(AI_MOCK, FIXTURE)
                 if args.react:
                     page.locator('.sl-app').wait_for()

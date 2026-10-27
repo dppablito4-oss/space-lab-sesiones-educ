@@ -1,5 +1,11 @@
 # Interfaz React del generador y entrada pública
 
+**Actualización del 27/10/2026:** React cubre ahora toda la interfaz. Este
+documento conserva la etapa del generador inicial; consultar la
+[arquitectura actual](FRONTEND_REACT.md) y la
+[validación en Comet](reports/MIGRACION_REACT_27-10-2026.md). La ruta
+`?ui=legacy` es un modo avanzado compatible de la misma aplicación React.
+
 La creación de sesiones, unidades y experiencias usa React, TypeScript, Vite,
 Radix UI y Lucide tanto en localhost como en la entrada pública de GitHub Pages.
 El landing, Mi espacio y la biblioteca conservan su interfaz. El motor de

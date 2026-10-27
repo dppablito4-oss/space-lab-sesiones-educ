@@ -33,6 +33,7 @@ export function App({bridge}:{bridge:Bridge}) {
         scroll.current?.scrollTo({top:0,behavior:'instant'});
         document.getElementById('react-step-heading')?.focus({preventScroll:true});
     },[step,state.view]);
+    useEffect(()=>{window.dispatchEvent(new CustomEvent('spacelab:frontend-navigate'));},[step,state.view]);
 
     function validate() {
         const failures=bridge.validate();
@@ -74,7 +75,7 @@ export function App({bridge}:{bridge:Bridge}) {
         <div className="sl-nav-bottom"><div className="sl-nav-tip"><span className="sl-tip-symbol"><Sparkles size={20}/></span><strong>Más tiempo para enseñar.</strong><p>Dale forma a tus ideas y crea experiencias para tu aula.</p><span className="sl-tip-line"/></div><span className="sl-sidebar-footer"><span className="sl-status-dot"/>Hecho para docentes</span></div>
     </>;
     if (state.view === 'legacy' && ['home','library','landing'].includes(state.legacyDestination)) return null;
-    if (state.view === 'legacy') return <div className="sl-return-bar"><span><BrandLogo/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al nuevo generador</button></div>;
+    if (state.view === 'legacy') return <div className="sl-return-bar"><span><BrandLogo/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al generador</button></div>;
 
     return <div className="sl-app">
         <a className="sl-skip" href={planning ? '#planning-title' : '#react-step-heading'} onClick={event=>{event.preventDefault();document.getElementById(planning ? 'planning-title' : 'react-step-heading')?.focus();}}>Ir al generador</a>
@@ -89,7 +90,7 @@ export function App({bridge}:{bridge:Bridge}) {
                 </Dialog.Root>
                 <span className="sl-mobile-brand"><BrandLogo/>Space<span>Lab</span></span>
                 <div className="sl-breadcrumb"><span>Planificador</span><ChevronRight size={14}/><strong>{planning ? 'Unidades y experiencias' : state.linked ? 'Sesión vinculada' : 'Nueva sesión'}</strong></div>
-                <div className="sl-topbar-actions"><span className="sl-beta-tag">VISTA PREVIA</span><button type="button" className="sl-icon-button" aria-label={state.theme==='dark' ? 'Usar tema claro' : 'Usar tema oscuro'} onClick={()=>bridge.toggleTheme()}>{state.theme==='dark' ? <Sun size={19}/> : <Moon size={19}/>}</button>
+                <div className="sl-topbar-actions"><a className="sl-icon-button" href="mailto:pabloclsa87@gmail.com" aria-label="Contactar con soporte por correo"><CircleHelp size={19}/></a><span className="sl-beta-tag">BETA</span><button type="button" className="sl-icon-button" aria-label={state.theme==='dark' ? 'Usar tema claro' : 'Usar tema oscuro'} onClick={()=>bridge.toggleTheme()}>{state.theme==='dark' ? <Sun size={19}/> : <Moon size={19}/>}</button>
                     <Help/>
                     <button type="button" className="sl-account" onClick={()=>state.account.signedIn ? bridge.showLegacy('home') : bridge.signIn()}>{state.account.signedIn ? <span className="sl-avatar">{state.account.name.slice(0,2).toUpperCase()}</span> : <LogIn size={18}/>}<span>{state.account.name}</span></button>
                 </div>

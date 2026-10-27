@@ -1,12 +1,11 @@
+import json
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
-import json
 from pathlib import Path
 from threading import Thread
 
 from playwright.sync_api import sync_playwright
 from ui_session_lifecycle_smoke import SESSION
-
 
 ROOT = Path(__file__).resolve().parents[1]
 SDK = """
@@ -33,6 +32,42 @@ window.supabase = { createClient: () => ({
     rpc: async () => ({data:{ok:true,plan:'free',features:{}},error:null}),
     storage: {from: () => query}
 })};
+"""
+
+# Simulate the actual conditional REST contract for session writes. Auth remains
+# the explicit fixture above; application code still performs all revision checks.
+SDK += """
+const originalCreateClient = window.supabase.createClient;
+window.supabase.createClient = (...args) => {
+    const client = originalCreateClient(...args);
+    const originalFrom = client.from.bind(client);
+    const rows = new Map();
+    function sessionQuery() {
+        let operation = 'read', payload = null, single = false;
+        const filters = [];
+        const api = {
+            select: () => api, order: () => api,
+            eq: (key,value) => {filters.push([key,value]);return api;},
+            insert: value => {operation='insert';payload=structuredClone(value);return api;},
+            update: value => {operation='update';payload=structuredClone(value);return api;},
+            maybeSingle: () => {single=true;return api;},
+            then(resolve,reject) {
+                return Promise.resolve().then(() => {
+                    const matching=Array.from(rows.values()).filter(row=>filters.every(([key,value])=>row[key]===value));
+                    if(operation==='insert'&&rows.has(payload.id))return {data:null,error:{code:'23505'}};
+                    if(operation==='insert'||operation==='update'&&matching.length) {
+                        rows.set(payload.id,structuredClone(payload));
+                        return {data:[{last_saved:payload.last_saved}],error:null};
+                    }
+                    return {data:structuredClone(single?matching[0]||null:matching),error:null};
+                }).then(resolve,reject);
+            }
+        };
+        return api;
+    }
+    client.from = name => name==='sesiones'?sessionQuery():originalFrom(name);
+    return client;
+};
 """
 
 

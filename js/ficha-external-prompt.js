@@ -8,18 +8,27 @@
  */
 ; (function () {
     'use strict';
+    function renderUi(element, markup) {
+        if (window.SpaceLabReactUI?.region) return window.SpaceLabReactUI.region(element, markup);
+        element.innerHTML = markup; // Recovery and isolated domain tests.
+        return markup;
+    }
+
 
     const MAX_CONTEXT_CHARS = 3600;
     let _lastSession = null;
 
     function cleanText(value) {
         const raw = String(value || '');
-        if (typeof document === 'undefined') {
+        const sanitizer = typeof window !== 'undefined' && window.SpaceLabSanitizer;
+        if (typeof document === 'undefined' || !sanitizer?.sanitizeFragment) {
             return raw.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
         }
-        const container = document.createElement('div');
-        container.innerHTML = raw;
-        return (container.textContent || container.innerText || '').replace(/\s+/g, ' ').trim();
+        // Only sanitized markup reaches an inert template. A detached div can
+        // still load images and execute their event handlers while reading text.
+        const template = document.createElement('template');
+        template.innerHTML = sanitizer.sanitizeFragment(raw);
+        return (template.content.textContent || '').replace(/\s+/g, ' ').trim();
     }
 
     function limit(value, length) {
@@ -286,7 +295,7 @@
         const modal = document.createElement('div');
         modal.id = 'external-ficha-prompt-modal';
         modal.className = 'external-ficha-modal hidden no-print';
-        modal.innerHTML = `
+        renderUi(modal, `
             <div class="external-ficha-card" role="dialog" aria-modal="true" aria-labelledby="external-ficha-title">
                 <div class="external-ficha-card-inner">
                     <button type="button" class="external-ficha-close" aria-label="Cerrar">×</button>
@@ -319,7 +328,7 @@
                         <button type="button" class="external-ficha-btn primary" id="btn-copy-external-ficha-prompt">Copiar prompt</button>
                     </div>
                 </div>
-            </div>`;
+            </div>`);
         document.body.appendChild(modal);
 
         const close = () => modal.classList.add('hidden');

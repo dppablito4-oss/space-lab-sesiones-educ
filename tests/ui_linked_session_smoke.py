@@ -48,6 +48,7 @@ def run_width(browser, port, width):
     errors = []
     page.on('pageerror', lambda error: errors.append(str(error)))
     page.goto(f"http://127.0.0.1:{port}/index.html?ui=legacy", wait_until='domcontentloaded')
+    page.wait_for_function("!document.getElementById('frontend-root') || window.SpaceLabFrontend?.ready")
     page.evaluate("""() => {
         window.SupabaseClient.getCurrentUser = async () => ({ id: 'linked-teacher' });
         window.SupabaseClient.getUserProfile = async () => null;

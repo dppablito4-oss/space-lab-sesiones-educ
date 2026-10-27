@@ -1,5 +1,11 @@
 # Avance guardado para continuar el 26 de octubre de 2026
 
+**Continuación disponible:** [estado del 27/10](CONTINUIDAD_27-10-2026.md) y
+[migración React con pruebas en Comet](MIGRACION_REACT_27-10-2026.md).
+La [sobrescritura entre dispositivos](CONFLICTOS_SESIONES_27-10-2026.md) también
+está corregida y probada localmente, pendiente de publicación.
+El contenido siguiente conserva el estado histórico del 25/10.
+
 Trabajo detenido a petición del usuario. Fecha de referencia: 25/10/2026,
 America/Bogota. Este informe permite retomar sin repetir la auditoría.
 

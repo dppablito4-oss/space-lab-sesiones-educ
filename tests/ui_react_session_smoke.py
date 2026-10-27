@@ -184,7 +184,7 @@ def run():
                 assert page.locator('#session-mode-advanced').get_attribute('aria-pressed') == 'true'
                 assert page.locator('#input-session-criteria').input_value() == 'Explica cómo contó las semillas'
                 assert page.locator('#input-source-file').evaluate('el => el.files[0].name') == 'semillas.txt'
-                page.get_by_role('button', name='Volver al nuevo generador').click()
+                page.get_by_role('button', name='Volver al generador').click()
                 assert page.locator('.sl-app').is_visible()
                 assert page.locator('#react-step-heading').inner_text() == 'Tu sesión está tomando forma'
 

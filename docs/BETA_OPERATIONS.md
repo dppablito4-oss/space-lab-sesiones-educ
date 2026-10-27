@@ -1,5 +1,11 @@
 # Operación y aceptación de la beta
 
+**Revisión del 27/10/2026:** la [validación actual](reports/VALIDACION_APERTURA_27-10-2026.md)
+confirma servicios reales, exportación y restauración, pero reproduce
+sobrescritura silenciosa entre dispositivos. La ampliación sigue condicionada
+al [plan de apertura controlada](PILOTO_CONTROLADO.md), al despliegue coordinado
+y a comprobar recepción de alertas.
+
 Procedimiento de operación de la beta abierta. La evidencia de despliegue y
 restauración está en [informe de preparación](reports/BETA_READINESS_19-10-2026.md); este documento describe cómo
 repetir las comprobaciones y distingue los pasos todavía pendientes.

@@ -73,7 +73,7 @@ def run():
                     page.get_by_role('button',name='Crear sesión',exact=True).click()
                     page.locator('.sl-main').wait_for()
                     page.get_by_role('button',name='Modo avanzado',exact=True).click()
-                    page.get_by_role('button',name='Volver al nuevo generador').click()
+                    page.get_by_role('button',name='Volver al generador').click()
                     page.locator('.sl-main').wait_for()
                     assert not errors,errors
                     page.close()
@@ -82,7 +82,8 @@ def run():
             base=f'http://127.0.0.1:{servers[0].server_port}/'
             page.goto(base+'index.html?ui=legacy#/app',wait_until='domcontentloaded')
             page.locator('#app-view').wait_for(state='visible')
-            page.wait_for_function("!document.getElementById('react-preview-root')")
+            page.wait_for_function("window.SpaceLabFrontend?.hydrated && window.SpaceLabFrontend.ready")
+            assert page.locator('#frontend-root').count() == 1
             assert page.evaluate('!window.SpaceLabReactBridge')
             page.close()
             page=browser.new_page()

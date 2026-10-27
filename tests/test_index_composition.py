@@ -33,6 +33,7 @@ CRITICAL_IDS = {
     "logos-gallery-modal",
 }
 EXPECTED_FRAGMENTS = {
+    "ui/fragments/frontend.html",
     "ui/fragments/home.html",
     "ui/fragments/landing.html",
     "ui/fragments/modals/auth.html",
@@ -179,9 +180,12 @@ def test_repository_composition() -> None:
             visit(ROOT / reference)
 
     visit(BUILD_INDEX.SOURCE_FILE)
-    assert set(reference_counts) == EXPECTED_FRAGMENTS, (
-        f"Every fragment must be reachable from the composition root: {reference_counts}"
+    assert set(reference_counts) == {"ui/fragments/frontend.html", "ui/fragments/shell/head.html"}, (
+        f"The entry must compose the React-rendered frontend and document head: {reference_counts}"
     )
+    for source_file in fragment_files:
+        if source_file.name != 'head.html':
+            assert 'Generated from React:' in source_file.read_text(encoding='utf-8'), source_file
     duplicate_references = {
         reference: count
         for reference, count in reference_counts.items()
@@ -203,9 +207,10 @@ def test_repository_composition() -> None:
 
     duplicate_ids = sorted({element_id for element_id in parser.ids if parser.ids.count(element_id) > 1})
     assert not duplicate_ids, f"Duplicate HTML IDs: {duplicate_ids}"
-    assert len(parser.script_sources) == 54, len(parser.script_sources)
+    assert len(parser.script_sources) == 56, len(parser.script_sources)
     assert parser.stylesheet_count == 14, parser.stylesheet_count
     assert parser.ids.count('react-preview-root') == 1
+    assert parser.ids.count('frontend-root') == 1
     assert parser.script_sources[-1] == 'assets/react-ui/app.js'
 
     positions = [parser.script_sources.index(source) for source in CRITICAL_SCRIPT_ORDER]

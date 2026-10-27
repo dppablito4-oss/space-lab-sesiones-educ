@@ -1,4 +1,4 @@
-/** Optional React prototype adapter. The existing form remains the source of truth. */
+/** React application adapter for the shared document and generation controllers. */
 window.SpaceLabReactSessionBridge = (() => {
     'use strict';
     const fields = {

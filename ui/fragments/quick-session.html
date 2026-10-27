@@ -1,42 +1,45 @@
-                    <div class="session-mode-switch" role="group" aria-label="Modo del generador">
-                        <button type="button" class="btn btn-ghost" id="session-mode-quick" aria-pressed="false">Modo rápido · 3 pasos</button>
-                        <button type="button" class="btn btn-ghost" id="session-mode-advanced" aria-pressed="true">Modo avanzado</button>
-                    </div>
-                    <section id="quick-session" hidden aria-label="Asistente rápido de sesiones">
-                        <nav class="quick-steps" aria-label="Pasos del modo rápido">
-                            <button type="button" data-quick-step="1" aria-current="step">1. Datos</button>
-                            <button type="button" data-quick-step="2">2. Aprendizajes</button>
-                            <button type="button" data-quick-step="3">3. Revisar</button>
-                        </nav>
-                        <p id="quick-step-status" class="curriculum-help" role="status">Paso 1 de 3</p>
-                        <div id="quick-errors" class="quick-notice" role="alert" hidden></div>
-                        <section data-quick-panel="1" aria-labelledby="quick-title-1">
-                            <h3 id="quick-title-1" tabindex="-1">Datos de tu sesión</h3>
-                            <p>Define qué enseñarás y a quiénes. Los datos de tu institución son opcionales.</p>
-                            <div id="quick-data-fields" class="quick-field-grid"></div>
-                            <details class="form-disclosure"><summary>Datos institucionales y de aula (opcionales)</summary><div id="quick-institution-fields" class="form-disclosure-content"></div></details>
-                        </section>
-                        <section data-quick-panel="2" hidden aria-labelledby="quick-title-2">
-                            <h3 id="quick-title-2" tabindex="-1">Aprendizajes y propuestas</h3>
-                            <p id="quick-curriculum-status" role="status">Comprobando cobertura curricular…</p>
-                            <p>El selector muestra referencias del catálogo. Los textos manuales o completados por IA requieren cotejo y no se convierten automáticamente en información oficial.</p>
-                            <div id="quick-learning-fields"></div>
-                            <details class="form-disclosure"><summary>Desempeños y procedencia del catálogo</summary><div id="quick-official-performances" class="form-disclosure-content"></div></details>
-                            <div id="quick-proposal-fields"></div>
-                        </section>
-                        <section data-quick-panel="3" hidden aria-labelledby="quick-title-3">
-                            <h3 id="quick-title-3" tabindex="-1">Revisar y generar</h3>
-                            <dl id="quick-review"></dl>
-                            <h4>Coherencia curricular y advertencias</h4>
-                            <ul id="quick-warnings" class="quick-notice"></ul>
-                            <p>Las actividades, criterios y evidencias son propuestas para revisión docente. Puedes generar sin registrar alumnos. La generación usa tu cuenta y está sujeta a tus límites y créditos de IA.</p>
-                            <details class="form-disclosure"><summary>Copiloto, referencias y opciones de generación</summary><div id="quick-ai-options" class="form-disclosure-content"></div></details>
-                            <details class="form-disclosure"><summary>Diseño del documento</summary><div id="quick-design-options" class="form-disclosure-content"></div></details>
-                            <details class="form-disclosure"><summary>Alumnos (opcional)</summary><div id="quick-student-options" class="form-disclosure-content"></div></details>
-                            <details class="form-disclosure"><summary>Fichas y material de aplicación</summary><div id="quick-worksheet-options" class="form-disclosure-content"></div></details>
-                        </section>
-                        <div class="quick-navigation">
-                            <button type="button" class="btn btn-ghost" id="quick-back" disabled>Anterior</button>
-                            <button type="button" class="btn btn-primary" id="quick-next">Continuar</button>
-                        </div>
-                    </section>
+<!-- Generated from React: QuickSession. Edit react-ui/src/, then npm run build:public. -->
+ <div class="session-mode-switch" role="group" aria-label="Modo del generador">
+<button type="button" class="btn btn-ghost" id="session-mode-quick" aria-pressed="false">Modo rápido · 3 pasos</button>
+<button type="button" class="btn btn-ghost" id="session-mode-advanced" aria-pressed="true">Modo avanzado</button>
+</div>
+<section id="quick-session" hidden="" aria-label="Asistente rápido de sesiones">
+<nav class="quick-steps" aria-label="Pasos del modo rápido">
+<button type="button" data-quick-step="1" aria-current="step">1. Datos</button>
+<button type="button" data-quick-step="2">2. Aprendizajes</button>
+<button type="button" data-quick-step="3">3. Revisar</button>
+</nav>
+<p id="quick-step-status" class="curriculum-help" role="status">Paso 1 de 3</p>
+<div id="quick-errors" class="quick-notice" role="alert" hidden=""></div>
+<section data-quick-panel="1" aria-labelledby="quick-title-1">
+<h3 id="quick-title-1" tabindex="-1">Datos de tu sesión</h3>
+<p>Define qué enseñarás y a quiénes. Los datos de tu institución son opcionales.</p>
+<div id="quick-data-fields" class="quick-field-grid"></div>
+<details class="form-disclosure"><summary>Datos institucionales y de aula (opcionales)</summary><div id="quick-institution-fields" class="form-disclosure-content"></div></details>
+</section>
+<section data-quick-panel="2" hidden="" aria-labelledby="quick-title-2">
+<h3 id="quick-title-2" tabindex="-1">Aprendizajes y propuestas</h3>
+<p id="quick-curriculum-status" role="status">Comprobando cobertura curricular…</p>
+<p>El selector muestra referencias del catálogo. Los textos manuales o completados por IA requieren cotejo y no se convierten automáticamente en información oficial.</p>
+<div id="quick-learning-fields"></div>
+<details class="form-disclosure"><summary>Desempeños y procedencia del catálogo</summary><div id="quick-official-performances" class="form-disclosure-content"></div></details>
+<div id="quick-proposal-fields"></div>
+</section>
+<section data-quick-panel="3" hidden="" aria-labelledby="quick-title-3">
+<h3 id="quick-title-3" tabindex="-1">Revisar y generar</h3>
+<dl id="quick-review"></dl>
+<h4>Coherencia curricular y advertencias</h4>
+<ul id="quick-warnings" class="quick-notice"></ul>
+<p>Las actividades, criterios y evidencias son propuestas para revisión docente. Puedes generar sin registrar alumnos. La generación usa tu cuenta y está sujeta a tus límites y créditos de IA.</p>
+<details class="form-disclosure"><summary>Copiloto, referencias y opciones de generación</summary><div id="quick-ai-options" class="form-disclosure-content"></div></details>
+<details class="form-disclosure"><summary>Diseño del documento</summary><div id="quick-design-options" class="form-disclosure-content"></div></details>
+<details class="form-disclosure"><summary>Alumnos (opcional)</summary><div id="quick-student-options" class="form-disclosure-content"></div></details>
+<details class="form-disclosure"><summary>Fichas y material de aplicación</summary><div id="quick-worksheet-options" class="form-disclosure-content"></div></details>
+</section>
+<div class="quick-navigation">
+<button type="button" class="btn btn-ghost" id="quick-back" disabled="">Anterior</button>
+<button type="button" class="btn btn-primary" id="quick-next">Continuar</button>
+</div>
+</section>
+
+<!-- End React: QuickSession -->

@@ -1,735 +1,947 @@
-    <!-- ═══════════ MAIN APP ═══════════ -->
-    <div id="app-view" class="app-wrapper hidden">
-
-        <!-- ─── HEADER ─── -->
-        <header class="app-header glass-card">
-            <div class="header-leading">
-                <div class="header-brand" data-action="view-landing" style="cursor: pointer;" title="Volver al inicio / presentación" role="button" tabindex="0" aria-label="Volver al inicio de Space Lab">
-                    <div class="brand-icon" style="background: linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%); border-color: rgba(0,212,255,0.35);">
-                        <img src="assets/favicon.svg" alt="Space Lab Logo" class="brand-logo-img">
-                    </div>
-                    <div>
-                        <h1 class="brand-title">Space Lab</h1>
-                        <span class="brand-subtitle">Sesiones Educativas</span>
-                    </div>
-                </div>
-                <div class="header-context" aria-label="Contexto de la sesión">
-                    <span class="header-context-label">Editor de sesión</span>
-                    <span id="session-context-title" class="header-context-title">Nueva sesión</span>
-                </div>
-                <!-- Badge de Perfil y Créditos en la parte superior izquierda -->
-                <div id="header-user-badge" class="header-user-badge" role="region" aria-label="Perfil y créditos del docente" hidden>
-                    <div class="user-avatar-badge" id="header-user-avatar" aria-hidden="true">--</div>
-                    <div class="user-details-col">
-                        <div class="user-name-row">
-                            <span class="user-display-name" id="header-user-name">Docente</span>
-                            <span class="user-plan-tag" id="header-user-plan">Plan docente</span>
-                        </div>
-                        <div class="user-credits-sub">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
-                            <span class="user-credits-text" id="header-user-credits">-- créditos IA</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="save-indicator" id="save-indicator" role="status" aria-live="polite">
-                <span class="save-dot"></span>
-                <span class="save-text">Sin cambios</span>
-            </div>
-            <nav class="header-actions">
-                <span id="ai-credit-indicator" class="ai-credit-indicator" role="status" aria-live="polite" hidden>IA · -- créditos</span>
-                <button id="btn-home-nav" type="button" class="btn btn-ghost btn-sm" data-action="view-home" hidden>
-                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg>
-                    <span class="btn-label">Mi espacio</span>
-                </button>
-                <label class="theme-picker" title="Tema de la aplicación">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-theme"></use></svg>
-                    <span class="sr-only">Tema de la aplicación</span>
-                    <select id="theme-preference" aria-label="Tema de la aplicación">
-                        <option value="system">Sistema</option>
-                        <option value="light">Claro</option>
-                        <option value="dark">Oscuro</option>
-                    </select>
-                </label>
-                <button id="btn-toggle-edit" class="btn btn-ghost btn-icon" title="Modo edición / lectura" aria-label="Cambiar modo de edición">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
-                    <span class="btn-label">Editar</span>
-                </button>
-                <button id="btn-preview" class="btn btn-ghost btn-icon" title="Vista previa de impresión" aria-label="Abrir vista previa">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
-                    <span class="btn-label">Vista Previa</span>
-                </button>
-                <details id="export-command-menu" class="command-menu">
-                    <summary class="btn btn-primary" aria-label="Abrir opciones de exportación">
-                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
-                        <span class="btn-label">Exportar</span>
-                        <svg class="ui-icon command-menu-chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
-                    </summary>
-                    <div class="command-menu-panel" role="group" aria-label="Opciones de exportación">
-                        <span class="command-menu-heading">Exportar sesión</span>
-                        <button id="btn-export-pdf" class="btn btn-pdf" title="Exportar sesión a PDF" aria-label="Exportar sesión a PDF">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                            <span class="btn-label">Documento PDF</span>
-                        </button>
-                        <button id="btn-export-word" class="btn btn-word" title="Exportar sesión a Word" aria-label="Exportar sesión a Word">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                            <span class="btn-label">Documento Word</span>
-                        </button>
-                        <span class="command-menu-separator" aria-hidden="true"></span>
-                        <a id="btn-download-engine" href="https://descargas.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" title="Descargar Motor de Exportación Local (.exe)">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
-                            <span class="btn-label">Obtener motor local</span>
-                        </a>
-                    </div>
-                </details>
-                <div id="auth-header-container" class="auth-header-container">
-                    <!-- Dinámico por auth-ui.js -->
-                </div>
-                <button id="btn-menu-mobile" class="btn btn-ghost btn-icon mobile-only" title="Abrir planificación" aria-label="Abrir planificación" aria-expanded="false" aria-controls="sidebar">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
-                    <span class="btn-label">Planificar</span>
-                </button>
-            </nav>
-        </header>
-
-        <!-- ─── MAIN CONTENT ─── -->
-        <main class="app-main">
-
-            <nav id="workflow-rail" class="workflow-rail" aria-label="Flujo de creación">
-                <button id="btn-toggle-rail" class="workflow-rail-brand" type="button" aria-label="Mostrar nombres de las etapas" aria-expanded="false" aria-controls="workflow-tabs">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
-                    <span>Etapas</span>
-                </button>
-                <button type="button" id="quick-open-planner" class="btn btn-ghost" aria-controls="sidebar">Editar sesión</button>
-                <div id="workflow-tabs" class="sidebar-tabs" role="group" aria-label="Secciones de la sesión">
-                    <button type="button" class="sidebar-tab active" data-tab="tab-ai" aria-label="Copiloto, en curso" aria-current="step" aria-controls="tab-ai">
-                        <span class="tab-step">01</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Copiloto</span><span class="tab-state">En curso</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-general" aria-label="Datos, pendiente" aria-controls="tab-general">
-                        <span class="tab-step">02</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Datos</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-propositos" aria-label="Propósitos, pendiente" aria-controls="tab-propositos">
-                        <span class="tab-step">03</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Propósitos</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-design" aria-label="Diseño, pendiente" aria-controls="tab-design">
-                        <span class="tab-step">04</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Diseño</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-alumnos" aria-label="Alumnos, pendiente" aria-controls="tab-alumnos">
-                        <span class="tab-step">05</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                    <button type="button" class="sidebar-tab" data-tab="tab-fichas" aria-label="Fichas, pendiente" aria-controls="tab-fichas">
-                        <span class="tab-step">06</span>
-                        <svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                        <span class="tab-copy"><span class="tab-text">Fichas</span><span class="tab-state">Pendiente</span></span>
-                    </button>
-                </div>
-            </nav>
-
-            <!-- ═══ SIDEBAR: Formulario ═══ -->
-            <aside id="sidebar" class="sidebar glass-card">
-                <div class="sidebar-header">
-                    <div>
-                        <span class="sidebar-eyebrow">Planificador docente</span>
-                        <h2 class="sidebar-title">Diseña tu sesión</h2>
-                    </div>
-                    <button id="btn-close-sidebar" type="button" class="btn btn-ghost btn-sm" aria-label="Volver al documento"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg><span>Volver al documento</span></button>
-                </div>
-
-                <div class="sidebar-workflow">
-                <form id="session-form" class="session-form" autocomplete="off">
-<!-- include:ui/fragments/quick-session.html -->
-                    <!-- PANE 1: COPILOTO IA -->
-                    <div id="tab-ai" class="tab-pane active" role="region" aria-labelledby="inspector-title">
-                    <div class="inspector-heading planner-section-heading">
-                        <span id="inspector-step" class="inspector-step">Paso 01 de 06</span>
-                        <h3 id="inspector-title">Configura el copiloto</h3>
-                        <p id="inspector-description">Elige el modelo, la plantilla y las referencias para preparar tu sesión.</p>
-                        <p class="planner-scroll-help">Baja para continuar. El menú te lleva directo a cada sección.</p>
-                    </div>
-
-                        <!-- Motor de IA para Generación -->
-                        <div class="form-group ai-model-card">
-                            <div class="ai-model-header">
-                                <div>
-                                    <span class="ai-model-eyebrow">Copiloto Space AI</span>
-                                    <strong>Enrutamiento inteligente</strong>
-                                </div>
-                                <span class="ai-model-status" id="ai-availability-status">Disponibilidad por verificar</span>
-                            </div>
-                            <label for="select-ai-provider" class="form-label">
+<!-- Generated from React: SessionEditor. Edit react-ui/src/, then npm run build:public. -->
+<link rel="preload" as="image" href="assets/favicon.svg"/> <!-- -->
+<div id="app-view" class="app-wrapper hidden">
+<!-- -->
+<header class="app-header glass-card">
+<div class="header-leading">
+<div class="header-brand" data-action="view-landing" style="cursor:pointer" title="Volver al inicio / presentación" role="button" tabindex="0" aria-label="Volver al inicio de Space Lab">
+<div class="brand-icon" style="background:linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%);border-color:rgba(0,212,255,0.35)">
+<img src="assets/favicon.svg" alt="Space Lab Logo" class="brand-logo-img"/>
+</div>
+<div>
+<h1 class="brand-title">Space Lab</h1>
+<span class="brand-subtitle">Sesiones Educativas</span>
+</div>
+</div>
+<div class="header-context" aria-label="Contexto de la sesión">
+<span class="header-context-label">Editor de sesión</span>
+<span id="session-context-title" class="header-context-title">Nueva sesión</span>
+</div>
+<!-- -->
+<div id="header-user-badge" class="header-user-badge" role="region" aria-label="Perfil y créditos del docente" hidden="">
+<div class="user-avatar-badge" id="header-user-avatar" aria-hidden="true">--</div>
+<div class="user-details-col">
+<div class="user-name-row">
+<span class="user-display-name" id="header-user-name">Docente</span>
+<span class="user-plan-tag" id="header-user-plan">Plan docente</span>
+</div>
+<div class="user-credits-sub">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+<span class="user-credits-text" id="header-user-credits">-- créditos IA</span>
+</div>
+</div>
+</div>
+</div>
+<div class="save-indicator" id="save-indicator" role="status" aria-live="polite">
+<span class="save-dot"></span>
+<span class="save-text">Sin cambios</span>
+</div>
+<nav class="header-actions">
+<a href="mailto:pabloclsa87@gmail.com" class="btn btn-ghost btn-sm" aria-label="Contactar con soporte por correo">Soporte</a>
+<span id="ai-credit-indicator" class="ai-credit-indicator" role="status" aria-live="polite" hidden="">IA · -- créditos</span>
+<button id="btn-home-nav" type="button" class="btn btn-ghost btn-sm" data-action="view-home" hidden="">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg>
+<span class="btn-label">Mi espacio</span>
+</button>
+<label class="theme-picker" title="Tema de la aplicación">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-theme"></use></svg>
+<span class="sr-only">Tema de la aplicación</span>
+<select id="theme-preference" aria-label="Tema de la aplicación">
+<option value="system">Sistema</option>
+<option value="light">Claro</option>
+<option value="dark">Oscuro</option>
+</select>
+</label>
+<button id="btn-toggle-edit" class="btn btn-ghost btn-icon" title="Modo edición / lectura" aria-label="Cambiar modo de edición">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>
+<span class="btn-label">Editar</span>
+</button>
+<button id="btn-preview" class="btn btn-ghost btn-icon" title="Vista previa de impresión" aria-label="Abrir vista previa">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>
+<span class="btn-label">Vista Previa</span>
+</button>
+<details id="export-command-menu" class="command-menu">
+<summary class="btn btn-primary" aria-label="Abrir opciones de exportación">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+<span class="btn-label">Exportar</span>
+<svg class="ui-icon command-menu-chevron" aria-hidden="true"><use href="#icon-chevron-down"></use></svg>
+</summary>
+<div class="command-menu-panel" role="group" aria-label="Opciones de exportación">
+<span class="command-menu-heading">Exportar sesión</span>
+<button id="btn-export-pdf" class="btn btn-pdf" title="Exportar sesión a PDF" aria-label="Exportar sesión a PDF">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+<span class="btn-label">Documento PDF</span>
+</button>
+<button id="btn-export-word" class="btn btn-word" title="Exportar sesión a Word" aria-label="Exportar sesión a Word">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+<span class="btn-label">Documento Word</span>
+</button>
+<span class="command-menu-separator" aria-hidden="true"></span>
+<a id="btn-download-engine" href="https://descargas.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" title="Descargar Motor de Exportación Local (.exe)">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+<span class="btn-label">Obtener motor local</span>
+</a>
+</div>
+</details>
+<div id="auth-header-container" class="auth-header-container"><button id="btn-login-trigger" class="btn btn-ghost btn-sm" aria-label="Iniciar sesión"><svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg><span class="auth-label">Iniciar sesión</span></button></div>
+<button id="btn-menu-mobile" class="btn btn-ghost btn-icon mobile-only" title="Abrir planificación" aria-label="Abrir planificación" aria-expanded="false" aria-controls="sidebar">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
+<span class="btn-label">Planificar</span>
+</button>
+</nav>
+</header>
+<!-- -->
+<main class="app-main">
+<nav id="workflow-rail" class="workflow-rail" aria-label="Flujo de creación">
+<button id="btn-toggle-rail" class="workflow-rail-brand" type="button" aria-label="Mostrar nombres de las etapas" aria-expanded="false" aria-controls="workflow-tabs">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-menu"></use></svg>
+<span>Etapas</span>
+</button>
+<button type="button" id="quick-open-planner" class="btn btn-ghost" aria-controls="sidebar">Editar sesión</button>
+<div id="workflow-tabs" class="sidebar-tabs" role="group" aria-label="Secciones de la sesión">
+<button type="button" class="sidebar-tab active" data-tab="tab-ai" aria-label="Copiloto, en curso" aria-current="step" aria-controls="tab-ai">
+<span class="tab-step">01</span>
+<svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+<span class="tab-copy"><span class="tab-text">Copiloto</span><span class="tab-state">En curso</span></span>
+</button>
+<button type="button" class="sidebar-tab" data-tab="tab-general" aria-label="Datos, pendiente" aria-controls="tab-general">
+<span class="tab-step">02</span>
+<svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
+<span class="tab-copy"><span class="tab-text">Datos</span><span class="tab-state">Pendiente</span></span>
+</button>
+<button type="button" class="sidebar-tab" data-tab="tab-propositos" aria-label="Propósitos, pendiente" aria-controls="tab-propositos">
+<span class="tab-step">03</span>
+<svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+<span class="tab-copy"><span class="tab-text">Propósitos</span><span class="tab-state">Pendiente</span></span>
+</button>
+<button type="button" class="sidebar-tab" data-tab="tab-design" aria-label="Diseño, pendiente" aria-controls="tab-design">
+<span class="tab-step">04</span>
+<svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+<span class="tab-copy"><span class="tab-text">Diseño</span><span class="tab-state">Pendiente</span></span>
+</button>
+<button type="button" class="sidebar-tab" data-tab="tab-alumnos" aria-label="Alumnos, pendiente" aria-controls="tab-alumnos">
+<span class="tab-step">05</span>
+<svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
+<span class="tab-copy"><span class="tab-text">Alumnos</span><span class="tab-state">Pendiente</span></span>
+</button>
+<button type="button" class="sidebar-tab" data-tab="tab-fichas" aria-label="Fichas, pendiente" aria-controls="tab-fichas">
+<span class="tab-step">06</span>
+<svg class="ui-icon tab-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+<span class="tab-copy"><span class="tab-text">Fichas</span><span class="tab-state">Pendiente</span></span>
+</button>
+</div>
+</nav>
+<!-- -->
+<aside id="sidebar" class="sidebar glass-card">
+<div class="sidebar-header">
+<div>
+<span class="sidebar-eyebrow">Planificador docente</span>
+<h2 class="sidebar-title">Diseña tu sesión</h2>
+</div>
+<button id="btn-close-sidebar" type="button" class="btn btn-ghost btn-sm" aria-label="Volver al documento"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg><span>Volver al documento</span></button>
+</div>
+<div class="sidebar-workflow">
+<form id="session-form" class="session-form" autoComplete="off">
+<!-- --> <div class="session-mode-switch" role="group" aria-label="Modo del generador">
+<button type="button" class="btn btn-ghost" id="session-mode-quick" aria-pressed="false">Modo rápido · 3 pasos</button>
+<button type="button" class="btn btn-ghost" id="session-mode-advanced" aria-pressed="true">Modo avanzado</button>
+</div>
+<section id="quick-session" hidden="" aria-label="Asistente rápido de sesiones">
+<nav class="quick-steps" aria-label="Pasos del modo rápido">
+<button type="button" data-quick-step="1" aria-current="step">1. Datos</button>
+<button type="button" data-quick-step="2">2. Aprendizajes</button>
+<button type="button" data-quick-step="3">3. Revisar</button>
+</nav>
+<p id="quick-step-status" class="curriculum-help" role="status">Paso 1 de 3</p>
+<div id="quick-errors" class="quick-notice" role="alert" hidden=""></div>
+<section data-quick-panel="1" aria-labelledby="quick-title-1">
+<h3 id="quick-title-1" tabindex="-1">Datos de tu sesión</h3>
+<p>Define qué enseñarás y a quiénes. Los datos de tu institución son opcionales.</p>
+<div id="quick-data-fields" class="quick-field-grid"></div>
+<details class="form-disclosure"><summary>Datos institucionales y de aula (opcionales)</summary><div id="quick-institution-fields" class="form-disclosure-content"></div></details>
+</section>
+<section data-quick-panel="2" hidden="" aria-labelledby="quick-title-2">
+<h3 id="quick-title-2" tabindex="-1">Aprendizajes y propuestas</h3>
+<p id="quick-curriculum-status" role="status">Comprobando cobertura curricular…</p>
+<p>El selector muestra referencias del catálogo. Los textos manuales o completados por IA requieren cotejo y no se convierten automáticamente en información oficial.</p>
+<div id="quick-learning-fields"></div>
+<details class="form-disclosure"><summary>Desempeños y procedencia del catálogo</summary><div id="quick-official-performances" class="form-disclosure-content"></div></details>
+<div id="quick-proposal-fields"></div>
+</section>
+<section data-quick-panel="3" hidden="" aria-labelledby="quick-title-3">
+<h3 id="quick-title-3" tabindex="-1">Revisar y generar</h3>
+<dl id="quick-review"></dl>
+<h4>Coherencia curricular y advertencias</h4>
+<ul id="quick-warnings" class="quick-notice"></ul>
+<p>Las actividades, criterios y evidencias son propuestas para revisión docente. Puedes generar sin registrar alumnos. La generación usa tu cuenta y está sujeta a tus límites y créditos de IA.</p>
+<details class="form-disclosure"><summary>Copiloto, referencias y opciones de generación</summary><div id="quick-ai-options" class="form-disclosure-content"></div></details>
+<details class="form-disclosure"><summary>Diseño del documento</summary><div id="quick-design-options" class="form-disclosure-content"></div></details>
+<details class="form-disclosure"><summary>Alumnos (opcional)</summary><div id="quick-student-options" class="form-disclosure-content"></div></details>
+<details class="form-disclosure"><summary>Fichas y material de aplicación</summary><div id="quick-worksheet-options" class="form-disclosure-content"></div></details>
+</section>
+<div class="quick-navigation">
+<button type="button" class="btn btn-ghost" id="quick-back" disabled="">Anterior</button>
+<button type="button" class="btn btn-primary" id="quick-next">Continuar</button>
+</div>
+</section>
+<!-- -->
+<!-- -->
+<div id="tab-ai" class="tab-pane active" role="region" aria-labelledby="inspector-title">
+<div class="inspector-heading planner-section-heading">
+<span id="inspector-step" class="inspector-step">Paso 01 de 06</span>
+<h3 id="inspector-title">Configura el copiloto</h3>
+<p id="inspector-description">Elige el modelo, la plantilla y las referencias para preparar tu sesión.</p>
+<p class="planner-scroll-help">Baja para continuar. El menú te lleva directo a cada sección.</p>
+</div>
+<!-- -->
+<div class="form-group ai-model-card">
+<div class="ai-model-header">
+<div>
+<span class="ai-model-eyebrow">Copiloto Space AI</span>
+<strong>Enrutamiento inteligente</strong>
+</div>
+<span class="ai-model-status" id="ai-availability-status">Disponibilidad por verificar</span>
+</div>
+<label for="select-ai-provider" class="form-label">
                                 Modo de calidad
                             </label>
-                            <select id="select-ai-provider" class="form-select">
-                                <option value="automatic" selected>Automático — Recomendado</option>
-                                <option value="fast" disabled hidden>Rápido — Menor latencia</option>
-                                <option value="balanced" disabled hidden>Equilibrado — Calidad y eficiencia</option>
-                                <option value="max_quality" disabled hidden>Máxima calidad — Trabajo curricular complejo</option>
-                            </select>
-                            <p id="ai-availability-help" class="curriculum-help">Automático delega la selección al gateway. Las demás opciones requieren verificar tu cuenta y el backend.</p>
-                            <div id="model-capabilities-badge" class="model-capabilities-badge">
-                                <svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                                <span class="badge-text"><strong>Automático:</strong> El gateway elige la ruta más adecuada según la tarea y los archivos.</span>
-                            </div>
-                        </div>
-
-                        <!-- Configuración Didáctica -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+<select id="select-ai-provider" class="form-select">
+<option value="automatic" selected="">Automático — Recomendado</option>
+<option value="fast" disabled="" hidden="">Rápido — Menor latencia</option>
+<option value="balanced" disabled="" hidden="">Equilibrado — Calidad y eficiencia</option>
+<option value="max_quality" disabled="" hidden="">Máxima calidad — Trabajo curricular complejo</option>
+</select>
+<p id="ai-availability-help" class="curriculum-help">Automático delega la selección al gateway. Las demás opciones requieren verificar tu cuenta y el backend.</p>
+<div id="model-capabilities-badge" class="model-capabilities-badge">
+<svg class="ui-icon badge-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+<span class="badge-text"><strong>Automático:</strong> El gateway elige la ruta más adecuada según la tarea y los archivos.</span>
+</div>
+</div>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
                                 Estructura de la Sesión
                             </div>
-                            <!-- Plantilla -->
-                            <div class="form-group">
-                                <label for="select-template" class="form-label">Tipo de Sesión</label>
-                                <select id="select-template" class="form-select">
-                                    <option value="estandar">Sesión estándar MINEDU</option>
-                                    <option value="inicial">Sesión de educación inicial</option>
-                                    <option value="laboratorio">Sesión de laboratorio</option>
-                                    <option value="refuerzo">Sesión de refuerzo</option>
-                                </select>
-                            </div>
-
-                            <!-- Metodología Didáctica -->
-                            <div class="form-group">
-                                <label for="select-methodology" class="form-label">Metodología Didáctica</label>
-                                <select id="select-methodology" class="form-select">
-                                    <option value="">-- Por defecto del Área --</option>
-                                    <option value="polya">Método de Polya — resolución de problemas</option>
-                                    <option value="erca">Ciclo ERCA — experiencia, reflexión, conceptualización y aplicación</option>
-                                    <option value="project_based_learning">Aprendizaje Basado en Proyectos</option>
-                                    <option value="flipped">Aula invertida</option>
-                                    <option value="indagacion">Indagación científica (STEAM)</option>
-                                    <option value="cooperativo">Aprendizaje cooperativo</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Archivo Fuente de Referencia -->
-                        <div class="form-card source-file-group">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg>
-                                Documento de Referencia <span class="optional-label" style="font-size:0.65rem; color:var(--text-muted); margin-left:auto;">Opcional</span>
-                            </div>
-                            <div id="source-file-dropzone" class="source-file-dropzone">
-                                <span class="icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg></span>
-                                <span class="text">Haz clic o arrastra un archivo aquí (PDF, imagen, audio o texto)</span>
-                            </div>
-                            <div id="source-file-info" class="source-file-info hidden">
-                                <span class="file-name" id="source-file-name-text"></span>
-                                <button type="button" id="btn-remove-source-file" class="btn-remove-file"
-                                    title="Eliminar archivo" aria-label="Eliminar archivo"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
-                            </div>
-                            <input type="file" id="input-source-file" class="hidden"
-                                accept=".pdf,image/*,audio/*,text/plain,.csv,.md,.json">
-                            <div id="source-file-guidance" class="source-file-guidance hidden">
-                                <label for="input-source-instruction" class="form-label">
+<!-- -->
+<div class="form-group">
+<label for="select-template" class="form-label">Tipo de Sesión</label>
+<select id="select-template" class="form-select">
+<option value="estandar">Sesión estándar MINEDU</option>
+<option value="inicial">Sesión de educación inicial</option>
+<option value="laboratorio">Sesión de laboratorio</option>
+<option value="refuerzo">Sesión de refuerzo</option>
+</select>
+</div>
+<!-- -->
+<div class="form-group">
+<label for="select-methodology" class="form-label">Metodología Didáctica</label>
+<select id="select-methodology" class="form-select">
+<option value="">-- Por defecto del Área --</option>
+<option value="polya">Método de Polya — resolución de problemas</option>
+<option value="erca">Ciclo ERCA — experiencia, reflexión, conceptualización y aplicación</option>
+<option value="project_based_learning">Aprendizaje Basado en Proyectos</option>
+<option value="flipped">Aula invertida</option>
+<option value="indagacion">Indagación científica (STEAM)</option>
+<option value="cooperativo">Aprendizaje cooperativo</option>
+</select>
+</div>
+</div>
+<!-- -->
+<div class="form-card source-file-group">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg>
+                                Documento de Referencia <span class="optional-label" style="font-size:0.65rem;color:var(--text-muted);margin-left:auto">Opcional</span>
+</div>
+<div id="source-file-dropzone" class="source-file-dropzone">
+<span class="icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg></span>
+<span class="text">Haz clic o arrastra un archivo aquí (PDF, imagen, audio o texto)</span>
+</div>
+<div id="source-file-info" class="source-file-info hidden">
+<span class="file-name" id="source-file-name-text"></span>
+<button type="button" id="btn-remove-source-file" class="btn-remove-file" title="Eliminar archivo" aria-label="Eliminar archivo"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+</div>
+<input type="file" id="input-source-file" class="hidden" accept=".pdf,image/*,audio/*,text/plain,.csv,.md,.json"/>
+<div id="source-file-guidance" class="source-file-guidance hidden">
+<label for="input-source-instruction" class="form-label">
                                     ¿Qué parte debe usar la IA?
                                 </label>
-                                <textarea id="input-source-instruction" class="form-textarea" rows="3"
-                                    maxlength="600"
-                                    placeholder="Ej.: Toma como situación central la primera situación problemática de la página 2. No uses los otros ejemplos."></textarea>
-                                <p class="source-file-guidance-help">
+<textarea id="input-source-instruction" class="form-textarea" rows="3" maxLength="600" placeholder="Ej.: Toma como situación central la primera situación problemática de la página 2. No uses los otros ejemplos."></textarea>
+<p class="source-file-guidance-help">
                                     Indica una página, un rango (págs. 3–5) o describe la situación. Si lo dejas vacío, la IA revisará todo el archivo.
                                 </p>
-                            </div>
-                        </div>
-
-                        <!-- Afinar enfoque pedagógico -->
-                        <div style="margin-top: 0.5rem;">
-                            <button type="button" id="btn-pedagogy-brief" class="pb-trigger-btn btn btn-ghost" title="Afinar el enfoque pedagógico con la IA antes de generar" style="width: 100%; padding: 10px 16px;">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Afinar enfoque pedagógico con IA
+</div>
+</div>
+<!-- -->
+<div style="margin-top:0.5rem">
+<button type="button" id="btn-pedagogy-brief" class="pb-trigger-btn btn btn-ghost" title="Afinar el enfoque pedagógico con la IA antes de generar" style="width:100%;padding:10px 16px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Afinar enfoque pedagógico con IA
                             </button>
-                        </div>
-                    </div>
-
-                    <!-- PANE 2: DATOS GENERALES -->
-                    <div id="tab-general" class="tab-pane" role="region" aria-labelledby="planner-title-general">
-                        <header class="planner-section-heading"><span class="planner-section-step">Paso 02 de 06</span><h3 id="planner-title-general">Completa los datos</h3><p>Define la institución, el grado, el área y la identidad de tu sesión.</p></header>
-                        <!-- Centro Educativo & Jurisdicción -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
+</div>
+</div>
+<!-- -->
+<div id="tab-general" class="tab-pane" role="region" aria-labelledby="planner-title-general">
+<header class="planner-section-heading"><span class="planner-section-step">Paso 02 de 06</span><h3 id="planner-title-general">Completa los datos</h3><p>Define la institución, el grado, el área y la identidad de tu sesión.</p></header>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
                                 Institución y Jurisdicción
                             </div>
-                            <div class="form-group">
-                                <label for="input-institucion" class="form-label">Institución Educativa</label>
-                                <input type="text" id="input-institucion" class="form-input"
-                                    placeholder="I.E. N° 000 — Nombre">
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="input-dre" class="form-label">DRE</label>
-                                    <input type="text" id="input-dre" class="form-input" placeholder="DRE Ucayali">
-                                </div>
-                                <div class="form-group">
-                                    <label for="input-ugel" class="form-label">UGEL</label>
-                                    <input type="text" id="input-ugel" class="form-input" placeholder="UGEL Padre Abad">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Responsables Educativos -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
+<div class="form-group">
+<label for="input-institucion" class="form-label">Institución Educativa</label>
+<input type="text" id="input-institucion" class="form-input" placeholder="I.E. N° 000 — Nombre"/>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="input-dre" class="form-label">DRE</label>
+<input type="text" id="input-dre" class="form-input" placeholder="DRE Ucayali"/>
+</div>
+<div class="form-group">
+<label for="input-ugel" class="form-label">UGEL</label>
+<input type="text" id="input-ugel" class="form-input" placeholder="UGEL Padre Abad"/>
+</div>
+</div>
+</div>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
                                 Equipo Docente
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="input-docente" class="form-label">Docente</label>
-                                    <input type="text" id="input-docente" class="form-input" placeholder="Nombre completo">
-                                </div>
-                                <div class="form-group">
-                                    <label for="input-director" class="form-label">Director(a)</label>
-                                    <input type="text" id="input-director" class="form-input"
-                                        placeholder="Nombre del director">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Aula, Temporalización y Calendario -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+<div class="form-row">
+<div class="form-group">
+<label for="input-docente" class="form-label">Docente</label>
+<input type="text" id="input-docente" class="form-input" placeholder="Nombre completo"/>
+</div>
+<div class="form-group">
+<label for="input-director" class="form-label">Director(a)</label>
+<input type="text" id="input-director" class="form-input" placeholder="Nombre del director"/>
+</div>
+</div>
+</div>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
                                 Programación de Aula
                             </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="input-fecha" class="form-label">Fecha</label>
-                                    <input type="date" id="input-fecha" class="form-input">
-                                </div>
-                                <div class="form-group">
-                                    <label for="input-nivel" class="form-label">Nivel</label>
-                                    <select id="input-nivel" class="form-select">
-                                        <option value="SECUNDARIA">Secundaria</option>
-                                        <option value="PRIMARIA">Primaria</option>
-                                        <option value="INICIAL">Inicial</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="input-grado" class="form-label">Grado</label>
-                                    <select id="input-grado" class="form-select">
-                                        <option value="">Seleccionar</option>
-                                        <option value="3 años">3 años (Inicial)</option>
-                                        <option value="4 años">4 años (Inicial)</option>
-                                        <option value="5 años">5 años (Inicial)</option>
-                                        <option value="1°">1° Grado</option>
-                                        <option value="2°">2° Grado</option>
-                                        <option value="3°">3° Grado</option>
-                                        <option value="4°">4° Grado</option>
-                                        <option value="5°">5° Grado</option>
-                                        <option value="6°">6° Grado</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="input-seccion" class="form-label">Sección</label>
-                                    <input type="text" id="input-seccion" class="form-input" placeholder='A, B, C...'>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label for="input-numero-sesion" class="form-label">N° de Sesión</label>
-                                    <input type="text" id="input-numero-sesion" class="form-input" placeholder="03">
-                                </div>
-                                <div class="form-group">
-                                    <label for="input-duracion" class="form-label">Duración</label>
-                                    <input type="text" id="input-duracion" class="form-input" placeholder="90 min">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Contenido Curricular -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+<div class="form-row">
+<div class="form-group">
+<label for="input-fecha" class="form-label">Fecha</label>
+<input type="date" id="input-fecha" class="form-input"/>
+</div>
+<div class="form-group">
+<label for="input-nivel" class="form-label">Nivel</label>
+<select id="input-nivel" class="form-select">
+<option value="SECUNDARIA">Secundaria</option>
+<option value="PRIMARIA">Primaria</option>
+<option value="INICIAL">Inicial</option>
+</select>
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="input-grado" class="form-label">Grado</label>
+<select id="input-grado" class="form-select">
+<option value="">Seleccionar</option>
+<option value="3 años">3 años (Inicial)</option>
+<option value="4 años">4 años (Inicial)</option>
+<option value="5 años">5 años (Inicial)</option>
+<option value="1°">1° Grado</option>
+<option value="2°">2° Grado</option>
+<option value="3°">3° Grado</option>
+<option value="4°">4° Grado</option>
+<option value="5°">5° Grado</option>
+<option value="6°">6° Grado</option>
+</select>
+</div>
+<div class="form-group">
+<label for="input-seccion" class="form-label">Sección</label>
+<input type="text" id="input-seccion" class="form-input" placeholder="A, B, C..."/>
+</div>
+</div>
+<div class="form-row">
+<div class="form-group">
+<label for="input-numero-sesion" class="form-label">N° de Sesión</label>
+<input type="text" id="input-numero-sesion" class="form-input" placeholder="03"/>
+</div>
+<div class="form-group">
+<label for="input-duracion" class="form-label">Duración</label>
+<input type="text" id="input-duracion" class="form-input" placeholder="90 min"/>
+</div>
+</div>
+</div>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
                                 Identidad y Temario
                             </div>
-                            <div class="form-group">
-                                <label for="input-area" class="form-label">Área Curricular</label>
-                                <select id="input-area" class="form-select">
-                                    <option value="">Seleccionar</option>
-                                    <option value="Comunicación">Comunicación</option>
-                                    <option value="Matemática">Matemática</option>
-                                    <option value="Ciencia y Tecnología">Ciencia y Tecnología</option>
-                                    <option value="Personal Social">Personal Social</option>
-                                    <option value="Arte y Cultura">Arte y Cultura</option>
-                                    <option value="Educación Física">Educación Física</option>
-                                    <option value="Educación Religiosa">Educación Religiosa</option>
-                                    <option value="Inglés">Inglés</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-unidad" class="form-label">Unidad Didáctica</label>
-                                <input type="text" id="input-unidad" class="form-input" placeholder="Unidad N° — Título">
-                            </div>
-                            <div class="form-group">
-                                <label for="input-titulo" class="form-label">Título de la Sesión</label>
-                                <input type="text" id="input-titulo" class="form-input"
-                                    placeholder="Título descriptivo de la sesión">
-                            </div>
-                        </div>
-
-                        <!-- Botones auxiliares de Datos -->
-                        <div style="display: flex; gap: 8px; margin-top: 1rem;">
-                            <button type="button" id="btn-save-defaults" class="btn btn-ghost btn-sm"
-                                title="Guardar predeterminados en la nube" style="flex: 1; font-size: 0.76rem; padding: 8px;">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Predeterminados
+<div class="form-group">
+<label for="input-area" class="form-label">Área Curricular</label>
+<select id="input-area" class="form-select">
+<option value="">Seleccionar</option>
+<option value="Comunicación">Comunicación</option>
+<option value="Matemática">Matemática</option>
+<option value="Ciencia y Tecnología">Ciencia y Tecnología</option>
+<option value="Personal Social">Personal Social</option>
+<option value="Arte y Cultura">Arte y Cultura</option>
+<option value="Educación Física">Educación Física</option>
+<option value="Educación Religiosa">Educación Religiosa</option>
+<option value="Inglés">Inglés</option>
+</select>
+</div>
+<div class="form-group">
+<label for="input-unidad" class="form-label">Unidad Didáctica</label>
+<input type="text" id="input-unidad" class="form-input" placeholder="Unidad N° — Título"/>
+</div>
+<div class="form-group">
+<label for="input-titulo" class="form-label">Título de la Sesión</label>
+<input type="text" id="input-titulo" class="form-input" placeholder="Título descriptivo de la sesión"/>
+</div>
+</div>
+<!-- -->
+<div style="display:flex;gap:8px;margin-top:1rem">
+<button type="button" id="btn-save-defaults" class="btn btn-ghost btn-sm" title="Guardar predeterminados en la nube" style="flex:1;font-size:0.76rem;padding:8px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Predeterminados
                             </button>
-                            <button type="button" id="btn-new" class="btn btn-ghost btn-sm"
-                                title="Limpiar formulario e iniciar nueva sesión"
-                                style="flex: 1; font-size: 0.76rem; padding: 8px;">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Limpiar Todo
+<button type="button" id="btn-new" class="btn btn-ghost btn-sm" title="Limpiar formulario e iniciar nueva sesión" style="flex:1;font-size:0.76rem;padding:8px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-trash"></use></svg> Limpiar Todo
                             </button>
-                        </div>
-                    </div>
-
-                    <!-- PANE 3: PROPÓSITOS Y ACCIONES -->
-                    <div id="tab-propositos" class="tab-pane" role="region" aria-labelledby="planner-title-propositos">
-                        <header class="planner-section-heading"><span class="planner-section-step">Paso 03 de 06</span><h3 id="planner-title-propositos">Elige los aprendizajes</h3><p>Marca competencias y capacidades. Después, precisa los desempeños y enfoques que trabajarás.</p></header>
-                        <!-- Competencias y Capacidades -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+</div>
+</div>
+<!-- -->
+<div id="tab-propositos" class="tab-pane" role="region" aria-labelledby="planner-title-propositos">
+<header class="planner-section-heading"><span class="planner-section-step">Paso 03 de 06</span><h3 id="planner-title-propositos">Elige los aprendizajes</h3><p>Marca competencias y capacidades. Después, precisa los desempeños y enfoques que trabajarás.</p></header>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
                                 Competencias y Capacidades
                             </div>
-                            <div id="curriculum-picker" class="curriculum-picker" aria-label="Seleccionar competencias y capacidades"></div>
-                            <details id="curriculum-manual" class="form-disclosure" open>
-                            <summary>Editar aprendizajes manualmente</summary>
-                            <div class="form-disclosure-content">
-                            <div class="form-group">
-                                <label for="input-competencia" class="form-label">Competencia Curricular</label>
-                                <select id="select-cneb-competencia" class="form-select hidden"
-                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                                <textarea id="input-competencia" class="form-textarea" rows="2"
-                                    placeholder="Competencia curricular..."></textarea>
-                            </div>
-                            <div class="form-group">
-                                <label for="input-capacidad" class="form-label">Capacidad a Desarrollar</label>
-                                <select id="select-cneb-capacidad" class="form-select hidden"
-                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                                <textarea id="input-capacidad" class="form-textarea" rows="2"
-                                    placeholder="Capacidades a desarrollar..."></textarea>
-                            </div>
-                            </div>
-                            </details>
-                        </div>
-
-                        <!-- Desempeños -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+<div id="curriculum-picker" class="curriculum-picker" aria-label="Seleccionar competencias y capacidades"></div>
+<details id="curriculum-manual" class="form-disclosure" open="">
+<summary>Editar aprendizajes manualmente</summary>
+<div class="form-disclosure-content">
+<div class="form-group">
+<label for="input-competencia" class="form-label">Competencia Curricular</label>
+<select id="select-cneb-competencia" class="form-select hidden" style="margin-bottom:6px;font-size:0.8rem;background-color:rgba(0, 212, 255, 0.08);border-color:var(--border-accent)"></select>
+<textarea id="input-competencia" class="form-textarea" rows="2" placeholder="Competencia curricular..."></textarea>
+</div>
+<div class="form-group">
+<label for="input-capacidad" class="form-label">Capacidad a Desarrollar</label>
+<select id="select-cneb-capacidad" class="form-select hidden" style="margin-bottom:6px;font-size:0.8rem;background-color:rgba(0, 212, 255, 0.08);border-color:var(--border-accent)"></select>
+<textarea id="input-capacidad" class="form-textarea" rows="2" placeholder="Capacidades a desarrollar..."></textarea>
+</div>
+</div>
+</details>
+</div>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
                                 Desempeños Esperados
                             </div>
-                            <div class="form-group">
-                                <label for="input-desempeno" class="form-label">Desempeño de la sesión (por verificar)</label>
-                                <textarea id="input-desempeno" class="form-textarea" rows="3"
-                                    placeholder="Desempeños esperados..."></textarea>
-                            </div>
-                        </div>
-
-                        <!-- Enfoques Transversales -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+<div class="form-group">
+<label for="input-desempeno" class="form-label">Desempeño de la sesión (por verificar)</label>
+<textarea id="input-desempeno" class="form-textarea" rows="3" placeholder="Desempeños esperados..."></textarea>
+</div>
+</div>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
                                 Enfoques Transversales CNEB
                             </div>
-                            <div class="form-group">
-                                <label for="input-enfoque" class="form-label">Enfoque Transversal 1</label>
-                                <select id="select-cneb-enfoque" class="form-select"
-                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                                <input type="text" id="input-enfoque" class="form-input"
-                                    placeholder="Ej: Enfoque de derechos">
-                            </div>
-                            <div class="form-group">
-                                <label for="input-enfoque2" class="form-label">Enfoque Transversal 2</label>
-                                <select id="select-cneb-enfoque2" class="form-select"
-                                    style="margin-bottom: 6px; font-size: 0.8rem; background-color: rgba(0, 212, 255, 0.08); border-color: var(--border-accent);"></select>
-                                <input type="text" id="input-enfoque2" class="form-input"
-                                    placeholder="Ej: Enfoque ambiental">
-                            </div>
-                        </div>
-                        <section id="session-proposals" class="quick-suggestions" aria-labelledby="session-proposals-title">
-                            <h4 id="session-proposals-title">Propuestas para tu sesión</h4>
-                            <p>Actividades, criterios y evidencias son propuestas editables del docente o de la IA; no son textos curriculares oficiales. La IA las completará al generar.</p>
-                            <div class="form-group"><label class="form-label" for="input-session-activities">Actividades sugeridas</label><textarea id="input-session-activities" class="form-textarea" rows="3" maxlength="2000" placeholder="Propón una actividad o revisa la propuesta después de generar."></textarea></div>
-                            <div class="form-group"><label class="form-label" for="input-session-criteria">Criterios de evaluación sugeridos (uno por línea)</label><textarea id="input-session-criteria" class="form-textarea" rows="3" maxlength="2000"></textarea></div>
-                            <div class="form-group"><label class="form-label" for="input-session-evidence">Evidencia sugerida</label><textarea id="input-session-evidence" class="form-textarea" rows="2" maxlength="2000"></textarea></div>
-                        </section>
-                    </div> <!-- End tab-propositos -->
-
-                    <!-- PANE 4: DISEÑO Y ESTILOS -->
-                    <div id="tab-design" class="tab-pane" role="region" aria-labelledby="planner-title-design">
-                        <header class="planner-section-heading"><span class="planner-section-step">Paso 04 de 06</span><h3 id="planner-title-design">Dale tu estilo</h3><p>Ajusta cómo se verá tu documento en el editor y al exportarlo.</p></header>
-                        <!-- Presets de Estilo -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
+<div class="form-group">
+<label for="input-enfoque" class="form-label">Enfoque Transversal 1</label>
+<select id="select-cneb-enfoque" class="form-select" style="margin-bottom:6px;font-size:0.8rem;background-color:rgba(0, 212, 255, 0.08);border-color:var(--border-accent)"></select>
+<input type="text" id="input-enfoque" class="form-input" placeholder="Ej: Enfoque de derechos"/>
+</div>
+<div class="form-group">
+<label for="input-enfoque2" class="form-label">Enfoque Transversal 2</label>
+<select id="select-cneb-enfoque2" class="form-select" style="margin-bottom:6px;font-size:0.8rem;background-color:rgba(0, 212, 255, 0.08);border-color:var(--border-accent)"></select>
+<input type="text" id="input-enfoque2" class="form-input" placeholder="Ej: Enfoque ambiental"/>
+</div>
+</div>
+<section id="session-proposals" class="quick-suggestions" aria-labelledby="session-proposals-title">
+<h4 id="session-proposals-title">Propuestas para tu sesión</h4>
+<p>Actividades, criterios y evidencias son propuestas editables del docente o de la IA; no son textos curriculares oficiales. La IA las completará al generar.</p>
+<div class="form-group"><label class="form-label" for="input-session-activities">Actividades sugeridas</label><textarea id="input-session-activities" class="form-textarea" rows="3" maxLength="2000" placeholder="Propón una actividad o revisa la propuesta después de generar."></textarea></div>
+<div class="form-group"><label class="form-label" for="input-session-criteria">Criterios de evaluación sugeridos (uno por línea)</label><textarea id="input-session-criteria" class="form-textarea" rows="3" maxLength="2000"></textarea></div>
+<div class="form-group"><label class="form-label" for="input-session-evidence">Evidencia sugerida</label><textarea id="input-session-evidence" class="form-textarea" rows="2" maxLength="2000"></textarea></div>
+</section>
+</div> <!-- -->
+<!-- -->
+<div id="tab-design" class="tab-pane" role="region" aria-labelledby="planner-title-design">
+<header class="planner-section-heading"><span class="planner-section-step">Paso 04 de 06</span><h3 id="planner-title-design">Dale tu estilo</h3><p>Ajusta cómo se verá tu documento en el editor y al exportarlo.</p></header>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sliders"></use></svg>
                                 Presentación del Documento
                             </div>
-                            <div class="form-group">
-                                <label class="form-label" for="select-design-preset">Estilo Prediseñado</label>
-                                <select id="select-design-preset" class="form-select">
-                                    <option value="minedu" selected>MINEDU oficial</option>
-                                    <option value="institucional">Institucional azul</option>
-                                    <option value="moderno">Moderno verde</option>
-                                    <option value="clasico">Clásico editorial</option>
-                                    <option value="accesible">Accesible alto contraste</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Logos del Encabezado -->
-                        <div class="form-card">
-                            <div class="form-card-title">
-                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg>
+<div class="form-group">
+<label class="form-label" for="select-design-preset">Estilo Prediseñado</label>
+<select id="select-design-preset" class="form-select">
+<option value="minedu" selected="">MINEDU oficial</option>
+<option value="institucional">Institucional azul</option>
+<option value="moderno">Moderno verde</option>
+<option value="clasico">Clásico editorial</option>
+<option value="accesible">Accesible alto contraste</option>
+</select>
+</div>
+</div>
+<!-- -->
+<div class="form-card">
+<div class="form-card-title">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-image"></use></svg>
                                 Logos del Encabezado
                             </div>
-                            <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                                <input type="file" id="input-upload-logo" accept="image/png,image/jpeg,image/webp" class="hidden">
-                                <button type="button" id="btn-trigger-upload-logo" class="btn btn-ghost btn-sm"
-                                    style="flex: 1; font-size: 0.74rem; padding: 6px;">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Subir logo
+<div style="display:flex;gap:8px;margin-bottom:10px">
+<input type="file" id="input-upload-logo" accept="image/png,image/jpeg,image/webp" class="hidden"/>
+<button type="button" id="btn-trigger-upload-logo" class="btn btn-ghost btn-sm" style="flex:1;font-size:0.74rem;padding:6px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Subir logo
                                 </button>
-                                <button type="button" id="btn-refresh-logos" class="btn btn-ghost btn-icon"
-                                    style="min-width: 34px; min-height: 34px; font-size: 0.8rem; padding: 2px;"
-                                    title="Actualizar lista" aria-label="Actualizar galería de logos">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
-                                </button>
-                            </div>
-                            <div id="logos-container"
-                                style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-height: 120px; overflow-y: auto; padding: 6px; background: rgba(0,0,0,0.25); border-radius: 8px; border: 1px solid var(--border);">
-                                <span
-                                    style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Inicia
+<button type="button" id="btn-refresh-logos" class="btn btn-ghost btn-icon" style="min-width:34px;min-height:34px;font-size:0.8rem;padding:2px" title="Actualizar lista" aria-label="Actualizar galería de logos">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-refresh"></use></svg>
+</button>
+</div>
+<div id="logos-container" style="display:grid;grid-template-columns:repeat(4, 1fr);gap:6px;max-height:120px;overflow-y:auto;padding:6px;background:rgba(0,0,0,0.25);border-radius:8px;border:1px solid var(--border)">
+<span style="grid-column:span 4;font-size:0.7rem;text-align:center;color:var(--text-muted);padding:4px">Inicia
                                     sesión para ver logos</span>
-                            </div>
-                        </div>
-
-                        <!-- Ajustes Avanzados de Tipografía y Formato -->
-                        <details class="form-disclosure">
-                            <summary>Ajustes avanzados</summary>
-                            <div class="form-disclosure-content">
-                                <!-- Color de Bordes/Tema -->
-                                <div class="form-group">
-                                    <label class="form-label" for="input-design-theme-color">Color de Bordes y Recuadros</label>
-                                    <div style="display: flex; gap: 8px; align-items: center;">
-                                        <input type="color" id="input-design-theme-color" class="form-input"
-                                            style="padding: 2px; width: 45px; height: 35px; border-radius: 6px; cursor: pointer; background: transparent; border: 1px solid var(--border);"
-                                            value="#000000">
-                                        <input type="text" id="input-design-theme-color-hex" class="form-input"
-                                            placeholder="#000000" aria-label="Código hexadecimal del color de bordes" style="flex: 1; font-family: monospace;" value="#000000">
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label class="form-label" for="input-design-accent-color">Color de títulos y acentos</label>
-                                    <input type="color" id="input-design-accent-color" class="form-input" value="#C0392B"
-                                        style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
-                                </div>
-
-                                <!-- Familia de Fuente -->
-                                <div class="form-group">
-                                    <label class="form-label" for="select-design-font-family">Tipo de Letra (Fuente)</label>
-                                    <select id="select-design-font-family" class="form-select">
-                                        <option value="Arial, sans-serif" selected>Arial (Sans-serif estándar)</option>
-                                        <option value="Calibri, Arial, sans-serif">Calibri (Word moderna)</option>
-                                        <option value="'Times New Roman', serif">Times New Roman (Serif clásica)</option>
-                                        <option value="Georgia, serif">Georgia (Serif de pantalla)</option>
-                                        <option value="'Courier New', monospace">Courier New (Monospaced)</option>
-                                        <option value="'Space Grotesk', sans-serif">Space Grotesk (Moderna)</option>
-                                    </select>
-                                </div>
-
-                                <!-- Tamaño de Letra -->
-                                <div class="form-group">
-                                    <label class="form-label" for="select-design-font-size">Tamaño de Letra</label>
-                                    <select id="select-design-font-size" class="form-select">
-                                        <option value="8pt">Pequeño (8pt)</option>
-                                        <option value="9pt">Estándar MINEDU (9pt)</option>
-                                        <option value="10pt" selected>Normal (10pt)</option>
-                                        <option value="11pt">Grande (11pt)</option>
-                                        <option value="12pt">Muy Grande (12pt)</option>
-                                    </select>
-                                </div>
-
-                                <!-- Espaciado / Padding de Celdas -->
-                                <div class="form-group">
-                                    <label class="form-label" for="select-design-padding">Espaciado de Celdas (Padding)</label>
-                                    <select id="select-design-padding" class="form-select">
-                                        <option value="2px 4px">Compacto (2px)</option>
-                                        <option value="4px 6px" selected>Estándar (4px)</option>
-                                        <option value="6px 8px">Amplio (6px)</option>
-                                        <option value="8px 10px">Espacioso (8px)</option>
-                                    </select>
-                                </div>
-
-                                <!-- Espaciado entre Líneas -->
-                                <div class="form-group">
-                                    <label class="form-label" for="select-design-line-height">Interlineado (Line Height)</label>
-                                    <select id="select-design-line-height" class="form-select">
-                                        <option value="1.2">Compacto (1.2)</option>
-                                        <option value="1.3">Sutil (1.3)</option>
-                                        <option value="1.4" selected>Estándar (1.4)</option>
-                                        <option value="1.5">Amplio (1.5)</option>
-                                    </select>
-                                </div>
-
-                                <!-- Color de Fondo de Cabeceras -->
-                                <div class="form-group">
-                                    <label class="form-label" for="select-design-header-bg">Estilo de Cabeceras de Momentos</label>
-                                    <input type="color" id="select-design-header-bg" class="form-input" value="#BDD6EE"
-                                        style="padding: 2px; width: 100%; height: 35px; cursor: pointer; background: transparent; border: 1px solid var(--border);">
-                                </div>
-                            </div>
-                        </details>
-                    </div>
-
-                    <!-- PANE 5: REGISTRO DE ALUMNOS -->
-                    <div id="tab-alumnos" class="tab-pane" role="region" aria-labelledby="planner-title-alumnos">
-                        <header class="planner-section-heading"><span class="planner-section-step">Paso 05 de 06</span><h3 id="planner-title-alumnos">Añade a tus estudiantes</h3><p>Prepara la lista de cotejo para tu grado y sección.</p></header>
-                        <div class="form-card">
-                            <div class="form-card-title" style="justify-content: space-between;">
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
+</div>
+</div>
+<!-- -->
+<details class="form-disclosure">
+<summary>Ajustes avanzados</summary>
+<div class="form-disclosure-content">
+<!-- -->
+<div class="form-group">
+<label class="form-label" for="input-design-theme-color">Color de Bordes y Recuadros</label>
+<div style="display:flex;gap:8px;align-items:center">
+<input type="color" id="input-design-theme-color" class="form-input" style="padding:2px;width:45px;height:35px;border-radius:6px;cursor:pointer;background:transparent;border:1px solid var(--border)" value="#000000"/>
+<input type="text" id="input-design-theme-color-hex" class="form-input" placeholder="#000000" aria-label="Código hexadecimal del color de bordes" style="flex:1;font-family:monospace" value="#000000"/>
+</div>
+</div>
+<div class="form-group">
+<label class="form-label" for="input-design-accent-color">Color de títulos y acentos</label>
+<input type="color" id="input-design-accent-color" class="form-input" style="padding:2px;width:100%;height:35px;cursor:pointer;background:transparent;border:1px solid var(--border)" value="#C0392B"/>
+</div>
+<!-- -->
+<div class="form-group">
+<label class="form-label" for="select-design-font-family">Tipo de Letra (Fuente)</label>
+<select id="select-design-font-family" class="form-select">
+<option value="Arial, sans-serif" selected="">Arial (Sans-serif estándar)</option>
+<option value="Calibri, Arial, sans-serif">Calibri (Word moderna)</option>
+<option value="&#x27;Times New Roman&#x27;, serif">Times New Roman (Serif clásica)</option>
+<option value="Georgia, serif">Georgia (Serif de pantalla)</option>
+<option value="&#x27;Courier New&#x27;, monospace">Courier New (Monospaced)</option>
+<option value="&#x27;Space Grotesk&#x27;, sans-serif">Space Grotesk (Moderna)</option>
+</select>
+</div>
+<!-- -->
+<div class="form-group">
+<label class="form-label" for="select-design-font-size">Tamaño de Letra</label>
+<select id="select-design-font-size" class="form-select">
+<option value="8pt">Pequeño (8pt)</option>
+<option value="9pt">Estándar MINEDU (9pt)</option>
+<option value="10pt" selected="">Normal (10pt)</option>
+<option value="11pt">Grande (11pt)</option>
+<option value="12pt">Muy Grande (12pt)</option>
+</select>
+</div>
+<!-- -->
+<div class="form-group">
+<label class="form-label" for="select-design-padding">Espaciado de Celdas (Padding)</label>
+<select id="select-design-padding" class="form-select">
+<option value="2px 4px">Compacto (2px)</option>
+<option value="4px 6px" selected="">Estándar (4px)</option>
+<option value="6px 8px">Amplio (6px)</option>
+<option value="8px 10px">Espacioso (8px)</option>
+</select>
+</div>
+<!-- -->
+<div class="form-group">
+<label class="form-label" for="select-design-line-height">Interlineado (Line Height)</label>
+<select id="select-design-line-height" class="form-select">
+<option value="1.2">Compacto (1.2)</option>
+<option value="1.3">Sutil (1.3)</option>
+<option value="1.4" selected="">Estándar (1.4)</option>
+<option value="1.5">Amplio (1.5)</option>
+</select>
+</div>
+<!-- -->
+<div class="form-group">
+<label class="form-label" for="select-design-header-bg">Estilo de Cabeceras de Momentos</label>
+<input type="color" id="select-design-header-bg" class="form-input" style="padding:2px;width:100%;height:35px;cursor:pointer;background:transparent;border:1px solid var(--border)" value="#BDD6EE"/>
+</div>
+</div>
+</details>
+</div>
+<!-- -->
+<div id="tab-alumnos" class="tab-pane" role="region" aria-labelledby="planner-title-alumnos">
+<header class="planner-section-heading"><span class="planner-section-step">Paso 05 de 06</span><h3 id="planner-title-alumnos">Añade a tus estudiantes</h3><p>Prepara la lista de cotejo para tu grado y sección.</p></header>
+<div class="form-card">
+<div class="form-card-title" style="justify-content:space-between">
+<div style="display:flex;align-items:center;gap:8px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-users"></use></svg>
                                     Registro de Estudiantes
                                 </div>
-                                <button type="button" id="btn-save-alumnos" class="btn btn-primary btn-sm" style="font-size:0.72rem; padding:4px 12px; cursor:pointer;">Guardar Alumnos</button>
-                            </div>
-                            <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+<button type="button" id="btn-save-alumnos" class="btn btn-primary btn-sm" style="font-size:0.72rem;padding:4px 12px;cursor:pointer">Guardar Alumnos</button>
+</div>
+<p style="font-size:0.74rem;color:var(--text-muted);margin-bottom:12px;line-height:1.4">
                                 Registra la lista de alumnos para autocompletar la Lista de Cotejo de tu sesión.
                             </p>
-                            <div class="form-group" style="margin-bottom: 0;">
-                                <textarea id="textarea-alumnos" class="form-textarea student-list-input" placeholder="Pega los nombres aquí, uno por línea. Ejemplo:
-ACOSTA MURGA, CLIFEER AMELEX
-AGUILAR JAVIER, FARID OMAR"></textarea>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- PANE 6: FICHAS DE TRABAJO (PROMPT IA) -->
-                    <div id="tab-fichas" class="tab-pane" role="region" aria-labelledby="planner-title-fichas">
-                        <header class="planner-section-heading"><span class="planner-section-step">Paso 06 de 06</span><h3 id="planner-title-fichas">Prepara tus fichas</h3><p>Una vez generada tu sesión, prepara el material de aplicación que acompañará a tus estudiantes.</p></header>
-                        <!-- Apartado de Fichas Didácticas -->
-                        <div id="apartado-fichas" class="form-card ficha-prompt-apartado">
-                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-                                <label for="input-ficha-prompt" class="form-card-title" style="margin: 0; font-size: 0.82rem;">
-                                    <svg class="ui-icon" aria-hidden="true" style="color: #00D4FF;"><use href="#icon-sparkles"></use></svg>
+<div class="form-group" style="margin-bottom:0">
+<textarea id="textarea-alumnos" class="form-textarea student-list-input" placeholder="Pega los nombres aquí, uno por línea. Ejemplo:\nACOSTA MURGA, CLIFEER AMELEX\nAGUILAR JAVIER, FARID OMAR"></textarea>
+</div>
+</div>
+</div>
+<!-- -->
+<div id="tab-fichas" class="tab-pane" role="region" aria-labelledby="planner-title-fichas">
+<header class="planner-section-heading"><span class="planner-section-step">Paso 06 de 06</span><h3 id="planner-title-fichas">Prepara tus fichas</h3><p>Una vez generada tu sesión, prepara el material de aplicación que acompañará a tus estudiantes.</p></header>
+<!-- -->
+<div id="apartado-fichas" class="form-card ficha-prompt-apartado">
+<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+<label for="input-ficha-prompt" class="form-card-title" style="margin:0;font-size:0.82rem">
+<svg class="ui-icon" aria-hidden="true" style="color:#00D4FF"><use href="#icon-sparkles"></use></svg>
                                     Ficha Didáctica (Prompt IA)
                                 </label>
-                                <button type="button" id="btn-copy-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.72rem; padding: 4px 10px;" title="Copiar prompt de ficha">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-copy"></use></svg> Copiar
+<button type="button" id="btn-copy-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size:0.72rem;padding:4px 10px" title="Copiar prompt de ficha">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-copy"></use></svg> Copiar
                                 </button>
-                            </div>
-                            <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 12px; line-height: 1.4;">
+</div>
+<p style="font-size:0.74rem;color:var(--text-muted);margin-bottom:12px;line-height:1.4">
                                 Genera un prompt optimizado para ChatGPT Images o Midjourney para crear fichas listas para imprimir:
                             </p>
-                            
-                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px;">
-                                <div>
-                                    <label for="select-ficha-nivel" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Dificultad</label>
-                                    <select id="select-ficha-nivel" class="form-select" style="font-size: 0.75rem; padding: 6px 8px;">
-                                        <option value="inicio">Nivel Inicio (Andamiaje)</option>
-                                        <option value="avanzado" selected>Nivel Avanzado (Estándar)</option>
-                                        <option value="experto">Nivel Experto (Desafío)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label for="select-ficha-variante" class="form-label" style="font-size: 0.72rem; margin-bottom: 4px;">Variante</label>
-                                    <select id="select-ficha-variante" class="form-select" style="font-size: 0.75rem; padding: 6px 8px;">
-                                        <option value="estandar" selected>Datos de la sesión</option>
-                                        <option value="alternativa">Situación alternativa</option>
-                                        <option value="refuerzo">Refuerzo guiado</option>
-                                        <option value="reto">Reto / Extensión</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <textarea id="input-ficha-prompt" class="form-textarea" rows="7" readonly style="font-size: 0.75rem; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; line-height: 1.35; background: rgba(0,0,0,0.3); resize: vertical;" placeholder="Primero genera la sesión para poder crear la ficha didáctica..."></textarea>
-                            
-                            <div style="display: flex; gap: 8px; margin-top: 10px;">
-                                <button type="button" id="btn-trigger-ficha-prompt" class="btn btn-primary btn-sm" style="flex: 1; font-size: 0.78rem; padding: 8px 12px;">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar variante
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px">
+<div>
+<label for="select-ficha-nivel" class="form-label" style="font-size:0.72rem;margin-bottom:4px">Dificultad</label>
+<select id="select-ficha-nivel" class="form-select" style="font-size:0.75rem;padding:6px 8px">
+<option value="inicio">Nivel Inicio (Andamiaje)</option>
+<option value="avanzado" selected="">Nivel Avanzado (Estándar)</option>
+<option value="experto">Nivel Experto (Desafío)</option>
+</select>
+</div>
+<div>
+<label for="select-ficha-variante" class="form-label" style="font-size:0.72rem;margin-bottom:4px">Variante</label>
+<select id="select-ficha-variante" class="form-select" style="font-size:0.75rem;padding:6px 8px">
+<option value="estandar" selected="">Datos de la sesión</option>
+<option value="alternativa">Situación alternativa</option>
+<option value="refuerzo">Refuerzo guiado</option>
+<option value="reto">Reto / Extensión</option>
+</select>
+</div>
+</div>
+<textarea id="input-ficha-prompt" class="form-textarea" rows="7" readOnly="" style="font-size:0.75rem;font-family:ui-monospace, SFMono-Regular, Consolas, monospace;line-height:1.35;background:rgba(0,0,0,0.3);resize:vertical" placeholder="Primero genera la sesión para poder crear la ficha didáctica..."></textarea>
+<div style="display:flex;gap:8px;margin-top:10px">
+<button type="button" id="btn-trigger-ficha-prompt" class="btn btn-primary btn-sm" style="flex:1;font-size:0.78rem;padding:8px 12px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar variante
                                 </button>
-                                <button type="button" id="btn-modal-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size: 0.78rem; padding: 8px 12px;" title="Ver prompt en ventana completa" aria-label="Ver prompt en ventana completa">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-expand"></use></svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- GESTIÓN DE SESIÓN Y ARCHIVOS (COLLAPSIBLE VAULT) -->
-                    <details class="form-disclosure session-management-disclosure" style="margin-top: 1.25rem;">
-                        <summary style="font-size: 0.78rem;">
-                            <svg class="ui-icon" aria-hidden="true" style="color: #00D4FF; margin-right: 6px;"><use href="#icon-folder"></use></svg>
+<button type="button" id="btn-modal-ficha-prompt" class="btn btn-ghost btn-sm" style="font-size:0.78rem;padding:8px 12px" title="Ver prompt en ventana completa" aria-label="Ver prompt en ventana completa">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-expand"></use></svg>
+</button>
+</div>
+</div>
+</div>
+<!-- -->
+<details class="form-disclosure session-management-disclosure" style="margin-top:1.25rem">
+<summary style="font-size:0.78rem">
+<svg class="ui-icon" aria-hidden="true" style="color:#00D4FF;margin-right:6px"><use href="#icon-folder"></use></svg>
                             Gestión de Sesiones y Archivos
                         </summary>
-                        <div class="form-disclosure-content">
-                            <!-- Acciones locales y guardado -->
-                            <div class="form-actions" style="border-top: none; padding-top: 4px;">
-                                <div class="form-actions-row" style="display: flex; gap: 6px; margin-bottom: 6px;">
-                                    <button type="button" id="btn-save" class="btn btn-ghost btn-sm" style="flex: 1;" title="Guardar cambios en la sesión actual">
-                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar
+<div class="form-disclosure-content">
+<!-- -->
+<div class="form-actions" style="border-top:none;padding-top:4px">
+<div class="form-actions-row" style="display:flex;gap:6px;margin-bottom:6px">
+<button type="button" id="btn-save" class="btn btn-ghost btn-sm" style="flex:1" title="Guardar cambios en la sesión actual">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar
                                     </button>
-                                    <button type="button" id="btn-load" class="btn btn-ghost btn-sm" style="flex: 1;" title="Cargar sesión previamente guardada">
-                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Cargar
+<button type="button" id="btn-load" class="btn btn-ghost btn-sm" style="flex:1" title="Cargar sesión previamente guardada">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg> Cargar
                                     </button>
-                                </div>
-                                <button type="button" id="btn-save-as" class="btn btn-ghost btn-sm" title="Guardar una copia de esta sesión con un nuevo título" style="width: 100%; margin-bottom: 6px;">
-                                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar como…
+</div>
+<button type="button" id="btn-save-as" class="btn btn-ghost btn-sm" title="Guardar una copia de esta sesión con un nuevo título" style="width:100%;margin-bottom:6px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-save"></use></svg> Guardar como…
                                 </button>
-                                <div class="form-actions-row" style="display: flex; gap: 6px;">
-                                    <button type="button" id="btn-export-json" class="btn btn-ghost btn-sm" style="flex: 1; font-size: 0.72rem;" title="Exportar sesión a archivo JSON">
-                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Exportar JSON
+<div class="form-actions-row" style="display:flex;gap:6px">
+<button type="button" id="btn-export-json" class="btn btn-ghost btn-sm" style="flex:1;font-size:0.72rem" title="Exportar sesión a archivo JSON">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Exportar JSON
                                     </button>
-                                    <button type="button" id="btn-import-json" class="btn btn-ghost btn-sm" style="flex: 1; font-size: 0.72rem;" title="Importar sesión desde archivo JSON">
-                                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Importar JSON
+<button type="button" id="btn-import-json" class="btn btn-ghost btn-sm" style="flex:1;font-size:0.72rem" title="Importar sesión desde archivo JSON">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-upload"></use></svg> Importar JSON
                                     </button>
-                                </div>
-                                <input type="file" id="input-import-file" class="hidden" accept=".json">
-                            </div>
-
-                            <!-- Sesiones Guardadas -->
-                            <div class="saved-sessions" style="margin-top: 1rem;">
-                                <h3 class="saved-title" style="font-size: 0.75rem; margin-bottom: 6px;">Sesiones guardadas</h3>
-                                <ul id="saved-list" class="saved-list">
-                                    <li class="saved-empty">No hay sesiones guardadas</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </details>
-                </form>
-
-                <aside class="session-planning-summary" aria-labelledby="planning-summary-heading">
-                    <span class="sidebar-eyebrow" id="planning-summary-heading">Tu sesión, de un vistazo</span>
-                    <svg class="ui-icon planning-summary-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
-                    <h3 id="planning-summary-title">Tu próxima clase</h3>
-                    <p id="planning-summary-context">Completa los datos de tu sesión.</p>
-                    <dl id="planning-summary-facts"></dl>
-                    <div class="planning-summary-note"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg><p>Inicio, desarrollo y cierre. Una estructura para acompañarte en el aula.</p></div>
-                </aside>
-
-                <!-- BOTÓN PRINCIPAL DE ACCIÓN PINNED -->
-                <div class="sidebar-primary-action">
-                    <span class="sidebar-primary-hint">Listo para crear</span>
-                    <button type="button" id="btn-generate" class="btn btn-primary btn-full">
-                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar sesión con IA
+</div>
+<input type="file" id="input-import-file" class="hidden" accept=".json"/>
+</div>
+<!-- -->
+<div class="saved-sessions" style="margin-top:1rem">
+<h3 class="saved-title" style="font-size:0.75rem;margin-bottom:6px">Sesiones guardadas</h3>
+<ul id="saved-list" class="saved-list">
+<li class="saved-empty">No hay sesiones guardadas</li>
+</ul>
+</div>
+</div>
+</details>
+</form>
+<aside class="session-planning-summary" aria-labelledby="planning-summary-heading">
+<span class="sidebar-eyebrow" id="planning-summary-heading">Tu sesión, de un vistazo</span>
+<svg class="ui-icon planning-summary-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+<h3 id="planning-summary-title">Tu próxima clase</h3>
+<p id="planning-summary-context">Completa los datos de tu sesión.</p>
+<dl id="planning-summary-facts"></dl>
+<div class="planning-summary-note"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg><p>Inicio, desarrollo y cierre. Una estructura para acompañarte en el aula.</p></div>
+</aside>
+<!-- -->
+<div class="sidebar-primary-action">
+<span class="sidebar-primary-hint">Listo para crear</span>
+<button type="button" id="btn-generate" class="btn btn-primary btn-full">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> Generar sesión con IA
                     </button>
-                </div>
-                </div>
-            </aside>
+</div>
+</div>
+</aside>
+<!-- --> <!-- -->
+<section id="preview-area" class="preview-area">
+<!-- -->
+<div id="empty-state" class="empty-state">
+<div class="empty-state-copy">
+<div class="hero-badge">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+<span>MINEDU 2026 · CNEB Perú · Planificación con IA</span>
+</div>
+<div class="empty-brand-row">
+<div class="empty-brand-mark" style="background:linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%);border-radius:12px;padding:10px;display:inline-flex;box-shadow:0 0 20px rgba(0,212,255,0.25)">
+<img src="assets/favicon.svg" alt="Space Lab Icon" aria-hidden="true"/>
+</div>
+<span class="empty-eyebrow">Workspace Curricular Inteligente</span>
+</div>
+<h2 class="empty-title">Diseña Sesiones de Aprendizaje Oficiales MINEDU con IA</h2>
+<p class="empty-text">Genera tu planificación curricular por competencias para <strong>Inicial, Primaria y Secundaria</strong> alineada al CNEB 2026. Con situaciones significativas, secuencia didáctica (Inicio, Desarrollo, Cierre), criterios e instrumentos de evaluación listos para editar y exportar a <strong>Word (.docx)</strong> y <strong>PDF</strong>.</p>
+<div class="hero-features-list">
+<div class="hero-feature-pill">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+<span>Alineado al CNEB 2026</span>
+</div>
+<div class="hero-feature-pill">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+<span>GPT-6 Luna, Claude &amp; Gemini</span>
+</div>
+<div class="hero-feature-pill">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+<span>Word (.docx) &amp; PDF A4</span>
+</div>
+<div class="hero-feature-pill">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+<span>Privado y en tu navegador</span>
+</div>
+</div>
+<div class="hero-actions-row">
+<button type="button" id="btn-empty-start" class="btn btn-primary empty-primary-action" aria-label="Comenzar a planificar sesión de aprendizaje">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                                Comenzar a planificar
+                                <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
+</button>
+</div>
+</div>
+<div class="empty-steps">
+<div class="step-item">
+<span class="step-num">1</span>
+<div class="step-content">
+<strong class="step-title">1. Configura el Contexto</strong>
+<span class="step-desc">Selecciona nivel (Inicial, Primaria, Secundaria), área, competencias y el modelo de IA (GPT-6 Luna, Claude o Gemini).</span>
+</div>
+</div>
+<div class="step-item">
+<span class="step-num">2</span>
+<div class="step-content">
+<strong class="step-title">2. Genera con IA</strong>
+<span class="step-desc">Space AI estructura la situación significativa, los momentos didácticos (Inicio, Desarrollo, Cierre), criterios y evidencias.</span>
+</div>
+</div>
+<div class="step-item">
+<span class="step-num">3</span>
+<div class="step-content">
+<strong class="step-title">3. Edita en Hoja A4</strong>
+<span class="step-desc">Ajusta los contenidos en tiempo real sobre la vista previa editable con fórmulas matemáticas KaTeX y tablas interactivas.</span>
+</div>
+</div>
+<div class="step-item">
+<span class="step-num">4</span>
+<div class="step-content">
+<strong class="step-title">4. Exporta y Presenta</strong>
+<span class="step-desc">Descarga en Microsoft Word (.docx) nativo con membretes de UGEL/MINEDU o exporta en PDF físico listo para presentar.</span>
+</div>
+</div>
+</div>
+</div>
+<!-- -->
+<div id="print-preview" class="print-preview hidden">
+<nav id="linked-planning-context" class="linked-planning-context no-print hidden" aria-label="Origen de la sesión">
+<button type="button" id="btn-return-planning" class="btn btn-ghost btn-sm">← Volver a planificación</button>
+<div class="linked-planning-copy">
+<span id="linked-planning-title" class="linked-planning-title"></span>
+<span id="linked-planning-position" class="linked-planning-position"></span>
+</div>
+</nav>
+<!-- -->
+<div class="preview-toolbar no-print">
+<!-- -->
+<div class="toolbar-group">
+<button type="button" id="btn-format-undo" class="btn btn-ghost btn-xs toolbar-btn" title="Deshacer (Ctrl+Z)" aria-label="Deshacer"><svg class="ui-icon" aria-hidden="true"><use href="#icon-undo"></use></svg></button>
+<button type="button" id="btn-format-redo" class="btn btn-ghost btn-xs toolbar-btn" title="Rehacer (Ctrl+Y)" aria-label="Rehacer"><svg class="ui-icon" aria-hidden="true"><use href="#icon-redo"></use></svg></button>
+<div class="toolbar-divider" style="margin:0 2px;height:18px;align-self:center"></div>
+<button type="button" id="btn-format-bold" class="btn btn-ghost btn-xs toolbar-btn" style="font-weight:800" title="Negrita (Ctrl+B)">B</button>
+<button type="button" id="btn-format-italic" class="btn btn-ghost btn-xs toolbar-btn" style="font-style:italic" title="Cursiva (Ctrl+I)">I</button>
+<button type="button" id="btn-format-underline" class="btn btn-ghost btn-xs toolbar-btn" style="text-decoration:underline" title="Subrayado (Ctrl+U)">U</button>
+<div class="toolbar-divider" style="margin:0 2px;height:18px;align-self:center"></div>
+<button type="button" id="btn-format-list-bullet" class="btn btn-ghost btn-xs toolbar-btn" title="Lista de viñetas" aria-label="Lista de viñetas"><svg class="ui-icon" aria-hidden="true"><use href="#icon-list"></use></svg></button>
+<button type="button" id="btn-format-list-number" class="btn btn-ghost btn-xs toolbar-btn" title="Lista numerada" aria-label="Lista numerada">1.</button>
+<div class="toolbar-divider" style="margin:0 2px;height:18px;align-self:center"></div>
+<!-- -->
+<button type="button" id="btn-format-align-left" class="btn btn-ghost btn-xs toolbar-btn" style="font-size:0.72rem;padding:2px 4px !important" title="Alinear a la izquierda">Izq</button>
+<button type="button" id="btn-format-align-center" class="btn btn-ghost btn-xs toolbar-btn" style="font-size:0.72rem;padding:2px 4px !important" title="Centrar">Cen</button>
+<button type="button" id="btn-format-align-right" class="btn btn-ghost btn-xs toolbar-btn" style="font-size:0.72rem;padding:2px 4px !important" title="Alinear a la derecha">Der</button>
+<button type="button" id="btn-format-align-justify" class="btn btn-ghost btn-xs toolbar-btn" style="font-size:0.72rem;padding:2px 4px !important" title="Justificar">Just</button>
+<div class="toolbar-divider" style="margin:0 2px;height:18px;align-self:center"></div>
+<!-- -->
+<div style="display:flex;align-items:center;gap:3px" title="Color de letra">
+<span style="font-size:0.85rem;font-weight:bold;border-bottom:2.5px solid #ff4444;line-height:1;padding:0 2px;color:var(--text)">A</span>
+<input type="color" id="btn-format-forecolor" class="toolbar-color" style="width:20px;height:20px;border:1px solid var(--border);border-radius:4px;padding:0;background:transparent;cursor:pointer" value="#000000"/>
+</div>
+<!-- -->
+<div style="display:flex;align-items:center;gap:3px" title="Color de resaltado">
+<span style="font-size:0.72rem;font-weight:bold;background:#ffff00;color:#000000;padding:0 3px;border-radius:3px;line-height:1.2">ab</span>
+<input type="color" id="btn-format-backcolor" class="toolbar-color" style="width:20px;height:20px;border:1px solid var(--border);border-radius:4px;padding:0;background:transparent;cursor:pointer" value="#ffff00"/>
+</div>
+</div>
+<!-- -->
+<div class="toolbar-divider"></div>
+<!-- -->
+<div class="toolbar-group">
+<div class="toolbar-item">
+<label for="ribbon-font-family" class="toolbar-sublabel">Fuente</label>
+<select id="ribbon-font-family" class="form-select select-sm toolbar-select" style="width:105px">
+<option value="Arial, sans-serif">Arial</option>
+<option value="Calibri, Arial, sans-serif">Calibri</option>
+<option value="&#x27;Times New Roman&#x27;, serif">Times New Roman</option>
+<option value="Georgia, serif">Georgia</option>
+<option value="&#x27;Courier New&#x27;, monospace">Courier New</option>
+<option value="&#x27;Space Grotesk&#x27;, sans-serif">Space Grotesk</option>
+</select>
+</div>
+<div class="toolbar-item">
+<label for="ribbon-font-size" class="toolbar-sublabel">Tamaño</label>
+<select id="ribbon-font-size" class="form-select select-sm toolbar-select" style="width:65px">
+<option value="8pt">8pt</option>
+<option value="9pt">9pt</option>
+<option value="10pt">10pt</option>
+<option value="11pt">11pt</option>
+<option value="12pt">12pt</option>
+</select>
+</div>
+<div class="toolbar-item">
+<label for="ribbon-padding" class="toolbar-sublabel">Padding</label>
+<select id="ribbon-padding" class="form-select select-sm toolbar-select" style="width:85px">
+<option value="2px 4px">Compacto</option>
+<option value="4px 6px">Estándar</option>
+<option value="6px 8px">Amplio</option>
+<option value="8px 10px">Espacioso</option>
+</select>
+</div>
+<div class="toolbar-item">
+<label for="ribbon-line-height" class="toolbar-sublabel">Interl.</label>
+<select id="ribbon-line-height" class="form-select select-sm toolbar-select" style="width:55px">
+<option value="1.2">1.2</option>
+<option value="1.3">1.3</option>
+<option value="1.4">1.4</option>
+<option value="1.5">1.5</option>
+</select>
+</div>
+</div>
+<!-- -->
+<div class="toolbar-divider"></div>
+<!-- -->
+<div class="toolbar-group">
+<div class="toolbar-item" style="flex-direction:row;gap:4px;align-items:center;height:100%">
+<label for="ribbon-theme-color" class="toolbar-sublabel">Borde</label>
+<input type="color" id="ribbon-theme-color" class="toolbar-color" title="Color de borde" value="#000000"/>
+</div>
+<div class="toolbar-item" style="margin-left:6px">
+<label for="ribbon-header-bg" class="toolbar-sublabel">Fondo Momentos</label>
+<select id="ribbon-header-bg" class="form-select select-sm toolbar-select" style="width:105px">
+<option value="#BDD6EE">MINEDU</option>
+<option value="#DBEAFE">Institucional</option>
+<option value="#CCFBF1">Moderno</option>
+<option value="#F3F4F6">Clásico</option>
+<option value="#CFFAFE">Accesible</option>
+<option value="#F1F5F9">Gris</option>
+<option value="#E0F2FE">Azul</option>
+<option value="#DCFCE7">Verde</option>
+<option value="#FEE2E2">Rojo</option>
+<option value="#FEF3C7">Amarillo</option>
+</select>
+</div>
+</div>
+<!-- -->
+<div class="toolbar-divider"></div>
+<!-- -->
+<div class="toolbar-group">
+<div class="toolbar-item">
+<label class="toolbar-sublabel">Insertar Logos</label>
+<button type="button" id="btn-ribbon-add-logo" class="btn btn-ghost btn-sm toolbar-btn" style="height:28px;min-height:28px;padding:2px 8px !important;display:flex;align-items:center;gap:4px" title="Añadir un nuevo logo al encabezado oficial"><svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>Añadir logo</button>
+</div>
+</div>
+<!-- -->
+<div class="toolbar-divider"></div>
+<!-- -->
+<div class="toolbar-group">
+<div class="toolbar-item">
+<label class="toolbar-sublabel">Filas de Tabla</label>
+<div class="btn-group" style="display:flex;gap:4px">
+<button type="button" id="btn-table-row-insert" class="btn btn-ghost btn-sm toolbar-btn" style="height:28px;min-height:28px;padding:2px 8px !important" title="Insertar fila debajo"><svg class="ui-icon" aria-hidden="true"><use href="#icon-plus"></use></svg>Fila</button>
+<button type="button" id="btn-table-row-delete" class="btn btn-ghost btn-sm toolbar-btn" style="height:28px;min-height:28px;padding:2px 8px !important" title="Eliminar fila"><svg class="ui-icon" aria-hidden="true"><use href="#icon-minus"></use></svg>Fila</button>
+</div>
+</div>
+</div>
+<!-- -->
+<div class="toolbar-divider"></div>
+<!-- -->
+<div class="toolbar-group">
+<div class="toolbar-item">
+<label class="toolbar-sublabel">Copiloto IA</label>
+<div class="btn-group" style="display:flex;gap:4px">
+<button type="button" id="btn-ai-rubrica" class="btn btn-ghost btn-sm toolbar-btn" style="height:28px;min-height:28px;padding:2px 8px !important;font-weight:600" title="Autogenerar criterios o rúbrica de evaluación"><svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>Rúbrica</button>
+<button type="button" id="btn-ai-improve-text" class="btn btn-ghost btn-sm toolbar-btn" style="height:28px;min-height:28px;padding:2px 8px !important;font-weight:600" title="Mejorar redacción técnica del texto seleccionado"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>Redactar</button>
+<button type="button" id="btn-toolbar-ficha-prompt" class="btn btn-ghost btn-sm toolbar-btn" style="height:28px;min-height:28px;padding:2px 8px !important;font-weight:600" title="Ver prompt para Ficha en IA externa"><svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>Ficha IA</button>
+</div>
+</div>
+</div>
+<!-- -->
+<div class="toolbar-divider"></div>
+<!-- -->
+<div class="toolbar-group toolbar-group-actions" style="margin-left:auto;display:flex;gap:8px;align-items:center">
+<span class="preview-badge" id="edit-mode-badge"><svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>Modo edición</span>
+<button id="btn-export-word-preview" class="btn btn-ghost btn-sm toolbar-btn" style="width:32px;height:32px;padding:0 !important" title="Exportar sesión a Word" aria-label="Exportar sesión a Word"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></button>
+<button id="btn-clean-format" class="btn btn-ghost btn-sm toolbar-btn" style="width:32px;height:32px;padding:0 !important" title="Limpiar formato pegado" aria-label="Limpiar formato pegado"><svg class="ui-icon" aria-hidden="true"><use href="#icon-clean"></use></svg></button>
+<button id="btn-close-session" class="btn btn-ghost btn-sm toolbar-btn" style="width:32px;height:32px;padding:0 !important;color:#ef4444;font-weight:bold;font-size:1.1rem" title="Cerrar sesión actual e iniciar una nueva" aria-label="Cerrar sesión actual e iniciar una nueva"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+</div>
+</div>
+<!-- -->
+<div id="time-balance-warning" class="time-balance-banner no-print" style="background:rgba(245, 158, 11, 0.12);border:1px solid rgba(245, 158, 11, 0.3);color:#eab308;padding:10px 16px;border-radius:8px;margin:10px auto;max-width:820px;font-size:0.85rem;font-weight:600;display:none;align-items:center;gap:8px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg>
+<span id="time-balance-warning-text"></span>
+</div>
+<!-- -->
+<div id="session-sheet" class="session-sheet a4-page">
+<!-- -->
+</div>
+</div>
+</section>
+<!-- -->
+</main>
+</div>
 
-            <!-- include:ui/fragments/session-preview.html -->
-
-        </main>
-    </div>
+<!-- End React: SessionEditor -->

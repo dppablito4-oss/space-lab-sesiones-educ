@@ -5,6 +5,12 @@
 
 const PedagogyBrief = (() => {
     'use strict';
+    function renderUi(element, markup) {
+        if (window.SpaceLabReactUI?.region) return window.SpaceLabReactUI.region(element, markup);
+        element.innerHTML = markup; // Recovery and isolated domain tests.
+        return markup;
+    }
+
 
     // ─── STATE ───
     let _formData = null;       // datos del formulario al abrir
@@ -83,7 +89,7 @@ const PedagogyBrief = (() => {
         modal.className = 'pb-overlay';
         modal.setAttribute('role', 'dialog');
         modal.setAttribute('aria-modal', 'true');
-        modal.innerHTML = `
+        renderUi(modal, `
             <div class="pb-panel">
                 <div class="pb-header">
                     <div class="pb-header-left">
@@ -121,7 +127,7 @@ const PedagogyBrief = (() => {
                     </div>
                 </div>
             </div>
-        `;
+        `);
 
         document.body.appendChild(modal);
 
@@ -166,7 +172,7 @@ const PedagogyBrief = (() => {
         bubble.className = `pb-bubble pb-bubble-${role}`;
         const content = String(htmlText || '').replace(/\n/g, '<br>');
         if (window.SpaceLabSanitizer) {
-            bubble.innerHTML = window.SpaceLabSanitizer.sanitizeFragment(content);
+            renderUi(bubble, window.SpaceLabSanitizer.sanitizeFragment(content));
         } else {
             bubble.textContent = String(htmlText || '');
             bubble.style.whiteSpace = 'pre-wrap';

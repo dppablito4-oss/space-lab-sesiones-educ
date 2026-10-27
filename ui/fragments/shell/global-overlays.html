@@ -1,28 +1,270 @@
-    <!-- ═══════════ TOAST CONTAINER ═══════════ -->
-    <div id="toast-container" class="toast-container"></div>
-
-    <!-- include:ui/fragments/modals/confirm.html -->
-
-    <!-- include:ui/fragments/modals/auth.html -->
-
-    <!-- include:ui/fragments/modals/terms.html -->
-
-    <!-- ═══════════ LOADER OVERLAY ═══════════ -->
-    <div id="loader-overlay" class="loader-overlay hidden">
-        <div class="loader-content">
-            <div class="loader-spinner">
-                <div class="orbit"></div>
-                <div class="orbit orbit-2"></div>
-                <div class="orbit orbit-3"></div>
-                <div class="core"></div>
+<!-- Generated from React: GlobalOverlays. Edit react-ui/src/, then npm run build:public. -->
+ <!-- -->
+<div id="toast-container" class="toast-container"></div>
+<!-- --> <!-- -->
+<div id="confirm-dialog" class="confirm-overlay hidden">
+<div class="confirm-card glass-card">
+<div class="confirm-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg></div>
+<h3 id="confirm-title">¿Estás seguro?</h3>
+<p id="confirm-message">Esta acción no se puede deshacer.</p>
+<div class="confirm-actions">
+<button id="confirm-cancel" class="btn btn-ghost">Cancelar</button>
+<button id="confirm-deny" class="btn btn-warning hidden">No Guardar</button>
+<button id="confirm-accept" class="btn btn-danger">Confirmar</button>
+</div>
+</div>
+</div>
+<!-- -->
+<!-- --> <!-- -->
+<div id="auth-modal" class="load-modal hidden" style="z-index:9999">
+<div class="load-modal-content glass-card auth-premium-card" style="max-width:420px;padding:2.5rem;text-align:center;position:relative">
+<!-- -->
+<button id="btn-close-auth" class="btn btn-ghost btn-sm" aria-label="Cerrar" style="position:absolute;top:1rem;right:1rem;color:#71717a"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+<!-- -->
+<div style="margin-bottom:1.5rem;display:flex;justify-content:center">
+<div style="background:#090a0f;border:1px solid rgba(255,255,255,0.06);padding:12px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;box-shadow:var(--shadow-sm)">
+<svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0px 0px 8px rgba(0, 210, 255, 0.5))">
+<rect x="2" y="2" width="96" height="96" rx="28" fill="#0d0e12" stroke="#1f2937" stroke-width="2"></rect>
+<path d="M55 22C42.5 22 36.5 30 36.5 35C36.5 37.5 38.5 39.5 41 39.5C43.5 39.5 45 37.5 45.5 35.5C46.2 33 49 28.5 54.5 28.5C60.5 28.5 63 32.5 63 36.5C63 42.5 56.5 44.5 51 46.5L42.5 49.5C36.5 51.5 34.5 57.5 34.5 63.5C34.5 72.5 43.5 78 54 78C66.5 78 72 70 72 65C72 62.5 70 60.5 67.5 60.5C65 60.5 63.5 62.5 63 64.5C62.3 67 59.5 71.5 54 71.5C47.5 71.5 45 67.5 45 63.5C45 57.5 51.5 55.5 57 53.5L65.5 50.5C71.5 48.5 73.5 42.5 73.5 36.5C73.5 27.5 65.5 22 55 22Z" fill="#ffffff"></path>
+<path d="M56 25L38 52H48L44 75L62 48H52L56 25Z" fill="#ffffff"></path>
+</svg>
+</div>
+</div>
+<!-- -->
+<div class="auth-tabs">
+<button type="button" id="auth-tab-login" class="auth-tab active">Ingresar</button>
+<button type="button" id="auth-tab-register" class="auth-tab">Crear cuenta</button>
+</div>
+<!-- -->
+<div class="load-modal-header" style="display:none">
+<h3 id="auth-title">Iniciar Sesión</h3>
+</div>
+<p id="auth-subtitle" style="display:none"></p>
+<form id="auth-form" autoComplete="off">
+<p id="auth-recovery-description" class="hidden" role="status"></p>
+<!-- -->
+<div id="auth-group-username" class="form-group hidden" style="text-align:left;margin-bottom:1rem">
+<input type="text" id="auth-username" class="auth-field" placeholder="Apodo único (sin espacios)"/>
+</div>
+<!-- -->
+<div class="form-group" style="text-align:left;margin-bottom:1rem">
+<input type="email" id="auth-email" class="auth-field" placeholder="Correo electrónico" required=""/>
+</div>
+<!-- -->
+<div class="form-group" style="text-align:left;margin-bottom:1rem">
+<input type="password" id="auth-password" class="auth-field" placeholder="Contraseña" required=""/>
+</div>
+<!-- -->
+<div id="auth-group-confirm-password" class="form-group hidden" style="text-align:left;margin-bottom:1rem">
+<input type="password" id="auth-confirm-password" class="auth-field" placeholder="Confirmar contraseña"/>
+</div>
+<!-- -->
+<div id="auth-group-terms" class="form-group hidden" style="text-align:left;margin-bottom:1.5rem;display:flex;align-items:center;gap:8px">
+<input type="checkbox" id="auth-terms" style="width:16px;height:16px;cursor:pointer;accent-color:#00d2ff;margin:0"/>
+<label for="auth-terms" style="font-size:0.8rem;color:#71717a;line-height:1.3;cursor:pointer;user-select:none">
+                        Acepto los <a href="#" style="color:#00d2ff;text-decoration:none;font-weight:600;border-bottom:1px dotted #00d2ff">Términos
+                            y Privacidad</a>
+</label>
+</div>
+<!-- -->
+<button type="submit" id="btn-submit-auth" class="auth-submit-btn">
+                    Iniciar Sesión
+                </button>
+<button type="button" id="btn-forgot-password" class="btn btn-ghost">Olvidé mi contraseña</button>
+</form>
+<!-- -->
+<div style="display:none">
+<span id="auth-toggle-text">¿No tienes una cuenta?</span>
+<a href="#" id="auth-toggle-mode">Créala aquí</a>
+</div>
+<!-- -->
+<div style="margin-top:0.5rem">
+<button type="button" id="btn-cancel-auth" class="auth-cancel-btn" style="background:none;border:none;color:#71717a;font-size:0.9rem;cursor:pointer;transition:color 0.2s">Cancelar</button>
+</div>
+</div>
+</div>
+<!-- -->
+<!-- --> <!-- -->
+<div id="terms-modal" class="load-modal hidden" style="z-index:10000">
+<div class="load-modal-content glass-card" style="max-width:720px;padding:2rem;text-align:left;max-height:85vh;overflow-y:auto">
+<div class="load-modal-header" style="border-bottom:1px solid var(--border);padding-bottom:0.75rem;margin-bottom:1.25rem;display:flex;justify-content:space-between;align-items:center">
+<div style="display:flex;align-items:center;gap:0.6rem">
+<svg class="ui-icon" style="color:var(--accent);width:22px;height:22px" aria-hidden="true"><use href="#icon-shield"></use></svg>
+<h3 style="font-size:1.2rem;font-weight:800;color:var(--color-foreground);margin:0">
+                        Términos, Condiciones de Uso y Políticas de Privacidad — Space Lab
+                    </h3>
+</div>
+<button id="btn-close-terms" class="btn btn-ghost btn-sm" style="font-size:1.1rem;padding:4px 8px" aria-label="Cerrar"><svg class="ui-icon" aria-hidden="true"><use href="#icon-close"></use></svg></button>
+</div>
+<div style="font-size:0.85rem;line-height:1.6;color:var(--text-primary);display:flex;flex-direction:column;gap:1.1rem">
+<div style="background:rgba(0, 210, 255, 0.06);border:1px solid rgba(0, 210, 255, 0.2);border-radius:8px;padding:0.85rem 1rem;font-size:0.82rem">
+<strong>Última actualización: Octubre de 2026</strong> | Versión del Sistema: <strong>Space Lab 2.0 (Motor v1.4.1)</strong><br/>
+                    Desarrollado y operado por <strong>Samuel Y. Pablo Claudio (pablitodp)</strong> — Huánuco, Perú.
+                </div>
+<p>Bienvenido a <strong>Space Lab</strong> (<code>sesiones.sypablitodp.site</code>). Esta plataforma de asistencia pedagógica, planificación curricular y exportación documental está diseñada para facilitar el trabajo técnico-pedagógico de los docentes de Educación Básica Regular (Inicial, Primaria y Secundaria) del Perú. Al acceder, registrarte y utilizar nuestros servicios, aceptas en su totalidad los siguientes Términos y Condiciones y la Política de Privacidad conforme a la legislación vigente de la República del Perú.</p>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg>
+                    1. REGISTRO, SEGURIDAD Y AUTENTICACIÓN
+                </h4>
+<p>El registro en Space Lab es de carácter personal e intransferible. El usuario es responsable de mantener la confidencialidad de sus credenciales. La plataforma utiliza infraestructura segura en la nube (Supabase Auth) con contraseñas encriptadas mediante algoritmos criptográficos robustos y políticas de seguridad a nivel de fila (Row Level Security - RLS). Cada docente tiene acceso exclusivo y privado a sus propias sesiones, perfiles y datos.</p>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg>
+                    2. ARQUITECTURA DEL MOTOR LOCAL (pablitohost.exe / pablitopyhost.exe) Y PRIVACIDAD TOTAL DE TU PC
+                </h4>
+<div style="background:var(--bg-card);border:1px solid var(--border);border-radius:8px;padding:1rem;display:flex;flex-direction:column;gap:0.75rem">
+<p><strong>¿Por qué se descarga el ejecutable local?</strong><br/>
+                    Los navegadores web estándar tienen limitaciones técnicas estrictas: no pueden generar de forma nativa documentos de Microsoft Word (.docx) con estructuras complejas como tablas anidadas con anchos milimétricos del MINEDU, listas de cotejo con formato oficial de evaluación formativa y fórmulas matemáticas o científicas editables en formato OMML (Office Math Markup Language). Para lograr una calidad de impresión física 100% idéntica a la normativa de UGEL/DRE y <strong>sin subir tus documentos pedagógicos a servidores o convertidores externos en la nube</strong>, se desarrolló el motor local <code>pablitohost.exe</code> (también denominado <code>pablitopyhost.exe</code>).</p>
+<p><strong>Arquitectura técnica en Python:</strong><br/>
+                    El motor es un micro-servicio local programado íntegramente en <strong>Python</strong> utilizando un servidor asíncrono ultraligero (FastAPI / Uvicorn) y bibliotecas especializadas de manipulación XML/docx. Se ejecuta de forma aislada en segundo plano en tu propia computadora escuchando únicamente en el puerto local <code>http://127.0.0.1:8000</code>.</p>
+<p><strong>Comunicación segura mediante Tokens Autorizados:</strong><br/>
+                    La aplicación web se conecta con el motor local a través del estándar de seguridad <strong>Private Network Access (PNA)</strong>. Toda petición requiere obligatoriamente un <strong>token criptográfico de vinculación</strong> generado al iniciar el programa. Asimismo, el motor cuenta con validación estricta de origen (CORS): únicamente procesa solicitudes emitidas desde el dominio oficial verificado (<code>https://sesiones.sypablitodp.site</code>) o el entorno local de desarrollo. Cualquier solicitud proveniente de páginas web no autorizadas o scripts de terceros es rechazada automáticamente.</p>
+<p><strong>Garantía de Privacidad y Aislamiento (No intrusión en tu sistema):</strong></p>
+<ul style="margin:0;padding-left:1.2rem;display:flex;flex-direction:column;gap:0.4rem">
+<li><strong>Sin exploración de documentos personales:</strong> El motor no busca ni recopila tus fotos, documentos o archivos personales. Utiliza sus recursos de aplicación y el contenido que el navegador le envía para exportar.</li>
+<li><strong>Cero telemetría invasiva:</strong> No monitorea la actividad de tu PC, no registra pulsaciones de teclado, ni accede a periféricos, micrófonos o cámaras.</li>
+<li><strong>Exportación local:</strong> Recibe el contenido de la sesión o planificación desde el navegador y devuelve el archivo Word o PDF. Según el formato, puede utilizar archivos temporales durante la conversión.</li>
+</ul>
+</div>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg>
+                    3. ASISTENCIA PEDAGÓGICA CON INTELIGENCIA ARTIFICIAL Y CRÉDITOS
+                </h4>
+<p>Space Lab utiliza OpenAI, Google Gemini y DeepSeek para asistir en la redacción pedagógica. Al solicitar una función de IA, el contenido necesario de tu solicitud y, si los adjuntas, textos o imágenes, se envía mediante las funciones de Supabase al proveedor seleccionado. Estos proveedores procesan ese contenido según sus propias condiciones. Los nombres de alumnos no son necesarios para generar una sesión: evita incluir datos personales de estudiantes en instrucciones y adjuntos. Las claves de los proveedores permanecen en los secretos del servidor y no se entregan al navegador. El uso de IA se registra mediante un <strong>sistema de créditos</strong>.</p>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg>
+                    4. PROPIEDAD INTELECTUAL Y TITULARIDAD DOCENTE
+                </h4>
+<p>Todas las sesiones de aprendizaje, programaciones curriculares, fichas de aplicación, rúbricas y materiales creados o editados en la plataforma son <strong>propiedad intelectual exclusiva del docente que los elabora</strong>. Space Lab no se atribuye ningún derecho de autor sobre los contenidos pedagógicos generados por sus usuarios.</p>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-target"></use></svg>
+                    5. RESPONSABILIDAD Y AUTONOMÍA PEDAGÓGICA
+                </h4>
+<p>La inteligencia artificial y los asistentes de Space Lab actúan como herramientas de apoyo para agilizar la labor administrativa y brindar sugerencias curriculares basadas en el CNEB. Es responsabilidad exclusiva del docente revisar, adecuar a su contexto real y validar pedagógicamente cada sesión antes de su desarrollo en el aula o presentación formal ante la dirección de su institución educativa, UGEL o DRE.</p>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg>
+                    6. PROTECCIÓN DE DATOS PERSONALES (LEY N° 29733) Y DERECHOS ARCO
+                </h4>
+<p>Supabase gestiona la autenticación y el almacenamiento de perfiles, sesiones, planificaciones y listas de alumnos que guardas en tu cuenta. El navegador conserva copias y borradores locales; en equipos compartidos, cada cuenta dispone de un espacio local separado. La información necesaria para las funciones de IA se procesa como se describe en la sección anterior. No vendemos ni alquilamos tus datos. Para solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos, o la eliminación de tu cuenta y contenido, utiliza el canal oficial de soporte indicado a continuación. El alcance y los plazos de conservación y eliminación deben confirmarse con soporte durante la beta.</p>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-mail"></use></svg>
+                    7. CANALES DE CONTACTO Y SOPORTE OFICIAL
+                </h4>
+<p>Para consultas técnicas, asistencia con el motor local, dudas sobre privacidad o reportes, puedes comunicarte directamente con el desarrollador:</p>
+<div style="display:flex;flex-wrap:wrap;gap:0.6rem;font-size:0.82rem">
+<a href="mailto:pabloclsa87@gmail.com" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:6px;color:var(--color-foreground);text-decoration:none">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-mail"></use></svg> pabloclsa87@gmail.com
+                    </a>
+<a href="https://wa.me/51918165428" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(37, 211, 102, 0.1);border:1px solid rgba(37, 211, 102, 0.3);border-radius:6px;color:#25d366;text-decoration:none">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-whatsapp"></use></svg> WhatsApp: 918 165 428
+                    </a>
+<a href="https://space.sypablitodp.site" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(0, 210, 255, 0.1);border:1px solid rgba(0, 210, 255, 0.3);border-radius:6px;color:#00d2ff;text-decoration:none">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-globe"></use></svg> space.sypablitodp.site
+                    </a>
+</div>
+<h4 style="color:var(--accent);font-weight:700;margin-top:0.5rem;display:flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-building"></use></svg>
+                    8. LEGISLACIÓN APLICABLE Y JURISDICCIÓN
+                </h4>
+<p>Los presentes Términos y Condiciones se rigen e interpretan según las leyes de la República del Perú. Para cualquier controversia, las partes se someten voluntariamente a la competencia exclusiva de los jueces y tribunales del distrito judicial de <strong>Huánuco, Perú</strong>.</p>
+</div>
+<div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:0.75rem">
+<button id="btn-accept-terms-modal" class="btn btn-primary" style="padding:0.6rem 1.4rem;font-weight:600;display:inline-flex;align-items:center;gap:0.4rem">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-check"></use></svg>
+                    Entendido y Aceptar
+                </button>
+</div>
+</div>
+</div>
+<!-- -->
+<!-- -->
+<div id="loader-overlay" class="loader-overlay hidden">
+<div class="loader-content">
+<div class="loader-spinner">
+<div class="orbit"></div>
+<div class="orbit orbit-2"></div>
+<div class="orbit orbit-3"></div>
+<div class="core"></div>
+</div>
+<p id="loader-text" class="loader-text">Generando sesión con IA...</p>
+</div>
+</div>
+<!-- --> <!-- -->
+<div id="pdf-guide-modal" class="pdf-guide-overlay hidden">
+<div class="pdf-guide-card glass-card">
+<button id="pdf-guide-close" class="pdf-guide-close" title="Cerrar" aria-label="Cerrar">×</button>
+<div class="pdf-guide-icon"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></div>
+<h3 class="pdf-guide-title">Exportar Sesión como PDF</h3>
+<!-- -->
+<div class="pdf-guide-warning-badge" style="background:rgba(245, 158, 11, 0.1);border:1px solid rgba(245, 158, 11, 0.25);color:#eab308;padding:8px 12px;border-radius:8px;font-size:0.82rem;font-weight:600;margin-bottom:12px;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg> Motor Local Desconectado: Se usará la impresión de Windows
             </div>
-            <p id="loader-text" class="loader-text">Generando sesión con IA...</p>
-        </div>
-    </div>
+<p class="pdf-guide-subtitle">Para obtener un PDF de calidad con el navegador, sigue estos pasos:</p>
+<div class="pdf-guide-steps">
+<div class="pdf-guide-step">
+<span class="step-number">1</span>
+<div class="step-content">
+<strong>Destino</strong>
+<span>Selecciona <em>&quot;Guardar como PDF&quot;</em></span>
+</div>
+</div>
+<div class="pdf-guide-step">
+<span class="step-number">2</span>
+<div class="step-content">
+<strong>Más opciones</strong>
+<span>Activa <em>&quot;Gráficos de fondo&quot;</em> (para conservar colores)</span>
+</div>
+</div>
+<div class="pdf-guide-step">
+<span class="step-number">3</span>
+<div class="step-content">
+<strong>Cabeceras</strong>
+<span>Desactiva <em>&quot;Cabeceras y pies de página&quot;</em> (para limpiar URLs)</span>
+</div>
+</div>
+</div>
+<!-- -->
+<div class="pdf-premium-ad-box" style="background:var(--color-card-surface);border:1px dashed rgba(6, 182, 212, 0.3);border-radius:8px;padding:15px;margin:15px 0;text-align:left">
+<div style="display:flex;align-items:center;gap:8px;color:#06b6d4;font-weight:600;font-size:0.9rem;margin-bottom:6px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-sparkles"></use></svg> ¡Recomendado: Exportación Premium Directa!
+                </div>
+<p style="font-size:0.8rem;color:#94a3b8;line-height:1.4;margin-bottom:10px">
+                    Para descargas automáticas inmediatas con paginado físico A4 perfecto y archivos Word (.docx) nativos editables de Office, descarga e inicia el motor.
+                </p>
+<a href="https://descargas.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="display:inline-flex;align-items:center;justify-content:center;width:100%;font-size:0.85rem;font-weight:600;text-decoration:none;padding:8px 14px">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
+                </a>
+</div>
+<div class="pdf-guide-actions">
+<button id="pdf-guide-cancel" class="btn btn-ghost">Cancelar</button>
+<button id="pdf-guide-proceed" class="btn btn-primary pdf-guide-proceed-btn">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg> Abrir Impresora
+                </button>
+</div>
+</div>
+</div>
+<!-- -->
+<!-- --> <!-- -->
+<div id="engine-required-modal" class="pdf-guide-overlay hidden">
+<div class="pdf-guide-card glass-card" style="max-width:420px">
+<button id="engine-modal-close" class="pdf-guide-close" title="Cerrar" aria-label="Cerrar">×</button>
+<div class="pdf-guide-icon" style="color:#f59e0b;margin-bottom:10px"><svg class="ui-icon" aria-hidden="true"><use href="#icon-alert"></use></svg></div>
+<h3 class="pdf-guide-title">Motor Local Requerido</h3>
+<p class="pdf-guide-subtitle" style="margin-bottom:15px;font-size:0.9rem">
+                La exportación nativa a **Microsoft Word (.docx)** con formato premium no está disponible sin vincular el motor local.
+            </p>
+<div style="background:rgba(245, 158, 11, 0.06);border:1px solid rgba(245, 158, 11, 0.2);border-radius:8px;padding:12px;text-align:left;margin-bottom:18px;font-size:0.82rem;line-height:1.4;color:#fef08a">
+                Para compilar y descargar un documento de Word limpio y editable con membretes de UGEL/MINEDU integrados, debes descargar e iniciar la aplicación <strong>pablitopyhost.exe</strong> en tu PC.
+            </div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<a href="https://descargas.sypablitodp.site" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="text-decoration:none;padding:10px;text-align:center">
+<svg class="ui-icon" aria-hidden="true"><use href="#icon-download"></use></svg> Descargar Motor Local (.exe)
+                </a>
+<button id="engine-modal-cancel" class="btn btn-ghost" style="padding:8px">Cancelar</button>
+</div>
+</div>
+</div>
+<!-- -->
+<!-- -->
+<canvas id="space-bg" class="space-background" hidden="" aria-hidden="true"></canvas>
 
-    <!-- include:ui/fragments/modals/pdf-guide.html -->
-
-    <!-- include:ui/fragments/modals/engine-required.html -->
-
-    <!-- ═══════════ BACKGROUND PARTICLES ═══════════ -->
-    <canvas id="space-bg" class="space-background" hidden aria-hidden="true"></canvas>
+<!-- End React: GlobalOverlays -->

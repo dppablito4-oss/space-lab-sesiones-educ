@@ -1,0 +1,19 @@
+{
+  "ui/fragments/home.html": "Home",
+  "ui/fragments/landing.html": "Landing",
+  "ui/fragments/modals/auth.html": "AuthDialog",
+  "ui/fragments/modals/confirm.html": "ConfirmDialogSurface",
+  "ui/fragments/modals/engine-required.html": "EngineRequired",
+  "ui/fragments/modals/load-session.html": "SessionLibraryDialog",
+  "ui/fragments/modals/logos-gallery.html": "LogoGallery",
+  "ui/fragments/modals/pdf-guide.html": "PdfGuide",
+  "ui/fragments/modals/refine-text.html": "RefineText",
+  "ui/fragments/modals/terms.html": "TermsDialog",
+  "ui/fragments/planning-host.html": "PlanningHost",
+  "ui/fragments/quick-session.html": "QuickSession",
+  "ui/fragments/session-editor.html": "SessionEditor",
+  "ui/fragments/session-preview.html": "SessionPreview",
+  "ui/fragments/shell/editor-overlays.html": "EditorOverlays",
+  "ui/fragments/shell/global-overlays.html": "GlobalOverlays",
+  "ui/fragments/shell/icons.html": "Icons"
+}

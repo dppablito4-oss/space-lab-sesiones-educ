@@ -5,7 +5,8 @@ Este directorio contiene los cambios incrementales del esquema de Space Lab a pa
 ## Instalación nueva
 
 1. Ejecuta [`database_setup.sql`](../../database_setup.sql) para crear el baseline.
-2. Aplica, en orden, todos los archivos de este directorio que aún no estén incluidos en ese baseline. En el snapshot actual, esto comienza en `202609260001_usage_cost_telemetry.sql`.
+2. Ejecuta [`bootstrap/platform_helpers.sql`](../bootstrap/platform_helpers.sql). El proyecto administrado original ya tiene `rls_auto_enable()`, pero una instalación local nueva puede carecer de esa función requerida por la migración histórica de permisos. El bootstrap conserva cualquier implementación existente y no instala un event trigger.
+3. Aplica, en orden, todos los archivos de este directorio que aún no estén incluidos en ese baseline. En el snapshot actual, esto comienza en `202609260001_usage_cost_telemetry.sql`.
 
 `database_setup.sql` no es la fuente de verdad de las funciones SaaS posteriores al baseline. La fuente de verdad incremental es este directorio. No despliegues una instalación nueva ejecutando únicamente el snapshot.
 

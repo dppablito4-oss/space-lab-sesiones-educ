@@ -42,6 +42,7 @@ def run():
             errors = []
             page.on("pageerror", lambda error: errors.append(str(error)))
             page.goto(f"http://127.0.0.1:{server.server_port}/index.html?ui=legacy", wait_until="domcontentloaded")
+            page.wait_for_function("!document.getElementById('frontend-root') || window.SpaceLabFrontend?.ready")
             page.evaluate(
                 """async ({planUrl, sessionUrl}) => {
                     window.SupabaseClient.getCurrentUser = async () => ({id: 'standalone-teacher'});

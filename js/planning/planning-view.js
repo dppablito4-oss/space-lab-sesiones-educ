@@ -1,6 +1,12 @@
 /** Read-only overview for an existing PlanningContainer 2.0. */
 const PlanningView = (() => {
     'use strict';
+    function renderUi(element, markup) {
+        if (window.SpaceLabReactUI?.region) return window.SpaceLabReactUI.region(element, markup);
+        element.innerHTML = markup; // Recovery and isolated domain tests.
+        return markup;
+    }
+
     const core = typeof module !== 'undefined' && module.exports
         ? require('./planning-container-v2.js') : window.PlanningContainerV2;
     const repositoryModule = typeof module !== 'undefined' && module.exports
@@ -218,7 +224,7 @@ const PlanningView = (() => {
         const container = repository.get(containerId);
         if (!container) throw new Error('No se encontró la planificación solicitada.');
         currentId = containerId;
-        dialog.innerHTML = '<div class="planning-shell"><p role="status">Cargando planificación…</p></div>';
+        renderUi(dialog, '<div class="planning-shell"><p role="status">Cargando planificación…</p></div>');
         if (!dialog.open) {
             if (window.SpaceLabReactBridge?.isReady()) {
                 window.SpaceLabReactBridge.showPlanning();
@@ -228,7 +234,7 @@ const PlanningView = (() => {
         const methodologyProfile = await loadMethodologyProfile(container);
         if (currentId !== containerId || ownerId !== (window.AccountStorage?.userId(window.SupabaseClient) || null)) return null;
         const sessionExists = id => Boolean(window.StorageManager?.getSession?.(id));
-        dialog.innerHTML = render(container, { methodologyProfile, sessionExists });
+        renderUi(dialog, render(container, { methodologyProfile, sessionExists }));
         (container.sequence || []).forEach(item => {
             if (item.status === 'generated' && item.linkedDocumentRef?.id && !sessionExists(item.linkedDocumentRef.id)) {
                 console.warn('[PlanningView] La sesión vinculada no está disponible:', item.linkedDocumentRef.id);
@@ -341,7 +347,10 @@ const PlanningView = (() => {
         });
     }
 
-    if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
+    if (typeof window !== 'undefined') {
+        if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', mount, { once: true });
+        else mount();
+    }
     return { open, render, close, exportDocx: exportPlanningDocx, sequenceAction, renderHeader, renderSituation, renderCurriculum, renderMethodology,
         renderProduct, renderAssessment, renderMilestones, renderSequence };
 })();

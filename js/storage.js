@@ -10,6 +10,73 @@ const Storage = (() => {
     const STORAGE_KEY = 'spacelab_sessions';
     const CURRENT_KEY = 'spacelab_current';
     const SETTINGS_KEY = 'spacelab_settings';
+    const sync = window.SessionSync || (typeof require === 'function' ? require('./core/session-sync.js') : null);
+    const recoveryPrefix = ownerId => ownerId ? accounts.key('spacelab_recovered', ownerId) + ':' : 'spacelab_recovered:guest:';
+    const recoveryKey = (session, ownerId) => recoveryPrefix(ownerId) + encodeURIComponent(session.id);
+
+    function emit(name, detail) {
+        if (typeof window.dispatchEvent === 'function') window.dispatchEvent(new CustomEvent(name, {detail}));
+    }
+
+    function acknowledge(snapshot, ownerId) {
+        if (currentOwner() !== ownerId || !snapshot._cloudSync) return;
+        const sessions = getAllSessions(true);
+        const local = sessions.find(item => item.id === snapshot.id);
+        if (local?._cloudSync?.branchId === snapshot._cloudSync.branchId) {
+            local._cloudSync = {...snapshot._cloudSync};
+            local.synced = sync.same(local, snapshot);
+            safeSetItem(accounts.key(STORAGE_KEY, ownerId), JSON.stringify(sessions));
+            if (local._recoveryOf) safeSetItem(recoveryKey(local, ownerId), JSON.stringify(local));
+        }
+        const draft = getCurrentSession();
+        if (draft?.id === snapshot.id && draft._cloudSync?.branchId === snapshot._cloudSync.branchId) {
+            draft._cloudSync = {...snapshot._cloudSync};
+            setCurrentSession(draft, ownerId);
+        }
+        emit('spacelab:session-synced', {id: snapshot.id, ownerId, state: snapshot._cloudSync});
+    }
+
+    async function recoverConflict(snapshot, error, ownerId, state) {
+        if (currentOwner() !== ownerId) return false;
+        const copy = JSON.parse(JSON.stringify(state.latestSnapshot || snapshot));
+        const originalId = copy.id;
+        copy.id = 'ses_recovered_' + sync.newId();
+        copy._recoveryOf = originalId;
+        copy.metadata = {...copy.metadata, titulo: (copy.metadata?.titulo || 'Sesión') + ' (copia recuperada)'};
+        copy.synced = false;
+        copy.lastSaved = new Date().toISOString();
+        copy.deleted_at = null;
+        if (copy.planning?.mode === 'linked') delete copy.planning;
+        sync.prepare(copy, ownerId);
+        // A dedicated key survives a competing tab replacing the sessions index.
+        // Never discard the existing local version if there is insufficient space.
+        if (!safeSetItem(recoveryKey(copy, ownerId), JSON.stringify(copy))) {
+            const failure = new Error('Tus cambios siguen en este dispositivo, pero falta espacio para crear la copia recuperada. Exporta el documento a JSON antes de continuar.');
+            failure.code = 'RECOVERY_STORAGE_FULL';
+            window.Toast?.error?.(failure.message);
+            throw failure;
+        }
+        const sessions = getAllSessions(true).filter(item => item.id !== originalId && item.id !== copy.id);
+        if (error.remoteSession) sessions.push(error.remoteSession);
+        sessions.push(copy);
+        safeSetItem(accounts.key(STORAGE_KEY, ownerId), JSON.stringify(sessions));
+        state.redirected = true;
+        const forkKey = accounts.key(copy.id, ownerId);
+        const forkState = {promise: state.promise, branchId: copy._cloudSync.branchId,
+            baseVersion: null, version: null, latestSnapshot: copy};
+        cloudSaveQueues.set(forkKey, forkState);
+        emit('spacelab:session-conflict', {originalId, ownerId, branchId: snapshot._cloudSync.branchId, session: copy});
+        window.Toast?.warning?.('La sesión cambió en otro dispositivo. Tus cambios están en una copia recuperada; la versión remota se conservó.');
+        window.SpaceLabHome?.refresh?.();
+        const saved = await SupabaseClient.saveSessionCloud(copy, ownerId);
+        if (currentOwner() !== ownerId) return false;
+        if (saved !== false) {
+            forkState.version = copy._cloudSync.version;
+            acknowledge(copy, ownerId);
+        }
+        if (cloudSaveQueues.get(forkKey) === forkState && forkState.promise === state.promise) cloudSaveQueues.delete(forkKey);
+        return saved;
+    }
 
     // ─── ACTIVE SYNC TRACKING ───
     let activeSyncsCount = 0;
@@ -32,27 +99,45 @@ const Storage = (() => {
         // This prevents a slow, older autosave from overwriting a newer version.
         const snapshot = JSON.parse(JSON.stringify(session));
         const queueKey = accounts.key(snapshot.id, ownerId);
-        const previous = cloudSaveQueues.get(queueKey) || Promise.resolve();
-        const next = previous.catch(() => undefined).then(async () => {
+        const previous = cloudSaveQueues.get(queueKey);
+        const sameBranch = previous?.branchId && previous.branchId === snapshot._cloudSync?.branchId;
+        const state = sameBranch ? previous : {ownerId, branchId: snapshot._cloudSync?.branchId,
+            baseVersion: snapshot._cloudSync?.version, version: snapshot._cloudSync?.version};
+        state.latestSnapshot = snapshot;
+        const next = (previous?.promise || Promise.resolve()).catch(() => undefined).then(async () => {
             if (currentOwner() !== ownerId) return;
+            if (state.redirected) return;
+            if (snapshot._cloudSync && snapshot._cloudSync.version === state.baseVersion) {
+                snapshot._cloudSync.version = state.version;
+            }
             incrementSync();
             try {
                 const user = await SupabaseClient.getCurrentUser();
                 if (user?.id === ownerId && currentOwner() === ownerId) {
-                    await SupabaseClient.saveSessionCloud(snapshot, ownerId);
+                    try {
+                        const saved = await SupabaseClient.saveSessionCloud(snapshot, ownerId);
+                        if (saved === false) return;
+                        state.version = snapshot._cloudSync?.version;
+                        acknowledge(snapshot, ownerId);
+                    } catch (error) {
+                        if (error.code !== 'SESSION_CONFLICT' || !sync) throw error;
+                        await recoverConflict(snapshot, error, ownerId, state);
+                    }
                 }
             } finally {
                 decrementSync();
             }
         });
 
-        cloudSaveQueues.set(queueKey, next);
+        state.promise = next;
+        cloudSaveQueues.set(queueKey, state);
         next.catch(err => console.warn('[Storage] Error al subir a la nube:', err));
         next.then(() => {
-            if (cloudSaveQueues.get(queueKey) === next) cloudSaveQueues.delete(queueKey);
+            if (cloudSaveQueues.get(queueKey)?.promise === next) cloudSaveQueues.delete(queueKey);
         }, () => {
-            if (cloudSaveQueues.get(queueKey) === next) cloudSaveQueues.delete(queueKey);
+            if (cloudSaveQueues.get(queueKey)?.promise === next) cloudSaveQueues.delete(queueKey);
         });
+        return next;
     }
 
     window.addEventListener('beforeunload', (e) => {
@@ -86,6 +171,17 @@ const Storage = (() => {
             const data = localStorage.getItem(scopedKey(STORAGE_KEY));
             const sessions = data ? JSON.parse(data) : [];
             if (!Array.isArray(sessions)) return [];
+            const prefix = recoveryPrefix(currentOwner());
+            for (let index = 0; index < (localStorage.length || 0); index++) {
+                const key = localStorage.key(index);
+                if (!key?.startsWith(prefix)) continue;
+                let recovered;
+                try { recovered = JSON.parse(localStorage.getItem(key)); } catch { continue; }
+                if (!recovered?.id) continue;
+                const previous = sessions.findIndex(item => item.id === recovered.id);
+                if (previous < 0) sessions.push(recovered);
+                else if (new Date(recovered.lastSaved || 0) > new Date(sessions[previous].lastSaved || 0)) sessions[previous] = recovered;
+            }
             if (includeDeleted) return sessions;
             return sessions.filter(s => !s.deleted_at);
         } catch (e) {
@@ -101,6 +197,8 @@ const Storage = (() => {
 
     function saveSession(session) {
         try {
+            sync?.prepare(session, currentOwner());
+            session.synced = false;
             if (window.SpaceLabSanitizer && typeof session?.htmlContent === 'string') {
                 session = {
                     ...session,
@@ -120,6 +218,7 @@ const Storage = (() => {
                 sessions.unshift(session);
             }
 
+            if (session._recoveryOf && !safeSetItem(recoveryKey(session, currentOwner()), JSON.stringify(session))) return false;
             if (!safeSetItem(scopedKey(STORAGE_KEY), JSON.stringify(sessions))) return false;
 
             // Sincronización asíncrona con Supabase en background si está logueado
@@ -140,6 +239,8 @@ const Storage = (() => {
             if (session) {
                 session.deleted_at = new Date().toISOString();
                 session.lastSaved = new Date().toISOString();
+                session.synced = false;
+                if (session._recoveryOf && !safeSetItem(recoveryKey(session, currentOwner()), JSON.stringify(session))) return false;
                 if (!safeSetItem(scopedKey(STORAGE_KEY), JSON.stringify(sessions))) return false;
 
                 // Sincronización asíncrona con Supabase en background
@@ -165,6 +266,7 @@ const Storage = (() => {
     }
 
     function setCurrentSession(session, ownerId = currentOwner()) {
+        if (session) sync?.prepare(session, ownerId);
         return safeSetItem(accounts.key(CURRENT_KEY, ownerId), JSON.stringify(session));
     }
 
@@ -341,105 +443,42 @@ const Storage = (() => {
 
         incrementSync();
         try {
-            // 1. Obtener todas las sesiones locales (incluidas las soft-deleted)
             const localSessions = getAllSessions(true);
             const original = new Map(localSessions.map(session => [session.id, JSON.stringify(session)]));
-            
-            // 2. Obtener sesiones de la nube (que incluyen deleted_at)
             const cloudSessions = await SupabaseClient.getSessionsCloud(ownerId);
             accounts.assertCurrent(window.SupabaseClient, ownerId);
-
-            // 3. Fusionar local y nube
-            const mergedMap = new Map();
-
-            // Agregar primero locales
-            localSessions.forEach(s => mergedMap.set(s.id, s));
-
-            // Agregar/sobreescribir con las de la nube si son más recientes
-            cloudSessions.forEach(cs => {
-                const local = mergedMap.get(cs.id);
-                if (!local) {
-                    mergedMap.set(cs.id, cs);
+            const merged = new Map(cloudSessions.map(session => [session.id, session]));
+            const writes = [];
+            for (const local of localSessions) {
+                const remote = merged.get(local.id);
+                // Do not enqueue an old snapshot over an edit made during the read.
+                const latest = getAllSessions(true).find(session => session.id === local.id);
+                if (JSON.stringify(latest) !== original.get(local.id)) continue;
+                if (remote && sync?.same(local, remote)) {
+                    sync.prepare(local, ownerId);
+                    local._cloudSync.version = remote._cloudSync?.version || remote.lastSaved;
+                    local.synced = true;
+                    merged.set(local.id, local);
+                } else if (remote && local.synced && local._cloudSync?.version) {
+                    // A clean local snapshot may advance; a dirty snapshot must
+                    // pass its own revision to the atomic conditional write.
+                    merged.set(local.id, remote);
                 } else {
-                    const localTime = new Date(local.lastSaved || 0);
-                    const cloudTime = new Date(cs.lastSaved || cs.last_saved || 0);
-                    if (cloudTime > localTime) {
-                        mergedMap.set(cs.id, cs);
-                    }
-                }
-            });
-
-            // Procesar la lista consolidada
-            const finalSessions = [];
-            const savePromises = [];
-
-            for (const session of mergedMap.values()) {
-                const cloudVersion = cloudSessions.find(cs => cs.id === session.id);
-
-                // Si está marcada como eliminada
-                if (session.deleted_at) {
-                    // Si no está en la nube, es porque el admin la purgó o borró físicamente. La purgamos local.
-                    if (!cloudVersion) {
-                        console.log('[Sync] Purgando sesión eliminada localmente (no existe en la nube):', session.id);
-                        continue;
-                    }
-                    // Si está en la nube pero no marcada como eliminada en la nube, actualizamos la nube
-                    if (!cloudVersion.deleted_at) {
-                        savePromises.push(SupabaseClient.saveSessionCloud(session, ownerId));
-                    }
-                    session.synced = true;
-                    finalSessions.push(session);
-                } else {
-                    // Sesión activa
-                    if (!cloudVersion) {
-                        // No está en la nube
-                        // ¿Ya había sido sincronizada anteriormente? (Si tiene la marca synced)
-                        if (session.synced) {
-                            // Si ya fue sincronizada pero ya no está en la nube, fue borrada de la nube por el admin.
-                            // Por lo tanto, la borramos localmente para evitar resurrecciones.
-                            console.log('[Sync] Borrando sesión eliminada por administrador en nube:', session.id);
-                            continue;
-                        } else {
-                            // Nueva sesión local nunca subida. La subimos.
-                            session.synced = true;
-                            savePromises.push(SupabaseClient.saveSessionCloud(session, ownerId));
-                            finalSessions.push(session);
-                        }
-                    } else {
-                        // Existe en ambos lados y está activa.
-                        // Si la versión local es más nueva, la subimos a la nube.
-                        const localTime = new Date(session.lastSaved || 0);
-                        const cloudTime = new Date(cloudVersion.lastSaved || 0);
-                        if (localTime > cloudTime) {
-                            savePromises.push(SupabaseClient.saveSessionCloud(session, ownerId));
-                        }
-                        session.synced = true;
-                        finalSessions.push(session);
-                    }
+                    merged.set(local.id, local);
+                    // A missing row may be a deletion or an RLS restriction.
+                    // Keep the local copy and never resurrect it automatically.
+                    if (!remote && local.synced) continue;
+                    writes.push(queueCloudSave(local));
                 }
             }
-
-            // Ejecutar subidas/sincronizaciones en la nube en paralelo
-            if (savePromises.length > 0) {
-                console.log(`[Sync] Sincronizando ${savePromises.length} sesiones en la nube en paralelo...`);
-                const results = await Promise.all(savePromises);
-                if (results.some(result => result === false)) throw new Error('No se completó la sincronización.');
-            }
+            const results = await Promise.all(writes);
+            if (results.some(result => result === false)) return false;
             accounts.assertCurrent(window.SupabaseClient, ownerId);
-
-            // Ordenar por fecha
-            finalSessions.sort((a, b) => new Date(b.lastSaved || 0) - new Date(a.lastSaved || 0));
-
-            // Guardar el resultado consolidado en LocalStorage
-            // Merge saves made while the network was in flight instead of losing them.
-            const latest = new Map(getAllSessions(true).map(session => [session.id, session]));
-            for (const [id, session] of latest) {
-                if (JSON.stringify(session) !== original.get(id)) {
-                    const index = finalSessions.findIndex(item => item.id === id);
-                    if (index >= 0) finalSessions[index] = session;
-                    else finalSessions.push(session);
-                }
+            for (const session of getAllSessions(true)) {
+                if (JSON.stringify(session) !== original.get(session.id)) merged.set(session.id, session);
             }
+            const finalSessions = Array.from(merged.values());
+            finalSessions.sort((a, b) => new Date(b.lastSaved || 0) - new Date(a.lastSaved || 0));
             if (!safeSetItem(accounts.key(STORAGE_KEY, ownerId), JSON.stringify(finalSessions))) return false;
 
             console.log('Sesiones sincronizadas con Supabase con éxito');

@@ -28,9 +28,9 @@ html[data-theme="dark"] #react-preview-root {
     --sl-action-hover:linear-gradient(135deg,#504d58,#36333e);
     --sl-action-text:#f5f3fc;--sl-action-border:#777080;
 }
-body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #app-view,
-body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #landing-view,
-body:is([data-react-preview="wizard"],[data-react-preview="planning"]) > #home-view {display:none !important;}
+body:is([data-react-preview="wizard"],[data-react-preview="planning"]) #app-view,
+body:is([data-react-preview="wizard"],[data-react-preview="planning"]) #landing-view,
+body:is([data-react-preview="wizard"],[data-react-preview="planning"]) #home-view {display:none !important;}
 body[data-react-preview] #confirm-dialog {z-index:12000;}
 body[data-react-preview] #loader-overlay {z-index:11900;}
 body[data-react-preview] #toast-container {bottom:calc(112px + env(safe-area-inset-bottom,0px));}
@@ -345,4 +345,14 @@ html[data-theme="dark"] .sl-step-icon,html[data-theme="dark"] .sl-step.current .
     .sl-breadcrumb {display:none;}
     .sl-field input,.sl-field select,.sl-field textarea {font-size:16px !important;}
     .sl-step strong {font-size:11px;}
+}
+#frontend-root {display:contents;}
+.frontend-recovery {position:relative;z-index:13000;padding:8px 16px;background:var(--color-card-surface,#fff);color:var(--color-foreground,#222);border-bottom:1px solid var(--color-border,#ccc);font:13px/1.5 system-ui;}
+@keyframes sl-surface-enter {from{opacity:.4;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+#frontend-root .load-modal:not(.hidden) .load-modal-content,
+#frontend-root dialog[open],
+#frontend-root .home-session-item {animation:sl-surface-enter 160ms cubic-bezier(.2,.8,.2,1);}
+@media (prefers-reduced-motion:reduce) {
+    #frontend-root .load-modal-content,#frontend-root dialog,#frontend-root .home-session-item {animation:none !important;}
+    #frontend-root {scroll-behavior:auto;}
 }

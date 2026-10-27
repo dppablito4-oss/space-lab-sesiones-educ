@@ -2542,7 +2542,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	var Ya = De(null);
 	function Xa() {
 		var e = Ya.current;
-		return e === null ? G.pooledCache : e;
+		return e === null ? K.pooledCache : e;
 	}
 	function Za(e, t) {
 		t === null ? k(Ya, Ya.current) : k(Ya, t.pool);
@@ -2565,7 +2565,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			default:
 				if (typeof t.status == "string") t.then(En, En);
 				else {
-					if (e = G, e !== null && 100 < e.shellSuspendCounter) throw Error(i(482));
+					if (e = K, e !== null && 100 < e.shellSuspendCounter) throw Error(i(482));
 					e = t, e.status = "pending", e.then(function(e) {
 						if (t.status === "pending") {
 							var n = t;
@@ -2838,7 +2838,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	function So(e, t, n) {
 		var r = e.updateQueue;
 		if (r === null) return null;
-		if (r = r.shared, W & 2) {
+		if (r = r.shared, G & 2) {
 			var i = r.pending;
 			return i === null ? t.next = t : (t.next = i.next, i.next = t), r.pending = t, t = Ii(e), Fi(e, null, n), t;
 		}
@@ -2900,7 +2900,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			o = 0, u = l = c = null, s = a;
 			do {
 				var f = s.lane & -536870913, p = f !== s.lane;
-				if (p ? (q & f) === f : (r & f) === f) {
+				if (p ? (J & f) === f : (r & f) === f) {
 					f !== 0 && f === Ua && (To = !0), u !== null && (u = u.next = {
 						lane: 0,
 						tag: s.tag,
@@ -2954,13 +2954,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	}
 	var Ao = De(null), jo = De(0);
 	function Mo(e, t) {
-		e = od, k(jo, e), k(Ao, t), od = e | t.baseLanes;
+		e = ad, k(jo, e), k(Ao, t), ad = e | t.baseLanes;
 	}
 	function No() {
-		k(jo, od), k(Ao, Ao.current);
+		k(jo, ad), k(Ao, Ao.current);
 	}
 	function L() {
-		od = jo.current, Oe(Ao), Oe(jo);
+		ad = jo.current, Oe(Ao), Oe(jo);
 	}
 	var Po = De(null), Fo = null;
 	function Io(e) {
@@ -3006,59 +3006,59 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		return null;
 	}
-	var Go = 0, R = null, z = null, Ko = null, qo = !1, Jo = !1, Yo = !1, Xo = 0, Zo = 0, Qo = null, $o = 0;
-	function B() {
+	var Go = 0, R = null, z = null, B = null, Ko = !1, qo = !1, Jo = !1, Yo = 0, Xo = 0, Zo = null, Qo = 0;
+	function V() {
 		throw Error(i(321));
 	}
-	function es(e, t) {
+	function $o(e, t) {
 		if (t === null) return !1;
 		for (var n = 0; n < t.length && n < e.length; n++) if (!Yr(e[n], t[n])) return !1;
 		return !0;
 	}
-	function ts(e, t, n, r, i, a) {
-		return Go = a, R = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, D.H = e === null || e.memoizedState === null ? vc : yc, Yo = !1, a = n(r, i), Yo = !1, Jo && (a = rs(t, n, r, i)), ns(e), a;
+	function es(e, t, n, r, i, a) {
+		return Go = a, R = t, t.memoizedState = null, t.updateQueue = null, t.lanes = 0, D.H = e === null || e.memoizedState === null ? _c : vc, Jo = !1, a = n(r, i), Jo = !1, qo && (a = ns(t, n, r, i)), ts(e), a;
 	}
-	function ns(e) {
-		D.H = _c;
+	function ts(e) {
+		D.H = gc;
 		var t = z !== null && z.next !== null;
-		if (Go = 0, Ko = z = R = null, qo = !1, Zo = 0, Qo = null, t) throw Error(i(300));
-		e === null || Ic || (e = e.dependencies, e !== null && Oa(e) && (Ic = !0));
+		if (Go = 0, B = z = R = null, Ko = !1, Xo = 0, Zo = null, t) throw Error(i(300));
+		e === null || Fc || (e = e.dependencies, e !== null && Oa(e) && (Fc = !0));
 	}
-	function rs(e, t, n, r) {
+	function ns(e, t, n, r) {
 		R = e;
 		var a = 0;
 		do {
-			if (Jo && (Qo = null), Zo = 0, Jo = !1, 25 <= a) throw Error(i(301));
-			if (a += 1, Ko = z = null, e.updateQueue != null) {
+			if (qo && (Zo = null), Xo = 0, qo = !1, 25 <= a) throw Error(i(301));
+			if (a += 1, B = z = null, e.updateQueue != null) {
 				var o = e.updateQueue;
 				o.lastEffect = null, o.events = null, o.stores = null, o.memoCache != null && (o.memoCache.index = 0);
 			}
-			D.H = bc, o = t(n, r);
-		} while (Jo);
+			D.H = yc, o = t(n, r);
+		} while (qo);
 		return o;
 	}
-	function is() {
+	function rs() {
 		var e = D.H, t = e.useState()[0];
-		return t = typeof t.then == "function" ? ds(t) : t, e = e.useState()[0], (z === null ? null : z.memoizedState) !== e && (R.flags |= 1024), t;
+		return t = typeof t.then == "function" ? us(t) : t, e = e.useState()[0], (z === null ? null : z.memoizedState) !== e && (R.flags |= 1024), t;
 	}
-	function as() {
-		var e = Xo !== 0;
-		return Xo = 0, e;
+	function is() {
+		var e = Yo !== 0;
+		return Yo = 0, e;
 	}
-	function os(e, t, n) {
+	function as(e, t, n) {
 		t.updateQueue = e.updateQueue, t.flags &= -2053, e.lanes &= ~n;
 	}
-	function ss(e) {
-		if (qo) {
+	function os(e) {
+		if (Ko) {
 			for (e = e.memoizedState; e !== null;) {
 				var t = e.queue;
 				t !== null && (t.pending = null), e = e.next;
 			}
-			qo = !1;
+			Ko = !1;
 		}
-		Go = 0, Ko = z = R = null, Jo = !1, Zo = Xo = 0, Qo = null;
+		Go = 0, B = z = R = null, qo = !1, Xo = Yo = 0, Zo = null;
 	}
-	function cs() {
+	function ss() {
 		var e = {
 			memoizedState: null,
 			baseState: null,
@@ -3066,15 +3066,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			queue: null,
 			next: null
 		};
-		return Ko === null ? R.memoizedState = Ko = e : Ko = Ko.next = e, Ko;
+		return B === null ? R.memoizedState = B = e : B = B.next = e, B;
 	}
-	function ls() {
+	function cs() {
 		if (z === null) {
 			var e = R.alternate;
 			e = e === null ? null : e.memoizedState;
 		} else e = z.next;
-		var t = Ko === null ? R.memoizedState : Ko.next;
-		if (t !== null) Ko = t, z = e;
+		var t = B === null ? R.memoizedState : B.next;
+		if (t !== null) B = t, z = e;
 		else {
 			if (e === null) throw R.alternate === null ? Error(i(467)) : Error(i(310));
 			z = e, e = {
@@ -3083,11 +3083,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				baseQueue: z.baseQueue,
 				queue: z.queue,
 				next: null
-			}, Ko === null ? R.memoizedState = Ko = e : Ko = Ko.next = e;
+			}, B === null ? R.memoizedState = B = e : B = B.next = e;
 		}
-		return Ko;
+		return B;
 	}
-	function us() {
+	function ls() {
 		return {
 			lastEffect: null,
 			events: null,
@@ -3095,19 +3095,19 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			memoCache: null
 		};
 	}
-	function ds(e) {
-		var t = Zo;
-		return Zo += 1, Qo === null && (Qo = []), e = io(Qo, e, t), t = R, (Ko === null ? t.memoizedState : Ko.next) === null && (t = t.alternate, D.H = t === null || t.memoizedState === null ? vc : yc), e;
+	function us(e) {
+		var t = Xo;
+		return Xo += 1, Zo === null && (Zo = []), e = io(Zo, e, t), t = R, (B === null ? t.memoizedState : B.next) === null && (t = t.alternate, D.H = t === null || t.memoizedState === null ? _c : vc), e;
 	}
-	function fs(e) {
+	function ds(e) {
 		if (typeof e == "object" && e) {
-			if (typeof e.then == "function") return ds(e);
+			if (typeof e.then == "function") return us(e);
 			if (e.$$typeof === ve) return;
 			if (e.$$typeof === E) return Aa(e);
 		}
 		throw Error(i(438, String(e)));
 	}
-	function ps(e) {
+	function fs(e) {
 		var t = null, n = R.updateQueue;
 		if (n !== null && (t = n.memoCache), t == null) {
 			var r = R.alternate;
@@ -3121,16 +3121,16 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		if (t ??= {
 			data: [],
 			index: 0
-		}, n === null && (n = us(), R.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = ge;
+		}, n === null && (n = ls(), R.updateQueue = n), n.memoCache = t, n = t.data[t.index], n === void 0) for (n = t.data[t.index] = Array(e), r = 0; r < e; r++) n[r] = ge;
 		return t.index++, n;
 	}
-	function ms(e, t) {
+	function ps(e, t) {
 		return typeof t == "function" ? t(e) : t;
 	}
-	function hs(e) {
-		return gs(ls(), z, e);
+	function ms(e) {
+		return hs(cs(), z, e);
 	}
-	function gs(e, t, n) {
+	function hs(e, t, n) {
 		var r = e.queue;
 		if (r === null) throw Error(i(311));
 		r.lastRenderedReducer = n;
@@ -3148,7 +3148,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			var c = s = null, l = null, u = t, d = !1;
 			do {
 				var f = u.lane & -536870913;
-				if (f === u.lane ? (Go & f) === f : (q & f) === f) {
+				if (f === u.lane ? (Go & f) === f : (J & f) === f) {
 					var p = u.revertLane;
 					if (p === 0) l !== null && (l = l.next = {
 						lane: 0,
@@ -3171,7 +3171,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						eagerState: u.eagerState,
 						next: null
 					}, l === null ? (c = l = f, s = o) : l = l.next = f, R.lanes |= p, sd |= p;
-					f = u.action, Yo && n(o, f), o = u.hasEagerState ? u.eagerState : n(o, f);
+					f = u.action, Jo && n(o, f), o = u.hasEagerState ? u.eagerState : n(o, f);
 				} else p = {
 					lane: f,
 					revertLane: u.revertLane,
@@ -3183,13 +3183,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				}, l === null ? (c = l = p, s = o) : l = l.next = p, R.lanes |= f, sd |= f;
 				u = u.next;
 			} while (u !== null && u !== t);
-			if (l === null ? s = o : l.next = c, !Yr(o, e.memoizedState) && (Ic = !0, d && (n = Wa, n !== null))) throw n;
+			if (l === null ? s = o : l.next = c, !Yr(o, e.memoizedState) && (Fc = !0, d && (n = Wa, n !== null))) throw n;
 			e.memoizedState = o, e.baseState = s, e.baseQueue = l, r.lastRenderedState = o;
 		}
 		return a === null && (r.lanes = 0), [e.memoizedState, r.dispatch];
 	}
-	function _s(e) {
-		var t = ls(), n = t.queue;
+	function gs(e) {
+		var t = cs(), n = t.queue;
 		if (n === null) throw Error(i(311));
 		n.lastRenderedReducer = e;
 		var r = n.dispatch, a = n.pending, o = t.memoizedState;
@@ -3199,38 +3199,38 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			do
 				o = e(o, s.action), s = s.next;
 			while (s !== a);
-			Yr(o, t.memoizedState) || (Ic = !0), t.memoizedState = o, t.baseQueue === null && (t.baseState = o), n.lastRenderedState = o;
+			Yr(o, t.memoizedState) || (Fc = !0), t.memoizedState = o, t.baseQueue === null && (t.baseState = o), n.lastRenderedState = o;
 		}
 		return [o, r];
 	}
-	function vs(e, t, n) {
-		var r = R, a = ls(), o = P;
+	function _s(e, t, n) {
+		var r = R, a = cs(), o = P;
 		if (o) {
 			if (n === void 0) throw Error(i(407));
 			n = n();
 		} else n = t();
 		var s = !Yr((z || a).memoizedState, n);
-		if (s && (a.memoizedState = n, Ic = !0), a = a.queue, Us(xs.bind(null, r, a, e), [e]), e = a.getSnapshot !== t || s || Ko !== null && !!(Ko.memoizedState.tag & 1), Rs(e ? 9 : 8, { destroy: void 0 }, bs.bind(null, r, a, n, t), null), e) {
-			if (r.flags |= 2048, G === null) throw Error(i(349));
-			o || Go & 127 || ys(r, t, n);
+		if (s && (a.memoizedState = n, Fc = !0), a = a.queue, Hs(bs.bind(null, r, a, e), [e]), e = a.getSnapshot !== t || s || B !== null && !!(B.memoizedState.tag & 1), Ls(e ? 9 : 8, { destroy: void 0 }, ys.bind(null, r, a, n, t), null), e) {
+			if (r.flags |= 2048, K === null) throw Error(i(349));
+			o || Go & 127 || vs(r, t, n);
 		}
 		return n;
 	}
-	function ys(e, t, n) {
+	function vs(e, t, n) {
 		e.flags |= 16384, e = {
 			getSnapshot: t,
 			value: n
-		}, t = R.updateQueue, t === null ? (t = us(), R.updateQueue = t, t.stores = [e]) : (n = t.stores, n === null ? t.stores = [e] : n.push(e));
+		}, t = R.updateQueue, t === null ? (t = ls(), R.updateQueue = t, t.stores = [e]) : (n = t.stores, n === null ? t.stores = [e] : n.push(e));
 	}
-	function bs(e, t, n, r) {
-		t.value = n, t.getSnapshot = r, Ss(t) && Cs(e);
+	function ys(e, t, n, r) {
+		t.value = n, t.getSnapshot = r, xs(t) && Ss(e);
 	}
-	function xs(e, t, n) {
+	function bs(e, t, n) {
 		return n(function() {
-			Ss(t) && Cs(e);
+			xs(t) && Ss(e);
 		});
 	}
-	function Ss(e) {
+	function xs(e) {
 		var t = e.getSnapshot;
 		e = e.value;
 		try {
@@ -3240,15 +3240,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			return !0;
 		}
 	}
-	function Cs(e) {
+	function Ss(e) {
 		var t = Pi(e, 2);
 		t !== null && Pd(t, e, 2);
 	}
-	function ws(e) {
-		var t = cs();
+	function Cs(e) {
+		var t = ss();
 		if (typeof e == "function") {
 			var n = e;
-			if (e = n(), Yo) {
+			if (e = n(), Jo) {
 				ot(!0);
 				try {
 					n();
@@ -3261,15 +3261,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			pending: null,
 			lanes: 0,
 			dispatch: null,
-			lastRenderedReducer: ms,
+			lastRenderedReducer: ps,
 			lastRenderedState: e
 		}, t;
 	}
-	function Ts(e, t, n, r) {
-		return e.baseState = n, gs(e, z, typeof r == "function" ? r : ms);
+	function ws(e, t, n, r) {
+		return e.baseState = n, hs(e, z, typeof r == "function" ? r : ps);
 	}
-	function Es(e, t, n, r, a) {
-		if (mc(e)) throw Error(i(485));
+	function Ts(e, t, n, r, a) {
+		if (pc(e)) throw Error(i(485));
 		if (e = t.action, e !== null) {
 			var o = {
 				payload: a,
@@ -3284,58 +3284,58 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					o.listeners.push(e);
 				}
 			};
-			D.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, Ds(t, o)) : (o.next = n.next, t.pending = n.next = o);
+			D.T === null ? o.isTransition = !1 : n(!0), r(o), n = t.pending, n === null ? (o.next = t.pending = o, Es(t, o)) : (o.next = n.next, t.pending = n.next = o);
 		}
 	}
-	function Ds(e, t) {
+	function Es(e, t) {
 		var n = t.action, r = t.payload, i = e.state;
 		if (t.isTransition) {
 			var a = D.T, o = {};
 			o.types = a === null ? null : a.types, D.T = o;
 			try {
 				var s = n(i, r), c = D.S;
-				c !== null && c(o, s), Os(e, t, s);
+				c !== null && c(o, s), Ds(e, t, s);
 			} catch (n) {
-				As(e, t, n);
+				ks(e, t, n);
 			} finally {
 				a !== null && o.types !== null && (a.types = o.types), D.T = a;
 			}
 		} else try {
-			a = n(i, r), Os(e, t, a);
+			a = n(i, r), Ds(e, t, a);
 		} catch (n) {
-			As(e, t, n);
+			ks(e, t, n);
 		}
 	}
-	function Os(e, t, n) {
+	function Ds(e, t, n) {
 		typeof n == "object" && n && typeof n.then == "function" ? n.then(function(n) {
-			ks(e, t, n);
+			Os(e, t, n);
 		}, function(n) {
-			return As(e, t, n);
-		}) : ks(e, t, n);
+			return ks(e, t, n);
+		}) : Os(e, t, n);
+	}
+	function Os(e, t, n) {
+		t.status = "fulfilled", t.value = n, As(t), e.state = n, t = e.pending, t !== null && (n = t.next, n === t ? e.pending = null : (n = n.next, t.next = n, Es(e, n)));
 	}
 	function ks(e, t, n) {
-		t.status = "fulfilled", t.value = n, js(t), e.state = n, t = e.pending, t !== null && (n = t.next, n === t ? e.pending = null : (n = n.next, t.next = n, Ds(e, n)));
-	}
-	function As(e, t, n) {
 		var r = e.pending;
 		if (e.pending = null, r !== null) {
 			r = r.next;
 			do
-				t.status = "rejected", t.reason = n, js(t), t = t.next;
+				t.status = "rejected", t.reason = n, As(t), t = t.next;
 			while (t !== r);
 		}
 		e.action = null;
 	}
-	function js(e) {
+	function As(e) {
 		e = e.listeners;
 		for (var t = 0; t < e.length; t++) (0, e[t])();
 	}
-	function Ms(e, t) {
+	function js(e, t) {
 		return t;
 	}
-	function Ns(e, t) {
+	function Ms(e, t) {
 		if (P) {
-			var n = G.formState;
+			var n = K.formState;
 			if (n !== null) {
 				a: {
 					var r = R;
@@ -3360,48 +3360,48 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				r && (t = n[0]);
 			}
 		}
-		return n = cs(), n.memoizedState = n.baseState = t, r = {
+		return n = ss(), n.memoizedState = n.baseState = t, r = {
 			pending: null,
 			lanes: 0,
 			dispatch: null,
-			lastRenderedReducer: Ms,
+			lastRenderedReducer: js,
 			lastRenderedState: t
-		}, n.queue = r, n = dc.bind(null, R, r), r.dispatch = n, r = ws(!1), a = pc.bind(null, R, !1, r.queue), r = cs(), i = {
+		}, n.queue = r, n = uc.bind(null, R, r), r.dispatch = n, r = Cs(!1), a = fc.bind(null, R, !1, r.queue), r = ss(), i = {
 			state: t,
 			dispatch: null,
 			action: e,
 			pending: null
-		}, r.queue = i, n = Es.bind(null, R, i, a, n), i.dispatch = n, r.memoizedState = e, [
+		}, r.queue = i, n = Ts.bind(null, R, i, a, n), i.dispatch = n, r.memoizedState = e, [
 			t,
 			n,
 			!1
 		];
 	}
-	function Ps(e) {
-		return Fs(ls(), z, e);
+	function Ns(e) {
+		return Ps(cs(), z, e);
 	}
-	function Fs(e, t, n) {
-		if (t = gs(e, t, Ms)[0], e = hs(ms)[0], typeof t == "object" && t && typeof t.then == "function") try {
-			var r = ds(t);
+	function Ps(e, t, n) {
+		if (t = hs(e, t, js)[0], e = ms(ps)[0], typeof t == "object" && t && typeof t.then == "function") try {
+			var r = us(t);
 		} catch (e) {
 			throw e === $a ? to : e;
 		}
 		else r = t;
-		t = ls();
+		t = cs();
 		var i = t.queue, a = i.dispatch;
-		return n !== t.memoizedState && (R.flags |= 2048, Rs(9, { destroy: void 0 }, Is.bind(null, i, n), null)), [
+		return n !== t.memoizedState && (R.flags |= 2048, Ls(9, { destroy: void 0 }, Fs.bind(null, i, n), null)), [
 			r,
 			a,
 			e
 		];
 	}
-	function Is(e, t) {
+	function Fs(e, t) {
 		e.action = t;
 	}
-	function Ls(e) {
-		var t = ls(), n = z;
-		if (n !== null) return Fs(t, n, e);
-		ls(), t = t.memoizedState, n = ls();
+	function Is(e) {
+		var t = cs(), n = z;
+		if (n !== null) return Ps(t, n, e);
+		cs(), t = t.memoizedState, n = cs();
 		var r = n.queue.dispatch;
 		return n.memoizedState = e, [
 			t,
@@ -3409,60 +3409,60 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			!1
 		];
 	}
-	function Rs(e, t, n, r) {
+	function Ls(e, t, n, r) {
 		return e = {
 			tag: e,
 			create: n,
 			deps: r,
 			inst: t,
 			next: null
-		}, t = R.updateQueue, t === null && (t = us(), R.updateQueue = t), n = t.lastEffect, n === null ? t.lastEffect = e.next = e : (r = n.next, n.next = e, e.next = r, t.lastEffect = e), e;
+		}, t = R.updateQueue, t === null && (t = ls(), R.updateQueue = t), n = t.lastEffect, n === null ? t.lastEffect = e.next = e : (r = n.next, n.next = e, e.next = r, t.lastEffect = e), e;
 	}
-	function zs() {
-		return ls().memoizedState;
+	function Rs() {
+		return cs().memoizedState;
+	}
+	function zs(e, t, n, r) {
+		var i = ss();
+		R.flags |= e, i.memoizedState = Ls(1 | t, { destroy: void 0 }, n, r === void 0 ? null : r);
 	}
 	function Bs(e, t, n, r) {
 		var i = cs();
-		R.flags |= e, i.memoizedState = Rs(1 | t, { destroy: void 0 }, n, r === void 0 ? null : r);
-	}
-	function Vs(e, t, n, r) {
-		var i = ls();
 		r = r === void 0 ? null : r;
 		var a = i.memoizedState.inst;
-		z !== null && r !== null && es(r, z.memoizedState.deps) ? i.memoizedState = Rs(t, a, n, r) : (R.flags |= e, i.memoizedState = Rs(1 | t, a, n, r));
+		z !== null && r !== null && $o(r, z.memoizedState.deps) ? i.memoizedState = Ls(t, a, n, r) : (R.flags |= e, i.memoizedState = Ls(1 | t, a, n, r));
+	}
+	function Vs(e, t) {
+		zs(8390656, 8, e, t);
 	}
 	function Hs(e, t) {
-		Bs(8390656, 8, e, t);
+		Bs(2048, 8, e, t);
 	}
-	function Us(e, t) {
-		Vs(2048, 8, e, t);
-	}
-	function Ws(e) {
+	function Us(e) {
 		R.flags |= 4;
 		var t = R.updateQueue;
-		if (t === null) t = us(), R.updateQueue = t, t.events = [e];
+		if (t === null) t = ls(), R.updateQueue = t, t.events = [e];
 		else {
 			var n = t.events;
 			n === null ? t.events = [e] : n.push(e);
 		}
 	}
-	function Gs(e) {
-		var t = ls().memoizedState;
-		return Ws({
+	function Ws(e) {
+		var t = cs().memoizedState;
+		return Us({
 			ref: t,
 			nextImpl: e
 		}), function() {
-			if (W & 2) throw Error(i(440));
+			if (G & 2) throw Error(i(440));
 			return t.impl.apply(void 0, arguments);
 		};
 	}
+	function Gs(e, t) {
+		return Bs(4, 2, e, t);
+	}
 	function Ks(e, t) {
-		return Vs(4, 2, e, t);
+		return Bs(4, 4, e, t);
 	}
 	function qs(e, t) {
-		return Vs(4, 4, e, t);
-	}
-	function Js(e, t) {
 		if (typeof t == "function") {
 			e = e();
 			var n = t(e);
@@ -3474,22 +3474,22 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			t.current = null;
 		};
 	}
-	function Ys(e, t, n) {
-		n = n == null ? null : n.concat([e]), Vs(4, 4, Js.bind(null, t, e), n);
+	function Js(e, t, n) {
+		n = n == null ? null : n.concat([e]), Bs(4, 4, qs.bind(null, t, e), n);
 	}
-	function Xs() {}
+	function Ys() {}
+	function Xs(e, t) {
+		var n = cs();
+		t = t === void 0 ? null : t;
+		var r = n.memoizedState;
+		return t !== null && $o(t, r[1]) ? r[0] : (n.memoizedState = [e, t], e);
+	}
 	function Zs(e, t) {
-		var n = ls();
+		var n = cs();
 		t = t === void 0 ? null : t;
 		var r = n.memoizedState;
-		return t !== null && es(t, r[1]) ? r[0] : (n.memoizedState = [e, t], e);
-	}
-	function Qs(e, t) {
-		var n = ls();
-		t = t === void 0 ? null : t;
-		var r = n.memoizedState;
-		if (t !== null && es(t, r[1])) return r[0];
-		if (r = e(), Yo) {
+		if (t !== null && $o(t, r[1])) return r[0];
+		if (r = e(), Jo) {
 			ot(!0);
 			try {
 				e();
@@ -3499,22 +3499,22 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		return n.memoizedState = [r, t], r;
 	}
-	function $s(e, t, n) {
-		return n === void 0 || Go & 1073741824 && !(q & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = Md(), R.lanes |= e, sd |= e, n);
+	function Qs(e, t, n) {
+		return n === void 0 || Go & 1073741824 && !(J & 261930) ? e.memoizedState = t : (e.memoizedState = n, e = Md(), R.lanes |= e, sd |= e, n);
 	}
-	function ec(e, t, n, r) {
-		return Yr(n, t) ? n : Ao.current === null ? !(Go & 106) || Go & 1073741824 && !(q & 261930) ? (Ic = !0, e.memoizedState = n) : (e = Md(), R.lanes |= e, sd |= e, t) : (e = $s(e, n, r), Yr(e, t) || (Ic = !0), e);
+	function $s(e, t, n, r) {
+		return Yr(n, t) ? n : Ao.current === null ? !(Go & 106) || Go & 1073741824 && !(J & 261930) ? (Fc = !0, e.memoizedState = n) : (e = Md(), R.lanes |= e, sd |= e, t) : (e = Qs(e, n, r), Yr(e, t) || (Fc = !0), e);
 	}
-	function tc(e, t, n, r, i) {
+	function ec(e, t, n, r, i) {
 		var a = O.p;
 		O.p = a !== 0 && 8 > a ? a : 8;
 		var o = D.T, s = {};
-		s.types = o === null ? null : o.types, D.T = s, pc(e, !1, t, n);
+		s.types = o === null ? null : o.types, D.T = s, fc(e, !1, t, n);
 		try {
 			var c = i(), l = D.S;
-			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? fc(e, t, qa(c, r), jd(e)) : fc(e, t, r, jd(e));
+			l !== null && l(s, c), typeof c == "object" && c && typeof c.then == "function" ? dc(e, t, qa(c, r), jd(e)) : dc(e, t, r, jd(e));
 		} catch (n) {
-			fc(e, t, {
+			dc(e, t, {
 				then: function() {},
 				status: "rejected",
 				reason: n
@@ -3523,15 +3523,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			O.p = a, o !== null && s.types !== null && (o.types = s.types), D.T = o;
 		}
 	}
-	function nc() {}
-	function rc(e, t, n, r) {
+	function tc() {}
+	function nc(e, t, n, r) {
 		if (e.tag !== 5) throw Error(i(476));
-		var a = ic(e).queue;
-		tc(e, a, t, we, n === null ? nc : function() {
-			return ac(e), n(r);
+		var a = rc(e).queue;
+		ec(e, a, t, we, n === null ? tc : function() {
+			return ic(e), n(r);
 		});
 	}
-	function ic(e) {
+	function rc(e) {
 		var t = e.memoizedState;
 		if (t !== null) return t;
 		t = {
@@ -3542,7 +3542,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				pending: null,
 				lanes: 0,
 				dispatch: null,
-				lastRenderedReducer: ms,
+				lastRenderedReducer: ps,
 				lastRenderedState: we
 			},
 			next: null
@@ -3556,26 +3556,26 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				pending: null,
 				lanes: 0,
 				dispatch: null,
-				lastRenderedReducer: ms,
+				lastRenderedReducer: ps,
 				lastRenderedState: n
 			},
 			next: null
 		}, e.memoizedState = t, e = e.alternate, e !== null && (e.memoizedState = t), t;
 	}
-	function ac(e) {
-		var t = ic(e);
-		t.next === null && (t = e.alternate.memoizedState), fc(e, t.next.queue, {}, jd());
+	function ic(e) {
+		var t = rc(e);
+		t.next === null && (t = e.alternate.memoizedState), dc(e, t.next.queue, {}, jd());
 	}
-	function oc() {
+	function ac() {
 		return Aa(sh);
 	}
+	function oc() {
+		return cs().memoizedState;
+	}
 	function sc() {
-		return ls().memoizedState;
+		return cs().memoizedState;
 	}
-	function cc() {
-		return ls().memoizedState;
-	}
-	function lc(e) {
+	function cc(e) {
 		for (var t = e.return; t !== null;) {
 			switch (t.tag) {
 				case 24:
@@ -3589,7 +3589,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			t = t.return;
 		}
 	}
-	function uc(e, t, n) {
+	function lc(e, t, n) {
 		var r = jd();
 		n = {
 			lane: r,
@@ -3599,12 +3599,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			hasEagerState: !1,
 			eagerState: null,
 			next: null
-		}, mc(e) ? hc(t, n) : (n = Ni(e, t, n, r), n !== null && (Pd(n, e, r), gc(n, t, r)));
+		}, pc(e) ? mc(t, n) : (n = Ni(e, t, n, r), n !== null && (Pd(n, e, r), hc(n, t, r)));
 	}
-	function dc(e, t, n) {
-		fc(e, t, n, jd());
+	function uc(e, t, n) {
+		dc(e, t, n, jd());
 	}
-	function fc(e, t, n, r) {
+	function dc(e, t, n, r) {
 		var i = {
 			lane: r,
 			revertLane: 0,
@@ -3614,18 +3614,18 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			eagerState: null,
 			next: null
 		};
-		if (mc(e)) hc(t, i);
+		if (pc(e)) mc(t, i);
 		else {
 			var a = e.alternate;
 			if (e.lanes === 0 && (a === null || a.lanes === 0) && (a = t.lastRenderedReducer, a !== null)) try {
 				var o = t.lastRenderedState, s = a(o, n);
-				if (i.hasEagerState = !0, i.eagerState = s, Yr(s, o)) return Mi(e, t, i, 0), G === null && ji(), !1;
+				if (i.hasEagerState = !0, i.eagerState = s, Yr(s, o)) return Mi(e, t, i, 0), K === null && ji(), !1;
 			} catch {}
-			if (n = Ni(e, t, i, r), n !== null) return Pd(n, e, r), gc(n, t, r), !0;
+			if (n = Ni(e, t, i, r), n !== null) return Pd(n, e, r), hc(n, t, r), !0;
 		}
 		return !1;
 	}
-	function pc(e, t, n, r) {
+	function fc(e, t, n, r) {
 		if (r = {
 			lane: 2,
 			revertLane: Pf(),
@@ -3634,72 +3634,72 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			hasEagerState: !1,
 			eagerState: null,
 			next: null
-		}, mc(e)) {
+		}, pc(e)) {
 			if (t) throw Error(i(479));
 		} else t = Ni(e, n, r, 2), t !== null && Pd(t, e, 2);
 	}
-	function mc(e) {
+	function pc(e) {
 		var t = e.alternate;
 		return e === R || t !== null && t === R;
 	}
-	function hc(e, t) {
-		Jo = qo = !0;
+	function mc(e, t) {
+		qo = Ko = !0;
 		var n = e.pending;
 		n === null ? t.next = t : (t.next = n.next, n.next = t), e.pending = t;
 	}
-	function gc(e, t, n) {
+	function hc(e, t, n) {
 		if (n & 4194048) {
 			var r = t.lanes;
 			r &= e.pendingLanes, n |= r, t.lanes = n, Ct(e, n);
 		}
 	}
-	var _c = {
+	var gc = {
 		readContext: Aa,
-		use: fs,
-		useCallback: B,
-		useContext: B,
-		useEffect: B,
-		useImperativeHandle: B,
-		useLayoutEffect: B,
-		useInsertionEffect: B,
-		useMemo: B,
-		useReducer: B,
-		useRef: B,
-		useState: B,
-		useDebugValue: B,
-		useDeferredValue: B,
-		useTransition: B,
-		useSyncExternalStore: B,
-		useId: B,
-		useHostTransitionStatus: B,
-		useFormState: B,
-		useActionState: B,
-		useOptimistic: B,
-		useMemoCache: B,
-		useCacheRefresh: B,
-		useEffectEvent: B
-	}, vc = {
+		use: ds,
+		useCallback: V,
+		useContext: V,
+		useEffect: V,
+		useImperativeHandle: V,
+		useLayoutEffect: V,
+		useInsertionEffect: V,
+		useMemo: V,
+		useReducer: V,
+		useRef: V,
+		useState: V,
+		useDebugValue: V,
+		useDeferredValue: V,
+		useTransition: V,
+		useSyncExternalStore: V,
+		useId: V,
+		useHostTransitionStatus: V,
+		useFormState: V,
+		useActionState: V,
+		useOptimistic: V,
+		useMemoCache: V,
+		useCacheRefresh: V,
+		useEffectEvent: V
+	}, _c = {
 		readContext: Aa,
-		use: fs,
+		use: ds,
 		useCallback: function(e, t) {
-			return cs().memoizedState = [e, t === void 0 ? null : t], e;
+			return ss().memoizedState = [e, t === void 0 ? null : t], e;
 		},
 		useContext: Aa,
-		useEffect: Hs,
+		useEffect: Vs,
 		useImperativeHandle: function(e, t, n) {
-			n = n == null ? null : n.concat([e]), Bs(4194308, 4, Js.bind(null, t, e), n);
+			n = n == null ? null : n.concat([e]), zs(4194308, 4, qs.bind(null, t, e), n);
 		},
 		useLayoutEffect: function(e, t) {
-			return Bs(4194308, 4, e, t);
+			return zs(4194308, 4, e, t);
 		},
 		useInsertionEffect: function(e, t) {
-			Bs(4, 2, e, t);
+			zs(4, 2, e, t);
 		},
 		useMemo: function(e, t) {
-			var n = cs();
+			var n = ss();
 			t = t === void 0 ? null : t;
 			var r = e();
-			if (Yo) {
+			if (Jo) {
 				ot(!0);
 				try {
 					e();
@@ -3710,10 +3710,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			return n.memoizedState = [r, t], r;
 		},
 		useReducer: function(e, t, n) {
-			var r = cs();
+			var r = ss();
 			if (n !== void 0) {
 				var i = n(t);
-				if (Yo) {
+				if (Jo) {
 					ot(!0);
 					try {
 						n(t);
@@ -3728,54 +3728,54 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				dispatch: null,
 				lastRenderedReducer: e,
 				lastRenderedState: i
-			}, r.queue = e, e = e.dispatch = uc.bind(null, R, e), [r.memoizedState, e];
+			}, r.queue = e, e = e.dispatch = lc.bind(null, R, e), [r.memoizedState, e];
 		},
 		useRef: function(e) {
-			var t = cs();
+			var t = ss();
 			return e = { current: e }, t.memoizedState = e;
 		},
 		useState: function(e) {
-			e = ws(e);
-			var t = e.queue, n = dc.bind(null, R, t);
+			e = Cs(e);
+			var t = e.queue, n = uc.bind(null, R, t);
 			return t.dispatch = n, [e.memoizedState, n];
 		},
-		useDebugValue: Xs,
+		useDebugValue: Ys,
 		useDeferredValue: function(e, t) {
-			return $s(cs(), e, t);
+			return Qs(ss(), e, t);
 		},
 		useTransition: function() {
-			var e = ws(!1);
-			return e = tc.bind(null, R, e.queue, !0, !1), cs().memoizedState = e, [!1, e];
+			var e = Cs(!1);
+			return e = ec.bind(null, R, e.queue, !0, !1), ss().memoizedState = e, [!1, e];
 		},
 		useSyncExternalStore: function(e, t, n) {
-			var r = R, a = cs();
+			var r = R, a = ss();
 			if (P) {
 				if (n === void 0) throw Error(i(407));
 				n = n();
 			} else {
-				if (n = t(), G === null) throw Error(i(349));
-				q & 127 || ys(r, t, n);
+				if (n = t(), K === null) throw Error(i(349));
+				J & 127 || vs(r, t, n);
 			}
 			a.memoizedState = n;
 			var o = {
 				value: n,
 				getSnapshot: t
 			};
-			return a.queue = o, Hs(xs.bind(null, r, o, e), [e]), r.flags |= 2048, Rs(9, { destroy: void 0 }, bs.bind(null, r, o, n, t), null), n;
+			return a.queue = o, Vs(bs.bind(null, r, o, e), [e]), r.flags |= 2048, Ls(9, { destroy: void 0 }, ys.bind(null, r, o, n, t), null), n;
 		},
 		useId: function() {
-			var e = cs(), t = G.identifierPrefix;
+			var e = ss(), t = K.identifierPrefix;
 			if (P) {
 				var n = ia, r = ra;
-				n = (r & ~(1 << 32 - st(r) - 1)).toString(32) + n, t = "_" + t + "R_" + n, n = Xo++, 0 < n && (t += "H" + n.toString(32)), t += "_";
-			} else n = $o++, t = "_" + t + "r_" + n.toString(32) + "_";
+				n = (r & ~(1 << 32 - st(r) - 1)).toString(32) + n, t = "_" + t + "R_" + n, n = Yo++, 0 < n && (t += "H" + n.toString(32)), t += "_";
+			} else n = Qo++, t = "_" + t + "r_" + n.toString(32) + "_";
 			return e.memoizedState = t;
 		},
-		useHostTransitionStatus: oc,
-		useFormState: Ns,
-		useActionState: Ns,
+		useHostTransitionStatus: ac,
+		useFormState: Ms,
+		useActionState: Ms,
 		useOptimistic: function(e) {
-			var t = cs();
+			var t = ss();
 			t.memoizedState = t.baseState = e;
 			var n = {
 				pending: null,
@@ -3784,94 +3784,94 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				lastRenderedReducer: null,
 				lastRenderedState: null
 			};
-			return t.queue = n, t = pc.bind(null, R, !0, n), n.dispatch = t, [e, t];
+			return t.queue = n, t = fc.bind(null, R, !0, n), n.dispatch = t, [e, t];
 		},
-		useMemoCache: ps,
+		useMemoCache: fs,
 		useCacheRefresh: function() {
-			return cs().memoizedState = lc.bind(null, R);
+			return ss().memoizedState = cc.bind(null, R);
 		},
 		useEffectEvent: function(e) {
-			var t = cs(), n = { impl: e };
+			var t = ss(), n = { impl: e };
 			return t.memoizedState = n, function() {
-				if (W & 2) throw Error(i(440));
+				if (G & 2) throw Error(i(440));
 				return n.impl.apply(void 0, arguments);
 			};
 		}
+	}, vc = {
+		readContext: Aa,
+		use: ds,
+		useCallback: Xs,
+		useContext: Aa,
+		useEffect: Hs,
+		useImperativeHandle: Js,
+		useInsertionEffect: Gs,
+		useLayoutEffect: Ks,
+		useMemo: Zs,
+		useReducer: ms,
+		useRef: Rs,
+		useState: function() {
+			return ms(ps);
+		},
+		useDebugValue: Ys,
+		useDeferredValue: function(e, t) {
+			return $s(cs(), z.memoizedState, e, t);
+		},
+		useTransition: function() {
+			var e = ms(ps)[0], t = cs().memoizedState;
+			return [typeof e == "boolean" ? e : us(e), t];
+		},
+		useSyncExternalStore: _s,
+		useId: oc,
+		useHostTransitionStatus: ac,
+		useFormState: Ns,
+		useActionState: Ns,
+		useOptimistic: function(e, t) {
+			return ws(cs(), z, e, t);
+		},
+		useMemoCache: fs,
+		useCacheRefresh: sc,
+		useEffectEvent: Ws
 	}, yc = {
 		readContext: Aa,
-		use: fs,
-		useCallback: Zs,
+		use: ds,
+		useCallback: Xs,
 		useContext: Aa,
-		useEffect: Us,
-		useImperativeHandle: Ys,
-		useInsertionEffect: Ks,
-		useLayoutEffect: qs,
-		useMemo: Qs,
-		useReducer: hs,
-		useRef: zs,
+		useEffect: Hs,
+		useImperativeHandle: Js,
+		useInsertionEffect: Gs,
+		useLayoutEffect: Ks,
+		useMemo: Zs,
+		useReducer: gs,
+		useRef: Rs,
 		useState: function() {
-			return hs(ms);
+			return gs(ps);
 		},
-		useDebugValue: Xs,
+		useDebugValue: Ys,
 		useDeferredValue: function(e, t) {
-			return ec(ls(), z.memoizedState, e, t);
+			var n = cs();
+			return z === null ? Qs(n, e, t) : $s(n, z.memoizedState, e, t);
 		},
 		useTransition: function() {
-			var e = hs(ms)[0], t = ls().memoizedState;
-			return [typeof e == "boolean" ? e : ds(e), t];
+			var e = gs(ps)[0], t = cs().memoizedState;
+			return [typeof e == "boolean" ? e : us(e), t];
 		},
-		useSyncExternalStore: vs,
-		useId: sc,
-		useHostTransitionStatus: oc,
-		useFormState: Ps,
-		useActionState: Ps,
+		useSyncExternalStore: _s,
+		useId: oc,
+		useHostTransitionStatus: ac,
+		useFormState: Is,
+		useActionState: Is,
 		useOptimistic: function(e, t) {
-			return Ts(ls(), z, e, t);
+			var n = cs();
+			return z === null ? (n.baseState = e, [e, n.queue.dispatch]) : ws(n, z, e, t);
 		},
-		useMemoCache: ps,
-		useCacheRefresh: cc,
-		useEffectEvent: Gs
-	}, bc = {
-		readContext: Aa,
-		use: fs,
-		useCallback: Zs,
-		useContext: Aa,
-		useEffect: Us,
-		useImperativeHandle: Ys,
-		useInsertionEffect: Ks,
-		useLayoutEffect: qs,
-		useMemo: Qs,
-		useReducer: _s,
-		useRef: zs,
-		useState: function() {
-			return _s(ms);
-		},
-		useDebugValue: Xs,
-		useDeferredValue: function(e, t) {
-			var n = ls();
-			return z === null ? $s(n, e, t) : ec(n, z.memoizedState, e, t);
-		},
-		useTransition: function() {
-			var e = _s(ms)[0], t = ls().memoizedState;
-			return [typeof e == "boolean" ? e : ds(e), t];
-		},
-		useSyncExternalStore: vs,
-		useId: sc,
-		useHostTransitionStatus: oc,
-		useFormState: Ls,
-		useActionState: Ls,
-		useOptimistic: function(e, t) {
-			var n = ls();
-			return z === null ? (n.baseState = e, [e, n.queue.dispatch]) : Ts(n, z, e, t);
-		},
-		useMemoCache: ps,
-		useCacheRefresh: cc,
-		useEffectEvent: Gs
+		useMemoCache: fs,
+		useCacheRefresh: sc,
+		useEffectEvent: Ws
 	};
-	function xc(e, t, n, r) {
+	function bc(e, t, n, r) {
 		t = e.memoizedState, n = n(r, t), n = n == null ? t : C({}, t, n), e.memoizedState = n, e.lanes === 0 && (e.updateQueue.baseState = n);
 	}
-	var Sc = {
+	var xc = {
 		enqueueSetState: function(e, t, n) {
 			e = e._reactInternals;
 			var r = jd(), i = xo(r);
@@ -3888,28 +3888,28 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			r.tag = 2, t != null && (r.callback = t), t = So(e, r, n), t !== null && (Pd(t, e, n), Co(t, e, n));
 		}
 	};
-	function Cc(e, t, n, r, i, a, o) {
+	function Sc(e, t, n, r, i, a, o) {
 		return e = e.stateNode, typeof e.shouldComponentUpdate == "function" ? e.shouldComponentUpdate(r, a, o) : t.prototype && t.prototype.isPureReactComponent ? !Xr(n, r) || !Xr(i, a) : !0;
 	}
-	function wc(e, t, n, r) {
-		e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(n, r), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(n, r), t.state !== e && Sc.enqueueReplaceState(t, t.state, null);
+	function Cc(e, t, n, r) {
+		e = t.state, typeof t.componentWillReceiveProps == "function" && t.componentWillReceiveProps(n, r), typeof t.UNSAFE_componentWillReceiveProps == "function" && t.UNSAFE_componentWillReceiveProps(n, r), t.state !== e && xc.enqueueReplaceState(t, t.state, null);
 	}
-	function Tc(e, t) {
+	function wc(e, t) {
 		var n = t;
 		if ("ref" in t) for (var r in n = {}, t) r !== "ref" && (n[r] = t[r]);
 		if (e = e.defaultProps) for (var i in n === t && (n = C({}, n)), e) n[i] === void 0 && (n[i] = e[i]);
 		return n;
 	}
-	function Ec(e) {
+	function Tc(e) {
 		Di(e);
 	}
-	function Dc(e) {
+	function Ec(e) {
 		console.error(e);
 	}
-	function Oc(e) {
+	function Dc(e) {
 		Di(e);
 	}
-	function kc(e, t) {
+	function Oc(e, t) {
 		try {
 			var n = e.onUncaughtError;
 			n(t.value, { componentStack: t.stack });
@@ -3919,7 +3919,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			});
 		}
 	}
-	function Ac(e, t, n) {
+	function kc(e, t, n) {
 		try {
 			var r = e.onCaughtError;
 			r(n.value, {
@@ -3932,38 +3932,38 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			});
 		}
 	}
-	function jc(e, t, n) {
+	function Ac(e, t, n) {
 		return n = xo(n), n.tag = 3, n.payload = { element: null }, n.callback = function() {
-			kc(e, t);
+			Oc(e, t);
 		}, n;
 	}
-	function Mc(e) {
+	function jc(e) {
 		return e = xo(e), e.tag = 3, e;
 	}
-	function Nc(e, t, n, r) {
+	function Mc(e, t, n, r) {
 		var i = n.type.getDerivedStateFromError;
 		if (typeof i == "function") {
 			var a = r.value;
 			e.payload = function() {
 				return i(a);
 			}, e.callback = function() {
-				Ac(t, n, r);
+				kc(t, n, r);
 			};
 		}
 		var o = n.stateNode;
 		o !== null && typeof o.componentDidCatch == "function" && (e.callback = function() {
-			Ac(t, n, r), typeof i != "function" && (yd === null ? yd = /* @__PURE__ */ new Set([this]) : yd.add(this));
+			kc(t, n, r), typeof i != "function" && (yd === null ? yd = /* @__PURE__ */ new Set([this]) : yd.add(this));
 			var e = r.stack;
 			this.componentDidCatch(r.value, { componentStack: e === null ? "" : e });
 		});
 	}
-	function Pc(e, t, n, r, a) {
+	function Nc(e, t, n, r, a) {
 		if (n.flags |= 32768, typeof r == "object" && r && typeof r.then == "function") {
 			if (t = n.alternate, t !== null && Da(t, n, a, !0), n = Po.current, n !== null) {
 				switch (n.tag) {
 					case 31:
 					case 13:
-					case 19: return Fo === null ? Kd() : n.alternate === null && Y === 0 && (Y = 3), n.flags &= -257, n.flags |= 65536, n.lanes = a, r === no ? n.flags |= 16384 : (t = n.updateQueue, t === null ? n.updateQueue = /* @__PURE__ */ new Set([r]) : t.add(r), mf(e, r, a)), !1;
+					case 19: return Fo === null ? Kd() : n.alternate === null && od === 0 && (od = 3), n.flags &= -257, n.flags |= 65536, n.lanes = a, r === no ? n.flags |= 16384 : (t = n.updateQueue, t === null ? n.updateQueue = /* @__PURE__ */ new Set([r]) : t.add(r), mf(e, r, a)), !1;
 					case 22: return n.flags |= 65536, r === no ? n.flags |= 16384 : (t = n.updateQueue, t === null ? (t = {
 						transitions: null,
 						markerInstances: null,
@@ -3974,15 +3974,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			}
 			return mf(e, r, a), Kd(), !1;
 		}
-		if (P) return t = Po.current, t === null ? (r !== pa && (t = Error(i(423), { cause: r }), ba(Yi(t, n))), e = e.current.alternate, e.flags |= 65536, a &= -a, e.lanes |= a, r = Yi(r, n), a = jc(e.stateNode, r, a), wo(e, a), Y !== 4 && (Y = 2)) : (!(t.flags & 65536) && (t.flags |= 256), t.flags |= 65536, t.lanes = a, r !== pa && (e = Error(i(422), { cause: r }), ba(Yi(e, n)))), !1;
+		if (P) return t = Po.current, t === null ? (r !== pa && (t = Error(i(423), { cause: r }), ba(Yi(t, n))), e = e.current.alternate, e.flags |= 65536, a &= -a, e.lanes |= a, r = Yi(r, n), a = Ac(e.stateNode, r, a), wo(e, a), od !== 4 && (od = 2)) : (!(t.flags & 65536) && (t.flags |= 256), t.flags |= 65536, t.lanes = a, r !== pa && (e = Error(i(422), { cause: r }), ba(Yi(e, n)))), !1;
 		var o = Error(i(520), { cause: r });
-		if (o = Yi(o, n), fd === null ? fd = [o] : fd.push(o), Y !== 4 && (Y = 2), t === null) return !0;
+		if (o = Yi(o, n), fd === null ? fd = [o] : fd.push(o), od !== 4 && (od = 2), t === null) return !0;
 		r = Yi(r, n), n = t;
 		do {
 			switch (n.tag) {
-				case 3: return n.flags |= 65536, e = a & -a, n.lanes |= e, e = jc(n.stateNode, r, e), wo(n, e), !1;
+				case 3: return n.flags |= 65536, e = a & -a, n.lanes |= e, e = Ac(n.stateNode, r, e), wo(n, e), !1;
 				case 1:
-					if (t = n.type, o = n.stateNode, !(n.flags & 128) && (typeof t.getDerivedStateFromError == "function" || o !== null && typeof o.componentDidCatch == "function" && (yd === null || !yd.has(o)))) return n.flags |= 65536, a &= -a, n.lanes |= a, a = Mc(a), Nc(a, e, n, r), wo(n, a), !1;
+					if (t = n.type, o = n.stateNode, !(n.flags & 128) && (typeof t.getDerivedStateFromError == "function" || o !== null && typeof o.componentDidCatch == "function" && (yd === null || !yd.has(o)))) return n.flags |= 65536, a &= -a, n.lanes |= a, a = jc(a), Mc(a, e, n, r), wo(n, a), !1;
 					break;
 				case 22: if (n.memoizedState !== null) return n.flags |= 65536, !1;
 			}
@@ -3990,41 +3990,41 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		} while (n !== null);
 		return !1;
 	}
-	var Fc = Error(i(461)), Ic = !1;
-	function Lc(e, t, n, r) {
+	var Pc = Error(i(461)), Fc = !1;
+	function Ic(e, t, n, r) {
 		t.child = e === null ? _o(t, null, n, r) : go(t, e.child, n, r);
 	}
-	function Rc(e, t, n, r, i) {
+	function Lc(e, t, n, r, i) {
 		n = n.render;
 		var a = t.ref;
 		if ("ref" in r) {
 			var o = {};
 			for (var s in r) s !== "ref" && (o[s] = r[s]);
 		} else o = r;
-		return ka(t), r = ts(e, t, n, o, a, i), s = as(), e !== null && !Ic ? (os(e, t, i), fl(e, t, i)) : (P && s && sa(t), t.flags |= 1, Lc(e, t, r, i), t.child);
+		return ka(t), r = es(e, t, n, o, a, i), s = is(), e !== null && !Fc ? (as(e, t, i), dl(e, t, i)) : (P && s && sa(t), t.flags |= 1, Ic(e, t, r, i), t.child);
 	}
-	function zc(e, t, n, r, i) {
+	function Rc(e, t, n, r, i) {
 		if (e === null) {
 			var a = n.type;
-			return typeof a == "function" && !Bi(a) && a.defaultProps === void 0 && n.compare === null ? (t.tag = 15, t.type = a, Bc(e, t, a, r, i)) : (e = Ui(n.type, null, r, t, t.mode, i), e.ref = t.ref, e.return = t, t.child = e);
+			return typeof a == "function" && !Bi(a) && a.defaultProps === void 0 && n.compare === null ? (t.tag = 15, t.type = a, zc(e, t, a, r, i)) : (e = Ui(n.type, null, r, t, t.mode, i), e.ref = t.ref, e.return = t, t.child = e);
 		}
-		if (a = e.child, !pl(e, i)) {
+		if (a = e.child, !fl(e, i)) {
 			var o = a.memoizedProps;
-			if (n = n.compare, n = n === null ? Xr : n, n(o, r) && e.ref === t.ref) return fl(e, t, i);
+			if (n = n.compare, n = n === null ? Xr : n, n(o, r) && e.ref === t.ref) return dl(e, t, i);
 		}
 		return t.flags |= 1, e = Vi(a, r), e.ref = t.ref, e.return = t, t.child = e;
 	}
-	function Bc(e, t, n, r, i) {
+	function zc(e, t, n, r, i) {
 		if (e !== null) {
 			var a = e.memoizedProps;
 			if (Xr(a, r) && e.ref === t.ref) {
-				if (Ic = !1, t.pendingProps = r = a, pl(e, i)) e.flags & 131072 && (Ic = !0);
-				else return t.lanes = e.lanes, fl(e, t, i);
+				if (Fc = !1, t.pendingProps = r = a, fl(e, i)) e.flags & 131072 && (Fc = !0);
+				else return t.lanes = e.lanes, dl(e, t, i);
 			}
 		}
-		return Jc(e, t, n, r, i);
+		return qc(e, t, n, r, i);
 	}
-	function Vc(e, t, n, r) {
+	function Bc(e, t, n, r) {
 		var i = r.children, a = e === null ? null : e.memoizedState;
 		if (e === null && t.stateNode === null && (t.stateNode = {
 			_visibility: 1,
@@ -4037,17 +4037,17 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					for (r = t.child = e.child, i = 0; r !== null;) i = i | r.lanes | r.childLanes, r = r.sibling;
 					r = i & ~a;
 				} else r = 0, t.child = null;
-				return Uc(e, t, a, n, r);
+				return Hc(e, t, a, n, r);
 			}
 			if (n & 536870912) t.memoizedState = {
 				baseLanes: 0,
 				cachePool: null
 			}, e !== null && Za(t, a === null ? null : a.cachePool), a === null ? No() : Mo(t, a), Ro(t);
-			else return r = t.lanes = 536870912, Uc(e, t, a === null ? n : a.baseLanes | n, n, r);
+			else return r = t.lanes = 536870912, Hc(e, t, a === null ? n : a.baseLanes | n, n, r);
 		} else a === null ? (e !== null && Za(t, null), No(), zo()) : (Za(t, a.cachePool), Mo(t, a), zo(), t.memoizedState = null);
-		return Lc(e, t, i, n), t.child;
+		return Ic(e, t, i, n), t.child;
 	}
-	function Hc(e, t) {
+	function Vc(e, t) {
 		return e !== null && e.tag === 22 || t.stateNode !== null || (t.stateNode = {
 			_visibility: 1,
 			_pendingMarkers: null,
@@ -4055,7 +4055,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			_transitions: null
 		}), t.sibling;
 	}
-	function Uc(e, t, n, r, i) {
+	function Hc(e, t, n, r, i) {
 		var a = Xa();
 		return a = a === null ? null : {
 			parent: I._currentValue,
@@ -4065,23 +4065,23 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			cachePool: a
 		}, e !== null && Za(t, null), No(), Ro(t), e !== null && Da(e, t, r, !0), t.childLanes = i, null;
 	}
-	function Wc(e, t) {
-		return t = rl({
+	function Uc(e, t) {
+		return t = nl({
 			mode: t.mode,
 			children: t.children
 		}, e.mode), t.ref = e.ref, e.child = t, t.return = e, t;
 	}
-	function Gc(e, t, n) {
-		return go(t, e.child, null, n), e = Wc(t, t.pendingProps), e.flags |= 2, Bo(t), t.memoizedState = null, e;
+	function Wc(e, t, n) {
+		return go(t, e.child, null, n), e = Uc(t, t.pendingProps), e.flags |= 2, Bo(t), t.memoizedState = null, e;
 	}
-	function Kc(e, t, n) {
+	function Gc(e, t, n) {
 		var r = t.pendingProps, a = !!(t.flags & 128);
 		if (t.flags &= -129, e === null) {
 			if (P) {
-				if (r.mode === "hidden") return e = Wc(t, r), t.lanes = 536870912, e.memoizedState = {
+				if (r.mode === "hidden") return e = Uc(t, r), t.lanes = 536870912, e.memoizedState = {
 					baseLanes: 0,
 					cachePool: null
-				}, Hc(null, e);
+				}, Vc(null, e);
 				if (Lo(t), (e = N) ? (e = am(e, fa), e = e !== null && e.data === "&" ? e : null, e !== null && (t.memoizedState = {
 					dehydrated: e,
 					treeContext: na === null ? null : {
@@ -4093,22 +4093,22 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				}, n = Ki(e), n.return = t, t.child = n, ua = t, N = null)) : e = null, e === null) throw ma(t);
 				return t.lanes = 536870912, null;
 			}
-			return Wc(t, r);
+			return Uc(t, r);
 		}
 		var o = e.memoizedState;
 		if (o !== null) {
 			var s = o.dehydrated;
 			if (Lo(t), a) {
-				if (t.flags & 256) t.flags &= -257, t = Gc(e, t, n);
+				if (t.flags & 256) t.flags &= -257, t = Wc(e, t, n);
 				else if (t.memoizedState !== null) t.child = e.child, t.flags |= 128, t = null;
 				else throw Error(i(558));
-			} else if (Ic || Da(e, t, n, !1), a = (n & e.childLanes) !== 0, Ic || a) {
+			} else if (Fc || Da(e, t, n, !1), a = (n & e.childLanes) !== 0, Fc || a) {
 				if (Ao.current === null) {
-					if (r = G, r !== null && (s = wt(r, n), s !== 0 && s !== o.retryLane)) throw o.retryLane = s, Pi(e, s), Pd(r, e, s), Fc;
+					if (r = K, r !== null && (s = wt(r, n), s !== 0 && s !== o.retryLane)) throw o.retryLane = s, Pi(e, s), Pd(r, e, s), Pc;
 					Kd();
 				}
-				t = Gc(e, t, n);
-			} else e = o.treeContext, N = lm(s.nextSibling), ua = t, P = !0, da = null, fa = !1, e !== null && la(t, e), t = Wc(t, r), t.flags |= 134221824;
+				t = Wc(e, t, n);
+			} else e = o.treeContext, N = lm(s.nextSibling), ua = t, P = !0, da = null, fa = !1, e !== null && la(t, e), t = Uc(t, r), t.flags |= 134221824;
 			return t;
 		}
 		return e = Vi(e.child, {
@@ -4116,7 +4116,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			children: r.children
 		}), e.ref = t.ref, t.child = e, e.return = t, e;
 	}
-	function qc(e, t) {
+	function Kc(e, t) {
 		var n = t.ref;
 		if (n === null) e !== null && e.ref !== null && (t.flags |= 4194816);
 		else {
@@ -4124,52 +4124,52 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			(e === null || e.ref !== n) && (t.flags |= 4194816);
 		}
 	}
-	function Jc(e, t, n, r, i) {
-		return ka(t), n = ts(e, t, n, r, void 0, i), r = as(), e !== null && !Ic ? (os(e, t, i), fl(e, t, i)) : (P && r && sa(t), t.flags |= 1, Lc(e, t, n, i), t.child);
+	function qc(e, t, n, r, i) {
+		return ka(t), n = es(e, t, n, r, void 0, i), r = is(), e !== null && !Fc ? (as(e, t, i), dl(e, t, i)) : (P && r && sa(t), t.flags |= 1, Ic(e, t, n, i), t.child);
 	}
-	function Yc(e, t, n, r, i, a) {
-		return ka(t), t.updateQueue = null, n = rs(t, r, n, i), ns(e), r = as(), e !== null && !Ic ? (os(e, t, a), fl(e, t, a)) : (P && r && sa(t), t.flags |= 1, Lc(e, t, n, a), t.child);
+	function Jc(e, t, n, r, i, a) {
+		return ka(t), t.updateQueue = null, n = ns(t, r, n, i), ts(e), r = is(), e !== null && !Fc ? (as(e, t, a), dl(e, t, a)) : (P && r && sa(t), t.flags |= 1, Ic(e, t, n, a), t.child);
 	}
-	function Xc(e, t, n, r, i) {
+	function Yc(e, t, n, r, i) {
 		if (ka(t), t.stateNode === null) {
 			var a = Li, o = n.contextType;
-			typeof o == "object" && o && (a = Aa(o)), a = new n(r, a), t.memoizedState = a.state !== null && a.state !== void 0 ? a.state : null, a.updater = Sc, t.stateNode = a, a._reactInternals = t, a = t.stateNode, a.props = r, a.state = t.memoizedState, a.refs = {}, yo(t), o = n.contextType, a.context = typeof o == "object" && o ? Aa(o) : Li, a.state = t.memoizedState, o = n.getDerivedStateFromProps, typeof o == "function" && (xc(t, n, o, r), a.state = t.memoizedState), typeof n.getDerivedStateFromProps == "function" || typeof a.getSnapshotBeforeUpdate == "function" || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (o = a.state, typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount(), o !== a.state && Sc.enqueueReplaceState(a, a.state, null), Do(t, r, a, i), Eo(), a.state = t.memoizedState), typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !0;
+			typeof o == "object" && o && (a = Aa(o)), a = new n(r, a), t.memoizedState = a.state !== null && a.state !== void 0 ? a.state : null, a.updater = xc, t.stateNode = a, a._reactInternals = t, a = t.stateNode, a.props = r, a.state = t.memoizedState, a.refs = {}, yo(t), o = n.contextType, a.context = typeof o == "object" && o ? Aa(o) : Li, a.state = t.memoizedState, o = n.getDerivedStateFromProps, typeof o == "function" && (bc(t, n, o, r), a.state = t.memoizedState), typeof n.getDerivedStateFromProps == "function" || typeof a.getSnapshotBeforeUpdate == "function" || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (o = a.state, typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount(), o !== a.state && xc.enqueueReplaceState(a, a.state, null), Do(t, r, a, i), Eo(), a.state = t.memoizedState), typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !0;
 		} else if (e === null) {
 			a = t.stateNode;
-			var s = t.memoizedProps, c = Tc(n, s);
+			var s = t.memoizedProps, c = wc(n, s);
 			a.props = c;
 			var l = a.context, u = n.contextType;
 			o = Li, typeof u == "object" && u && (o = Aa(u));
 			var d = n.getDerivedStateFromProps;
-			u = typeof d == "function" || typeof a.getSnapshotBeforeUpdate == "function", s = t.pendingProps !== s, u || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (s || l !== o) && wc(t, a, r, o), vo = !1;
+			u = typeof d == "function" || typeof a.getSnapshotBeforeUpdate == "function", s = t.pendingProps !== s, u || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (s || l !== o) && Cc(t, a, r, o), vo = !1;
 			var f = t.memoizedState;
-			a.state = f, Do(t, r, a, i), Eo(), l = t.memoizedState, s || f !== l || vo ? (typeof d == "function" && (xc(t, n, d, r), l = t.memoizedState), (c = vo || Cc(t, n, c, r, f, l, o)) ? (u || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount()), typeof a.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = r, t.memoizedState = l), a.props = r, a.state = l, a.context = o, r = c) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !1);
+			a.state = f, Do(t, r, a, i), Eo(), l = t.memoizedState, s || f !== l || vo ? (typeof d == "function" && (bc(t, n, d, r), l = t.memoizedState), (c = vo || Sc(t, n, c, r, f, l, o)) ? (u || typeof a.UNSAFE_componentWillMount != "function" && typeof a.componentWillMount != "function" || (typeof a.componentWillMount == "function" && a.componentWillMount(), typeof a.UNSAFE_componentWillMount == "function" && a.UNSAFE_componentWillMount()), typeof a.componentDidMount == "function" && (t.flags |= 4194308)) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), t.memoizedProps = r, t.memoizedState = l), a.props = r, a.state = l, a.context = o, r = c) : (typeof a.componentDidMount == "function" && (t.flags |= 4194308), r = !1);
 		} else {
-			a = t.stateNode, bo(e, t), o = t.memoizedProps, u = Tc(n, o), a.props = u, d = t.pendingProps, f = a.context, l = n.contextType, c = Li, typeof l == "object" && l && (c = Aa(l)), s = n.getDerivedStateFromProps, (l = typeof s == "function" || typeof a.getSnapshotBeforeUpdate == "function") || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (o !== d || f !== c) && wc(t, a, r, c), vo = !1, f = t.memoizedState, a.state = f, Do(t, r, a, i), Eo();
+			a = t.stateNode, bo(e, t), o = t.memoizedProps, u = wc(n, o), a.props = u, d = t.pendingProps, f = a.context, l = n.contextType, c = Li, typeof l == "object" && l && (c = Aa(l)), s = n.getDerivedStateFromProps, (l = typeof s == "function" || typeof a.getSnapshotBeforeUpdate == "function") || typeof a.UNSAFE_componentWillReceiveProps != "function" && typeof a.componentWillReceiveProps != "function" || (o !== d || f !== c) && Cc(t, a, r, c), vo = !1, f = t.memoizedState, a.state = f, Do(t, r, a, i), Eo();
 			var p = t.memoizedState;
-			o !== d || f !== p || vo || e !== null && e.dependencies !== null && Oa(e.dependencies) ? (typeof s == "function" && (xc(t, n, s, r), p = t.memoizedState), (u = vo || Cc(t, n, u, r, f, p, c) || e !== null && e.dependencies !== null && Oa(e.dependencies)) ? (l || typeof a.UNSAFE_componentWillUpdate != "function" && typeof a.componentWillUpdate != "function" || (typeof a.componentWillUpdate == "function" && a.componentWillUpdate(r, p, c), typeof a.UNSAFE_componentWillUpdate == "function" && a.UNSAFE_componentWillUpdate(r, p, c)), typeof a.componentDidUpdate == "function" && (t.flags |= 4), typeof a.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), t.memoizedProps = r, t.memoizedState = p), a.props = r, a.state = p, a.context = c, r = u) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), r = !1);
+			o !== d || f !== p || vo || e !== null && e.dependencies !== null && Oa(e.dependencies) ? (typeof s == "function" && (bc(t, n, s, r), p = t.memoizedState), (u = vo || Sc(t, n, u, r, f, p, c) || e !== null && e.dependencies !== null && Oa(e.dependencies)) ? (l || typeof a.UNSAFE_componentWillUpdate != "function" && typeof a.componentWillUpdate != "function" || (typeof a.componentWillUpdate == "function" && a.componentWillUpdate(r, p, c), typeof a.UNSAFE_componentWillUpdate == "function" && a.UNSAFE_componentWillUpdate(r, p, c)), typeof a.componentDidUpdate == "function" && (t.flags |= 4), typeof a.getSnapshotBeforeUpdate == "function" && (t.flags |= 1024)) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), t.memoizedProps = r, t.memoizedState = p), a.props = r, a.state = p, a.context = c, r = u) : (typeof a.componentDidUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 4), typeof a.getSnapshotBeforeUpdate != "function" || o === e.memoizedProps && f === e.memoizedState || (t.flags |= 1024), r = !1);
 		}
-		return a = r, qc(e, t), r = !!(t.flags & 128), a || r ? (a = t.stateNode, n = r && typeof n.getDerivedStateFromError != "function" ? null : a.render(), t.flags |= 1, e !== null && r ? (t.child = go(t, e.child, null, i), t.child = go(t, null, n, i)) : Lc(e, t, n, i), t.memoizedState = a.state, e = t.child) : e = fl(e, t, i), e;
+		return a = r, Kc(e, t), r = !!(t.flags & 128), a || r ? (a = t.stateNode, n = r && typeof n.getDerivedStateFromError != "function" ? null : a.render(), t.flags |= 1, e !== null && r ? (t.child = go(t, e.child, null, i), t.child = go(t, null, n, i)) : Ic(e, t, n, i), t.memoizedState = a.state, e = t.child) : e = dl(e, t, i), e;
 	}
-	function Zc(e, t, n, r) {
-		return va(), t.flags |= 256, Lc(e, t, n, r), t.child;
+	function Xc(e, t, n, r) {
+		return va(), t.flags |= 256, Ic(e, t, n, r), t.child;
 	}
-	var Qc = {
+	var Zc = {
 		dehydrated: null,
 		treeContext: null,
 		retryLane: 0,
 		hydrationErrors: null
 	};
-	function $c(e) {
+	function Qc(e) {
 		return {
 			baseLanes: e,
 			cachePool: Qa()
 		};
 	}
-	function el(e, t, n) {
+	function $c(e, t, n) {
 		return e = e === null ? 0 : e.childLanes & ~n, t && (e |= ud), e;
 	}
-	function tl(e, t, n) {
+	function el(e, t, n) {
 		var r = t.pendingProps, i = !1, a = !!(t.flags & 128), o;
 		if ((o = a) || (o = e !== null && e.memoizedState === null ? !1 : !!(Vo.current & 2)), o && (i = !0, t.flags &= -129), o = !!(t.flags & 32), t.flags &= -33, e === null) {
 			if (P) {
@@ -4184,75 +4184,75 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				}, n = Ki(e), n.return = t, t.child = n, ua = t, N = null)) : e = null, e === null) throw ma(t);
 				return t.lanes = sm(e) ? 32 : 536870912, null;
 			}
-			return a = r.children, r = r.fallback, i ? (zo(), i = t.mode, a = rl({
+			return a = r.children, r = r.fallback, i ? (zo(), i = t.mode, a = nl({
 				mode: "hidden",
 				children: a
-			}, i), r = Wi(r, i, n, null), a.return = t, r.return = t, a.sibling = r, t.child = a, r = t.child, r.memoizedState = $c(n), r.childLanes = el(e, o, n), t.memoizedState = Qc, Hc(null, r)) : (Io(t), nl(t, a));
+			}, i), r = Wi(r, i, n, null), a.return = t, r.return = t, a.sibling = r, t.child = a, r = t.child, r.memoizedState = Qc(n), r.childLanes = $c(e, o, n), t.memoizedState = Zc, Vc(null, r)) : (Io(t), tl(t, a));
 		}
 		var s = e.memoizedState;
 		if (s !== null) {
 			var c = s.dehydrated;
-			if (c !== null) return al(e, t, a, o, r, c, s, n);
+			if (c !== null) return il(e, t, a, o, r, c, s, n);
 		}
 		return i ? (zo(), i = r.fallback, a = t.mode, s = e.child, c = s.sibling, r = Vi(s, {
 			mode: "hidden",
 			children: r.children
-		}), r.subtreeFlags = s.subtreeFlags & 1206910976, c === null ? (i = Wi(i, a, n, null), i.flags |= 2) : i = Vi(c, i), i.return = t, r.return = t, r.sibling = i, t.child = r, Hc(null, r), r = t.child, i = e.child.memoizedState, i === null ? i = $c(n) : (a = i.cachePool, a === null ? a = Qa() : (s = I._currentValue, a = a.parent === s ? a : {
+		}), r.subtreeFlags = s.subtreeFlags & 1206910976, c === null ? (i = Wi(i, a, n, null), i.flags |= 2) : i = Vi(c, i), i.return = t, r.return = t, r.sibling = i, t.child = r, Vc(null, r), r = t.child, i = e.child.memoizedState, i === null ? i = Qc(n) : (a = i.cachePool, a === null ? a = Qa() : (s = I._currentValue, a = a.parent === s ? a : {
 			parent: s,
 			pool: s
 		}), i = {
 			baseLanes: i.baseLanes | n,
 			cachePool: a
-		}), r.memoizedState = i, r.childLanes = el(e, o, n), t.memoizedState = Qc, Hc(e.child, r)) : (Io(t), n = e.child, e = n.sibling, n = Vi(n, {
+		}), r.memoizedState = i, r.childLanes = $c(e, o, n), t.memoizedState = Zc, Vc(e.child, r)) : (Io(t), n = e.child, e = n.sibling, n = Vi(n, {
 			mode: "visible",
 			children: r.children
 		}), n.return = t, n.sibling = null, e !== null && (o = t.deletions, o === null ? (t.deletions = [e], t.flags |= 16) : o.push(e)), t.child = n, t.memoizedState = null, n);
 	}
-	function nl(e, t) {
-		return t = rl({
+	function tl(e, t) {
+		return t = nl({
 			mode: "visible",
 			children: t
 		}, e.mode), t.return = e, e.child = t;
 	}
-	function rl(e, t) {
+	function nl(e, t) {
 		return e = zi(22, e, null, t), e.lanes = 0, e;
 	}
-	function il(e, t, n) {
-		return go(t, e.child, null, n), e = nl(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
+	function rl(e, t, n) {
+		return go(t, e.child, null, n), e = tl(t, t.pendingProps.children), e.flags |= 2, t.memoizedState = null, e;
 	}
-	function al(e, t, n, r, a, o, s, c) {
-		if (n) return t.flags & 256 ? (Io(t), t.flags &= -257, il(e, t, c)) : t.memoizedState === null ? (zo(), o = a.fallback, s = t.mode, a = rl({
+	function il(e, t, n, r, a, o, s, c) {
+		if (n) return t.flags & 256 ? (Io(t), t.flags &= -257, rl(e, t, c)) : t.memoizedState === null ? (zo(), o = a.fallback, s = t.mode, a = nl({
 			mode: "visible",
 			children: a.children
-		}, s), o = Wi(o, s, c, null), o.flags |= 2, a.return = t, o.return = t, a.sibling = o, t.child = a, go(t, e.child, null, c), a = t.child, a.memoizedState = $c(c), a.childLanes = el(e, r, c), t.memoizedState = Qc, Hc(null, a)) : (zo(), t.child = e.child, t.flags |= 128, null);
+		}, s), o = Wi(o, s, c, null), o.flags |= 2, a.return = t, o.return = t, a.sibling = o, t.child = a, go(t, e.child, null, c), a = t.child, a.memoizedState = Qc(c), a.childLanes = $c(e, r, c), t.memoizedState = Zc, Vc(null, a)) : (zo(), t.child = e.child, t.flags |= 128, null);
 		if (Io(t), sm(o)) {
 			if (r = o.nextSibling && o.nextSibling.dataset, r) var l = r.dgst;
 			return r = l, r !== "" && (a = Error(i(419)), a.stack = "", a.digest = r, ba({
 				value: a,
 				source: null,
 				stack: null
-			})), il(e, t, c);
+			})), rl(e, t, c);
 		}
-		if (Ic || Da(e, t, c, !1), r = (c & e.childLanes) !== 0, Ic || r) {
-			if (Ao.current !== null) return il(e, t, c);
-			if (r = G, r !== null && (a = wt(r, c), a !== 0 && a !== s.retryLane)) throw s.retryLane = a, Pi(e, a), Pd(r, e, a), Fc;
-			return om(o) || Kd(), il(e, t, c);
+		if (Fc || Da(e, t, c, !1), r = (c & e.childLanes) !== 0, Fc || r) {
+			if (Ao.current !== null) return rl(e, t, c);
+			if (r = K, r !== null && (a = wt(r, c), a !== 0 && a !== s.retryLane)) throw s.retryLane = a, Pi(e, a), Pd(r, e, a), Pc;
+			return om(o) || Kd(), rl(e, t, c);
 		}
-		return om(o) ? (t.flags |= 192, t.child = e.child, null) : (e = s.treeContext, N = lm(o.nextSibling), ua = t, P = !0, da = null, fa = !1, e !== null && la(t, e), t = nl(t, a.children), t.flags |= 134221824, t);
+		return om(o) ? (t.flags |= 192, t.child = e.child, null) : (e = s.treeContext, N = lm(o.nextSibling), ua = t, P = !0, da = null, fa = !1, e !== null && la(t, e), t = tl(t, a.children), t.flags |= 134221824, t);
 	}
-	function ol(e, t, n) {
+	function al(e, t, n) {
 		e.lanes |= t;
 		var r = e.alternate;
 		r !== null && (r.lanes |= t), Ta(e.return, t, n);
 	}
-	function sl(e) {
+	function ol(e) {
 		for (var t = null; e !== null;) {
 			var n = e.alternate;
 			n !== null && Wo(n) === null && (t = e), e = e.sibling;
 		}
 		return t;
 	}
-	function cl(e, t, n, r, i, a) {
+	function sl(e, t, n, r, i, a) {
 		var o = e.memoizedState;
 		o === null ? e.memoizedState = {
 			isBackwards: t,
@@ -4264,22 +4264,22 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			treeForkCount: a
 		} : (o.isBackwards = t, o.rendering = null, o.renderingStartTime = 0, o.last = r, o.tail = n, o.tailMode = i, o.treeForkCount = a);
 	}
-	function ll(e) {
+	function cl(e) {
 		var t = e.child;
 		for (e.child = null; t !== null;) {
 			var n = t.sibling;
 			t.sibling = e.child, e.child = t, t = n;
 		}
 	}
-	function ul(e, t, n) {
+	function ll(e, t, n) {
 		var r = t.pendingProps, i = r.revealOrder, a = r.tail;
 		r = r.children;
 		var o = Vo.current;
 		if (t.flags & 128) return Ho(t, o), null;
 		var s = !!(o & 2);
-		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, Ho(t, o), i === "backwards" && e !== null ? (ll(e), Lc(e, t, r, n), ll(e)) : Lc(e, t, r, n), r = P ? $i : 0, !s && e !== null && e.flags & 128) a: for (e = t.child; e !== null;) {
-			if (e.tag === 13) e.memoizedState !== null && ol(e, n, t);
-			else if (e.tag === 19) ol(e, n, t);
+		if (s ? (o = o & 1 | 2, t.flags |= 128) : o &= 1, Ho(t, o), i === "backwards" && e !== null ? (cl(e), Ic(e, t, r, n), cl(e)) : Ic(e, t, r, n), r = P ? $i : 0, !s && e !== null && e.flags & 128) a: for (e = t.child; e !== null;) {
+			if (e.tag === 13) e.memoizedState !== null && al(e, n, t);
+			else if (e.tag === 19) al(e, n, t);
 			else if (e.child !== null) {
 				e.child.return = e, e = e.child;
 				continue;
@@ -4293,7 +4293,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		switch (i) {
 			case "backwards":
-				n = sl(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null, ll(t)), cl(t, !0, i, null, a, r);
+				n = ol(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null, cl(t)), sl(t, !0, i, null, a, r);
 				break;
 			case "unstable_legacy-backwards":
 				for (n = null, i = t.child, t.child = null; i !== null;) {
@@ -4303,23 +4303,23 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 					e = i.sibling, i.sibling = n, n = i, i = e;
 				}
-				cl(t, !0, n, null, a, r);
+				sl(t, !0, n, null, a, r);
 				break;
 			case "together":
-				cl(t, !1, null, null, void 0, r);
+				sl(t, !1, null, null, void 0, r);
 				break;
 			case "independent":
 				t.memoizedState = null;
 				break;
-			default: n = sl(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null), cl(t, !1, i, n, a, r);
+			default: n = ol(t.child), n === null ? (i = t.child, t.child = null) : (i = n.sibling, n.sibling = null), sl(t, !1, i, n, a, r);
 		}
 		return t.child;
 	}
-	function dl(e, t, n) {
+	function ul(e, t, n) {
 		var r = t.pendingProps;
-		return Ca(t, t.type, r.value), Lc(e, t, r.children, n), t.child;
+		return Ca(t, t.type, r.value), Ic(e, t, r.children, n), t.child;
 	}
-	function fl(e, t, n) {
+	function dl(e, t, n) {
 		if (e !== null && (t.dependencies = e.dependencies), sd |= t.lanes, (n & t.childLanes) === 0) {
 			if (e !== null) {
 				if (Da(e, t, n, !1), (n & t.childLanes) === 0) return null;
@@ -4332,10 +4332,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		return t.child;
 	}
-	function pl(e, t) {
+	function fl(e, t) {
 		return (e.lanes & t) !== 0 || (e = e.dependencies, !!(e !== null && Oa(e)));
 	}
-	function ml(e, t, n) {
+	function pl(e, t, n) {
 		switch (t.tag) {
 			case 3:
 				Ne(t, t.stateNode.containerInfo), Ca(t, I, e.memoizedState.cache), va();
@@ -4359,49 +4359,49 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					if (r.dehydrated !== null) return Io(t), t.flags |= 128, null;
 					r = Da(e, t, n, !1);
 					var i = t.child.childLanes;
-					return r || (n & i) !== 0 ? tl(e, t, n) : (Io(t), e = fl(e, t, n), e === null ? null : e.sibling);
+					return r || (n & i) !== 0 ? el(e, t, n) : (Io(t), e = dl(e, t, n), e === null ? null : e.sibling);
 				}
 				Io(t);
 				break;
 			case 19:
-				if (t.flags & 128) return ul(e, t, n);
+				if (t.flags & 128) return ll(e, t, n);
 				if (i = !!(e.flags & 128), r = (n & t.childLanes) !== 0, r ||= (Da(e, t, n, !1), (n & t.childLanes) !== 0), i) {
-					if (r) return ul(e, t, n);
+					if (r) return ll(e, t, n);
 					t.flags |= 128;
 				}
 				if (i = t.memoizedState, i !== null && (i.rendering = null, i.tail = null, i.lastEffect = null), Ho(t, Vo.current), r) break;
 				return null;
-			case 22: return t.lanes = 0, Vc(e, t, n, t.pendingProps);
+			case 22: return t.lanes = 0, Bc(e, t, n, t.pendingProps);
 			case 24: Ca(t, I, e.memoizedState.cache);
 		}
-		return fl(e, t, n);
+		return dl(e, t, n);
 	}
-	function hl(e, t, n) {
+	function ml(e, t, n) {
 		if (e !== null) {
-			if (e.memoizedProps !== t.pendingProps) Ic = !0;
+			if (e.memoizedProps !== t.pendingProps) Fc = !0;
 			else {
-				if (!pl(e, n) && !(t.flags & 128)) return Ic = !1, ml(e, t, n);
-				Ic = !!(e.flags & 131072);
+				if (!fl(e, n) && !(t.flags & 128)) return Fc = !1, pl(e, t, n);
+				Fc = !!(e.flags & 131072);
 			}
-		} else Ic = !1, P && t.flags & 1048576 && oa(t, $i, t.index);
+		} else Fc = !1, P && t.flags & 1048576 && oa(t, $i, t.index);
 		switch (t.lanes = 0, t.tag) {
 			case 16:
 				a: {
 					var r = t.pendingProps;
-					if (e = ao(t.elementType), t.type = e, typeof e == "function") Bi(e) ? (r = Tc(e, r), t.tag = 1, t = Xc(null, t, e, r, n)) : (t.tag = 0, t = Jc(null, t, e, r, n));
+					if (e = ao(t.elementType), t.type = e, typeof e == "function") Bi(e) ? (r = wc(e, r), t.tag = 1, t = Yc(null, t, e, r, n)) : (t.tag = 0, t = qc(null, t, e, r, n));
 					else {
 						if (e != null) {
 							var a = e.$$typeof;
 							if (a === le) {
-								t.tag = 11, t = Rc(null, t, e, r, n);
+								t.tag = 11, t = Lc(null, t, e, r, n);
 								break a;
 							}
 							if (a === fe) {
-								t.tag = 14, t = zc(null, t, e, r, n);
+								t.tag = 14, t = Rc(null, t, e, r, n);
 								break a;
 							}
 							if (a === E) {
-								t.tag = 10, t.type = e, t = dl(null, t, n);
+								t.tag = 10, t.type = e, t = ul(null, t, n);
 								break a;
 							}
 						}
@@ -4409,8 +4409,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 				}
 				return t;
-			case 0: return Jc(e, t, t.type, t.pendingProps, n);
-			case 1: return r = t.type, a = Tc(r, t.pendingProps), Xc(e, t, r, a, n);
+			case 0: return qc(e, t, t.type, t.pendingProps, n);
+			case 1: return r = t.type, a = wc(r, t.pendingProps), Yc(e, t, r, a, n);
 			case 3:
 				a: {
 					if (Ne(t, t.stateNode.containerInfo), e === null) throw Error(i(387));
@@ -4424,11 +4424,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							isDehydrated: !1,
 							cache: s.cache
 						}, t.updateQueue.baseState = o, t.memoizedState = o, t.flags & 256) {
-							t = Zc(e, t, r, n);
+							t = Xc(e, t, r, n);
 							break a;
 						}
 						if (r !== a) {
-							a = Yi(Error(i(424)), t), ba(a), t = Zc(e, t, r, n);
+							a = Yi(Error(i(424)), t), ba(a), t = Xc(e, t, r, n);
 							break a;
 						}
 						switch (e = t.stateNode.containerInfo, e.nodeType) {
@@ -4440,52 +4440,52 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						for (N = lm(e.firstChild), ua = t, P = !0, da = null, fa = !0, n = _o(t, null, r, n), t.child = n; n;) n.flags = n.flags & -3 | 134221824, n = n.sibling;
 					} else {
 						if (va(), r === a) {
-							t = fl(e, t, n);
+							t = dl(e, t, n);
 							break a;
 						}
-						Lc(e, t, r, n);
+						Ic(e, t, r, n);
 					}
 					t = t.child;
 				}
 				return t;
-			case 26: return qc(e, t), e === null ? (n = Nm(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : P || (t.stateNode = fp(t.type, t.pendingProps, je.current, t)) : t.memoizedState = Nm(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
-			case 27: return Fe(t), e === null && P && (r = t.stateNode = hm(t.type, t.pendingProps, je.current), ua = t, fa = !0, a = N, Sp(t.type) ? (um = a, N = lm(r.firstChild)) : N = a), Lc(e, t, t.pendingProps.children, n), qc(e, t), e === null && (t.flags |= 4194304), t.child;
-			case 5: return e === null && P && ((a = r = N) && (r = rm(r, t.type, t.pendingProps, fa), r === null ? a = !1 : (t.stateNode = r, ua = t, N = lm(r.firstChild), fa = !1, a = !0)), a || ma(t)), Fe(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(a, o) ? r = null : s !== null && pp(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = ts(e, t, is, null, null, n), sh._currentValue = a), qc(e, t), Lc(e, t, r, n), t.child;
+			case 26: return Kc(e, t), e === null ? (n = Nm(t.type, null, t.pendingProps, null)) ? t.memoizedState = n : P || (t.stateNode = fp(t.type, t.pendingProps, je.current, t)) : t.memoizedState = Nm(t.type, e.memoizedProps, t.pendingProps, e.memoizedState), null;
+			case 27: return Fe(t), e === null && P && (r = t.stateNode = hm(t.type, t.pendingProps, je.current), ua = t, fa = !0, a = N, Sp(t.type) ? (um = a, N = lm(r.firstChild)) : N = a), Ic(e, t, t.pendingProps.children, n), Kc(e, t), e === null && (t.flags |= 4194304), t.child;
+			case 5: return e === null && P && ((a = r = N) && (r = rm(r, t.type, t.pendingProps, fa), r === null ? a = !1 : (t.stateNode = r, ua = t, N = lm(r.firstChild), fa = !1, a = !0)), a || ma(t)), Fe(t), a = t.type, o = t.pendingProps, s = e === null ? null : e.memoizedProps, r = o.children, pp(a, o) ? r = null : s !== null && pp(a, s) && (t.flags |= 32), t.memoizedState !== null && (a = es(e, t, rs, null, null, n), sh._currentValue = a), Kc(e, t), Ic(e, t, r, n), t.child;
 			case 6: return e === null && P && ((e = n = N) && (n = im(n, t.pendingProps, fa), n === null ? e = !1 : (t.stateNode = n, ua = t, N = null, e = !0)), e || ma(t)), null;
-			case 13: return tl(e, t, n);
-			case 4: return Ne(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = go(t, null, r, n) : Lc(e, t, r, n), t.child;
-			case 11: return Rc(e, t, t.type, t.pendingProps, n);
-			case 7: return r = t.pendingProps, qc(e, t), Lc(e, t, r, n), t.child;
-			case 8: return Lc(e, t, t.pendingProps.children, n), t.child;
-			case 12: return Lc(e, t, t.pendingProps.children, n), t.child;
-			case 10: return dl(e, t, n);
-			case 9: return a = t.type._context, r = t.pendingProps.children, ka(t), a = Aa(a), r = r(a), t.flags |= 1, Lc(e, t, r, n), t.child;
-			case 14: return zc(e, t, t.type, t.pendingProps, n);
-			case 15: return Bc(e, t, t.type, t.pendingProps, n);
-			case 19: return ul(e, t, n);
-			case 31: return Kc(e, t, n);
-			case 22: return Vc(e, t, n, t.pendingProps);
-			case 24: return ka(t), r = Aa(I), e === null ? (a = Xa(), a === null && (a = G, o = Ia(), a.pooledCache = o, o.refCount++, o !== null && (a.pooledCacheLanes |= n), a = o), t.memoizedState = {
+			case 13: return el(e, t, n);
+			case 4: return Ne(t, t.stateNode.containerInfo), r = t.pendingProps, e === null ? t.child = go(t, null, r, n) : Ic(e, t, r, n), t.child;
+			case 11: return Lc(e, t, t.type, t.pendingProps, n);
+			case 7: return r = t.pendingProps, Kc(e, t), Ic(e, t, r, n), t.child;
+			case 8: return Ic(e, t, t.pendingProps.children, n), t.child;
+			case 12: return Ic(e, t, t.pendingProps.children, n), t.child;
+			case 10: return ul(e, t, n);
+			case 9: return a = t.type._context, r = t.pendingProps.children, ka(t), a = Aa(a), r = r(a), t.flags |= 1, Ic(e, t, r, n), t.child;
+			case 14: return Rc(e, t, t.type, t.pendingProps, n);
+			case 15: return zc(e, t, t.type, t.pendingProps, n);
+			case 19: return ll(e, t, n);
+			case 31: return Gc(e, t, n);
+			case 22: return Bc(e, t, n, t.pendingProps);
+			case 24: return ka(t), r = Aa(I), e === null ? (a = Xa(), a === null && (a = K, o = Ia(), a.pooledCache = o, o.refCount++, o !== null && (a.pooledCacheLanes |= n), a = o), t.memoizedState = {
 				parent: r,
 				cache: a
 			}, yo(t), Ca(t, I, a)) : ((e.lanes & n) !== 0 && (bo(e, t), Do(t, null, null, n), Eo()), a = e.memoizedState, o = t.memoizedState, a.parent === r ? (r = o.cache, Ca(t, I, r), r !== a.cache && Ea(t, [I], n, !0)) : (a = {
 				parent: r,
 				cache: r
-			}, t.memoizedState = a, t.lanes === 0 && (t.memoizedState = t.updateQueue.baseState = a), Ca(t, I, r))), Lc(e, t, t.pendingProps.children, n), t.child;
+			}, t.memoizedState = a, t.lanes === 0 && (t.memoizedState = t.updateQueue.baseState = a), Ca(t, I, r))), Ic(e, t, t.pendingProps.children, n), t.child;
 			case 30: return t.stateNode === null && (t.stateNode = {
 				autoName: null,
 				paired: null,
 				clones: null,
 				ref: null
-			}), r = t.pendingProps, r.name != null && r.name !== "auto" ? t.flags |= e === null ? 18882560 : 18874368 : P && sa(t), e !== null && e.memoizedProps.name !== r.name ? t.flags |= 4194816 : qc(e, t), Lc(e, t, r.children, n), t.child;
+			}), r = t.pendingProps, r.name != null && r.name !== "auto" ? t.flags |= e === null ? 18882560 : 18874368 : P && sa(t), e !== null && e.memoizedProps.name !== r.name ? t.flags |= 4194816 : Kc(e, t), Ic(e, t, r.children, n), t.child;
 			case 29: throw t.pendingProps;
 		}
 		throw Error(i(156, t.tag));
 	}
-	function gl(e) {
+	function hl(e) {
 		e.flags |= 4;
 	}
-	function _l(e, t, n, r, i) {
+	function gl(e, t, n, r, i) {
 		var a;
 		if ((a = !!(e.mode & 32)) && (a = n === null ? Jm(t, r) : Jm(t, r) && (r.src !== n.src || r.srcSet !== n.srcSet)), a) {
 			if (e.flags |= 16777216, (i & 335544128) === i) {
@@ -4495,17 +4495,17 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			}
 		} else e.flags &= -16777217;
 	}
-	function vl(e, t) {
+	function _l(e, t) {
 		if (t.type !== "stylesheet" || t.state.loading & 4) e.flags &= -16777217;
 		else if (e.flags |= 16777216, !Ym(t)) {
 			if (Ud()) e.flags |= 8192;
 			else throw oo = no, eo;
 		}
 	}
-	function yl(e, t) {
+	function vl(e, t) {
 		t !== null && (e.flags |= 4), e.flags & 16384 && (t = e.tag === 22 ? 536870912 : vt(), e.lanes |= t, dd |= t);
 	}
-	function bl(e, t) {
+	function yl(e, t) {
 		if (!P) switch (e.tailMode) {
 			case "visible": break;
 			case "collapsed":
@@ -4517,13 +4517,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				n === null ? e.tail = null : n.sibling = null;
 		}
 	}
-	function V(e) {
+	function H(e) {
 		var t = e.alternate !== null && e.alternate.child === e.child, n = 0, r = 0;
 		if (t) for (var i = e.child; i !== null;) n |= i.lanes | i.childLanes, r |= i.subtreeFlags & 1206910976, r |= i.flags & 1206910976, i.return = e, i = i.sibling;
 		else for (i = e.child; i !== null;) n |= i.lanes | i.childLanes, r |= i.subtreeFlags, r |= i.flags, i.return = e, i = i.sibling;
 		return e.subtreeFlags |= r, e.childLanes = n, t;
 	}
-	function xl(e, t, n) {
+	function bl(e, t, n) {
 		var r = t.pendingProps;
 		switch (ca(t), t.tag) {
 			case 16:
@@ -4534,28 +4534,28 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			case 8:
 			case 12:
 			case 9:
-			case 14: return V(t), null;
-			case 1: return V(t), null;
-			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), wa(I), Pe(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (_a(t) ? gl(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, ya())), V(t), null;
+			case 14: return H(t), null;
+			case 1: return H(t), null;
+			case 3: return n = t.stateNode, r = null, e !== null && (r = e.memoizedState.cache), t.memoizedState.cache !== r && (t.flags |= 2048), wa(I), Pe(), n.pendingContext && (n.context = n.pendingContext, n.pendingContext = null), (e === null || e.child === null) && (_a(t) ? hl(t) : e === null || e.memoizedState.isDehydrated && !(t.flags & 256) || (t.flags |= 1024, ya())), H(t), null;
 			case 26:
 				var a = t.type, o = t.memoizedState;
-				return e === null ? (gl(t), o === null ? (V(t), _l(t, a, null, r, n)) : (V(t), vl(t, o))) : o ? o === e.memoizedState ? (V(t), t.flags &= -16777217) : (gl(t), V(t), vl(t, o)) : (e = e.memoizedProps, e !== r && gl(t), V(t), _l(t, a, e, r, n)), null;
+				return e === null ? (hl(t), o === null ? (H(t), gl(t, a, null, r, n)) : (H(t), _l(t, o))) : o ? o === e.memoizedState ? (H(t), t.flags &= -16777217) : (hl(t), H(t), _l(t, o)) : (e = e.memoizedProps, e !== r && hl(t), H(t), gl(t, a, e, r, n)), null;
 			case 27:
-				if (Ie(t), n = je.current, a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && gl(t);
+				if (Ie(t), n = je.current, a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && hl(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(i(166));
-						return V(t), t.subtreeFlags &= -33554433, null;
+						return H(t), t.subtreeFlags &= -33554433, null;
 					}
-					e = ke.current, _a(t) ? ha(t, e) : (e = hm(a, r, n), t.stateNode = e, gl(t));
+					e = ke.current, _a(t) ? ha(t, e) : (e = hm(a, r, n), t.stateNode = e, hl(t));
 				}
-				return V(t), t.subtreeFlags &= -33554433, null;
+				return H(t), t.subtreeFlags &= -33554433, null;
 			case 5:
-				if (Ie(t), a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && gl(t);
+				if (Ie(t), a = t.type, e !== null && t.stateNode != null) e.memoizedProps !== r && hl(t);
 				else {
 					if (!r) {
 						if (t.stateNode === null) throw Error(i(166));
-						return V(t), t.subtreeFlags &= -33554433, null;
+						return H(t), t.subtreeFlags &= -33554433, null;
 					}
 					if (o = ke.current, _a(t)) ha(t, o);
 					else {
@@ -4610,12 +4610,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 								break a;
 							default: r = !1;
 						}
-						r && gl(t);
+						r && hl(t);
 					}
 				}
-				return V(t), t.subtreeFlags &= -33554433, _l(t, t.type, e === null ? null : e.memoizedProps, t.pendingProps, n), null;
+				return H(t), t.subtreeFlags &= -33554433, gl(t, t.type, e === null ? null : e.memoizedProps, t.pendingProps, n), null;
 			case 6:
-				if (e && t.stateNode != null) e.memoizedProps !== r && gl(t);
+				if (e && t.stateNode != null) e.memoizedProps !== r && hl(t);
 				else {
 					if (typeof r != "string" && t.stateNode === null) throw Error(i(166));
 					if (e = je.current, _a(t)) {
@@ -4626,7 +4626,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						e[At] = t, e = !!(e.nodeValue === n || r !== null && !0 === r.suppressHydrationWarning || ep(e.nodeValue, n)), e || ma(t, !0);
 					} else e = lp(e).createTextNode(r), e[At] = t, t.stateNode = e;
 				}
-				return V(t), null;
+				return H(t), null;
 			case 31:
 				if (n = t.memoizedState, e === null || e.memoizedState !== null) {
 					if (r = _a(t), n !== null) {
@@ -4635,12 +4635,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							if (e = t.memoizedState, e = e === null ? null : e.dehydrated, !e) throw Error(i(557));
 							e[At] = t;
 						} else va(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
-						V(t), e = !1;
+						H(t), e = !1;
 					} else n = ya(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = n), e = !0;
 					if (!e) return t.flags & 256 ? (Bo(t), t) : (Bo(t), null);
 					if (t.flags & 128) throw Error(i(558));
 				}
-				return V(t), null;
+				return H(t), null;
 			case 13:
 				if (r = t.memoizedState, e === null || e.memoizedState !== null && e.memoizedState.dehydrated !== null) {
 					if (a = _a(t), r !== null && r.dehydrated !== null) {
@@ -4649,32 +4649,32 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							if (a = t.memoizedState, a = a === null ? null : a.dehydrated, !a) throw Error(i(317));
 							a[At] = t;
 						} else va(), !(t.flags & 128) && (t.memoizedState = null), t.flags |= 4;
-						V(t), a = !1;
+						H(t), a = !1;
 					} else a = ya(), e !== null && e.memoizedState !== null && (e.memoizedState.hydrationErrors = a), a = !0;
 					if (!a) return t.flags & 256 ? (Bo(t), t) : (Bo(t), null);
 				}
-				return Bo(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, a = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (a = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== a && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), yl(t, t.updateQueue), V(t), null);
-			case 4: return Pe(), e === null && Wf(t.stateNode.containerInfo), t.flags |= 67108864, V(t), null;
-			case 10: return wa(t.type), V(t), null;
+				return Bo(t), t.flags & 128 ? (t.lanes = n, t) : (n = r !== null, e = e !== null && e.memoizedState !== null, n && (r = t.child, a = null, r.alternate !== null && r.alternate.memoizedState !== null && r.alternate.memoizedState.cachePool !== null && (a = r.alternate.memoizedState.cachePool.pool), o = null, r.memoizedState !== null && r.memoizedState.cachePool !== null && (o = r.memoizedState.cachePool.pool), o !== a && (r.flags |= 2048)), n !== e && n && (t.child.flags |= 8192), vl(t, t.updateQueue), H(t), null);
+			case 4: return Pe(), e === null && Wf(t.stateNode.containerInfo), t.flags |= 67108864, H(t), null;
+			case 10: return wa(t.type), H(t), null;
 			case 19:
-				if (Uo(t), r = t.memoizedState, r === null) return V(t), null;
+				if (Uo(t), r = t.memoizedState, r === null) return H(t), null;
 				if (a = !!(t.flags & 128), o = r.rendering, o === null) {
-					if (a) bl(r, !1);
+					if (a) yl(r, !1);
 					else {
-						if (Y !== 0 || e !== null && e.flags & 128) for (e = t.child; e !== null;) {
+						if (od !== 0 || e !== null && e.flags & 128) for (e = t.child; e !== null;) {
 							if (o = Wo(e), o !== null) {
-								for (t.flags |= 128, bl(r, !1), e = o.updateQueue, t.updateQueue = e, yl(t, e), t.subtreeFlags = 0, e = n, n = t.child; n !== null;) Hi(n, e), n = n.sibling;
+								for (t.flags |= 128, yl(r, !1), e = o.updateQueue, t.updateQueue = e, vl(t, e), t.subtreeFlags = 0, e = n, n = t.child; n !== null;) Hi(n, e), n = n.sibling;
 								return Ho(t, Vo.current & 1 | 2), P && aa(t, r.treeForkCount), t.child;
 							}
 							e = e.sibling;
 						}
-						r.tail !== null && Ye() > _d && (t.flags |= 128, a = !0, bl(r, !1), t.lanes = 4194304);
+						r.tail !== null && Ye() > _d && (t.flags |= 128, a = !0, yl(r, !1), t.lanes = 4194304);
 					}
 				} else {
 					if (!a) {
 						if (e = Wo(o), e !== null) {
-							if (t.flags |= 128, a = !0, e = e.updateQueue, t.updateQueue = e, yl(t, e), bl(r, !0), r.tail === null && r.tailMode !== "collapsed" && r.tailMode !== "visible" && !o.alternate && !P) return V(t), null;
-						} else 2 * Ye() - r.renderingStartTime > _d && n !== 536870912 && (t.flags |= 128, a = !0, bl(r, !1), t.lanes = 4194304);
+							if (t.flags |= 128, a = !0, e = e.updateQueue, t.updateQueue = e, vl(t, e), yl(r, !0), r.tail === null && r.tailMode !== "collapsed" && r.tailMode !== "visible" && !o.alternate && !P) return H(t), null;
+						} else 2 * Ye() - r.renderingStartTime > _d && n !== 536870912 && (t.flags |= 128, a = !0, yl(r, !1), t.lanes = 4194304);
 					}
 					r.isBackwards ? (o.sibling = t.child, t.child = o) : (e = r.last, e === null ? t.child = o : e.sibling = o, r.last = o);
 				}
@@ -4692,16 +4692,16 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 					return r.rendering = e, r.tail = e.sibling, r.renderingStartTime = Ye(), e.sibling = null, o = Vo.current, o = a ? o & 1 | 2 : o & 1, r.tailMode === "visible" || r.tailMode === "collapsed" || !n || P ? Ho(t, o) : (n = o, k(Po, t), k(Vo, n), Fo === null && (Fo = t)), P && aa(t, r.treeForkCount), e;
 				}
-				return V(t), null;
+				return H(t), null;
 			case 22:
-			case 23: return Bo(t), L(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (V(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : V(t), n = t.updateQueue, n !== null && yl(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && Oe(Ya), null;
-			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), wa(I), V(t), null;
+			case 23: return Bo(t), L(), r = t.memoizedState !== null, e === null ? r && (t.flags |= 8192) : e.memoizedState !== null !== r && (t.flags |= 8192), r ? n & 536870912 && !(t.flags & 128) && (H(t), t.subtreeFlags & 6 && (t.flags |= 8192)) : H(t), n = t.updateQueue, n !== null && vl(t, n.retryQueue), n = null, e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), r = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (r = t.memoizedState.cachePool.pool), r !== n && (t.flags |= 2048), e !== null && Oe(Ya), null;
+			case 24: return n = null, e !== null && (n = e.memoizedState.cache), t.memoizedState.cache !== n && (t.flags |= 2048), wa(I), H(t), null;
 			case 25: return null;
-			case 30: return t.flags |= 33554432, V(t), null;
+			case 30: return t.flags |= 33554432, H(t), null;
 		}
 		throw Error(i(156, t.tag));
 	}
-	function Sl(e, t) {
+	function xl(e, t) {
 		switch (ca(t), t.tag) {
 			case 1: return e = t.flags, e & 65536 ? (t.flags = e & -65537 | 128, t) : null;
 			case 3: return wa(I), Pe(), e = t.flags, e & 65536 && !(e & 128) ? (t.flags = e & -65537 | 128, t) : null;
@@ -4730,7 +4730,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			default: return null;
 		}
 	}
-	function Cl(e, t) {
+	function Sl(e, t) {
 		switch (ca(t), t.tag) {
 			case 3:
 				wa(I), Pe();
@@ -4762,7 +4762,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			case 24: wa(I);
 		}
 	}
-	function wl(e, t) {
+	function Cl(e, t) {
 		try {
 			var n = t.updateQueue, r = n === null ? null : n.lastEffect;
 			if (r !== null) {
@@ -4781,7 +4781,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			Z(t, t.return, e);
 		}
 	}
-	function Tl(e, t, n) {
+	function wl(e, t, n) {
 		try {
 			var r = t.updateQueue, i = r === null ? null : r.lastEffect;
 			if (i !== null) {
@@ -4807,7 +4807,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			Z(t, t.return, e);
 		}
 	}
-	function El(e) {
+	function Tl(e) {
 		var t = e.updateQueue;
 		if (t !== null) {
 			var n = e.stateNode;
@@ -4818,15 +4818,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			}
 		}
 	}
-	function Dl(e, t, n) {
-		n.props = Tc(e.type, e.memoizedProps), n.state = e.memoizedState;
+	function El(e, t, n) {
+		n.props = wc(e.type, e.memoizedProps), n.state = e.memoizedState;
 		try {
 			n.componentWillUnmount();
 		} catch (n) {
 			Z(e, t, n);
 		}
 	}
-	function Ol(e, t) {
+	function Dl(e, t) {
 		try {
 			var n = e.ref;
 			if (n !== null) {
@@ -4855,7 +4855,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			Z(e, t, n);
 		}
 	}
-	function kl(e, t) {
+	function Ol(e, t) {
 		var n = e.ref, r = e.refCleanup;
 		if (n !== null) {
 			if (typeof r == "function") try {
@@ -4873,22 +4873,22 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			else n.current = null;
 		}
 	}
-	function Al(e, t) {
+	function kl(e, t) {
 		if ((e.tag === 5 || e.tag === 27 || e.tag === 6) && e.alternate === null && t !== null) for (var n = 0; n < t.length; n++) em(e.stateNode, t[n]);
 	}
+	function Al(e) {
+		for (var t = e.return; t !== null && (Nl(t) && em(e.stateNode, t.stateNode), !Ml(t));) t = t.return;
+	}
 	function jl(e) {
-		for (var t = e.return; t !== null && (Pl(t) && em(e.stateNode, t.stateNode), !Nl(t));) t = t.return;
+		for (var t = e.return; t !== null && (Nl(t) && tm(e.stateNode, t.stateNode), !Ml(t));) t = t.return;
 	}
 	function Ml(e) {
-		for (var t = e.return; t !== null && (Pl(t) && tm(e.stateNode, t.stateNode), !Nl(t));) t = t.return;
-	}
-	function Nl(e) {
 		return e.tag === 5 || e.tag === 3 || e.tag === 27;
 	}
-	function Pl(e) {
+	function Nl(e) {
 		return e && e.tag === 7 && e.stateNode !== null;
 	}
-	function Fl(e) {
+	function Pl(e) {
 		var t = e.type, n = e.memoizedProps, r = e.stateNode;
 		try {
 			a: switch (t) {
@@ -4904,7 +4904,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			Z(e, e.return, t);
 		}
 	}
-	function Il(e, t, n) {
+	function Fl(e, t, n) {
 		try {
 			var r = e.stateNode;
 			ip(r, e.type, n, t), r[jt] = t;
@@ -4912,13 +4912,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			Z(e, e.return, t);
 		}
 	}
-	function Ll(e) {
+	function Il(e) {
 		return e.tag === 5 || e.tag === 3 || e.tag === 26 || e.tag === 27 && Sp(e.type) || e.tag === 4;
 	}
-	function Rl(e) {
+	function Ll(e) {
 		a: for (;;) {
 			for (; e.sibling === null;) {
-				if (e.return === null || Ll(e.return)) return null;
+				if (e.return === null || Il(e.return)) return null;
 				e = e.return;
 			}
 			for (e.sibling.return = e.return, e = e.sibling; e.tag !== 5 && e.tag !== 6 && e.tag !== 18;) {
@@ -4928,17 +4928,17 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			if (!(e.flags & 2)) return e.stateNode;
 		}
 	}
+	function Rl(e, t, n, r) {
+		var i = e.tag;
+		if (i === 5 || i === 6) i = e.stateNode, t ? (n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n).insertBefore(i, t) : (t = n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n, t.appendChild(i), n = n._reactRootContainer, n != null || t.onclick !== null || (t.onclick = En)), kl(e, r), j = !0;
+		else if (i !== 4 && (i === 27 && (kl(e, r), r = null, Sp(e.type) && (n = e.stateNode, t = null)), e = e.child, e !== null)) for (Rl(e, t, n, r), e = e.sibling; e !== null;) Rl(e, t, n, r), e = e.sibling;
+	}
 	function zl(e, t, n, r) {
 		var i = e.tag;
-		if (i === 5 || i === 6) i = e.stateNode, t ? (n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n).insertBefore(i, t) : (t = n.nodeType === 9 ? n.body : n.nodeName === "HTML" ? n.ownerDocument.body : n, t.appendChild(i), n = n._reactRootContainer, n != null || t.onclick !== null || (t.onclick = En)), Al(e, r), j = !0;
-		else if (i !== 4 && (i === 27 && (Al(e, r), r = null, Sp(e.type) && (n = e.stateNode, t = null)), e = e.child, e !== null)) for (zl(e, t, n, r), e = e.sibling; e !== null;) zl(e, t, n, r), e = e.sibling;
+		if (i === 5 || i === 6) i = e.stateNode, t ? n.insertBefore(i, t) : n.appendChild(i), kl(e, r), j = !0;
+		else if (i !== 4 && (i === 27 && (kl(e, r), r = null, Sp(e.type) && (n = e.stateNode)), e = e.child, e !== null)) for (zl(e, t, n, r), e = e.sibling; e !== null;) zl(e, t, n, r), e = e.sibling;
 	}
-	function Bl(e, t, n, r) {
-		var i = e.tag;
-		if (i === 5 || i === 6) i = e.stateNode, t ? n.insertBefore(i, t) : n.appendChild(i), Al(e, r), j = !0;
-		else if (i !== 4 && (i === 27 && (Al(e, r), r = null, Sp(e.type) && (n = e.stateNode)), e = e.child, e !== null)) for (Bl(e, t, n, r), e = e.sibling; e !== null;) Bl(e, t, n, r), e = e.sibling;
-	}
-	function Vl(e) {
+	function Bl(e) {
 		var t = e.stateNode, n = e.memoizedProps;
 		try {
 			for (var r = e.type, i = t.attributes; i.length;) t.removeAttributeNode(i[0]);
@@ -4947,20 +4947,20 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			Z(e, e.return, t);
 		}
 	}
-	var Hl = !1, Ul = null;
-	function Wl(e) {
-		(e.tag === 30 || e.subtreeFlags & 33554432) && (Hl = !0);
+	var Vl = !1, Hl = null;
+	function Ul(e) {
+		(e.tag === 30 || e.subtreeFlags & 33554432) && (Vl = !0);
 	}
-	var Gl = null;
-	function Kl() {
-		var e = Gl;
-		return Gl = null, e;
+	var Wl = null;
+	function Gl() {
+		var e = Wl;
+		return Wl = null, e;
 	}
-	var ql = 0;
+	var Kl = 0;
+	function ql(e, t, n, r, i) {
+		return Kl = 0, Jl(e.child, t, n, r, i);
+	}
 	function Jl(e, t, n, r, i) {
-		return ql = 0, Yl(e.child, t, n, r, i);
-	}
-	function Yl(e, t, n, r, i) {
 		for (var a = !1; e !== null;) {
 			if (e.tag === 5) {
 				var o = e.stateNode;
@@ -4968,36 +4968,36 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					var s = Op(o);
 					r.push(s), s.view && (a = !0);
 				} else a || Op(o).view && (a = !0);
-				Hl = !0, Tp(o, ql === 0 ? t : t + "_" + ql, n), ql++;
-			} else e.tag === 22 && e.memoizedState !== null || e.tag === 30 && i || Yl(e.child, t, n, r, i) && (a = !0);
+				Vl = !0, Tp(o, Kl === 0 ? t : t + "_" + Kl, n), Kl++;
+			} else e.tag === 22 && e.memoizedState !== null || e.tag === 30 && i || Jl(e.child, t, n, r, i) && (a = !0);
 			e = e.sibling;
 		}
 		return a;
 	}
-	function Xl(e, t) {
-		for (; e !== null;) e.tag === 5 ? Ep(e.stateNode, e.memoizedProps) : e.tag === 22 && e.memoizedState !== null || e.tag === 30 && t || Xl(e.child, t), e = e.sibling;
+	function Yl(e, t) {
+		for (; e !== null;) e.tag === 5 ? Ep(e.stateNode, e.memoizedProps) : e.tag === 22 && e.memoizedState !== null || e.tag === 30 && t || Yl(e.child, t), e = e.sibling;
 	}
-	function Zl(e) {
+	function Xl(e) {
 		if (e.subtreeFlags & 18874368) for (e = e.child; e !== null;) {
-			if ((e.tag !== 22 || e.memoizedState === null) && (Zl(e), e.tag === 30 && e.flags & 18874368 && e.stateNode.paired)) {
+			if ((e.tag !== 22 || e.memoizedState === null) && (Xl(e), e.tag === 30 && e.flags & 18874368 && e.stateNode.paired)) {
 				var t = e.memoizedProps;
 				if (t.name == null || t.name === "auto") throw Error(i(544));
 				var n = t.name;
-				t = Ei(t.default, t.share), t !== "none" && (Jl(e, n, t, null, !1) || Xl(e.child, !1));
+				t = Ei(t.default, t.share), t !== "none" && (ql(e, n, t, null, !1) || Yl(e.child, !1));
 			}
 			e = e.sibling;
 		}
 	}
-	function Ql(e, t) {
+	function Zl(e, t) {
 		if (e.tag === 30) {
 			var n = e.stateNode, r = e.memoizedProps, i = wi(r, n), a = Ei(r.default, n.paired ? r.share : r.enter);
-			a === "none" ? Zl(e) : Jl(e, i, a, null, !1) ? (Zl(e), n.paired || t || Nd(e, r.onEnter)) : Xl(e.child, !1);
-		} else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) Ql(e, t), e = e.sibling;
-		else Zl(e);
+			a === "none" ? Xl(e) : ql(e, i, a, null, !1) ? (Xl(e), n.paired || t || Nd(e, r.onEnter)) : Yl(e.child, !1);
+		} else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) Zl(e, t), e = e.sibling;
+		else Xl(e);
 	}
-	function $l(e) {
-		if (Ul !== null && Ul.size !== 0) {
-			var t = Ul;
+	function Ql(e) {
+		if (Hl !== null && Hl.size !== 0) {
+			var t = Hl;
 			if (e.subtreeFlags & 18874368) for (e = e.child; e !== null;) {
 				if (e.tag !== 22 || e.memoizedState === null) {
 					if (e.tag === 30 && e.flags & 18874368) {
@@ -5006,58 +5006,58 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							var i = t.get(r);
 							if (i !== void 0) {
 								var a = Ei(n.default, n.share);
-								if (a !== "none" && (Jl(e, r, a, null, !1) ? (a = e.stateNode, i.paired = a, a.paired = i, Nd(e, n.onShare)) : Xl(e.child, !1)), t.delete(r), t.size === 0) break;
+								if (a !== "none" && (ql(e, r, a, null, !1) ? (a = e.stateNode, i.paired = a, a.paired = i, Nd(e, n.onShare)) : Yl(e.child, !1)), t.delete(r), t.size === 0) break;
 							}
 						}
 					}
-					$l(e);
+					Ql(e);
 				}
 				e = e.sibling;
 			}
 		}
 	}
-	function eu(e) {
+	function $l(e) {
 		if (e.tag === 30) {
-			var t = e.memoizedProps, n = wi(t, e.stateNode), r = Ul === null ? void 0 : Ul.get(n), i = Ei(t.default, r === void 0 ? t.exit : t.share);
-			i !== "none" && (Jl(e, n, i, null, !1) ? r === void 0 ? Nd(e, t.onExit) : (i = e.stateNode, r.paired = i, i.paired = r, Ul.delete(n), Nd(e, t.onShare)) : Xl(e.child, !1)), Ul !== null && $l(e);
-		} else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) eu(e), e = e.sibling;
-		else Ul !== null && $l(e);
+			var t = e.memoizedProps, n = wi(t, e.stateNode), r = Hl === null ? void 0 : Hl.get(n), i = Ei(t.default, r === void 0 ? t.exit : t.share);
+			i !== "none" && (ql(e, n, i, null, !1) ? r === void 0 ? Nd(e, t.onExit) : (i = e.stateNode, r.paired = i, i.paired = r, Hl.delete(n), Nd(e, t.onShare)) : Yl(e.child, !1)), Hl !== null && Ql(e);
+		} else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) $l(e), e = e.sibling;
+		else Hl !== null && Ql(e);
 	}
-	function tu(e) {
+	function eu(e) {
 		for (e = e.child; e !== null;) {
 			if (e.tag === 30) {
 				var t = e.memoizedProps, n = wi(t, e.stateNode);
-				t = Ei(t.default, t.update), e.flags &= -5, t !== "none" && Jl(e, n, t, e.memoizedState = [], !1);
-			} else e.subtreeFlags & 33554432 && tu(e);
+				t = Ei(t.default, t.update), e.flags &= -5, t !== "none" && ql(e, n, t, e.memoizedState = [], !1);
+			} else e.subtreeFlags & 33554432 && eu(e);
 			e = e.sibling;
 		}
 	}
-	function nu(e) {
+	function tu(e) {
 		if (e.subtreeFlags & 18874368) for (e = e.child; e !== null;) {
 			if (e.tag !== 22 || e.memoizedState === null) {
 				if (e.tag === 30 && e.flags & 18874368) {
 					var t = e.stateNode;
-					t.paired !== null && (t.paired = null, Xl(e.child, !1));
+					t.paired !== null && (t.paired = null, Yl(e.child, !1));
 				}
-				nu(e);
+				tu(e);
 			}
 			e = e.sibling;
 		}
 	}
+	function nu(e) {
+		if (e.tag === 30) e.stateNode.paired = null, Yl(e.child, !1), tu(e);
+		else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) nu(e), e = e.sibling;
+		else tu(e);
+	}
 	function ru(e) {
-		if (e.tag === 30) e.stateNode.paired = null, Xl(e.child, !1), nu(e);
-		else if (e.subtreeFlags & 33554432) for (e = e.child; e !== null;) ru(e), e = e.sibling;
-		else nu(e);
+		for (e = e.child; e !== null;) e.tag === 30 ? Yl(e.child, !1) : e.subtreeFlags & 33554432 && ru(e), e = e.sibling;
 	}
-	function iu(e) {
-		for (e = e.child; e !== null;) e.tag === 30 ? Xl(e.child, !1) : e.subtreeFlags & 33554432 && iu(e), e = e.sibling;
-	}
-	function au(e, t, n, r, i, a, o) {
+	function iu(e, t, n, r, i, a, o) {
 		for (var s = !1; t !== null;) {
 			if (t.tag === 5) {
 				var c = t.stateNode;
-				if (a !== null && ql < a.length) {
-					var l = a[ql], u = Op(c);
+				if (a !== null && Kl < a.length) {
+					var l = a[Kl], u = Op(c);
 					(l.view || u.view) && (s = !0);
 					var d;
 					if (d = !(e.flags & 4)) {
@@ -5070,13 +5070,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 					d && (e.flags |= 4), u.abs ? u = !l.abs : (l = l.rect, u = u.rect, u = l.height !== u.height || l.width !== u.width), u && (e.flags |= 32);
 				} else e.flags |= 32;
-				e.flags & 4 && Tp(c, ql === 0 ? n : n + "_" + ql, i), s && e.flags & 4 || (Gl === null && (Gl = []), Gl.push(c, ql === 0 ? r : r + "_" + ql, t.memoizedProps)), ql++;
-			} else (t.tag !== 22 || t.memoizedState === null) && (t.tag === 30 && o ? e.flags |= t.flags & 32 : au(e, t.child, n, r, i, a, o) && (s = !0));
+				e.flags & 4 && Tp(c, Kl === 0 ? n : n + "_" + Kl, i), s && e.flags & 4 || (Wl === null && (Wl = []), Wl.push(c, Kl === 0 ? r : r + "_" + Kl, t.memoizedProps)), Kl++;
+			} else (t.tag !== 22 || t.memoizedState === null) && (t.tag === 30 && o ? e.flags |= t.flags & 32 : iu(e, t.child, n, r, i, a, o) && (s = !0));
 			t = t.sibling;
 		}
 		return s;
 	}
-	function ou(e, t) {
+	function au(e, t) {
 		for (e = e.child; e !== null;) {
 			if (e.tag === 30) {
 				var n = e.memoizedProps, r = e.stateNode, i = wi(n, r), a = Ei(n.default, n.update);
@@ -5086,13 +5086,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				} else o = e.memoizedState, e.memoizedState = null;
 				r = e;
 				var s = e.child;
-				ql = 0, i = au(r, s, i, i, a, o, !1), e.flags & 4 && i && (t || Nd(e, n.onUpdate));
-			} else e.subtreeFlags & 33554432 && ou(e, t);
+				Kl = 0, i = iu(r, s, i, i, a, o, !1), e.flags & 4 && i && (t || Nd(e, n.onUpdate));
+			} else e.subtreeFlags & 33554432 && au(e, t);
 			e = e.sibling;
 		}
 	}
-	var su = !1, H = !1, cu = !1, lu = !1, uu = typeof WeakSet == "function" ? WeakSet : Set, du = null, fu = !1, pu = !1, mu = !1, hu = !1;
-	function gu(e, t, n) {
+	var ou = !1, U = !1, su = !1, cu = !1, lu = typeof WeakSet == "function" ? WeakSet : Set, uu = null, du = !1, fu = !1, pu = !1, mu = !1;
+	function hu(e, t, n) {
 		if (e = e.containerInfo, sp = gh, e = ti(e), ni(e)) {
 			if ("selectionStart" in e) var r = {
 				start: e.selectionStart,
@@ -5135,28 +5135,28 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		for (cp = {
 			focusedElem: e,
 			selectionRange: r
-		}, gh = !1, n = (n & 335544064) === n, du = t, t = n ? 9270 : 1024; du !== null;) {
-			if (e = du, n && (r = e.deletions, r !== null)) for (a = 0; a < r.length; a++) n && eu(r[a]);
-			if (e.alternate === null && e.flags & 2) n && Wl(e), _u(n);
+		}, gh = !1, n = (n & 335544064) === n, uu = t, t = n ? 9270 : 1024; uu !== null;) {
+			if (e = uu, n && (r = e.deletions, r !== null)) for (a = 0; a < r.length; a++) n && $l(r[a]);
+			if (e.alternate === null && e.flags & 2) n && Ul(e), gu(n);
 			else {
 				if (e.tag === 22) {
 					if (r = e.alternate, e.memoizedState !== null) {
-						r !== null && r.memoizedState === null && n && eu(r), _u(n);
+						r !== null && r.memoizedState === null && n && $l(r), gu(n);
 						continue;
 					}
 					if (r !== null && r.memoizedState !== null) {
-						n && Wl(e), _u(n);
+						n && Ul(e), gu(n);
 						continue;
 					}
 				}
-				r = e.child, (e.subtreeFlags & t) !== 0 && r !== null ? (r.return = e, du = r) : (n && tu(e), _u(n));
+				r = e.child, (e.subtreeFlags & t) !== 0 && r !== null ? (r.return = e, uu = r) : (n && eu(e), gu(n));
 			}
 		}
-		Ul = null;
+		Hl = null;
 	}
-	function _u(e) {
-		for (; du !== null;) {
-			var t = du, n = e, r = t.alternate, a = t.flags;
+	function gu(e) {
+		for (; uu !== null;) {
+			var t = uu, n = e, r = t.alternate, a = t.flags;
 			switch (t.tag) {
 				case 0:
 				case 11:
@@ -5166,7 +5166,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						n = void 0, a = r.memoizedProps, r = r.memoizedState;
 						var o = t.stateNode;
 						try {
-							var s = Tc(t.type, a);
+							var s = wc(t.type, a);
 							n = o.getSnapshotBeforeUpdate(s, r), o.__reactInternalSnapshotBeforeUpdate = n;
 						} catch (e) {
 							Z(t, t.return, e);
@@ -5193,34 +5193,34 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				case 4:
 				case 17: break;
 				case 30:
-					n && r !== null && (n = wi(r.memoizedProps, r.stateNode), a = t.memoizedProps, a = Ei(a.default, a.update), a !== "none" && Jl(r, n, a, r.memoizedState = [], !0));
+					n && r !== null && (n = wi(r.memoizedProps, r.stateNode), a = t.memoizedProps, a = Ei(a.default, a.update), a !== "none" && ql(r, n, a, r.memoizedState = [], !0));
 					break;
 				default: if (a & 1024) throw Error(i(163));
 			}
 			if (r = t.sibling, r !== null) {
-				r.return = t.return, du = r;
+				r.return = t.return, uu = r;
 				break;
 			}
-			du = t.return;
+			uu = t.return;
 		}
 	}
-	function vu(e, t, n) {
+	function _u(e, t, n) {
 		var r = n.flags;
 		switch (n.tag) {
 			case 0:
 			case 11:
 			case 15:
-				Lu(e, n), r & 4 && wl(5, n);
+				Iu(e, n), r & 4 && Cl(5, n);
 				break;
 			case 1:
-				if (Lu(e, n), r & 4) {
+				if (Iu(e, n), r & 4) {
 					if (e = n.stateNode, t === null) try {
 						e.componentDidMount();
 					} catch (e) {
 						Z(n, n.return, e);
 					}
 					else {
-						var i = Tc(n.type, t.memoizedProps);
+						var i = wc(n.type, t.memoizedProps);
 						t = t.memoizedState;
 						try {
 							e.componentDidUpdate(i, t, e.__reactInternalSnapshotBeforeUpdate);
@@ -5229,10 +5229,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						}
 					}
 				}
-				r & 64 && El(n), r & 512 && Ol(n, n.return);
+				r & 64 && Tl(n), r & 512 && Dl(n, n.return);
 				break;
 			case 3:
-				if (Lu(e, n), r & 64 && (e = n.updateQueue, e !== null)) {
+				if (Iu(e, n), r & 64 && (e = n.updateQueue, e !== null)) {
 					if (t = null, n.child !== null) switch (n.child.tag) {
 						case 27:
 						case 5:
@@ -5247,37 +5247,37 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 				}
 				break;
-			case 27: t === null && r & 4 && Vl(n);
+			case 27: t === null && r & 4 && Bl(n);
 			case 26:
 			case 5:
-				Lu(e, n), t === null && r & 4 && Fl(n), r & 512 && Ol(n, n.return);
+				Iu(e, n), t === null && r & 4 && Pl(n), r & 512 && Dl(n, n.return);
 				break;
 			case 12:
-				Lu(e, n);
+				Iu(e, n);
 				break;
 			case 31:
-				Lu(e, n), r & 4 && Eu(e, n);
+				Iu(e, n), r & 4 && Tu(e, n);
 				break;
 			case 13:
-				Lu(e, n), r & 4 && Du(e, n), r & 64 && (e = n.memoizedState, e !== null && (e = e.dehydrated, e !== null && (n = _f.bind(null, n), cm(e, n))));
+				Iu(e, n), r & 4 && Eu(e, n), r & 64 && (e = n.memoizedState, e !== null && (e = e.dehydrated, e !== null && (n = _f.bind(null, n), cm(e, n))));
 				break;
 			case 22:
-				if (r = n.memoizedState !== null || su, !r) {
-					var a = t !== null && t.memoizedState !== null || H;
-					t = su, i = H, su = r, (H = a) && !i ? (r = 2, n.subtreeFlags & 8772 && (r |= 1), zu(e, n, r)) : Lu(e, n), su = t, H = i;
+				if (r = n.memoizedState !== null || ou, !r) {
+					var a = t !== null && t.memoizedState !== null || U;
+					t = ou, i = U, ou = r, (U = a) && !i ? (r = 2, n.subtreeFlags & 8772 && (r |= 1), Ru(e, n, r)) : Iu(e, n), ou = t, U = i;
 				}
 				break;
 			case 30:
-				Lu(e, n), r & 512 && Ol(n, n.return);
+				Iu(e, n), r & 512 && Dl(n, n.return);
 				break;
-			case 7: r & 512 && Ol(n, n.return);
-			default: Lu(e, n);
+			case 7: r & 512 && Dl(n, n.return);
+			default: Iu(e, n);
 		}
 	}
-	function yu(e, t) {
-		for (e = e.child; e !== null;) bu(e, t), e = e.sibling;
+	function vu(e, t) {
+		for (e = e.child; e !== null;) yu(e, t), e = e.sibling;
 	}
-	function bu(e, t) {
+	function yu(e, t) {
 		switch (e.tag) {
 			case 5:
 			case 26:
@@ -5293,7 +5293,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				} catch (t) {
 					Z(e, e.return, t);
 				}
-				xu(e, t);
+				bu(e, t);
 				break;
 			case 6:
 				try {
@@ -5312,95 +5312,95 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				break;
 			case 22:
 			case 23:
-				e.memoizedState === null && yu(e, t);
+				e.memoizedState === null && vu(e, t);
 				break;
-			default: yu(e, t);
+			default: vu(e, t);
 		}
 	}
-	function xu(e, t) {
+	function bu(e, t) {
 		if (e.subtreeFlags & 67108864) for (e = e.child; e !== null;) {
 			a: {
 				var n = e, r = t;
 				switch (n.tag) {
 					case 4:
-						bu(n, r);
+						yu(n, r);
 						break a;
 					case 22:
-						n.memoizedState === null && xu(n, r);
+						n.memoizedState === null && bu(n, r);
 						break a;
-					default: xu(n, r);
+					default: bu(n, r);
 				}
 			}
 			e = e.sibling;
 		}
 	}
-	function Su(e) {
+	function xu(e) {
 		var t = e.alternate;
-		t !== null && (e.alternate = null, Su(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && zt(t)), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
+		t !== null && (e.alternate = null, xu(t)), e.child = null, e.deletions = null, e.sibling = null, e.tag === 5 && (t = e.stateNode, t !== null && zt(t)), e.stateNode = null, e.return = null, e.dependencies = null, e.memoizedProps = null, e.memoizedState = null, e.pendingProps = null, e.stateNode = null, e.updateQueue = null;
 	}
-	var U = null, Cu = !1;
+	var W = null, Su = !1;
+	function Cu(e, t, n) {
+		for (n = n.child; n !== null;) wu(e, t, n), n = n.sibling;
+	}
 	function wu(e, t, n) {
-		for (n = n.child; n !== null;) Tu(e, t, n), n = n.sibling;
-	}
-	function Tu(e, t, n) {
 		if (at && typeof at.onCommitFiberUnmount == "function") try {
 			at.onCommitFiberUnmount(it, n);
 		} catch {}
 		switch (n.tag) {
 			case 26:
-				H || kl(n, t), wu(e, t, n), n.memoizedState ? n.memoizedState.count-- : n.stateNode && !H && (n = n.stateNode, n.parentNode.removeChild(n));
+				U || Ol(n, t), Cu(e, t, n), n.memoizedState ? n.memoizedState.count-- : n.stateNode && !U && (n = n.stateNode, n.parentNode.removeChild(n));
 				break;
 			case 27:
-				H || kl(n, t), Ml(n);
-				var r = U, i = Cu;
-				Sp(n.type) && (U = n.stateNode, Cu = !1), wu(e, t, n), gm(n.stateNode, n.type, n.memoizedProps), U = r, Cu = i;
+				U || Ol(n, t), jl(n);
+				var r = W, i = Su;
+				Sp(n.type) && (W = n.stateNode, Su = !1), Cu(e, t, n), gm(n.stateNode, n.type, n.memoizedProps), W = r, Su = i;
 				break;
-			case 5: H || kl(n, t), Ml(n);
+			case 5: U || Ol(n, t), jl(n);
 			case 6:
-				if (n.tag === 6 && Ml(n), r = U, i = Cu, U = null, wu(e, t, n), U = r, Cu = i, U !== null) {
-					if (Cu) try {
-						(U.nodeType === 9 ? U.body : U.nodeName === "HTML" ? U.ownerDocument.body : U).removeChild(n.stateNode), j = !0;
+				if (n.tag === 6 && jl(n), r = W, i = Su, W = null, Cu(e, t, n), W = r, Su = i, W !== null) {
+					if (Su) try {
+						(W.nodeType === 9 ? W.body : W.nodeName === "HTML" ? W.ownerDocument.body : W).removeChild(n.stateNode), j = !0;
 					} catch (e) {
 						Z(n, t, e);
 					}
 					else try {
-						U.removeChild(n.stateNode), j = !0;
+						W.removeChild(n.stateNode), j = !0;
 					} catch (e) {
 						Z(n, t, e);
 					}
 				}
 				break;
 			case 18:
-				U !== null && (Cu ? (e = U, Cp(e.nodeType === 9 ? e.body : e.nodeName === "HTML" ? e.ownerDocument.body : e, n.stateNode), Hh(e)) : Cp(U, n.stateNode));
+				W !== null && (Su ? (e = W, Cp(e.nodeType === 9 ? e.body : e.nodeName === "HTML" ? e.ownerDocument.body : e, n.stateNode), Hh(e)) : Cp(W, n.stateNode));
 				break;
 			case 4:
-				r = U, i = Cu, U = n.stateNode.containerInfo, Cu = !0, wu(e, t, n), U = r, Cu = i;
+				r = W, i = Su, W = n.stateNode.containerInfo, Su = !0, Cu(e, t, n), W = r, Su = i;
 				break;
 			case 0:
 			case 11:
 			case 14:
 			case 15:
-				Tl(2, n, t), H || Tl(4, n, t), wu(e, t, n);
+				wl(2, n, t), U || wl(4, n, t), Cu(e, t, n);
 				break;
 			case 1:
-				H || (kl(n, t), r = n.stateNode, typeof r.componentWillUnmount == "function" && Dl(n, t, r)), wu(e, t, n);
+				U || (Ol(n, t), r = n.stateNode, typeof r.componentWillUnmount == "function" && El(n, t, r)), Cu(e, t, n);
 				break;
 			case 21:
-				wu(e, t, n);
+				Cu(e, t, n);
 				break;
 			case 22:
-				H = (r = H) || n.memoizedState !== null, wu(e, t, n), H = r;
+				U = (r = U) || n.memoizedState !== null, Cu(e, t, n), U = r;
 				break;
 			case 30:
-				kl(n, t), wu(e, t, n);
+				Ol(n, t), Cu(e, t, n);
 				break;
 			case 7:
-				H || kl(n, t), wu(e, t, n);
+				U || Ol(n, t), Cu(e, t, n);
 				break;
-			default: wu(e, t, n);
+			default: Cu(e, t, n);
 		}
 	}
-	function Eu(e, t) {
+	function Tu(e, t) {
 		if (t.memoizedState === null && (e = t.alternate, e !== null && (e = e.memoizedState, e !== null))) {
 			e = e.dehydrated;
 			try {
@@ -5410,26 +5410,26 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			}
 		}
 	}
-	function Du(e, t) {
+	function Eu(e, t) {
 		if (t.memoizedState === null && (e = t.alternate, e !== null && (e = e.memoizedState, e !== null && (e = e.dehydrated, e !== null)))) try {
 			Hh(e);
 		} catch (e) {
 			Z(t, t.return, e);
 		}
 	}
-	function Ou(e) {
+	function Du(e) {
 		switch (e.tag) {
 			case 31:
 			case 13:
 			case 19:
 				var t = e.stateNode;
-				return t === null && (t = e.stateNode = new uu()), t;
-			case 22: return e = e.stateNode, t = e._retryCache, t === null && (t = e._retryCache = new uu()), t;
+				return t === null && (t = e.stateNode = new lu()), t;
+			case 22: return e = e.stateNode, t = e._retryCache, t === null && (t = e._retryCache = new lu()), t;
 			default: throw Error(i(435, e.tag));
 		}
 	}
-	function ku(e, t) {
-		var n = Ou(e);
+	function Ou(e, t) {
+		var n = Du(e);
 		t.forEach(function(t) {
 			if (!n.has(t)) {
 				n.add(t);
@@ -5438,7 +5438,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			}
 		});
 	}
-	function Au(e, t, n) {
+	function ku(e, t, n) {
 		var r = t.deletions;
 		if (r !== null) for (var a = 0; a < r.length; a++) {
 			var o = r[a], s = e, c = t, l = c;
@@ -5446,27 +5446,27 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				switch (l.tag) {
 					case 27:
 						if (Sp(l.type)) {
-							U = l.stateNode, Cu = !1;
+							W = l.stateNode, Su = !1;
 							break a;
 						}
 						break;
 					case 5:
-						U = l.stateNode, Cu = !1;
+						W = l.stateNode, Su = !1;
 						break a;
 					case 3:
 					case 4:
-						U = l.stateNode.containerInfo, Cu = !0;
+						W = l.stateNode.containerInfo, Su = !0;
 						break a;
 				}
 				l = l.return;
 			}
-			if (U === null) throw Error(i(160));
-			Tu(s, c, o), U = null, Cu = !1, s = o.alternate, s !== null && (s.return = null), o.return = null;
+			if (W === null) throw Error(i(160));
+			wu(s, c, o), W = null, Su = !1, s = o.alternate, s !== null && (s.return = null), o.return = null;
 		}
-		if (t.subtreeFlags & 13886) for (t = t.child; t !== null;) Mu(t, e, n), t = t.sibling;
+		if (t.subtreeFlags & 13886) for (t = t.child; t !== null;) ju(t, e, n), t = t.sibling;
 	}
-	var ju = null;
-	function Mu(e, t, n) {
+	var Au = null;
+	function ju(e, t, n) {
 		var r = e.alternate, a = e.flags;
 		switch (e.tag) {
 			case 0:
@@ -5477,17 +5477,17 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					var s = r[o];
 					s.ref.impl = s.nextImpl;
 				}
-				Au(t, e, n), Nu(e), a & 4 && (Tl(3, e, e.return), wl(3, e), Tl(5, e, e.return));
+				ku(t, e, n), Mu(e), a & 4 && (wl(3, e, e.return), Cl(3, e), wl(5, e, e.return));
 				break;
 			case 1:
-				Au(t, e, n), Nu(e), a & 512 && (H || r === null || kl(r, r.return)), a & 64 && su && (e = e.updateQueue, e !== null && (t = e.callbacks, t !== null && (n = e.shared.hiddenCallbacks, e.shared.hiddenCallbacks = n === null ? t : n.concat(t))));
+				ku(t, e, n), Mu(e), a & 512 && (U || r === null || Ol(r, r.return)), a & 64 && ou && (e = e.updateQueue, e !== null && (t = e.callbacks, t !== null && (n = e.shared.hiddenCallbacks, e.shared.hiddenCallbacks = n === null ? t : n.concat(t))));
 				break;
 			case 26:
-				if (o = ju, Au(t, e, n), Nu(e), a & 512 && (H || r === null || kl(r, r.return)), a & 4) {
+				if (o = Au, ku(t, e, n), Mu(e), a & 512 && (U || r === null || Ol(r, r.return)), a & 4) {
 					if (a = r === null ? null : r.memoizedState, n = e.memoizedState, r === null) {
 						if (n === null) {
 							if (e.stateNode === null) {
-								if (su) e.stateNode = fp(e.type, e.memoizedProps, t.containerInfo, e);
+								if (ou) e.stateNode = fp(e.type, e.memoizedProps, t.containerInfo, e);
 								else {
 									a: {
 										t = e.type, n = e.memoizedProps, a = o.ownerDocument || o;
@@ -5519,16 +5519,16 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 									}
 									e.stateNode = t;
 								}
-							} else su || Km(o, e.type, e.stateNode);
+							} else ou || Km(o, e.type, e.stateNode);
 						} else e.stateNode = Bm(o, n, e.memoizedProps);
-					} else a === n ? n === null && e.stateNode !== null && Il(e, e.memoizedProps, r.memoizedProps) : (a === null ? (t = r.stateNode, t === null || H || t.parentNode.removeChild(t)) : a.count--, n === null ? su || Km(o, e.type, e.stateNode) : Bm(o, n, e.memoizedProps));
+					} else a === n ? n === null && e.stateNode !== null && Fl(e, e.memoizedProps, r.memoizedProps) : (a === null ? (t = r.stateNode, t === null || U || t.parentNode.removeChild(t)) : a.count--, n === null ? ou || Km(o, e.type, e.stateNode) : Bm(o, n, e.memoizedProps));
 				}
 				break;
 			case 27:
-				Au(t, e, n), Nu(e), a & 512 && (H || r === null || kl(r, r.return)), r !== null && a & 4 && Il(e, e.memoizedProps, r.memoizedProps);
+				ku(t, e, n), Mu(e), a & 512 && (U || r === null || Ol(r, r.return)), r !== null && a & 4 && Fl(e, e.memoizedProps, r.memoizedProps);
 				break;
 			case 5:
-				if (o = cu, cu = !1, Au(t, e, n), cu = o, Nu(e), a & 512 && (H || r === null || kl(r, r.return)), e.flags & 32) {
+				if (o = su, su = !1, ku(t, e, n), su = o, Mu(e), a & 512 && (U || r === null || Ol(r, r.return)), e.flags & 32) {
 					t = e.stateNode;
 					try {
 						vn(t, ""), j = !0;
@@ -5536,10 +5536,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						Z(e, e.return, t);
 					}
 				}
-				a & 4 && e.stateNode != null && (t = e.memoizedProps, Il(e, t, r === null ? t : r.memoizedProps)), a & 1024 && (lu = !0);
+				a & 4 && e.stateNode != null && (t = e.memoizedProps, Fl(e, t, r === null ? t : r.memoizedProps)), a & 1024 && (cu = !0);
 				break;
 			case 6:
-				if (Au(t, e, n), Nu(e), a & 4) {
+				if (ku(t, e, n), Mu(e), a & 4) {
 					if (e.stateNode === null) throw Error(i(162));
 					t = e.memoizedProps, n = e.stateNode;
 					try {
@@ -5550,47 +5550,47 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				}
 				break;
 			case 3:
-				if (j = !1, Wm = null, o = ju, ju = bm(t.containerInfo), Au(t, e, n), ju = o, Nu(e), a & 4 && r !== null && r.memoizedState.isDehydrated) try {
+				if (j = !1, Wm = null, o = Au, Au = bm(t.containerInfo), ku(t, e, n), Au = o, Mu(e), a & 4 && r !== null && r.memoizedState.isDehydrated) try {
 					Hh(t.containerInfo);
 				} catch (t) {
 					Z(e, e.return, t);
 				}
-				lu && (lu = !1, Pu(e)), j = !1;
+				cu && (cu = !1, Nu(e)), j = !1;
 				break;
 			case 4:
-				a = cu, cu = su, r = en(), o = ju, ju = bm(e.stateNode.containerInfo), Au(t, e, n), Nu(e), ju = o, j && pu && (mu = !0), j = r, cu = a;
+				a = su, su = ou, r = en(), o = Au, Au = bm(e.stateNode.containerInfo), ku(t, e, n), Mu(e), Au = o, j && fu && (pu = !0), j = r, su = a;
 				break;
 			case 12:
-				Au(t, e, n), Nu(e);
+				ku(t, e, n), Mu(e);
 				break;
 			case 31:
-				Au(t, e, n), Nu(e), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, ku(e, t)));
+				ku(t, e, n), Mu(e), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, Ou(e, t)));
 				break;
 			case 13:
-				Au(t, e, n), Nu(e), e.child.flags & 8192 && e.memoizedState !== null != (r !== null && r.memoizedState !== null) && (hd = Ye()), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, ku(e, t)));
+				ku(t, e, n), Mu(e), e.child.flags & 8192 && e.memoizedState !== null != (r !== null && r.memoizedState !== null) && (hd = Ye()), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, Ou(e, t)));
 				break;
 			case 22:
 				o = e.memoizedState !== null, s = r !== null && r.memoizedState !== null;
-				var c = su, l = H, u = cu;
-				su = c || o, cu = u || o, H = l || s, Au(t, e, n), H = l, cu = u, su = c, Nu(e), a & 8192 && (t = e.stateNode, t._visibility = o ? t._visibility & -2 : t._visibility | 1, !o || r === null || s || su || H || (t = s || H, n = su, r = H, su = o || su, H = t, Ru(e, 2), su = n, H = r), !o && cu || yu(e, o)), a & 4 && (t = e.updateQueue, t !== null && (n = t.retryQueue, n !== null && (t.retryQueue = null, ku(e, n))));
+				var c = ou, l = U, u = su;
+				ou = c || o, su = u || o, U = l || s, ku(t, e, n), U = l, su = u, ou = c, Mu(e), a & 8192 && (t = e.stateNode, t._visibility = o ? t._visibility & -2 : t._visibility | 1, !o || r === null || s || ou || U || (t = s || U, n = ou, r = U, ou = o || ou, U = t, Lu(e, 2), ou = n, U = r), !o && su || vu(e, o)), a & 4 && (t = e.updateQueue, t !== null && (n = t.retryQueue, n !== null && (t.retryQueue = null, Ou(e, n))));
 				break;
 			case 19:
-				Au(t, e, n), Nu(e), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, ku(e, t)));
+				ku(t, e, n), Mu(e), a & 4 && (t = e.updateQueue, t !== null && (e.updateQueue = null, Ou(e, t)));
 				break;
 			case 30:
-				a & 512 && (H || r === null || kl(r, r.return)), a = en(), o = pu, s = (n & 335544064) === n, c = e.memoizedProps, pu = s && Ei(c.default, c.update) !== "none", Au(t, e, n), Nu(e), s && r !== null && j && (e.flags |= 4), pu = o, j = a;
+				a & 512 && (U || r === null || Ol(r, r.return)), a = en(), o = fu, s = (n & 335544064) === n, c = e.memoizedProps, fu = s && Ei(c.default, c.update) !== "none", ku(t, e, n), Mu(e), s && r !== null && j && (e.flags |= 4), fu = o, j = a;
 				break;
 			case 21: break;
-			case 7: a & 512 && (H || r === null || kl(r, r.return)), r && r.stateNode !== null && (r.stateNode._fragmentFiber = e);
-			default: Au(t, e, n), Nu(e);
+			case 7: a & 512 && (U || r === null || Ol(r, r.return)), r && r.stateNode !== null && (r.stateNode._fragmentFiber = e);
+			default: ku(t, e, n), Mu(e);
 		}
 	}
-	function Nu(e) {
+	function Mu(e) {
 		var t = e.flags;
 		if (t & 2) {
 			try {
 				for (var n, r = e.return; r !== null;) {
-					if (Ll(r)) {
+					if (Il(r)) {
 						n = r;
 						break;
 					}
@@ -5598,11 +5598,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				}
 				r = null;
 				for (var a = e.return; a !== null;) {
-					if (Pl(a)) {
+					if (Nl(a)) {
 						var o = a.stateNode;
 						r === null ? r = [o] : r.push(o);
 					}
-					if (Nl(a)) break;
+					if (Ml(a)) break;
 					a = a.return;
 				}
 				var s = r;
@@ -5610,16 +5610,16 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				switch (n.tag) {
 					case 27:
 						var c = n.stateNode;
-						Bl(e, Rl(e), c, s);
+						zl(e, Ll(e), c, s);
 						break;
 					case 5:
 						var l = n.stateNode;
-						n.flags & 32 && (vn(l, ""), n.flags &= -33), Bl(e, Rl(e), l, s);
+						n.flags & 32 && (vn(l, ""), n.flags &= -33), zl(e, Ll(e), l, s);
 						break;
 					case 3:
 					case 4:
 						var u = n.stateNode.containerInfo;
-						zl(e, Rl(e), u, s);
+						Rl(e, Ll(e), u, s);
 						break;
 					default: throw Error(i(161));
 				}
@@ -5630,23 +5630,23 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 		t & 4096 && (e.flags &= -4097);
 	}
-	function Pu(e) {
+	function Nu(e) {
 		if (e.subtreeFlags & 1024) for (e = e.child; e !== null;) {
 			var t = e;
-			Pu(t), t.tag === 5 && t.flags & 1024 && (t = t.stateNode, gh = !0, t.reset(), gh = !1), e = e.sibling;
+			Nu(t), t.tag === 5 && t.flags & 1024 && (t = t.stateNode, gh = !0, t.reset(), gh = !1), e = e.sibling;
 		}
 	}
-	function Fu(e, t) {
-		if (t.subtreeFlags & 9270) for (t = t.child; t !== null;) Iu(t, e), t = t.sibling;
-		else ou(t, !1);
+	function Pu(e, t) {
+		if (t.subtreeFlags & 9270) for (t = t.child; t !== null;) Fu(t, e), t = t.sibling;
+		else au(t, !1);
 	}
-	function Iu(e, t) {
+	function Fu(e, t) {
 		var n = e.alternate;
-		if (n === null) Ql(e, !1);
+		if (n === null) Zl(e, !1);
 		else switch (e.tag) {
 			case 3:
-				if (hu = fu = !1, Kl(), Fu(t, e), !fu && !mu) {
-					if (e = Gl, e !== null) for (var r = 0; r < e.length; r += 3) {
+				if (mu = du = !1, Gl(), Pu(t, e), !du && !pu) {
+					if (e = Wl, e !== null) for (var r = 0; r < e.length; r += 3) {
 						n = e[r];
 						var i = e[r + 1];
 						Ep(n, e[r + 2]), n = n.ownerDocument.documentElement, n !== null && n.animate({
@@ -5672,33 +5672,33 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						duration: 0,
 						fill: "forwards",
 						pseudoElement: "::view-transition"
-					})), hu = !0;
+					})), mu = !0;
 				}
-				Gl = null;
+				Wl = null;
 				break;
 			case 5:
-				Fu(t, e);
+				Pu(t, e);
 				break;
 			case 4:
-				r = fu, fu = !1, Fu(t, e), fu && (mu = !0), fu = r;
+				r = du, du = !1, Pu(t, e), du && (pu = !0), du = r;
 				break;
 			case 22:
-				e.memoizedState === null && (n.memoizedState === null ? Fu(t, e) : Ql(e, !1));
+				e.memoizedState === null && (n.memoizedState === null ? Pu(t, e) : Zl(e, !1));
 				break;
 			case 30:
-				r = fu, i = Kl(), fu = !1, Fu(t, e), fu && (e.flags |= 4);
+				r = du, i = Gl(), du = !1, Pu(t, e), du && (e.flags |= 4);
 				var a = e.memoizedProps, o = e.stateNode;
 				t = wi(a, o), o = wi(n.memoizedProps, o);
 				var s = Ei(a.default, a.update);
-				s === "none" ? t = !1 : (a = n.memoizedState, n.memoizedState = null, n = e.child, ql = 0, t = au(e, n, t, o, s, a, !0), ql !== (a === null ? 0 : a.length) && (e.flags |= 32)), e.flags & 4 && t ? (Nd(e, e.memoizedProps.onUpdate), Gl = i) : i !== null && (i.push.apply(i, Gl), Gl = i), fu = e.flags & 32 ? !0 : r;
+				s === "none" ? t = !1 : (a = n.memoizedState, n.memoizedState = null, n = e.child, Kl = 0, t = iu(e, n, t, o, s, a, !0), Kl !== (a === null ? 0 : a.length) && (e.flags |= 32)), e.flags & 4 && t ? (Nd(e, e.memoizedProps.onUpdate), Wl = i) : i !== null && (i.push.apply(i, Wl), Wl = i), du = e.flags & 32 ? !0 : r;
 				break;
-			default: Fu(t, e);
+			default: Pu(t, e);
 		}
 	}
-	function Lu(e, t) {
-		if (t.subtreeFlags & 8772) for (t = t.child; t !== null;) vu(e, t.alternate, t), t = t.sibling;
+	function Iu(e, t) {
+		if (t.subtreeFlags & 8772) for (t = t.child; t !== null;) _u(e, t.alternate, t), t = t.sibling;
 	}
-	function Ru(e, t) {
+	function Lu(e, t) {
 		for (e = e.child; e !== null;) {
 			var n = e, r = t;
 			switch (n.tag) {
@@ -5706,46 +5706,46 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				case 11:
 				case 14:
 				case 15:
-					Tl(4, n, n.return), Ru(n, r);
+					wl(4, n, n.return), Lu(n, r);
 					break;
 				case 1:
-					kl(n, n.return);
+					Ol(n, n.return);
 					var i = n.stateNode;
-					typeof i.componentWillUnmount == "function" && Dl(n, n.return, i), Ru(n, r);
+					typeof i.componentWillUnmount == "function" && El(n, n.return, i), Lu(n, r);
 					break;
 				case 27: r & 2 && gm(n.stateNode, n.type, n.memoizedProps);
 				case 5:
-					kl(n, n.return), n.tag !== 5 && n.tag !== 27 || Ml(n), Ru(n, r);
+					Ol(n, n.return), n.tag !== 5 && n.tag !== 27 || jl(n), Lu(n, r);
 					break;
 				case 6:
-					Ml(n);
+					jl(n);
 					break;
 				case 26:
-					kl(n, n.return), i = n.stateNode, n.memoizedState !== null || i === null || H || i.parentNode.removeChild(i), Ru(n, r);
+					Ol(n, n.return), i = n.stateNode, n.memoizedState !== null || i === null || U || i.parentNode.removeChild(i), Lu(n, r);
 					break;
 				case 22:
-					n.memoizedState === null && Ru(n, r);
+					n.memoizedState === null && Lu(n, r);
 					break;
 				case 30:
-					kl(n, n.return), Ru(n, r);
+					Ol(n, n.return), Lu(n, r);
 					break;
-				case 7: kl(n, n.return);
-				default: Ru(n, r);
+				case 7: Ol(n, n.return);
+				default: Lu(n, r);
 			}
 			e = e.sibling;
 		}
 	}
-	function zu(e, t, n) {
+	function Ru(e, t, n) {
 		for (n = t.subtreeFlags & 8772 ? n : n & -2, t = t.child; t !== null;) {
 			var r = t.alternate, i = e, a = t, o = a.flags, s = !!(n & 1);
 			switch (a.tag) {
 				case 0:
 				case 11:
 				case 15:
-					zu(i, a, n), wl(4, a);
+					Ru(i, a, n), Cl(4, a);
 					break;
 				case 1:
-					if (zu(i, a, n), r = a, i = r.stateNode, typeof i.componentDidMount == "function") try {
+					if (Ru(i, a, n), r = a, i = r.stateNode, typeof i.componentDidMount == "function") try {
 						i.componentDidMount();
 					} catch (e) {
 						Z(r, r.return, e);
@@ -5759,165 +5759,165 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							Z(r, r.return, e);
 						}
 					}
-					s && o & 64 && El(a), Ol(a, a.return);
+					s && o & 64 && Tl(a), Dl(a, a.return);
 					break;
-				case 27: n & 2 && Vl(a);
+				case 27: n & 2 && Bl(a);
 				case 5:
-					a.tag !== 5 && a.tag !== 27 || jl(a), zu(i, a, n), s && r === null && o & 4 && Fl(a), Ol(a, a.return);
+					a.tag !== 5 && a.tag !== 27 || Al(a), Ru(i, a, n), s && r === null && o & 4 && Pl(a), Dl(a, a.return);
 					break;
 				case 6:
-					jl(a);
+					Al(a);
 					break;
 				case 26:
-					c = a.stateNode, a.memoizedState !== null || c === null || su || Km(bm(c.ownerDocument), a.type, c), zu(i, a, n), s && r === null && o & 4 && Fl(a), Ol(a, a.return);
+					c = a.stateNode, a.memoizedState !== null || c === null || ou || Km(bm(c.ownerDocument), a.type, c), Ru(i, a, n), s && r === null && o & 4 && Pl(a), Dl(a, a.return);
 					break;
 				case 12:
-					zu(i, a, n);
+					Ru(i, a, n);
 					break;
 				case 31:
-					zu(i, a, n), s && o & 4 && Eu(i, a);
+					Ru(i, a, n), s && o & 4 && Tu(i, a);
 					break;
 				case 13:
-					zu(i, a, n), s && o & 4 && Du(i, a);
+					Ru(i, a, n), s && o & 4 && Eu(i, a);
 					break;
 				case 22:
-					a.memoizedState === null && zu(i, a, n), Ol(a, a.return);
+					a.memoizedState === null && Ru(i, a, n), Dl(a, a.return);
 					break;
 				case 30:
-					zu(i, a, n), Ol(a, a.return);
+					Ru(i, a, n), Dl(a, a.return);
 					break;
-				case 7: Ol(a, a.return);
-				default: zu(i, a, n);
+				case 7: Dl(a, a.return);
+				default: Ru(i, a, n);
 			}
 			t = t.sibling;
 		}
 	}
-	function Bu(e, t) {
+	function zu(e, t) {
 		var n = null;
 		e !== null && e.memoizedState !== null && e.memoizedState.cachePool !== null && (n = e.memoizedState.cachePool.pool), e = null, t.memoizedState !== null && t.memoizedState.cachePool !== null && (e = t.memoizedState.cachePool.pool), e !== n && (e != null && e.refCount++, n != null && La(n));
 	}
-	function Vu(e, t) {
+	function Bu(e, t) {
 		e = null, t.alternate !== null && (e = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== e && (t.refCount++, e != null && La(e));
+	}
+	function Vu(e, t, n, r) {
+		var i = (n & 335544064) === n;
+		if (t.subtreeFlags & (i ? 10262 : 10256)) for (t = t.child; t !== null;) Hu(e, t, n, r), t = t.sibling;
+		else i && ru(t);
 	}
 	function Hu(e, t, n, r) {
 		var i = (n & 335544064) === n;
-		if (t.subtreeFlags & (i ? 10262 : 10256)) for (t = t.child; t !== null;) Uu(e, t, n, r), t = t.sibling;
-		else i && iu(t);
-	}
-	function Uu(e, t, n, r) {
-		var i = (n & 335544064) === n;
-		i && t.alternate === null && t.return !== null && t.return.alternate !== null && ru(t);
+		i && t.alternate === null && t.return !== null && t.return.alternate !== null && nu(t);
 		var a = t.flags;
 		switch (t.tag) {
 			case 0:
 			case 11:
 			case 15:
-				Hu(e, t, n, r), a & 2048 && wl(9, t);
+				Vu(e, t, n, r), a & 2048 && Cl(9, t);
 				break;
 			case 1:
-				Hu(e, t, n, r);
+				Vu(e, t, n, r);
 				break;
 			case 3:
-				Hu(e, t, n, r), i && hu && (e = e.containerInfo, e = e.nodeType === 9 ? e.body : e.nodeName === "HTML" ? e.ownerDocument.body : e, e.style.viewTransitionName === "root" && (e.style.viewTransitionName = ""), e = e.ownerDocument.documentElement, e !== null && e.style.viewTransitionName === "none" && (e.style.viewTransitionName = "")), a & 2048 && (a = null, t.alternate !== null && (a = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== a && (t.refCount++, a != null && La(a)));
+				Vu(e, t, n, r), i && mu && (e = e.containerInfo, e = e.nodeType === 9 ? e.body : e.nodeName === "HTML" ? e.ownerDocument.body : e, e.style.viewTransitionName === "root" && (e.style.viewTransitionName = ""), e = e.ownerDocument.documentElement, e !== null && e.style.viewTransitionName === "none" && (e.style.viewTransitionName = "")), a & 2048 && (a = null, t.alternate !== null && (a = t.alternate.memoizedState.cache), t = t.memoizedState.cache, t !== a && (t.refCount++, a != null && La(a)));
 				break;
 			case 12:
 				if (a & 2048) {
-					Hu(e, t, n, r), a = t.stateNode;
+					Vu(e, t, n, r), a = t.stateNode;
 					try {
 						var o = t.memoizedProps, s = o.id, c = o.onPostCommit;
 						typeof c == "function" && c(s, t.alternate === null ? "mount" : "update", a.passiveEffectDuration, -0);
 					} catch (e) {
 						Z(t, t.return, e);
 					}
-				} else Hu(e, t, n, r);
+				} else Vu(e, t, n, r);
 				break;
 			case 31:
-				Hu(e, t, n, r);
+				Vu(e, t, n, r);
 				break;
 			case 13:
-				Hu(e, t, n, r);
+				Vu(e, t, n, r);
 				break;
 			case 23: break;
 			case 22:
-				o = t.stateNode, s = t.alternate, t.memoizedState === null ? (i && s !== null && s.memoizedState !== null && ru(t), o._visibility & 2 ? Hu(e, t, n, r) : (o._visibility |= 2, Wu(e, t, n, r, !!(t.subtreeFlags & 10256) || !1))) : (i && s !== null && s.memoizedState === null && ru(s), o._visibility & 2 ? Hu(e, t, n, r) : Gu(e, t)), a & 2048 && Bu(s, t);
+				o = t.stateNode, s = t.alternate, t.memoizedState === null ? (i && s !== null && s.memoizedState !== null && nu(t), o._visibility & 2 ? Vu(e, t, n, r) : (o._visibility |= 2, Uu(e, t, n, r, !!(t.subtreeFlags & 10256) || !1))) : (i && s !== null && s.memoizedState === null && nu(s), o._visibility & 2 ? Vu(e, t, n, r) : Wu(e, t)), a & 2048 && zu(s, t);
 				break;
 			case 24:
-				Hu(e, t, n, r), a & 2048 && Vu(t.alternate, t);
+				Vu(e, t, n, r), a & 2048 && Bu(t.alternate, t);
 				break;
 			case 30:
-				i && (a = t.alternate, a !== null && (Xl(a.child, !0), Xl(t.child, !0))), Hu(e, t, n, r);
+				i && (a = t.alternate, a !== null && (Yl(a.child, !0), Yl(t.child, !0))), Vu(e, t, n, r);
 				break;
-			default: Hu(e, t, n, r);
+			default: Vu(e, t, n, r);
 		}
 	}
-	function Wu(e, t, n, r, i) {
+	function Uu(e, t, n, r, i) {
 		for (i &&= !!(t.subtreeFlags & 10256) || !1, t = t.child; t !== null;) {
 			var a = e, o = t, s = n, c = r, l = o.flags;
 			switch (o.tag) {
 				case 0:
 				case 11:
 				case 15:
-					Wu(a, o, s, c, i), wl(8, o);
+					Uu(a, o, s, c, i), Cl(8, o);
 					break;
 				case 23: break;
 				case 22:
 					var u = o.stateNode;
-					o.memoizedState === null ? (u._visibility |= 2, Wu(a, o, s, c, i)) : u._visibility & 2 ? Wu(a, o, s, c, i) : Gu(a, o), i && l & 2048 && Bu(o.alternate, o);
+					o.memoizedState === null ? (u._visibility |= 2, Uu(a, o, s, c, i)) : u._visibility & 2 ? Uu(a, o, s, c, i) : Wu(a, o), i && l & 2048 && zu(o.alternate, o);
 					break;
 				case 24:
-					Wu(a, o, s, c, i), i && l & 2048 && Vu(o.alternate, o);
+					Uu(a, o, s, c, i), i && l & 2048 && Bu(o.alternate, o);
 					break;
-				default: Wu(a, o, s, c, i);
+				default: Uu(a, o, s, c, i);
 			}
 			t = t.sibling;
 		}
 	}
-	function Gu(e, t) {
+	function Wu(e, t) {
 		if (t.subtreeFlags & 10256) for (t = t.child; t !== null;) {
 			var n = e, r = t, i = r.flags;
 			switch (r.tag) {
 				case 22:
-					Gu(n, r), i & 2048 && Bu(r.alternate, r);
+					Wu(n, r), i & 2048 && zu(r.alternate, r);
 					break;
 				case 24:
-					Gu(n, r), i & 2048 && Vu(r.alternate, r);
+					Wu(n, r), i & 2048 && Bu(r.alternate, r);
 					break;
-				default: Gu(n, r);
+				default: Wu(n, r);
 			}
 			t = t.sibling;
 		}
 	}
-	var Ku = 8192;
-	function qu(e, t, n) {
-		if (e.subtreeFlags & Ku) for (e = e.child; e !== null;) Ju(e, t, n), e = e.sibling;
+	var Gu = 8192;
+	function Ku(e, t, n) {
+		if (e.subtreeFlags & Gu) for (e = e.child; e !== null;) qu(e, t, n), e = e.sibling;
 	}
-	function Ju(e, t, n) {
+	function qu(e, t, n) {
 		switch (e.tag) {
 			case 26:
-				qu(e, t, n), e.flags & Ku && (e.memoizedState === null ? (e = e.stateNode, (t & 335544128) === t && Zm(n, e)) : Qm(n, ju, e.memoizedState, e.memoizedProps));
+				Ku(e, t, n), e.flags & Gu && (e.memoizedState === null ? (e = e.stateNode, (t & 335544128) === t && Zm(n, e)) : Qm(n, Au, e.memoizedState, e.memoizedProps));
 				break;
 			case 5:
-				qu(e, t, n), e.flags & Ku && (e = e.stateNode, (t & 335544128) === t && Zm(n, e));
+				Ku(e, t, n), e.flags & Gu && (e = e.stateNode, (t & 335544128) === t && Zm(n, e));
 				break;
 			case 3:
 			case 4:
-				var r = ju;
-				ju = bm(e.stateNode.containerInfo), qu(e, t, n), ju = r;
+				var r = Au;
+				Au = bm(e.stateNode.containerInfo), Ku(e, t, n), Au = r;
 				break;
 			case 22:
-				e.memoizedState === null && (r = e.alternate, r !== null && r.memoizedState !== null ? (r = Ku, Ku = 16777216, qu(e, t, n), Ku = r) : qu(e, t, n));
+				e.memoizedState === null && (r = e.alternate, r !== null && r.memoizedState !== null ? (r = Gu, Gu = 16777216, Ku(e, t, n), Gu = r) : Ku(e, t, n));
 				break;
 			case 30:
-				if ((e.flags & Ku) !== 0 && (r = e.memoizedProps.name, r != null && r !== "auto")) {
+				if ((e.flags & Gu) !== 0 && (r = e.memoizedProps.name, r != null && r !== "auto")) {
 					var i = e.stateNode;
-					i.paired = null, Ul === null && (Ul = /* @__PURE__ */ new Map()), Ul.set(r, i);
+					i.paired = null, Hl === null && (Hl = /* @__PURE__ */ new Map()), Hl.set(r, i);
 				}
-				qu(e, t, n);
+				Ku(e, t, n);
 				break;
-			default: qu(e, t, n);
+			default: Ku(e, t, n);
 		}
 	}
-	function Yu(e) {
+	function Ju(e) {
 		var t = e.alternate;
 		if (t !== null && (e = t.child, e !== null)) {
 			t.child = null;
@@ -5926,69 +5926,69 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			while (e !== null);
 		}
 	}
-	function Xu(e) {
+	function Yu(e) {
 		var t = e.deletions;
 		if (e.flags & 16) {
 			if (t !== null) for (var n = 0; n < t.length; n++) {
 				var r = t[n];
-				du = r, $u(r, e);
+				uu = r, Qu(r, e);
 			}
-			Yu(e);
+			Ju(e);
 		}
-		if (e.subtreeFlags & 10256) for (e = e.child; e !== null;) Zu(e), e = e.sibling;
+		if (e.subtreeFlags & 10256) for (e = e.child; e !== null;) Xu(e), e = e.sibling;
 	}
-	function Zu(e) {
+	function Xu(e) {
 		switch (e.tag) {
 			case 0:
 			case 11:
 			case 15:
-				Xu(e), e.flags & 2048 && Tl(9, e, e.return);
+				Yu(e), e.flags & 2048 && wl(9, e, e.return);
 				break;
 			case 3:
-				Xu(e);
+				Yu(e);
 				break;
 			case 12:
-				Xu(e);
+				Yu(e);
 				break;
 			case 22:
 				var t = e.stateNode;
-				e.memoizedState !== null && t._visibility & 2 && (e.return === null || e.return.tag !== 13) ? (t._visibility &= -3, Qu(e)) : Xu(e);
+				e.memoizedState !== null && t._visibility & 2 && (e.return === null || e.return.tag !== 13) ? (t._visibility &= -3, Zu(e)) : Yu(e);
 				break;
-			default: Xu(e);
+			default: Yu(e);
 		}
 	}
-	function Qu(e) {
+	function Zu(e) {
 		var t = e.deletions;
 		if (e.flags & 16) {
 			if (t !== null) for (var n = 0; n < t.length; n++) {
 				var r = t[n];
-				du = r, $u(r, e);
+				uu = r, Qu(r, e);
 			}
-			Yu(e);
+			Ju(e);
 		}
 		for (e = e.child; e !== null;) {
 			switch (t = e, t.tag) {
 				case 0:
 				case 11:
 				case 15:
-					Tl(8, t, t.return), Qu(t);
+					wl(8, t, t.return), Zu(t);
 					break;
 				case 22:
-					n = t.stateNode, n._visibility & 2 && (n._visibility &= -3, Qu(t));
+					n = t.stateNode, n._visibility & 2 && (n._visibility &= -3, Zu(t));
 					break;
-				default: Qu(t);
+				default: Zu(t);
 			}
 			e = e.sibling;
 		}
 	}
-	function $u(e, t) {
-		for (; du !== null;) {
-			var n = du;
+	function Qu(e, t) {
+		for (; uu !== null;) {
+			var n = uu;
 			switch (n.tag) {
 				case 0:
 				case 11:
 				case 15:
-					Tl(8, n, t);
+					wl(8, n, t);
 					break;
 				case 23:
 				case 22:
@@ -5999,23 +5999,23 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					break;
 				case 24: La(n.memoizedState.cache);
 			}
-			if (r = n.child, r !== null) r.return = n, du = r;
-			else a: for (n = e; du !== null;) {
-				r = du;
+			if (r = n.child, r !== null) r.return = n, uu = r;
+			else a: for (n = e; uu !== null;) {
+				r = uu;
 				var i = r.sibling, a = r.return;
-				if (Su(r), r === n) {
-					du = null;
+				if (xu(r), r === n) {
+					uu = null;
 					break a;
 				}
 				if (i !== null) {
-					i.return = a, du = i;
+					i.return = a, uu = i;
 					break a;
 				}
-				du = a;
+				uu = a;
 			}
 		}
 	}
-	var ed = {
+	var $u = {
 		getCacheForType: function(e) {
 			var t = Aa(I), n = t.data.get(e);
 			return n === void 0 && (n = e(), t.data.set(e, n)), n;
@@ -6023,13 +6023,13 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		cacheSignal: function() {
 			return Aa(I).controller.signal;
 		}
-	}, td = typeof WeakMap == "function" ? WeakMap : Map, W = 0, G = null, K = null, q = 0, J = 0, nd = null, rd = !1, id = !1, ad = !1, od = 0, Y = 0, sd = 0, cd = 0, ld = 0, ud = 0, dd = 0, fd = null, pd = null, md = !1, hd = 0, gd = 0, _d = Infinity, vd = null, yd = null, X = 0, bd = null, xd = null, Sd = 0, Cd = 0, wd = null, Td = null, Ed = null, Dd = null, Od = null, kd = 0, Ad = null;
+	}, ed = typeof WeakMap == "function" ? WeakMap : Map, G = 0, K = null, q = null, J = 0, Y = 0, td = null, nd = !1, rd = !1, id = !1, ad = 0, od = 0, sd = 0, cd = 0, ld = 0, ud = 0, dd = 0, fd = null, pd = null, md = !1, hd = 0, gd = 0, _d = Infinity, vd = null, yd = null, X = 0, bd = null, xd = null, Sd = 0, Cd = 0, wd = null, Td = null, Ed = null, Dd = null, Od = null, kd = 0, Ad = null;
 	function jd() {
-		return W & 2 && q !== 0 ? q & -q : D.T === null ? Dt() : Pf();
+		return G & 2 && J !== 0 ? J & -J : D.T === null ? Dt() : Pf();
 	}
 	function Md() {
 		if (ud === 0) {
-			if (!(q & 536870912) || P) {
+			if (!(J & 536870912) || P) {
 				var e = ft;
 				ft <<= 1, !(ft & 3932160) && (ft = 262144), ud = e;
 			} else ud = 536870912;
@@ -6043,14 +6043,14 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 	}
 	function Pd(e, t, n) {
-		(e === G && (J === 2 || J === 9) || e.cancelPendingCommit !== null) && (Vd(e, 0), Rd(e, q, ud, !1)), bt(e, n), W & 2 && e === G || (e === G && (!(W & 2) && (cd |= n), Y === 4 && Rd(e, q, ud, !1)), Ef(e));
+		(e === K && (Y === 2 || Y === 9) || e.cancelPendingCommit !== null) && (Vd(e, 0), Rd(e, J, ud, !1)), bt(e, n), G & 2 && e === K || (e === K && (!(G & 2) && (cd |= n), od === 4 && Rd(e, J, ud, !1)), Ef(e));
 	}
 	function Fd(e, t, n) {
-		if (W & 6) throw Error(i(327));
+		if (G & 6) throw Error(i(327));
 		var r = !n && !(t & 127) && (t & e.expiredLanes) === 0 || ht(e, t), a = r ? Yd(e, t) : qd(e, t, !0), o = r;
 		do {
 			if (a === 0) {
-				id && !r && Rd(e, t, 0, !1);
+				rd && !r && Rd(e, t, 0, !1);
 				break;
 			}
 			if (n = e.current.alternate, o && !Ld(n)) a = qd(e, t, !1), o = !1;
@@ -6065,7 +6065,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 							a = fd;
 							var l = c.current.memoizedState.isDehydrated;
 							if (l && (Vd(c, s).flags |= 256), s = qd(c, s, !1), s !== 2 && s !== 6) {
-								if (ad && !l) {
+								if (id && !l) {
 									c.errorRecoveryDisabledLanes |= o, cd |= o, a = 4;
 									break a;
 								}
@@ -6086,7 +6086,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						case 1: throw Error(i(345));
 						case 4: if ((t & 4194048) !== t && (t & 62914560) !== t) break;
 						case 6:
-							Rd(r, t, ud, !rd);
+							Rd(r, t, ud, !nd);
 							break a;
 						case 2:
 							pd = null;
@@ -6096,11 +6096,11 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						default: throw Error(i(329));
 					}
 					if ((t & 62914560) === t && (a = hd + 300 - Ye(), 10 < a)) {
-						if (Rd(r, t, ud, !rd), A(r, 0, !0) !== 0) break a;
-						Sd = t, r.timeoutHandle = gp(Id.bind(null, r, n, pd, vd, md, t, ud, cd, dd, rd, o, "Throttled", -0, 0), a);
+						if (Rd(r, t, ud, !nd), A(r, 0, !0) !== 0) break a;
+						Sd = t, r.timeoutHandle = gp(Id.bind(null, r, n, pd, vd, md, t, ud, cd, dd, nd, o, "Throttled", -0, 0), a);
 						break a;
 					}
-					Id(r, n, pd, vd, md, t, ud, cd, dd, rd, o, null, -0, 0);
+					Id(r, n, pd, vd, md, t, ud, cd, dd, nd, o, null, -0, 0);
 				}
 				break;
 			}
@@ -6119,7 +6119,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			waitingForImages: !0,
 			waitingForViewTransition: !1,
 			unsuspend: En
-		}, Ul = null, Ju(t, a, d), h && (m = d, h = e.containerInfo, h = (h.nodeType === 9 ? h : h.ownerDocument).__reactViewTransition, h != null && (m.count++, m.waitingForViewTransition = !0, m = nh.bind(m), h.finished.then(m, m))), m = (a & 62914560) === a ? hd - Ye() : (a & 4194048) === a ? gd - Ye() : 0, m = eh(d, m), m !== null) ? (Sd = a, e.cancelPendingCommit = m(nf.bind(null, e, t, a, n, r, i, o, s, c, l, u, d, null, f, p)), Rd(e, a, o, !l)) : nf(e, t, a, n, r, i, o, s, c, l, u, d);
+		}, Hl = null, qu(t, a, d), h && (m = d, h = e.containerInfo, h = (h.nodeType === 9 ? h : h.ownerDocument).__reactViewTransition, h != null && (m.count++, m.waitingForViewTransition = !0, m = nh.bind(m), h.finished.then(m, m))), m = (a & 62914560) === a ? hd - Ye() : (a & 4194048) === a ? gd - Ye() : 0, m = eh(d, m), m !== null) ? (Sd = a, e.cancelPendingCommit = m(nf.bind(null, e, t, a, n, r, i, o, s, c, l, u, d, null, f, p)), Rd(e, a, o, !l)) : nf(e, t, a, n, r, i, o, s, c, l, u, d);
 	}
 	function Ld(e) {
 		for (var t = e;;) {
@@ -6154,49 +6154,49 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		n !== 0 && St(e, n, t);
 	}
 	function zd() {
-		return W & 6 ? !0 : (Df(0, !1), !1);
+		return G & 6 ? !0 : (Df(0, !1), !1);
 	}
 	function Bd() {
-		if (K !== null) {
-			if (J === 0) var e = K.return;
-			else e = K, Sa = F = null, ss(e), lo = null, uo = 0, e = K;
-			for (; e !== null;) Cl(e.alternate, e), e = e.return;
-			K = null;
+		if (q !== null) {
+			if (Y === 0) var e = q.return;
+			else e = q, Sa = F = null, os(e), lo = null, uo = 0, e = q;
+			for (; e !== null;) Sl(e.alternate, e), e = e.return;
+			q = null;
 		}
 	}
 	function Vd(e, t) {
 		var n = e.timeoutHandle;
-		return n !== -1 && (e.timeoutHandle = -1, _p(n)), n = e.cancelPendingCommit, n !== null && (e.cancelPendingCommit = null, n()), Sd = 0, Bd(), G = e, K = n = Vi(e.current, null), q = t, J = 0, nd = null, rd = !1, id = ht(e, t), ad = !1, dd = ud = ld = cd = sd = Y = 0, pd = fd = null, md = !1, od = gt(e, t), ji(), n;
+		return n !== -1 && (e.timeoutHandle = -1, _p(n)), n = e.cancelPendingCommit, n !== null && (e.cancelPendingCommit = null, n()), Sd = 0, Bd(), K = e, q = n = Vi(e.current, null), J = t, Y = 0, td = null, nd = !1, rd = ht(e, t), id = !1, dd = ud = ld = cd = sd = od = 0, pd = fd = null, md = !1, ad = gt(e, t), ji(), n;
 	}
 	function Hd(e, t) {
-		R = null, D.H = _c, t === $a || t === to ? (t = so(), J = 3) : t === eo ? (t = so(), J = 4) : J = t === Fc ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, nd = t, K === null && (Y = 1, kc(e, Yi(t, e.current)));
+		R = null, D.H = gc, t === $a || t === to ? (t = so(), Y = 3) : t === eo ? (t = so(), Y = 4) : Y = t === Pc ? 8 : typeof t == "object" && t && typeof t.then == "function" ? 6 : 1, td = t, q === null && (od = 1, Oc(e, Yi(t, e.current)));
 	}
 	function Ud() {
 		var e = Po.current;
-		return e === null ? !0 : (q & 4194048) === q ? Fo === null : (q & 62914560) === q || q & 536870912 ? e === Fo : !1;
+		return e === null ? !0 : (J & 4194048) === J ? Fo === null : (J & 62914560) === J || J & 536870912 ? e === Fo : !1;
 	}
 	function Wd() {
 		var e = D.H;
-		return D.H = _c, e === null ? _c : e;
+		return D.H = gc, e === null ? gc : e;
 	}
 	function Gd() {
 		var e = D.A;
-		return D.A = ed, e;
+		return D.A = $u, e;
 	}
 	function Kd() {
-		Y = 4, rd || (q & 4194048) !== q && Po.current !== null || (id = !0), !(sd & 134217727) && !(cd & 134217727) || G === null || Rd(G, q, ud, !1);
+		od = 4, nd || (J & 4194048) !== J && Po.current !== null || (rd = !0), !(sd & 134217727) && !(cd & 134217727) || K === null || Rd(K, J, ud, !1);
 	}
 	function qd(e, t, n) {
-		var r = W;
-		W |= 2;
+		var r = G;
+		G |= 2;
 		var i = Wd(), a = Gd();
-		(G !== e || q !== t) && (vd = null, Vd(e, t)), t = !1;
-		var o = Y;
+		(K !== e || J !== t) && (vd = null, Vd(e, t)), t = !1;
+		var o = od;
 		a: do
 			try {
-				if (J !== 0 && K !== null) {
-					var s = K, c = nd;
-					switch (J) {
+				if (Y !== 0 && q !== null) {
+					var s = q, c = td;
+					switch (Y) {
 						case 8:
 							Bd(), o = 6;
 							break a;
@@ -6205,84 +6205,84 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						case 9:
 						case 6:
 							Po.current === null && (t = !0);
-							var l = J;
-							if (J = 0, nd = null, $d(e, s, c, l), n && id) {
+							var l = Y;
+							if (Y = 0, td = null, $d(e, s, c, l), n && rd) {
 								o = 0;
 								break a;
 							}
 							break;
-						default: l = J, J = 0, nd = null, $d(e, s, c, l);
+						default: l = Y, Y = 0, td = null, $d(e, s, c, l);
 					}
 				}
-				Jd(), o = Y;
+				Jd(), o = od;
 				break;
 			} catch (t) {
 				Hd(e, t);
 			}
 		while (1);
-		return t && e.shellSuspendCounter++, Sa = F = null, W = r, D.H = i, D.A = a, K === null && (G = null, q = 0, ji()), o;
+		return t && e.shellSuspendCounter++, Sa = F = null, G = r, D.H = i, D.A = a, q === null && (K = null, J = 0, ji()), o;
 	}
 	function Jd() {
-		for (; K !== null;) Zd(K);
+		for (; q !== null;) Zd(q);
 	}
 	function Yd(e, t) {
-		var n = W;
-		W |= 2;
+		var n = G;
+		G |= 2;
 		var r = Wd(), a = Gd();
-		G !== e || q !== t ? (vd = null, _d = Ye() + 500, Vd(e, t)) : id = ht(e, t);
+		K !== e || J !== t ? (vd = null, _d = Ye() + 500, Vd(e, t)) : rd = ht(e, t);
 		a: do
 			try {
-				if (J !== 0 && K !== null) {
-					t = K;
-					var o = nd;
-					b: switch (J) {
+				if (Y !== 0 && q !== null) {
+					t = q;
+					var o = td;
+					b: switch (Y) {
 						case 1:
-							J = 0, nd = null, $d(e, t, o, 1);
+							Y = 0, td = null, $d(e, t, o, 1);
 							break;
 						case 2:
 						case 9:
 							if (ro(o)) {
-								J = 0, nd = null, Qd(t);
+								Y = 0, td = null, Qd(t);
 								break;
 							}
 							t = function() {
-								J !== 2 && J !== 9 || G !== e || (J = 7), Ef(e);
+								Y !== 2 && Y !== 9 || K !== e || (Y = 7), Ef(e);
 							}, o.then(t, t);
 							break a;
 						case 3:
-							J = 7;
+							Y = 7;
 							break a;
 						case 4:
-							J = 5;
+							Y = 5;
 							break a;
 						case 7:
-							ro(o) ? (J = 0, nd = null, Qd(t)) : (J = 0, nd = null, $d(e, t, o, 7));
+							ro(o) ? (Y = 0, td = null, Qd(t)) : (Y = 0, td = null, $d(e, t, o, 7));
 							break;
 						case 5:
 							var s = null;
-							switch (K.tag) {
-								case 26: s = K.memoizedState;
+							switch (q.tag) {
+								case 26: s = q.memoizedState;
 								case 5:
 								case 27:
-									var c = K;
+									var c = q;
 									if (s ? Ym(s) : c.stateNode.complete) {
-										J = 0, nd = null;
+										Y = 0, td = null;
 										var l = c.sibling;
-										if (l !== null) K = l;
+										if (l !== null) q = l;
 										else {
 											var u = c.return;
-											u === null ? K = null : (K = u, ef(u));
+											u === null ? q = null : (q = u, ef(u));
 										}
 										break b;
 									}
 							}
-							J = 0, nd = null, $d(e, t, o, 5);
+							Y = 0, td = null, $d(e, t, o, 5);
 							break;
 						case 6:
-							J = 0, nd = null, $d(e, t, o, 6);
+							Y = 0, td = null, $d(e, t, o, 6);
 							break;
 						case 8:
-							Bd(), Y = 6;
+							Bd(), od = 6;
 							break a;
 						default: throw Error(i(462));
 					}
@@ -6293,108 +6293,108 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				Hd(e, t);
 			}
 		while (1);
-		return Sa = F = null, D.H = r, D.A = a, W = n, K === null ? (G = null, q = 0, ji(), Y) : 0;
+		return Sa = F = null, D.H = r, D.A = a, G = n, q === null ? (K = null, J = 0, ji(), od) : 0;
 	}
 	function Xd() {
-		for (; K !== null && !qe();) Zd(K);
+		for (; q !== null && !qe();) Zd(q);
 	}
 	function Zd(e) {
-		var t = hl(e.alternate, e, od);
-		e.memoizedProps = e.pendingProps, t === null ? ef(e) : K = t;
+		var t = ml(e.alternate, e, ad);
+		e.memoizedProps = e.pendingProps, t === null ? ef(e) : q = t;
 	}
 	function Qd(e) {
 		var t = e, n = t.alternate;
 		switch (t.tag) {
 			case 15:
 			case 0:
-				t = Yc(n, t, t.pendingProps, t.type, void 0, q);
+				t = Jc(n, t, t.pendingProps, t.type, void 0, J);
 				break;
 			case 11:
-				t = Yc(n, t, t.pendingProps, t.type.render, t.ref, q);
+				t = Jc(n, t, t.pendingProps, t.type.render, t.ref, J);
 				break;
 			case 5:
-				ss(t);
+				os(t);
 				var r = t;
 				r === ua && (P ? (ga(r), r.tag === 5 && r.stateNode != null && (N = r.stateNode)) : (ga(r), P = !0));
-			default: Cl(n, t), t = K = Hi(t, od), t = hl(n, t, od);
+			default: Sl(n, t), t = q = Hi(t, ad), t = ml(n, t, ad);
 		}
-		e.memoizedProps = e.pendingProps, t === null ? ef(e) : K = t;
+		e.memoizedProps = e.pendingProps, t === null ? ef(e) : q = t;
 	}
 	function $d(e, t, n, r) {
-		Sa = F = null, ss(t), lo = null, uo = 0;
+		Sa = F = null, os(t), lo = null, uo = 0;
 		var i = t.return;
 		try {
-			if (Pc(e, i, t, n, q)) {
-				Y = 1, kc(e, Yi(n, e.current)), K = null;
+			if (Nc(e, i, t, n, J)) {
+				od = 1, Oc(e, Yi(n, e.current)), q = null;
 				return;
 			}
 		} catch (t) {
-			if (i !== null) throw K = i, t;
-			Y = 1, kc(e, Yi(n, e.current)), K = null;
+			if (i !== null) throw q = i, t;
+			od = 1, Oc(e, Yi(n, e.current)), q = null;
 			return;
 		}
-		t.flags & 32768 ? (P || r === 1 ? e = !0 : id || q & 536870912 ? e = !1 : (rd = e = !0, (r === 2 || r === 9 || r === 3 || r === 6) && (r = Po.current, r !== null && r.tag === 13 && (r.flags |= 16384))), tf(t, e)) : ef(t);
+		t.flags & 32768 ? (P || r === 1 ? e = !0 : rd || J & 536870912 ? e = !1 : (nd = e = !0, (r === 2 || r === 9 || r === 3 || r === 6) && (r = Po.current, r !== null && r.tag === 13 && (r.flags |= 16384))), tf(t, e)) : ef(t);
 	}
 	function ef(e) {
 		var t = e;
 		do {
 			if (t.flags & 32768) {
-				tf(t, rd);
+				tf(t, nd);
 				return;
 			}
 			e = t.return;
-			var n = xl(t.alternate, t, od);
+			var n = bl(t.alternate, t, ad);
 			if (n !== null) {
-				K = n;
+				q = n;
 				return;
 			}
 			if (t = t.sibling, t !== null) {
-				K = t;
+				q = t;
 				return;
 			}
-			K = t = e;
+			q = t = e;
 		} while (t !== null);
-		Y === 0 && (Y = 5);
+		od === 0 && (od = 5);
 	}
 	function tf(e, t) {
 		do {
-			var n = Sl(e.alternate, e);
+			var n = xl(e.alternate, e);
 			if (n !== null) {
-				n.flags &= 32767, K = n;
+				n.flags &= 32767, q = n;
 				return;
 			}
 			if (n = e.return, n !== null && (n.flags |= 32768, n.subtreeFlags = 0, n.deletions = null), !t && (e = e.sibling, e !== null)) {
-				K = e;
+				q = e;
 				return;
 			}
-			K = e = n;
+			q = e = n;
 		} while (e !== null);
-		Y = 6, K = null;
+		od = 6, q = null;
 	}
 	function nf(e, t, n, r, a, o, s, c, l, u, d, f) {
 		e.cancelPendingCommit = null;
 		do
 			df();
 		while (X !== 0);
-		if (W & 6) throw Error(i(327));
+		if (G & 6) throw Error(i(327));
 		if (t !== null) {
 			if (t === e.current) throw Error(i(177));
-			e === G && (K = G = null, q = 0), xd = t, bd = e, Sd = n, wd = a, Td = r, rf(e, t, n, s, c, l, f);
+			e === K && (q = K = null, J = 0), xd = t, bd = e, Sd = n, wd = a, Td = r, rf(e, t, n, s, c, l, f);
 		}
 	}
 	function rf(e, t, n, r, i, a, o) {
 		var s = t.lanes | t.childLanes;
 		if (Cd = s, s |= Ai, xt(e, n, s, r, i, a), Dd = null, (n & 335544064) === n ? (Od = Ba(e), r = 10262) : (Od = null, r = 10256), (t.subtreeFlags & r) !== 0 || (t.flags & r) !== 0 ? (e.callbackNode = null, e.callbackPriority = 0, yf($e, function() {
 			return ff(), null;
-		})) : (e.callbackNode = null, e.callbackPriority = 0), Hl = !1, r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
-			r = D.T, D.T = null, i = O.p, O.p = 2, a = W, W |= 4;
+		})) : (e.callbackNode = null, e.callbackPriority = 0), Vl = !1, r = !!(t.flags & 13878), t.subtreeFlags & 13878 || r) {
+			r = D.T, D.T = null, i = O.p, O.p = 2, a = G, G |= 4;
 			try {
-				gu(e, t, n);
+				hu(e, t, n);
 			} finally {
-				W = a, O.p = i, D.T = r;
+				G = a, O.p = i, D.T = r;
 			}
 		}
-		X = 1, Hl ? Ed = Mp(o, e.containerInfo, Od, sf, cf, of, lf, ff, af, null, null) : (sf(), cf(), lf());
+		X = 1, Vl ? Ed = Mp(o, e.containerInfo, Od, sf, cf, of, lf, ff, af, null, null) : (sf(), cf(), lf());
 	}
 	function af(e) {
 		if (X !== 0) {
@@ -6403,7 +6403,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 	}
 	function of() {
-		X === 3 && (X = 0, Iu(xd, bd), X = 4);
+		X === 3 && (X = 0, Fu(xd, bd), X = 4);
 	}
 	function sf() {
 		if (X === 1) {
@@ -6413,10 +6413,10 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				r = D.T, D.T = null;
 				var i = O.p;
 				O.p = 2;
-				var a = W;
-				W |= 4;
+				var a = G;
+				G |= 4;
 				try {
-					pu = mu = !1, Mu(t, e, n), n = cp;
+					fu = pu = !1, ju(t, e, n), n = cp;
 					var o = ti(e.containerInfo), s = n.focusedElem, c = n.selectionRange;
 					if (o !== s && s && s.ownerDocument && ei(s.ownerDocument.documentElement, s)) {
 						if (c !== null && ni(s)) {
@@ -6447,7 +6447,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					}
 					gh = !!sp, cp = sp = null;
 				} finally {
-					W = a, O.p = i, D.T = r;
+					G = a, O.p = i, D.T = r;
 				}
 			}
 			e.current = t, X = 2;
@@ -6461,12 +6461,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 				n = D.T, D.T = null;
 				var r = O.p;
 				O.p = 2;
-				var i = W;
-				W |= 4;
+				var i = G;
+				G |= 4;
 				try {
-					vu(e, t.alternate, t);
+					_u(e, t.alternate, t);
 				} finally {
-					W = i, O.p = r, D.T = n;
+					G = i, O.p = r, D.T = n;
 				}
 			}
 			X = 3;
@@ -6510,9 +6510,9 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		try {
 			O.p = 32 > n ? 32 : n, D.T = null, n = wd, wd = null;
 			var o = bd, s = Sd;
-			if (X = 0, xd = bd = null, Sd = 0, W & 6) throw Error(i(331));
-			var c = W;
-			if (W |= 4, Zu(o.current), Uu(o, o.current, s, n), W = c, Df(0, !1), at && typeof at.onPostCommitFiberRoot == "function") try {
+			if (X = 0, xd = bd = null, Sd = 0, G & 6) throw Error(i(331));
+			var c = G;
+			if (G |= 4, Xu(o.current), Hu(o, o.current, s, n), G = c, Df(0, !1), at && typeof at.onPostCommitFiberRoot == "function") try {
 				at.onPostCommitFiberRoot(it, o);
 			} catch {}
 			return !0;
@@ -6521,7 +6521,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		}
 	}
 	function pf(e, t, n) {
-		t = Yi(n, t), t = jc(e.stateNode, t, 2), e = So(e, t, 2), e !== null && (bt(e, 2), Ef(e));
+		t = Yi(n, t), t = Ac(e.stateNode, t, 2), e = So(e, t, 2), e !== null && (bt(e, 2), Ef(e));
 	}
 	function Z(e, t, n) {
 		if (e.tag === 3) pf(e, e, n);
@@ -6533,7 +6533,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			if (t.tag === 1) {
 				var r = t.stateNode;
 				if (typeof t.type.getDerivedStateFromError == "function" || typeof r.componentDidCatch == "function" && (yd === null || !yd.has(r))) {
-					e = Yi(n, e), n = Mc(2), r = So(t, n, 2), r !== null && (Nc(n, r, t, e), bt(r, 2), Ef(r));
+					e = Yi(n, e), n = jc(2), r = So(t, n, 2), r !== null && (Mc(n, r, t, e), bt(r, 2), Ef(r));
 					break;
 				}
 			}
@@ -6543,15 +6543,15 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	function mf(e, t, n) {
 		var r = e.pingCache;
 		if (r === null) {
-			r = e.pingCache = new td();
+			r = e.pingCache = new ed();
 			var i = /* @__PURE__ */ new Set();
 			r.set(t, i);
 		} else i = r.get(t), i === void 0 && (i = /* @__PURE__ */ new Set(), r.set(t, i));
-		i.has(n) || (ad = !0, i.add(n), e = hf.bind(null, e, t, n), t.then(e, e));
+		i.has(n) || (id = !0, i.add(n), e = hf.bind(null, e, t, n), t.then(e, e));
 	}
 	function hf(e, t, n) {
 		var r = e.pingCache;
-		r !== null && r.delete(t), e.pingedLanes |= e.suspendedLanes & n, e.warmLanes &= ~n, G === e && (q & n) === n && (Y === 4 || Y === 3 && (q & 62914560) === q && 300 > Ye() - hd ? W & 2 ? ld |= n : Vd(e, 0) : ld |= n, dd === q && (dd = 0)), Ef(e);
+		r !== null && r.delete(t), e.pingedLanes |= e.suspendedLanes & n, e.warmLanes &= ~n, K === e && (J & n) === n && (od === 4 || od === 3 && (J & 62914560) === J && 300 > Ye() - hd ? G & 2 ? ld |= n : Vd(e, 0) : ld |= n, dd === J && (dd = 0)), Ef(e);
 	}
 	function gf(e, t) {
 		t === 0 && (t = vt()), e = Pi(e, t), e !== null && (bt(e, t), Ef(e));
@@ -6599,7 +6599,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 								a = (1 << 31 - st(42 | e) + 1) - 1, a &= i & ~(o & ~s), a = a & 201326741 ? a & 201326741 | 1 : a ? a | 2 : 0;
 							}
 							a !== 0 && (n = !0, Mf(r, a));
-						} else a = q, a = A(r, r === G ? a : 0, r.cancelPendingCommit !== null || r.timeoutHandle !== -1), !(a & 3) || ht(r, a) || (n = !0, Mf(r, a));
+						} else a = J, a = A(r, r === K ? a : 0, r.cancelPendingCommit !== null || r.timeoutHandle !== -1), !(a & 3) || ht(r, a) || (n = !0, Mf(r, a));
 					}
 					r = r.next;
 				}
@@ -6625,7 +6625,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 			var o = 31 - st(a), s = 1 << o, c = i[o];
 			c === -1 ? ((s & n) === 0 || (s & r) !== 0) && (i[o] = _t(s, t)) : c <= t && (e.expiredLanes |= s), a &= ~s;
 		}
-		if (t = G, n = q, n = A(e, e === t ? n : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r = e.callbackNode, n === 0 || e === t && (J === 2 || J === 9) || e.cancelPendingCommit !== null) return r !== null && r !== null && Ke(r), e.callbackNode = null, e.callbackPriority = 0;
+		if (t = K, n = J, n = A(e, e === t ? n : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r = e.callbackNode, n === 0 || e === t && (Y === 2 || Y === 9) || e.cancelPendingCommit !== null) return r !== null && r !== null && Ke(r), e.callbackNode = null, e.callbackPriority = 0;
 		if (!(n & 3) || ht(e, n)) {
 			if (t = n & -n, t === e.callbackPriority) return t;
 			switch (r !== null && Ke(r), Et(n)) {
@@ -6649,8 +6649,8 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 		if (X !== 0 && X !== 5) return e.callbackNode = null, e.callbackPriority = 0, null;
 		var n = e.callbackNode;
 		if (df() && e.callbackNode !== n) return null;
-		var r = q;
-		return r = A(e, e === G ? r : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r === 0 ? null : (Fd(e, r, t), Af(e, Ye()), e.callbackNode != null && e.callbackNode === n ? jf.bind(null, e) : null);
+		var r = J;
+		return r = A(e, e === K ? r : 0, e.cancelPendingCommit !== null || e.timeoutHandle !== -1), r === 0 ? null : (Fd(e, r, t), Af(e, Ye()), e.callbackNode != null && e.callbackNode === n ? jf.bind(null, e) : null);
 	}
 	function Mf(e, t) {
 		if (df()) return null;
@@ -6658,7 +6658,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	}
 	function Nf() {
 		bp(function() {
-			W & 6 ? Ge(Ze, Of) : kf();
+			G & 6 ? Ge(Ze, Of) : kf();
 		});
 	}
 	function Pf() {
@@ -6684,14 +6684,14 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 						if (r.defaultPrevented) {
 							if (Tf !== 0) {
 								var e = new FormData(i, o);
-								rc(n, {
+								nc(n, {
 									pending: !0,
 									data: e,
 									method: i.method,
 									action: a
 								}, null, e);
 							}
-						} else typeof a == "function" && (s.preventDefault(), e = new FormData(i, o), rc(n, {
+						} else typeof a == "function" && (s.preventDefault(), e = new FormData(i, o), nc(n, {
 							pending: !0,
 							data: e,
 							method: i.method,
@@ -8203,7 +8203,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	}
 	function Cm(e) {
 		var t = Vt(e);
-		t !== null && t.tag === 5 && t.type === "form" ? ac(t) : xm.r(e);
+		t !== null && t.tag === 5 && t.type === "form" ? ic(t) : xm.r(e);
 	}
 	var wm = typeof document > "u" ? null : document;
 	function Tm(e, t, n) {
@@ -8686,7 +8686,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 										var c = 1 << 31 - st(o);
 										s.entanglements[1] |= c, o &= ~c;
 									}
-									Ef(a), !(W & 6) && (_d = Ye() + 500, Df(0, !1));
+									Ef(a), !(G & 6) && (_d = Ye() + 500, Df(0, !1));
 								}
 							}
 							break;
@@ -8913,7 +8913,7 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 					break;
 				}
 				var a = Vt(n);
-				a !== null && (e.splice(t, 3), t -= 3, rc(a, {
+				a !== null && (e.splice(t, 3), t -= 3, nc(a, {
 					pending: !0,
 					data: i,
 					method: n.method,
@@ -9030,8 +9030,12 @@ var e = Object.create, t = Object.defineProperty, n = Object.getOwnPropertyDescr
 	}
 	e.createRoot = function(e, t) {
 		if (!a(e)) throw Error(i(299));
-		var n = !1, r = "", o = Ec, s = Dc, c = Oc;
+		var n = !1, r = "", o = Tc, s = Ec, c = Dc;
 		return t != null && (!0 === t.unstable_strictMode && (n = !0), t.identifierPrefix !== void 0 && (r = t.identifierPrefix), t.onUncaughtError !== void 0 && (o = t.onUncaughtError), t.onCaughtError !== void 0 && (s = t.onCaughtError), t.onRecoverableError !== void 0 && (c = t.onRecoverableError)), t = lh(e, 1, !1, null, null, n, r, null, o, s, c, Uh), e[Mt] = t.current, Wf(e), new Wh(t);
+	}, e.hydrateRoot = function(e, t, n) {
+		if (!a(e)) throw Error(i(299));
+		var r = !1, o = "", s = Tc, c = Ec, l = Dc, u = null;
+		return n != null && (!0 === n.unstable_strictMode && (r = !0), n.identifierPrefix !== void 0 && (o = n.identifierPrefix), n.onUncaughtError !== void 0 && (s = n.onUncaughtError), n.onCaughtError !== void 0 && (c = n.onCaughtError), n.onRecoverableError !== void 0 && (l = n.onRecoverableError), n.formState !== void 0 && (u = n.formState)), t = lh(e, 1, !0, t, n ?? null, r, o, u, s, c, l, Uh), t.context = uh(null), n = t.current, r = jd(), r = Tt(r), o = xo(r), o.callback = null, So(n, o, r), n = r, t.current.lanes = n, bt(t, n), Ef(t), e[Mt] = t.current, Wf(e), new Gh(t);
 	};
 })), g = /* @__PURE__ */ o(((e, t) => {
 	function n() {
@@ -12867,6 +12871,8 @@ function Uo({ bridge: e }) {
 			top: 0,
 			behavior: "instant"
 		}), document.getElementById("react-step-heading")?.focus({ preventScroll: !0 }));
+	}, [n, t.view]), (0, _.useEffect)(() => {
+		window.dispatchEvent(new CustomEvent("spacelab:frontend-navigate"));
 	}, [n, t.view]);
 	function d() {
 		let t = e.validate();
@@ -12979,7 +12985,7 @@ function Uo({ bridge: e }) {
 		children: [/* @__PURE__ */ (0, T.jsxs)("span", { children: [/* @__PURE__ */ (0, T.jsx)(Go, {}), "Space Lab"] }), /* @__PURE__ */ (0, T.jsxs)("button", {
 			type: "button",
 			onClick: () => e.prepare(),
-			children: [/* @__PURE__ */ (0, T.jsx)(ii, { size: 17 }), "Volver al nuevo generador"]
+			children: [/* @__PURE__ */ (0, T.jsx)(ii, { size: 17 }), "Volver al generador"]
 		})]
 	}) : /* @__PURE__ */ (0, T.jsxs)("div", {
 		className: "sl-app",
@@ -13057,9 +13063,15 @@ function Uo({ bridge: e }) {
 						/* @__PURE__ */ (0, T.jsxs)("div", {
 							className: "sl-topbar-actions",
 							children: [
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									className: "sl-icon-button",
+									href: "mailto:pabloclsa87@gmail.com",
+									"aria-label": "Contactar con soporte por correo",
+									children: /* @__PURE__ */ (0, T.jsx)(wi, { size: 19 })
+								}),
 								/* @__PURE__ */ (0, T.jsx)("span", {
 									className: "sl-beta-tag",
-									children: "VISTA PREVIA"
+									children: "BETA"
 								}),
 								/* @__PURE__ */ (0, T.jsx)("button", {
 									type: "button",
@@ -13257,14 +13269,10693 @@ function R() {
 		})]
 	})] });
 }
-// react-ui/src/main.tsx
+// react-ui/src/surfaces/Icons.tsx
 function z() {
-	let e = document.getElementById("react-preview-root");
-	if (!e) return;
-	if (new URLSearchParams(location.search).get("ui") === "legacy") {
-		e.remove(), delete document.body.dataset.reactPreview;
-		return;
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		/* @__PURE__ */ (0, T.jsxs)("svg", {
+			className: "ui-icon-sprite",
+			"aria-hidden": "true",
+			style: {
+				display: "none !important",
+				position: "absolute",
+				width: "0",
+				height: "0"
+			},
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-edit",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M12 20h9" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-eye",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z" }), /* @__PURE__ */ (0, T.jsx)("circle", {
+						cx: "12",
+						cy: "12",
+						r: "3"
+					})]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-file",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M14 2v6h6M8 13h8M8 17h6" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-download",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M12 3v12m0 0 4-4m-4 4-4-4" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M4 18v2h16v-2" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-menu",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M4 6h16M4 12h16M4 18h16" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-sparkles",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "m12 3-1.4 3.6L7 8l3.6 1.4L12 13l1.4-3.6L17 8l-3.6-1.4Z" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "m19 14-.9 2.1L16 17l2.1.9L19 20l.9-2.1L22 17l-2.1-.9ZM5 14l-.7 1.3L3 16l1.3.7L5 18l.7-1.3L7 16l-1.3-.7Z" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-building",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M3 21h18M6 21V4h12v17M9 8h2m2 0h2m-6 4h2m2 0h2m-6 4h2m2 0h2" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-target",
+					viewBox: "0 0 24 24",
+					children: [
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "12",
+							cy: "12",
+							r: "9"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "12",
+							cy: "12",
+							r: "5"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "12",
+							cy: "12",
+							r: "1"
+						})
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-users",
+					viewBox: "0 0 24 24",
+					children: [
+						/* @__PURE__ */ (0, T.jsx)("path", { d: "M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" }),
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "9",
+							cy: "7",
+							r: "4"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("path", { d: "M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" })
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-save",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M17 21v-8H7v8M7 3v5h8" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-folder",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M3 6h7l2 2h9v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-upload",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M12 16V4m0 0-4 4m4-4 4 4" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M4 18v2h16v-2" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-close",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M6 6l12 12M18 6 6 18" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-check",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "m5 12 4 4L19 6" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-user",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("circle", {
+						cx: "12",
+						cy: "8",
+						r: "4"
+					}), /* @__PURE__ */ (0, T.jsx)("path", { d: "M4 21a8 8 0 0 1 16 0" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-shield",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M12 3 4 6v5c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6Z" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "m9 12 2 2 4-4" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-logout",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M10 17l5-5-5-5M15 12H3" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M14 3h5a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-5" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-chat",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M21 15a4 4 0 0 1-4 4H8l-5 3 1.5-5A8 8 0 1 1 21 15Z" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M8 12h.01M12 12h.01M16 12h.01" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-sliders",
+					viewBox: "0 0 24 24",
+					children: [
+						/* @__PURE__ */ (0, T.jsx)("path", { d: "M4 6h10M18 6h2M4 12h3M11 12h9M4 18h7M15 18h5" }),
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "16",
+							cy: "6",
+							r: "2"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "9",
+							cy: "12",
+							r: "2"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "13",
+							cy: "18",
+							r: "2"
+						})
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-trash",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M3 6h18M8 6V4h8v2M19 6l-1 15H6L5 6M10 10v7M14 10v7" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-image",
+					viewBox: "0 0 24 24",
+					children: [
+						/* @__PURE__ */ (0, T.jsx)("rect", {
+							x: "3",
+							y: "4",
+							width: "18",
+							height: "16",
+							rx: "2"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "9",
+							cy: "10",
+							r: "2"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("path", { d: "m21 15-5-5L5 20" })
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-refresh",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M20 7h-5V2M4 17h5v5" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M6.1 7a8 8 0 0 1 13.5-1.5L20 7M4 17l.4 1.5A8 8 0 0 0 17.9 17" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-plus",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M12 5v14M5 12h14" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-minus",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M5 12h14" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-arrow-right",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M5 12h14M13 6l6 6-6 6" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-alert",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M10.3 3.7 2.5 17.2A2 2 0 0 0 4.2 20h15.6a2 2 0 0 0 1.7-2.8L13.7 3.7a2 2 0 0 0-3.4 0Z" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M12 9v4M12 17h.01" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-undo",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "m9 7-5 5 5 5" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M20 17a7 7 0 0 0-7-7H4" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-redo",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "m15 7 5 5-5 5" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M4 17a7 7 0 0 1 7-7h9" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-list",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M8 6h13M8 12h13M8 18h13" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "M3 6h.01M3 12h.01M3 18h.01" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-clean",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "m4 18 8-8M14 3l7 7-9 9H5l-2-2 9-9Z" }), /* @__PURE__ */ (0, T.jsx)("path", { d: "m11 19 2 2M16 16l2 2M7 15l4 4" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-copy",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("rect", {
+						width: "14",
+						height: "14",
+						x: "8",
+						y: "8",
+						rx: "2",
+						ry: "2"
+					}), /* @__PURE__ */ (0, T.jsx)("path", { d: "M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-expand",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "m15 3 6 6m0-6h-6m6 0v6M9 21l-6-6m0 6h6m-6 0v-6" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-theme",
+					viewBox: "0 0 24 24",
+					children: [
+						/* @__PURE__ */ (0, T.jsx)("rect", {
+							x: "3",
+							y: "4",
+							width: "18",
+							height: "14",
+							rx: "2"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("path", { d: "M8 22h8M12 18v4" }),
+						/* @__PURE__ */ (0, T.jsx)("path", { d: "M16.5 8.5a4 4 0 1 1-5-1 3.2 3.2 0 0 0 5 1Z" })
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-chevron-down",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "m6 9 6 6 6-6" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-mail",
+					viewBox: "0 0 24 24",
+					children: [/* @__PURE__ */ (0, T.jsx)("rect", {
+						width: "20",
+						height: "16",
+						x: "2",
+						y: "4",
+						rx: "2"
+					}), /* @__PURE__ */ (0, T.jsx)("path", { d: "m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" })]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-whatsapp",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.888 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.05 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" })
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("symbol", {
+					id: "icon-globe",
+					viewBox: "0 0 24 24",
+					children: [
+						/* @__PURE__ */ (0, T.jsx)("circle", {
+							cx: "12",
+							cy: "12",
+							r: "10"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("line", {
+							x1: "2",
+							y1: "12",
+							x2: "22",
+							y2: "12"
+						}),
+						/* @__PURE__ */ (0, T.jsx)("path", { d: "M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" })
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("symbol", {
+					id: "icon-heart",
+					viewBox: "0 0 24 24",
+					children: /* @__PURE__ */ (0, T.jsx)("path", { d: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" })
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/regions.tsx
+var B = /* @__PURE__ */ new Map(), Ko = /* @__PURE__ */ new Set([
+	"script",
+	"iframe",
+	"object",
+	"embed",
+	"base",
+	"link",
+	"meta",
+	"style"
+]), qo = /* @__PURE__ */ new Set([
+	"disabled",
+	"hidden",
+	"required",
+	"multiple",
+	"open",
+	"readonly",
+	"autofocus",
+	"checked"
+]), Jo = {
+	class: "className",
+	for: "htmlFor",
+	tabindex: "tabIndex",
+	readonly: "readOnly",
+	autofocus: "autoFocus",
+	colspan: "colSpan",
+	rowspan: "rowSpan",
+	maxlength: "maxLength",
+	minlength: "minLength",
+	contenteditable: "contentEditable",
+	spellcheck: "spellCheck",
+	autocomplete: "autoComplete",
+	"stroke-width": "strokeWidth",
+	"stroke-linecap": "strokeLinecap",
+	"stroke-linejoin": "strokeLinejoin"
+}, Yo = (e) => e.replace(/-([a-z])/g, (e, t) => t.toUpperCase());
+function Xo(e, t) {
+	if (e.nodeType === Node.TEXT_NODE) return e.textContent;
+	if (!(e instanceof Element) || Ko.has(e.localName)) return null;
+	let n = e.localName, r = { key: t };
+	for (let { name: t, value: i } of Array.from(e.attributes)) if (!(t.startsWith("on") || [
+		"srcdoc",
+		"style",
+		"selected"
+	].includes(t))) {
+		if ([
+			"href",
+			"src",
+			"xlink:href",
+			"action",
+			"formaction"
+		].includes(t)) {
+			if (n === "use" && !/^#[\w-]+$/.test(i)) continue;
+			try {
+				let e = new URL(i, location.href).protocol;
+				if (![
+					"http:",
+					"https:",
+					"mailto:",
+					"blob:"
+				].includes(e) && !/^data:image\/(png|jpeg|webp|gif);base64,/i.test(i)) continue;
+			} catch {
+				continue;
+			}
+		}
+		t === "value" && ["input", "textarea"].includes(n) ? r.defaultValue = i : t === "checked" ? r.defaultChecked = !0 : r[Jo[t] || t] = qo.has(t) ? !0 : i;
 	}
+	if (e instanceof HTMLElement) {
+		let t = {};
+		for (let n of Array.from(e.style)) {
+			let r = e.style.getPropertyValue(n);
+			/(?:url\s*\(|expression\s*\(|javascript\s*:)/i.test(r) || (t[n.startsWith("--") ? n : Yo(n)] = r);
+		}
+		r.style = t;
+	}
+	if (n === "select") {
+		let t = Array.from(e.querySelectorAll("option[selected]")).map((e) => e.getAttribute("value") || e.textContent || "");
+		t.length && (r.defaultValue = r.multiple ? t : t[0]);
+	}
+	return n === "textarea" ? (r.defaultValue = e.textContent || "", (0, _.createElement)(n, r)) : [
+		"input",
+		"img",
+		"br",
+		"hr",
+		"area",
+		"col",
+		"source",
+		"wbr"
+	].includes(n) ? (0, _.createElement)(n, r) : (0, _.createElement)(n, r, ...Array.from(e.childNodes, Xo));
+}
+function Zo(e, t) {
+	for (let [t, n] of B) t !== e && e.contains(t) && (n.root.unmount(), B.delete(t));
+	let n = B.get(e);
+	n || (n = {
+		root: (0, v.createRoot)(e),
+		revision: 0
+	}, B.set(e, n));
+	let r = document.createElement("template");
+	r.innerHTML = String(t);
+	let i = Array.from(r.content.childNodes, Xo), a = n;
+	return (0, k.flushSync)(() => a.root.render((0, _.createElement)(_.Fragment, { key: ++a.revision }, ...i))), t;
+}
+function Qo() {
+	let e = new MutationObserver(() => {
+		for (let [e, t] of B) e.isConnected || (t.root.unmount(), B.delete(e));
+	});
+	return e.observe(document.body, {
+		childList: !0,
+		subtree: !0
+	}), () => {
+		e.disconnect(), B.forEach((e) => e.root.unmount()), B.clear();
+	};
+}
+// react-ui/src/live.tsx
+function V(e) {
+	let t = e, n = /* @__PURE__ */ new Set();
+	return {
+		get: () => t,
+		server: () => e,
+		subscribe: (e) => (n.add(e), () => n.delete(e)),
+		set(e) {
+			t = e, n.forEach((e) => e());
+		}
+	};
+}
+var $o = V([]), es = V({
+	signedIn: !1,
+	isAdmin: !1
+}), ts = V([]), ns = /* @__PURE__ */ new Map(), rs = 0, is = (e) => {
+	clearTimeout(ns.get(e)), ns.delete(e), ts.set(ts.get().filter((t) => t.id !== e));
+};
+function as({ name: e }) {
+	return /* @__PURE__ */ (0, T.jsx)("svg", {
+		className: "ui-icon",
+		"aria-hidden": "true",
+		children: /* @__PURE__ */ (0, T.jsx)("use", { href: `#icon-${e}` })
+	});
+}
+function os() {
+	let e = (0, _.useSyncExternalStore)($o.subscribe, $o.get, $o.server);
+	return e.length ? /* @__PURE__ */ (0, T.jsx)(T.Fragment, { children: e.map((e) => /* @__PURE__ */ (0, T.jsxs)("article", {
+		className: "home-session-item",
+		children: [/* @__PURE__ */ (0, T.jsxs)("div", {
+			className: "home-session-main",
+			children: [/* @__PURE__ */ (0, T.jsx)("span", {
+				className: "home-session-symbol",
+				children: /* @__PURE__ */ (0, T.jsx)(as, { name: "file" })
+			}), /* @__PURE__ */ (0, T.jsxs)("div", {
+				className: "home-session-copy",
+				children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: e.title }), /* @__PURE__ */ (0, T.jsx)("span", { children: e.description })]
+			})]
+		}), /* @__PURE__ */ (0, T.jsxs)("div", {
+			className: "home-session-actions",
+			children: [/* @__PURE__ */ (0, T.jsx)("time", {
+				className: "home-session-date",
+				dateTime: e.lastSaved,
+				children: e.date
+			}), /* @__PURE__ */ (0, T.jsxs)("button", {
+				type: "button",
+				className: "btn btn-ghost btn-sm home-open-session",
+				"data-session-id": e.id,
+				children: ["Abrir ", /* @__PURE__ */ (0, T.jsx)(as, { name: "arrow-right" })]
+			})]
+		})]
+	}, e.id)) }) : /* @__PURE__ */ (0, T.jsxs)("div", {
+		className: "home-empty-sessions",
+		children: [
+			/* @__PURE__ */ (0, T.jsx)("span", { children: /* @__PURE__ */ (0, T.jsx)(as, { name: "folder" }) }),
+			/* @__PURE__ */ (0, T.jsx)("h3", { children: "Aún no tienes sesiones guardadas" }),
+			/* @__PURE__ */ (0, T.jsx)("p", { children: "Crea tu primera planificación y aparecerá aquí automáticamente." }),
+			/* @__PURE__ */ (0, T.jsx)("button", {
+				type: "button",
+				className: "btn btn-primary btn-sm",
+				"data-home-action": "new-session",
+				children: "Crear mi primera sesión"
+			})
+		]
+	});
+}
+function ss() {
+	let e = (0, _.useSyncExternalStore)(es.subscribe, es.get, es.server);
+	return e.signedIn ? /* @__PURE__ */ (0, T.jsxs)("div", {
+		className: "user-menu-container",
+		children: [e.isAdmin && /* @__PURE__ */ (0, T.jsxs)("a", {
+			href: "admin.html",
+			className: "btn btn-accent btn-sm",
+			children: [/* @__PURE__ */ (0, T.jsx)(as, { name: "shield" }), /* @__PURE__ */ (0, T.jsx)("span", {
+				className: "auth-label",
+				children: "Admin"
+			})]
+		}), /* @__PURE__ */ (0, T.jsxs)("button", {
+			id: "btn-logout",
+			className: "btn btn-ghost btn-sm",
+			title: "Cerrar sesión",
+			onClick: e.onLogout,
+			children: [/* @__PURE__ */ (0, T.jsx)(as, { name: "logout" }), /* @__PURE__ */ (0, T.jsx)("span", {
+				className: "auth-label",
+				children: "Salir"
+			})]
+		})]
+	}) : /* @__PURE__ */ (0, T.jsxs)("button", {
+		id: "btn-login-trigger",
+		className: "btn btn-ghost btn-sm",
+		"aria-label": "Iniciar sesión",
+		onClick: e.onLogin,
+		children: [/* @__PURE__ */ (0, T.jsx)(as, { name: "user" }), /* @__PURE__ */ (0, T.jsx)("span", {
+			className: "auth-label",
+			children: "Iniciar sesión"
+		})]
+	});
+}
+function cs() {
+	let e = (0, _.useSyncExternalStore)(ts.subscribe, ts.get, ts.server);
+	(0, _.useEffect)(() => () => {
+		ns.forEach(clearTimeout), ns.clear();
+	}, []);
+	let t = {
+		success: "check",
+		error: "close",
+		info: "sparkles",
+		warning: "alert"
+	};
+	return /* @__PURE__ */ (0, T.jsx)(T.Fragment, { children: e.map((e) => /* @__PURE__ */ (0, T.jsxs)("div", {
+		className: `toast toast-${e.type}`,
+		role: e.type === "error" ? "alert" : "status",
+		onClick: () => is(e.id),
+		children: [
+			/* @__PURE__ */ (0, T.jsx)("span", {
+				className: "toast-icon",
+				children: /* @__PURE__ */ (0, T.jsx)(as, { name: t[e.type] || "sparkles" })
+			}),
+			/* @__PURE__ */ (0, T.jsx)("span", {
+				className: "toast-msg",
+				children: e.message
+			}),
+			/* @__PURE__ */ (0, T.jsx)("button", {
+				type: "button",
+				className: "btn btn-ghost btn-sm",
+				"aria-label": "Cerrar aviso",
+				onClick: () => is(e.id),
+				children: "×"
+			})
+		]
+	}, e.id)) });
+}
+function ls() {
+	window.SpaceLabReactUI = {
+		region: Zo,
+		sessions: (e) => $o.set(e),
+		auth: (e) => es.set(e),
+		toast(e, t = "info", n = 3500) {
+			let r = ++rs;
+			ts.get().length >= 5 && is(ts.get()[0].id), ts.set([...ts.get(), {
+				id: r,
+				message: String(e ?? ""),
+				type: t
+			}]), ns.set(r, setTimeout(() => is(r), Math.max(0, n)));
+		}
+	};
+}
+// react-ui/src/surfaces/AuthDialog.tsx
+function us() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "auth-modal",
+			className: "load-modal hidden",
+			style: { zIndex: "9999" },
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "load-modal-content glass-card auth-premium-card",
+					style: {
+						maxWidth: "420px",
+						padding: "2.5rem",
+						textAlign: "center",
+						position: "relative"
+					},
+					children: [
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							id: "btn-close-auth",
+							className: "btn btn-ghost btn-sm",
+							"aria-label": "Cerrar",
+							style: {
+								position: "absolute",
+								top: "1rem",
+								right: "1rem",
+								color: "#71717a"
+							},
+							children: /* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+							})
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								marginBottom: "1.5rem",
+								display: "flex",
+								justifyContent: "center"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										background: "#090a0f",
+										border: "1px solid rgba(255,255,255,0.06)",
+										padding: "12px",
+										borderRadius: "8px",
+										display: "inline-flex",
+										alignItems: "center",
+										justifyContent: "center",
+										boxShadow: "var(--shadow-sm)"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("svg", {
+											width: "42",
+											height: "42",
+											viewBox: "0 0 100 100",
+											fill: "none",
+											xmlns: "http://www.w3.org/2000/svg",
+											style: { filter: "drop-shadow(0px 0px 8px rgba(0, 210, 255, 0.5))" },
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("rect", {
+													x: "2",
+													y: "2",
+													width: "96",
+													height: "96",
+													rx: "28",
+													fill: "#0d0e12",
+													stroke: "#1f2937",
+													strokeWidth: "2"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("path", {
+													d: "M55 22C42.5 22 36.5 30 36.5 35C36.5 37.5 38.5 39.5 41 39.5C43.5 39.5 45 37.5 45.5 35.5C46.2 33 49 28.5 54.5 28.5C60.5 28.5 63 32.5 63 36.5C63 42.5 56.5 44.5 51 46.5L42.5 49.5C36.5 51.5 34.5 57.5 34.5 63.5C34.5 72.5 43.5 78 54 78C66.5 78 72 70 72 65C72 62.5 70 60.5 67.5 60.5C65 60.5 63.5 62.5 63 64.5C62.3 67 59.5 71.5 54 71.5C47.5 71.5 45 67.5 45 63.5C45 57.5 51.5 55.5 57 53.5L65.5 50.5C71.5 48.5 73.5 42.5 73.5 36.5C73.5 27.5 65.5 22 55 22Z",
+													fill: "#ffffff"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("path", {
+													d: "M56 25L38 52H48L44 75L62 48H52L56 25Z",
+													fill: "#ffffff"
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "auth-tabs",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "auth-tab-login",
+									className: "auth-tab active",
+									children: "Ingresar"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "auth-tab-register",
+									className: "auth-tab",
+									children: "Crear cuenta"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "load-modal-header",
+							style: { display: "none" },
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h3", {
+									id: "auth-title",
+									children: "Iniciar Sesión"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", {
+							id: "auth-subtitle",
+							style: { display: "none" }
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("form", {
+							id: "auth-form",
+							autoComplete: "off",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									id: "auth-recovery-description",
+									className: "hidden",
+									role: "status"
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									id: "auth-group-username",
+									className: "form-group hidden",
+									style: {
+										textAlign: "left",
+										marginBottom: "1rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("input", {
+											type: "text",
+											id: "auth-username",
+											className: "auth-field",
+											placeholder: "Apodo único (sin espacios)"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "form-group",
+									style: {
+										textAlign: "left",
+										marginBottom: "1rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("input", {
+											type: "email",
+											id: "auth-email",
+											className: "auth-field",
+											placeholder: "Correo electrónico",
+											required: !0
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "form-group",
+									style: {
+										textAlign: "left",
+										marginBottom: "1rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("input", {
+											type: "password",
+											id: "auth-password",
+											className: "auth-field",
+											placeholder: "Contraseña",
+											required: !0
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									id: "auth-group-confirm-password",
+									className: "form-group hidden",
+									style: {
+										textAlign: "left",
+										marginBottom: "1rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("input", {
+											type: "password",
+											id: "auth-confirm-password",
+											className: "auth-field",
+											placeholder: "Confirmar contraseña"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									id: "auth-group-terms",
+									className: "form-group hidden",
+									style: {
+										textAlign: "left",
+										marginBottom: "1.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "8px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("input", {
+											type: "checkbox",
+											id: "auth-terms",
+											style: {
+												width: "16px",
+												height: "16px",
+												cursor: "pointer",
+												accentColor: "#00d2ff",
+												margin: "0"
+											}
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("label", {
+											htmlFor: "auth-terms",
+											style: {
+												fontSize: "0.8rem",
+												color: "#71717a",
+												lineHeight: "1.3",
+												cursor: "pointer",
+												userSelect: "none"
+											},
+											children: [
+												"\n                        Acepto los ",
+												/* @__PURE__ */ (0, T.jsx)("a", {
+													href: "#",
+													style: {
+														color: "#00d2ff",
+														textDecoration: "none",
+														fontWeight: "600",
+														borderBottom: "1px dotted #00d2ff"
+													},
+													children: "Términos\n                            y Privacidad"
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "submit",
+									id: "btn-submit-auth",
+									className: "auth-submit-btn",
+									children: "\n                    Iniciar Sesión\n                "
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "btn-forgot-password",
+									className: "btn btn-ghost",
+									children: "Olvidé mi contraseña"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: { display: "none" },
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									id: "auth-toggle-text",
+									children: "¿No tienes una cuenta?"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#",
+									id: "auth-toggle-mode",
+									children: "Créala aquí"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: { marginTop: "0.5rem" },
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "btn-cancel-auth",
+									className: "auth-cancel-btn",
+									style: {
+										background: "none",
+										border: "none",
+										color: "#71717a",
+										fontSize: "0.9rem",
+										cursor: "pointer",
+										transition: "color 0.2s"
+									},
+									children: "Cancelar"
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/ConfirmDialogSurface.tsx
+function ds() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "confirm-dialog",
+			className: "confirm-overlay hidden",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "confirm-card glass-card",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", {
+							className: "confirm-icon",
+							children: /* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-alert" })
+							})
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h3", {
+							id: "confirm-title",
+							children: "¿Estás seguro?"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", {
+							id: "confirm-message",
+							children: "Esta acción no se puede deshacer."
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "confirm-actions",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "confirm-cancel",
+									className: "btn btn-ghost",
+									children: "Cancelar"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "confirm-deny",
+									className: "btn btn-warning hidden",
+									children: "No Guardar"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "confirm-accept",
+									className: "btn btn-danger",
+									children: "Confirmar"
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/EngineRequired.tsx
+function fs() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "engine-required-modal",
+			className: "pdf-guide-overlay hidden",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "pdf-guide-card glass-card",
+					style: { maxWidth: "420px" },
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							id: "engine-modal-close",
+							className: "pdf-guide-close",
+							title: "Cerrar",
+							"aria-label": "Cerrar",
+							children: "×"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", {
+							className: "pdf-guide-icon",
+							style: {
+								color: "#f59e0b",
+								marginBottom: "10px"
+							},
+							children: /* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-alert" })
+							})
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h3", {
+							className: "pdf-guide-title",
+							children: "Motor Local Requerido"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", {
+							className: "pdf-guide-subtitle",
+							style: {
+								marginBottom: "15px",
+								fontSize: "0.9rem"
+							},
+							children: "\n                La exportación nativa a **Microsoft Word (.docx)** con formato premium no está disponible sin vincular el motor local.\n            "
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								background: "rgba(245, 158, 11, 0.06)",
+								border: "1px solid rgba(245, 158, 11, 0.2)",
+								borderRadius: "8px",
+								padding: "12px",
+								textAlign: "left",
+								marginBottom: "18px",
+								fontSize: "0.82rem",
+								lineHeight: "1.4",
+								color: "#fef08a"
+							},
+							children: [
+								"\n                Para compilar y descargar un documento de Word limpio y editable con membretes de UGEL/MINEDU integrados, debes descargar e iniciar la aplicación ",
+								/* @__PURE__ */ (0, T.jsx)("strong", { children: "pablitopyhost.exe" }),
+								" en tu PC.\n            "
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								display: "flex",
+								flexDirection: "column",
+								gap: "8px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("a", {
+									href: "https://descargas.sypablitodp.site",
+									target: "_blank",
+									rel: "noopener noreferrer",
+									className: "btn btn-primary",
+									style: {
+										textDecoration: "none",
+										padding: "10px",
+										textAlign: "center"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+										}),
+										" Descargar Motor Local (.exe)\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "engine-modal-cancel",
+									className: "btn btn-ghost",
+									style: { padding: "8px" },
+									children: "Cancelar"
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/PdfGuide.tsx
+function ps() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "pdf-guide-modal",
+			className: "pdf-guide-overlay hidden",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "pdf-guide-card glass-card",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							id: "pdf-guide-close",
+							className: "pdf-guide-close",
+							title: "Cerrar",
+							"aria-label": "Cerrar",
+							children: "×"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", {
+							className: "pdf-guide-icon",
+							children: /* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+							})
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h3", {
+							className: "pdf-guide-title",
+							children: "Exportar Sesión como PDF"
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "pdf-guide-warning-badge",
+							style: {
+								background: "rgba(245, 158, 11, 0.1)",
+								border: "1px solid rgba(245, 158, 11, 0.25)",
+								color: "#eab308",
+								padding: "8px 12px",
+								borderRadius: "8px",
+								fontSize: "0.82rem",
+								fontWeight: "600",
+								marginBottom: "12px",
+								textAlign: "center",
+								display: "flex",
+								alignItems: "center",
+								justifyContent: "center",
+								gap: "6px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("svg", {
+									className: "ui-icon",
+									"aria-hidden": "true",
+									children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-alert" })
+								}),
+								" Motor Local Desconectado: Se usará la impresión de Windows\n            "
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", {
+							className: "pdf-guide-subtitle",
+							children: "Para obtener un PDF de calidad con el navegador, sigue estos pasos:"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "pdf-guide-steps",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "pdf-guide-step",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "step-number",
+											children: "1"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "step-content",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("strong", { children: "Destino" }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", { children: ["Selecciona ", /* @__PURE__ */ (0, T.jsx)("em", { children: "\"Guardar como PDF\"" })] }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "pdf-guide-step",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "step-number",
+											children: "2"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "step-content",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("strong", { children: "Más opciones" }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", { children: [
+													"Activa ",
+													/* @__PURE__ */ (0, T.jsx)("em", { children: "\"Gráficos de fondo\"" }),
+													" (para conservar colores)"
+												] }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "pdf-guide-step",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "step-number",
+											children: "3"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "step-content",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("strong", { children: "Cabeceras" }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", { children: [
+													"Desactiva ",
+													/* @__PURE__ */ (0, T.jsx)("em", { children: "\"Cabeceras y pies de página\"" }),
+													" (para limpiar URLs)"
+												] }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "pdf-premium-ad-box",
+							style: {
+								background: "var(--color-card-surface)",
+								border: "1px dashed rgba(6, 182, 212, 0.3)",
+								borderRadius: "8px",
+								padding: "15px",
+								margin: "15px 0",
+								textAlign: "left"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										display: "flex",
+										alignItems: "center",
+										gap: "8px",
+										color: "#06b6d4",
+										fontWeight: "600",
+										fontSize: "0.9rem",
+										marginBottom: "6px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+										}),
+										" ¡Recomendado: Exportación Premium Directa!\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									style: {
+										fontSize: "0.8rem",
+										color: "#94a3b8",
+										lineHeight: "1.4",
+										marginBottom: "10px"
+									},
+									children: "\n                    Para descargas automáticas inmediatas con paginado físico A4 perfecto y archivos Word (.docx) nativos editables de Office, descarga e inicia el motor.\n                "
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("a", {
+									href: "https://descargas.sypablitodp.site",
+									target: "_blank",
+									rel: "noopener noreferrer",
+									className: "btn btn-primary",
+									style: {
+										display: "inline-flex",
+										alignItems: "center",
+										justifyContent: "center",
+										width: "100%",
+										fontSize: "0.85rem",
+										fontWeight: "600",
+										textDecoration: "none",
+										padding: "8px 14px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+										}),
+										" Descargar Motor Local (.exe)\n                "
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "pdf-guide-actions",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "pdf-guide-cancel",
+									className: "btn btn-ghost",
+									children: "Cancelar"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "pdf-guide-proceed",
+									className: "btn btn-primary pdf-guide-proceed-btn",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+										}),
+										" Abrir Impresora\n                "
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/TermsDialog.tsx
+function ms() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "terms-modal",
+			className: "load-modal hidden",
+			style: { zIndex: "10000" },
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "load-modal-content glass-card",
+					style: {
+						maxWidth: "720px",
+						padding: "2rem",
+						textAlign: "left",
+						maxHeight: "85vh",
+						overflowY: "auto"
+					},
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "load-modal-header",
+							style: {
+								borderBottom: "1px solid var(--border)",
+								paddingBottom: "0.75rem",
+								marginBottom: "1.25rem",
+								display: "flex",
+								justifyContent: "space-between",
+								alignItems: "center"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										display: "flex",
+										alignItems: "center",
+										gap: "0.6rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											style: {
+												color: "var(--accent)",
+												width: "22px",
+												height: "22px"
+											},
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-shield" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											style: {
+												fontSize: "1.2rem",
+												fontWeight: "800",
+												color: "var(--color-foreground)",
+												margin: "0"
+											},
+											children: "\n                        Términos, Condiciones de Uso y Políticas de Privacidad — Space Lab\n                    "
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "btn-close-terms",
+									className: "btn btn-ghost btn-sm",
+									style: {
+										fontSize: "1.1rem",
+										padding: "4px 8px"
+									},
+									"aria-label": "Cerrar",
+									children: /* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+									})
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								fontSize: "0.85rem",
+								lineHeight: "1.6",
+								color: "var(--text-primary)",
+								display: "flex",
+								flexDirection: "column",
+								gap: "1.1rem"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										background: "rgba(0, 210, 255, 0.06)",
+										border: "1px solid rgba(0, 210, 255, 0.2)",
+										borderRadius: "8px",
+										padding: "0.85rem 1rem",
+										fontSize: "0.82rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "Última actualización: Octubre de 2026" }),
+										" | Versión del Sistema: ",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "Space Lab 2.0 (Motor v1.4.1)" }),
+										/* @__PURE__ */ (0, T.jsx)("br", {}),
+										"\n                    Desarrollado y operado por ",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "Samuel Y. Pablo Claudio (pablitodp)" }),
+										" — Huánuco, Perú.\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("p", { children: [
+									"Bienvenido a ",
+									/* @__PURE__ */ (0, T.jsx)("strong", { children: "Space Lab" }),
+									" (",
+									/* @__PURE__ */ (0, T.jsx)("code", { children: "sesiones.sypablitodp.site" }),
+									"). Esta plataforma de asistencia pedagógica, planificación curricular y exportación documental está diseñada para facilitar el trabajo técnico-pedagógico de los docentes de Educación Básica Regular (Inicial, Primaria y Secundaria) del Perú. Al acceder, registrarte y utilizar nuestros servicios, aceptas en su totalidad los siguientes Términos y Condiciones y la Política de Privacidad conforme a la legislación vigente de la República del Perú."
+								] }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-user" })
+										}),
+										"\n                    1. REGISTRO, SEGURIDAD Y AUTENTICACIÓN\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", { children: "El registro en Space Lab es de carácter personal e intransferible. El usuario es responsable de mantener la confidencialidad de sus credenciales. La plataforma utiliza infraestructura segura en la nube (Supabase Auth) con contraseñas encriptadas mediante algoritmos criptográficos robustos y políticas de seguridad a nivel de fila (Row Level Security - RLS). Cada docente tiene acceso exclusivo y privado a sus propias sesiones, perfiles y datos." }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+										}),
+										"\n                    2. ARQUITECTURA DEL MOTOR LOCAL (pablitohost.exe / pablitopyhost.exe) Y PRIVACIDAD TOTAL DE TU PC\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										background: "var(--bg-card)",
+										border: "1px solid var(--border)",
+										borderRadius: "8px",
+										padding: "1rem",
+										display: "flex",
+										flexDirection: "column",
+										gap: "0.75rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("p", { children: [
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "¿Por qué se descarga el ejecutable local?" }),
+											/* @__PURE__ */ (0, T.jsx)("br", {}),
+											"\n                    Los navegadores web estándar tienen limitaciones técnicas estrictas: no pueden generar de forma nativa documentos de Microsoft Word (.docx) con estructuras complejas como tablas anidadas con anchos milimétricos del MINEDU, listas de cotejo con formato oficial de evaluación formativa y fórmulas matemáticas o científicas editables en formato OMML (Office Math Markup Language). Para lograr una calidad de impresión física 100% idéntica a la normativa de UGEL/DRE y ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "sin subir tus documentos pedagógicos a servidores o convertidores externos en la nube" }),
+											", se desarrolló el motor local ",
+											/* @__PURE__ */ (0, T.jsx)("code", { children: "pablitohost.exe" }),
+											" (también denominado ",
+											/* @__PURE__ */ (0, T.jsx)("code", { children: "pablitopyhost.exe" }),
+											")."
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("p", { children: [
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Arquitectura técnica en Python:" }),
+											/* @__PURE__ */ (0, T.jsx)("br", {}),
+											"\n                    El motor es un micro-servicio local programado íntegramente en ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Python" }),
+											" utilizando un servidor asíncrono ultraligero (FastAPI / Uvicorn) y bibliotecas especializadas de manipulación XML/docx. Se ejecuta de forma aislada en segundo plano en tu propia computadora escuchando únicamente en el puerto local ",
+											/* @__PURE__ */ (0, T.jsx)("code", { children: "http://127.0.0.1:8000" }),
+											"."
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("p", { children: [
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Comunicación segura mediante Tokens Autorizados:" }),
+											/* @__PURE__ */ (0, T.jsx)("br", {}),
+											"\n                    La aplicación web se conecta con el motor local a través del estándar de seguridad ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Private Network Access (PNA)" }),
+											". Toda petición requiere obligatoriamente un ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "token criptográfico de vinculación" }),
+											" generado al iniciar el programa. Asimismo, el motor cuenta con validación estricta de origen (CORS): únicamente procesa solicitudes emitidas desde el dominio oficial verificado (",
+											/* @__PURE__ */ (0, T.jsx)("code", { children: "https://sesiones.sypablitodp.site" }),
+											") o el entorno local de desarrollo. Cualquier solicitud proveniente de páginas web no autorizadas o scripts de terceros es rechazada automáticamente."
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", { children: /* @__PURE__ */ (0, T.jsx)("strong", { children: "Garantía de Privacidad y Aislamiento (No intrusión en tu sistema):" }) }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("ul", {
+											style: {
+												margin: "0",
+												paddingLeft: "1.2rem",
+												display: "flex",
+												flexDirection: "column",
+												gap: "0.4rem"
+											},
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Sin exploración de documentos personales:" }), " El motor no busca ni recopila tus fotos, documentos o archivos personales. Utiliza sus recursos de aplicación y el contenido que el navegador le envía para exportar."] }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Cero telemetría invasiva:" }), " No monitorea la actividad de tu PC, no registra pulsaciones de teclado, ni accede a periféricos, micrófonos o cámaras."] }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Exportación local:" }), " Recibe el contenido de la sesión o planificación desde el navegador y devuelve el archivo Word o PDF. Según el formato, puede utilizar archivos temporales durante la conversión."] }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+										}),
+										"\n                    3. ASISTENCIA PEDAGÓGICA CON INTELIGENCIA ARTIFICIAL Y CRÉDITOS\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("p", { children: [
+									"Space Lab utiliza OpenAI, Google Gemini y DeepSeek para asistir en la redacción pedagógica. Al solicitar una función de IA, el contenido necesario de tu solicitud y, si los adjuntas, textos o imágenes, se envía mediante las funciones de Supabase al proveedor seleccionado. Estos proveedores procesan ese contenido según sus propias condiciones. Los nombres de alumnos no son necesarios para generar una sesión: evita incluir datos personales de estudiantes en instrucciones y adjuntos. Las claves de los proveedores permanecen en los secretos del servidor y no se entregan al navegador. El uso de IA se registra mediante un ",
+									/* @__PURE__ */ (0, T.jsx)("strong", { children: "sistema de créditos" }),
+									"."
+								] }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+										}),
+										"\n                    4. PROPIEDAD INTELECTUAL Y TITULARIDAD DOCENTE\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("p", { children: [
+									"Todas las sesiones de aprendizaje, programaciones curriculares, fichas de aplicación, rúbricas y materiales creados o editados en la plataforma son ",
+									/* @__PURE__ */ (0, T.jsx)("strong", { children: "propiedad intelectual exclusiva del docente que los elabora" }),
+									". Space Lab no se atribuye ningún derecho de autor sobre los contenidos pedagógicos generados por sus usuarios."
+								] }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-target" })
+										}),
+										"\n                    5. RESPONSABILIDAD Y AUTONOMÍA PEDAGÓGICA\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", { children: "La inteligencia artificial y los asistentes de Space Lab actúan como herramientas de apoyo para agilizar la labor administrativa y brindar sugerencias curriculares basadas en el CNEB. Es responsabilidad exclusiva del docente revisar, adecuar a su contexto real y validar pedagógicamente cada sesión antes de su desarrollo en el aula o presentación formal ante la dirección de su institución educativa, UGEL o DRE." }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-shield" })
+										}),
+										"\n                    6. PROTECCIÓN DE DATOS PERSONALES (LEY N° 29733) Y DERECHOS ARCO\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", { children: "Supabase gestiona la autenticación y el almacenamiento de perfiles, sesiones, planificaciones y listas de alumnos que guardas en tu cuenta. El navegador conserva copias y borradores locales; en equipos compartidos, cada cuenta dispone de un espacio local separado. La información necesaria para las funciones de IA se procesa como se describe en la sección anterior. No vendemos ni alquilamos tus datos. Para solicitar acceso, rectificación, cancelación u oposición al tratamiento de tus datos, o la eliminación de tu cuenta y contenido, utiliza el canal oficial de soporte indicado a continuación. El alcance y los plazos de conservación y eliminación deben confirmarse con soporte durante la beta." }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-mail" })
+										}),
+										"\n                    7. CANALES DE CONTACTO Y SOPORTE OFICIAL\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", { children: "Para consultas técnicas, asistencia con el motor local, dudas sobre privacidad o reportes, puedes comunicarte directamente con el desarrollador:" }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										display: "flex",
+										flexWrap: "wrap",
+										gap: "0.6rem",
+										fontSize: "0.82rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("a", {
+											href: "mailto:pabloclsa87@gmail.com",
+											style: {
+												display: "inline-flex",
+												alignItems: "center",
+												gap: "4px",
+												padding: "4px 10px",
+												background: "rgba(255,255,255,0.05)",
+												border: "1px solid var(--border)",
+												borderRadius: "6px",
+												color: "var(--color-foreground)",
+												textDecoration: "none"
+											},
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-mail" })
+												}),
+												" pabloclsa87@gmail.com\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("a", {
+											href: "https://wa.me/51918165428",
+											target: "_blank",
+											rel: "noopener noreferrer",
+											style: {
+												display: "inline-flex",
+												alignItems: "center",
+												gap: "4px",
+												padding: "4px 10px",
+												background: "rgba(37, 211, 102, 0.1)",
+												border: "1px solid rgba(37, 211, 102, 0.3)",
+												borderRadius: "6px",
+												color: "#25d366",
+												textDecoration: "none"
+											},
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-whatsapp" })
+												}),
+												" WhatsApp: 918 165 428\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("a", {
+											href: "https://space.sypablitodp.site",
+											target: "_blank",
+											rel: "noopener noreferrer",
+											style: {
+												display: "inline-flex",
+												alignItems: "center",
+												gap: "4px",
+												padding: "4px 10px",
+												background: "rgba(0, 210, 255, 0.1)",
+												border: "1px solid rgba(0, 210, 255, 0.3)",
+												borderRadius: "6px",
+												color: "#00d2ff",
+												textDecoration: "none"
+											},
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-globe" })
+												}),
+												" space.sypablitodp.site\n                    "
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h4", {
+									style: {
+										color: "var(--accent)",
+										fontWeight: "700",
+										marginTop: "0.5rem",
+										display: "flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-building" })
+										}),
+										"\n                    8. LEGISLACIÓN APLICABLE Y JURISDICCIÓN\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("p", { children: [
+									"Los presentes Términos y Condiciones se rigen e interpretan según las leyes de la República del Perú. Para cualquier controversia, las partes se someten voluntariamente a la competencia exclusiva de los jueces y tribunales del distrito judicial de ",
+									/* @__PURE__ */ (0, T.jsx)("strong", { children: "Huánuco, Perú" }),
+									"."
+								] }),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								marginTop: "1.5rem",
+								paddingTop: "1rem",
+								borderTop: "1px solid var(--border)",
+								display: "flex",
+								justifyContent: "flex-end",
+								gap: "0.75rem"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "btn-accept-terms-modal",
+									className: "btn btn-primary",
+									style: {
+										padding: "0.6rem 1.4rem",
+										fontWeight: "600",
+										display: "inline-flex",
+										alignItems: "center",
+										gap: "0.4rem"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+										}),
+										"\n                    Entendido y Aceptar\n                "
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/GlobalOverlays.tsx
+function hs() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)("div", {
+			id: "toast-container",
+			className: "toast-container",
+			children: /* @__PURE__ */ (0, T.jsx)(cs, {})
+		}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(ds, {}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(us, {}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(ms, {}),
+		"\n",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "loader-overlay",
+			className: "loader-overlay hidden",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "loader-content",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "loader-spinner",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "orbit" }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "orbit orbit-2" }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "orbit orbit-3" }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "core" }),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", {
+							id: "loader-text",
+							className: "loader-text",
+							children: "Generando sesión con IA..."
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(ps, {}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(fs, {}),
+		"\n",
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)("canvas", {
+			id: "space-bg",
+			className: "space-background",
+			hidden: !0,
+			"aria-hidden": "true"
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/Landing.tsx
+function gs() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "landing-view",
+			className: "landing-view",
+			children: [
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("header", {
+					className: "landing-navbar",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("a", {
+							href: "#/",
+							className: "landing-brand",
+							"aria-label": "Space Lab - Inicio",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-brand-logo",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("img", {
+											src: "assets/favicon.svg",
+											alt: "Space Lab Logo"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-brand-text",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-brand-title",
+											children: "Space Lab"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-brand-badge",
+											children: "MINEDU 2026 · CNEB"
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("ul", {
+							className: "landing-nav-links",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("li", { children: /* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#como-funciona",
+									className: "landing-nav-link",
+									children: "¿Cómo Funciona?"
+								}) }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("li", { children: /* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#motor-local",
+									className: "landing-nav-link",
+									children: "Motor Local"
+								}) }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("li", { children: /* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#modelos-ia",
+									className: "landing-nav-link",
+									children: "Modelos IA"
+								}) }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("li", { children: /* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#preguntas-frecuentes",
+									className: "landing-nav-link",
+									children: "Preguntas Frecuentes"
+								}) }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("li", { children: /* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#contacto",
+									className: "landing-nav-link",
+									children: "Contacto"
+								}) }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("li", { children: /* @__PURE__ */ (0, T.jsx)("a", {
+									href: "descargas_landing.html",
+									className: "landing-nav-link",
+									children: "Descargas"
+								}) }),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-nav-actions",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("label", {
+									className: "theme-picker",
+									title: "Tema de la aplicación",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-theme" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "sr-only",
+											children: "Tema de la aplicación"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("select", {
+											"data-theme-selector": "",
+											"aria-label": "Tema de la aplicación",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "system",
+													children: "Sistema"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "light",
+													children: "Claro"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "dark",
+													children: "Oscuro"
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									className: "btn btn-ghost btn-sm",
+									"data-action": "open-login",
+									"aria-label": "Iniciar sesión con tu cuenta",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-user" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Iniciar Sesión" }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									className: "btn btn-primary btn-sm",
+									"data-action": "enter-app",
+									"aria-label": "Abrir editor de sesiones de aprendizaje",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Ir al Editor" }),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					className: "landing-hero",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-hero-copy",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-pill-badge",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Plataforma Inteligente MINEDU 2026 · CNEB Perú" }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h1", {
+									className: "landing-hero-title",
+									children: [
+										"\n                    Menos tiempo planificando.",
+										/* @__PURE__ */ (0, T.jsx)("br", {}),
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "highlight",
+											children: "Más tiempo enseñando."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("p", {
+									className: "landing-hero-subtitle",
+									children: [
+										"\n                    Prepara tu próxima clase para ",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "Inicial, Primaria o Secundaria" }),
+										". Elige los aprendizajes, construye tu sesión con ayuda de la IA y dale tu toque antes de exportarla a ",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "Word o PDF" }),
+										".\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-hero-actions",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "landing-btn-lg landing-btn-primary",
+											"data-action": "enter-app",
+											"aria-label": "Comenzar a planificar sesión de aprendizaje gratis",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Crear mi sesión" }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-arrow-right" })
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("a", {
+											href: "#como-funciona",
+											className: "landing-btn-lg landing-btn-ghost",
+											"aria-label": "Ver cómo funciona la plataforma",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Ver Cómo Funciona" }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-badges-row",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "landing-badge-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "CNEB 2026 Oficial" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "landing-badge-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "GPT-6 Luna & DeepSeek R1" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "landing-badge-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Motor Word (.docx) Nativo" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "landing-badge-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-shield" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Privado y Seguro" }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-hero-preview landing-lesson-visual",
+							role: "img",
+							"aria-label": "Ejemplo de planificación: elegir competencias y capacidades, revisar la sesión y llevarla a Word o PDF.",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "lesson-scene",
+									"aria-hidden": "true",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", { className: "lesson-dot-grid" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "lesson-mini-app",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "lesson-mini-top",
+													children: [/* @__PURE__ */ (0, T.jsxs)("span", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+														className: "ui-icon",
+														children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-folder" })
+													}), " Tu próxima clase"] }), /* @__PURE__ */ (0, T.jsxs)("span", {
+														className: "lesson-mini-saved",
+														children: [/* @__PURE__ */ (0, T.jsx)("i", {}), " Guardado"]
+													})]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "lesson-mini-body",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "lesson-mini-steps",
+															children: [
+																/* @__PURE__ */ (0, T.jsxs)("span", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																	className: "ui-icon",
+																	children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+																}), " Datos"] }),
+																/* @__PURE__ */ (0, T.jsx)("strong", { children: "2 Aprendizajes" }),
+																/* @__PURE__ */ (0, T.jsx)("span", { children: "3 Revisión" })
+															]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "lesson-mini-context",
+															children: "MATEMÁTICA · 2.° DE SECUNDARIA"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("h2", { children: [
+															"Aprender también",
+															/* @__PURE__ */ (0, T.jsx)("br", {}),
+															"empieza con elegir."
+														] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("p", { children: "¿Qué trabajarán tus estudiantes?" }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "lesson-mini-option selected",
+															children: [/* @__PURE__ */ (0, T.jsx)("span", {
+																className: "lesson-mini-check",
+																children: /* @__PURE__ */ (0, T.jsx)("svg", {
+																	className: "ui-icon",
+																	children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+																})
+															}), /* @__PURE__ */ (0, T.jsxs)("span", { children: ["Resuelve problemas de cantidad", /* @__PURE__ */ (0, T.jsx)("small", { children: "4 capacidades disponibles" })] })]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "lesson-mini-option",
+															children: [/* @__PURE__ */ (0, T.jsx)("span", { className: "lesson-mini-box" }), /* @__PURE__ */ (0, T.jsxs)("span", { children: [
+																"Resuelve problemas de regularidad,",
+																/* @__PURE__ */ (0, T.jsx)("br", {}),
+																"equivalencia y cambio"
+															] })]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "lesson-mini-capacity",
+															children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																className: "ui-icon",
+																children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+															}), " Traduce cantidades a expresiones numéricas"]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "lesson-mini-capacity",
+															children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																className: "ui-icon",
+																children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+															}), " Argumenta sus procedimientos"]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("div", {
+															className: "lesson-mini-bottom",
+															children: "Tu sesión va tomando forma"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "lesson-floating-paper",
+											children: [
+												/* @__PURE__ */ (0, T.jsxs)("span", {
+													className: "lesson-paper-label",
+													children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+														className: "ui-icon",
+														children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+													}), " TU SESIÓN, LISTA PARA EL AULA"]
+												}),
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "lesson-paper-lines",
+													children: [
+														/* @__PURE__ */ (0, T.jsx)("i", {}),
+														/* @__PURE__ */ (0, T.jsx)("i", {}),
+														/* @__PURE__ */ (0, T.jsx)("i", {})
+													]
+												}),
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "lesson-paper-table",
+													children: [
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Inicio" }),
+														/* @__PURE__ */ (0, T.jsx)("i", {}),
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Desarrollo" }),
+														/* @__PURE__ */ (0, T.jsx)("i", {}),
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Cierre" }),
+														/* @__PURE__ */ (0, T.jsx)("i", {})
+													]
+												}),
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "lesson-paper-formats",
+													children: [
+														"WORD ",
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "·" }),
+														" PDF ",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														})
+													]
+												})
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "lesson-teacher-note",
+											children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+											}), /* @__PURE__ */ (0, T.jsxs)("span", { children: [
+												"La IA propone.",
+												/* @__PURE__ */ (0, T.jsx)("br", {}),
+												/* @__PURE__ */ (0, T.jsx)("strong", { children: "Tú le das tu toque." })
+											] })]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					id: "como-funciona",
+					className: "landing-section",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-section-header",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "landing-section-eyebrow",
+									children: "Flujo Pedagógico"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h2", {
+									className: "landing-section-title",
+									children: "¿Cómo Funciona en 3 Simples Pasos?"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									className: "landing-section-desc",
+									children: "Diseñado para ahorrarte horas de trabajo administrativo y enfocarte en la enseñanza."
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-steps-grid",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-step-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-step-number",
+											children: "1"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											className: "landing-step-title",
+											children: "Configuración Curricular CNEB"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-step-text",
+											children: "Elige tu nivel educativo (Inicial, Primaria o Secundaria), área, grado, competencias y capacidades precargadas del CNEB de forma automática."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-step-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-step-number",
+											children: "2"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											className: "landing-step-title",
+											children: "Generación Pedagógica con IA"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-step-text",
+											children: "Los modelos de IA (GPT-6 Luna, DeepSeek R1 o Gemini) redactan situaciones significativas, la secuencia didáctica completa (Inicio, Desarrollo, Cierre) y los criterios de evaluación."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-step-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-step-number",
+											children: "3"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											className: "landing-step-title",
+											children: "Compilación Nativa con Motor Local"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-step-text",
+											children: "Descarga el motor de escritorio para compilar Word (.docx) nativo con tablas CNEB perfectas, fórmulas matemáticas OMML editables y membretes oficiales sin descuadres."
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					id: "motor-local",
+					className: "landing-section",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-section-header",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "landing-section-eyebrow",
+									children: "Arquitectura Híbrida"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h2", {
+									className: "landing-section-title",
+									children: "¿Por qué Space Lab Incluye un Motor Local?"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									className: "landing-section-desc",
+									children: "Unificamos la flexibilidad de la web con la potencia del compilador nativo de escritorio para documentos Word (.docx) de máxima fidelidad."
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "motor-local-card",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "motor-local-info",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "motor-local-badge",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Fidelidad Documental 100%" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											className: "motor-local-title",
+											children: "Motor Local de Exportación para Windows"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("p", {
+											className: "motor-local-desc",
+											children: [
+												"\n                        Los navegadores web no pueden crear de forma nativa documentos de Microsoft Word con tablas anidadas multinivel, márgenes físicos A4 de imprenta ni fórmulas matemáticas editables (OMML). Por eso creamos ",
+												/* @__PURE__ */ (0, T.jsx)("strong", { children: "pablitopyhost.exe" }),
+												": un motor ultraligero que corre en tu PC y se comunica de forma transparente y segura con esta aplicación web a través de ",
+												/* @__PURE__ */ (0, T.jsx)("code", { children: "localhost:8000" }),
+												".\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "motor-local-features",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "motor-feature-item",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Tablas CNEB oficiales sin celdas descuadradas" }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "motor-feature-item",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Ecuaciones matemáticas editables en formato OMML" }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "motor-feature-item",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Membretes institucionales de DRE y UGEL" }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "motor-feature-item",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Exportación instantánea sin límites de memoria web" }),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "motor-local-actions",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("a", {
+													href: "descargas_landing.html",
+													className: "landing-btn-lg landing-btn-primary",
+													"aria-label": "Ir a la página de descarga del motor local",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Descargar Motor Local (.exe)" }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("a", {
+													href: "conexion.html",
+													className: "landing-btn-lg landing-btn-ghost",
+													"aria-label": "Ver estado de conexión del motor",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-refresh" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", { children: "Verificar Estado de Conexión" }),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					id: "modelos-ia",
+					className: "landing-section",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-section-header",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "landing-section-eyebrow",
+									children: "Tecnología de Vanguardia"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h2", {
+									className: "landing-section-title",
+									children: "Impulsado por los Mejores Modelos de IA"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									className: "landing-section-desc",
+									children: "Elige el motor de inteligencia artificial que mejor se adapte a tu estilo pedagógico."
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-models-grid",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-model-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-model-badge",
+											children: "Nuevo"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "landing-model-icon",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											className: "landing-model-title",
+											children: "GPT-6 Luna"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-model-provider",
+											children: "OpenAI Router"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-model-desc",
+											children: "Máxima agilidad y creatividad en el planteamiento de situaciones significativas contextualizadas a la realidad y coyuntura peruana."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-model-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-model-badge",
+											style: {
+												background: "rgba(123, 97, 255, 0.15)",
+												color: "#7b61ff",
+												borderColor: "rgba(123, 97, 255, 0.3)"
+											},
+											children: "Recomendado"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "landing-model-icon",
+											style: { color: "#7b61ff" },
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-target" })
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											className: "landing-model-title",
+											children: "DeepSeek R1 / V3"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-model-provider",
+											children: "DeepSeek Router"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-model-desc",
+											children: "Razonamiento pedagógico profundo, coherencia estricta en la alineación de propósitos y diseño de instrumentos de evaluación formativa."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-model-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-model-badge",
+											style: {
+												background: "rgba(16, 185, 129, 0.15)",
+												color: "#10b981",
+												borderColor: "rgba(16, 185, 129, 0.3)"
+											},
+											children: "Rápido"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "landing-model-icon",
+											style: { color: "#10b981" },
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h3", {
+											className: "landing-model-title",
+											children: "Gemini 2.5 Flash"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "landing-model-provider",
+											children: "Google DeepMind"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-model-desc",
+											children: "Velocidad instantánea para actividades prácticas de inicio, desarrollo y cierre, fichas de trabajo y adaptación a distintos ritmos de aprendizaje."
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					id: "preguntas-frecuentes",
+					className: "landing-section",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-section-header",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "landing-section-eyebrow",
+									children: "Respuestas Claras"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h2", {
+									className: "landing-section-title",
+									children: "Preguntas Frecuentes para Docentes"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									className: "landing-section-desc",
+									children: "Todo lo que necesitas saber sobre la plataforma, el motor local y el currículo."
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-faq-container",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-faq-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("h3", {
+											className: "landing-faq-question",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+												}),
+												"\n                        ¿Qué es el Motor Local y por qué debo descargarlo?\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("p", {
+											className: "landing-faq-answer",
+											children: [
+												"Para que tus sesiones se descarguen en Microsoft Word (.docx) con las tablas oficiales del MINEDU, márgenes exactos, listas de cotejo y fórmulas matemáticas editables (OMML) sin que se mueva ninguna celda, desarrollamos un motor nativo (",
+												/* @__PURE__ */ (0, T.jsx)("code", { children: "pablitopyhost.exe" }),
+												"). Se ejecuta en segundo plano en tu computadora y procesa el documento con máxima fidelidad."
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-faq-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("h3", {
+											className: "landing-faq-question",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+												}),
+												"\n                        ¿Puedo usar la plataforma sin descargar el motor local?\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-faq-answer",
+											children: "Sí. Puedes diseñar, redactar, editar, guardar en la nube o localmente, y utilizar todos los modelos de Inteligencia Artificial directamente en tu navegador. El motor local solo es necesario cuando deseas compilar y descargar tus sesiones en formato Word (.docx) editable de alta fidelidad."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-faq-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("h3", {
+											className: "landing-faq-question",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-target" })
+												}),
+												"\n                        ¿Cómo se alinea al Currículo Nacional de la Educación Básica (CNEB)?\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-faq-answer",
+											children: "Toda la base de datos de competencias, capacidades, desempeños por grado y ciclo (Inicial, Primaria y Secundaria), enfoques transversales e instrumentos de evaluación está completamente estructurada según las directivas curriculares vigentes del Ministerio de Educación del Perú (MINEDU)."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-faq-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("h3", {
+											className: "landing-faq-question",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n                        ¿Qué modelos de Inteligencia Artificial están disponibles?\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-faq-answer",
+											children: "Dispones de una arquitectura multi-modelo conectada a través de routers seguros: GPT-6 Luna de OpenAI, DeepSeek V3 y Reasoner R1 para razonamiento pedagógico profundo, y Google Gemini 2.5 Flash para generación ultrarrápida de actividades y criterios."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-faq-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("h3", {
+											className: "landing-faq-question",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sliders" })
+												}),
+												"\n                        ¿Cómo funciona el sistema de créditos y monetización automatizada?\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-faq-answer",
+											children: "La plataforma cuenta con un sistema de créditos automatizado gestionado en la nube con Supabase. No requiere procesos manuales de verificación: tus créditos de IA se recargan y acreditan de forma automática para que puedas seguir planificando sin interrupciones."
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-faq-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("h3", {
+											className: "landing-faq-question",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-shield" })
+												}),
+												"\n                        ¿Mis sesiones y datos personales están seguros?\n                    "
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", {
+											className: "landing-faq-answer",
+											children: "Totalmente seguros. Tus sesiones se guardan localmente en tu propio dispositivo (LocalStorage e IndexedDB) y, si inicias sesión, se sincronizan en la nube mediante Supabase con políticas de seguridad de nivel de fila (RLS). Tu información docente nunca se comparte con terceros."
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					className: "landing-cta-banner",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-cta-card",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h2", {
+									className: "landing-cta-title",
+									children: "¿Listo para Planificar tu Próxima Sesión?"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									className: "landing-cta-text",
+									children: "Únete a los docentes que ya optimizan su tiempo administrativo con inteligencia artificial curricular."
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									className: "landing-btn-lg landing-btn-primary",
+									"data-action": "enter-app",
+									"aria-label": "Entrar al editor y planificar sesión ahora",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Entrar al Editor y Crear mi Sesión Ahora" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-arrow-right" })
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					id: "contacto",
+					className: "landing-contact-section",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-contact-content",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h2", {
+									className: "landing-contact-title",
+									children: "ESTABLECER ENLACE"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "landing-contact-divider" }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									className: "landing-contact-desc",
+									children: "\n                    ¿Tienes un proyecto en mente o necesitas una solución digital? Transmite tus requerimientos por cualquiera de estos canales.\n                "
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-contact-buttons",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("a", {
+											href: "https://wa.me/51918165428",
+											target: "_blank",
+											rel: "noopener noreferrer",
+											className: "contact-btn contact-btn-whatsapp",
+											"aria-label": "Contactar por WhatsApp al 918165428",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-whatsapp" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "WHATSAPP" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("a", {
+											href: "mailto:pabloclsa87@gmail.com",
+											className: "contact-btn contact-btn-email",
+											"aria-label": "Enviar correo a pabloclsa87@gmail.com",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-mail" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "EMAIL" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("a", {
+											href: "https://space.sypablitodp.site",
+											target: "_blank",
+											rel: "noopener noreferrer",
+											className: "contact-btn contact-btn-web",
+											"aria-label": "Visitar sitio personal space.sypablitodp.site",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-globe" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "WEB PERSONAL" }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("footer", {
+					className: "landing-footer",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-creator-box",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "landing-creator-icon",
+									"aria-hidden": "true",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("p", {
+									className: "landing-creator-text",
+									children: [
+										"\n                    SISTEMA CREADO CON ",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon icon-heart",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-heart" })
+										}),
+										" POR ",
+										/* @__PURE__ */ (0, T.jsx)("a", {
+											href: "https://space.sypablitodp.site",
+											target: "_blank",
+											rel: "noopener noreferrer",
+											className: "creator-highlight",
+											children: "SAMUEL PABLO CLAUDIO"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "landing-classified-tag",
+									children: "© 2026 PABLITO_DP — ACCESO CLASIFICADO"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "landing-footer-links",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "https://space.sypablitodp.site",
+									target: "_blank",
+									rel: "noopener noreferrer",
+									className: "landing-footer-link",
+									children: "space.sypablitodp.site"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "descargas_landing.html",
+									className: "landing-footer-link",
+									children: "Motor Local de Word"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "conexion.html",
+									className: "landing-footer-link",
+									children: "Estado de Conexión"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#",
+									id: "link-terms-footer",
+									className: "landing-footer-link",
+									children: "Términos y Privacidad"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#/app",
+									className: "landing-footer-link",
+									"data-action": "enter-app",
+									children: "Ir al Editor"
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/Home.tsx
+function _s() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "home-view",
+			className: "home-view hidden",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("header", {
+					className: "home-header",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("button", {
+							type: "button",
+							className: "home-brand",
+							"data-action": "view-home",
+							"aria-label": "Ir a Mi espacio",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "home-brand-mark",
+									children: /* @__PURE__ */ (0, T.jsx)("img", {
+										src: "assets/favicon.svg",
+										alt: "",
+										"aria-hidden": "true"
+									})
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("span", { children: [
+									"\n",
+									/* @__PURE__ */ (0, T.jsx)("strong", { children: "Space Lab" }),
+									"\n",
+									/* @__PURE__ */ (0, T.jsx)("small", { children: "Mi espacio docente" }),
+									"\n"
+								] }),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("nav", {
+							className: "home-nav",
+							"aria-label": "Navegación principal",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#/home",
+									className: "home-nav-link active",
+									children: "Mi espacio"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "#/sessions",
+									className: "home-nav-link",
+									children: "Mis sesiones"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "mailto:pabloclsa87@gmail.com",
+									className: "home-nav-link",
+									children: "Soporte"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "home-account",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("label", {
+									className: "theme-picker",
+									title: "Tema de la aplicación",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-theme" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "sr-only",
+											children: "Tema de la aplicación"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("select", {
+											"data-theme-selector": "",
+											"aria-label": "Tema de la aplicación",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "system",
+													children: "Sistema"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "light",
+													children: "Claro"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "dark",
+													children: "Oscuro"
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "home-account-copy",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("strong", {
+											id: "home-account-name",
+											children: "Docente"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											id: "home-account-plan",
+											children: "Plan docente"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									id: "home-account-avatar",
+									className: "home-account-avatar",
+									"aria-hidden": "true",
+									children: "D"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									id: "home-logout",
+									className: "btn btn-ghost btn-sm",
+									title: "Cerrar sesión",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-logout" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Salir" }),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("main", {
+					className: "home-main",
+					id: "home-main",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("section", {
+							className: "home-welcome",
+							"aria-labelledby": "home-welcome-title",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "home-welcome-copy",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "home-eyebrow",
+											children: "Tu centro de planificación"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("h1", {
+											id: "home-welcome-title",
+											children: "Bienvenido a tu espacio docente"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("p", { children: "Continúa una planificación o crea una nueva sesión con una guía clara, paso a paso." }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "home-primary-actions",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("button", {
+													type: "button",
+													className: "btn btn-primary home-primary-button",
+													"data-home-action": "new-session",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-plus" })
+														}),
+														"\n                            Crear nueva sesión\n                        "
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("button", {
+													type: "button",
+													id: "home-continue-session",
+													className: "btn btn-ghost home-secondary-button hidden",
+													"data-home-action": "continue-session",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-edit" })
+														}),
+														"\n                            Continuar último borrador\n                        "
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("aside", {
+									className: "home-guide",
+									"aria-label": "Guía para comenzar",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "home-guide-heading",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "home-guide-icon",
+													children: /* @__PURE__ */ (0, T.jsx)("svg", {
+														className: "ui-icon",
+														"aria-hidden": "true",
+														children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+													})
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+													"\n",
+													/* @__PURE__ */ (0, T.jsx)("span", { children: "Primera sesión" }),
+													"\n",
+													/* @__PURE__ */ (0, T.jsx)("strong", { children: "Te acompañamos en cada paso" }),
+													"\n"
+												] }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("ol", {
+											className: "home-guide-steps",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("span", { children: "1" }), /* @__PURE__ */ (0, T.jsxs)("p", { children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Completa los datos" }), "Indica nivel, área y propósito."] })] }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("span", { children: "2" }), /* @__PURE__ */ (0, T.jsxs)("p", { children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Genera con IA" }), "Obtén una propuesta alineada al CNEB."] })] }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("span", { children: "3" }), /* @__PURE__ */ (0, T.jsxs)("p", { children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Revisa y exporta" }), "Edita libremente y descarga tu documento."] })] }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("section", {
+							className: "home-summary",
+							"aria-label": "Resumen de la cuenta",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("article", {
+									className: "home-summary-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "home-summary-icon",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [/* @__PURE__ */ (0, T.jsx)("strong", {
+											id: "home-session-count",
+											children: "0"
+										}), /* @__PURE__ */ (0, T.jsx)("span", { children: "Sesiones guardadas" })] }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("article", {
+									className: "home-summary-card",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "home-summary-icon accent-purple",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [/* @__PURE__ */ (0, T.jsx)("strong", {
+											id: "home-credit-count",
+											children: "--"
+										}), /* @__PURE__ */ (0, T.jsx)("span", { children: "Créditos de IA" })] }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("article", {
+									className: "home-summary-card home-plan-summary",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "home-summary-icon accent-green",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-shield" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "home-plan-summary-copy",
+											children: [/* @__PURE__ */ (0, T.jsx)("strong", {
+												id: "home-plan-name",
+												children: "Docente"
+											}), /* @__PURE__ */ (0, T.jsx)("span", { children: "Plan actual" })]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "home-plan-link",
+											"data-home-action": "view-plans",
+											children: [
+												"\n                        Ver planes\n                        ",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-arrow-right" })
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("section", {
+							className: "home-section",
+							"aria-labelledby": "home-tools-title",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "home-section-heading",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("span", {
+												className: "home-eyebrow",
+												children: "Herramientas"
+											}),
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("h2", {
+												id: "home-tools-title",
+												children: "¿Qué deseas preparar?"
+											}),
+											"\n"
+										] }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "home-tool-grid",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("article", {
+											className: "home-tool-card home-tool-card-active",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "home-tool-icon",
+													children: /* @__PURE__ */ (0, T.jsx)("svg", {
+														className: "ui-icon",
+														"aria-hidden": "true",
+														children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+													})
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "home-tool-copy",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-tool-status",
+															children: "Disponible"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("h3", { children: "Sesión individual" }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("p", { children: "Diseña, genera y exporta sesiones alineadas al CNEB para Inicial, Primaria y Secundaria." }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("button", {
+													type: "button",
+													className: "home-tool-action",
+													"data-home-action": "new-session",
+													children: [
+														"\n                            Crear sesión ",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-arrow-right" })
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("article", {
+											className: "home-tool-card home-tool-card-active",
+											"aria-label": "Planificación articulada",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "home-tool-icon",
+													children: /* @__PURE__ */ (0, T.jsx)("svg", {
+														className: "ui-icon",
+														"aria-hidden": "true",
+														children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-folder" })
+													})
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "home-tool-copy",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-tool-status",
+															children: "Beta"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("h3", { children: "Planificación articulada" }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("p", { children: "Experiencias, Unidades y Proyectos de aprendizaje. Construye y guarda tu mapa paso a paso." }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("button", {
+													type: "button",
+													className: "home-tool-action",
+													"data-open-planning": "",
+													children: "Abrir planificaciones"
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("section", {
+							id: "home-sessions-section",
+							className: "home-section home-sessions-section",
+							"aria-labelledby": "home-sessions-title",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "home-section-heading",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("span", {
+												className: "home-eyebrow",
+												children: "Biblioteca personal"
+											}),
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("h2", {
+												id: "home-sessions-title",
+												children: "Mis sesiones"
+											}),
+											"\n"
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "home-toggle-all-sessions",
+											className: "btn btn-ghost btn-sm hidden",
+											children: "Ver todas"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", {
+									id: "home-session-list",
+									className: "home-session-list",
+									"aria-live": "polite",
+									children: /* @__PURE__ */ (0, T.jsx)(os, {})
+								})
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("dialog", {
+					id: "home-plans-dialog",
+					className: "home-plans-dialog",
+					"aria-labelledby": "home-plans-title",
+					"aria-describedby": "home-plans-description",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "home-plans-shell",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("header", {
+									className: "home-plans-header",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("span", {
+												className: "home-eyebrow",
+												children: "Comparación de planes"
+											}),
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("h2", {
+												id: "home-plans-title",
+												children: "Conoce qué incluye cada plan"
+											}),
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("p", {
+												id: "home-plans-description",
+												children: "Conoce las diferencias antes de decidir. Los cambios de plan y los pagos todavía no están habilitados."
+											}),
+											"\n"
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "home-plans-close",
+											"data-home-action": "close-plans",
+											"aria-label": "Cerrar comparación de planes",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "home-plans-grid",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("article", {
+											className: "home-plan-card",
+											"data-plan-code": "free",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "home-plan-card-heading",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", { children: [/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-kicker",
+															children: "Para comenzar"
+														}), /* @__PURE__ */ (0, T.jsx)("h3", { children: "Gratuito" })] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-current-badge",
+															hidden: !0,
+															children: "Tu plan actual"
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("p", {
+													className: "home-plan-description",
+													children: "Lo esencial para crear y guardar tus primeras sesiones."
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("p", {
+													className: "home-plan-credits",
+													children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "30" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "créditos de IA por ciclo" })]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("ul", {
+													className: "home-plan-benefits",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Crear sesiones con IA"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Guardar tus planificaciones"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Exportar a Word y PDF"] }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "home-plan-status",
+													children: "En desarrollo"
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("article", {
+											className: "home-plan-card",
+											"data-plan-code": "beta_teacher",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "home-plan-card-heading",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", { children: [/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-kicker",
+															children: "Acceso anticipado"
+														}), /* @__PURE__ */ (0, T.jsx)("h3", { children: "Docente Beta" })] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-current-badge",
+															hidden: !0,
+															children: "Tu plan actual"
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("p", {
+													className: "home-plan-description",
+													children: "Para docentes que prueban y ayudan a mejorar Space Lab."
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("p", {
+													className: "home-plan-credits",
+													children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "100" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "créditos de IA por ciclo" })]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("ul", {
+													className: "home-plan-benefits",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Todo lo incluido en Gratuito"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Adjuntar fuentes al copiloto"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Acceso anticipado a novedades"] }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "home-plan-status",
+													children: "En desarrollo"
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("article", {
+											className: "home-plan-card home-plan-card-featured",
+											"data-plan-code": "teacher",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "home-plan-card-heading",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", { children: [/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-kicker",
+															children: "Para el día a día"
+														}), /* @__PURE__ */ (0, T.jsx)("h3", { children: "Docente Plus" })] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-current-badge",
+															hidden: !0,
+															children: "Tu plan actual"
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("p", {
+													className: "home-plan-description",
+													children: "Más capacidad y herramientas para una planificación frecuente."
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("p", {
+													className: "home-plan-credits",
+													children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "150" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "créditos de IA por ciclo" })]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("ul", {
+													className: "home-plan-benefits",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Todo lo incluido en Gratuito"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Archivos y calidad equilibrada"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Plantillas personalizadas"] }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "home-plan-status",
+													children: "En desarrollo"
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("article", {
+											className: "home-plan-card",
+											"data-plan-code": "pro",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "home-plan-card-heading",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", { children: [/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-kicker",
+															children: "Máxima capacidad"
+														}), /* @__PURE__ */ (0, T.jsx)("h3", { children: "Docente Pro" })] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "home-plan-current-badge",
+															hidden: !0,
+															children: "Tu plan actual"
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("p", {
+													className: "home-plan-description",
+													children: "Para un uso intensivo y las capacidades más avanzadas."
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("p", {
+													className: "home-plan-credits",
+													children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "400" }), /* @__PURE__ */ (0, T.jsx)("span", { children: "créditos de IA por ciclo" })]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("ul", {
+													className: "home-plan-benefits",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Todo lo incluido en Plus"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Calidad máxima de IA"] }),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("li", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+														}), "Acceso previsto a planificación avanzada"] }),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "home-plan-status",
+													children: "En desarrollo"
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("footer", {
+									className: "home-plans-footer",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-shield" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("p", { children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Vista informativa." }), " No se realizará ningún cobro ni cambio de plan desde esta pantalla."] }),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/PlanningHost.tsx
+function vs() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		/* @__PURE__ */ (0, T.jsx)("dialog", {
+			id: "planning-dialog",
+			className: "planning-dialog",
+			"aria-labelledby": "planning-title"
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/QuickSession.tsx
+function ys() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			className: "session-mode-switch",
+			role: "group",
+			"aria-label": "Modo del generador",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("button", {
+					type: "button",
+					className: "btn btn-ghost",
+					id: "session-mode-quick",
+					"aria-pressed": "false",
+					children: "Modo rápido · 3 pasos"
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("button", {
+					type: "button",
+					className: "btn btn-ghost",
+					id: "session-mode-advanced",
+					"aria-pressed": "true",
+					children: "Modo avanzado"
+				}),
+				"\n"
+			]
+		}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("section", {
+			id: "quick-session",
+			hidden: !0,
+			"aria-label": "Asistente rápido de sesiones",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("nav", {
+					className: "quick-steps",
+					"aria-label": "Pasos del modo rápido",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							type: "button",
+							"data-quick-step": "1",
+							"aria-current": "step",
+							children: "1. Datos"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							type: "button",
+							"data-quick-step": "2",
+							children: "2. Aprendizajes"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							type: "button",
+							"data-quick-step": "3",
+							children: "3. Revisar"
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("p", {
+					id: "quick-step-status",
+					className: "curriculum-help",
+					role: "status",
+					children: "Paso 1 de 3"
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("div", {
+					id: "quick-errors",
+					className: "quick-notice",
+					role: "alert",
+					hidden: !0
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					"data-quick-panel": "1",
+					"aria-labelledby": "quick-title-1",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h3", {
+							id: "quick-title-1",
+							tabIndex: -1,
+							children: "Datos de tu sesión"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", { children: "Define qué enseñarás y a quiénes. Los datos de tu institución son opcionales." }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", {
+							id: "quick-data-fields",
+							className: "quick-field-grid"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("details", {
+							className: "form-disclosure",
+							children: [/* @__PURE__ */ (0, T.jsx)("summary", { children: "Datos institucionales y de aula (opcionales)" }), /* @__PURE__ */ (0, T.jsx)("div", {
+								id: "quick-institution-fields",
+								className: "form-disclosure-content"
+							})]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					"data-quick-panel": "2",
+					hidden: !0,
+					"aria-labelledby": "quick-title-2",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h3", {
+							id: "quick-title-2",
+							tabIndex: -1,
+							children: "Aprendizajes y propuestas"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", {
+							id: "quick-curriculum-status",
+							role: "status",
+							children: "Comprobando cobertura curricular…"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", { children: "El selector muestra referencias del catálogo. Los textos manuales o completados por IA requieren cotejo y no se convierten automáticamente en información oficial." }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", { id: "quick-learning-fields" }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("details", {
+							className: "form-disclosure",
+							children: [/* @__PURE__ */ (0, T.jsx)("summary", { children: "Desempeños y procedencia del catálogo" }), /* @__PURE__ */ (0, T.jsx)("div", {
+								id: "quick-official-performances",
+								className: "form-disclosure-content"
+							})]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", { id: "quick-proposal-fields" }),
+						"\n"
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("section", {
+					"data-quick-panel": "3",
+					hidden: !0,
+					"aria-labelledby": "quick-title-3",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h3", {
+							id: "quick-title-3",
+							tabIndex: -1,
+							children: "Revisar y generar"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("dl", { id: "quick-review" }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h4", { children: "Coherencia curricular y advertencias" }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("ul", {
+							id: "quick-warnings",
+							className: "quick-notice"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", { children: "Las actividades, criterios y evidencias son propuestas para revisión docente. Puedes generar sin registrar alumnos. La generación usa tu cuenta y está sujeta a tus límites y créditos de IA." }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("details", {
+							className: "form-disclosure",
+							children: [/* @__PURE__ */ (0, T.jsx)("summary", { children: "Copiloto, referencias y opciones de generación" }), /* @__PURE__ */ (0, T.jsx)("div", {
+								id: "quick-ai-options",
+								className: "form-disclosure-content"
+							})]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("details", {
+							className: "form-disclosure",
+							children: [/* @__PURE__ */ (0, T.jsx)("summary", { children: "Diseño del documento" }), /* @__PURE__ */ (0, T.jsx)("div", {
+								id: "quick-design-options",
+								className: "form-disclosure-content"
+							})]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("details", {
+							className: "form-disclosure",
+							children: [/* @__PURE__ */ (0, T.jsx)("summary", { children: "Alumnos (opcional)" }), /* @__PURE__ */ (0, T.jsx)("div", {
+								id: "quick-student-options",
+								className: "form-disclosure-content"
+							})]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("details", {
+							className: "form-disclosure",
+							children: [/* @__PURE__ */ (0, T.jsx)("summary", { children: "Fichas y material de aplicación" }), /* @__PURE__ */ (0, T.jsx)("div", {
+								id: "quick-worksheet-options",
+								className: "form-disclosure-content"
+							})]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "quick-navigation",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							type: "button",
+							className: "btn btn-ghost",
+							id: "quick-back",
+							disabled: !0,
+							children: "Anterior"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							type: "button",
+							className: "btn btn-primary",
+							id: "quick-next",
+							children: "Continuar"
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/SessionPreview.tsx
+function bs() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("section", {
+			id: "preview-area",
+			className: "preview-area",
+			children: [
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					id: "empty-state",
+					className: "empty-state",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "empty-state-copy",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "hero-badge",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "MINEDU 2026 · CNEB Perú · Planificación con IA" }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "empty-brand-row",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "empty-brand-mark",
+											style: {
+												background: "linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%)",
+												borderRadius: "12px",
+												padding: "10px",
+												display: "inline-flex",
+												boxShadow: "0 0 20px rgba(0,212,255,0.25)"
+											},
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("img", {
+													src: "assets/favicon.svg",
+													alt: "Space Lab Icon",
+													"aria-hidden": "true"
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "empty-eyebrow",
+											children: "Workspace Curricular Inteligente"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("h2", {
+									className: "empty-title",
+									children: "Diseña Sesiones de Aprendizaje Oficiales MINEDU con IA"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("p", {
+									className: "empty-text",
+									children: [
+										"Genera tu planificación curricular por competencias para ",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "Inicial, Primaria y Secundaria" }),
+										" alineada al CNEB 2026. Con situaciones significativas, secuencia didáctica (Inicio, Desarrollo, Cierre), criterios e instrumentos de evaluación listos para editar y exportar a ",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "Word (.docx)" }),
+										" y ",
+										/* @__PURE__ */ (0, T.jsx)("strong", { children: "PDF" }),
+										"."
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "hero-features-list",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "hero-feature-pill",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Alineado al CNEB 2026" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "hero-feature-pill",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "GPT-6 Luna, Claude & Gemini" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "hero-feature-pill",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Word (.docx) & PDF A4" }),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "hero-feature-pill",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-shield" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", { children: "Privado y en tu navegador" }),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "hero-actions-row",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											id: "btn-empty-start",
+											className: "btn btn-primary empty-primary-action",
+											"aria-label": "Comenzar a planificar sesión de aprendizaje",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n                                Comenzar a planificar\n                                ",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-arrow-right" })
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "empty-steps",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "step-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "step-num",
+											children: "1"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "step-content",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("strong", {
+													className: "step-title",
+													children: "1. Configura el Contexto"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "step-desc",
+													children: "Selecciona nivel (Inicial, Primaria, Secundaria), área, competencias y el modelo de IA (GPT-6 Luna, Claude o Gemini)."
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "step-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "step-num",
+											children: "2"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "step-content",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("strong", {
+													className: "step-title",
+													children: "2. Genera con IA"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "step-desc",
+													children: "Space AI estructura la situación significativa, los momentos didácticos (Inicio, Desarrollo, Cierre), criterios y evidencias."
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "step-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "step-num",
+											children: "3"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "step-content",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("strong", {
+													className: "step-title",
+													children: "3. Edita en Hoja A4"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "step-desc",
+													children: "Ajusta los contenidos en tiempo real sobre la vista previa editable con fórmulas matemáticas KaTeX y tablas interactivas."
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "step-item",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "step-num",
+											children: "4"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "step-content",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("strong", {
+													className: "step-title",
+													children: "4. Exporta y Presenta"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "step-desc",
+													children: "Descarga en Microsoft Word (.docx) nativo con membretes de UGEL/MINEDU o exporta en PDF físico listo para presentar."
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					id: "print-preview",
+					className: "print-preview hidden",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("nav", {
+							id: "linked-planning-context",
+							className: "linked-planning-context no-print hidden",
+							"aria-label": "Origen de la sesión",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "btn-return-planning",
+									className: "btn btn-ghost btn-sm",
+									children: "← Volver a planificación"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "linked-planning-copy",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											id: "linked-planning-title",
+											className: "linked-planning-title"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											id: "linked-planning-position",
+											className: "linked-planning-position"
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "preview-toolbar no-print",
+							children: [
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "toolbar-group",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-undo",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											title: "Deshacer (Ctrl+Z)",
+											"aria-label": "Deshacer",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-undo" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-redo",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											title: "Rehacer (Ctrl+Y)",
+											"aria-label": "Rehacer",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-redo" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", {
+											className: "toolbar-divider",
+											style: {
+												margin: "0 2px",
+												height: "18px",
+												alignSelf: "center"
+											}
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-bold",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											style: { fontWeight: "800" },
+											title: "Negrita (Ctrl+B)",
+											children: "B"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-italic",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											style: { fontStyle: "italic" },
+											title: "Cursiva (Ctrl+I)",
+											children: "I"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-underline",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											style: { textDecoration: "underline" },
+											title: "Subrayado (Ctrl+U)",
+											children: "U"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", {
+											className: "toolbar-divider",
+											style: {
+												margin: "0 2px",
+												height: "18px",
+												alignSelf: "center"
+											}
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-list-bullet",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											title: "Lista de viñetas",
+											"aria-label": "Lista de viñetas",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-list" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-list-number",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											title: "Lista numerada",
+											"aria-label": "Lista numerada",
+											children: "1."
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", {
+											className: "toolbar-divider",
+											style: {
+												margin: "0 2px",
+												height: "18px",
+												alignSelf: "center"
+											}
+										}),
+										"\n",
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-align-left",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											style: {
+												fontSize: "0.72rem",
+												padding: "2px 4px !important"
+											},
+											title: "Alinear a la izquierda",
+											children: "Izq"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-align-center",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											style: {
+												fontSize: "0.72rem",
+												padding: "2px 4px !important"
+											},
+											title: "Centrar",
+											children: "Cen"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-align-right",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											style: {
+												fontSize: "0.72rem",
+												padding: "2px 4px !important"
+											},
+											title: "Alinear a la derecha",
+											children: "Der"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											id: "btn-format-align-justify",
+											className: "btn btn-ghost btn-xs toolbar-btn",
+											style: {
+												fontSize: "0.72rem",
+												padding: "2px 4px !important"
+											},
+											title: "Justificar",
+											children: "Just"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", {
+											className: "toolbar-divider",
+											style: {
+												margin: "0 2px",
+												height: "18px",
+												alignSelf: "center"
+											}
+										}),
+										"\n",
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											style: {
+												display: "flex",
+												alignItems: "center",
+												gap: "3px"
+											},
+											title: "Color de letra",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													style: {
+														fontSize: "0.85rem",
+														fontWeight: "bold",
+														borderBottom: "2.5px solid #ff4444",
+														lineHeight: "1",
+														padding: "0 2px",
+														color: "var(--text)"
+													},
+													children: "A"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("input", {
+													type: "color",
+													id: "btn-format-forecolor",
+													className: "toolbar-color",
+													defaultValue: "#000000",
+													style: {
+														width: "20px",
+														height: "20px",
+														border: "1px solid var(--border)",
+														borderRadius: "4px",
+														padding: "0",
+														background: "transparent",
+														cursor: "pointer"
+													}
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											style: {
+												display: "flex",
+												alignItems: "center",
+												gap: "3px"
+											},
+											title: "Color de resaltado",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													style: {
+														fontSize: "0.72rem",
+														fontWeight: "bold",
+														background: "#ffff00",
+														color: "#000000",
+														padding: "0 3px",
+														borderRadius: "3px",
+														lineHeight: "1.2"
+													},
+													children: "ab"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("input", {
+													type: "color",
+													id: "btn-format-backcolor",
+													className: "toolbar-color",
+													defaultValue: "#ffff00",
+													style: {
+														width: "20px",
+														height: "20px",
+														border: "1px solid var(--border)",
+														borderRadius: "4px",
+														padding: "0",
+														background: "transparent",
+														cursor: "pointer"
+													}
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "toolbar-divider" }),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "toolbar-group",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													htmlFor: "ribbon-font-family",
+													className: "toolbar-sublabel",
+													children: "Fuente"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("select", {
+													id: "ribbon-font-family",
+													className: "form-select select-sm toolbar-select",
+													style: { width: "105px" },
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "Arial, sans-serif",
+															children: "Arial"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "Calibri, Arial, sans-serif",
+															children: "Calibri"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "'Times New Roman', serif",
+															children: "Times New Roman"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "Georgia, serif",
+															children: "Georgia"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "'Courier New', monospace",
+															children: "Courier New"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "'Space Grotesk', sans-serif",
+															children: "Space Grotesk"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													htmlFor: "ribbon-font-size",
+													className: "toolbar-sublabel",
+													children: "Tamaño"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("select", {
+													id: "ribbon-font-size",
+													className: "form-select select-sm toolbar-select",
+													style: { width: "65px" },
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "8pt",
+															children: "8pt"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "9pt",
+															children: "9pt"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "10pt",
+															children: "10pt"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "11pt",
+															children: "11pt"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "12pt",
+															children: "12pt"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													htmlFor: "ribbon-padding",
+													className: "toolbar-sublabel",
+													children: "Padding"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("select", {
+													id: "ribbon-padding",
+													className: "form-select select-sm toolbar-select",
+													style: { width: "85px" },
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "2px 4px",
+															children: "Compacto"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "4px 6px",
+															children: "Estándar"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "6px 8px",
+															children: "Amplio"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "8px 10px",
+															children: "Espacioso"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													htmlFor: "ribbon-line-height",
+													className: "toolbar-sublabel",
+													children: "Interl."
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("select", {
+													id: "ribbon-line-height",
+													className: "form-select select-sm toolbar-select",
+													style: { width: "55px" },
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "1.2",
+															children: "1.2"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "1.3",
+															children: "1.3"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "1.4",
+															children: "1.4"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "1.5",
+															children: "1.5"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "toolbar-divider" }),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "toolbar-group",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											style: {
+												flexDirection: "row",
+												gap: "4px",
+												alignItems: "center",
+												height: "100%"
+											},
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													htmlFor: "ribbon-theme-color",
+													className: "toolbar-sublabel",
+													children: "Borde"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("input", {
+													type: "color",
+													id: "ribbon-theme-color",
+													className: "toolbar-color",
+													defaultValue: "#000000",
+													title: "Color de borde"
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											style: { marginLeft: "6px" },
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													htmlFor: "ribbon-header-bg",
+													className: "toolbar-sublabel",
+													children: "Fondo Momentos"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("select", {
+													id: "ribbon-header-bg",
+													className: "form-select select-sm toolbar-select",
+													style: { width: "105px" },
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#BDD6EE",
+															children: "MINEDU"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#DBEAFE",
+															children: "Institucional"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#CCFBF1",
+															children: "Moderno"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#F3F4F6",
+															children: "Clásico"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#CFFAFE",
+															children: "Accesible"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#F1F5F9",
+															children: "Gris"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#E0F2FE",
+															children: "Azul"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#DCFCE7",
+															children: "Verde"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#FEE2E2",
+															children: "Rojo"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("option", {
+															value: "#FEF3C7",
+															children: "Amarillo"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "toolbar-divider" }),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "toolbar-group",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													className: "toolbar-sublabel",
+													children: "Insertar Logos"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("button", {
+													type: "button",
+													id: "btn-ribbon-add-logo",
+													className: "btn btn-ghost btn-sm toolbar-btn",
+													style: {
+														height: "28px",
+														minHeight: "28px",
+														padding: "2px 8px !important",
+														display: "flex",
+														alignItems: "center",
+														gap: "4px"
+													},
+													title: "Añadir un nuevo logo al encabezado oficial",
+													children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+														className: "ui-icon",
+														"aria-hidden": "true",
+														children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-plus" })
+													}), "Añadir logo"]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "toolbar-divider" }),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "toolbar-group",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													className: "toolbar-sublabel",
+													children: "Filas de Tabla"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "btn-group",
+													style: {
+														display: "flex",
+														gap: "4px"
+													},
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("button", {
+															type: "button",
+															id: "btn-table-row-insert",
+															className: "btn btn-ghost btn-sm toolbar-btn",
+															style: {
+																height: "28px",
+																minHeight: "28px",
+																padding: "2px 8px !important"
+															},
+															title: "Insertar fila debajo",
+															children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																className: "ui-icon",
+																"aria-hidden": "true",
+																children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-plus" })
+															}), "Fila"]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("button", {
+															type: "button",
+															id: "btn-table-row-delete",
+															className: "btn btn-ghost btn-sm toolbar-btn",
+															style: {
+																height: "28px",
+																minHeight: "28px",
+																padding: "2px 8px !important"
+															},
+															title: "Eliminar fila",
+															children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																className: "ui-icon",
+																"aria-hidden": "true",
+																children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-minus" })
+															}), "Fila"]
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "toolbar-divider" }),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "toolbar-group",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "toolbar-item",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("label", {
+													className: "toolbar-sublabel",
+													children: "Copiloto IA"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "btn-group",
+													style: {
+														display: "flex",
+														gap: "4px"
+													},
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("button", {
+															type: "button",
+															id: "btn-ai-rubrica",
+															className: "btn btn-ghost btn-sm toolbar-btn",
+															style: {
+																height: "28px",
+																minHeight: "28px",
+																padding: "2px 8px !important",
+																fontWeight: "600"
+															},
+															title: "Autogenerar criterios o rúbrica de evaluación",
+															children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																className: "ui-icon",
+																"aria-hidden": "true",
+																children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-target" })
+															}), "Rúbrica"]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("button", {
+															type: "button",
+															id: "btn-ai-improve-text",
+															className: "btn btn-ghost btn-sm toolbar-btn",
+															style: {
+																height: "28px",
+																minHeight: "28px",
+																padding: "2px 8px !important",
+																fontWeight: "600"
+															},
+															title: "Mejorar redacción técnica del texto seleccionado",
+															children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																className: "ui-icon",
+																"aria-hidden": "true",
+																children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+															}), "Redactar"]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("button", {
+															type: "button",
+															id: "btn-toolbar-ficha-prompt",
+															className: "btn btn-ghost btn-sm toolbar-btn",
+															style: {
+																height: "28px",
+																minHeight: "28px",
+																padding: "2px 8px !important",
+																fontWeight: "600"
+															},
+															title: "Ver prompt para Ficha en IA externa",
+															children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+																className: "ui-icon",
+																"aria-hidden": "true",
+																children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+															}), "Ficha IA"]
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", { className: "toolbar-divider" }),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "toolbar-group toolbar-group-actions",
+									style: {
+										marginLeft: "auto",
+										display: "flex",
+										gap: "8px",
+										alignItems: "center"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("span", {
+											className: "preview-badge",
+											id: "edit-mode-badge",
+											children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-edit" })
+											}), "Modo edición"]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											id: "btn-export-word-preview",
+											className: "btn btn-ghost btn-sm toolbar-btn",
+											style: {
+												width: "32px",
+												height: "32px",
+												padding: "0 !important"
+											},
+											title: "Exportar sesión a Word",
+											"aria-label": "Exportar sesión a Word",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											id: "btn-clean-format",
+											className: "btn btn-ghost btn-sm toolbar-btn",
+											style: {
+												width: "32px",
+												height: "32px",
+												padding: "0 !important"
+											},
+											title: "Limpiar formato pegado",
+											"aria-label": "Limpiar formato pegado",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-clean" })
+											})
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											id: "btn-close-session",
+											className: "btn btn-ghost btn-sm toolbar-btn",
+											style: {
+												width: "32px",
+												height: "32px",
+												padding: "0 !important",
+												color: "#ef4444",
+												fontWeight: "bold",
+												fontSize: "1.1rem"
+											},
+											title: "Cerrar sesión actual e iniciar una nueva",
+											"aria-label": "Cerrar sesión actual e iniciar una nueva",
+											children: /* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+											})
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							id: "time-balance-warning",
+							className: "time-balance-banner no-print",
+							style: {
+								background: "rgba(245, 158, 11, 0.12)",
+								border: "1px solid rgba(245, 158, 11, 0.3)",
+								color: "#eab308",
+								padding: "10px 16px",
+								borderRadius: "8px",
+								margin: "10px auto",
+								maxWidth: "820px",
+								fontSize: "0.85rem",
+								fontWeight: "600",
+								display: "none",
+								alignItems: "center",
+								gap: "8px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("svg", {
+									className: "ui-icon",
+									"aria-hidden": "true",
+									children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-alert" })
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", { id: "time-balance-warning-text" }),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							id: "session-sheet",
+							className: "session-sheet a4-page",
+							children: ["\n", "\n"]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/SessionEditor.tsx
+function xs() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "app-view",
+			className: "app-wrapper hidden",
+			children: [
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("header", {
+					className: "app-header glass-card",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "header-leading",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "header-brand",
+									"data-action": "view-landing",
+									style: { cursor: "pointer" },
+									title: "Volver al inicio / presentación",
+									role: "button",
+									tabIndex: 0,
+									"aria-label": "Volver al inicio de Space Lab",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "brand-icon",
+											style: {
+												background: "linear-gradient(135deg, rgba(0,212,255,0.2) 0%, rgba(123,97,255,0.2) 100%)",
+												borderColor: "rgba(0,212,255,0.35)"
+											},
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("img", {
+													src: "assets/favicon.svg",
+													alt: "Space Lab Logo",
+													className: "brand-logo-img"
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("h1", {
+												className: "brand-title",
+												children: "Space Lab"
+											}),
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("span", {
+												className: "brand-subtitle",
+												children: "Sesiones Educativas"
+											}),
+											"\n"
+										] }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "header-context",
+									"aria-label": "Contexto de la sesión",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "header-context-label",
+											children: "Editor de sesión"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											id: "session-context-title",
+											className: "header-context-title",
+											children: "Nueva sesión"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									id: "header-user-badge",
+									className: "header-user-badge",
+									role: "region",
+									"aria-label": "Perfil y créditos del docente",
+									hidden: !0,
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", {
+											className: "user-avatar-badge",
+											id: "header-user-avatar",
+											"aria-hidden": "true",
+											children: "--"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "user-details-col",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "user-name-row",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "user-display-name",
+															id: "header-user-name",
+															children: "Docente"
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "user-plan-tag",
+															id: "header-user-plan",
+															children: "Plan docente"
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "user-credits-sub",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "user-credits-text",
+															id: "header-user-credits",
+															children: "-- créditos IA"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "save-indicator",
+							id: "save-indicator",
+							role: "status",
+							"aria-live": "polite",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", { className: "save-dot" }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "save-text",
+									children: "Sin cambios"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("nav", {
+							className: "header-actions",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("a", {
+									href: "mailto:pabloclsa87@gmail.com",
+									className: "btn btn-ghost btn-sm",
+									"aria-label": "Contactar con soporte por correo",
+									children: "Soporte"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									id: "ai-credit-indicator",
+									className: "ai-credit-indicator",
+									role: "status",
+									"aria-live": "polite",
+									hidden: !0,
+									children: "IA · -- créditos"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "btn-home-nav",
+									type: "button",
+									className: "btn btn-ghost btn-sm",
+									"data-action": "view-home",
+									hidden: !0,
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-folder" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "btn-label",
+											children: "Mi espacio"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("label", {
+									className: "theme-picker",
+									title: "Tema de la aplicación",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-theme" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "sr-only",
+											children: "Tema de la aplicación"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("select", {
+											id: "theme-preference",
+											"aria-label": "Tema de la aplicación",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "system",
+													children: "Sistema"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "light",
+													children: "Claro"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("option", {
+													value: "dark",
+													children: "Oscuro"
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "btn-toggle-edit",
+									className: "btn btn-ghost btn-icon",
+									title: "Modo edición / lectura",
+									"aria-label": "Cambiar modo de edición",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-edit" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "btn-label",
+											children: "Editar"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "btn-preview",
+									className: "btn btn-ghost btn-icon",
+									title: "Vista previa de impresión",
+									"aria-label": "Abrir vista previa",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-eye" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "btn-label",
+											children: "Vista Previa"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("details", {
+									id: "export-command-menu",
+									className: "command-menu",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("summary", {
+											className: "btn btn-primary",
+											"aria-label": "Abrir opciones de exportación",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "btn-label",
+													children: "Exportar"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon command-menu-chevron",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-chevron-down" })
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "command-menu-panel",
+											role: "group",
+											"aria-label": "Opciones de exportación",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "command-menu-heading",
+													children: "Exportar sesión"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("button", {
+													id: "btn-export-pdf",
+													className: "btn btn-pdf",
+													title: "Exportar sesión a PDF",
+													"aria-label": "Exportar sesión a PDF",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "btn-label",
+															children: "Documento PDF"
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("button", {
+													id: "btn-export-word",
+													className: "btn btn-word",
+													title: "Exportar sesión a Word",
+													"aria-label": "Exportar sesión a Word",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "btn-label",
+															children: "Documento Word"
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "command-menu-separator",
+													"aria-hidden": "true"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("a", {
+													id: "btn-download-engine",
+													href: "https://descargas.sypablitodp.site",
+													target: "_blank",
+													rel: "noopener noreferrer",
+													className: "btn btn-ghost",
+													title: "Descargar Motor de Exportación Local (.exe)",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("span", {
+															className: "btn-label",
+															children: "Obtener motor local"
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", {
+									id: "auth-header-container",
+									className: "auth-header-container",
+									children: /* @__PURE__ */ (0, T.jsx)(ss, {})
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "btn-menu-mobile",
+									className: "btn btn-ghost btn-icon mobile-only",
+									title: "Abrir planificación",
+									"aria-label": "Abrir planificación",
+									"aria-expanded": "false",
+									"aria-controls": "sidebar",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-menu" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "btn-label",
+											children: "Planificar"
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("main", {
+					className: "app-main",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("nav", {
+							id: "workflow-rail",
+							className: "workflow-rail",
+							"aria-label": "Flujo de creación",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "btn-toggle-rail",
+									className: "workflow-rail-brand",
+									type: "button",
+									"aria-label": "Mostrar nombres de las etapas",
+									"aria-expanded": "false",
+									"aria-controls": "workflow-tabs",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-menu" })
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Etapas" }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "quick-open-planner",
+									className: "btn btn-ghost",
+									"aria-controls": "sidebar",
+									children: "Editar sesión"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									id: "workflow-tabs",
+									className: "sidebar-tabs",
+									role: "group",
+									"aria-label": "Secciones de la sesión",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "sidebar-tab active",
+											"data-tab": "tab-ai",
+											"aria-label": "Copiloto, en curso",
+											"aria-current": "step",
+											"aria-controls": "tab-ai",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "tab-step",
+													children: "01"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon tab-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", {
+													className: "tab-copy",
+													children: [/* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-text",
+														children: "Copiloto"
+													}), /* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-state",
+														children: "En curso"
+													})]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "sidebar-tab",
+											"data-tab": "tab-general",
+											"aria-label": "Datos, pendiente",
+											"aria-controls": "tab-general",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "tab-step",
+													children: "02"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon tab-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-building" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", {
+													className: "tab-copy",
+													children: [/* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-text",
+														children: "Datos"
+													}), /* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-state",
+														children: "Pendiente"
+													})]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "sidebar-tab",
+											"data-tab": "tab-propositos",
+											"aria-label": "Propósitos, pendiente",
+											"aria-controls": "tab-propositos",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "tab-step",
+													children: "03"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon tab-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-target" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", {
+													className: "tab-copy",
+													children: [/* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-text",
+														children: "Propósitos"
+													}), /* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-state",
+														children: "Pendiente"
+													})]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "sidebar-tab",
+											"data-tab": "tab-design",
+											"aria-label": "Diseño, pendiente",
+											"aria-controls": "tab-design",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "tab-step",
+													children: "04"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon tab-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sliders" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", {
+													className: "tab-copy",
+													children: [/* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-text",
+														children: "Diseño"
+													}), /* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-state",
+														children: "Pendiente"
+													})]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "sidebar-tab",
+											"data-tab": "tab-alumnos",
+											"aria-label": "Alumnos, pendiente",
+											"aria-controls": "tab-alumnos",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "tab-step",
+													children: "05"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon tab-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-users" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", {
+													className: "tab-copy",
+													children: [/* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-text",
+														children: "Alumnos"
+													}), /* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-state",
+														children: "Pendiente"
+													})]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											type: "button",
+											className: "sidebar-tab",
+											"data-tab": "tab-fichas",
+											"aria-label": "Fichas, pendiente",
+											"aria-controls": "tab-fichas",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "tab-step",
+													children: "06"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon tab-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("span", {
+													className: "tab-copy",
+													children: [/* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-text",
+														children: "Fichas"
+													}), /* @__PURE__ */ (0, T.jsx)("span", {
+														className: "tab-state",
+														children: "Pendiente"
+													})]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("aside", {
+							id: "sidebar",
+							className: "sidebar glass-card",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "sidebar-header",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("span", {
+												className: "sidebar-eyebrow",
+												children: "Planificador docente"
+											}),
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("h2", {
+												className: "sidebar-title",
+												children: "Diseña tu sesión"
+											}),
+											"\n"
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("button", {
+											id: "btn-close-sidebar",
+											type: "button",
+											className: "btn btn-ghost btn-sm",
+											"aria-label": "Volver al documento",
+											children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+												className: "ui-icon",
+												"aria-hidden": "true",
+												children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+											}), /* @__PURE__ */ (0, T.jsx)("span", { children: "Volver al documento" })]
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "sidebar-workflow",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("form", {
+											id: "session-form",
+											className: "session-form",
+											autoComplete: "off",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)(ys, {}),
+												"\n",
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													id: "tab-ai",
+													className: "tab-pane active",
+													role: "region",
+													"aria-labelledby": "inspector-title",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "inspector-heading planner-section-heading",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("span", {
+																	id: "inspector-step",
+																	className: "inspector-step",
+																	children: "Paso 01 de 06"
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("h3", {
+																	id: "inspector-title",
+																	children: "Configura el copiloto"
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("p", {
+																	id: "inspector-description",
+																	children: "Elige el modelo, la plantilla y las referencias para preparar tu sesión."
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("p", {
+																	className: "planner-scroll-help",
+																	children: "Baja para continuar. El menú te lleva directo a cada sección."
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-group ai-model-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "ai-model-header",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+																			"\n",
+																			/* @__PURE__ */ (0, T.jsx)("span", {
+																				className: "ai-model-eyebrow",
+																				children: "Copiloto Space AI"
+																			}),
+																			"\n",
+																			/* @__PURE__ */ (0, T.jsx)("strong", { children: "Enrutamiento inteligente" }),
+																			"\n"
+																		] }),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("span", {
+																			className: "ai-model-status",
+																			id: "ai-availability-status",
+																			children: "Disponibilidad por verificar"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("label", {
+																	htmlFor: "select-ai-provider",
+																	className: "form-label",
+																	children: "\n                                Modo de calidad\n                            "
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("select", {
+																	defaultValue: "automatic",
+																	id: "select-ai-provider",
+																	className: "form-select",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("option", {
+																			value: "automatic",
+																			children: "Automático — Recomendado"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("option", {
+																			value: "fast",
+																			disabled: !0,
+																			hidden: !0,
+																			children: "Rápido — Menor latencia"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("option", {
+																			value: "balanced",
+																			disabled: !0,
+																			hidden: !0,
+																			children: "Equilibrado — Calidad y eficiencia"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("option", {
+																			value: "max_quality",
+																			disabled: !0,
+																			hidden: !0,
+																			children: "Máxima calidad — Trabajo curricular complejo"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("p", {
+																	id: "ai-availability-help",
+																	className: "curriculum-help",
+																	children: "Automático delega la selección al gateway. Las demás opciones requieren verificar tu cuenta y el backend."
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	id: "model-capabilities-badge",
+																	className: "model-capabilities-badge",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon badge-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("span", {
+																			className: "badge-text",
+																			children: [/* @__PURE__ */ (0, T.jsx)("strong", { children: "Automático:" }), " El gateway elige la ruta más adecuada según la tarea y los archivos."]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sliders" })
+																		}),
+																		"\n                                Estructura de la Sesión\n                            "
+																	]
+																}),
+																"\n",
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "select-template",
+																			className: "form-label",
+																			children: "Tipo de Sesión"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("select", {
+																			id: "select-template",
+																			className: "form-select",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "estandar",
+																					children: "Sesión estándar MINEDU"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "inicial",
+																					children: "Sesión de educación inicial"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "laboratorio",
+																					children: "Sesión de laboratorio"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "refuerzo",
+																					children: "Sesión de refuerzo"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "select-methodology",
+																			className: "form-label",
+																			children: "Metodología Didáctica"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("select", {
+																			id: "select-methodology",
+																			className: "form-select",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "",
+																					children: "-- Por defecto del Área --"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "polya",
+																					children: "Método de Polya — resolución de problemas"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "erca",
+																					children: "Ciclo ERCA — experiencia, reflexión, conceptualización y aplicación"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "project_based_learning",
+																					children: "Aprendizaje Basado en Proyectos"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "flipped",
+																					children: "Aula invertida"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "indagacion",
+																					children: "Indagación científica (STEAM)"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "cooperativo",
+																					children: "Aprendizaje cooperativo"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card source-file-group",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-upload" })
+																		}),
+																		"\n                                Documento de Referencia ",
+																		/* @__PURE__ */ (0, T.jsx)("span", {
+																			className: "optional-label",
+																			style: {
+																				fontSize: "0.65rem",
+																				color: "var(--text-muted)",
+																				marginLeft: "auto"
+																			},
+																			children: "Opcional"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	id: "source-file-dropzone",
+																	className: "source-file-dropzone",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("span", {
+																			className: "icon",
+																			children: /* @__PURE__ */ (0, T.jsx)("svg", {
+																				className: "ui-icon",
+																				"aria-hidden": "true",
+																				children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-upload" })
+																			})
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("span", {
+																			className: "text",
+																			children: "Haz clic o arrastra un archivo aquí (PDF, imagen, audio o texto)"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	id: "source-file-info",
+																	className: "source-file-info hidden",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("span", {
+																			className: "file-name",
+																			id: "source-file-name-text"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("button", {
+																			type: "button",
+																			id: "btn-remove-source-file",
+																			className: "btn-remove-file",
+																			title: "Eliminar archivo",
+																			"aria-label": "Eliminar archivo",
+																			children: /* @__PURE__ */ (0, T.jsx)("svg", {
+																				className: "ui-icon",
+																				"aria-hidden": "true",
+																				children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+																			})
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("input", {
+																	type: "file",
+																	id: "input-source-file",
+																	className: "hidden",
+																	accept: ".pdf,image/*,audio/*,text/plain,.csv,.md,.json"
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	id: "source-file-guidance",
+																	className: "source-file-guidance hidden",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-source-instruction",
+																			className: "form-label",
+																			children: "\n                                    ¿Qué parte debe usar la IA?\n                                "
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("textarea", {
+																			id: "input-source-instruction",
+																			className: "form-textarea",
+																			rows: 3,
+																			maxLength: 600,
+																			placeholder: "Ej.: Toma como situación central la primera situación problemática de la página 2. No uses los otros ejemplos."
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("p", {
+																			className: "source-file-guidance-help",
+																			children: "\n                                    Indica una página, un rango (págs. 3–5) o describe la situación. Si lo dejas vacío, la IA revisará todo el archivo.\n                                "
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															style: { marginTop: "0.5rem" },
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("button", {
+																	type: "button",
+																	id: "btn-pedagogy-brief",
+																	className: "pb-trigger-btn btn btn-ghost",
+																	title: "Afinar el enfoque pedagógico con la IA antes de generar",
+																	style: {
+																		width: "100%",
+																		padding: "10px 16px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+																		}),
+																		" Afinar enfoque pedagógico con IA\n                            "
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													id: "tab-general",
+													className: "tab-pane",
+													role: "region",
+													"aria-labelledby": "planner-title-general",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("header", {
+															className: "planner-section-heading",
+															children: [
+																/* @__PURE__ */ (0, T.jsx)("span", {
+																	className: "planner-section-step",
+																	children: "Paso 02 de 06"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("h3", {
+																	id: "planner-title-general",
+																	children: "Completa los datos"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("p", { children: "Define la institución, el grado, el área y la identidad de tu sesión." })
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-building" })
+																		}),
+																		"\n                                Institución y Jurisdicción\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-institucion",
+																			className: "form-label",
+																			children: "Institución Educativa"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("input", {
+																			type: "text",
+																			id: "input-institucion",
+																			className: "form-input",
+																			placeholder: "I.E. N° 000 — Nombre"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-row",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-dre",
+																					className: "form-label",
+																					children: "DRE"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "text",
+																					id: "input-dre",
+																					className: "form-input",
+																					placeholder: "DRE Ucayali"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-ugel",
+																					className: "form-label",
+																					children: "UGEL"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "text",
+																					id: "input-ugel",
+																					className: "form-input",
+																					placeholder: "UGEL Padre Abad"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-user" })
+																		}),
+																		"\n                                Equipo Docente\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-row",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-docente",
+																					className: "form-label",
+																					children: "Docente"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "text",
+																					id: "input-docente",
+																					className: "form-input",
+																					placeholder: "Nombre completo"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-director",
+																					className: "form-label",
+																					children: "Director(a)"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "text",
+																					id: "input-director",
+																					className: "form-input",
+																					placeholder: "Nombre del director"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sliders" })
+																		}),
+																		"\n                                Programación de Aula\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-row",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-fecha",
+																					className: "form-label",
+																					children: "Fecha"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "date",
+																					id: "input-fecha",
+																					className: "form-input"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-nivel",
+																					className: "form-label",
+																					children: "Nivel"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("select", {
+																					id: "input-nivel",
+																					className: "form-select",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "SECUNDARIA",
+																							children: "Secundaria"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "PRIMARIA",
+																							children: "Primaria"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "INICIAL",
+																							children: "Inicial"
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-row",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-grado",
+																					className: "form-label",
+																					children: "Grado"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("select", {
+																					id: "input-grado",
+																					className: "form-select",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "",
+																							children: "Seleccionar"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "3 años",
+																							children: "3 años (Inicial)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "4 años",
+																							children: "4 años (Inicial)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "5 años",
+																							children: "5 años (Inicial)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "1°",
+																							children: "1° Grado"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "2°",
+																							children: "2° Grado"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "3°",
+																							children: "3° Grado"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "4°",
+																							children: "4° Grado"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "5°",
+																							children: "5° Grado"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "6°",
+																							children: "6° Grado"
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-seccion",
+																					className: "form-label",
+																					children: "Sección"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "text",
+																					id: "input-seccion",
+																					className: "form-input",
+																					placeholder: "A, B, C..."
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-row",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-numero-sesion",
+																					className: "form-label",
+																					children: "N° de Sesión"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "text",
+																					id: "input-numero-sesion",
+																					className: "form-input",
+																					placeholder: "03"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					htmlFor: "input-duracion",
+																					className: "form-label",
+																					children: "Duración"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "text",
+																					id: "input-duracion",
+																					className: "form-input",
+																					placeholder: "90 min"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+																		}),
+																		"\n                                Identidad y Temario\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-area",
+																			className: "form-label",
+																			children: "Área Curricular"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("select", {
+																			id: "input-area",
+																			className: "form-select",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "",
+																					children: "Seleccionar"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Comunicación",
+																					children: "Comunicación"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Matemática",
+																					children: "Matemática"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Ciencia y Tecnología",
+																					children: "Ciencia y Tecnología"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Personal Social",
+																					children: "Personal Social"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Arte y Cultura",
+																					children: "Arte y Cultura"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Educación Física",
+																					children: "Educación Física"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Educación Religiosa",
+																					children: "Educación Religiosa"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "Inglés",
+																					children: "Inglés"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-unidad",
+																			className: "form-label",
+																			children: "Unidad Didáctica"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("input", {
+																			type: "text",
+																			id: "input-unidad",
+																			className: "form-input",
+																			placeholder: "Unidad N° — Título"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-titulo",
+																			className: "form-label",
+																			children: "Título de la Sesión"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("input", {
+																			type: "text",
+																			id: "input-titulo",
+																			className: "form-input",
+																			placeholder: "Título descriptivo de la sesión"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															style: {
+																display: "flex",
+																gap: "8px",
+																marginTop: "1rem"
+															},
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("button", {
+																	type: "button",
+																	id: "btn-save-defaults",
+																	className: "btn btn-ghost btn-sm",
+																	title: "Guardar predeterminados en la nube",
+																	style: {
+																		flex: "1",
+																		fontSize: "0.76rem",
+																		padding: "8px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-save" })
+																		}),
+																		" Predeterminados\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("button", {
+																	type: "button",
+																	id: "btn-new",
+																	className: "btn btn-ghost btn-sm",
+																	title: "Limpiar formulario e iniciar nueva sesión",
+																	style: {
+																		flex: "1",
+																		fontSize: "0.76rem",
+																		padding: "8px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-trash" })
+																		}),
+																		" Limpiar Todo\n                            "
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													id: "tab-propositos",
+													className: "tab-pane",
+													role: "region",
+													"aria-labelledby": "planner-title-propositos",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("header", {
+															className: "planner-section-heading",
+															children: [
+																/* @__PURE__ */ (0, T.jsx)("span", {
+																	className: "planner-section-step",
+																	children: "Paso 03 de 06"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("h3", {
+																	id: "planner-title-propositos",
+																	children: "Elige los aprendizajes"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("p", { children: "Marca competencias y capacidades. Después, precisa los desempeños y enfoques que trabajarás." })
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-target" })
+																		}),
+																		"\n                                Competencias y Capacidades\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("div", {
+																	id: "curriculum-picker",
+																	className: "curriculum-picker",
+																	"aria-label": "Seleccionar competencias y capacidades"
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("details", {
+																	id: "curriculum-manual",
+																	className: "form-disclosure",
+																	open: !0,
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("summary", { children: "Editar aprendizajes manualmente" }),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-disclosure-content",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("div", {
+																					className: "form-group",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("label", {
+																							htmlFor: "input-competencia",
+																							className: "form-label",
+																							children: "Competencia Curricular"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("select", {
+																							id: "select-cneb-competencia",
+																							className: "form-select hidden",
+																							style: {
+																								marginBottom: "6px",
+																								fontSize: "0.8rem",
+																								backgroundColor: "rgba(0, 212, 255, 0.08)",
+																								borderColor: "var(--border-accent)"
+																							}
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("textarea", {
+																							id: "input-competencia",
+																							className: "form-textarea",
+																							rows: 2,
+																							placeholder: "Competencia curricular..."
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("div", {
+																					className: "form-group",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("label", {
+																							htmlFor: "input-capacidad",
+																							className: "form-label",
+																							children: "Capacidad a Desarrollar"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("select", {
+																							id: "select-cneb-capacidad",
+																							className: "form-select hidden",
+																							style: {
+																								marginBottom: "6px",
+																								fontSize: "0.8rem",
+																								backgroundColor: "rgba(0, 212, 255, 0.08)",
+																								borderColor: "var(--border-accent)"
+																							}
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("textarea", {
+																							id: "input-capacidad",
+																							className: "form-textarea",
+																							rows: 2,
+																							placeholder: "Capacidades a desarrollar..."
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-check" })
+																		}),
+																		"\n                                Desempeños Esperados\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-desempeno",
+																			className: "form-label",
+																			children: "Desempeño de la sesión (por verificar)"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("textarea", {
+																			id: "input-desempeno",
+																			className: "form-textarea",
+																			rows: 3,
+																			placeholder: "Desempeños esperados..."
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+																		}),
+																		"\n                                Enfoques Transversales CNEB\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-enfoque",
+																			className: "form-label",
+																			children: "Enfoque Transversal 1"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("select", {
+																			id: "select-cneb-enfoque",
+																			className: "form-select",
+																			style: {
+																				marginBottom: "6px",
+																				fontSize: "0.8rem",
+																				backgroundColor: "rgba(0, 212, 255, 0.08)",
+																				borderColor: "var(--border-accent)"
+																			}
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("input", {
+																			type: "text",
+																			id: "input-enfoque",
+																			className: "form-input",
+																			placeholder: "Ej: Enfoque de derechos"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			htmlFor: "input-enfoque2",
+																			className: "form-label",
+																			children: "Enfoque Transversal 2"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("select", {
+																			id: "select-cneb-enfoque2",
+																			className: "form-select",
+																			style: {
+																				marginBottom: "6px",
+																				fontSize: "0.8rem",
+																				backgroundColor: "rgba(0, 212, 255, 0.08)",
+																				borderColor: "var(--border-accent)"
+																			}
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("input", {
+																			type: "text",
+																			id: "input-enfoque2",
+																			className: "form-input",
+																			placeholder: "Ej: Enfoque ambiental"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("section", {
+															id: "session-proposals",
+															className: "quick-suggestions",
+															"aria-labelledby": "session-proposals-title",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("h4", {
+																	id: "session-proposals-title",
+																	children: "Propuestas para tu sesión"
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("p", { children: "Actividades, criterios y evidencias son propuestas editables del docente o de la IA; no son textos curriculares oficiales. La IA las completará al generar." }),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [/* @__PURE__ */ (0, T.jsx)("label", {
+																		className: "form-label",
+																		htmlFor: "input-session-activities",
+																		children: "Actividades sugeridas"
+																	}), /* @__PURE__ */ (0, T.jsx)("textarea", {
+																		id: "input-session-activities",
+																		className: "form-textarea",
+																		rows: 3,
+																		maxLength: 2e3,
+																		placeholder: "Propón una actividad o revisa la propuesta después de generar."
+																	})]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [/* @__PURE__ */ (0, T.jsx)("label", {
+																		className: "form-label",
+																		htmlFor: "input-session-criteria",
+																		children: "Criterios de evaluación sugeridos (uno por línea)"
+																	}), /* @__PURE__ */ (0, T.jsx)("textarea", {
+																		id: "input-session-criteria",
+																		className: "form-textarea",
+																		rows: 3,
+																		maxLength: 2e3
+																	})]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [/* @__PURE__ */ (0, T.jsx)("label", {
+																		className: "form-label",
+																		htmlFor: "input-session-evidence",
+																		children: "Evidencia sugerida"
+																	}), /* @__PURE__ */ (0, T.jsx)("textarea", {
+																		id: "input-session-evidence",
+																		className: "form-textarea",
+																		rows: 2,
+																		maxLength: 2e3
+																	})]
+																}),
+																"\n"
+															]
+														}),
+														"\n"
+													]
+												}),
+												" ",
+												"\n",
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													id: "tab-design",
+													className: "tab-pane",
+													role: "region",
+													"aria-labelledby": "planner-title-design",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("header", {
+															className: "planner-section-heading",
+															children: [
+																/* @__PURE__ */ (0, T.jsx)("span", {
+																	className: "planner-section-step",
+																	children: "Paso 04 de 06"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("h3", {
+																	id: "planner-title-design",
+																	children: "Dale tu estilo"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("p", { children: "Ajusta cómo se verá tu documento en el editor y al exportarlo." })
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sliders" })
+																		}),
+																		"\n                                Presentación del Documento\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("label", {
+																			className: "form-label",
+																			htmlFor: "select-design-preset",
+																			children: "Estilo Prediseñado"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("select", {
+																			defaultValue: "minedu",
+																			id: "select-design-preset",
+																			className: "form-select",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "minedu",
+																					children: "MINEDU oficial"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "institucional",
+																					children: "Institucional azul"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "moderno",
+																					children: "Moderno verde"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "clasico",
+																					children: "Clásico editorial"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("option", {
+																					value: "accesible",
+																					children: "Accesible alto contraste"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("svg", {
+																			className: "ui-icon",
+																			"aria-hidden": "true",
+																			children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-image" })
+																		}),
+																		"\n                                Logos del Encabezado\n                            "
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	style: {
+																		display: "flex",
+																		gap: "8px",
+																		marginBottom: "10px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("input", {
+																			type: "file",
+																			id: "input-upload-logo",
+																			accept: "image/png,image/jpeg,image/webp",
+																			className: "hidden"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("button", {
+																			type: "button",
+																			id: "btn-trigger-upload-logo",
+																			className: "btn btn-ghost btn-sm",
+																			style: {
+																				flex: "1",
+																				fontSize: "0.74rem",
+																				padding: "6px"
+																			},
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-upload" })
+																				}),
+																				" Subir logo\n                                "
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("button", {
+																			type: "button",
+																			id: "btn-refresh-logos",
+																			className: "btn btn-ghost btn-icon",
+																			style: {
+																				minWidth: "34px",
+																				minHeight: "34px",
+																				fontSize: "0.8rem",
+																				padding: "2px"
+																			},
+																			title: "Actualizar lista",
+																			"aria-label": "Actualizar galería de logos",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-refresh" })
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	id: "logos-container",
+																	style: {
+																		display: "grid",
+																		gridTemplateColumns: "repeat(4, 1fr)",
+																		gap: "6px",
+																		maxHeight: "120px",
+																		overflowY: "auto",
+																		padding: "6px",
+																		background: "rgba(0,0,0,0.25)",
+																		borderRadius: "8px",
+																		border: "1px solid var(--border)"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("span", {
+																			style: {
+																				gridColumn: "span 4",
+																				fontSize: "0.7rem",
+																				textAlign: "center",
+																				color: "var(--text-muted)",
+																				padding: "4px"
+																			},
+																			children: "Inicia\n                                    sesión para ver logos"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("details", {
+															className: "form-disclosure",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("summary", { children: "Ajustes avanzados" }),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-disclosure-content",
+																	children: [
+																		"\n",
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					className: "form-label",
+																					htmlFor: "input-design-theme-color",
+																					children: "Color de Bordes y Recuadros"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("div", {
+																					style: {
+																						display: "flex",
+																						gap: "8px",
+																						alignItems: "center"
+																					},
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("input", {
+																							type: "color",
+																							id: "input-design-theme-color",
+																							className: "form-input",
+																							style: {
+																								padding: "2px",
+																								width: "45px",
+																								height: "35px",
+																								borderRadius: "6px",
+																								cursor: "pointer",
+																								background: "transparent",
+																								border: "1px solid var(--border)"
+																							},
+																							defaultValue: "#000000"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("input", {
+																							type: "text",
+																							id: "input-design-theme-color-hex",
+																							className: "form-input",
+																							placeholder: "#000000",
+																							"aria-label": "Código hexadecimal del color de bordes",
+																							style: {
+																								flex: "1",
+																								fontFamily: "monospace"
+																							},
+																							defaultValue: "#000000"
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					className: "form-label",
+																					htmlFor: "input-design-accent-color",
+																					children: "Color de títulos y acentos"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "color",
+																					id: "input-design-accent-color",
+																					className: "form-input",
+																					defaultValue: "#C0392B",
+																					style: {
+																						padding: "2px",
+																						width: "100%",
+																						height: "35px",
+																						cursor: "pointer",
+																						background: "transparent",
+																						border: "1px solid var(--border)"
+																					}
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					className: "form-label",
+																					htmlFor: "select-design-font-family",
+																					children: "Tipo de Letra (Fuente)"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("select", {
+																					defaultValue: "Arial, sans-serif",
+																					id: "select-design-font-family",
+																					className: "form-select",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "Arial, sans-serif",
+																							children: "Arial (Sans-serif estándar)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "Calibri, Arial, sans-serif",
+																							children: "Calibri (Word moderna)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "'Times New Roman', serif",
+																							children: "Times New Roman (Serif clásica)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "Georgia, serif",
+																							children: "Georgia (Serif de pantalla)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "'Courier New', monospace",
+																							children: "Courier New (Monospaced)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "'Space Grotesk', sans-serif",
+																							children: "Space Grotesk (Moderna)"
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					className: "form-label",
+																					htmlFor: "select-design-font-size",
+																					children: "Tamaño de Letra"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("select", {
+																					defaultValue: "10pt",
+																					id: "select-design-font-size",
+																					className: "form-select",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "8pt",
+																							children: "Pequeño (8pt)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "9pt",
+																							children: "Estándar MINEDU (9pt)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "10pt",
+																							children: "Normal (10pt)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "11pt",
+																							children: "Grande (11pt)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "12pt",
+																							children: "Muy Grande (12pt)"
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					className: "form-label",
+																					htmlFor: "select-design-padding",
+																					children: "Espaciado de Celdas (Padding)"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("select", {
+																					defaultValue: "4px 6px",
+																					id: "select-design-padding",
+																					className: "form-select",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "2px 4px",
+																							children: "Compacto (2px)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "4px 6px",
+																							children: "Estándar (4px)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "6px 8px",
+																							children: "Amplio (6px)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "8px 10px",
+																							children: "Espacioso (8px)"
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					className: "form-label",
+																					htmlFor: "select-design-line-height",
+																					children: "Interlineado (Line Height)"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("select", {
+																					defaultValue: "1.4",
+																					id: "select-design-line-height",
+																					className: "form-select",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "1.2",
+																							children: "Compacto (1.2)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "1.3",
+																							children: "Sutil (1.3)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "1.4",
+																							children: "Estándar (1.4)"
+																						}),
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("option", {
+																							value: "1.5",
+																							children: "Amplio (1.5)"
+																						}),
+																						"\n"
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-group",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("label", {
+																					className: "form-label",
+																					htmlFor: "select-design-header-bg",
+																					children: "Estilo de Cabeceras de Momentos"
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("input", {
+																					type: "color",
+																					id: "select-design-header-bg",
+																					className: "form-input",
+																					defaultValue: "#BDD6EE",
+																					style: {
+																						padding: "2px",
+																						width: "100%",
+																						height: "35px",
+																						cursor: "pointer",
+																						background: "transparent",
+																						border: "1px solid var(--border)"
+																					}
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													id: "tab-alumnos",
+													className: "tab-pane",
+													role: "region",
+													"aria-labelledby": "planner-title-alumnos",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("header", {
+															className: "planner-section-heading",
+															children: [
+																/* @__PURE__ */ (0, T.jsx)("span", {
+																	className: "planner-section-step",
+																	children: "Paso 05 de 06"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("h3", {
+																	id: "planner-title-alumnos",
+																	children: "Añade a tus estudiantes"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("p", { children: "Prepara la lista de cotejo para tu grado y sección." })
+															]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-card",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-card-title",
+																	style: { justifyContent: "space-between" },
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			style: {
+																				display: "flex",
+																				alignItems: "center",
+																				gap: "8px"
+																			},
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-users" })
+																				}),
+																				"\n                                    Registro de Estudiantes\n                                "
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("button", {
+																			type: "button",
+																			id: "btn-save-alumnos",
+																			className: "btn btn-primary btn-sm",
+																			style: {
+																				fontSize: "0.72rem",
+																				padding: "4px 12px",
+																				cursor: "pointer"
+																			},
+																			children: "Guardar Alumnos"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("p", {
+																	style: {
+																		fontSize: "0.74rem",
+																		color: "var(--text-muted)",
+																		marginBottom: "12px",
+																		lineHeight: "1.4"
+																	},
+																	children: "\n                                Registra la lista de alumnos para autocompletar la Lista de Cotejo de tu sesión.\n                            "
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-group",
+																	style: { marginBottom: "0" },
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("textarea", {
+																			id: "textarea-alumnos",
+																			className: "form-textarea student-list-input",
+																			placeholder: "Pega los nombres aquí, uno por línea. Ejemplo:\\nACOSTA MURGA, CLIFEER AMELEX\\nAGUILAR JAVIER, FARID OMAR"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													id: "tab-fichas",
+													className: "tab-pane",
+													role: "region",
+													"aria-labelledby": "planner-title-fichas",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("header", {
+															className: "planner-section-heading",
+															children: [
+																/* @__PURE__ */ (0, T.jsx)("span", {
+																	className: "planner-section-step",
+																	children: "Paso 06 de 06"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("h3", {
+																	id: "planner-title-fichas",
+																	children: "Prepara tus fichas"
+																}),
+																/* @__PURE__ */ (0, T.jsx)("p", { children: "Una vez generada tu sesión, prepara el material de aplicación que acompañará a tus estudiantes." })
+															]
+														}),
+														"\n",
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															id: "apartado-fichas",
+															className: "form-card ficha-prompt-apartado",
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	style: {
+																		display: "flex",
+																		alignItems: "center",
+																		justifyContent: "space-between",
+																		marginBottom: "8px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("label", {
+																			htmlFor: "input-ficha-prompt",
+																			className: "form-card-title",
+																			style: {
+																				margin: "0",
+																				fontSize: "0.82rem"
+																			},
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					style: { color: "#00D4FF" },
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+																				}),
+																				"\n                                    Ficha Didáctica (Prompt IA)\n                                "
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("button", {
+																			type: "button",
+																			id: "btn-copy-ficha-prompt",
+																			className: "btn btn-ghost btn-sm",
+																			style: {
+																				fontSize: "0.72rem",
+																				padding: "4px 10px"
+																			},
+																			title: "Copiar prompt de ficha",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-copy" })
+																				}),
+																				" Copiar\n                                "
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("p", {
+																	style: {
+																		fontSize: "0.74rem",
+																		color: "var(--text-muted)",
+																		marginBottom: "12px",
+																		lineHeight: "1.4"
+																	},
+																	children: "\n                                Genera un prompt optimizado para ChatGPT Images o Midjourney para crear fichas listas para imprimir:\n                            "
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	style: {
+																		display: "grid",
+																		gridTemplateColumns: "1fr 1fr",
+																		gap: "8px",
+																		marginBottom: "10px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+																			"\n",
+																			/* @__PURE__ */ (0, T.jsx)("label", {
+																				htmlFor: "select-ficha-nivel",
+																				className: "form-label",
+																				style: {
+																					fontSize: "0.72rem",
+																					marginBottom: "4px"
+																				},
+																				children: "Dificultad"
+																			}),
+																			"\n",
+																			/* @__PURE__ */ (0, T.jsxs)("select", {
+																				defaultValue: "avanzado",
+																				id: "select-ficha-nivel",
+																				className: "form-select",
+																				style: {
+																					fontSize: "0.75rem",
+																					padding: "6px 8px"
+																				},
+																				children: [
+																					"\n",
+																					/* @__PURE__ */ (0, T.jsx)("option", {
+																						value: "inicio",
+																						children: "Nivel Inicio (Andamiaje)"
+																					}),
+																					"\n",
+																					/* @__PURE__ */ (0, T.jsx)("option", {
+																						value: "avanzado",
+																						children: "Nivel Avanzado (Estándar)"
+																					}),
+																					"\n",
+																					/* @__PURE__ */ (0, T.jsx)("option", {
+																						value: "experto",
+																						children: "Nivel Experto (Desafío)"
+																					}),
+																					"\n"
+																				]
+																			}),
+																			"\n"
+																		] }),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+																			"\n",
+																			/* @__PURE__ */ (0, T.jsx)("label", {
+																				htmlFor: "select-ficha-variante",
+																				className: "form-label",
+																				style: {
+																					fontSize: "0.72rem",
+																					marginBottom: "4px"
+																				},
+																				children: "Variante"
+																			}),
+																			"\n",
+																			/* @__PURE__ */ (0, T.jsxs)("select", {
+																				defaultValue: "estandar",
+																				id: "select-ficha-variante",
+																				className: "form-select",
+																				style: {
+																					fontSize: "0.75rem",
+																					padding: "6px 8px"
+																				},
+																				children: [
+																					"\n",
+																					/* @__PURE__ */ (0, T.jsx)("option", {
+																						value: "estandar",
+																						children: "Datos de la sesión"
+																					}),
+																					"\n",
+																					/* @__PURE__ */ (0, T.jsx)("option", {
+																						value: "alternativa",
+																						children: "Situación alternativa"
+																					}),
+																					"\n",
+																					/* @__PURE__ */ (0, T.jsx)("option", {
+																						value: "refuerzo",
+																						children: "Refuerzo guiado"
+																					}),
+																					"\n",
+																					/* @__PURE__ */ (0, T.jsx)("option", {
+																						value: "reto",
+																						children: "Reto / Extensión"
+																					}),
+																					"\n"
+																				]
+																			}),
+																			"\n"
+																		] }),
+																		"\n"
+																	]
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("textarea", {
+																	id: "input-ficha-prompt",
+																	className: "form-textarea",
+																	rows: 7,
+																	readOnly: !0,
+																	style: {
+																		fontSize: "0.75rem",
+																		fontFamily: "ui-monospace, SFMono-Regular, Consolas, monospace",
+																		lineHeight: "1.35",
+																		background: "rgba(0,0,0,0.3)",
+																		resize: "vertical"
+																	},
+																	placeholder: "Primero genera la sesión para poder crear la ficha didáctica..."
+																}),
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	style: {
+																		display: "flex",
+																		gap: "8px",
+																		marginTop: "10px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("button", {
+																			type: "button",
+																			id: "btn-trigger-ficha-prompt",
+																			className: "btn btn-primary btn-sm",
+																			style: {
+																				flex: "1",
+																				fontSize: "0.78rem",
+																				padding: "8px 12px"
+																			},
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+																				}),
+																				" Generar variante\n                                "
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("button", {
+																			type: "button",
+																			id: "btn-modal-ficha-prompt",
+																			className: "btn btn-ghost btn-sm",
+																			style: {
+																				fontSize: "0.78rem",
+																				padding: "8px 12px"
+																			},
+																			title: "Ver prompt en ventana completa",
+																			"aria-label": "Ver prompt en ventana completa",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-expand" })
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n"
+													]
+												}),
+												"\n",
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("details", {
+													className: "form-disclosure session-management-disclosure",
+													style: { marginTop: "1.25rem" },
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("summary", {
+															style: { fontSize: "0.78rem" },
+															children: [
+																"\n",
+																/* @__PURE__ */ (0, T.jsx)("svg", {
+																	className: "ui-icon",
+																	"aria-hidden": "true",
+																	style: {
+																		color: "#00D4FF",
+																		marginRight: "6px"
+																	},
+																	children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-folder" })
+																}),
+																"\n                            Gestión de Sesiones y Archivos\n                        "
+															]
+														}),
+														"\n",
+														/* @__PURE__ */ (0, T.jsxs)("div", {
+															className: "form-disclosure-content",
+															children: [
+																"\n",
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "form-actions",
+																	style: {
+																		borderTop: "none",
+																		paddingTop: "4px"
+																	},
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-actions-row",
+																			style: {
+																				display: "flex",
+																				gap: "6px",
+																				marginBottom: "6px"
+																			},
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("button", {
+																					type: "button",
+																					id: "btn-save",
+																					className: "btn btn-ghost btn-sm",
+																					style: { flex: "1" },
+																					title: "Guardar cambios en la sesión actual",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("svg", {
+																							className: "ui-icon",
+																							"aria-hidden": "true",
+																							children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-save" })
+																						}),
+																						" Guardar\n                                    "
+																					]
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("button", {
+																					type: "button",
+																					id: "btn-load",
+																					className: "btn btn-ghost btn-sm",
+																					style: { flex: "1" },
+																					title: "Cargar sesión previamente guardada",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("svg", {
+																							className: "ui-icon",
+																							"aria-hidden": "true",
+																							children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-folder" })
+																						}),
+																						" Cargar\n                                    "
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("button", {
+																			type: "button",
+																			id: "btn-save-as",
+																			className: "btn btn-ghost btn-sm",
+																			title: "Guardar una copia de esta sesión con un nuevo título",
+																			style: {
+																				width: "100%",
+																				marginBottom: "6px"
+																			},
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("svg", {
+																					className: "ui-icon",
+																					"aria-hidden": "true",
+																					children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-save" })
+																				}),
+																				" Guardar como…\n                                "
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("div", {
+																			className: "form-actions-row",
+																			style: {
+																				display: "flex",
+																				gap: "6px"
+																			},
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("button", {
+																					type: "button",
+																					id: "btn-export-json",
+																					className: "btn btn-ghost btn-sm",
+																					style: {
+																						flex: "1",
+																						fontSize: "0.72rem"
+																					},
+																					title: "Exportar sesión a archivo JSON",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("svg", {
+																							className: "ui-icon",
+																							"aria-hidden": "true",
+																							children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-download" })
+																						}),
+																						" Exportar JSON\n                                    "
+																					]
+																				}),
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsxs)("button", {
+																					type: "button",
+																					id: "btn-import-json",
+																					className: "btn btn-ghost btn-sm",
+																					style: {
+																						flex: "1",
+																						fontSize: "0.72rem"
+																					},
+																					title: "Importar sesión desde archivo JSON",
+																					children: [
+																						"\n",
+																						/* @__PURE__ */ (0, T.jsx)("svg", {
+																							className: "ui-icon",
+																							"aria-hidden": "true",
+																							children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-upload" })
+																						}),
+																						" Importar JSON\n                                    "
+																					]
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("input", {
+																			type: "file",
+																			id: "input-import-file",
+																			className: "hidden",
+																			accept: ".json"
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n",
+																"\n",
+																/* @__PURE__ */ (0, T.jsxs)("div", {
+																	className: "saved-sessions",
+																	style: { marginTop: "1rem" },
+																	children: [
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsx)("h3", {
+																			className: "saved-title",
+																			style: {
+																				fontSize: "0.75rem",
+																				marginBottom: "6px"
+																			},
+																			children: "Sesiones guardadas"
+																		}),
+																		"\n",
+																		/* @__PURE__ */ (0, T.jsxs)("ul", {
+																			id: "saved-list",
+																			className: "saved-list",
+																			children: [
+																				"\n",
+																				/* @__PURE__ */ (0, T.jsx)("li", {
+																					className: "saved-empty",
+																					children: "No hay sesiones guardadas"
+																				}),
+																				"\n"
+																			]
+																		}),
+																		"\n"
+																	]
+																}),
+																"\n"
+															]
+														}),
+														"\n"
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("aside", {
+											className: "session-planning-summary",
+											"aria-labelledby": "planning-summary-heading",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "sidebar-eyebrow",
+													id: "planning-summary-heading",
+													children: "Tu sesión, de un vistazo"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("svg", {
+													className: "ui-icon planning-summary-icon",
+													"aria-hidden": "true",
+													children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-file" })
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("h3", {
+													id: "planning-summary-title",
+													children: "Tu próxima clase"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("p", {
+													id: "planning-summary-context",
+													children: "Completa los datos de tu sesión."
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("dl", { id: "planning-summary-facts" }),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "planning-summary-note",
+													children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+														className: "ui-icon",
+														"aria-hidden": "true",
+														children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+													}), /* @__PURE__ */ (0, T.jsx)("p", { children: "Inicio, desarrollo y cierre. Una estructura para acompañarte en el aula." })]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "sidebar-primary-action",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("span", {
+													className: "sidebar-primary-hint",
+													children: "Listo para crear"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("button", {
+													type: "button",
+													id: "btn-generate",
+													className: "btn btn-primary btn-full",
+													children: [
+														"\n",
+														/* @__PURE__ */ (0, T.jsx)("svg", {
+															className: "ui-icon",
+															"aria-hidden": "true",
+															children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+														}),
+														" Generar sesión con IA\n                    "
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)(bs, {}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/LogoGallery.tsx
+function Ss() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "logos-gallery-modal",
+			className: "load-modal hidden no-print",
+			style: { zIndex: "9998" },
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "load-modal-content glass-card",
+					style: {
+						maxWidth: "520px",
+						padding: "2rem",
+						position: "relative"
+					},
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							id: "btn-close-gallery-modal",
+							className: "btn btn-ghost btn-sm",
+							"aria-label": "Cerrar",
+							style: {
+								position: "absolute",
+								top: "1rem",
+								right: "1rem",
+								color: "#71717a",
+								cursor: "pointer",
+								background: "none",
+								border: "none",
+								padding: "0"
+							},
+							children: /* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+							})
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("h3", {
+							style: {
+								margin: "0 0 1rem 0",
+								fontSize: "1.2rem",
+								color: "#fff",
+								fontWeight: "700",
+								display: "flex",
+								alignItems: "center",
+								gap: "8px"
+							},
+							children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-image" })
+							}), " Galería de Logos del Encabezado"]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							id: "modal-logo-dropzone",
+							className: "source-file-dropzone",
+							style: {
+								border: "2px dashed rgba(0, 210, 255, 0.2)",
+								background: "rgba(0, 210, 255, 0.02)",
+								borderRadius: "12px",
+								padding: "20px",
+								textAlign: "center",
+								cursor: "pointer",
+								transition: "all 0.2s",
+								marginBottom: "1.5rem"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "icon",
+									style: {
+										display: "block",
+										marginBottom: "8px"
+									},
+									children: /* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-upload" })
+									})
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("span", {
+									className: "text",
+									style: {
+										fontSize: "0.8rem",
+										color: "#a1a1aa",
+										lineHeight: "1.4"
+									},
+									children: [
+										"Sube tu logo para el encabezado (PNG, JPG)",
+										/* @__PURE__ */ (0, T.jsx)("br", {}),
+										/* @__PURE__ */ (0, T.jsx)("strong", {
+											style: { color: "#00d2ff" },
+											children: "Se comprimirá automáticamente"
+										}),
+										" para un rendimiento ultra-rápido"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("input", {
+									type: "file",
+									id: "input-modal-upload-logo",
+									accept: "image/png,image/jpeg,image/webp",
+									className: "hidden"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", {
+							className: "toolbar-divider",
+							style: {
+								margin: "1.5rem 0",
+								background: "rgba(255,255,255,0.06)",
+								height: "1px",
+								width: "100%"
+							}
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h4", {
+							style: {
+								margin: "0 0 0.75rem 0",
+								fontSize: "0.9rem",
+								color: "#e4e4e7"
+							},
+							children: "Tus logos subidos previamente:"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							id: "modal-logos-container",
+							style: {
+								display: "grid",
+								gridTemplateColumns: "repeat(4, 1fr)",
+								gap: "10px",
+								maxHeight: "200px",
+								overflowY: "auto",
+								padding: "8px",
+								background: "rgba(0,0,0,0.25)",
+								borderRadius: "8px",
+								border: "1px solid rgba(255,255,255,0.06)",
+								marginBottom: "1.5rem"
+							},
+							children: ["\n", "\n"]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								display: "flex",
+								justifyContent: "flex-end",
+								gap: "8px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "btn-modal-gallery-close",
+									className: "btn btn-ghost btn-sm",
+									style: {
+										fontSize: "0.8rem",
+										padding: "6px 16px"
+									},
+									children: "Cerrar"
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/RefineText.tsx
+function Cs() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "refine-text-modal",
+			className: "load-modal hidden no-print",
+			style: { zIndex: "9999" },
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "load-modal-content glass-card",
+					style: {
+						maxWidth: "485px",
+						padding: "2rem",
+						position: "relative"
+					},
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							id: "btn-close-refine-modal",
+							className: "btn btn-ghost btn-sm",
+							"aria-label": "Cerrar",
+							style: {
+								position: "absolute",
+								top: "1rem",
+								right: "1rem",
+								color: "#71717a",
+								cursor: "pointer",
+								background: "none",
+								border: "none",
+								padding: "0"
+							},
+							children: /* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+							})
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("h3", {
+							style: {
+								margin: "0 0 1rem 0",
+								fontSize: "1.2rem",
+								color: "#fff",
+								fontWeight: "700",
+								display: "flex",
+								alignItems: "center",
+								gap: "8px"
+							},
+							children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+							}), " Refinar Texto con IA"]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								background: "rgba(0,0,0,0.25)",
+								border: "1px solid rgba(255,255,255,0.06)",
+								padding: "12px",
+								borderRadius: "8px",
+								marginBottom: "1.25rem",
+								maxHeight: "100px",
+								overflowY: "auto"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("label", {
+									style: {
+										display: "block",
+										fontSize: "0.75rem",
+										color: "var(--text-muted)",
+										marginBottom: "4px",
+										fontWeight: "600"
+									},
+									children: "Texto seleccionado:"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("p", {
+									id: "refine-text-preview",
+									style: {
+										fontSize: "0.8rem",
+										color: "#e4e4e7",
+										margin: "0",
+										fontStyle: "italic",
+										whiteSpace: "pre-wrap"
+									}
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "form-group",
+							style: { marginBottom: "1.25rem" },
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("label", {
+									className: "form-label",
+									style: {
+										fontSize: "0.85rem",
+										fontWeight: "600",
+										marginBottom: "8px",
+										display: "block"
+									},
+									children: "¿Cómo deseas refinarlo?"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										display: "grid",
+										gridTemplateColumns: "repeat(2, 1fr)",
+										gap: "8px",
+										marginBottom: "12px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											className: "btn btn-ghost btn-sm refine-opt-btn active",
+											"data-instruction": "Hazlo más formal, claro y profesional. Mantén un tono pedagógico adecuado.",
+											children: "Más Formal"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											className: "btn btn-ghost btn-sm refine-opt-btn",
+											"data-instruction": "Hazlo mucho más sencillo, explicativo y fácil de entender para niños.",
+											children: "Más Sencillo"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											className: "btn btn-ghost btn-sm refine-opt-btn",
+											"data-instruction": "Reescríbelo con un tono lúdico, divertido, entusiasta y chistoso para enganchar a los estudiantes.",
+											children: "Más Divertido"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											className: "btn btn-ghost btn-sm refine-opt-btn",
+											"data-instruction": "Corrige estrictamente cualquier error de ortografía, puntuación o gramática sin alterar su sentido.",
+											children: "Corregir Ortografía"
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "form-group",
+							style: { marginBottom: "1.5rem" },
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("label", {
+									htmlFor: "input-refine-custom",
+									className: "form-label",
+									style: {
+										fontSize: "0.8rem",
+										fontWeight: "600",
+										marginBottom: "6px"
+									},
+									children: "O escribe una orden personalizada:"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("textarea", {
+									id: "input-refine-custom",
+									className: "form-textarea",
+									rows: 2,
+									style: {
+										fontSize: "0.8rem",
+										background: "rgba(0,0,0,0.25)",
+										border: "1px solid rgba(255,255,255,0.08)",
+										width: "100%",
+										borderRadius: "6px",
+										padding: "8px",
+										color: "#fff"
+									},
+									placeholder: "Ej. Escríbelo en forma de rima, tradúcelo a quechua, agrega preguntas..."
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								display: "flex",
+								justifyContent: "flex-end",
+								gap: "8px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "btn-refine-cancel",
+									className: "btn btn-ghost btn-sm",
+									style: {
+										fontSize: "0.8rem",
+										padding: "6px 16px"
+									},
+									children: "Cancelar"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									id: "btn-refine-submit",
+									className: "btn btn-primary btn-sm",
+									style: {
+										fontSize: "0.8rem",
+										padding: "6px 16px",
+										fontWeight: "600"
+									},
+									children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-sparkles" })
+									}), " Refinar"]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/SessionLibraryDialog.tsx
+function ws() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "load-modal",
+			className: "load-modal hidden",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "load-modal-content glass-card",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "load-modal-header",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("h3", { children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+									className: "ui-icon",
+									"aria-hidden": "true",
+									children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-folder" })
+								}), " Cargar Sesión Guardada"] }),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "btn-close-load",
+									className: "btn btn-ghost btn-sm",
+									"aria-label": "Cerrar",
+									children: /* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+									})
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("ul", {
+							id: "load-list",
+							className: "load-list",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("li", {
+									className: "saved-empty",
+									children: "No hay sesiones guardadas"
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/surfaces/EditorOverlays.tsx
+function Ts() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		" ",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "chatbot-container",
+			className: "chatbot-container no-print",
+			children: [
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("button", {
+					id: "chatbot-bubble",
+					className: "chatbot-bubble",
+					title: "Preguntar al copiloto",
+					"aria-label": "Preguntar al copiloto",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("svg", {
+							className: "ui-icon",
+							"aria-hidden": "true",
+							children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-chat" })
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("span", { className: "pulse-ring" }),
+						"\n"
+					]
+				}),
+				"\n",
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					id: "chatbot-window",
+					className: "chatbot-window glass-card hidden",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "chatbot-header",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "chatbot-header-info",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { className: "chatbot-dot" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("h4", {
+												className: "chatbot-title",
+												children: "Space Assistant"
+											}),
+											"\n",
+											/* @__PURE__ */ (0, T.jsx)("span", {
+												className: "chatbot-subtitle",
+												children: "GPT-6 Luna Copilot"
+											}),
+											"\n"
+										] }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									id: "btn-close-chatbot",
+									className: "btn-close-chat",
+									"aria-label": "Cerrar copiloto",
+									children: /* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+									})
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							id: "chatbot-messages",
+							className: "chatbot-messages",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "chat-message bot",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", {
+											className: "message-bubble",
+											children: "\n                        ¡Hola! Soy tu asistente pedagógico de Space Lab. ¿En qué puedo ayudarte hoy con tus sesiones o\n                        el Currículo Nacional?\n                    "
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "chatbot-input-container",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("input", {
+									type: "text",
+									id: "chatbot-input",
+									placeholder: "Pregunta algo sobre tu sesión...",
+									autoComplete: "off"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									id: "btn-send-chat",
+									className: "btn btn-accent btn-icon-only",
+									"aria-label": "Enviar mensaje al copiloto",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("svg", {
+											className: "ui-icon",
+											"aria-hidden": "true",
+											children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-arrow-right" })
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(ws, {}),
+		"\n",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "logo-editor-popover",
+			className: "logo-editor-popover hidden no-print",
+			style: {
+				position: "absolute",
+				display: "none"
+			},
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "popover-header",
+					style: {
+						display: "flex",
+						justifyContent: "space-between",
+						alignItems: "center",
+						borderBottom: "1px solid rgba(255,255,255,0.06)",
+						paddingBottom: "8px"
+					},
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("h4", {
+							style: {
+								margin: "0",
+								fontSize: "0.9rem",
+								color: "#fff",
+								fontWeight: "600"
+							},
+							children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-image" })
+							}), " Ajustes de Logo"]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("button", {
+							type: "button",
+							id: "logo-editor-close",
+							className: "popover-close-btn",
+							"aria-label": "Cerrar",
+							style: {
+								background: "none",
+								border: "none",
+								color: "#a1a1aa",
+								cursor: "pointer",
+								padding: "0",
+								lineHeight: "1"
+							},
+							children: /* @__PURE__ */ (0, T.jsx)("svg", {
+								className: "ui-icon",
+								"aria-hidden": "true",
+								children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-close" })
+							})
+						}),
+						"\n"
+					]
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "popover-body",
+					style: {
+						padding: "12px 0 0 0",
+						display: "flex",
+						flexDirection: "column",
+						gap: "12px"
+					},
+					children: [
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "popover-action-row",
+							style: {
+								display: "flex",
+								gap: "6px",
+								flexWrap: "wrap"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									id: "logo-editor-gallery-trigger",
+									className: "btn btn-ghost btn-sm",
+									style: {
+										flex: "1.5",
+										fontSize: "0.75rem",
+										padding: "4px 8px !important",
+										minWidth: "100px"
+									},
+									children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-image" })
+									}), " Galería / Subir"]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									id: "logo-editor-swap",
+									className: "btn btn-ghost btn-sm",
+									style: {
+										flex: "1",
+										fontSize: "0.75rem",
+										padding: "4px 8px !important"
+									},
+									title: "Mover la posición del logo en la lista",
+									children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-refresh" })
+									}), " Mover"]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("button", {
+									type: "button",
+									id: "logo-editor-delete",
+									className: "btn btn-danger-ghost btn-sm",
+									style: {
+										flex: "1",
+										fontSize: "0.75rem",
+										padding: "4px 8px !important",
+										color: "#ef4444",
+										borderColor: "rgba(239, 68, 68, 0.2)"
+									},
+									children: [/* @__PURE__ */ (0, T.jsx)("svg", {
+										className: "ui-icon",
+										"aria-hidden": "true",
+										children: /* @__PURE__ */ (0, T.jsx)("use", { href: "#icon-trash" })
+									}), " Quitar"]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "popover-control-group",
+							style: {
+								display: "flex",
+								flexDirection: "column",
+								gap: "4px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										display: "flex",
+										justifyContent: "space-between",
+										fontSize: "0.75rem",
+										color: "#a1a1aa"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Ancho:" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											id: "logo-editor-width-val",
+											style: {
+												fontWeight: "600",
+												color: "#00d2ff"
+											},
+											children: "65px"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("input", {
+									type: "range",
+									id: "logo-editor-width-slider",
+									min: "30",
+									max: "200",
+									defaultValue: "65",
+									style: {
+										width: "100%",
+										height: "4px",
+										borderRadius: "2px",
+										accentColor: "#00d2ff",
+										cursor: "pointer"
+									}
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								display: "flex",
+								alignItems: "center",
+								gap: "6px",
+								cursor: "pointer"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("input", {
+									type: "checkbox",
+									id: "logo-editor-aspect-ratio",
+									defaultChecked: !0,
+									style: {
+										width: "14px",
+										height: "14px",
+										cursor: "pointer",
+										accentColor: "#00d2ff"
+									}
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("label", {
+									htmlFor: "logo-editor-aspect-ratio",
+									style: {
+										fontSize: "0.75rem",
+										color: "#a1a1aa",
+										cursor: "pointer",
+										userSelect: "none"
+									},
+									children: "Mantener proporción (alto auto)"
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							id: "logo-editor-height-container",
+							className: "popover-control-group hidden",
+							style: {
+								display: "none",
+								flexDirection: "column",
+								gap: "4px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										display: "flex",
+										justifyContent: "space-between",
+										fontSize: "0.75rem",
+										color: "#a1a1aa"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", { children: "Alto:" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											id: "logo-editor-height-val",
+											style: {
+												fontWeight: "600",
+												color: "#00d2ff"
+											},
+											children: "65px"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("input", {
+									type: "range",
+									id: "logo-editor-height-slider",
+									min: "30",
+									max: "200",
+									defaultValue: "65",
+									style: {
+										width: "100%",
+										height: "4px",
+										borderRadius: "2px",
+										accentColor: "#00d2ff",
+										cursor: "pointer"
+									}
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							id: "logo-editor-fit-container",
+							className: "popover-control-group hidden",
+							style: {
+								display: "none",
+								flexDirection: "column",
+								gap: "4px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									style: {
+										fontSize: "0.75rem",
+										color: "#a1a1aa"
+									},
+									children: "Ajuste de imagen:"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "fit-btn-group",
+									style: {
+										display: "flex",
+										gap: "4px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											className: "btn btn-ghost btn-xs btn-fit active",
+											"data-fit": "contain",
+											style: {
+												flex: "1",
+												fontSize: "0.65rem",
+												padding: "2px 4px !important"
+											},
+											children: "Ajustar"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											className: "btn btn-ghost btn-xs btn-fit",
+											"data-fit": "cover",
+											style: {
+												flex: "1",
+												fontSize: "0.65rem",
+												padding: "2px 4px !important"
+											},
+											children: "Recortar"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("button", {
+											type: "button",
+											className: "btn btn-ghost btn-xs btn-fit",
+											"data-fit": "fill",
+											style: {
+												flex: "1",
+												fontSize: "0.65rem",
+												padding: "2px 4px !important"
+											},
+											children: "Estirar"
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							style: {
+								borderTop: "1px solid rgba(255,255,255,0.06)",
+								paddingTop: "10px",
+								marginTop: "2px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("button", {
+									type: "button",
+									id: "logo-editor-reset",
+									className: "btn btn-accent btn-full",
+									style: {
+										fontSize: "0.75rem",
+										padding: "6px 12px",
+										height: "auto"
+									},
+									children: "Restablecer valores"
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(Cs, {}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)(Ss, {}),
+		"\n",
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			id: "editor-context-menu",
+			className: "editor-context-menu hidden no-print",
+			style: {
+				position: "absolute",
+				display: "none",
+				zIndex: "10000"
+			},
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("ul", {
+					className: "context-menu-list",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("li", {
+							id: "menu-item-bold",
+							className: "context-menu-item",
+							children: [
+								/* @__PURE__ */ (0, T.jsx)("strong", { children: "Negrita" }),
+								" ",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "shortcut",
+									children: "Ctrl+B"
+								})
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("li", {
+							id: "menu-item-italic",
+							className: "context-menu-item",
+							children: [
+								/* @__PURE__ */ (0, T.jsx)("em", { children: "Cursiva" }),
+								" ",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "shortcut",
+									children: "Ctrl+I"
+								})
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("li", {
+							id: "menu-item-underline",
+							className: "context-menu-item",
+							children: [
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									style: { textDecoration: "underline" },
+									children: "Subrayado"
+								}),
+								" ",
+								/* @__PURE__ */ (0, T.jsx)("span", {
+									className: "shortcut",
+									children: "Ctrl+U"
+								})
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("li", { className: "context-menu-divider" }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("li", {
+							id: "menu-item-cut",
+							className: "context-menu-item",
+							children: ["Cortar ", /* @__PURE__ */ (0, T.jsx)("span", {
+								className: "shortcut",
+								children: "Ctrl+X"
+							})]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("li", {
+							id: "menu-item-copy",
+							className: "context-menu-item",
+							children: ["Copiar ", /* @__PURE__ */ (0, T.jsx)("span", {
+								className: "shortcut",
+								children: "Ctrl+C"
+							})]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("li", {
+							id: "menu-item-paste",
+							className: "context-menu-item",
+							children: ["Pegar ", /* @__PURE__ */ (0, T.jsx)("span", {
+								className: "shortcut",
+								children: "Ctrl+V"
+							})]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("li", { className: "context-menu-divider" }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("li", {
+							id: "menu-item-ai-improve",
+							className: "context-menu-item",
+							children: "Refinar con IA"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("li", {
+							id: "menu-item-ai-rubrica",
+							className: "context-menu-item",
+							children: "Rúbrica con IA"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("li", {
+							id: "menu-item-edit-logo",
+							className: "context-menu-item hidden",
+							children: "Ajustes de Logo"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("li", {
+							id: "menu-item-swap-logos",
+							className: "context-menu-item hidden",
+							children: "Intercambiar Lado"
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/FrontendShell.tsx
+var Es = (0, _.memo)(function() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		/* @__PURE__ */ (0, T.jsx)("div", { id: "react-preview-root" }),
+		/* @__PURE__ */ (0, T.jsx)("a", {
+			className: "skip-link",
+			href: "#session-form",
+			children: "Ir al formulario de sesión"
+		}),
+		/* @__PURE__ */ (0, T.jsx)(z, {}),
+		/* @__PURE__ */ (0, T.jsx)(hs, {}),
+		/* @__PURE__ */ (0, T.jsx)(gs, {}),
+		/* @__PURE__ */ (0, T.jsx)(_s, {}),
+		/* @__PURE__ */ (0, T.jsx)(vs, {}),
+		/* @__PURE__ */ (0, T.jsx)(xs, {}),
+		/* @__PURE__ */ (0, T.jsx)(Ts, {})
+	] });
+});
+function Ds({ onReady: e }) {
+	return (0, _.useEffect)(() => e?.(), [e]), /* @__PURE__ */ (0, T.jsx)(Es, {});
+}
+// react-ui/src/surfaces/Downloads.tsx
+function Os() {
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("label", {
+			className: "theme-picker standalone-theme-picker",
+			title: "Tema de la aplicación",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsx)("span", {
+					className: "sr-only",
+					children: "Tema de la aplicación"
+				}),
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("select", {
+					id: "theme-preference",
+					"aria-label": "Tema de la aplicación",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("option", {
+							value: "system",
+							children: "Sistema"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("option", {
+							value: "light",
+							children: "Claro"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("option", {
+							value: "dark",
+							children: "Oscuro"
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)("div", { className: "stars" }),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)("div", { className: "stars-anim" }),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)("div", { className: "glow-orb-1" }),
+		"\n",
+		/* @__PURE__ */ (0, T.jsx)("div", { className: "glow-orb-2" }),
+		"\n",
+		/* @__PURE__ */ (0, T.jsxs)("div", {
+			className: "container",
+			children: [
+				"\n",
+				/* @__PURE__ */ (0, T.jsxs)("div", {
+					className: "card",
+					children: [
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("h1", { children: "S.Y. PABLITO_DP" }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", {
+							className: "version",
+							children: "> Motor de Exportación Local v1.4.5"
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("p", { children: "\n                Activa el motor de exportación local en Windows para generar PDF en A4 y documentos de Word (.docx) editables desde la web, con tablas y fórmulas matemáticas.\n            " }),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("a", {
+							href: "https://github.com/dppablito4-oss/space-lab-sesiones-educ/releases/download/v1.4.5/pablitopyhost.exe",
+							className: "btn-download",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("svg", {
+									className: "download-icon",
+									viewBox: "0 0 24 24",
+									fill: "none",
+									stroke: "currentColor",
+									strokeWidth: "2.5",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("path", { d: "M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" }),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("span", { children: "DESCARGAR MOTOR DE EXPORTACIÓN" }),
+								"\n"
+							]
+						}),
+						"\n",
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "mockup-terminal",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "terminal-header",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", { className: "terminal-dot red" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", { className: "terminal-dot yellow" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("div", { className: "terminal-dot green" }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "terminal-title",
+											children: "pablitopyhost.exe"
+										}),
+										"\n"
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "terminal-body",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "t-cyan",
+											children: "S.Y. PABLITO_DP - Servidor Local v1.4.5"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "t-muted",
+											children: "Escaneando motor de renderizado Chromium..."
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "t-green",
+											children: "[LISTO] Motor Chromium extraído y disponible en ./bin/chrome-win/"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "t-muted",
+											children: "Iniciando servidor local en el puerto 8000..."
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "t-magenta",
+											children: "[MOTOR ONLINE] Servidor de exportación disponible en http://localhost:8000"
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "t-yellow",
+											children: "[IMPORTANTE] Mantén esta ventana abierta en segundo plano."
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											className: "t-green",
+											children: "[CONECTADO] El enlace de seguridad fue establecido con la web."
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsx)("div", { className: "divider" }),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "steps-container",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", {
+									className: "steps-title",
+									children: "\n                    GUÍA DE INICIO RÁPIDO:\n                "
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									className: "install-steps",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "install-step",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("div", {
+													className: "step-num",
+													children: "1"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "step-text",
+													children: [
+														"Descarga el archivo ",
+														/* @__PURE__ */ (0, T.jsx)("strong", { children: "pablitopyhost.exe" }),
+														" desde el botón superior."
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "install-step",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("div", {
+													className: "step-num",
+													children: "2"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("div", {
+													className: "step-text",
+													children: "Ejecuta el archivo. Verás iniciarse la terminal hacker de color negro profundo."
+												}),
+												"\n"
+											]
+										}),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", {
+											className: "install-step",
+											children: [
+												"\n",
+												/* @__PURE__ */ (0, T.jsx)("div", {
+													className: "step-num",
+													children: "3"
+												}),
+												"\n",
+												/* @__PURE__ */ (0, T.jsxs)("div", {
+													className: "step-text",
+													children: [
+														"Haz clic en el enlace ",
+														/* @__PURE__ */ (0, T.jsx)("strong", { children: "[ CLIC AQUÍ PARA VINCULAR ]" }),
+														" dentro de la consola para emparejar tu navegador."
+													]
+												}),
+												"\n"
+											]
+										}),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "warning-box",
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", {
+									className: "warning-title",
+									children: "NOTA DE SEGURIDAD (Windows SmartScreen):"
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("ul", {
+									className: "warning-steps-list",
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("li", { children: "Al ser una aplicación de desarrollo independiente (no firmada digitalmente), Windows podría lanzar una advertencia." }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("li", { children: [
+											"Comprueba el origen y el hash de la descarga indicados abajo. Para continuar, haz clic en ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "\"Más información\"" }),
+											"."
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("li", { children: [
+											"Presiona el botón ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "\"Ejecutar de todas formas\"" }),
+											" para iniciar el puente de exportación local."
+										] }),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n",
+						/* @__PURE__ */ (0, T.jsxs)("div", {
+							className: "verify-box",
+							style: {
+								background: "rgba(6, 182, 212, 0.03)",
+								border: "1px solid rgba(6, 182, 212, 0.2)",
+								borderRadius: "16px",
+								padding: "24px",
+								textAlign: "left",
+								marginTop: "25px"
+							},
+							children: [
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										color: "var(--cyan)",
+										fontWeight: "700",
+										fontSize: "0.98rem",
+										marginBottom: "12px",
+										display: "flex",
+										alignItems: "center",
+										gap: "8px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("svg", {
+											width: "20",
+											height: "20",
+											viewBox: "0 0 24 24",
+											fill: "none",
+											stroke: "currentColor",
+											strokeWidth: "2",
+											children: [/* @__PURE__ */ (0, T.jsx)("path", { d: "M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" }), /* @__PURE__ */ (0, T.jsx)("polyline", { points: "9 12 11 14 15 10" })]
+										}),
+										"\n                    VERIFICACIÓN DE INTEGRIDAD Y SEGURIDAD\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsx)("div", {
+									style: {
+										fontSize: "0.88rem",
+										color: "#cbd5e1",
+										lineHeight: "1.6",
+										marginBottom: "12px"
+									},
+									children: "\n                    Comprueba que el SHA-256 de tu descarga coincida con el ejecutable publicado y compilado en GitHub Actions:\n                "
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										background: "rgba(0,0,0,0.5)",
+										padding: "12px",
+										borderRadius: "8px",
+										fontFamily: "'Fira Code', monospace",
+										fontSize: "0.78rem",
+										wordBreak: "break-all",
+										color: "#a5f3fc",
+										border: "1px solid rgba(6, 182, 212, 0.2)",
+										marginBottom: "14px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsx)("span", {
+											style: {
+												color: "#64748b",
+												display: "block",
+												fontSize: "0.7rem",
+												textTransform: "uppercase"
+											},
+											children: "Hash SHA-256 Oficial:"
+										}),
+										"\n                    46F3CABDE6A5B58C8F59D5E15E811E33C7D66917DA84D9BA5A53BCD34620BDAB\n                "
+									]
+								}),
+								"\n",
+								/* @__PURE__ */ (0, T.jsxs)("div", {
+									style: {
+										fontSize: "0.82rem",
+										color: "#94a3b8",
+										display: "flex",
+										flexDirection: "column",
+										gap: "6px"
+									},
+									children: [
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"• ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Versión:" }),
+											" v1.4.5 | ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Publicación:" }),
+											" 2026-10-24 02:24 UTC | ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Tamaño:" }),
+											" 106.536.121 bytes"
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"• ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Código fuente público:" }),
+											" ",
+											/* @__PURE__ */ (0, T.jsx)("a", {
+												href: "https://github.com/dppablito4-oss/space-lab-sesiones-educ/tree/v1.4.5/backend",
+												target: "_blank",
+												rel: "noopener noreferrer",
+												style: {
+													color: "var(--cyan)",
+													textDecoration: "underline"
+												},
+												children: "Ver backend en GitHub"
+											})
+										] }),
+										"\n",
+										/* @__PURE__ */ (0, T.jsxs)("div", { children: [
+											"• ",
+											/* @__PURE__ */ (0, T.jsx)("strong", { children: "Auditoría técnica:" }),
+											" ",
+											/* @__PURE__ */ (0, T.jsx)("a", {
+												href: "https://github.com/dppablito4-oss/space-lab-sesiones-educ/blob/main/AUDITORIA_SEGURIDAD_MOTOR_LOCAL.md",
+												target: "_blank",
+												rel: "noopener noreferrer",
+												style: {
+													color: "var(--cyan)",
+													textDecoration: "underline"
+												},
+												children: "Reporte de Seguridad y Aislamiento"
+											})
+										] }),
+										"\n"
+									]
+								}),
+								"\n"
+							]
+						}),
+						"\n"
+					]
+				}),
+				"\n"
+			]
+		}),
+		"\n"
+	] });
+}
+// react-ui/src/ConnectionPage.tsx
+function ks() {
+	let [e, t] = (0, _.useState)("system"), n = () => window.SpaceLabTheme;
+	return (0, _.useEffect)(() => {
+		t(n()?.getPreference() || "system");
+	}, []), /* @__PURE__ */ (0, T.jsxs)("label", {
+		className: "theme-picker standalone-theme-picker",
+		title: "Tema de la aplicación",
+		children: [/* @__PURE__ */ (0, T.jsx)("span", {
+			className: "sr-only",
+			children: "Tema de la aplicación"
+		}), /* @__PURE__ */ (0, T.jsxs)("select", {
+			id: "theme-preference",
+			"aria-label": "Tema de la aplicación",
+			value: e,
+			onChange: (e) => {
+				t(e.target.value), n()?.setPreference(e.target.value);
+			},
+			children: [
+				/* @__PURE__ */ (0, T.jsx)("option", {
+					value: "system",
+					children: "Sistema"
+				}),
+				/* @__PURE__ */ (0, T.jsx)("option", {
+					value: "light",
+					children: "Claro"
+				}),
+				/* @__PURE__ */ (0, T.jsx)("option", {
+					value: "dark",
+					children: "Oscuro"
+				})
+			]
+		})]
+	});
+}
+function As() {
+	let [e, t] = (0, _.useState)("ready"), [n, r] = (0, _.useState)(""), i = (0, _.useRef)(""), a = (0, _.useRef)(null);
+	(0, _.useEffect)(() => (i.current = new URLSearchParams(window.location.search).get("token") || "", i.current || (t("error"), r("Falta el token de enlace seguro. Asegúrate de abrir la URL enviada por el ejecutable.")), () => a.current?.abort()), []), (0, _.useEffect)(() => {
+		if (e !== "connected") return;
+		let t = setTimeout(() => {
+			window.location.href = "./#/app";
+		}, 2200);
+		return () => clearTimeout(t);
+	}, [e]);
+	async function o() {
+		if (!i.current || e === "checking") return;
+		t("checking"), r(""), a.current?.abort(), a.current = new AbortController();
+		let n = a.current.signal;
+		try {
+			let e, r = encodeURIComponent(i.current);
+			try {
+				e = await fetch(`http://127.0.0.1:8000/verificar-token?token=${r}`, { signal: n });
+			} catch (t) {
+				if (n.aborted) throw t;
+				e = await fetch(`http://localhost:8000/verificar-token?token=${r}`, { signal: n });
+			}
+			if (e.status === 401) throw Error("TOKEN_EXPIRED");
+			if (!e.ok || (await e.json()).status !== "Connected") throw Error("CONNECTION_FAILED");
+			localStorage.setItem("backend_connected", "true"), localStorage.setItem("connection_token", i.current), t("connected");
+		} catch (e) {
+			if (n.aborted) return;
+			t("error"), r(e instanceof Error && e.message === "TOKEN_EXPIRED" ? "El token de enlace está vencido. Abre de nuevo el enlace de vinculación en pablitopyhost.exe." : "No se pudo establecer la conexión segura. Mantén abierto pablitopyhost.exe y permite a este sitio conectarse al motor local antes de reintentar.");
+		}
+	}
+	return /* @__PURE__ */ (0, T.jsxs)(T.Fragment, { children: [
+		/* @__PURE__ */ (0, T.jsx)(ks, {}),
+		/* @__PURE__ */ (0, T.jsx)("div", { className: "grid-bg" }),
+		/* @__PURE__ */ (0, T.jsx)("div", {
+			className: "container",
+			children: /* @__PURE__ */ (0, T.jsxs)("div", {
+				id: "card",
+				className: "glass-card",
+				children: [
+					/* @__PURE__ */ (0, T.jsxs)("div", {
+						id: "link-box",
+						className: `link-animation-box${e === "connected" ? " connected" : ""}`,
+						children: [
+							/* @__PURE__ */ (0, T.jsx)("div", {
+								className: "node node-left",
+								title: "Navegador web",
+								children: /* @__PURE__ */ (0, T.jsxs)("svg", {
+									viewBox: "0 0 24 24",
+									"aria-hidden": "true",
+									children: [/* @__PURE__ */ (0, T.jsx)("circle", {
+										cx: "12",
+										cy: "12",
+										r: "9"
+									}), /* @__PURE__ */ (0, T.jsx)("path", { d: "M3 12h18M12 3c3 3.5 3 14 0 18M12 3c-3 3.5-3 14 0 18" })]
+								})
+							}),
+							/* @__PURE__ */ (0, T.jsx)("div", {
+								className: "connection-beam",
+								children: /* @__PURE__ */ (0, T.jsx)("div", { className: "connection-pulse" })
+							}),
+							/* @__PURE__ */ (0, T.jsx)("div", {
+								className: "node node-right",
+								title: "Motor local",
+								children: /* @__PURE__ */ (0, T.jsxs)("svg", {
+									viewBox: "0 0 24 24",
+									"aria-hidden": "true",
+									children: [/* @__PURE__ */ (0, T.jsx)("rect", {
+										x: "4",
+										y: "5",
+										width: "16",
+										height: "14",
+										rx: "2"
+									}), /* @__PURE__ */ (0, T.jsx)("path", { d: "M8 9h8M8 13h5M8 17h3" })]
+								})
+							})
+						]
+					}),
+					/* @__PURE__ */ (0, T.jsx)("h1", {
+						id: "title",
+						children: e === "connected" ? "Motor Enlazado" : "Enlazar Motor Local"
+					}),
+					/* @__PURE__ */ (0, T.jsx)("p", {
+						id: "description",
+						children: e === "connected" ? "El motor de exportación local en Python ha sido vinculado correctamente. Redirigiéndote al editor..." : "Detectamos una solicitud de conexión segura para activar la exportación premium (PDF impecable y Word nativo)."
+					}),
+					/* @__PURE__ */ (0, T.jsx)("button", {
+						id: "btn-connect",
+						className: `btn-connect${e === "connected" ? " btn-success" : ""}`,
+						onClick: () => void o(),
+						disabled: e === "checking" || e === "connected" || e === "error" && !i.current,
+						children: /* @__PURE__ */ (0, T.jsx)("span", {
+							id: "btn-text",
+							children: e === "checking" ? "Comprobando conexión..." : e === "connected" ? "¡Enlace Exitoso!" : "Vincular con Motor Local"
+						})
+					}),
+					/* @__PURE__ */ (0, T.jsx)("div", {
+						id: "status-message",
+						className: n ? "status-alert alert-error" : "status-alert",
+						role: "status",
+						style: n ? { display: "block" } : void 0,
+						children: n
+					}),
+					/* @__PURE__ */ (0, T.jsxs)("div", {
+						className: "footer-info",
+						children: ["Desarrollado por Samuel Pablo | ", /* @__PURE__ */ (0, T.jsx)("a", {
+							href: "./",
+							children: "Ir al Panel de Control"
+						})]
+					})
+				]
+			})
+		})
+	] });
+}
+// react-ui/src/runtime.ts
+async function js() {
+	let e = window.SpaceLabFrontend;
+	if (!window.SpaceLabControllerBoot) throw Error("No se cargó el arranque de la aplicación.");
+	await window.SpaceLabControllerBoot.start(), document.querySelectorAll("[data-theme-selector],#theme-preference").forEach((e) => {
+		let t = window.SpaceLabTheme;
+		t && (e.value = t.getPreference(), e.addEventListener("change", () => t.setPreference(e.value)));
+	}), e.ready = !0, window.dispatchEvent(new CustomEvent("spacelab:frontend-ready"));
+}
+function Ms() {
+	let e = window.matchMedia("(prefers-reduced-motion: reduce)"), t, n = (n) => {
+		if (e.matches) return;
+		let r = n.detail?.view, i = r ? document.getElementById(`${r}-view`) : document.querySelector(".sl-main");
+		i && !i.classList.contains("hidden") && (t?.cancel(), t = i.animate([{
+			opacity: .35,
+			transform: "translateY(6px)"
+		}, {
+			opacity: 1,
+			transform: "translateY(0)"
+		}], {
+			duration: 180,
+			easing: "cubic-bezier(.2,.8,.2,1)"
+		}));
+	};
+	return window.addEventListener("spacelab:view-changed", n), window.addEventListener("spacelab:frontend-navigate", n), () => {
+		t?.cancel(), window.removeEventListener("spacelab:view-changed", n), window.removeEventListener("spacelab:frontend-navigate", n);
+	};
+}
+// react-ui/src/main.tsx
+function Ns() {
+	let e = document.getElementById("react-preview-root");
+	if (!e || new URLSearchParams(location.search).get("ui") === "legacy") return;
 	[
 		"#/app",
 		"#/editor",
@@ -13277,4 +23968,17 @@ function z() {
 	}
 	n();
 }
-z();
+var Ps = document.getElementById("frontend-root"), Fs = document.getElementById("standalone-root");
+window.SpaceLabFrontend?.mode === "recovery" || (Fs ? (0, v.hydrateRoot)(Fs, Fs.dataset.page === "Downloads" ? /* @__PURE__ */ (0, T.jsx)(Os, {}) : /* @__PURE__ */ (0, T.jsx)(As, {})) : Ps ? (window.SpaceLabFrontend = {
+	hydrated: !1,
+	ready: !1,
+	failures: []
+}, (0, v.hydrateRoot)(Ps, /* @__PURE__ */ (0, T.jsx)(Ds, { onReady: () => {
+	window.SpaceLabFrontend.hydrated = !0, ls();
+	let e = Ms(), t = Qo();
+	return js().then(Ns), () => {
+		e(), t();
+	};
+} }), { onRecoverableError(e) {
+	window.SpaceLabFrontend.failures.push("hydration"), console.error("Frontend hydration failed", e);
+} })) : Ns());

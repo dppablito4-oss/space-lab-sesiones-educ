@@ -350,12 +350,8 @@ window.SupabaseClient = (() => {
             throw error;
         }
 
-        return data.map(row => ({
-            ...row.session_data,
-            id: row.id,
-            lastSaved: row.last_saved,
-            deleted_at: row.deleted_at
-        }));
+        if (getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
+        return data.map(row => window.SessionSync.fromRow(row, expectedUserId));
     }
 
     /**
@@ -363,28 +359,52 @@ window.SupabaseClient = (() => {
      */
     async function saveSessionCloud(session, expectedUserId = getSessionUserSync()?.id) {
         if (!supabase) return false;
+        const sync = window.SessionSync;
+        sync.prepare(session, expectedUserId);
+        const snapshot = JSON.parse(JSON.stringify(session));
         const user = await getCurrentUser();
         if (!user) return false;
         if (!expectedUserId || user.id !== expectedUserId || getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
 
-        const { error } = await supabase
-            .from('sesiones')
-            .upsert({
-                id: session.id,
+        const expectedVersion = snapshot._cloudSync.version;
+        const payload = {
+                id: snapshot.id,
                 user_id: user.id,
-                titulo: session.metadata?.titulo || 'Sin título',
-                template: session.template || 'estandar',
-                session_data: {
-                    ...session,
-                    deleted_at: session.deleted_at || null
-                },
-                last_saved: session.lastSaved || new Date().toISOString(),
-                deleted_at: session.deleted_at || null
-            });
-
-        if (error) {
+                titulo: snapshot.metadata?.titulo || 'Sin título',
+                template: snapshot.template || 'estandar',
+                session_data: sync.data(snapshot),
+                last_saved: sync.nextVersion(expectedVersion),
+                deleted_at: snapshot.deleted_at || null
+        };
+        // Postgres evaluates the version predicate while locking the row. A
+        // concurrent writer cannot pass using the same revision after a commit.
+        const query = expectedVersion
+            ? supabase.from('sesiones').update(payload).eq('id', snapshot.id)
+                .eq('user_id', expectedUserId).eq('last_saved', expectedVersion)
+            : supabase.from('sesiones').insert(payload);
+        const {data, error} = await query.select('last_saved');
+        if (getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
+        if (error && error.code !== '23505') {
             console.error('[Supabase] Error al guardar sesión en nube:', error);
             throw error;
+        }
+        let version = data?.[0]?.last_saved;
+        if (!version) {
+            const {data: remote, error: readError} = await supabase.from('sesiones').select('*')
+                .eq('id', snapshot.id).eq('user_id', expectedUserId).maybeSingle();
+            if (getSessionUserSync()?.id !== expectedUserId) throw new Error('La cuenta cambió.');
+            if (readError) throw readError;
+            const current = remote ? sync.fromRow(remote, expectedUserId) : null;
+            if (current && sync.same(snapshot, current)) version = remote.last_saved;
+            else {
+                const conflict = new Error('Esta sesión cambió en otro dispositivo. Conservaremos tus cambios en una copia recuperada.');
+                conflict.code = 'SESSION_CONFLICT';
+                conflict.remoteSession = current;
+                throw conflict;
+            }
+        }
+        if (session.id === snapshot.id && session._cloudSync?.branchId === snapshot._cloudSync.branchId) {
+            session._cloudSync = {...snapshot._cloudSync, version};
         }
         return true;
     }

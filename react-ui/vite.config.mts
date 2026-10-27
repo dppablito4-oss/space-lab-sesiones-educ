@@ -11,7 +11,6 @@ const publicFolders = ['js', 'css', 'assets', 'data'];
 const contentTypes: Record<string,string> = {'.js':'text/javascript', '.css':'text/css', '.json':'application/json', '.svg':'image/svg+xml', '.png':'image/png', '.jpg':'image/jpeg', '.webp':'image/webp', '.html':'text/html; charset=utf-8'};
 function legacyHtml() {
     return readFileSync(resolve(workspace,'index.html'),'utf8')
-        .replace(/<div id="react-preview-root"><\/div>/, '')
         .replace(/<script\b[^>]*src="assets\/react-ui\/app\.js[^\"]*"[^>]*><\/script>/, '')
         .replace(/<link\b[^>]*href="assets\/react-ui\/app\.css[^\"]*"[^>]*>/, '');
 }
@@ -29,7 +28,7 @@ function legacyHost(): Plugin {
                 // Derive the host from the existing fragment build, never copy a second form.
                 return legacyHtml()
                     .replace(/<title>[\s\S]*?<\/title>/, '<title>Space Lab · Nuevo generador</title>')
-                    .replace('<body>', '<body data-react-preview="legacy"><div id="react-preview-root"></div>')
+                    .replace('<body>', '<body data-react-preview="legacy">')
                     .replace('</head>', styles.join('\n') + '</head>')
                     .replace('</body>', modules.join('\n') + '</body>');
             }

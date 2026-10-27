@@ -5,6 +5,12 @@
 
 ; (function () {
     'use strict';
+    function renderUi(element, markup) {
+        if (window.SpaceLabReactUI?.region) return window.SpaceLabReactUI.region(element, markup);
+        element.innerHTML = markup; // Recovery and isolated domain tests.
+        return markup;
+    }
+
 
     if (!window.SpaceLabUtils || !window.LocalExportClient || !window.DocumentSourceProcessor
         || !window.SpaceLabExportController || !window.SpaceLabAiController
@@ -1200,12 +1206,12 @@
         if (AppState.editMode) {
             btnLabel.textContent = 'Editar';
             if (btnIconUse) btnIconUse.setAttribute('href', '#icon-edit');
-            DOM.editModeBadge.innerHTML = '<svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>Modo edición';
+            renderUi(DOM.editModeBadge, '<svg class="ui-icon" aria-hidden="true"><use href="#icon-edit"></use></svg>Modo edición');
             DOM.editModeBadge.classList.remove('read-only');
         } else {
             btnLabel.textContent = 'Lectura';
             if (btnIconUse) btnIconUse.setAttribute('href', '#icon-eye');
-            DOM.editModeBadge.innerHTML = '<svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>Modo lectura';
+            renderUi(DOM.editModeBadge, '<svg class="ui-icon" aria-hidden="true"><use href="#icon-eye"></use></svg>Modo lectura');
             DOM.editModeBadge.classList.add('read-only');
         }
 
@@ -1874,23 +1880,23 @@
     async function loadLogosGallery() {
         const user = await SupabaseClient.getCurrentUser();
         if (!user) {
-            DOM.logosContainer.innerHTML = `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Inicia sesión para ver logos</span>`;
+            renderUi(DOM.logosContainer, `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Inicia sesión para ver logos</span>`);
             return;
         }
 
-        DOM.logosContainer.innerHTML = `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Cargando...</span>`;
+        renderUi(DOM.logosContainer, `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">Cargando...</span>`);
         try {
             const logos = await SupabaseClient.listLogos();
             if (logos.length === 0) {
-                DOM.logosContainer.innerHTML = `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">No hay logos subidos</span>`;
+                renderUi(DOM.logosContainer, `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--text-muted); padding: 4px;">No hay logos subidos</span>`);
                 return;
             }
 
-            DOM.logosContainer.innerHTML = logos.map(logo => `
+            renderUi(DOM.logosContainer, logos.map(logo => `
                 <div class="logo-gallery-item" draggable="true" data-url="${logo.url}" style="position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 6px; padding: 4px; cursor: grab; transition: all var(--transition-fast);" title="Haz clic para aplicar o arrastra al documento">
                     <img src="${logo.url}" alt="${logo.name}" style="max-width: 100%; max-height: 100%; object-fit: contain; pointer-events: none;">
                 </div>
-            `).join('');
+            `).join(''));
 
             // Bind events for gallery items
             DOM.logosContainer.querySelectorAll('.logo-gallery-item').forEach(item => {
@@ -1910,7 +1916,7 @@
 
         } catch (e) {
             console.error('[Gallery] Error loading logos:', e);
-            DOM.logosContainer.innerHTML = `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--danger); padding: 4px;">Error al cargar</span>`;
+            renderUi(DOM.logosContainer, `<span style="grid-column: span 4; font-size: 0.7rem; text-align: center; color: var(--danger); padding: 4px;">Error al cargar</span>`);
         }
     }
 
@@ -2356,23 +2362,23 @@
 
         const user = await SupabaseClient.getCurrentUser();
         if (!user) {
-            container.innerHTML = `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: #a1a1aa; padding: 10px;">Inicia sesión para ver tus logos subidos</span>`;
+            renderUi(container, `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: #a1a1aa; padding: 10px;">Inicia sesión para ver tus logos subidos</span>`);
             return;
         }
 
-        container.innerHTML = `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: #a1a1aa; padding: 10px;">Cargando logos de Supabase...</span>`;
+        renderUi(container, `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: #a1a1aa; padding: 10px;">Cargando logos de Supabase...</span>`);
         try {
             const logos = await SupabaseClient.listLogos();
             if (logos.length === 0) {
-                container.innerHTML = `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: #a1a1aa; padding: 10px;">No tienes logos subidos previamente</span>`;
+                renderUi(container, `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: #a1a1aa; padding: 10px;">No tienes logos subidos previamente</span>`);
                 return;
             }
 
-            container.innerHTML = logos.map(logo => `
+            renderUi(container, logos.map(logo => `
                 <div class="modal-logo-item" data-url="${logo.url}" style="position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 6px; cursor: pointer; transition: all 0.2s;" title="Clic para seleccionar">
                     <img src="${logo.url}" alt="${logo.name}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
                 </div>
-            `).join('');
+            `).join(''));
 
             container.querySelectorAll('.modal-logo-item').forEach(item => {
                 item.addEventListener('click', () => {
@@ -2382,7 +2388,7 @@
             });
         } catch (e) {
             console.error('[Modal Gallery] Error loading logos:', e);
-            container.innerHTML = `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: var(--danger); padding: 10px;">Error al cargar logos</span>`;
+            renderUi(container, `<span style="grid-column: span 4; font-size: 0.8rem; text-align: center; color: var(--danger); padding: 10px;">Error al cargar logos</span>`);
         }
     }
 

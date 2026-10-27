@@ -57,6 +57,19 @@ assert.equal(context.window.ExternalFichaPrompt.buildPrompt(null), 'Primero gene
 assert.equal(context.window.ExternalFichaPrompt.buildPrompt({}), 'Primero genera la sesión');
 assert.equal(context.window.ExternalFichaPrompt.updateApartado(null), 'Primero genera la sesión');
 
+// If the sanitizer fails to load, untrusted content must never reach a DOM sink.
+context.document = {
+    getElementById: () => null,
+    createElement: () => { throw new Error('Untrusted HTML reached the DOM'); }
+};
+const maliciousPrompt = context.window.ExternalFichaPrompt.buildPrompt({
+    metadata: { titulo: '<img src=x onerror="globalThis.fichaXss=true">Título seguro' },
+    fichaTrabajo: { actividades: '<svg onload="globalThis.fichaXss=true"></svg><p>Actividad segura</p>' }
+});
+assert.match(maliciousPrompt, /Título seguro/);
+assert.match(maliciousPrompt, /Actividad segura/);
+assert.doesNotMatch(maliciousPrompt, /<img|<svg|onerror|onload/);
+
 console.log('ficha-external-prompt.test.js: OK');
 
 

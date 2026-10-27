@@ -4,6 +4,12 @@
    ═══════════════════════════════════════════════════ */
 
 window.Chatbot = (() => {
+    function renderUi(element, markup) {
+        if (window.SpaceLabReactUI?.region) return window.SpaceLabReactUI.region(element, markup);
+        element.innerHTML = markup; // Recovery and isolated domain tests.
+        return markup;
+    }
+
     
     let container = null;
     let bubble = null;
@@ -243,11 +249,11 @@ window.Chatbot = (() => {
         
         const cleanText = renderSafeHTML(text);
 
-        msgDiv.innerHTML = `
+        renderUi(msgDiv, `
             <div class="message-bubble">
                 ${cleanText}
             </div>
-        `;
+        `);
         messagesContainer.appendChild(msgDiv);
     }
 
@@ -257,13 +263,13 @@ window.Chatbot = (() => {
         msgDiv.className = 'chat-message bot';
         msgDiv.id = typingId;
 
-        msgDiv.innerHTML = `
+        renderUi(msgDiv, `
             <div class="message-bubble" style="display: flex; align-items: center; gap: 4px; padding: 0.6rem 1rem;">
                 <span class="dot-bounce"></span>
                 <span class="dot-bounce" style="animation-delay: 0.2s;"></span>
                 <span class="dot-bounce" style="animation-delay: 0.4s;"></span>
             </div>
-        `;
+        `);
         messagesContainer.appendChild(msgDiv);
         return typingId;
     }

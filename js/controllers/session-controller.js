@@ -18,6 +18,33 @@ window.SpaceLabSessionController = (() => {
             loadProfileDefaults
         } = dependencies;
 
+        window.addEventListener('spacelab:session-synced', event => {
+            const current = AppState.currentSession;
+            if (event.detail.ownerId !== window.SupabaseClient?.getSessionUserSync?.()?.id) return;
+            if (current?.id === event.detail.id && current._cloudSync?.branchId === event.detail.state.branchId) {
+                current._cloudSync = {...event.detail.state};
+            }
+        });
+        window.addEventListener('spacelab:session-conflict', event => {
+            const {originalId, ownerId, branchId, session: recovered} = event.detail;
+            const current = AppState.currentSession;
+            if (ownerId !== window.SupabaseClient?.getSessionUserSync?.()?.id) return;
+            if (current?.id !== originalId || current._cloudSync?.branchId !== branchId) return;
+            const copy = {...current, id: recovered.id, _cloudSync: {...recovered._cloudSync},
+                _recoveryOf: originalId, synced: false, deleted_at: null,
+                metadata: {...current.metadata, titulo: recovered.metadata.titulo},
+                htmlContent: window.SpaceLabSanitizer
+                    ? SpaceLabSanitizer.sanitizeSessionHTML(DOM.sessionSheet.innerHTML)
+                    : DOM.sessionSheet.textContent};
+            if (copy.planning?.mode === 'linked') delete copy.planning;
+            AppState.currentSession = copy;
+            if (DOM.inputTitulo) DOM.inputTitulo.value = copy.metadata.titulo;
+            Storage.setCurrentSession(copy);
+            Storage.saveSession(copy);
+            renderSavedList();
+            window.dispatchEvent(new CustomEvent('spacelab:session-loaded', {detail: {session: copy}}));
+        });
+
         function handleSave() {
             if (!AppState.currentSession) {
                 Toast.warning('No hay sesión para guardar');
@@ -69,6 +96,7 @@ window.SpaceLabSessionController = (() => {
                 const copy = JSON.parse(JSON.stringify(value));
                 delete copy.lastSaved;
                 delete copy.synced;
+                delete copy._cloudSync;
                 return copy;
             };
             return JSON.stringify(comparable({ ...current, htmlContent: currentHtml })) !== JSON.stringify(comparable(saved));
@@ -311,6 +339,7 @@ window.SpaceLabSessionController = (() => {
         function loadLastSession() {
             const current = Storage.getCurrentSession();
             if (current && current.htmlContent) {
+                window.SessionSync?.beginEdit(current, window.SupabaseClient?.getSessionUserSync?.()?.id);
                 AppState.currentSession = current;
                 AppState.sessionDirty = false;
                 populateForm(current);
@@ -399,6 +428,7 @@ window.SpaceLabSessionController = (() => {
                 Toast.error('Sesión no encontrada');
                 return;
             }
+            window.SessionSync?.beginEdit(session, window.SupabaseClient?.getSessionUserSync?.()?.id);
         
             AppState.currentSession = session;
             AppState.sessionDirty = false;

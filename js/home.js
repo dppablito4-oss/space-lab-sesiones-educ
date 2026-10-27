@@ -99,34 +99,11 @@ window.SpaceLabHome = (() => {
         toggle.classList.toggle('hidden', sessions.length <= RECENT_LIMIT);
         toggle.textContent = showAllSessions ? 'Ver recientes' : `Ver todas (${sessions.length})`;
 
-        if (sessions.length === 0) {
-            container.innerHTML = `
-                <div class="home-empty-sessions">
-                    <span><svg class="ui-icon" aria-hidden="true"><use href="#icon-folder"></use></svg></span>
-                    <h3>Aún no tienes sesiones guardadas</h3>
-                    <p>Crea tu primera planificación y aparecerá aquí automáticamente.</p>
-                    <button type="button" class="btn btn-primary btn-sm" data-home-action="new-session">Crear mi primera sesión</button>
-                </div>`;
-            return;
-        }
-
         const visibleSessions = showAllSessions ? sessions : sessions.slice(0, RECENT_LIMIT);
-        container.innerHTML = visibleSessions.map(session => `
-            <article class="home-session-item">
-                <div class="home-session-main">
-                    <span class="home-session-symbol"><svg class="ui-icon" aria-hidden="true"><use href="#icon-file"></use></svg></span>
-                    <div class="home-session-copy">
-                        <strong>${escapeHTML(sessionTitle(session))}</strong>
-                        <span>${escapeHTML(sessionDescription(session))}</span>
-                    </div>
-                </div>
-                <div class="home-session-actions">
-                    <time class="home-session-date" datetime="${escapeHTML(session.lastSaved || '')}">${escapeHTML(formatSavedDate(session.lastSaved))}</time>
-                    <button type="button" class="btn btn-ghost btn-sm home-open-session" data-session-id="${escapeHTML(session.id)}">
-                        Abrir <svg class="ui-icon" aria-hidden="true"><use href="#icon-arrow-right"></use></svg>
-                    </button>
-                </div>
-            </article>`).join('');
+        window.SpaceLabReactUI?.sessions(visibleSessions.map(session => ({
+            id: session.id, title: sessionTitle(session), description: sessionDescription(session),
+            lastSaved: session.lastSaved || '', date: formatSavedDate(session.lastSaved)
+        })));
     }
 
     function renderCurrentSession() {

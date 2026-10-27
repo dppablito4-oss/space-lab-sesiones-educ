@@ -1,6 +1,12 @@
 /** Planning pilot editor. Persistence and validation stay in Planning Core. */
 const PlanningWizard = (() => {
     'use strict';
+    function renderUi(element, markup) {
+        if (window.SpaceLabReactUI?.region) return window.SpaceLabReactUI.region(element, markup);
+        element.innerHTML = markup; // Recovery and isolated domain tests.
+        return markup;
+    }
+
     const core = typeof module !== 'undefined' && module.exports
         ? require('./planning-container-v2.js') : window.PlanningContainerV2;
     const mapGenerator = typeof module !== 'undefined' && module.exports
@@ -342,7 +348,7 @@ const PlanningWizard = (() => {
             if (error) element.focus();
         }
         function shell(content) {
-            dialog.innerHTML = `<div class="planning-shell"><header class="planning-header"><div><span class="home-eyebrow">Beta · Secundaria, ciclos VI y VII</span><h2 id="planning-title">Planificación articulada</h2></div>${button('close', 'Cerrar')}</header><p id="planning-notice" tabindex="-1" role="status"></p>${content}</div>`;
+            renderUi(dialog, `<div class="planning-shell"><header class="planning-header"><div><span class="home-eyebrow">Beta · Secundaria, ciclos VI y VII</span><h2 id="planning-title">Planificación articulada</h2></div>${button('close', 'Cerrar')}</header><p id="planning-notice" tabindex="-1" role="status"></p>${content}</div>`);
         }
         function library() {
             draft = null; previous = null; dirty = false; creationMode = 'manual'; aiProposal = null; generating = false; returnToView = false;
@@ -579,7 +585,7 @@ const PlanningWizard = (() => {
             clearTimeout(previewTimer);
             previewTimer = setTimeout(() => {
                 const previewBody = dialog.querySelector('.planning-preview-body');
-                if (previewBody) previewBody.innerHTML = previewMarkup();
+                if (previewBody) renderUi(previewBody, previewMarkup());
                 const completion = requiredCompletion(draft);
                 const progress = dialog.querySelector('.planning-progress progress');
                 const label = dialog.querySelector('[data-progress-label]');
@@ -748,7 +754,7 @@ const PlanningWizard = (() => {
                     previewMode = target.dataset.mode === 'document' ? 'document' : 'summary';
                     dialog.querySelectorAll('.planning-preview [role="tab"]').forEach(tab => tab.setAttribute('aria-selected', String(tab === target)));
                     const previewBody = dialog.querySelector('.planning-preview-body');
-                    if (previewBody) previewBody.innerHTML = previewMarkup();
+                    if (previewBody) renderUi(previewBody, previewMarkup());
                     return;
                 }
                 if (action === 'close') { if (mayLeave()) { dirty = false; dialog.close(); } return; }
@@ -862,7 +868,10 @@ const PlanningWizard = (() => {
         };
         document.querySelectorAll('[data-open-planning]').forEach(button => button.addEventListener('click', openLibrary));
     }
-    if (typeof window !== 'undefined') window.addEventListener('DOMContentLoaded', mount, { once: true });
+    if (typeof window !== 'undefined') {
+        if (document.readyState === 'loading') window.addEventListener('DOMContentLoaded', mount, { once: true });
+        else mount();
+    }
     return { create, canCreate, addCurriculum, setCurriculumCompetency, addSession, reorder, removeSession, prepareSave, prepareReview, requiredCompletion,
         generationReadiness, buildGenerationInput, hasMeaningfulManualContent, acceptGeneratedProposal,
         formatAiError, generateProposal, resolvePlanningProfiles };

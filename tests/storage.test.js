@@ -14,6 +14,7 @@ const window = {
   addEventListener() {},
   localStorage,
   AccountStorage: require('../js/core/account-storage.js'),
+  SessionSync: require('../js/core/session-sync.js'),
 };
 
 const context = vm.createContext({

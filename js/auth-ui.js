@@ -491,21 +491,7 @@ window.AuthUi = (() => {
             }
             if (homeNavButton) homeNavButton.hidden = false;
 
-            authHeaderContainer.innerHTML = `
-                <div class="user-menu-container">
-                    ${isAdmin ? `
-                        <a href="admin.html" class="btn btn-accent btn-sm" style="text-decoration: none;">
-                            <svg class="ui-icon" aria-hidden="true"><use href="#icon-shield"></use></svg><span class="auth-label">Admin</span>
-                        </a>
-                    ` : ''}
-                    <button id="btn-logout" class="btn btn-ghost btn-sm" title="Cerrar sesión" style="border-radius: 9999px;">
-                        <svg class="ui-icon" aria-hidden="true"><use href="#icon-logout"></use></svg><span class="auth-label">Salir</span>
-                    </button>
-                </div>
-            `;
-
-            // Vincular evento de logout
-            document.getElementById('btn-logout').addEventListener('click', async () => {
+            window.SpaceLabReactUI?.auth({signedIn: true, isAdmin, onLogin: openModal, onLogout: async () => {
                 const confirmed = await ConfirmDialog.show({
                     title: '¿Cerrar sesión?',
                     message: 'Volverás a trabajar en modo offline con almacenamiento local.',
@@ -527,7 +513,7 @@ window.AuthUi = (() => {
                         Toast.error('Error al cerrar sesión: ' + e.message);
                     }
                 }
-            });
+            }});
 
         } else {
             const headerBadge = document.getElementById('header-user-badge');
@@ -535,13 +521,7 @@ window.AuthUi = (() => {
             if (headerBadge) headerBadge.hidden = true;
             if (homeNavButton) homeNavButton.hidden = true;
 
-            authHeaderContainer.innerHTML = `
-                <button id="btn-login-trigger" class="btn btn-ghost btn-sm" aria-label="Iniciar sesión">
-                    <svg class="ui-icon" aria-hidden="true"><use href="#icon-user"></use></svg><span class="auth-label">Iniciar sesión</span>
-                </button>
-            `;
-
-            document.getElementById('btn-login-trigger').addEventListener('click', openModal);
+            window.SpaceLabReactUI?.auth({signedIn: false, isAdmin: false, onLogin: openModal});
         }
     }
 

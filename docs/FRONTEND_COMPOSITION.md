@@ -1,5 +1,11 @@
 # Composición del frontend
 
+**Desde el 27/10/2026:** las vistas se mantienen en React/TypeScript. Los
+fragmentos de vistas descritos abajo son snapshots generados, salvo el head.
+Editar `react-ui/src/` y ejecutar `npm run build:public`; no editar esos
+snapshots a mano. La [guía actual de React](FRONTEND_REACT.md) sustituye el
+procedimiento de edición de fragmentos de esta descripción histórica.
+
 `index.html` es un artefacto generado y comprometido porque GitHub Pages lo sirve directamente. No debe editarse a mano ni se cargan fragmentos con `fetch()` en el navegador.
 
 ## Arquitectura de fragmentos

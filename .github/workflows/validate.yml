@@ -109,6 +109,8 @@ jobs:
       - name: Run storage smoke test
         run: |
           node tests/storage.test.js
+          node tests/session-sync.test.js
+          node tests/storage-conflicts.test.js
           node tests/auth-session-boundaries.test.js
           node tests/ai-provider-routing.test.js
           node tests/theme.test.js
@@ -153,6 +155,7 @@ jobs:
       - name: Build isolated React preview
         run: |
           npm ci --ignore-scripts
+          npm run check:surfaces
           npm run build:public:assets
           git diff --exit-code -- assets/react-ui
           npm run build:admin
@@ -167,6 +170,9 @@ jobs:
         run: |
           python tests/frontend_security.py
           python tests/ui_pedagogy_brief_security.py
+          python tests/ui_ficha_prompt_security.py
+          python tests/ui_full_react_smoke.py
+          python tests/ui_session_conflicts.py
           python tests/ui_storage_account_controls.py
           python tests/ui_engine_security_smoke.py
           python tests/ui_admin_smoke.py
