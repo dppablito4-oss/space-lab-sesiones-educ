@@ -8,6 +8,7 @@ El [plan de beta](../PLAN_BETA.md) conserva el seguimiento operativo en la raíz
 - [Frontend completo en React](FRONTEND_REACT.md).
 - [Migración React y validación en Comet del 27/10](reports/MIGRACION_REACT_27-10-2026.md).
 - [Conflictos entre dispositivos y copias recuperadas](reports/CONFLICTOS_SESIONES_27-10-2026.md).
+- [Barra lateral compartida y rediseño de Mi espacio](reports/NAVEGACION_COMPARTIDA_27-10-2026.md).
 - [Validación de apertura del 27 de octubre](reports/VALIDACION_APERTURA_27-10-2026.md).
 - [Preparación del piloto de 10–20 docentes](PILOTO_CONTROLADO.md).
 - [Avance guardado y pasos para continuar el 26 de octubre](reports/CONTINUIDAD_25-10-2026.md).

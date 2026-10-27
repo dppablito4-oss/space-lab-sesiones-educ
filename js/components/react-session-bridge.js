@@ -13,7 +13,9 @@ window.SpaceLabReactSessionBridge = (() => {
         const byId = id => document.getElementById(id);
         const isReady = () => byId('react-preview-root')?.dataset.ready === 'true';
         const listeners = new Set();
-        let busy = false, generated = 0, snapshot, legacyDestination = 'landing', planningRoute = '';
+        let busy = false, generated = 0, snapshot, planningRoute = '';
+        let legacyDestination = ['#/home','#/sessions'].includes(window.location.hash)
+            || !byId('home-view')?.classList.contains('hidden') ? 'home' : 'landing';
         const options = id => Array.from(byId(id)?.options || []).filter(option => !option.hidden || option.selected)
             .map(option => ({value:option.value, label:option.textContent.trim(), disabled:option.disabled}));
         function read() {
@@ -64,6 +66,8 @@ window.SpaceLabReactSessionBridge = (() => {
         }
         function prepare() {
             if (document.body.dataset.reactPreview === 'planning' && !window.SpaceLabPlanningStudio.leave()) return;
+            window.LandingRouter.showApp(false);
+            if (['#/home','#/sessions','#/landing'].includes(window.location.hash)) history.pushState(null, '', '#/app');
             document.body.dataset.reactPreview = 'wizard';
             quickSession.setMode('quick', false);
             closeSidebar(false);

@@ -1,5 +1,10 @@
 # Continuidad — 27 de octubre de 2026
 
+**Interfaz posterior al commit `02d7a2e`:** barra lateral React compartida entre
+las vistas de trabajo y rediseño de Mi espacio, con validación en navegador.
+Ver [cambio y pruebas](NAVEGACION_COMPARTIDA_27-10-2026.md). Esta nueva revisión
+permanece local, pendiente de commit y publicación.
+
 **Corrección posterior:** resuelta localmente la sobrescritura entre dispositivos
 con revisión condicional y copias recuperadas; probada en Comet visible contra
 Supabase real. Ver [cambio y evidencia](CONFLICTOS_SESIONES_27-10-2026.md).

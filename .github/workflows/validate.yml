@@ -172,6 +172,7 @@ jobs:
           python tests/ui_pedagogy_brief_security.py
           python tests/ui_ficha_prompt_security.py
           python tests/ui_full_react_smoke.py
+          python tests/ui_workspace_navigation.py
           python tests/ui_session_conflicts.py
           python tests/ui_storage_account_controls.py
           python tests/ui_engine_security_smoke.py

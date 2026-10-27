@@ -99,6 +99,15 @@ estados de espera/error siguen expresados mediante texto y controles.
 
 ## Pruebas de interfaz
 
+La navegación compartida se implementa en `WorkspaceNavigation.tsx` y permanece
+montada al cambiar entre inicio, generador, planificación, biblioteca y documento.
+`Home.tsx` conserva los identificadores usados por los servicios de cuenta y
+sesiones. Los estilos del espacio y sus transiciones están en `styles.css`;
+no editar sus snapshots HTML generados.
+
+La regresión `tests/ui_workspace_navigation.py` valida continuidad de borradores,
+recarga, temas y navegación en tres tamaños; admite `--comet --headed`.
+
 ```powershell
 .venv/Scripts/python.exe tests/ui_full_react_smoke.py
 .venv/Scripts/python.exe tests/ui_full_react_smoke.py --comet --headed --live-account

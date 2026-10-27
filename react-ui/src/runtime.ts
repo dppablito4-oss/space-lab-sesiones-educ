@@ -23,7 +23,10 @@ export function installMotion() {
     const animate=(event:Event)=>{
         if(reduced.matches)return;
         const view=(event as CustomEvent<{view?:string}>).detail?.view;
-        const target=view ? document.getElementById(`${view}-view`) : document.querySelector<HTMLElement>('.sl-main');
+        // Animate content, keeping fixed navigation and document tools anchored.
+        const target=view==='app' ? document.querySelector<HTMLElement>('#app-view .preview-area')
+            : view==='home' ? document.getElementById('home-main')
+            : view ? document.getElementById(`${view}-view`) : document.querySelector<HTMLElement>('.sl-main');
         if(!target || target.classList.contains('hidden'))return;
         previous?.cancel();
         previous=target.animate([{opacity:.35,transform:'translateY(6px)'},{opacity:1,transform:'translateY(0)'}],

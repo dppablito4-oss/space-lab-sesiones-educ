@@ -220,9 +220,12 @@ window.AuthUi = (() => {
     }
 
     function closeModal() {
-        inputPassword.value = '';
-        inputConfirmPassword.value = '';
-        modal.classList.add('hidden');
+        // The router may close login before the editor has initialized AuthUi.
+        const password = inputPassword || document.getElementById('auth-password');
+        const confirmation = inputConfirmPassword || document.getElementById('auth-confirm-password');
+        if (password) password.value = '';
+        if (confirmation) confirmation.value = '';
+        (modal || document.getElementById('auth-modal'))?.classList.add('hidden');
     }
 
     function showRecovery(updating) {

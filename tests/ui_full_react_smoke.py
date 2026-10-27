@@ -129,7 +129,7 @@ def run():
                 early.locator('#btn-close-auth').click()
                 animated = early.evaluate('''() => {
                     LandingRouter.showHome(true);
-                    return document.getElementById('home-view').getAnimations().length > 0;
+                    return document.getElementById('home-main').getAnimations().length > 0;
                 }''')
                 assert animated, 'Normal motion must animate the route transition'
                 report['startup'] = {'early_click_preserved': True, 'route_animation': True}

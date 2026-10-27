@@ -1,306 +1,46 @@
+import {ArrowRight, ArrowUpRight, BookOpen, Check, CircleHelp, FileText, LogOut, Monitor, Plus, ShieldCheck, Sparkles, WandSparkles} from 'lucide-react';
 import {SessionCards} from '../live';
 
 export function Home() {
     return <>
-{" "}
-{"\n"}
 <div id="home-view" className="home-view hidden">
-{"\n"}
-<header className="home-header">
-{"\n"}
-<button type="button" className="home-brand" data-action="view-home" aria-label="Ir a Mi espacio">
-{"\n"}
-<span className="home-brand-mark">
-<img src="assets/favicon.svg" alt="" aria-hidden="true"/>
-</span>
-{"\n"}
-<span>
-{"\n"}
-<strong>
-{"Space Lab"}
-</strong>
-{"\n"}
-<small>
-{"Mi espacio docente"}
-</small>
-{"\n"}
-</span>
-{"\n"}
-</button>
-{"\n"}
-<nav className="home-nav" aria-label="Navegación principal">
-{"\n"}
-<a href="#/home" className="home-nav-link active">
-{"Mi espacio"}
-</a>
-{"\n"}
-<a href="#/sessions" className="home-nav-link">
-{"Mis sesiones"}
-</a>
-{"\n"}
-<a href="mailto:pabloclsa87@gmail.com" className="home-nav-link">
-{"Soporte"}
-</a>
-{"\n"}
-</nav>
-{"\n"}
-<div className="home-account">
-{"\n"}
-<label className="theme-picker" title="Tema de la aplicación">
-{"\n"}
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-theme">
-
-</use>
-</svg>
-{"\n"}
-<span className="sr-only">
-{"Tema de la aplicación"}
-</span>
-{"\n"}
-<select data-theme-selector="" aria-label="Tema de la aplicación">
-{"\n"}
-<option value="system">
-{"Sistema"}
-</option>
-{"\n"}
-<option value="light">
-{"Claro"}
-</option>
-{"\n"}
-<option value="dark">
-{"Oscuro"}
-</option>
-{"\n"}
-</select>
-{"\n"}
-</label>
-{"\n"}
-<div className="home-account-copy">
-{"\n"}
-<strong id="home-account-name">
-{"Docente"}
-</strong>
-{"\n"}
-<span id="home-account-plan">
-{"Plan docente"}
-</span>
-{"\n"}
-</div>
-{"\n"}
-<span id="home-account-avatar" className="home-account-avatar" aria-hidden="true">
-{"D"}
-</span>
-{"\n"}
-<button type="button" id="home-logout" className="btn btn-ghost btn-sm" title="Cerrar sesión">
-{"\n"}
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-logout">
-
-</use>
-</svg>
-{"\n"}
-<span>
-{"Salir"}
-</span>
-{"\n"}
-</button>
-{"\n"}
-</div>
-{"\n"}
-</header>
-{"\n"}
-<main className="home-main" id="home-main">
-{"\n"}
-<section className="home-welcome" aria-labelledby="home-welcome-title">
-{"\n"}
-<div className="home-welcome-copy">
-{"\n"}
-<span className="home-eyebrow">
-{"Tu centro de planificación"}
-</span>
-{"\n"}
-<h1 id="home-welcome-title">
-{"Bienvenido a tu espacio docente"}
-</h1>
-{"\n"}
-<p>
-{"Continúa una planificación o crea una nueva sesión con una guía clara, paso a paso."}
-</p>
-{"\n"}
-<div className="home-primary-actions">
-{"\n"}
-<button type="button" className="btn btn-primary home-primary-button" data-home-action="new-session">
-{"\n"}
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-plus">
-
-</use>
-</svg>
-{"\n                            Crear nueva sesión\n                        "}
-</button>
-{"\n"}
-<button type="button" id="home-continue-session" className="btn btn-ghost home-secondary-button hidden" data-home-action="continue-session">
-{"\n"}
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-edit">
-
-</use>
-</svg>
-{"\n                            Continuar último borrador\n                        "}
-</button>
-{"\n"}
-</div>
-{"\n"}
-</div>
-{"\n"}
-<aside className="home-guide" aria-label="Guía para comenzar">
-{"\n"}
-<div className="home-guide-heading">
-{"\n"}
-<span className="home-guide-icon">
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-sparkles">
-
-</use>
-</svg>
-</span>
-{"\n"}
-<div>
-{"\n"}
-<span>
-{"Primera sesión"}
-</span>
-{"\n"}
-<strong>
-{"Te acompañamos en cada paso"}
-</strong>
-{"\n"}
-</div>
-{"\n"}
-</div>
-{"\n"}
-<ol className="home-guide-steps">
-{"\n"}
-<li>
-<span>
-{"1"}
-</span>
-<p>
-<strong>
-{"Completa los datos"}
-</strong>
-{"Indica nivel, área y propósito."}
-</p>
-</li>
-{"\n"}
-<li>
-<span>
-{"2"}
-</span>
-<p>
-<strong>
-{"Genera con IA"}
-</strong>
-{"Obtén una propuesta alineada al CNEB."}
-</p>
-</li>
-{"\n"}
-<li>
-<span>
-{"3"}
-</span>
-<p>
-<strong>
-{"Revisa y exporta"}
-</strong>
-{"Edita libremente y descarga tu documento."}
-</p>
-</li>
-{"\n"}
-</ol>
-{"\n"}
-</aside>
-{"\n"}
-</section>
-{"\n"}
-<section className="home-summary" aria-label="Resumen de la cuenta">
-{"\n"}
-<article className="home-summary-card">
-{"\n"}
-<span className="home-summary-icon">
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-file">
-
-</use>
-</svg>
-</span>
-{"\n"}
-<div>
-<strong id="home-session-count">
-{"0"}
-</strong>
-<span>
-{"Sesiones guardadas"}
-</span>
-</div>
-{"\n"}
-</article>
-{"\n"}
-<article className="home-summary-card">
-{"\n"}
-<span className="home-summary-icon accent-purple">
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-sparkles">
-
-</use>
-</svg>
-</span>
-{"\n"}
-<div>
-<strong id="home-credit-count">
-{"--"}
-</strong>
-<span>
-{"Créditos de IA"}
-</span>
-</div>
-{"\n"}
-</article>
-{"\n"}
-<article className="home-summary-card home-plan-summary">
-{"\n"}
-<span className="home-summary-icon accent-green">
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-shield">
-
-</use>
-</svg>
-</span>
-{"\n"}
-<div className="home-plan-summary-copy">
-<strong id="home-plan-name">
-{"Docente"}
-</strong>
-<span>
-{"Plan actual"}
-</span>
-</div>
-{"\n"}
-<button type="button" className="home-plan-link" data-home-action="view-plans">
-{"\n                        Ver planes\n                        "}
-<svg className="ui-icon" aria-hidden="true">
-<use href="#icon-arrow-right">
-
-</use>
-</svg>
-{"\n"}
-</button>
-{"\n"}
-</article>
-{"\n"}
-</section>
-{"\n"}
+    <header className="home-header">
+        <button type="button" className="home-brand" data-action="view-home" aria-label="Ir a Mi espacio">
+            <span className="home-brand-mark"><img src="assets/favicon.svg" alt="" aria-hidden="true"/></span>
+            <span><strong>Mi espacio</strong><small>Todo listo para tu próxima clase</small></span>
+        </button>
+        <nav className="home-nav" aria-label="Navegación del espacio"><a href="#/home" className="home-nav-link active">Mi espacio</a><a href="#/sessions" className="home-nav-link">Mis sesiones</a></nav>
+        <div className="home-account">
+            <a className="home-support" href="mailto:pabloclsa87@gmail.com" aria-label="Contactar con soporte"><CircleHelp size={18}/><span>Soporte</span></a>
+            <label className="theme-picker" title="Tema de la aplicación"><Monitor size={16} aria-hidden="true"/><span className="sr-only">Tema de la aplicación</span><select data-theme-selector="" aria-label="Tema de la aplicación"><option value="system">Sistema</option><option value="light">Claro</option><option value="dark">Oscuro</option></select></label>
+            <div className="home-account-copy"><strong id="home-account-name">Docente</strong><span id="home-account-plan">Plan docente</span></div>
+            <span id="home-account-avatar" className="home-account-avatar" aria-hidden="true">D</span>
+            <button type="button" id="home-logout" className="btn btn-ghost btn-sm" aria-label="Cerrar sesión"><LogOut size={17}/><span>Salir</span></button>
+        </div>
+    </header>
+    <main className="home-main" id="home-main">
+        <section className="home-welcome" aria-labelledby="home-welcome-title">
+            <div className="home-welcome-copy">
+                <span className="home-eyebrow"><span className="home-live-dot"/>TU CENTRO DE PLANIFICACIÓN</span>
+                <h1 id="home-welcome-title">Bienvenido a tu espacio docente</h1>
+                <p>Una idea para tu aula. Un espacio para darle forma.<br/>Crea, organiza y continúa tus próximas clases.</p>
+                <div className="home-primary-actions">
+                    <button type="button" className="btn btn-primary home-primary-button" data-home-action="new-session"><Plus size={19}/>Crear nueva sesión<ArrowUpRight size={17}/></button>
+                    <button type="button" id="home-continue-session" className="btn btn-ghost home-secondary-button hidden" data-home-action="continue-session"><BookOpen size={17}/>Continuar último borrador<ArrowRight size={16}/></button>
+                </div>
+                <span className="home-welcome-note"><Check size={14}/>Tus ideas, tus decisiones. La IA te acompaña.</span>
+            </div>
+            <aside className="home-guide" aria-label="Guía para comenzar">
+                <div className="home-guide-art" aria-hidden="true"><span className="home-orbit orbit-one"/><span className="home-orbit orbit-two"/><span className="home-guide-spark"><WandSparkles size={32}/></span><span className="home-orbit-star"><Sparkles size={18}/></span></div>
+                <div className="home-guide-heading"><span className="home-guide-icon"><Sparkles size={18}/></span><div><span>DE LA IDEA AL AULA</span><strong>Tu próxima clase, paso a paso</strong></div></div>
+                <ol className="home-guide-steps"><li><span>1</span><p><strong>Completa los datos</strong>Indica nivel, área y propósito.</p></li><li><span>2</span><p><strong>Genera con IA</strong>Obtén una propuesta alineada al CNEB.</p></li><li><span>3</span><p><strong>Revisa y exporta</strong>Edita libremente y descarga tu documento.</p></li></ol>
+            </aside>
+        </section>
+        <section className="home-summary" aria-label="Resumen de la cuenta">
+            <article className="home-summary-card"><span className="home-summary-icon"><FileText size={21}/></span><div><strong id="home-session-count">0</strong><span>Sesiones guardadas</span></div><span className="home-stat-caption">Tu trabajo, a mano</span></article>
+            <article className="home-summary-card"><span className="home-summary-icon accent-purple"><Sparkles size={21}/></span><div><strong id="home-credit-count">--</strong><span>Créditos de IA</span></div><span className="home-stat-caption">Para tus próximas ideas</span></article>
+            <article className="home-summary-card home-plan-summary"><span className="home-summary-icon accent-green"><ShieldCheck size={21}/></span><div className="home-plan-summary-copy"><strong id="home-plan-name">Docente</strong><span>Plan actual</span></div><button type="button" className="home-plan-link" data-home-action="view-plans">Ver planes<ArrowRight size={15}/></button></article>
+        </section>
 <section className="home-section" aria-labelledby="home-tools-title">
 {"\n"}
 <div className="home-section-heading">

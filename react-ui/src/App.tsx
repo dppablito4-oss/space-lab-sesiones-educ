@@ -1,7 +1,8 @@
 import {useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore} from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
-import {ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronRight, CircleHelp, FileText, FolderOpen, GraduationCap, Home, Layers3, LoaderCircle, LogIn, Menu, Moon, Plus, SlidersHorizontal, Sparkles, Sun, X} from 'lucide-react';
+import {ArrowLeft, ArrowRight, ArrowUpRight, BookOpen, Check, ChevronRight, CircleHelp, FileText, GraduationCap, LoaderCircle, LogIn, Moon, SlidersHorizontal, Sparkles, Sun, X} from 'lucide-react';
 import type {Bridge, Field} from './bridge';
+import {WorkspaceNavigation} from './WorkspaceNavigation';
 import {DataStep} from './DataStep';
 import {LearningStep} from './LearningStep';
 import {ReviewStep} from './ReviewStep';
@@ -14,7 +15,6 @@ export function App({bridge}:{bridge:Bridge}) {
     const [step,setStep]=useState(0);
     const [errors,setErrors]=useState<Partial<Record<Field,string>>>({});
     const [notice,setNotice]=useState('');
-    const [menuOpen,setMenuOpen]=useState(false);
     const scroll=useRef<HTMLElement>(null);
 
     useEffect(()=>{
@@ -52,42 +52,15 @@ export function App({bridge}:{bridge:Bridge}) {
         await bridge.generate();
         if (bridge.getSnapshot().generated === before) setNotice('La sesión todavía no se generó. Revisa el aviso, tu cuenta y las opciones seleccionadas.');
     }
-    async function newSession() {
-        setMenuOpen(false);
-        // Release the mobile dialog's focus trap before opening a legacy confirmation.
-        await new Promise(resolve=>requestAnimationFrame(resolve));
-        if (await bridge.newSession()) {
-            bridge.setField('duracion','90 min');setStep(0);setErrors({});setNotice('');
-            requestAnimationFrame(()=>document.getElementById('react-step-heading')?.focus({preventScroll:true}));
-        }
-    }
     const planning=state.view === 'planning';
-    const nav=<>
-        <div className="sl-brand"><span className="sl-brand-symbol"><BrandLogo/></span><span>Space<span className="sl-brand-light">Lab</span><small>EL ESPACIO DE TUS IDEAS</small></span></div>
-        <button type="button" className="sl-create-button" onClick={()=>void newSession()}><Plus size={19}/>Nueva sesión</button>
-        <span className="sl-nav-label">TU ESPACIO DOCENTE</span>
-        <nav aria-label="Navegación principal" className="sl-nav">
-            <button type="button" onClick={()=>{bridge.showLegacy('home');setMenuOpen(false);}}><Home size={19}/>Mi espacio</button>
-            <button type="button" className={!planning ? "active" : undefined} aria-current={!planning ? "page" : undefined} onClick={()=>{bridge.prepare();setMenuOpen(false);}}><Sparkles size={19}/>Crear sesión<span className="sl-nav-dot"/></button>
-            <button type="button" className={planning ? 'active' : undefined} aria-current={planning ? 'page' : undefined} onClick={()=>{setMenuOpen(false);requestAnimationFrame(()=>bridge.openPlanning());}}><Layers3 size={19}/>Unidades y experiencias</button>
-            <button type="button" onClick={()=>{bridge.showLegacy('library');setMenuOpen(false);}}><FolderOpen size={19}/>Mi biblioteca</button>
-        </nav>
-        <div className="sl-nav-bottom"><div className="sl-nav-tip"><span className="sl-tip-symbol"><Sparkles size={20}/></span><strong>Más tiempo para enseñar.</strong><p>Dale forma a tus ideas y crea experiencias para tu aula.</p><span className="sl-tip-line"/></div><span className="sl-sidebar-footer"><span className="sl-status-dot"/>Hecho para docentes</span></div>
-    </>;
-    if (state.view === 'legacy' && ['home','library','landing'].includes(state.legacyDestination)) return null;
-    if (state.view === 'legacy') return <div className="sl-return-bar"><span><BrandLogo/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al generador</button></div>;
-
-    return <div className="sl-app">
+    const legacy=state.view==='legacy';
+    return <><WorkspaceNavigation bridge={bridge} state={state}/>{legacy ? (
+        ['home','library','landing'].includes(state.legacyDestination) ? null :
+        <div className="sl-return-bar"><span><BrandLogo/>Space Lab</span><button type="button" onClick={()=>bridge.prepare()}><ArrowLeft size={17}/>Volver al generador</button></div>
+    ) : <div className="sl-app">
         <a className="sl-skip" href={planning ? '#planning-title' : '#react-step-heading'} onClick={event=>{event.preventDefault();document.getElementById(planning ? 'planning-title' : 'react-step-heading')?.focus();}}>Ir al generador</a>
-        <aside className="sl-sidebar">{nav}</aside>
         <div className="sl-workspace">
             <header className="sl-topbar">
-                <Dialog.Root open={menuOpen} onOpenChange={setMenuOpen}><Dialog.Trigger asChild><button className="sl-icon-button sl-mobile-menu" type="button" aria-label="Abrir navegación"><Menu size={22}/></button></Dialog.Trigger>
-                    <Dialog.Portal container={document.getElementById('react-preview-root')}><Dialog.Overlay className="sl-dialog-overlay"/><Dialog.Content className="sl-mobile-drawer" onCloseAutoFocus={event=>{
-                        // A completed request or another dialog may already own the focus.
-                        if (document.activeElement?.closest('#planning-dialog,#confirm-dialog,#auth-modal')) event.preventDefault();
-                    }}><Dialog.Title className="sl-sr-only">Navegación de Space Lab</Dialog.Title><Dialog.Description className="sl-sr-only">Accede a tus sesiones, unidades y biblioteca.</Dialog.Description><Dialog.Close className="sl-drawer-close" aria-label="Cerrar navegación"><X size={22}/></Dialog.Close>{nav}</Dialog.Content></Dialog.Portal>
-                </Dialog.Root>
                 <span className="sl-mobile-brand"><BrandLogo/>Space<span>Lab</span></span>
                 <div className="sl-breadcrumb"><span>Planificador</span><ChevronRight size={14}/><strong>{planning ? 'Unidades y experiencias' : state.linked ? 'Sesión vinculada' : 'Nueva sesión'}</strong></div>
                 <div className="sl-topbar-actions"><a className="sl-icon-button" href="mailto:pabloclsa87@gmail.com" aria-label="Contactar con soporte por correo"><CircleHelp size={19}/></a><span className="sl-beta-tag">BETA</span><button type="button" className="sl-icon-button" aria-label={state.theme==='dark' ? 'Usar tema claro' : 'Usar tema oscuro'} onClick={()=>bridge.toggleTheme()}>{state.theme==='dark' ? <Sun size={19}/> : <Moon size={19}/>}</button>
@@ -107,7 +80,7 @@ export function App({bridge}:{bridge:Bridge}) {
             </main>
             <footer className="sl-footer"><div><button type="button" className="sl-back-button" onClick={()=>goTo(step-1)} disabled={step===0 || state.busy}><ArrowLeft size={18}/>Anterior</button><span className="sl-footer-status"><span>PASO {step+1} DE 3</span><strong>{state.busy ? 'Preparando tu sesión…' : steps[step].title}</strong></span><button type="button" className="sl-primary-button" disabled={state.busy} onClick={()=>step===2 ? void generate() : goTo(step+1)}>{state.busy ? <><LoaderCircle size={19} className="sl-spin"/>Generando…</> : step===2 ? <><Sparkles size={19}/>Generar mi sesión</> : <>Continuar<ArrowRight size={19}/></>}</button></div></footer></>}
         </div>
-    </div>;
+    </div>}</>;
 }
 
 // Keep the existing editor node and its event handlers: one draft, one save/AI flow.
